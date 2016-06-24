@@ -1,0 +1,569 @@
+Time|User|Action
+
+
+25/10/2014 14:18:28|admin|login
+
+25/10/2014 14:18:37|admin|logout
+
+25/10/2014 14:26:04|admin|login
+
+29/10/2014 10:44:33|admin|login
+
+29/10/2014 11:00:26|admin|logout
+
+29/10/2014 13:26:27|admin|login
+
+30/10/2014 14:44:06|admin|login
+
+05/11/2014 09:31:29|admin|login
+
+06/11/2014 20:43:05|admin|login
+
+06/11/2014 20:43:43|admin|logout
+
+07/11/2014 11:12:02|admin|login
+
+07/11/2014 11:15:58|admin|logout
+
+08/11/2014 07:37:47|admin|login
+
+08/11/2014 14:54:50|admin|logout
+
+08/11/2014 23:06:57|admin|login
+
+08/11/2014 23:07:16|admin|logout
+
+10/11/2014 09:17:46|admin|login
+
+10/11/2014 19:27:53|admin|login
+
+11/11/2014 15:16:30|admin|login
+
+13/11/2014 07:26:34|admin|login
+
+13/11/2014 08:30:24|admin|logout
+
+13/11/2014 17:01:35|admin|login
+
+14/11/2014 08:06:19|admin|login
+
+14/11/2014 09:33:06|admin|logout
+
+15/11/2014 08:34:17|admin|login
+
+15/11/2014 16:45:47|admin|login
+
+17/11/2014 13:28:19|admin|login
+
+17/11/2014 20:28:30|admin|login
+
+18/11/2014 09:56:12|admin|login
+
+18/11/2014 15:31:11|admin|login
+
+19/11/2014 13:04:37|admin|login
+
+20/11/2014 23:54:33|peter|login
+
+20/11/2014 23:55:04|peter|logout
+
+20/11/2014 23:55:11|linda|login
+
+20/11/2014 23:55:41|linda|logout
+
+22/11/2014 15:36:46|admin|login
+
+22/11/2014 23:20:33|admin|login
+
+25/11/2014 10:51:28|admin|login
+
+26/11/2014 09:40:04|admin|login
+
+26/11/2014 09:40:31|admin|logout
+
+04/12/2014 16:16:25|admin|login
+
+10/12/2014 14:27:13|admin|login
+
+10/12/2014 14:27:55|admin|logout
+
+15/12/2014 11:13:33|admin|login
+
+15/12/2014 13:49:42|admin|logout
+
+15/12/2014 16:26:57|admin|login
+
+16/12/2014 07:42:40|peter|login
+
+16/12/2014 10:04:56|peter|login
+
+22/12/2014 08:19:46|admin|login
+
+22/12/2014 13:38:38|admin|logout
+
+22/12/2014 13:38:46|peter|login
+
+22/12/2014 13:38:57|peter|logout
+
+22/12/2014 13:57:43|peter|login
+
+24/12/2014 10:09:37|peter|login
+
+25/12/2014 11:26:29|admin|login
+
+25/12/2014 13:46:05|admin|login
+
+25/12/2014 13:56:15|admin|logout
+
+25/12/2014 13:56:22|peter|login
+
+25/12/2014 14:03:33|peter|logout
+
+25/12/2014 14:03:38|admin|login
+
+26/12/2014 15:49:07|admin|login
+
+27/12/2014 08:14:56|admin|login
+
+29/12/2014 08:10:30|admin|login
+
+29/12/2014 13:38:55|admin|login
+
+30/12/2014 09:14:06|admin|login
+
+31/12/2014 08:02:02|admin|login
+
+05/01/2015 08:18:23|admin|login
+
+05/01/2015 10:24:34|admin|logout
+
+05/01/2015 10:24:45|peter|login
+
+06/01/2015 14:09:18|peter|login
+
+06/01/2015 14:32:01|peter|logout
+
+06/01/2015 14:32:08|admin|login
+
+06/01/2015 14:32:31|admin|logout
+
+06/01/2015 14:32:39|peter|login
+
+06/01/2015 15:44:36|peter|logout
+
+06/01/2015 15:44:44|admin|login
+
+07/01/2015 08:42:35|admin|login
+
+08/01/2015 07:39:05|admin|login
+
+09/01/2015 07:54:20|admin|login
+
+10/01/2015 07:30:33|admin|login
+
+10/01/2015 08:59:15|admin|login
+
+10/01/2015 10:07:31|admin|logout
+
+10/01/2015 10:07:38|peter|login
+
+10/01/2015 10:19:37|peter|logout
+
+10/01/2015 10:19:42|admin|login
+
+12/01/2015 07:45:55|admin|login
+
+12/01/2015 15:18:38|admin|logout
+
+12/01/2015 15:18:45|peter|login
+
+12/01/2015 16:25:07|peter|logout
+
+12/01/2015 16:26:13|linda|login
+
+12/01/2015 16:26:56|linda|logout
+
+12/01/2015 16:27:01|admin|login
+
+12/01/2015 16:28:03|admin|logout
+
+12/01/2015 16:28:10|linda|login
+
+13/01/2015 07:48:24|admin|login
+
+13/01/2015 14:30:12|admin|logout
+
+13/01/2015 14:30:19|linda|login
+
+13/01/2015 14:31:48|linda|logout
+
+13/01/2015 14:31:54|peter|login
+
+13/01/2015 14:36:23|peter|logout
+
+13/01/2015 14:36:29|admin|login
+
+14/01/2015 07:37:25|admin|login
+
+15/01/2015 08:07:39|admin|login
+
+15/01/2015 21:53:15|admin|logout
+
+15/01/2015 21:53:23|linda|login
+
+16/01/2015 07:41:38|admin|login
+
+17/01/2015 07:37:26|admin|login
+
+19/01/2015 07:45:01|admin|login
+
+19/01/2015 22:51:21|admin|login
+
+20/01/2015 07:44:20|admin|login
+
+20/01/2015 19:20:18|admin|login
+
+21/01/2015 07:34:49|admin|login
+
+21/01/2015 09:00:03|admin|logout
+
+21/01/2015 09:00:42|nancy|login
+
+21/01/2015 14:14:54|nancy|logout
+
+21/01/2015 14:15:00|admin|login
+
+21/01/2015 14:15:29|admin|logout
+
+21/01/2015 14:15:35|linda|login
+
+21/01/2015 14:26:04|admin|login
+
+21/01/2015 19:49:18|admin|login
+
+22/01/2015 07:29:38|admin|login
+
+22/01/2015 07:29:38|admin|login
+
+22/01/2015 19:47:39|admin|login
+
+22/01/2015 22:00:11|admin|login
+
+23/01/2015 07:38:47|admin|login
+
+24/01/2015 07:51:52|admin|login
+
+26/01/2015 07:53:41|admin|login
+
+27/01/2015 07:59:51|admin|login
+
+27/01/2015 08:39:32|admin|logout
+
+27/01/2015 08:39:39|linda|login
+
+27/01/2015 08:46:59|linda|logout
+
+27/01/2015 08:47:37|sas|login
+
+27/01/2015 08:49:17|sas|logout
+
+27/01/2015 08:49:24|nancy|login
+
+27/01/2015 08:49:32|nancy|logout
+
+27/01/2015 08:49:39|linda|login
+
+27/01/2015 08:49:57|linda|logout
+
+27/01/2015 08:50:04|nancy|login
+
+27/01/2015 08:50:34|nancy|logout
+
+27/01/2015 08:50:40|admin|login
+
+28/01/2015 07:32:01|admin|login
+
+28/01/2015 20:34:42|admin|login
+
+29/01/2015 07:37:49|admin|login
+
+30/01/2015 07:38:05|admin|login
+
+31/01/2015 07:20:49|admin|login
+
+31/01/2015 20:01:20|admin|login
+
+02/02/2015 07:38:25|admin|login
+
+02/02/2015 07:57:56|admin|logout
+
+02/02/2015 07:58:44|admin|login
+
+03/02/2015 09:25:15|admin|login
+
+03/02/2015 15:34:21|admin|login
+
+04/02/2015 07:41:45|admin|login
+
+05/02/2015 07:40:51|admin|login
+
+06/02/2015 09:40:28|admin|login
+
+07/02/2015 07:39:09|admin|login
+
+09/02/2015 07:40:01|admin|login
+
+10/02/2015 07:44:52|admin|login
+
+11/02/2015 07:47:05|admin|login
+
+11/02/2015 20:51:37|admin|login
+
+11/02/2015 23:07:42|admin|login
+
+12/02/2015 07:28:25|admin|login
+
+12/02/2015 22:09:42|admin|login
+
+13/02/2015 07:49:06|admin|login
+
+14/02/2015 00:14:12|admin|login
+
+14/02/2015 00:32:57|admin|login
+
+14/02/2015 07:57:08|admin|login
+
+15/02/2015 08:47:03|admin|login
+
+15/02/2015 08:57:51|admin|login
+
+16/02/2015 11:11:49|admin|login
+
+16/02/2015 11:15:27|admin|logout
+
+16/02/2015 11:15:33|admin|login
+
+16/02/2015 22:05:38|admin|login
+
+17/02/2015 09:04:46|admin|login
+
+17/02/2015 21:22:54|admin|login
+
+23/02/2015 19:33:02|admin|login
+
+24/02/2015 07:38:21|admin|login
+
+25/02/2015 07:45:10|admin|login
+
+26/02/2015 07:32:40|admin|login
+
+26/02/2015 22:41:41|admin|login
+
+27/02/2015 07:34:43|admin|login
+
+28/02/2015 08:21:04|admin|login
+
+28/02/2015 19:53:59|admin|login
+
+01/03/2015 13:37:21|admin|login
+
+02/03/2015 09:19:17|admin|login
+
+02/03/2015 23:09:41|admin|login
+
+03/03/2015 07:39:21|admin|login
+
+03/03/2015 21:43:32|admin|login
+
+04/03/2015 07:34:16|admin|login
+
+05/03/2015 08:16:52|admin|login
+
+05/03/2015 22:42:30|admin|login
+
+06/03/2015 07:48:27|admin|login
+
+07/03/2015 00:12:12|admin|login
+
+07/03/2015 07:45:40|admin|login
+
+09/03/2015 07:56:05|admin|login
+
+09/03/2015 19:36:45|admin|login
+
+10/03/2015 07:33:45|admin|login
+
+11/03/2015 07:41:39|admin|login
+
+11/03/2015 20:07:48|admin|login
+
+12/03/2015 07:36:53|admin|login
+
+12/03/2015 19:32:03|admin|login
+
+13/03/2015 08:00:32|admin|login
+
+14/03/2015 08:14:16|admin|login
+
+16/03/2015 07:36:58|admin|login
+
+16/03/2015 21:22:22|admin|login
+
+17/03/2015 11:05:52|admin|login
+
+18/03/2015 13:43:31|admin|login
+
+18/03/2015 21:09:05|admin|login
+
+19/03/2015 07:41:59|admin|login
+
+20/03/2015 07:38:16|admin|login
+
+20/03/2015 20:15:41|admin|login
+
+21/03/2015 07:31:43|admin|login
+
+23/03/2015 08:06:25|admincmg|login
+
+23/03/2015 09:40:56|admincmg|logout
+
+23/03/2015 09:42:25|nhhung|login
+
+23/03/2015 09:56:50|nhhung|logout
+
+23/03/2015 09:57:05|admincmg|login
+
+24/03/2015 07:43:08|admincmg|login
+
+25/03/2015 10:56:33|admincmg|login
+
+25/03/2015 20:37:54|admincmg|login
+
+26/03/2015 09:01:11|admincmg|login
+
+26/03/2015 21:33:14|admincmg|login
+
+27/03/2015 07:52:30|admincmg|login
+
+27/03/2015 23:18:28|admincmg|login
+
+28/03/2015 09:47:45|admincmg|login
+
+30/03/2015 08:26:57|admincmg|login
+
+31/03/2015 07:50:18|admincmg|login
+
+02/04/2015 14:49:07|admincmg|login
+
+03/04/2015 18:15:43|admincmg|login
+
+04/04/2015 07:33:55|admincmg|login
+
+06/04/2015 08:00:17|admincmg|login
+
+07/04/2015 08:24:49|admincmg|login
+
+07/04/2015 15:07:10|admincmg|logout
+
+07/04/2015 16:04:55|admincmg|login
+
+08/04/2015 09:29:19|admincmg|login
+
+09/04/2015 13:21:46|admincmg|login
+
+10/04/2015 08:02:20|admincmg|login
+
+11/04/2015 07:43:39|admincmg|login
+
+13/04/2015 08:02:18|admincmg|login
+
+15/04/2015 13:32:55|admincmg|login
+
+15/04/2015 13:36:55||logout
+
+15/04/2015 13:40:16|admincmg|login
+
+15/04/2015 14:05:43|admincmg|logout
+
+15/04/2015 14:19:45|admincmg|login
+
+15/04/2015 14:20:13|admincmg|login
+
+15/04/2015 14:20:25|admincmg|logout
+
+15/04/2015 14:20:45|admincmg|logout
+
+15/04/2015 14:21:04|admincmg|login
+
+15/04/2015 14:21:06|admincmg|logout
+
+15/04/2015 14:21:14|admincmg|login
+
+15/04/2015 14:21:16|admincmg|logout
+
+15/04/2015 14:28:13|admincmg|login
+
+15/04/2015 14:28:16|admincmg|logout
+
+15/04/2015 14:28:32|admincmg|logout
+
+15/04/2015 14:40:34|admincmg|logout
+
+15/04/2015 14:41:08|admincmg|login
+
+15/04/2015 14:43:41|admincmg|logout
+
+15/04/2015 14:44:15|admincmg|login
+
+15/04/2015 14:45:06|admincmg|logout
+
+15/04/2015 14:45:27|admincmg|login
+
+17/04/2015 08:47:10|admincmg|logout
+
+17/04/2015 08:47:19|admincmg|login
+
+12/05/2015 17:29:00|admincmg|logout
+
+12/05/2015 17:29:17|admincmg|login
+
+02/07/2015 07:47:34|admincmg|login
+
+02/07/2015 11:14:50|admincmg|login
+
+09/08/2015 21:17:05|nvtinh|login
+
+10/08/2015 07:43:39|nvtinh|login
+
+22/08/2015 09:50:39|admincmg|login
+
+26/08/2015 09:45:51|admincmg|logout
+
+26/08/2015 09:46:11|admincmg|login
+
+26/08/2015 10:04:07|admincmg|logout
+
+26/08/2015 10:04:22|admincmg|login
+
+26/08/2015 10:26:33|admincmg|logout
+
+26/08/2015 10:26:46|admincmg|login
+
+26/08/2015 10:26:46|admincmg|logout
+
+26/08/2015 10:40:10|admincmg|login
+
+15/10/2015 15:02:21|admincmg|login
+
+05/12/2015 08:21:55|admincmg|login
+
+05/12/2015 14:12:08|admincmg|login
+
+25/01/2016 09:02:24|admincmg|login
+
+15/03/2016 10:26:54|admincmg|login
+
+05/05/2016 08:06:22|admincmg|login
+
+24/06/2016 09:02:39|admincmg|login
+

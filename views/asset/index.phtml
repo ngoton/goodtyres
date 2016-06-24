@@ -1,0 +1,37 @@
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;"><h1>TÀI SẢN CỐ ĐỊNH </h1></center>
+
+</div>
+
+<table class="table_data" style="width:50%; margin:0 auto">
+<thead>
+    <tr>
+        <th class="fix">
+            <a >STT </a>
+        </th>
+        <th  class="fix">
+            <a >Tên tài sản </a>
+        </th>
+        <th class="fix">
+            <a >Số lượng </a>
+        </th>
+        
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $i=1; ?>
+    <?php foreach ($assets as $fixed_asset) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $fixed_asset->fixed_asset_id ?>" class="edit_tr">
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix"  id="fixed_asset_name_<?php echo $fixed_asset->fixed_asset_id; ?>"><?php echo $fixed_asset->fixed_asset_name ?></td>
+            <td class="fix"  id="fixed_asset_number_<?php echo $fixed_asset->fixed_asset_id; ?>"><?php echo $fixed_asset->fixed_asset_number; ?></td>
+            
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>

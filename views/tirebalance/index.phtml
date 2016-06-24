@@ -1,0 +1,301 @@
+<?php
+if ($order_by == 'import_tire_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'expect_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cost_vat')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> NHẬP HÀNG LỐP XE </h1></center>
+<?php if($_SESSION['role_logined'] != 10){ ?>
+<div class="add-box">
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+<?php } ?>
+    <div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+
+    <div class="tablenav top">
+        <div class="add-box">
+                  
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">  
+            
+        </div>
+
+      </div>
+
+</div>
+<?php $i=1; $j=1; $total = array(); $total_cost = array(); ?>
+<div class="tabs">
+    <ul class="tab-links">
+        <?php foreach ($codes as $code) { ?>
+            <li <?php echo $i==1?'class="active"':null ?> ><a href="#tab<?php echo $i++ ?>"><?php echo $code['code'] ?></a></li>
+        <?php } ?>
+        
+    </ul>
+ 
+    <div class="tab-content">
+        <?php foreach ($codes as $code) { ?>
+        <div class="tab <?php echo $j==1?'active':null ?>" id="tab<?php echo $j++ ?>" >
+            <div style="width:60%; margin:0 auto">
+                Tỷ giá USD: <input type="text" id="<?php echo $code['code'] ?>" class="rate" value="1">
+                <table class="table_data">
+                   <thead>
+                        <tr>
+                            <th rowspan="2" class="fix">No</th>
+                            <th rowspan="2" class="fix">Costing</th>
+                            <th colspan="3" class="fix">Thực tế</th>
+                            <th rowspan="2" class="fix">Cố định</th>
+                            <th rowspan="2" class="fix">Chênh lệch</th>
+                        </tr>
+                        <tr>
+                            <th class="fix">In VAT</th>
+                            <th class="fix">Ex VAT</th>
+                            <th class="fix">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="fix">1</td>
+                        <td class="fix">Tiền mua lốp</td>
+                        <td class="fix"><?php echo $lib->formatMoney($c_vat = isset($costs_vat[$code['code']][1])?$costs_vat[$code['code']][1]:0) ?></td>
+                        <td class="fix"><?php echo $lib->formatMoney($c = isset($costs[$code['code']][1])?$costs[$code['code']][1]:0) ?></td>
+                        <td class="fix" id="tien_lop_<?php echo $code['code'] ?>"><?php echo $lib->formatMoney($tong = $c+$c_vat) ?></td>
+                        <td class="fix" data="<?php echo $gia = isset($prices[$code['code']])?$prices[$code['code']]:0 ?>" id="price_<?php echo $code['code'] ?>"><?php echo $lib->formatMoney($gia) ?></td>
+                        <td class="fix error" id="lech_gia_<?php echo $code['code'] ?>"><?php echo $lib->formatMoney($tong-$gia) ?></td>
+
+                        <?php 
+                            $total['total'][$code['code']] = isset($total['total'][$code['code']])?$total['total'][$code['code']]+$tong:$tong;
+                            $total['cost'][$code['code']] = isset($total['cost'][$code['code']])?$total['cost'][$code['code']]+$c:$c;
+                            $total['cost_vat'][$code['code']] = isset($total['cost_vat'][$code['code']])?$total['cost_vat'][$code['code']]+$c_vat:$c_vat;
+
+                            $total_cost[$code['code']] = isset($total_cost[$code['code']])?$total_cost[$code['code']]+$gia:$gia;
+                        ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">2</td>
+                        <td class="fix">Thuế</td>
+                        <td class="fix"><?php echo $lib->formatMoney($c_vat = isset($costs_vat[$code['code']][2])?$costs_vat[$code['code']][2]:0) ?></td>
+                        <td class="fix"><?php echo $lib->formatMoney($c = isset($costs[$code['code']][2])?$costs[$code['code']][2]:0) ?></td>
+                        <td class="fix" id="tien_thue_<?php echo $code['code'] ?>"><?php echo $lib->formatMoney($tong = $c+$c_vat) ?></td>
+                        <td class="fix" data="<?php echo $thue = isset($taxs[$code['code']])?$taxs[$code['code']]:0 ?>" id="tax_<?php echo $code['code'] ?>"><?php echo $lib->formatMoney($thue) ?></td>
+                        <td class="fix error" id="lech_thue_<?php echo $code['code'] ?>"><?php echo $lib->formatMoney($tong-$thue) ?></td>
+                        <?php 
+                            $total['total'][$code['code']] = isset($total['total'][$code['code']])?$total['total'][$code['code']]+$tong:$tong;
+                            $total['cost'][$code['code']] = isset($total['cost'][$code['code']])?$total['cost'][$code['code']]+$c:$c;
+                            $total['cost_vat'][$code['code']] = isset($total['cost_vat'][$code['code']])?$total['cost_vat'][$code['code']]+$c_vat:$c_vat;
+
+                            $total_cost[$code['code']] = isset($total_cost[$code['code']])?$total_cost[$code['code']]+$thue:$thue;
+                        ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">3</td>
+                        <td class="fix">TTHQ-Logistics & phí khác</td>
+                        <td class="fix"><?php echo $lib->formatMoney($c_vat = isset($costs_vat[$code['code']][3])?$costs_vat[$code['code']][3]:0) ?></td>
+                        <td class="fix"><?php echo $lib->formatMoney($c = isset($costs[$code['code']][3])?$costs[$code['code']][3]:0) ?></td>
+                        <td class="fix"><?php echo $lib->formatMoney($tong = $c+$c_vat) ?></td>
+                        <td class="fix"><?php echo $lib->formatMoney($logs = $logistics->custom+$logistics->lift+$logistics->shipping+$logistics->trucking+$logistics->stevedore+$logistics->transfer+$logistics->deviation) ?></td>
+                        <td class="fix error" id="lech_log_<?php echo $code['code'] ?>"><?php echo $lib->formatMoney($tong-$logs) ?></td>
+                        <?php 
+                            $total['total'][$code['code']] = isset($total['total'][$code['code']])?$total['total'][$code['code']]+$tong:$tong;
+                            $total['cost'][$code['code']] = isset($total['cost'][$code['code']])?$total['cost'][$code['code']]+$c:$c;
+                            $total['cost_vat'][$code['code']] = isset($total['cost_vat'][$code['code']])?$total['cost_vat'][$code['code']]+$c_vat:$c_vat;
+
+                            $total_cost[$code['code']] = isset($total_cost[$code['code']])?$total_cost[$code['code']]+$logs:$logs;
+                        ?>
+                    </tr>
+                    <tr style="font-weight:bold;">
+                        <td class="fix" colspan="2">Total</td>
+                        <td class="fix"><?php echo $lib->formatMoney(isset($total['cost_vat'][$code['code']])?$total['cost_vat'][$code['code']]:0) ?></td>
+                        <td class="fix"><?php echo $lib->formatMoney(isset($total['cost'][$code['code']])?$total['cost'][$code['code']]:0) ?></td>
+                        <td class="fix error" id="t_<?php echo $code['code'] ?>"><?php echo $lib->formatMoney($tt = isset($total['total'][$code['code']])?$total['total'][$code['code']]:0) ?></td>
+                        <td class="fix error" id="total_cost_<?php echo $code['code'] ?>" data="<?php echo $to = isset($total_cost[$code['code']])?$total_cost[$code['code']]:0 ?>"><?php echo $lib->formatMoney($to) ?></td>
+                        <td class="fix error" id="lech_<?php echo $code['code'] ?>"><?php echo $lib->formatMoney($tt-$to) ?></td>
+                    </tr>
+
+                   </tbody>
+                </table>
+                </div>
+        </div>
+        <?php } ?>
+    </div>
+</div>
+
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('tirebalance') ?>">&larr;</a></div>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<script type="text/javascript">
+ 
+
+var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+ 
+
+
+
+    jQuery(document).ready(function() {
+    jQuery('.tabs .tab-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+        // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).slideDown(300).siblings().slideUp(300);
+ 
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+ 
+        e.preventDefault();
+    });
+
+    jQuery('.tabs .tab-left a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+ 
+        // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).slideDown(300).siblings().slideUp(300);
+ 
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+ 
+        e.preventDefault();
+    });
+});
+
+$('.rate').keyup(function(){
+    var code = $(this).attr('id');
+    var price = parseFloat($('#price_'+code).attr('data'));
+    var tax = parseFloat($('#tax_'+code).attr('data'));
+    var total = parseInt($('#total_cost_'+code).attr('data'));
+
+    var gia = parseInt($(this).val())*price;
+    var thue = parseInt($(this).val())*tax;
+    var tong = total-price-tax;
+
+    var tien_lop = parseInt($('#tien_lop_'+code).text().replace(/\,/g,''));
+    var tien_thue = parseInt($('#tien_thue_'+code).text().replace(/\,/g,''));
+    var t = parseInt($('#t_'+code).text().replace(/\,/g,''));
+
+    $('#lech_gia_'+code).text(tien_lop-gia);
+    $('#lech_thue_'+code).text(tien_thue-thue);
+    $('#lech_'+code).text(t-(tong+gia+thue));
+
+    $('#price_'+code).text(gia);
+    $('#tax_'+code).text(thue);
+    $('#total_cost_'+code).text(tong+gia+thue);
+
+    $('#price_'+code).text(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $('#tax_'+code).text(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $('#total_cost_'+code).text(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $('#lech_'+code).text(function(index, value) {
+        return value
+          .replace(/[^0-9-]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $('#lech_gia_'+code).text(function(index, value) {
+        return value
+          .replace(/[^0-9-]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $('#lech_thue_'+code).text(function(index, value) {
+        return value
+          .replace(/[^0-9-]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+});
+</script>
+</div>

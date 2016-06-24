@@ -1,0 +1,201 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'order_tire_waiting_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'order_tire_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'customer_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'total')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'order_tire_number')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> ĐƠN HÀNG ĐANG CHỜ</h1></center>
+<div class="add-box">
+    <a class="add_button" href="<?php echo $this->url('ordertire') ?>">Thêm đơn hàng mới</a>
+    <?php if($_SESSION['role_logined'] ==1 ){ ?>
+    <a class="add_button" id="btnExport" >Export Excel</a>
+    <?php } ?>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+        <div class="add-box">
+            <select id="sl_status" name="sl_status" style="width:200px">
+                <option value="">Khách hàng</option>
+                <?php foreach ($customers as $customer) { ?>
+                    <option value="<?php echo $customer->customer_id ?>"><?php echo $customer->customer_name ?></option>
+                <?php } ?>
+            </select>
+            <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+        </div>
+        <div class="add-box">
+            <select id="sl_nv" name="sl_nv" style="width:150px">
+                <option value="">Trạng thái</option>
+                <option value="0">Chưa xuất đơn</option>
+                <option value="1">Đã xuất đơn</option>
+            </select>
+            <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+        </div>
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+			<option value="20">Hiển thị 20 giá trị</option>
+            <option value="30">Hiển thị 30 giá trị</option>
+            <option value="50">Hiển thị 50 giá trị</option>
+            
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+    
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','order_tire_waiting_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'order_tire_waiting_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','order_tire_waiting_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'order_tire_waiting_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_name','<?php echo $url_order ?>')">Khách hàng <?php if ($order_by == 'customer_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','order_tire_waiting_number','<?php echo $url_order ?>')">Sản lượng <?php if ($order_by == 'order_tire_waiting_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','username','<?php echo $url_order ?>')">Sale <?php if ($order_by == 'username'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','order_tire_waiting_status','<?php echo $url_order ?>')">Trạng thái <?php if ($order_by == 'order_tire_waiting_status'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($order_tires as $order_tire) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->order_tire_waiting_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->order_tire_waiting_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix"  id="order_tire_date_<?php echo $order_tire->order_tire_waiting_id; ?>"><?php echo $lib->hien_thi_ngay_thang($order_tire->order_tire_waiting_date); ?></td>
+            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_waiting_id; ?>"><?php echo $order_tire->customer_name; ?></td>
+            <td class="fix"  id="order_tire_waiting_number_<?php echo $order_tire->order_tire_waiting_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertirewaiting/listtire/'.$order_tire->order_tire_waiting_id); ?>"><?php echo $order_tire->order_tire_waiting_number; ?></a></td>
+            
+            <td class="fix" id="sale_<?php echo $order_tire->order_tire_waiting_id; ?>"><?php echo $order_tire->username; ?></td> 
+            
+            <td class="fix" id="order_tire_waiting_status_<?php echo $order_tire->order_tire_waiting_id; ?>" data="<?php echo $order_tire->order_tire_waiting_status ?>"><?php echo $order_tire->order_tire_waiting_status==1?"Đã xuất":"Chưa xuất"; ?> 
+                <button id="ex_stock_<?php echo $order_tire->order_tire_waiting_id; ?>" style="display:none" class="ex_stock" onclick="window.location.href='<?php echo $this->url('ordertire/waiting/'.$order_tire->order_tire_waiting_id) ?>'" >Xuất đơn hàng</button>
+            </td> 
+            <td class="fix"> 
+                
+                <?php if($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1){ ?>
+                <a class="error" onclick="del(<?php echo $order_tire->order_tire_waiting_id ?>)" >Xóa</a>
+                <?php } ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('ordertirewaiting') ?>">&larr;</a></div>
+
+
+
+<script type="text/javascript">
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+var c = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+c+']').attr('selected','selected');
+
+var s = "<?php echo $nv ?>";
+$('#sl_nv option[value='+s+']').attr('selected','selected');
+
+
+$(".order_list").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:600,
+            resizable: false,
+            title:'Thông tin',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+$('.edit_tr').hover(function(){
+    var order_tire_status = $(this).find("#order_tire_waiting_status_"+$(this).attr('id')).attr('data');
+    if (order_tire_status != 1) {
+        $('#ex_stock_'+$(this).attr('id')).show();
+    }
+    else{
+        $('#ex_stock_'+$(this).attr('id')).hide();
+    }
+},function(){
+    $('#ex_stock_'+$(this).attr('id')).hide();
+});
+
+
+
+var pickerOpay2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $(".ngay").datepicker(pickerOpay2);
+
+
+</script>

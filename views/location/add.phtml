@@ -1,0 +1,50 @@
+<script type="text/javascript">
+$(document).ready(function(){
+	
+			// Validate form
+			$("#add").validate({
+				errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+				rules: {
+				}
+					 
+				 
+			});
+	
+});
+</script>
+<div class="login_form">
+  <div class="goback"><a href="<?php echo $this->url('location') ?>">&larr;</a></div>      
+        <div class="login_body">
+          <h1>THÊM ĐỊA ĐIỂM</h1>
+              <form id="add" method="post" action="">
+                  <table style="margin-top:20px;">
+                    <tr>
+                        <td>Tên địa điểm </td>
+                        <td><input type="text" id="location_name" name="location_name" tabindex="1" autofocus required="required"></td>
+                        
+                    </tr>
+                    <tr>
+                        <td>Tỉnh thành </td>
+                        <td>
+                          <select name="district" id="district" tabindex="2" required="required">
+                            <option value="">-------------Tỉnh thành--------------</option>
+                            <?php
+                            foreach ($district as $district) {
+                              echo '<option value="'.$district->district_id.'">'.$district->district_name.'</option>';
+                            }
+                            ?>
+                          </select>
+                        </td>
+                    </tr>
+                    
+                     <tr>
+                        <td ><input type="reset" name="reset" value="Nhập lại" tabindex="4"></td>
+                         <td><input type="submit" name="submit" value="Hoàn tất" tabindex="3"></td>
+                         
+                    </tr>
+                </table> 
+            </form>
+        </div>
+        <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+        </div>
+

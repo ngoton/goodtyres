@@ -1,0 +1,151 @@
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<?php $i = 1; $j=1; $tongthu=0; $tongchi=0; ?>
+<table style="margin-top: 10px" class="table_data">
+<thead>
+    <tr>
+    	
+        <th rowspan="2" class="fix">
+            <a >STT </a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a>Ngày </a>
+        </th> 
+        <th rowspan="2" class="fix">
+            <a>Code </a>
+        </th>   
+        <th colspan="3" class="fix">
+            <a >Dự thu </a>
+        </th> 
+        <th rowspan="2" class="fix">
+            <a >Số tiền </a>
+        </th> 
+        <th rowspan="2" class="fix">
+            <a >Nội dung </a>
+        </th> 
+        <th rowspan="2" class="fix">
+            <a >Tài khoản </a>
+        </th> 
+       
+    </tr>
+    <tr>
+        
+        <th class="fix">
+            <a >Khách hàng </a>
+        </th> 
+        <th class="fix">
+            <a >Vendor </a>
+        </th> 
+        <th class="fix">
+            <a >Nhân viên </a>
+        </th> 
+       
+    </tr>
+    
+    
+   </thead>
+   <tbody>
+    <?php foreach ($receivables as $receivable) { ?>
+    <?php $tongthu += $receivable->money-$receivable->pay_money; ?>
+    <tr class="edit_tr" >
+        <td style="text-align:center;" class="fix"><?php echo $i++; ?></td>
+        
+        <td  class="fix"><?php echo $lib->hien_thi_ngay_thang($receivable->expect_date) ?></td>
+        <td  class="fix"><?php echo $receivable->code ?></td>
+        <td class="fix" ><?php echo isset($customers['name'][$receivable->customer])?$customers['name'][$receivable->customer]:null; ?></td>
+        <td class="fix" ><?php echo isset($vendors['name'][$receivable->vendor])?$vendors['name'][$receivable->vendor]:null; ?></td>
+        <td class="fix" ><?php echo isset($staffs['name'][$receivable->staff])?$staffs['name'][$receivable->staff]:null; ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($receivable->money-$receivable->pay_money) ?></td>
+        <td  class="fix"><?php echo $receivable->comment ?></td>
+        <td  class="fix"><?php echo $receivable->bank_name ?></td>
+    </tr>
+    <?php } ?>
+    <tr style="font-weight:bold" class="error">
+        <td class="fix" colspan="6">Tổng cộng</td>
+        <td  class="fix"><?php echo $lib->formatMoney($tongthu) ?></td>
+        <td class="fix"></td>
+        <td class="fix"></td>
+    </tr>
+   </tbody>
+</table>
+
+<table style="margin-top: 10px" class="table_data">
+<thead>
+    <tr>
+        
+        <th rowspan="2" class="fix">
+            <a >STT </a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a>Ngày </a>
+        </th> 
+        <th rowspan="2" class="fix">
+            <a>Code </a>
+        </th>   
+        <th colspan="2" class="fix">
+            <a >Dự chi </a>
+        </th> 
+        <th rowspan="2" class="fix">
+            <a >Số tiền </a>
+        </th> 
+        <th rowspan="2" class="fix">
+            <a >Nội dung </a>
+        </th> 
+        <th rowspan="2" class="fix">
+            <a >Tài khoản </a>
+        </th> 
+       
+    </tr>
+    <tr>
+        
+        <th class="fix">
+            <a >Vendor </a>
+        </th>
+        <th class="fix">
+            <a>Khách hàng </a>
+        </th> 
+        
+       
+    </tr>
+    
+    
+   </thead>
+   <tbody>
+    <?php foreach ($payables as $payable) { ?>
+    <?php $tongchi += $payable->money-$payable->pay_money; ?>
+    <tr class="edit_tr" >
+        <td style="text-align:center;" class="fix"><?php echo $j++; ?></td>
+        
+        <td  class="fix"><?php echo $lib->hien_thi_ngay_thang($payable->expect_date) ?></td>
+        <td  class="fix"><?php echo $payable->code ?></td>
+        <td class="fix" ><?php echo isset($vendors['name'][$payable->vendor])?$vendors['name'][$payable->vendor]:null; ?></td>
+        <td class="fix" ><?php echo isset($customers['name'][$payable->customer])?$customers['name'][$payable->customer]:null; ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($payable->money-$payable->pay_money) ?></td>
+        <td  class="fix"><?php echo $payable->comment ?></td>
+        <td  class="fix"><?php echo $payable->bank_name ?></td>
+    </tr>
+    <?php } ?>
+    <?php foreach ($costs as $payable) { ?>
+    <?php $tongchi += $payable->money-$payable->pay_money; ?>
+    <tr class="edit_tr" >
+        <td style="text-align:center;" class="fix"><?php echo $j++; ?></td>
+        
+        <td  class="fix"><?php echo $lib->hien_thi_ngay_thang($payable->expect_date) ?></td>
+        <td  class="fix"><?php echo $payable->code ?></td>
+        <td class="fix" ></td>
+        <td class="fix" ></td>
+        <td  class="fix"><?php echo $lib->formatMoney($payable->money-$payable->pay_money) ?></td>
+        <td  class="fix"><?php echo $payable->comment ?></td>
+        <td  class="fix"><?php echo $payable->bank_name ?></td>
+    </tr>
+    <?php } ?>
+    <tr style="font-weight:bold" class="error">
+        <td class="fix" colspan="5">Tổng cộng</td>
+        <td  class="fix"><?php echo $lib->formatMoney($tongchi) ?></td>
+        <td class="fix"></td>
+        <td class="fix"></td>
+    </tr>
+   </tbody>
+</table>

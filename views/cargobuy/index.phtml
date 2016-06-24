@@ -1,0 +1,635 @@
+<?php
+$url_order = 'ASC';
+if ($order_by == 'cargo_buy_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cargo_buy_code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cargo_brand_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cargo_category_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cargo_type_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'shipment_vendor_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cargo_buy_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cargo_buy_number')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cargo_buy_charge')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cargo_buy_cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> LÔ HÀNG NHẬP</h1></center>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Nhập lô mới</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Search">
+        <input type="button" name="" id="search-submit" class="button-search" value="Search" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+       
+    </div>
+    <div class="tablenav top">
+
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Select</option>
+                
+                <option value="delete">Delete</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Apply" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">All</option>
+			<option value="15">15 items</option>
+            <option value="20">20 items</option>
+            <option value="50">50 items</option>
+            <option selected="selected" value="100">100 items</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Apply" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+        
+      </div>
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+        <th class="fix" rowspan="2"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th  class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cargo_buy_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'cargo_buy_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cargo_buy_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'cargo_buy_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cargo_buy_code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'cargo_buy_code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" colspan="3">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cargo_brand_name','<?php echo $url_order ?>')">Loại hàng <?php if ($order_by == 'cargo_brand_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','shipment_vendor_name','<?php echo $url_order ?>')">Vendor <?php if ($order_by == 'shipment_vendor_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cargo_buy_number','<?php echo $url_order ?>')">Sản lượng <?php if ($order_by == 'cargo_buy_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cargo_buy_charge','<?php echo $url_order ?>')">Đơn giá <?php if ($order_by == 'cargo_buy_charge'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cargo_buy_cost','<?php echo $url_order ?>')">Thành tiền <?php if ($order_by == 'cargo_buy_cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        
+        <th class="fix" rowspan="2"></th>
+    </tr>
+    <tr>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cargo_type_name','<?php echo $url_order ?>')">Mặt hàng <?php if ($order_by == 'cargo_type_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cargo_brand_name','<?php echo $url_order ?>')">Thương hiệu <?php if ($order_by == 'cargo_brand_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cargo_category_name','<?php echo $url_order ?>')">Loại <?php if ($order_by == 'cargo_category_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($cargo_buys as $cargo_buy) : ?>
+    
+        
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $cargo_buy->cargo_buy_id ?>" class="edit_tr">
+            
+            <td>
+                <input name="check[]" type="checkbox" class="checkbox" value="<?php echo $cargo_buy->cargo_buy_id ?>">
+            </td>
+            
+            <td  class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="cargo_buy_date_<?php echo $cargo_buy->cargo_buy_id; ?>"><?php echo $lib->hien_thi_ngay_thang($cargo_buy->cargo_buy_date); ?></td>
+            <td class="fix" id="cargo_buy_code_<?php echo $cargo_buy->cargo_buy_id; ?>"><?php echo $cargo_buy->cargo_buy_code; ?></td>
+            <td class="fix" id="cargo_type_<?php echo $cargo_buy->cargo_buy_id; ?>"><?php echo $cargo_buy->cargo_type_name; ?></td>
+            <td class="fix" id="cargo_brand_<?php echo $cargo_buy->cargo_buy_id; ?>"><?php echo $cargo_buy->cargo_brand_name; ?></td>
+            <td class="fix" id="cargo_category_<?php echo $cargo_buy->cargo_buy_id; ?>"><?php echo $cargo_buy->cargo_category_name; ?></td>
+            <td class="fix" id="cargo_buy_vendor_<?php echo $cargo_buy->cargo_buy_id; ?>"><?php echo $cargo_buy->shipment_vendor_name; ?></td>
+            <td class="fix" id="cargo_buy_number_<?php echo $cargo_buy->cargo_buy_id; ?>"><?php echo $cargo_buy->cargo_buy_number; ?></td>
+            <td class="fix" id="cargo_buy_charge_<?php echo $cargo_buy->cargo_buy_id; ?>"><?php echo $lib->formatMoney($cargo_buy->cargo_buy_charge); ?></td>
+            <td class="fix" id="cargo_buy_cost_<?php echo $cargo_buy->cargo_buy_id; ?>"><?php echo $lib->formatMoney($cargo_buy->cargo_buy_cost); ?></td>
+            
+            <td>
+                
+                <button class="error" onclick="del(<?php echo $cargo_buy->cargo_buy_id ?>)" >Xóa</button>
+                
+               
+            </td>
+        </tr>
+
+
+    <?php endforeach; ?>
+     
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div style="display:none" id="lasted"></div>
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Lô hàng </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_cargo" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            <td>Ngày </td>
+                            <td>
+                                <input style="width:80px" class="ngay" type="text" id="cargo_buy_date"  name="cargo_buy_date" tabindex="1"  required="required" >
+                                
+                            </td>
+                            <td>Code</td>
+                            <td>
+                                <input style="width:80px" class="number" type="text" id="cargo_buy_code"  name="cargo_buy_code" tabindex="2"  required="required" >
+                                
+                            </td>
+                            <td>Vendor</td>
+                            <td>
+                                <select style="width:120px" name="cargo_buy_vendor" id="cargo_buy_vendor" tabindex="3"  required="required">
+                                    <?php foreach ($cargo_vendors as $cargo_vendor) { ?>
+                                        <option value="<?php echo $cargo_vendor->shipment_vendor_id ?>"><?php echo $cargo_vendor->shipment_vendor_name ?></option>
+                                    <?php } ?>
+                                    
+                                </select>
+                            </td>
+                            
+                            
+                            
+                        </tr>
+                        <tr>
+                            <td>Mặt hàng</td>
+                            <td>
+                                <select name="cargo_type" id="cargo_type" tabindex="4"  required="required">
+                                    <option value="-1">Chọn 1 mặt hàng</option>
+                                    <?php foreach ($cargo_types as $cargo_type) { ?>
+                                        <option value="<?php echo $cargo_type->cargo_type_id ?>"><?php echo $cargo_type->cargo_type_name ?></option>
+                                    <?php } ?>
+                                    
+                                </select>
+                                
+                            </td>
+                            <td>Thương hiệu</td>
+                            <td>
+                                <select name="cargo_brand" id="cargo_brand" tabindex="5"  required="required">
+                                    <?php foreach ($cargo_brands as $cargo_brand) { ?>
+                                        <option value="<?php echo $cargo_brand->cargo_brand_id ?>"><?php echo $cargo_brand->cargo_brand_name ?></option>
+                                    <?php } ?>
+                                    
+                                </select>
+                                
+                            </td>
+                            <td>Loại</td>
+                            <td>
+                                <select name="cargo_category" id="cargo_category" tabindex="6"  required="required">
+                                    <?php foreach ($cargo_categorys as $cargo_category) { ?>
+                                        <option value="<?php echo $cargo_category->cargo_category_id ?>"><?php echo $cargo_category->cargo_category_name ?></option>
+                                    <?php } ?>
+                                    
+                                </select>
+                                
+                            </td>
+                            
+                            
+                        </tr>
+                        <tr>
+                            <td>Sản lượng</td>
+                            <td>
+                                <input style="width:80px" class="numberss" type="text" id="cargo_buy_number"  name="cargo_buy_number" tabindex="7"  required="required" >
+                                
+                            </td>
+                            <td>Đơn giá</td>
+                            <td>
+                                <input style="width:90px" class="numbers" type="text" id="cargo_buy_charge"  name="cargo_buy_charge" tabindex="8"  required="required" >
+                                
+                            </td>
+                            <td>Thành tiền</td>
+                            <td>
+                                <input style="width:100px" class="numbers" type="text" id="cargo_buy_cost"  name="cargo_buy_cost" tabindex="9"  required="required" >
+                                
+                            </td>
+                            
+                        </tr>
+                                               
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td></td>
+                            <td></td>
+
+                            <td>
+                                <input type="submit" name="submit" value="Submit" tabindex="10">
+                                
+                            </td>
+                            <td>
+                                <input type="reset" name="reset" value="Reset" tabindex="11">
+                            </td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+
+
+<script type="text/javascript">
+
+
+  
+$('.add-field').hide();  
+
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);      
+    }
+    
+});
+
+
+
+    $('.edit_tr').click(function(e){
+        if(e.target != '[object HTMLButtonElement]' && e.target != '[object HTMLSpanElement]' && !$('.checkbox').is(':focus')) { 
+            if(!$('.checkbox').is(':focus')){
+                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+            }
+            var cargo_buy_code = $(this).find("#cargo_buy_code_"+$(this).attr('id')).text();
+            var cargo_brand = $(this).find("#cargo_brand_"+$(this).attr('id')).text();
+            var cargo_type = $(this).find("#cargo_type_"+$(this).attr('id')).text();
+            var cargo_category = $(this).find("#cargo_category_"+$(this).attr('id')).text();
+            var cargo_buy_number = $(this).find("#cargo_buy_number_"+$(this).attr('id')).text();
+            var cargo_buy_charge = $(this).find("#cargo_buy_charge_"+$(this).attr('id')).text();
+            var cargo_buy_cost = $(this).find("#cargo_buy_cost_"+$(this).attr('id')).text();
+            var cargo_buy_vendor = $(this).find("#cargo_buy_vendor_"+$(this).attr('id')).text();
+            var cargo_buy_date = $(this).find("#cargo_buy_date_"+$(this).attr('id')).text();
+
+            //alert(cost_code);
+            $('#yes').val($(this).attr('id'));
+            
+            $('#cargo_buy_code').val(cargo_buy_code);
+            $("#cargo_brand option:contains(" + cargo_brand + ")").attr('selected', 'selected');
+            $("#cargo_type option:contains(" + cargo_type + ")").attr('selected', 'selected');
+            $("#cargo_category option:contains(" + cargo_category + ")").attr('selected', 'selected');
+            $("#cargo_buy_vendor option:contains(" + cargo_buy_vendor + ")").attr('selected', 'selected');
+            $('#cargo_buy_cost').val(cargo_buy_cost);
+            $('#cargo_buy_charge').val(cargo_buy_charge);
+            $('#cargo_buy_number').val(cargo_buy_number);
+            $('#cargo_buy_date').val(cargo_buy_date.replace(/\//g,"-"));
+
+            $( ".add-field" ).dialog( "open" );
+        }
+
+        
+        
+    });
+
+
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+     $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
+     
+        $('#cargo_buy_code').val("");
+        $('#cargo_buy_cost').val("");
+        $('#cargo_buy_charge').val("");
+        $('#cargo_buy_number').val("");
+        $('#cargo_buy_date').val("");
+                
+        $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+    $( ".add-field" ).dialog( "open" );
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_cargo").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var cargo_buy_code = $('#cargo_buy_code').attr('value');
+                    var cargo_category = $('#cargo_category').attr('value');
+                    var cargo_buy_number = $('#cargo_buy_number').attr('value');
+                    var cargo_buy_charge = $('#cargo_buy_charge').attr('value');
+                    var cargo_buy_cost = $('#cargo_buy_cost').attr('value');
+                    var cargo_buy_vendor = $('#cargo_buy_vendor').attr('value');
+                    var cargo_buy_date = $('#cargo_buy_date').attr('value');
+                    
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/cargobuy/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            cargo_buy_code: cargo_buy_code,
+                            cargo_category: cargo_category,
+                            cargo_buy_number: cargo_buy_number,
+                            cargo_buy_charge: cargo_buy_charge,
+                            cargo_buy_cost: cargo_buy_cost,
+                            cargo_buy_vendor: cargo_buy_vendor,
+                            cargo_buy_date: cargo_buy_date,
+
+                            yes: yes,
+
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (yes != "") {
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                                    $('#expect_date_'+yes).text(expect_date);
+                                    $('#comment_'+yes).text(comment);
+                                    $('#money_'+yes).text(money);
+                                    $('#source_'+yes).text($("#source option:selected").text());
+                                    $('#source_in_'+yes).text($("#source_in option:selected").text());
+                            }
+                            else{
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="vendor_'+parseInt(lastID+1)+'">'+vendor+'</td><td class="fix" id="money_'+parseInt(lastID+1)+'">'+money+'</td><td class="fix" id="expect_date_'+parseInt(lastID+1)+'">'+expect_date+'</td><td class="fix" id="week_'+parseInt(lastID+1)+'"></td><td class="fix" id="code_'+parseInt(lastID+1)+'">'+code+'</td><td class="fix" id="source_'+parseInt(lastID+1)+'">'+$("#source option:selected").text()+'</td><td class="fix" id="comment_'+parseInt(lastID+1)+'">'+comment+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+
+
+    $('#cargo_buy_charge').keyup(function() {
+
+         $('#cargo_buy_cost').val(
+            Math.round(
+            parseFloat(get_number('#cargo_buy_number')) * (parseFloat(get_number('#cargo_buy_charge')))
+                
+            )
+            );
+         $('#cargo_buy_cost').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+    });
+
+    $('#cargo_buy_number').keyup(function() {
+
+         $('#cargo_buy_cost').val(
+            Math.round(
+            parseFloat(get_number('#cargo_buy_number')) * (parseFloat(get_number('#cargo_buy_charge')))
+                
+            )
+            );
+         $('#cargo_buy_cost').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+    });
+
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+    $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-]/g, "")
+        ;
+      });
+    });
+
+    $('.numberss').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+        ;
+      });
+    });
+    
+
+});
+
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+function set_item(item,name) {
+    // change input value
+    $('#work_code').val(item);
+    $("#work_code").attr("data",name);
+    
+    $('#code_list_id').hide();
+    $('#work_code').focus();
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+
+ 
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+
+</script>
+</div>
+
+<script type="text/javascript">
+
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Lô hàng",
+    hide: 'fold',
+    show: 'blind'
+});
+
+var pickerOpay2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $(".ngay").datepicker(pickerOpay2);
+
+$(".show").click(function(){
+    $("#winpopup").dialog({
+        draggable:true,
+        modal: true,
+        autoOpen: false,
+        width: "90%",
+        resizable: false,
+        position: "top",
+        title:'Chi tiết',
+        buttons: {
+            OK: function() {
+                $( this ).dialog( "close" );
+            },
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        }
+    });
+    $("#winpopup").load($(this).attr('href'));
+    $("#winpopup").dialog("open");
+    return false;
+});
+
+$('#cargo_type').change(function(){
+        var data = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/cargobuy/getBrand',
+            type: 'POST',
+            data: {data:data},
+            success:function(data){
+                $("#cargo_brand").empty();
+                var show = '<option value="-1">Chọn 1 thương hiệu</option>'+data;
+                $('#cargo_brand').append(show);
+                $("#cargo_category").empty();
+            }
+        });
+        
+      
+   }); 
+
+$('#cargo_brand').change(function(){
+        var data = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/cargobuy/getCategory',
+            type: 'POST',
+            data: {data:data},
+            success:function(data){
+                $("#cargo_category").empty();
+                $('#cargo_category').append(data);
+            }
+        });
+        
+      
+   }); 
+
+</script>
+

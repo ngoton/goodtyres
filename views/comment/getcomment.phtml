@@ -1,0 +1,161 @@
+<div id="comment_container" class="container">  
+    <?php foreach ($comments as $comment) { ?>
+    <div class="leftbox <?php echo $comment->username==$_SESSION['user_logined'] ? 'approve' : null ?>" >
+        <span class="add-on"><i class="icon-user" ></i></span> <?php echo $comment->username; ?>
+    </div>
+    <div class="dialogbox">
+        <div class="<?php echo $comment->username==$_SESSION['user_logined'] ? 'me' : 'body' ?>">
+          <span class="<?php echo $comment->username==$_SESSION['user_logined'] ? 'tip-me' : 'tip' ?> tip-up"></span>
+          <div class="message">
+            <span><?php echo $comment->comment; ?></span>
+          </div>
+        </div>
+    </div>
+    <?php } ?>
+    
+    <div id="item_final"></div>
+    
+</div>
+<div style="bottom:0" class="dialogbox">
+        <div class="body">
+          <div class="message">
+            <input type="hidden" name="table" id="table" value="" >
+            <input type="hidden" name="record" id="record" value="" >
+            <textarea style="width:95%" id="comment" name="comment" autofocus ></textarea>
+            <button id="post_comment" name="post_comment">Gửi</button>
+          </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+
+$('#table').val("<?php echo $table ?>");
+$('#record').val(<?php echo $record ?>);
+
+    $('#comment').keypress(function (e) {
+     var key = e.which;
+     if(key == 13 && !e.shiftKey)  // the enter key code
+      {
+        if($('#comment').val().trim() != ""){
+          $('#post_comment').click();
+          return false;  
+        }
+      }
+    }); 
+    $('#post_comment').click(function(){
+        var comment = $('#comment').val();
+        var table = $('#table').val();
+        var record = $('#record').val();
+
+        $.post("<?php echo BASE_URL ?>/comment/add", 
+            {
+                yes: "",
+                comment: comment,
+                table: table,
+                record: record,
+            },
+           function(data){
+            $('<div class="leftbox approve"><span class="add-on"><i class="icon-user" ></i></span> <?php echo $_SESSION["user_logined"]; ?></div><div class="dialogbox"><div class="me"><span class="tip-me tip-up"></span><div class="message"><span>'+comment+'</span></div></div></div>').insertBefore('#item_final');
+
+            $('#comment').val("");
+
+            var wtf    = $('#comment_container');
+            var height = wtf[0].scrollHeight;
+            wtf.scrollTop(height);
+
+           });
+    });
+</script>
+
+<style type="text/css">
+
+.dialogbox .me{
+  background-color: rgba(123, 236, 169, 0.24);
+  position: relative;
+  max-width: 300px;
+  height: auto;
+  margin: 20px 10px;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #BAE8D0;
+}
+.tip-me{
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  background: transparent;
+  border: 10px solid #BAE8D0;
+}
+.approve{
+  color: green;
+}
+
+#comment_container{
+  height: 300px;
+  overflow: auto;
+}
+    .leftbox{
+        margin-bottom: -10px;
+        font-weight: bold;
+    }
+
+    .tip {
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  background: transparent;
+  border: 10px solid #ccc;
+}
+
+.tip-up {
+  top: -20px; /* Same as body margin top + bordere */
+  left: 10px;
+  border-right-color: transparent;
+  border-left-color: transparent;
+  border-top-color: transparent;
+}
+
+.tip-down {
+  bottom: -25px;
+  left: 10px;
+  border-right-color: transparent;
+  border-left-color: transparent;
+  border-bottom-color: transparent;  
+}
+
+.tip-left {
+  top: 10px;
+  left: -20px;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-bottom-color: transparent;  
+}
+
+.tip-right {
+  top: 10px;
+  right: -25px;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;  
+}
+
+.dialogbox .body {
+  position: relative;
+  max-width: 300px;
+  height: auto;
+  margin: 20px 10px;
+  padding: 5px;
+  background-color: #DADADA;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+.body .message {
+  min-height: 20px;
+  border-radius: 3px;
+  font-family: Arial;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #797979;
+}
+</style>

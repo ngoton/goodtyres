@@ -1,0 +1,363 @@
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BÁO CÁO DÒNG TIỀN </h1></center>
+    <div class="add-box">
+        <a class="add_button" id="btnExport" >Export Excel</a>
+    </div>
+    <div class="tablenav top">
+        <div class="add-box">
+                  <form id="report" name="report" action method="post">
+            Tuần  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn năm" <?php if(isset($batdau)) echo "value='$batdau'"; ?> > 
+            Năm  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn tuần" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >   
+             <input type="submit" name="submit" id="xem" value="Xem"> 
+            </form>
+        </div>
+    </div>
+</div>
+
+<table id="tblExport" style="margin-top: 30px" class="table_data">
+<thead>
+    <tr>
+    	
+        <th rowspan="2" style="width:30px" class="fix">
+            <a >Tuần </a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a >Dòng tiền </a>
+        </th>
+        <th colspan="4" class="fix">
+            <a>SALE </a>
+        </th> 
+          
+        <th colspan="4" class="fix">
+            <a >AGENTS </a>
+        </th> 
+        <th colspan="4" class="fix">
+            <a >TCMT </a>
+        </th> 
+        <th colspan="4" class="fix">
+            <a >TRADING </a>
+        </th> 
+        <th colspan="4" class="fix">
+            <a >HÀNH CHÍNH </a>
+        </th> 
+       
+    </tr>
+    <tr>
+        
+        <th class="fix">
+            <a >Dự thu </a>
+        </th> 
+        <th class="fix">
+            <a >Thực thu </a>
+        </th>
+        <th class="fix">
+            <a >Dự chi </a>
+        </th>
+        <th class="fix">
+            <a >Thực chi </a>
+        </th>
+        <th class="fix">
+            <a >Dự thu </a>
+        </th> 
+        <th class="fix">
+            <a >Thực thu </a>
+        </th>
+        <th class="fix">
+            <a >Dự chi </a>
+        </th>
+        <th class="fix">
+            <a >Thực chi </a>
+        </th>
+        <th class="fix">
+            <a >Dự thu </a>
+        </th> 
+        <th class="fix">
+            <a >Thực thu </a>
+        </th>
+        <th class="fix">
+            <a >Dự chi </a>
+        </th>
+        <th class="fix">
+            <a >Thực chi </a>
+        </th>
+        <th class="fix">
+            <a >Dự thu </a>
+        </th> 
+        <th class="fix">
+            <a >Thực thu </a>
+        </th>
+        <th class="fix">
+            <a >Dự chi </a>
+        </th>
+        <th class="fix">
+            <a >Thực chi </a>
+        </th>
+        <th class="fix">
+            <a >Dự thu </a>
+        </th> 
+        <th class="fix">
+            <a >Thực thu </a>
+        </th>
+        <th class="fix">
+            <a >Dự chi </a>
+        </th>
+        <th class="fix">
+            <a >Thực chi </a>
+        </th>
+       
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php
+    $tduthu_sale=0;
+    $tduthu_agent=0;
+    $tduthu_tcmt=0;
+    $tduthu_trading=0;
+    $tduthu_hc=0;
+    $tduchi_sale=0;
+    $tduchi_agent=0;
+    $tduchi_tcmt=0;
+    $tduchi_trading=0;
+    $tduchi_hc=0;
+
+    $tthucthu_sale=0;
+    $tthucthu_agent=0;
+    $tthucthu_tcmt=0;
+    $tthucthu_trading=0;
+    $tthucthu_hc=0;
+    $tthucchi_sale=0;
+    $tthucchi_agent=0;
+    $tthucchi_tcmt=0;
+    $tthucchi_trading=0;
+    $tthucchi_hc=0;
+
+    ?>
+    <?php for($i=$batdau; $i<= ($week+1); $i++){ ?>
+    <?php 
+    $duthu_sale[$i] = (isset($receivable_data[$i][1])?$receivable_data[$i][1]:0);
+    $duthu_agent[$i] = (isset($receivable_data[$i][2])?$receivable_data[$i][2]:0);
+    $duthu_tcmt[$i] = (isset($receivable_data[$i][3])?$receivable_data[$i][3]:0);
+    $duthu_trading[$i] = (isset($receivable_data[$i][4])?$receivable_data[$i][4]:0);
+    $duthu_hc[$i] = (isset($receivable_data[$i][5])?$receivable_data[$i][5]:0);
+
+    $duchi_sale[$i] = (isset($payable_data[$i][1])?$payable_data[$i][1]:0);
+    $duchi_agent[$i] = (isset($payable_data[$i][2])?$payable_data[$i][2]:0);
+    $duchi_tcmt[$i] = (isset($payable_data[$i][3])?$payable_data[$i][3]:0);
+    $duchi_trading[$i] = (isset($payable_data[$i][4])?$payable_data[$i][4]:0);
+    $duchi_hc[$i] = (isset($payable_data[$i][5])?$payable_data[$i][5]:0);
+
+    $thucthu_sale[$i] = (isset($receive_data[$i][1])?$receive_data[$i][1]:0);
+    $thucthu_agent[$i] = (isset($receive_data[$i][2])?$receive_data[$i][2]:0);
+    $thucthu_tcmt[$i] = (isset($receive_data[$i][3])?$receive_data[$i][3]:0);
+    $thucthu_trading[$i] = (isset($receive_data[$i][4])?$receive_data[$i][4]:0);
+    $thucthu_hc[$i] = (isset($receive_data[$i][5])?$receive_data[$i][5]:0);
+
+    $thucchi_sale[$i] = (isset($pay_data[$i][1])?$pay_data[$i][1]:0);
+    $thucchi_agent[$i] = (isset($pay_data[$i][2])?$pay_data[$i][2]:0);
+    $thucchi_tcmt[$i] = (isset($pay_data[$i][3])?$pay_data[$i][3]:0);
+    $thucchi_trading[$i] = (isset($pay_data[$i][4])?$pay_data[$i][4]:0);
+    $thucchi_hc[$i] = (isset($pay_data[$i][5])?$pay_data[$i][5]:0);
+
+    if ($i==$batdau) {
+        $dongtien[$i] = $dongtien_data[$i];
+    }
+
+    else if($i==($batdau+1)){
+        $dongtien[$i] = isset($dongtien[$i-1])?($dongtien[$i-1]+( $duthu_sale[$i]+($duthu_sale[$i-1]-$thucthu_sale[$i-1])+$duthu_agent[$i]+($duthu_agent[$i-1]-$thucthu_agent[$i-1])+$duthu_tcmt[$i]+($duthu_tcmt[$i-1]-$thucthu_tcmt[$i-1])+$duthu_trading[$i]+($duthu_trading[$i-1]-$thucthu_trading[$i-1])+$duthu_hc[$i]+($duthu_hc[$i-1]-$thucthu_hc[$i-1]) ) - ($duchi_sale[$i]+($duchi_sale[$i-1]-$thucchi_sale[$i-1])+$duchi_agent[$i]+($duchi_agent[$i-1]-$thucchi_agent[$i-1])+$duchi_tcmt[$i]+($duchi_tcmt[$i-1]-$thucchi_tcmt[$i-1])+$duchi_trading[$i]+($duchi_trading[$i-1]-$thucchi_trading[$i-1])+$duchi_hc[$i]+($duchi_hc[$i-1]-$thucchi_hc[$i-1])) ):(( $duthu_sale[$i]+($duthu_sale[$i-1]-$thucthu_sale[$i-1])+$duthu_agent[$i]+($duthu_agent[$i-1]-$thucthu_agent[$i-1])+$duthu_tcmt[$i]+($duthu_tcmt[$i-1]-$thucthuc_tcmt[$i-1])+$duthu_trading[$i]+($duthu_trading[$i-1]-$thucthu_trading[$i-1])+$duthu_hc[$i]+($duthu_hc[$i-1]-$thucthu_hc[$i-1]) ) - ($duchi_sale[$i]+($duchi_sale[$i-1]-$thucchi_sale[$i-1])+$duchi_agent[$i]+($duchi_agent[$i-1]-$thucchi_agent[$i-1])+$duchi_tcmt[$i]+($duchi_tcmt[$i-1]-$thucchi_tcmt[$i-1])+$duchi_trading[$i]+($duchi_trading[$i-1]-$thucchi_trading[$i-1])+$duchi_hc[$i]+($duchi_hc[$i-1]-$thucchi_hc[$i-1])) );
+    }
+    
+    else {
+        $dongtien[$i] = isset($dongtien[$i-1])?($dongtien[$i-1]+( $duthu_sale[$i]+$duthu_agent[$i]+$duthu_tcmt[$i]+$duthu_trading[$i]+$duthu_hc[$i]-$duchi_sale[$i]-$duchi_agent[$i]-$duchi_tcmt[$i]-$duchi_trading[$i]-$duchi_hc[$i])+( $thucthu_sale[$i]+$thucthu_agent[$i]+$thucthu_tcmt[$i]+$thucthu_trading[$i]+$thucthu_hc[$i]-$thucchi_sale[$i]-$thucchi_agent[$i]-$thucchi_tcmt[$i]-$thucchi_trading[$i]-$thucchi_hc[$i])):(( $duthu_sale[$i]+$duthu_agent[$i]+$duthu_tcmt[$i]+$duthu_trading[$i]+$duthu_hc[$i]-$duchi_sale[$i]-$duchi_agent[$i]-$duchi_tcmt[$i]-$duchi_trading[$i]-$duchi_hc[$i])+( $thucthu_sale[$i]+$thucthu_agent[$i]+$thucthu_tcmt[$i]+$thucthu_trading[$i]+$thucthu_hc[$i]-$thucchi_sale[$i]-$thucchi_agent[$i]-$thucchi_tcmt[$i]-$thucchi_trading[$i]-$thucchi_hc[$i]));
+    }
+    
+       
+    $tduthu_sale += (isset($receivable_data[$i][1])?$receivable_data[$i][1]:0);
+    $tduthu_agent += (isset($receivable_data[$i][2])?$receivable_data[$i][2]:0);
+    $tduthu_tcmt += (isset($receivable_data[$i][3])?$receivable_data[$i][3]:0);
+    $tduthu_trading += (isset($receivable_data[$i][4])?$receivable_data[$i][4]:0);
+    $tduthu_hc += (isset($receivable_data[$i][5])?$receivable_data[$i][5]:0);
+
+    $tduchi_sale += (isset($payable_data[$i][1])?$payable_data[$i][1]:0);
+    $tduchi_agent += (isset($payable_data[$i][2])?$payable_data[$i][2]:0);
+    $tduchi_tcmt += (isset($payable_data[$i][3])?$payable_data[$i][3]:0);
+    $tduchi_trading += (isset($payable_data[$i][4])?$payable_data[$i][4]:0);
+    $tduchi_hc += (isset($payable_data[$i][5])?$payable_data[$i][5]:0);
+
+    $tthucthu_sale += (isset($receive_data[$i][1])?$receive_data[$i][1]:0);
+    $tthucthu_agent += (isset($receive_data[$i][2])?$receive_data[$i][2]:0);
+    $tthucthu_tcmt += (isset($receive_data[$i][3])?$receive_data[$i][3]:0);
+    $tthucthu_trading += (isset($receive_data[$i][4])?$receive_data[$i][4]:0);
+    $tthucthu_hc += (isset($receive_data[$i][5])?$receive_data[$i][5]:0);
+
+    $tthucchi_sale += (isset($pay_data[$i][1])?$pay_data[$i][1]:0);
+    $tthucchi_agent += (isset($pay_data[$i][2])?$pay_data[$i][2]:0);
+    $tthucchi_tcmt += (isset($pay_data[$i][3])?$pay_data[$i][3]:0);
+    $tthucchi_trading += (isset($pay_data[$i][4])?$pay_data[$i][4]:0);
+    $tthucchi_hc += (isset($pay_data[$i][5])?$pay_data[$i][5]:0);             
+
+    ?>
+    <tr>
+        <td style="text-align:center;" class="fix"><?php echo $i; ?></td>
+        <td style=" font-weight: bold; color: red" class="fix"><?php echo $lib->formatMoney($dongtien[$i]); ?></td>
+        <td style="background:rgba(8, 158, 39, 0.75); color: #fff" class="fix"><?php echo $lib->formatMoney($duthu_sale[$i]) ?></td>
+        <td style="background:rgba(25, 126, 244, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($thucthu_sale[$i]) ?></td>
+        <td style="background:rgba(154, 34, 249, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($duchi_sale[$i]) ?></td>
+        <td style="background:rgba(244, 25, 75, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($thucchi_sale[$i]) ?></td>
+        <td style="background:rgba(8, 158, 39, 0.75); color: #fff" class="fix"><?php echo $lib->formatMoney($duthu_agent[$i]) ?></td>
+        <td style="background:rgba(25, 126, 244, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($thucthu_agent[$i]) ?></td>
+        <td style="background:rgba(154, 34, 249, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($duchi_agent[$i]) ?></td>
+        <td style="background:rgba(244, 25, 75, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($thucchi_agent[$i]) ?></td>
+        <td style="background:rgba(8, 158, 39, 0.75); color: #fff" class="fix"><?php echo $lib->formatMoney($duthu_tcmt[$i]) ?></td>
+        <td style="background:rgba(25, 126, 244, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($thucthu_tcmt[$i]) ?></td>
+        <td style="background:rgba(154, 34, 249, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($duchi_tcmt[$i]) ?></td>
+        <td style="background:rgba(244, 25, 75, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($thucchi_tcmt[$i]) ?></td>
+        <td style="background:rgba(8, 158, 39, 0.75); color: #fff" class="fix"><?php echo $lib->formatMoney($duthu_trading[$i]) ?></td>
+        <td style="background:rgba(25, 126, 244, 1); color: #fff"  class="fix"><?php echo $lib->formatMoney($thucthu_trading[$i]) ?></td>
+        <td style="background:rgba(154, 34, 249, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($duchi_trading[$i]) ?></td>
+        <td style="background:rgba(244, 25, 75, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($thucchi_trading[$i]) ?></td>
+        <td style="background:rgba(8, 158, 39, 0.75); color: #fff" class="fix"><?php echo $lib->formatMoney($duthu_hc[$i]) ?></td>
+        <td style="background:rgba(25, 126, 244, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($thucthu_hc[$i]) ?></td>
+        <td style="background:rgba(154, 34, 249, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($duchi_hc[$i]) ?></td>
+        <td style="background:rgba(244, 25, 75, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($thucchi_hc[$i]) ?></td>
+    </tr>
+    <?php } ?>
+    <tr style="font-weight:bold" class="error">
+        <td class="fix"></td>
+        <td class="fix"></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tduthu_sale) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tthucthu_sale) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tduchi_sale) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($tthucchi_sale) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tduthu_agent) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tthucthu_agent) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tduchi_agent) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tthucchi_agent) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tduthu_tcmt) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tthucthu_tcmt) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tduchi_tcmt) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tthucchi_tcmt) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tduthu_trading) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tthucthu_trading) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tduchi_trading) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tthucchi_trading) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tduthu_hc) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tthucthu_hc) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tduchi_hc) ?></td>
+        <td  class="fix"><?php echo $lib->formatMoney($tthucchi_hc) ?></td>
+    </tr>
+   </tbody>
+</table>
+
+<?php 
+    //$day = date('d-m-Y');
+    //$week = (int)date('W',strtotime($day));
+
+    $duthu_sale_tuan = (isset($receivable_data[$batdau][1])?$receivable_data[$batdau][1]:0);
+    $duthu_agent_tuan = (isset($receivable_data[$batdau][2])?$receivable_data[$batdau][2]:0);
+    $duthu_tcmt_tuan = (isset($receivable_data[$batdau][3])?$receivable_data[$batdau][3]:0);
+    $duthu_trading_tuan = (isset($receivable_data[$batdau][4])?$receivable_data[$batdau][4]:0);
+    $duthu_hc_tuan = (isset($receivable_data[$batdau][5])?$receivable_data[$batdau][5]:0);
+
+    $duchi_sale_tuan = (isset($payable_data[$batdau][1])?$payable_data[$batdau][1]:0);
+    $duchi_agent_tuan = (isset($payable_data[$batdau][2])?$payable_data[$batdau][2]:0);
+    $duchi_tcmt_tuan = (isset($payable_data[$batdau][3])?$payable_data[$batdau][3]:0);
+    $duchi_trading_tuan = (isset($payable_data[$batdau][4])?$payable_data[$batdau][4]:0);
+    $duchi_hc_tuan = (isset($payable_data[$batdau][5])?$payable_data[$batdau][5]:0);
+
+    $thucthu_sale_tuan = (isset($receive_data[$batdau][1])?$receive_data[$batdau][1]:0);
+    $thucthu_agent_tuan = (isset($receive_data[$batdau][2])?$receive_data[$batdau][2]:0);
+    $thucthu_tcmt_tuan = (isset($receive_data[$batdau][3])?$receive_data[$batdau][3]:0);
+    $thucthu_trading_tuan = (isset($receive_data[$batdau][4])?$receive_data[$batdau][4]:0);
+    $thucthu_hc_tuan = (isset($receive_data[$batdau][5])?$receive_data[$batdau][5]:0);
+
+    $thucchi_sale_tuan = (isset($pay_data[$batdau][1])?$pay_data[$batdau][1]:0);
+    $thucchi_agent_tuan = (isset($pay_data[$batdau][2])?$pay_data[$batdau][2]:0);
+    $thucchi_tcmt_tuan = (isset($pay_data[$batdau][3])?$pay_data[$batdau][3]:0);
+    $thucchi_trading_tuan = (isset($pay_data[$batdau][4])?$pay_data[$batdau][4]:0);
+    $thucchi_hc_tuan = (isset($pay_data[$batdau][5])?$pay_data[$batdau][5]:0);
+    
+    $duthu_tuan = $duthu_hc_tuan+$duthu_trading_tuan+$duthu_tcmt_tuan+$duthu_sale_tuan+$duthu_agent_tuan;
+    $thucthu_tuan = $thucthu_hc_tuan+$thucthu_trading_tuan+$thucthu_tcmt_tuan+$thucthu_agent_tuan+$thucthu_sale_tuan;
+    $duchi_tuan = $duchi_hc_tuan+$duchi_trading_tuan+$duchi_tcmt_tuan+$duchi_agent_tuan+$duchi_sale_tuan;
+    $thucchi_tuan = $thucchi_hc_tuan+$thucchi_trading_tuan+$thucchi_tcmt_tuan+$thucchi_agent_tuan+$thucchi_sale_tuan;
+?>
+
+<table class="table_data" style="float: left; width: 45%; margin: 20px">
+    <thead>
+        <tr>
+            <th class="fix">KPI</th>
+            <th class="fix"></th>
+            <th class="fix">%</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="fix">
+               Dự thu trong tuần 
+            </td>
+            <td style="background:rgba(8, 158, 39, 0.75); color: #fff" class="fix"><?php echo $lib->formatMoney($duthu_tuan) ?></td>
+            <td style="font-weight:bold; text-align:center" class="fix error"><?php echo $lib->formatMoney(($duthu_tuan!=0)?round(($thucthu_tuan-$duthu_tuan)/$duthu_tuan*100,2):0).'%' ?></td>
+        </tr>
+        <tr>
+            <td class="fix">
+                Thực thu trong tuần
+            </td>
+            <td style="background:rgba(25, 126, 244, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($thucthu_tuan) ?></td>
+            <td class="fix"></td>
+        </tr>
+        <tr>
+            <td class="fix">
+                Dự chi trong tuần
+            </td>
+            <td style="background:rgba(154, 34, 249, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($duchi_tuan) ?></td>
+            <td style="font-weight:bold; text-align:center" class="fix error"><?php echo $lib->formatMoney(($duchi_tuan!=0)?round(($thucchi_tuan-$duchi_tuan)/$duchi_tuan*100,2):0).'%' ?></td>
+        </tr>
+        <tr>
+            <td class="fix">
+                Thực chi trong tuần
+            </td>
+            <td style="background:rgba(244, 25, 75, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($thucchi_tuan) ?></td>
+            <td class="fix"></td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table_data" style="width: 25%; margin: 20px">
+    
+    <tbody>
+        <tr>
+            <td style="font-weight:bold; text-align:center" class="fix">
+               Dự thu
+            </td>
+            <td style="background:rgba(8, 158, 39, 0.75); color: #fff" class="fix"><?php echo $lib->formatMoney($tduthu_hc+$tduthu_trading+$tduthu_tcmt+$tduthu_agent+$tduthu_sale) ?></td>
+            
+        </tr>
+        <tr>
+            <td style="font-weight:bold; text-align:center"  class="fix">
+                Dự chi
+            </td>
+            <td style="background:rgba(154, 34, 249, 1); color: #fff" class="fix"><?php echo $lib->formatMoney($tduchi_hc+$tduchi_trading+$tduchi_tcmt+$tduchi_agent+$tduchi_sale) ?></td>
+            
+        </tr>
+    </tbody>
+</table>
+
+<div style="clear:both"></div>
+
+<script type="text/javascript">
+    var w = $(".table_data").width();
+
+      $(".container").width(w);
+      $(".navbar-inner").width(w);
+      $(".navbar").width(w);
+      $("#container").width(w);
+
+$(function(){
+  $(".table_data").colResizable({"disable": true});
+});
+</script>

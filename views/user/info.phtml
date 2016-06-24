@@ -1,0 +1,51 @@
+<script type="text/javascript">
+$(document).ready(function(){
+	
+			// Validate form
+			$("#edit").validate({
+				errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+				rules: {
+					password: { rangelength: [4,16] },
+					confirmpassword: {
+            equalTo: "#password" //So sánh với trường cpassword với thành trường có id là password
+          },
+				}
+					 
+				 
+			});
+	
+});
+</script>
+<div class="login_form">
+        <div class="goback"><a href="<?php echo $this->url('') ?>">&larr;</a></div>
+        <div class="login_body">
+          <h1>CẬP NHẬT TÀI KHOẢN</h1>
+              <form id="edit" method="post" action="">
+                  <table style="margin-top:20px;">
+                    <tr>
+                        <td>Mật khẩu cũ</td>
+                        <td><input type="password" id="oldpassword" name="oldpassword" tabindex="1" autofocus ></td>
+                        
+                    </tr>
+                    <tr>
+                        <td>Mật khẩu mới</td>
+                        <td><input type="password" id="password" name="password" tabindex="2" ></td>
+                        
+                    </tr>
+                    <tr>
+                        <td>Nhập lại mật khẩu mới</td>
+                        <td><input type="password" id="confirmpassword" name="confirmpassword" tabindex="3" ></td>
+                    </tr>
+                    
+                    
+                     <tr>
+                        <td ><input type="reset" name="reset" value="Nhập lại" tabindex="5"></td>
+                         <td><input type="submit" name="submit" value="Hoàn tất" tabindex="4"></td>
+                         
+                    </tr>
+                </table> 
+            </form>
+        </div>
+        <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+        </div>
+

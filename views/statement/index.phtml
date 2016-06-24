@@ -1,0 +1,132 @@
+<style type="text/css">
+    .table_data tr:nth-child(even) {background: rgba(255, 240, 250, 0.59)}
+    .table_data tr:nth-child(odd) {background: #FFF}
+</style>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> THỰC THU - THỰC CHI </h1></center>
+    <div class="add-box">
+        <a class="add_button" id="btnExport" >Export Excel</a>
+    </div>
+	<div class="search-box">
+        <div class="add-box">
+                  <form id="report" name="report" action method="post">
+            Tuần  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn tuần" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >    
+            Năm  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn năm" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="submit" name="submit" id="xem" value="Xem">  
+            </form>
+            
+        </div>
+    </div>
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+    	
+        <th style="width:30px" class="fix">
+            <a >STT </a>
+        </th>
+        <th  class="fix">
+            <a >Ngày </a>
+        </th>
+        <th class="fix">
+            <a>Diễn giải </a>
+        </th> 
+          
+        <th class="fix">
+            <a >TM/TK </a>
+        </th> 
+        <th class="fix">
+            <a >Chi </a>
+        </th>
+        <th class="fix">
+            <a >Thu </a>
+        </th>
+       
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $i=1; $tongthu=0; $tongchi=0; ?>
+    <?php foreach($banks as $bank){ ?>
+    <?php foreach ($asset_costs[$bank->bank_id] as $asset) { ?>
+    <?php
+        $tongchi += $asset->total<0?$asset->total:0;
+        $tongthu += $asset->total>0?$asset->total:0;
+    ?>
+    <tr>
+        <td style="text-align:center;" class="fix"><?php echo $i++; ?></td>
+        <td class="fix"><?php echo $lib->hien_thi_ngay_thang($asset->assets_date); ?></td>
+        <td style="color: rgb(9, 74, 160)" class="fix"><?php echo $asset->comment ?></td>
+        <td class="fix"><?php echo $asset->bank_name ?></td>
+        <td style="color: red" class="fix"><?php echo $lib->formatMoney($asset->total<0?$asset->total:null) ?></td>
+        <td style="color: rgb(24, 160, 9)" class="fix"><?php echo $lib->formatMoney($asset->total>0?$asset->total:null) ?></td>
+        
+        
+    </tr>
+    <?php } ?>
+    <?php foreach ($asset_advance[$bank->bank_id] as $asset) { ?>
+    <?php
+        $tongchi += $asset->total<0?$asset->total:0;
+        $tongthu += $asset->total>0?$asset->total:0;
+    ?>
+    <tr>
+        <td style="text-align:center;" class="fix"><?php echo $i++; ?></td>
+        <td class="fix"><?php echo $lib->hien_thi_ngay_thang($asset->assets_date); ?></td>
+        <td style="color: rgb(9, 74, 160)" class="fix"><?php echo $asset->comment ?></td>
+        <td class="fix"><?php echo $asset->bank_name ?></td>
+        <td style="color: red" class="fix"><?php echo $lib->formatMoney($asset->total<0?$asset->total:null) ?></td>
+        <td style="color: rgb(24, 160, 9)" class="fix"><?php echo $lib->formatMoney($asset->total>0?$asset->total:null) ?></td>
+        
+        
+    </tr>
+    <?php } ?>
+    <?php foreach ($asset_receivable[$bank->bank_id] as $asset) { ?>
+    <?php
+        $tongchi += $asset->total<0?$asset->total:0;
+        $tongthu += $asset->total>0?$asset->total:0;
+    ?>
+    <tr>
+        <td style="text-align:center;" class="fix"><?php echo $i++; ?></td>
+        <td class="fix"><?php echo $lib->hien_thi_ngay_thang($asset->assets_date); ?></td>
+        <td style="color: rgb(9, 74, 160)" class="fix"><?php echo $asset->comment ?></td>
+        <td class="fix"><?php echo $asset->bank_name ?></td>
+        <td style="color: red" class="fix"><?php echo $lib->formatMoney($asset->total<0?$asset->total:null) ?></td>
+        <td style="color: rgb(24, 160, 9)" class="fix"><?php echo $lib->formatMoney($asset->total>0?$asset->total:null) ?></td>
+        
+        
+    </tr>
+    <?php } ?>
+    <?php foreach ($asset_payable[$bank->bank_id] as $asset) { ?>
+    <?php
+        $tongchi += $asset->total<0?$asset->total:0;
+        $tongthu += $asset->total>0?$asset->total:0;
+    ?>
+    <tr>
+        <td style="text-align:center;" class="fix"><?php echo $i++; ?></td>
+        <td class="fix"><?php echo $lib->hien_thi_ngay_thang($asset->assets_date); ?></td>
+        <td style="color: rgb(9, 74, 160)" class="fix"><?php echo $asset->comment ?></td>
+        <td class="fix"><?php echo $asset->bank_name ?></td>
+        <td style="color: red" class="fix"><?php echo $lib->formatMoney($asset->total<0?$asset->total:null) ?></td>
+        <td style="color: rgb(24, 160, 9)" class="fix"><?php echo $lib->formatMoney($asset->total>0?$asset->total:null) ?></td>
+        
+        
+    </tr>
+    <?php } ?>
+    <?php } ?>
+
+    <tr style="font-weight: bold; text-align: center">
+        <td colspan="4" class="fix">Tổng cộng</td>
+        <td style="color: red" class="fix"><?php echo $lib->formatMoney(str_replace('-', "",$tongchi)) ?></td>
+        <td style="color: rgb(24, 160, 9)" class="fix"><?php echo $lib->formatMoney($tongthu) ?></td>
+        
+        
+    </tr>
+   </tbody>
+</table>
+

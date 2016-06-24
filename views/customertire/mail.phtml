@@ -1,0 +1,94 @@
+<link rel="stylesheet" type="text/css" href="<?php BASE_URL ?>/public/css/jquery.multiselect.css" />
+<script type="text/javascript" src="<?php BASE_URL ?>/public/js/jquery.multiselect.js"></script>
+<script type="text/javascript" src="<?php echo BASE_URL ?>/public/js/editor/ckeditor.js"></script>
+
+<script type="text/javascript">
+$(function(){
+    $("#customer_email").multiselect();
+});
+</script>
+
+            <div class="login_body">
+                  <form id="send_mail_customer" method="post" action="" enctype="multipart/form-data" >
+                      <table>
+                        <tr>
+                            <td>
+                                Username
+                            </td>
+                            <td>
+                                <input style="width:200px" type="email" id="tendangnhap"  name="tendangnhap" tabindex="1" required="required" value="lopxe@viet-trade.org" >
+                            </td>
+                            <td>
+                                Password
+                            </td>
+                            <td>
+                                <input style="width:200px" type="password" id="matkhau"  name="matkhau" tabindex="2" required="required" value="lopxe!@#$" >
+                            </td>
+                            <td>
+                                Host
+                            </td>
+                            <td>
+                                <input style="width:200px" type="text" id="hostname"  name="hostname" tabindex="3" required="required" value="smtp.zoho.com" >
+                            </td>
+                        </tr>
+                        <tr>
+                            
+                            <td>Tới</td>
+                            <td colspan="4">
+                                <select multiple="multiple" style="width:600px" id="customer_email" name="customer_email" tabindex="3">
+
+                                    <?php 
+                                    $h = -1; $d=1;
+
+                                    echo '<optgroup label="Group '.$d.'">';
+                                        foreach ($customers as $customer) { 
+                                        $h++;
+                                        if ($h==10) {
+                                            $d++;
+                                            echo '<optgroup label="Group '.$d.'">';
+                                            $h=0;
+                                            
+                                        }
+                                    ?>
+                                        <option value="<?php echo $customer->customer_tire_email ?>"><?php echo $customer->customer_tire_company ?></option>
+                                    <?php } ?>
+                                        </optgroup>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Chủ đề</td>
+                            <td colspan="4">
+                                <input style="width:600px" type="text" id="subject"  name="subject" tabindex="4" required="required" >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Nội dung </td>
+                            <td colspan="5">
+                                <textarea name="mail_content" id="mail_content" tabindex="5" required="required" >
+                                    
+                                </textarea>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>Chữ ký </td>
+                            <td colspan="5">
+                                <textarea name="signature" id="signature" tabindex="6" >
+                                    
+                                </textarea>
+                            </td>
+
+                        </tr>
+                        
+                    </table> 
+                </form>
+            </div>
+
+<script type="text/javascript">
+    CKEDITOR.replace('mail_content');
+    CKEDITOR.replace('signature');
+
+var html = '<div style="color: rgb(0, 0, 0); font-family: Verdana, arial, Helvetica, sans-serif; background-image: initial; background-attachment: initial;background-size: initial; background-origin: initial; background-clip: initial; background-position: initial; background-repeat: initial;"><p class="MsoNormal" style="background-image: initial; background-attachment: initial; background-size: initial; background-origin: initial; background-clip: initial; background-position: initial; background-repeat: initial;">&nbsp;</p></div><div align="center" class="MsoNormal" style="text-align: center; background-image: initial; background-attachment: initial; background-size: initial; background-origin: initial;background-clip: initial; background-position: initial; background-repeat: initial;"><hr align="center" noshade="noshade" size="1" style="color:#CCCCCC" width="100%" /></div><table border="0" cellpadding="0" cellspacing="0" class="MsoNormalTable" style="width: 100%; border-collapse: collapse; background-image: initial; background-attachment: initial; background-size: initial; background-origin: initial; background-clip: initial; background-position: initial; background-repeat: initial;" width="100%"><tbody><tr><td style="width:131.25pt;padding:0in 0in 0in 0in" valign="top" width="175"><p class="MsoNormal"><!--[if gte vml 1]><v:shapetype  id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f"><v:stroke joinstyle="miter"/><v:formulas><v:f eqn="if lineDrawn pixelLineWidth 0"/><v:f eqn="sum @0 1 0"/><v:f eqn="sum 0 0 @1"/><v:f eqn="prod @2 1 2"/><v:f eqn="prod @3 21600 pixelWidth"/><v:f eqn="prod @3 21600 pixelHeight"/><v:f eqn="sum @0 0 1"/><v:f eqn="prod @6 1 2"/><v:f eqn="prod @7 21600 pixelWidth"/><v:f eqn="sum @8 21600 0"/><v:f eqn="prod @7 21600 pixelHeight"/><v:f eqn="sum @10 21600 0"/></v:formulas><v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/><o:lock v:ext="edit" aspectratio="t"/></v:shapetype><v:shape id="Picture_x0020_1" o:spid="_x0000_i1027" type="#_x0000_t75" style="width:151.5pt;height:45.75pt;visibility:visible;mso-wrap-style:square"><v:imagedata src=http://viet-trade.org/public/images/1.png o:title=""/></v:shape><![endif]--><!--[if !vml]--> <span style="font-size: 12pt; font-family: "Times New Roman", serif;"><img height="61" src="http://viet-trade.org/public/images/1.png" v:shapes="Picture_x0020_1" width="202" /><!--[endif]--><o:p></o:p></span></p></td><td style="padding:0in 0in 0in 0in"><p class="MsoNormal"><b><span style="font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;mso-fareast-font-family:&quot;Times New Roman&quot;;color:#333333;mso-no-proof:yes">Viet Trade Company Limited</span></b><span style="font-size: 10pt; font-family: Arial, sans-serif;">&nbsp;<br /></span><span style="font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;mso-fareast-font-family:&quot;Times New Roman&quot;;color:#333333;mso-no-proof:yes">No.29, 51 Highway, Phuoc Tan ward, Bien Hoa city, Dong Nai province, Vietnam.<br />Tel: +84 (61) 3 937 607 / 747 - Fax: +84 (61) 3 937 677&nbsp;</span><span style="font-size: 10pt; font-family: Arial, sans-serif;"><br /></span><b><span style="font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;mso-fareast-font-family:&quot;Times New Roman&quot;;color:#333333;mso-no-proof:yes">Website:</span></b><span style="font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;mso-fareast-font-family:&quot;Times New Roman&quot;;color:#333333;mso-no-proof:yes">&nbsp;</span><a href="www.viet-trade.org"><span style="font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;mso-fareast-font-family:&quot;Times New Roman&quot;;color:blue">www.viet-trade.org</span></a><span style="font-size: 12pt; font-family: "Times New Roman", serif;"><o:p></o:p></span></p></td></tr></tbody></table><div align="center" class="MsoNormal" style="text-align:center"><hr align="center" noshade="noshade" size="1" style="color:#CCCCCC" width="100%" /></div><p style="color: rgb(0, 0, 0); font-family: Verdana, arial, Helvetica, sans-serif;"><b style="color: rgb(34, 34, 34); font-family: Arial, Verdana, sans-serif;"><span style="font-family:Consolas;mso-fareast-font-family:Calibri;mso-bidi-font-family:&quot;Times New Roman&quot;;color:black;mso-no-proof:yes">&ldquo;NH&Agrave;&nbsp;NHẬP KHẨU&nbsp;V&Agrave;&nbsp;PH&Acirc;N PHỐI TRỰC TIẾP&nbsp;</span></b><b style="color: rgb(34, 34, 34); font-family: Arial, Verdana, sans-serif;"><span style="font-family:Consolas;mso-fareast-font-family:Calibri;mso-bidi-font-family:&quot;Times New Roman&quot;;color:red;mso-no-proof:yes">LỐP XE BỐ KẼM </span></b><b style="color: rgb(34, 34, 34); font-family: Arial, Verdana, sans-serif;"><span style="font-family:Consolas;mso-fareast-font-family:Calibri;mso-bidi-font-family:&quot;Times New Roman&quot;;color:black;mso-no-proof:yes">CAO CẤP&nbsp;(Gi&aacute; rẻ nhất thị trường)&rdquo;</span></b></p><p class="MsoNormal">&nbsp;</p><p class="MsoNormal"><i><span style="font-size: 9pt; font-family: Verdana, sans-serif; color: black; background-image: initial; background-attachment: initial; background-size: initial; background-origin: initial; background-clip: initial; background-position: initial; background-repeat: initial;">*** Đặt h&agrave;ng v&agrave; nhận gi&aacute; ưu đ&atilde;i nhất h&atilde;y li&ecirc;n hệ: </span></i><i><span style="font-size: 9pt; font-family: Verdana, sans-serif; color: red; background-image: initial; background-attachment: initial; background-size: initial; background-origin: initial; background-clip: initial; background-position: initial; background-repeat: initial;">0931 557 775 </span></i><i><span style="font-size: 9pt; font-family: Verdana, sans-serif; color: black; background-image: initial; background-attachment: initial; background-size: initial; background-origin: initial; background-clip: initial; background-position: initial; background-repeat: initial;">- </span></i><i><span style="font-size: 9pt; font-family: Verdana, sans-serif; color: red; background-image: initial; background-attachment: initial; background-size: initial; background-origin: initial; background-clip: initial; background-position: initial; background-repeat: initial;">0931 55 99 09</span></i><i><span style="font-size:9.0pt;font-family:&quot;Verdana&quot;,sans-serif;color:black"><br /><span style="background-image: initial; background-attachment: initial; background-size: initial; background-origin: initial; background-clip: initial; background-position: initial; background-repeat: initial;">*** Email: </span></span></i><i><span style="font-size: 9pt; font-family: Verdana, sans-serif; background-image: initial; background-attachment: initial; background-size: initial; background-origin: initial; background-clip: initial; background-position: initial; background-repeat: initial;"><a href="mailto:carl@viet-trade.org">carl@viet-trade.org</a> <span style="color:black">- </span><a href="mailto:it@viet-trade.org">it@viet-trade.org</a></span><o:p></o:p></i></p>';
+    $('#signature').val(html);
+</script>

@@ -1,0 +1,497 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'sales_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'customer_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'm')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 's')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'c')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'revenue')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'profit')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+$tongdoanhthu = 0;
+$tongchiphi = 0;
+$tongloinhuan = 0;
+
+
+
+/*$loinhuan = array();
+
+$m_salary = array();
+$s_salary = array();
+$c_salary = array();
+
+
+/* arr xem M S C nhân viên xuất hiện mấy lần*/
+$arr_msc = array();
+$total_bonus = array();
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> LƯƠNG DOANH SỐ </h1></center>
+
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <form id="report" name="report" action method="post">
+    <div class="tablenav top">
+        <div class="add-box">
+                  
+            Từ tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn tháng" <?php if(isset($ngaytao)) echo "value='$ngaytao'"; ?> >    
+            Đến tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytaobatdau" id="chonngaytaobatdau" placeholder="Chọn tháng" <?php if(isset($ngaytaobatdau)) echo "value='$ngaytaobatdau'"; ?> >  
+             <input type="submit" name="submit" id="xem" value="Xem">  
+           
+            
+        </div>
+        <div class="add-box">
+                  
+            Từ  <input style="width:90px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            Đến  <input style="width:90px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+            <input type="submit" name="submit" id="xem" value="Xem">   
+        </div>
+        <div class="alignleft actions">
+        <select style="width: 150px;" name="sl_status" id="sl_status">
+                <option selected="selected" value="0">Tất cả</option>
+                <?php foreach ($staffs as $staff) { ?>
+                    <option  value="<?php echo $staff->staff_id ?>"><?php echo $staff->staff_name ?></option>
+                <?php } ?>
+                
+            </select>
+        <input type="submit" name="submit" id="chon" value="Chọn">                             
+        </div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option selected="selected" value="18446744073709">Hiển thị tất cả</option>
+			<option value="10">Hiển thị 10 giá trị</option>
+            <option value="20">Hiển thị 20 giá trị</option>
+            <option value="30">Hiển thị 30 giá trị</option>
+            <option  value="50">Hiển thị 50 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+  </form>
+
+
+<table class="table_data scrollTable">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix" ><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sales_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'sales_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','code','<?php echo $url_order ?>')">CODE <?php if ($order_by == 'code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_name','<?php echo $url_order ?>')">Khách hàng <?php if ($order_by == 'customer_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','comment','<?php echo $url_order ?>')">Diễn giải <?php if ($order_by == 'comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="3" class="fix">MSC</th>
+        
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','revenue','<?php echo $url_order ?>')">Tổng doanh thu <?php if ($order_by == 'revenue'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost','<?php echo $url_order ?>')">Tổng chi phí <?php if ($order_by == 'cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','profit','<?php echo $url_order ?>')">Lợi nhuận<?php if ($order_by == 'profit'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+    </tr>
+    <tr>
+        <th id="m_fix" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','m','<?php echo $url_order ?>')">M <?php if ($order_by == 'm'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th id="s_fix" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','s','<?php echo $url_order ?>')">S <?php if ($order_by == 's'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th id="c_fix" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','c','<?php echo $url_order ?>')">C <?php if ($order_by == 'c'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>    
+    </tr>
+   </thead>
+   <tbody>
+    
+    <?php foreach ($sales as $sales) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $sales->sales_id ?>" class="edit_tr">
+        	<td ><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $sales->sales_id ?>"></td>
+            <td  class="fix"><?php echo $i++; ?></td>
+            <td  class="fix" id="code_<?php echo $sales->sales_id; ?>"><?php echo $sales->code; ?></td>
+            <td  class="fix" id="customer_name_<?php echo $sales->sales_id; ?>"><?php echo $sales->customer_name; ?></td>
+            
+            <td  class="fix" id="comment_<?php echo $sales->sales_id; ?>"><?php echo $sales->comment; ?></td>
+            
+            <td m="<?php echo $sales->m ?>" data="<?php echo isset($staff['basic_salary'][date('m-Y',$sales->sales_create_time)][$sales->m])?$staff['basic_salary'][date('m-Y',$sales->sales_create_time)][$sales->m]:null ?>" class="fix"  id="m_<?php echo $sales->sales_id; ?>"><?php echo (isset($staff['staff_id'][date('m-Y',$sales->sales_create_time)][$sales->m]) && $sales->m==$staff['staff_id'][date('m-Y',$sales->sales_create_time)][$sales->m])?$staff['staff_name'][date('m-Y',$sales->sales_create_time)][$sales->m]:null ?></td>
+            <td s="<?php echo $sales->s ?>" data="<?php echo isset($staff['basic_salary'][date('m-Y',$sales->sales_create_time)][$sales->s])?$staff['basic_salary'][date('m-Y',$sales->sales_create_time)][$sales->s]:null ?>" class="fix"  id="s_<?php echo $sales->sales_id; ?>"><?php echo (isset($staff['staff_id'][date('m-Y',$sales->sales_create_time)][$sales->s]) && $sales->s==$staff['staff_id'][date('m-Y',$sales->sales_create_time)][$sales->s])?$staff['staff_name'][date('m-Y',$sales->sales_create_time)][$sales->s]:null ?></td>
+            <td c="<?php echo $sales->c ?>" data="<?php echo isset($staff['basic_salary'][date('m-Y',$sales->sales_create_time)][$sales->c])?$staff['basic_salary'][date('m-Y',$sales->sales_create_time)][$sales->c]:null ?>" class="fix"  id="c_<?php echo $sales->sales_id; ?>"><?php echo (isset($staff['staff_id'][date('m-Y',$sales->sales_create_time)][$sales->c]) && $sales->c==$staff['staff_id'][date('m-Y',$sales->sales_create_time)][$sales->c])?$staff['staff_name'][date('m-Y',$sales->sales_create_time)][$sales->c]:null ?></td>
+            <td  class="fix" id="revenue_<?php echo $sales->sales_id; ?>"><?php echo $lib->formatMoney($sales->revenue); ?></td>
+            <td  class="fix" id="cost_<?php echo $sales->sales_id; ?>"><?php echo $lib->formatMoney($sales->cost); ?></td>
+            <td  class="fix" id="profit_<?php echo $sales->sales_id; ?>"><?php echo $lib->formatMoney($sales->profit); ?></td>
+            <td style="display:none;"  id="customer_phone_<?php echo $sales->sales_id; ?>"><?php echo $sales->customer_phone; ?></td>
+            <td style="display:none;"  id="customer_address_<?php echo $sales->sales_id; ?>"><?php echo $sales->customer_address; ?></td>
+            <td style="display:none;"  id="customer_email_<?php echo $sales->sales_id; ?>"><?php echo $sales->customer_email; ?></td>
+            <td style="display:none;"  id="sales_create_time_<?php echo $sales->sales_id; ?>"><?php echo $sales->sales_create_time; ?></td>
+            
+        </tr>
+        <?php
+        $tongdoanhthu += $sales->revenue;
+        $tongchiphi += $sales->cost;
+        $tongloinhuan += $sales->profit;
+
+
+        /*******/
+        $arr_msc[date('m-Y',$sales->sales_create_time)][$sales->m]['m'][$sales->sales_id][] = $sales->profit;
+        $arr_msc[date('m-Y',$sales->sales_create_time)][$sales->s]['s'][$sales->sales_id][] = $sales->profit;
+        $arr_msc[date('m-Y',$sales->sales_create_time)][$sales->c]['c'][$sales->sales_id][] = $sales->profit;
+        /*******/
+        $staff_msc[date('m-Y',$sales->sales_create_time)][$sales->m]['m'][$sales->sales_id] = $sales->profit;
+        $staff_msc[date('m-Y',$sales->sales_create_time)][$sales->s]['s'][$sales->sales_id] = $sales->profit;
+        $staff_msc[date('m-Y',$sales->sales_create_time)][$sales->c]['c'][$sales->sales_id] = $sales->profit;
+
+         ?>
+    <?php endforeach; 
+
+    $array_sum = 0;
+    $total_bonus = array();
+
+        $m_sum = array();
+        $s_sum = array();
+        $c_sum = array();
+        $salary_arr = array();
+
+        $thuong_m = 0;
+        $thuong_s = 0;
+        $thuong_c = 0;
+
+        $arr_thuong_m = array();
+        $arr_thuong_s = array();
+        $arr_thuong_c = array();
+
+    foreach ($arr_msc as $thang => $mang) {
+        
+        
+        foreach ($mang as $key => $value) {
+          //var_dump($value['m']);die();
+            $m_sum[$thang][$key] = 0;
+            $s_sum[$thang][$key] = 0;
+            $c_sum[$thang][$key] = 0;
+            $total_bonus[$thang][$key] = 0;
+
+            $arr_thuong_m[$key][$thang] = 0;
+            $arr_thuong_s[$key][$thang] = 0;
+            $arr_thuong_c[$key][$thang] = 0;
+
+          if (isset($value['m'])) {
+            foreach ($value['m'] as $key1 => $value1) {
+                $m_sum[$thang][$key] += array_sum($value1);
+                
+            }
+          }
+          if (isset($value['s'])) {
+            foreach ($value['s'] as $key2 => $value2) {
+                $s_sum[$thang][$key] += array_sum($value2);
+                
+            }
+          }
+          if (isset($value['c'])) {
+            foreach ($value['c'] as $key3 => $value3) {
+                $c_sum[$thang][$key] += array_sum($value3);
+                
+            }
+          }
+          
+          //$total_bonus[$key] = (isset($m_bonus[$key])?(array_sum($m_bonus[$key])>0?array_sum($m_bonus[$key]):0):0)+(isset($s_bonus[$key])?(array_sum($s_bonus[$key])>0?array_sum($s_bonus[$key]):0):0)+(isset($c_bonus[$key])?(array_sum($c_bonus[$key])>0?array_sum($c_bonus[$key]):0):0);
+          //$array_sum[] = $total_bonus[$key];
+
+          $thuong_m = isset($staff['basic_salary'][$thang][$key]) ? (($m_sum[$thang][$key]-(3*$staff['basic_salary'][$thang][$key]))*10/100) : 0;
+          $thuong_s = isset($staff['basic_salary'][$thang][$key]) ? (($s_sum[$thang][$key]-(3*$staff['basic_salary'][$thang][$key]))*10/100) : 0;
+          $thuong_c = isset($staff['basic_salary'][$thang][$key]) ? (($c_sum[$thang][$key]-(3*$staff['basic_salary'][$thang][$key]))*10/100) : 0;
+
+
+          $arr_thuong_m[$key][$thang] += ($thuong_m > 0 ? $thuong_m : 0);
+          $arr_thuong_s[$key][$thang] += ($thuong_s > 0 ? $thuong_s : 0);
+          $arr_thuong_c[$key][$thang] += ($thuong_c > 0 ? $thuong_c : 0);
+
+
+          $total_bonus[$thang][$key] += ($thuong_m > 0 ? $thuong_m : 0) + ($thuong_s > 0 ? $thuong_s : 0) + ($thuong_c > 0 ? $thuong_c : 0);
+          
+        }
+        //$array_sum[] = array_sum($total_bonus);
+        //var_dump($total_bonus);
+        $array_sum += array_sum($total_bonus[$thang]);
+    }
+    //var_dump($total_bonus);die();
+    //echo json_encode($arr_msc);die();
+    /*$tong_m = 0;
+    $tong_s = 0;
+    $tong_c = 0;
+
+    $sum_loinhuan = array();
+
+    for ($j=0; $j < count($m_salary); $j++) { 
+
+      $bonus_m +=  3*$m_salary[$j];
+      $bonus_s +=  3*$s_salary[$j];
+      $bonus_c +=  3*$c_salary[$j];
+
+      
+    }
+    for ($k=0; $k < count($loinhuan); $k++) { 
+          $bonus_m = ($loinhuan[$k]-$bonus_m)*10/100;
+          $bonus_s = ($loinhuan[$k]-$bonus_s)*10/100;
+          $bonus_c = ($loinhuan[$k]-$bonus_c)*10/100;
+    }*/
+    /*
+    foreach ($staff['staff_id'] as $arr) {
+      
+      if (array_key_exists($arr,$arr_msc['m'])){
+        $m = $arr_msc['m'][$arr];
+        foreach ($m as $m) {
+          $sum_loinhuan[$arr]['m'] = $m;
+        }
+      }
+      if (array_key_exists($arr,$arr_msc['s'])){
+        $s = $arr_msc['s'][$arr];
+        foreach ($s as $s) {
+          $sum_loinhuan[$arr]['s'] = $s;
+        }
+      }
+      if (array_key_exists($arr,$arr_msc['c'])){
+        $c = $arr_msc['c'][$arr];
+        foreach ($c as $c) {
+          $sum_loinhuan[$arr]['c'] = $c;
+        }
+      }
+      //var_dump($m[0]);
+      
+      
+
+    }
+    
+
+    var_dump($sum_loinhuan);*/
+
+    ?>
+    
+   </tbody>
+   <tfoot>
+       <tr>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           
+           <td colspan="2"><b>Tổng cộng</b></td>
+           <td id="total_revenue" class="error"><?php echo $lib->formatMoney($tongdoanhthu) ?></td>
+           <td id="total_cost" class="error"><?php echo $lib->formatMoney($tongchiphi) ?></td>
+           <td id="total_profit" class="error"><?php echo $lib->formatMoney($tongloinhuan) ?></td>
+           
+       </tr>
+       
+       <tr>
+            <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td colspan="2"><b>Thưởng tháng</b></td>
+           <td></td>
+           <td><b class="error" id="total_month_bonus"><?php echo $lib->formatMoney($array_sum) ?></b></td>
+           <td></td>
+           
+       </tr>
+   </tfoot>
+</table>
+
+<?php
+$this->helper('slidePaginator');
+?>
+
+
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$(function() {
+    var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+              
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytao").change();
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts);
+
+    $("#chonngaytao").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var firstDay = new Date(year, month, 1);
+
+        $('#batdau').datepicker("setDate", firstDay );
+
+    });
+
+    var pickerOpts5 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytaobatdau").change();
+         },
+         
+    };  
+    $("#chonngaytaobatdau").datepicker(pickerOpts5);
+
+    $("#chonngaytaobatdau").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var lastDay = new Date(year, month+1, 0);
+        $('#ketthuc').datepicker("setDate", lastDay );
+    });
+    $(".monthPicker").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });        
+    
+});
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+var ch = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+ch+']').attr('selected','selected');
+  
+</script>
+</div>

@@ -1,0 +1,2328 @@
+<?php
+if ($order_by == 'import_tire_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'expect_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cost_vat')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> NHẬP HÀNG LỐP XE </h1></center>
+<?php if($_SESSION['role_logined'] != 10){ ?>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm bảng báo cáo</a>
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+<?php } ?>
+    <div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+
+    <div class="tablenav top">
+        <div class="add-box">
+                  
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">  
+            
+        </div>
+        <?php if($_SESSION['role_logined'] != 10){ ?>
+        <div class="alignleft actions">
+            <select name="action" id="action">
+                <option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+        </div>
+        <?php } ?>
+        <div class="alignleft actions">
+        <select name="m" id="chonloc">
+            <option  value="18446744073709">Hiển thị tất cả</option>
+            <option value="5">Hiển thị 5 giá trị</option>
+            <option value="10">Hiển thị 10 giá trị</option>
+            <option value="15">Hiển thị 15 giá trị</option>
+            <option selected="selected" value="20">Hiển thị 20 giá trị</option>
+        </select>
+        <input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">                               
+        </div>
+
+      </div>
+
+</div>
+<table class="table_data" id="tblExport">
+    <thead>
+        <tr>
+            <th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+            <th class="fix">
+                <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'import_tire_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            </th>
+            <th class="fix">
+                <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'import_tire_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            </th>
+            <th class="fix">
+                <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            </th>
+            <th class="fix">
+                <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','comment','<?php echo $url_order ?>')">Diễn giải <?php if ($order_by == 'comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            </th>
+            <th class="fix">
+                <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','expect_date','<?php echo $url_order ?>')">Ngày dự kiến về <?php if ($order_by == 'expect_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            </th>
+            <th class="fix">
+                <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost','<?php echo $url_order ?>')">Chi phí 0 VAT <?php if ($order_by == 'cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            </th>
+            <th class="fix">
+                <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost_vat','<?php echo $url_order ?>')">Chi phí VAT <?php if ($order_by == 'cost_vat'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            </th>
+            <th class="fix">
+                <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost','<?php echo $url_order ?>')">Tổng chi phí <?php if ($order_by == 'cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            </th>
+            <th class="fix">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $tongkvat=0; $tongvat=0; ?>
+        <?php foreach ($sales as $sale) : ?>
+        <?php $tongvat += $sale->cost_vat; $tongkvat += $sale->cost; ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $sale->import_tire_id ?>" data="<?php echo $sale->import_tire_lock ?>" class="edit_tr">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $sale->import_tire_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix"  id="import_tire_date_<?php echo $sale->import_tire_id; ?>"><?php echo $lib->hien_thi_ngay_thang($sale->import_tire_date) ?></td>
+            <td class="fix"  id="code_<?php echo $sale->import_tire_id; ?>"><?php echo $sale->code ?></td>
+            <td class="fix"  id="comment_<?php echo $sale->import_tire_id; ?>"><?php echo $sale->comment ?></td>
+            <td class="fix"  id="expect_date_<?php echo $sale->import_tire_id; ?>"><?php echo $lib->hien_thi_ngay_thang($sale->expect_date) ?></td>
+            <td class="fix"  id="cost_<?php echo $sale->import_tire_id; ?>"><?php echo $lib->formatMoney($sale->cost) ?></td>
+            <td class="fix"  id="cost_vat_<?php echo $sale->import_tire_id; ?>"><?php echo $lib->formatMoney($sale->cost_vat) ?></td>
+            <td class="fix"  id="all_cost_<?php echo $sale->import_tire_id; ?>"><?php echo $lib->formatMoney($sale->cost+$sale->cost_vat) ?></td>
+            <td class="fix">
+                <?php if($sale->import_tire_lock != 1){ ?>
+                <button class="error" onclick="del(<?php echo $sale->import_tire_id ?>)" >Xóa</button>
+                <?php } ?>
+                <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 8){ ?>
+                <?php if($sale->import_tire_lock == 1){ ?>
+                    <button value="0" class="unlock error" data="<?php echo $sale->import_tire_id ?>" >Mở khóa</button>
+                <?php } if($sale->import_tire_lock != 1){ ?>
+                    <button value="1" class="lock error" data="<?php echo $sale->import_tire_id ?>" >Khóa</button>
+                <?php } } ?>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+        <tr style="text-align:center; font-weight: bold; color: red;">
+            <td class="fix" colspan="6" >Tổng cộng</td>
+            <td class="fix"><?php echo $lib->formatMoney($tongkvat); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongvat); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongkvat+$tongvat); ?></td>
+            <td class="fix" ></td>
+        </tr>
+    </tbody>
+</table>
+
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('importtire') ?>">&larr;</a></div>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Nhập hàng </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_sale" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div class="add-box"><a class="add_button" onClick="add_click();">Thêm bảng nhập hàng</a></div></td>
+                            
+                        </tr>
+                        <tr>
+                            <td>Ngày </td>
+                            <td>
+                                <input class="ngay" style="width:90px" type="text" id="import_tire_date"  name="import_tire_date" tabindex="1" required="required" >
+                            </td>
+                            <td>Code </td>
+                            <td>
+                                <input style="width:90px"  class="number" type="text" id="code" name="code" tabindex="2" required="required" >
+                            </td>
+                        </tr>
+                        <tr>
+                            
+                            <td>Diễn giải </td>
+                            <td ><textarea id="comment" name="comment" tabindex="3"></textarea></td>
+                            <td>Ngày dự kiến về </td>
+                            <td>
+                                <input required="required" class="ngay" style="width:120px"  type="text" id="expect_date"  name="expect_date" tabindex="4"  >
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="7">
+                                <fieldset class="groupbox"><legend><span><h3>Chi phí mua lốp</h3></span></legend>
+                                    <div id="tire_going" style="font-weight:bold;" data="<?php echo $this->url('importtire/going/') ?>">
+                                        <a title="Thêm mới" id="add_new_list" href="#"> <img style="vertical-align:middle" src="<?php echo BASE_URL ?>/public/images/attachment.png"> Chi tiết hàng nhập </a>
+
+                                    </div>
+                                    <table id="dataTable4" border="1" style="width: 100%; border: 1px solid rgb(221, 217, 217); margin-bottom: 10px" >
+                                        <tbody>
+                                            <?php if( !isset($vendor_data4) || count($vendor_data4) == 0){ ?>
+                                            <tr>
+                                                <td><input type="checkbox" name="chk4"></td>
+                                                <td>
+                                                    <table style="width: 100%">
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>Loại chi phí</td>
+                                                            <td>
+                                                                <select tabindex="1" class="cost_type4" name="cost_type4[]" style="width:100px">
+                                                                    <option value="1">Trucking</option>
+                                                                    <option value="2">Barging</option>
+                                                                    <option value="3">Feeder</option>
+                                                                    <option value="4">Thu hộ</option>
+                                                                    <option value="5">Hoa hồng</option>
+                                                                    <option value="6">TTHQ</option>
+                                                                    <option value="7">Khác</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                Vendor
+                                                            </td>
+                                                            <td>
+                                                                <select tabindex="2" class="vendor4" name="vendor4[]" style="width:200px">
+                                                                    <?php foreach ($vendor_list as $vendor) { ?>
+                                                                    <?php
+                                                                        if ($vendor->vendor_type == 1) {
+                                                                            $type = "TTHQ";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 2) {
+                                                                            $type = "Trucking";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 3) {
+                                                                            $type = "Barging";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 4) {
+                                                                            $type = "Feeder";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 5) {
+                                                                            $type = "Hoa hồng";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 6) {
+                                                                            $type = "Thu hộ";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 7) {
+                                                                            $type = "Khác";
+                                                                        }
+                                                                    ?>
+                                                                    <option class="<?php echo $vendor->vendor_type ?>" value="<?php echo $vendor->shipment_vendor_id ?>"><?php echo $vendor->shipment_vendor_name ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                                <a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="<?php echo $this->url('shipmentvendor') ?>"> + </a>
+                                                            </td>
+                                                            <td>
+                                                                Dự chi
+                                                            </td>
+                                                            <td>
+                                                                <input required="required" tabindex="5" class="vendor_expect_date4" type="date"   name="vendor_expect_date4[]" >
+                                                            </td>
+                                                            <td>
+                                                                Tài khoản
+                                                            </td>
+                                                            <td>
+                                                                <select tabindex="9"  style="width:120px" class="vendor_source4"  name="vendor_source4[]"  required="required">
+                                                                    <?php foreach($banks as $bank){ ?>
+                                                                    <option value="<?php echo $bank->bank_id ?>"><?php echo $bank->bank_name ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                Số tiền (VAT)
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="3" type="text" style="width:120px" class="numbers cost_vat4"  name="cost_vat4[]"  >
+                                                            </td>
+                                                            <td>
+                                                                Phí mua HĐ
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="6" type="text" style="width:120px" class="numbers invoice_cost4"  name="invoice_cost4[]"  >
+                                                            </td>
+                                                            <td>
+                                                                Ghi chú
+                                                            </td>
+                                                            <td rowspan="2">
+                                                                <textarea tabindex="10" class="cost_comment4" name="cost_comment4[]" ></textarea>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                Số tiền (0 VAT)
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="4" type="text" style="width:120px" class="numbers cost4"  name="cost4[]"  >
+                                                            </td>
+                                                            <td>
+                                                                Phí chuyển tiền
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="7" type="text" style="width:120px" class="numbers pay_cost4"  name="pay_cost4[]"  >
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                               
+                                                            </td>
+                                                            <td><input type="checkbox" value="1" name="check_deposit4[]" class="check_deposit4"> Tiền đặt cọc</td>
+                                                            <td>
+                                                                Phí gửi chứng từ
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="8" type="text" style="width:120px" class="numbers document_cost4"  name="document_cost4[]"  >
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <?php } ?>
+                                            
+
+                                            
+
+                                        </tbody>
+                                    </table>
+
+                                    <input type="button" value="Thêm chi phí khác" onclick="addRow4('dataTable4')">
+ 
+                                    <input type="button" value="Xóa chi phí" onclick="deleteRow4('dataTable4')">
+                                </fieldset></td>
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="7">
+                                <fieldset class="groupbox"><legend><span><h3>Thuế</h3></span></legend>
+                                    <table id="dataTable" border="1" style="width: 100%; border: 1px solid rgb(221, 217, 217); margin-bottom: 10px" >
+                                        <tbody>
+                                            <?php if( !isset($vendor_data) || count($vendor_data) == 0){ ?>
+                                            <tr>
+                                                <td><input type="checkbox" name="chk"></td>
+                                                <td>
+                                                    <table style="width: 100%">
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>Loại chi phí</td>
+                                                            <td>
+                                                                <select tabindex="1" class="cost_type" name="cost_type[]" style="width:100px">
+                                                                    <option value="1">Trucking</option>
+                                                                    <option value="2">Barging</option>
+                                                                    <option value="3">Feeder</option>
+                                                                    <option value="4">Thu hộ</option>
+                                                                    <option value="5">Hoa hồng</option>
+                                                                    <option value="6">TTHQ</option>
+                                                                    <option value="7">Khác</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                Vendor
+                                                            </td>
+                                                            <td>
+                                                                <select tabindex="2" class="vendor" name="vendor[]" style="width:200px">
+                                                                    <?php foreach ($vendor_list as $vendor) { ?>
+                                                                    <?php
+                                                                        if ($vendor->vendor_type == 1) {
+                                                                            $type = "TTHQ";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 2) {
+                                                                            $type = "Trucking";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 3) {
+                                                                            $type = "Barging";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 4) {
+                                                                            $type = "Feeder";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 5) {
+                                                                            $type = "Hoa hồng";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 6) {
+                                                                            $type = "Thu hộ";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 7) {
+                                                                            $type = "Khác";
+                                                                        }
+                                                                    ?>
+                                                                    <option class="<?php echo $vendor->vendor_type ?>" value="<?php echo $vendor->shipment_vendor_id ?>"><?php echo $vendor->shipment_vendor_name ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                                <a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="<?php echo $this->url('shipmentvendor') ?>"> + </a>
+                                                            </td>
+                                                            <td>
+                                                                Dự chi
+                                                            </td>
+                                                            <td>
+                                                                <input required="required" tabindex="5" class="vendor_expect_date" type="date"   name="vendor_expect_date[]" >
+                                                            </td>
+                                                            <td>
+                                                                Tài khoản
+                                                            </td>
+                                                            <td>
+                                                                <select tabindex="9"  style="width:120px" class="vendor_source"  name="vendor_source[]"  required="required">
+                                                                    <?php foreach($banks as $bank){ ?>
+                                                                    <option value="<?php echo $bank->bank_id ?>"><?php echo $bank->bank_name ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                Số tiền (VAT)
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="3" type="text" style="width:120px" class="numbers cost_vat"  name="cost_vat[]"  >
+                                                            </td>
+                                                            <td>
+                                                                Phí mua HĐ
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="6" type="text" style="width:120px" class="numbers invoice_cost"  name="invoice_cost[]"  >
+                                                            </td>
+                                                            <td>
+                                                                Ghi chú
+                                                            </td>
+                                                            <td rowspan="2">
+                                                                <textarea tabindex="10" class="cost_comment" name="cost_comment[]" ></textarea>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                Số tiền (0 VAT)
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="4" type="text" style="width:120px" class="numbers cost"  name="cost[]"  >
+                                                            </td>
+                                                            <td>
+                                                                Phí chuyển tiền
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="7" type="text" style="width:120px" class="numbers pay_cost"  name="pay_cost[]"  >
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                               
+                                                            </td>
+                                                            <td><input type="checkbox" value="1" name="check_deposit[]" class="check_deposit"> Tiền đặt cọc</td>
+                                                            <td>
+                                                                Phí gửi chứng từ
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="8" type="text" style="width:120px" class="numbers document_cost"  name="document_cost[]"  >
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <?php } ?>
+                                            
+
+                                            
+
+                                        </tbody>
+                                    </table>
+
+                                    <input type="button" value="Thêm chi phí khác" onclick="addRow('dataTable')">
+ 
+                                    <input type="button" value="Xóa chi phí" onclick="deleteRow('dataTable')">
+                                </fieldset></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="7">
+                                <fieldset class="groupbox"><legend><span><h3>Chi phí TTHQ - logistics & chi phí khác</h3></span></legend>
+                                    <table id="dataTable2" border="1" style="width: 100%; border: 1px solid rgb(221, 217, 217); margin-bottom: 10px" >
+                                        <tbody>
+                                            <?php if( !isset($vendor_data2) || count($vendor_data2) == 0){ ?>
+                                            <tr>
+                                                <td><input type="checkbox" name="chk2"></td>
+                                                <td>
+                                                    <table style="width: 100%">
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>Loại chi phí</td>
+                                                            <td>
+                                                                <select tabindex="1" class="cost_type2" name="cost_type2[]" style="width:100px">
+                                                                    <option value="1">Trucking</option>
+                                                                    <option value="2">Barging</option>
+                                                                    <option value="3">Feeder</option>
+                                                                    <option value="4">Thu hộ</option>
+                                                                    <option value="5">Hoa hồng</option>
+                                                                    <option value="6">TTHQ</option>
+                                                                    <option value="7">Khác</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                Vendor
+                                                            </td>
+                                                            <td>
+                                                                <select tabindex="2" class="vendor2" name="vendor2[]" style="width:200px">
+                                                                    <?php foreach ($vendor_list as $vendor) { ?>
+                                                                    <?php
+                                                                        if ($vendor->vendor_type == 1) {
+                                                                            $type = "TTHQ";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 2) {
+                                                                            $type = "Trucking";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 3) {
+                                                                            $type = "Barging";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 4) {
+                                                                            $type = "Feeder";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 5) {
+                                                                            $type = "Hoa hồng";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 6) {
+                                                                            $type = "Thu hộ";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 7) {
+                                                                            $type = "Khác";
+                                                                        }
+                                                                    ?>
+                                                                    <option class="<?php echo $vendor->vendor_type ?>" value="<?php echo $vendor->shipment_vendor_id ?>"><?php echo $vendor->shipment_vendor_name ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                                <a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="<?php echo $this->url('shipmentvendor') ?>"> + </a>
+                                                            </td>
+                                                            <td>
+                                                                Dự chi
+                                                            </td>
+                                                            <td>
+                                                                <input required="required" tabindex="5" class="vendor_expect_date2" type="date"   name="vendor_expect_date2[]"  >
+                                                            </td>
+                                                            <td>
+                                                                Tài khoản
+                                                            </td>
+                                                            <td>
+                                                                <select tabindex="9"  style="width:120px" class="vendor_source2"  name="vendor_source2[]"  required="required">
+                                                                    <?php foreach($banks as $bank){ ?>
+                                                                    <option value="<?php echo $bank->bank_id ?>"><?php echo $bank->bank_name ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                Số tiền (VAT)
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="3" type="text" style="width:120px" class="numbers cost_vat2"  name="cost_vat2[]"  >
+                                                            </td>
+                                                            <td>
+                                                                Phí mua HĐ
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="6" type="text" style="width:120px" class="numbers invoice_cost2"  name="invoice_cost2[]"  >
+                                                            </td>
+                                                            <td>
+                                                                Ghi chú
+                                                            </td>
+                                                            <td rowspan="2">
+                                                                <textarea tabindex="10" class="cost_comment2" name="cost_comment2[]" ></textarea>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                Số tiền (0 VAT)
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="4" type="text" style="width:120px" class="numbers cost2"  name="cost2[]"  >
+                                                            </td>
+                                                            <td>
+                                                                Phí chuyển tiền
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="7" type="text" style="width:120px" class="numbers pay_cost2"  name="pay_cost2[]"  >
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                
+                                                            </td>
+                                                            <td>
+                                                                Phí gửi chứng từ
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="8" type="text" style="width:120px" class="numbers document_cost2"  name="document_cost2[]"  >
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <?php } ?>
+                                            
+
+                                            
+
+                                        </tbody>
+                                    </table>
+
+                                    <input type="button" value="Thêm chi phí khác" onclick="addRow2('dataTable2')">
+ 
+                                    <input type="button" value="Xóa chi phí" onclick="deleteRow2('dataTable2')">
+
+                                </fieldset>
+                            </td>
+                        </tr>
+
+                        
+
+                        
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="46"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="47"></td>
+                            <td></td>
+                            <td></td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+
+<?php if($_SESSION['role_logined'] != 10){ ?>
+<script type="text/javascript">
+
+function add_click(){
+    if ($('#yes').val() != "") {
+        addRow('dataTable');
+       addRow2('dataTable2');
+       addRow4('dataTable4');
+       $("#dataTable>tbody>tr").filter("[class]").remove();
+       $("#dataTable2>tbody>tr").filter("[class]").remove();
+       $("#dataTable4>tbody>tr").filter("[class]").remove();
+    };
+
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+     $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
+        
+        $('#import_tire_date').val("<?php echo date('d-m-Y') ?>");
+        $('#deposit').val(0);
+        
+        $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+        $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+
+   $('input[name="submit"]').show();
+    $('input[name="reset"]').show();
+    $('input[type="button"]').show();
+
+   
+
+}
+
+$('.edit_tr').click(function(){
+
+        $('#dataTable tbody tr').remove();
+        $('#dataTable2 tbody tr').remove();
+        $('#dataTable4 tbody tr').remove();
+        
+        var sale_id = $(this).attr('id');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/importtire/getvendor',
+            type: 'POST',
+            data: {sale_report:sale_id},
+            success:function(data){
+                //alert(data);
+                $('#dataTable tbody').append(data);
+                    $('.cost').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost:eq('+rowIndex+')'))*0.04
+                        )
+                    );
+
+                    $('.invoice_cost:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+                $('.cost2').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost2:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost2:eq('+rowIndex+')'))*0.04
+                        )
+                    );
+
+                    $('.invoice_cost2:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+                $('.cost4').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost4:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost4:eq('+rowIndex+')'))*0.04
+                        )
+                    );
+
+                    $('.invoice_cost4:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+                $('.number').focus(function(){
+                    if ( $(this).val() == '0') {
+                       $(this).val(""); 
+                    };
+                    
+                });
+                $('.number').blur(function(){
+                    if ( $(this).val() == "") {
+                        $(this).val(0);
+                    };
+                    
+                });
+
+                $('.numbers').focus(function(){
+                    if ( $(this).val() == '0') {
+                       $(this).val(""); 
+                    };
+                    
+                });
+                $('.numbers').blur(function(){
+                    if ( $(this).val() == "") {
+                        $(this).val(0);
+                    };
+                    
+                });
+                $('.numbers').keyup(function(event) {
+
+                      // skip for arrow keys
+                  if(event.which >= 37 && event.which <= 40) return;
+
+                  // format number
+                  $(this).val(function(index, value) {
+                    return value
+                      .replace(/[^0-9-.]/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ;
+                  });
+                });
+
+            function get_number(id){
+                return $(id).val().replace(/[^0-9\.-]+/g,"");
+            }
+            }
+        });
+
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/importtire/getvendor4',
+            type: 'POST',
+            data: {sale_report:sale_id},
+            success:function(data){
+                //alert(data);
+                $('#dataTable4 tbody').append(data);
+                    $('.cost').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost:eq('+rowIndex+')'))*0.04
+                        )
+                    );
+
+                    $('.invoice_cost:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+                $('.cost2').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost2:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost2:eq('+rowIndex+')'))*0.04
+                        )
+                    );
+
+                    $('.invoice_cost2:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+                $('.cost4').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost4:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost4:eq('+rowIndex+')'))*0.04
+                        )
+                    );
+
+                    $('.invoice_cost4:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+                $('.number').focus(function(){
+                    if ( $(this).val() == '0') {
+                       $(this).val(""); 
+                    };
+                    
+                });
+                $('.number').blur(function(){
+                    if ( $(this).val() == "") {
+                        $(this).val(0);
+                    };
+                    
+                });
+
+                $('.numbers').focus(function(){
+                    if ( $(this).val() == '0') {
+                       $(this).val(""); 
+                    };
+                    
+                });
+                $('.numbers').blur(function(){
+                    if ( $(this).val() == "") {
+                        $(this).val(0);
+                    };
+                    
+                });
+                $('.numbers').keyup(function(event) {
+
+                      // skip for arrow keys
+                  if(event.which >= 37 && event.which <= 40) return;
+
+                  // format number
+                  $(this).val(function(index, value) {
+                    return value
+                      .replace(/[^0-9-.]/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ;
+                  });
+                });
+
+            function get_number(id){
+                return $(id).val().replace(/[^0-9\.-]+/g,"");
+            }
+            }
+        });
+
+        $('#dataTable2 tbody tr').remove();
+        
+        var sale_id2 = $(this).attr('id');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/importtire/getvendor2',
+            type: 'POST',
+            data: {sale_report:sale_id2},
+            success:function(data){
+                //alert(data);
+                $('#dataTable2 tbody').append(data);
+                    $('.cost').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost:eq('+rowIndex+')'))*0.04
+                        )
+                    );
+
+                    $('.invoice_cost:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+                $('.cost2').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost2:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost2:eq('+rowIndex+')'))*0.04
+                        )
+                    );
+
+                    $('.invoice_cost2:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+                $('.cost4').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost4:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost4:eq('+rowIndex+')'))*0.04
+                        )
+                    );
+
+                    $('.invoice_cost4:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+                $('.number').focus(function(){
+                    if ( $(this).val() == '0') {
+                       $(this).val(""); 
+                    };
+                    
+                });
+                $('.number').blur(function(){
+                    if ( $(this).val() == "") {
+                        $(this).val(0);
+                    };
+                    
+                });
+
+                $('.numbers').focus(function(){
+                    if ( $(this).val() == '0') {
+                       $(this).val(""); 
+                    };
+                    
+                });
+                $('.numbers').blur(function(){
+                    if ( $(this).val() == "") {
+                        $(this).val(0);
+                    };
+                    
+                });
+                $('.numbers').keyup(function(event) {
+
+                      // skip for arrow keys
+                  if(event.which >= 37 && event.which <= 40) return;
+
+                  // format number
+                  $(this).val(function(index, value) {
+                    return value
+                      .replace(/[^0-9-.]/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ;
+                  });
+                });
+
+            function get_number(id){
+                return $(id).val().replace(/[^0-9\.-]+/g,"");
+            }
+            }
+        });
+
+        
+
+
+        var lock = $(this).attr('data');
+        if (lock==1) {
+            $('.add-field input[name="submit"]').hide();
+            $('.add-field input[name="reset"]').hide();
+            $('.add-field input[type="button"]').hide();
+        }
+
+            if(!$('.checkbox').is(':checked')){
+                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+            }
+            
+
+            var import_tire_date = $(this).find("#import_tire_date_"+$(this).attr('id')).text();
+            var code = $(this).find("#code_"+$(this).attr('id')).text();
+            var comment = $(this).find("#comment_"+$(this).attr('id')).text();
+            var expect_date = $(this).find("#expect_date_"+$(this).attr('id')).text();
+
+            //alert(sale_code);
+            $('#yes').val($(this).attr('id'));
+            
+            
+            $('#import_tire_date').val(import_tire_date.replace(/\//g,"-"));
+            $('#code').val(code);
+            $('#comment').val(comment);
+            $('#expect_date').val(expect_date.replace(/\//g,"-"));
+        
+        
+
+    });
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_sale").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+
+                    var import_tire_date = $('#import_tire_date').attr('value');
+                    var code = $('#code').attr('value');
+                    var comment = $('#comment').attr('value');
+                    var expect_date = $('#expect_date').attr('value');
+
+                    var vendor_cost = [];
+
+                    var cost_type = [];
+                    var vendor = [];
+                    var cost = [];
+                    var cost_vat = [];
+                    var vendor_expect_date = [];
+                    var vendor_source = [];
+                    var invoice_cost = [];
+                    var pay_cost = [];
+                    var document_cost = [];
+                    var cost_comment = [];
+                    var check_deposit = [];
+
+                    $('.cost_type').each(function() { 
+                        cost_type.push($(this).val());
+                    });
+
+                    $('.vendor').each(function() { 
+                        vendor.push($(this).val());
+                    });
+
+                    $('.cost').each(function() { 
+                        cost.push($(this).val());
+                    });
+                    $('.cost_vat').each(function() { 
+                        cost_vat.push($(this).val());
+                    });
+                    $('.vendor_expect_date').each(function() { 
+                        vendor_expect_date.push($(this).val());
+                    });
+                    $('.vendor_source').each(function() { 
+                        vendor_source.push($(this).val());
+                    });
+                    $('.invoice_cost').each(function() { 
+                        invoice_cost.push($(this).val());
+                    });
+                    $('.pay_cost').each(function() { 
+                        pay_cost.push($(this).val());
+                    });
+                    $('.document_cost').each(function() { 
+                        document_cost.push($(this).val());
+                    });
+                    $('.cost_comment').each(function() { 
+                        cost_comment.push($(this).val());
+                    });
+                    $('.check_deposit').each(function() { 
+                        if($(this).is(':checked')){
+                            check_deposit.push($(this).val());
+                        }
+                        else{
+                            check_deposit.push(0);
+                        }
+                    });
+
+                    
+                    for (var i = 0; i < cost_type.length; i++) {
+                        vendor_cost.push({'cost_type':cost_type[i], 'vendor':vendor[i], 'cost':cost[i], 'cost_vat':cost_vat[i], 'vendor_expect_date':vendor_expect_date[i], 'vendor_source':vendor_source[i], 'invoice_cost':invoice_cost[i], 'pay_cost':pay_cost[i], 'document_cost':document_cost[i], 'cost_comment':cost_comment[i], 'check_deposit':check_deposit[i]});
+                        
+                        
+                    };
+
+                    var vendor_cost2 = [];
+
+                    var cost_type2 = [];
+                    var vendor2 = [];
+                    var cost2 = [];
+                    var cost_vat2 = [];
+                    var vendor_expect_date2 = [];
+                    var vendor_source2 = [];
+                    var invoice_cost2 = [];
+                    var pay_cost2 = [];
+                    var document_cost2 = [];
+                    var cost_comment2 = [];
+                    var check_deposit2 = [];
+
+                    $('.cost_type2').each(function() { 
+                        cost_type2.push($(this).val());
+                    });
+
+                    $('.vendor2').each(function() { 
+                        vendor2.push($(this).val());
+                    });
+
+                    $('.cost2').each(function() { 
+                        cost2.push($(this).val());
+                    });
+                    $('.cost_vat2').each(function() { 
+                        cost_vat2.push($(this).val());
+                    });
+                    $('.vendor_expect_date2').each(function() { 
+                        vendor_expect_date2.push($(this).val());
+                    });
+                    $('.vendor_source2').each(function() { 
+                        vendor_source2.push($(this).val());
+                    });
+                    $('.invoice_cost2').each(function() { 
+                        invoice_cost2.push($(this).val());
+                    });
+                    $('.pay_cost2').each(function() { 
+                        pay_cost2.push($(this).val());
+                    });
+                    $('.document_cost2').each(function() { 
+                        document_cost2.push($(this).val());
+                    });
+                    $('.cost_comment2').each(function() { 
+                        cost_comment2.push($(this).val());
+                    });
+                    $('.check_deposit2').each(function() { 
+                        if($(this).is(':checked')){
+                            check_deposit2.push($(this).val());
+                        }
+                        else{
+                            check_deposit2.push(0);
+                        }
+                    });
+
+                    
+                    for (var i = 0; i < cost_type2.length; i++) {
+                        vendor_cost2.push({'cost_type':cost_type2[i], 'vendor':vendor2[i], 'cost':cost2[i], 'cost_vat':cost_vat2[i], 'vendor_expect_date':vendor_expect_date2[i], 'vendor_source':vendor_source2[i], 'invoice_cost':invoice_cost2[i], 'pay_cost':pay_cost2[i], 'document_cost':document_cost2[i], 'cost_comment':cost_comment2[i], 'check_deposit':check_deposit2[i]});
+                        
+                        
+                    };
+
+
+                    var vendor_cost4 = [];
+
+                    var cost_type4 = [];
+                    var vendor4 = [];
+                    var cost4 = [];
+                    var cost_vat4 = [];
+                    var vendor_expect_date4 = [];
+                    var vendor_source4 = [];
+                    var invoice_cost4 = [];
+                    var pay_cost4 = [];
+                    var document_cost4 = [];
+                    var cost_comment4 = [];
+                    var check_deposit4 = [];
+
+                    $('.cost_type4').each(function() { 
+                        cost_type4.push($(this).val());
+                    });
+
+                    $('.vendor4').each(function() { 
+                        vendor4.push($(this).val());
+                    });
+
+                    $('.cost4').each(function() { 
+                        cost4.push($(this).val());
+                    });
+                    $('.cost_vat4').each(function() { 
+                        cost_vat4.push($(this).val());
+                    });
+                    $('.vendor_expect_date4').each(function() { 
+                        vendor_expect_date4.push($(this).val());
+                    });
+                    $('.vendor_source4').each(function() { 
+                        vendor_source4.push($(this).val());
+                    });
+                    $('.invoice_cost4').each(function() { 
+                        invoice_cost4.push($(this).val());
+                    });
+                    $('.pay_cost4').each(function() { 
+                        pay_cost4.push($(this).val());
+                    });
+                    $('.document_cost4').each(function() { 
+                        document_cost4.push($(this).val());
+                    });
+                    $('.cost_comment4').each(function() { 
+                        cost_comment4.push($(this).val());
+                    });
+                    $('.check_deposit4').each(function() { 
+                        if($(this).is(':checked')){
+                            check_deposit4.push($(this).val());
+                        }
+                        else{
+                            check_deposit4.push(0);
+                        }
+                    });
+
+                    
+                    for (var i = 0; i < cost_type4.length; i++) {
+                        vendor_cost4.push({'cost_type':cost_type4[i], 'vendor':vendor4[i], 'cost':cost4[i], 'cost_vat':cost_vat4[i], 'vendor_expect_date':vendor_expect_date4[i], 'vendor_source':vendor_source4[i], 'invoice_cost':invoice_cost4[i], 'pay_cost':pay_cost4[i], 'document_cost':document_cost4[i], 'cost_comment':cost_comment4[i], 'check_deposit':check_deposit4[i]});
+                        
+                        
+                    };
+                    
+
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/importtire/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            import_tire_date: import_tire_date,
+                            code: code,
+                            comment: comment,
+                            expect_date: expect_date,
+
+                            vendor_cost: vendor_cost,
+
+                            vendor_cost2: vendor_cost2,
+
+                            vendor_cost4: vendor_cost4,
+
+                            yes: yes,
+                            
+                            }, // giá trị post
+                        error: function (xhr, ajaxOptions, thrownError) {
+                           console.log(xhr.status);
+                           console.log(xhr.responseText);
+                           console.log(thrownError);
+                       },
+                        success: function(answer){ // if everything goes well
+                            alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (yes != "") {
+                                
+                                    setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                                
+                            }
+                            else{
+                                
+                                    setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   
+
+
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+   $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+        ;
+      });
+    });
+    
+
+
+});
+</script>
+<?php } ?>
+
+<script type="text/javascript">
+       var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+
+$('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+   $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+        ;
+      });
+    });
+
+$('.cost').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost:eq('+rowIndex+')'))*0.04
+                        )
+                    );
+
+                    $('.invoice_cost:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+                $('.cost2').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost2:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost2:eq('+rowIndex+')'))*0.04
+                        )
+                    );
+
+                    $('.invoice_cost2:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+                $('.cost4').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost4:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost4:eq('+rowIndex+')'))*0.04
+                        )
+                    );
+
+                    $('.invoice_cost4:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+function get_number(id){
+    return $(id).val().replace(/[^0-9\.-]+/g,"");
+}
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+    $('.lock').click(function(){
+    var id = $(this).attr("data");
+    var value = $(this).attr("value");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/importtire/lock", {data: id, value: value},
+           function(data){
+            
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+              }, 200);
+
+            $('#loading').fadeOut(200);
+            
+            
+           
+           }); 
+      }
+
+});
+$('.unlock').click(function(){
+    var id = $(this).attr("data");
+    var value = $(this).attr("value");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/importtire/lock", {data: id, value: value},
+           function(data){
+            
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+              }, 200);
+
+            $('#loading').fadeOut(200);
+            
+            
+           
+           }); 
+      }
+
+});
+
+$('#tire_going').click(function(){
+    var code = $('#code').attr("value");
+    var date = $('#expect_date').attr("value");
+    if (code == "") {
+        alert('Vui lòng nhập code lô hàng!');
+        $('#code').focus();
+    }
+    else if (date == "") {
+        alert('Vui lòng nhập ngày dự kiến!');
+        $('#expect_date').focus();
+    }
+    else{
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:600,
+            width:600,
+            resizable: false,
+            title:'Chi tiết hàng nhập',
+            
+        });
+        $("#winpopup").load($(this).attr('data')+code+'/1/'+date);
+        $("#winpopup").dialog("open");
+    }
+    return false;
+});
+
+var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $(".ngay").datepicker(pickerOpts);
+
+
+function addRow(tableID){
+    var table=document.getElementById(tableID);
+    var rowCount=table.rows.length;
+    var row=table.insertRow(rowCount);
+    var colCount=table.rows[0].cells.length;
+    for(var i=0;i<colCount;i++){
+        var newcell=row.insertCell(i);
+        newcell.innerHTML=table.rows[0].cells[i].innerHTML;
+        switch(newcell.childNodes[0].type){
+            case"text":newcell.childNodes[0].value="";
+            break;
+            case"checkbox":newcell.childNodes[0].checked=false;
+            break;
+            case"select-one":newcell.childNodes[0].selectedIndex=0;
+            break;
+        }
+    }
+
+    $('.cost_type:last').attr('disabled',false);
+    $('.vendor:last').attr('disabled',false);
+    $('.cost_vat:last').val("");
+    $('.cost:last').val("");
+    $('.cost_comment:last').val("");
+    $('.vendor_expect_date:last').val("");
+    $('.invoice_cost:last').val("");
+    $('.pay_cost:last').val("");
+    $('.document_cost:last').val("");
+    $('.check_deposit:last').attr("checked",false);
+    $('input[name="chk"]:last').attr('data',"");
+    $('input[name="chk"]:last').attr('tabindex',0);
+    $('input[name="chk"]:last').attr('title',"");
+    $('input[name="chk"]:last').attr('class',"");
+    $('.check_deposit:last').attr('disabled',false);
+    $('.check_deposit:last').attr('checked',false);
+    $(".cost_type:last").val($(".cost_type:last option:first").val());
+    $(".vendor:last").val($(".vendor:last option:first").val());
+
+        $('.cost').keyup(function(){
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        $('.invoice_cost:eq('+rowIndex+')').val(
+            Math.round(
+            parseFloat(get_number('.cost:eq('+rowIndex+')'))*0.04
+            )
+        );
+
+        $('.invoice_cost:eq('+rowIndex+')').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        
+    });
+
+    $('.cost2').keyup(function(){
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        $('.invoice_cost2:eq('+rowIndex+')').val(
+            Math.round(
+            parseFloat(get_number('.cost2:eq('+rowIndex+')'))*0.04
+            )
+        );
+
+        $('.invoice_cost2:eq('+rowIndex+')').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        
+    });
+
+    $('.cost4').keyup(function(){
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        $('.invoice_cost4:eq('+rowIndex+')').val(
+            Math.round(
+            parseFloat(get_number('.cost4:eq('+rowIndex+')'))*0.04
+            )
+        );
+
+        $('.invoice_cost4:eq('+rowIndex+')').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        
+    });
+
+$('.cost_type').change(function(){
+    var row = $(this).parent().parent().parent().parent().parent().parent();
+    var rowIndex = row[0].rowIndex;
+
+    var check_type = 0;
+    var check_vendor = 0;
+
+    var val = $(this).val();
+    var vendor_val = $('.vendor:eq('+rowIndex+')').val();
+    $('.cost_type').each(function() { 
+        if (val == $(this).val()) {
+            check_type ++;
+
+            var row2 = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex2 = row2[0].rowIndex;
+            var vendor_val2 = $('.vendor:eq('+rowIndex2+')').val();
+            if (vendor_val == vendor_val2) {
+                check_vendor ++;
+            }
+        }
+    });
+
+    
+
+    if (check_type >= 2 && check_vendor >= 2) {
+        alert('Vui lòng chọn loại phí khác cho vendor này!');
+        $(".cost_type:last").val($(".cost_type:last option:first").val());
+        $(".vendor:last").val($(".vendor:last option:first").val());
+        
+    };
+    
+});
+$('.vendor').change(function(){
+    var row = $(this).parent().parent().parent().parent().parent().parent();
+    var rowIndex = row[0].rowIndex;
+
+    var check_type = 0;
+    var check_vendor = 0;
+
+    var val = $(this).val();
+    var type_val = $('.cost_type:eq('+rowIndex+')').val();
+    $('.vendor').each(function() { 
+        if (val == $(this).val()) {
+            check_vendor ++;
+
+            var row2 = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex2 = row2[0].rowIndex;
+            var type_val2 = $('.cost_type:eq('+rowIndex2+')').val();
+            if (type_val == type_val2) {
+                check_type ++;
+            }
+        }
+    });
+
+
+    if (check_type >= 2 && check_vendor >= 2) {
+        alert('Vui lòng chọn loại phí khác cho vendor này!');
+        $(".cost_type:last").val($(".cost_type:last option:first").val());
+        $(".vendor:last").val($(".vendor:last option:first").val());
+        
+    };
+    
+});
+
+function get_number(id){
+    return $(id).val().replace(/[^0-9\.-]+/g,"");
+}
+
+    $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+         $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+}
+function deleteRow(tableID){
+    try{
+        var table=document.getElementById(tableID);
+        var rowCount=table.rows.length;
+
+        var r = confirm("Bạn có chắc chắn không?");
+        if (r == true){
+            for(var i=0;i<rowCount;i++){
+                var row=table.rows[i];
+                var chkbox=row.cells[0].childNodes[0];
+                if(null!=chkbox&&true==chkbox.checked){
+                    if(chkbox.getAttribute("title") > 0){
+                        
+                            var data = chkbox.getAttribute("data");
+                            var type = chkbox.getAttribute("tabindex");
+                            var vendor = chkbox.className;
+                            $.post("<?php echo BASE_URL ?>/importtire/deletevendor", {data: data, vendor: vendor, type: type},
+                               function(data){
+                                //alert(data);
+                               }); 
+                        
+                    }
+                    if(rowCount<=1){
+                        alert("Cannot delete all the rows.");
+                        break;
+                    }
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+            }
+        }
+    }
+    catch(e){
+        alert(e);
+    }
+}
+
+function addRow2(tableID){
+    var table=document.getElementById(tableID);
+    var rowCount=table.rows.length;
+    var row=table.insertRow(rowCount);
+    var colCount=table.rows[0].cells.length;
+    for(var i=0;i<colCount;i++){
+        var newcell=row.insertCell(i);
+        newcell.innerHTML=table.rows[0].cells[i].innerHTML;
+        switch(newcell.childNodes[0].type){
+            case"text":newcell.childNodes[0].value="";
+            break;
+            case"checkbox":newcell.childNodes[0].checked=false;
+            break;
+            case"select-one":newcell.childNodes[0].selectedIndex=0;
+            break;
+        }
+    }
+
+    $('.cost_type2:last').attr('disabled',false);
+    $('.vendor2:last').attr('disabled',false);
+    $('.cost_vat2:last').val("");
+    $('.cost2:last').val("");
+    $('.cost_comment2:last').val("");
+    $('.vendor_expect_date2:last').val("");
+    $('.invoice_cost2:last').val("");
+    $('.pay_cost2:last').val("");
+    $('.document_cost2:last').val("");
+    $('.check_deposit2:last').attr("checked",false);
+    $('input[name="chk2"]:last').attr('data',"");
+    $('input[name="chk2"]:last').attr('tabindex',0);
+    $('input[name="chk2"]:last').attr('title',"");
+    $('input[name="chk2"]:last').attr('class',"");
+    $('.check_deposit2:last').attr('disabled',false);
+    $('.check_deposit2:last').attr('checked',false);
+    $(".cost_type2:last").val($(".cost_type2:last option:first").val());
+    $(".vendor2:last").val($(".vendor2:last option:first").val());
+
+        $('.cost').keyup(function(){
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        $('.invoice_cost:eq('+rowIndex+')').val(
+            Math.round(
+            parseFloat(get_number('.cost:eq('+rowIndex+')'))*0.1
+            )
+        );
+
+        $('.invoice_cost:eq('+rowIndex+')').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        
+    });
+
+    $('.cost2').keyup(function(){
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        $('.invoice_cost2:eq('+rowIndex+')').val(
+            Math.round(
+            parseFloat(get_number('.cost2:eq('+rowIndex+')'))*0.04
+            )
+        );
+
+        $('.invoice_cost2:eq('+rowIndex+')').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        
+    });
+
+    $('.cost4').keyup(function(){
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        $('.invoice_cost4:eq('+rowIndex+')').val(
+            Math.round(
+            parseFloat(get_number('.cost4:eq('+rowIndex+')'))*0.04
+            )
+        );
+
+        $('.invoice_cost4:eq('+rowIndex+')').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        
+    });
+
+$('.cost_type2').change(function(){
+    var row = $(this).parent().parent().parent().parent().parent().parent();
+    var rowIndex = row[0].rowIndex;
+
+    var check_type = 0;
+    var check_vendor = 0;
+
+    var val = $(this).val();
+    var vendor_val = $('.vendor2:eq('+rowIndex+')').val();
+    $('.cost_type2').each(function() { 
+        if (val == $(this).val()) {
+            check_type ++;
+
+            var row2 = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex2 = row2[0].rowIndex;
+            var vendor_val2 = $('.vendor2:eq('+rowIndex2+')').val();
+            if (vendor_val == vendor_val2) {
+                check_vendor ++;
+            }
+        }
+    });
+
+    
+
+    if (check_type >= 2 && check_vendor >= 2) {
+        alert('Vui lòng chọn loại phí khác cho vendor này!');
+        $(".cost_type2:last").val($(".cost_type2:last option:first").val());
+        $(".vendor2:last").val($(".vendor2:last option:first").val());
+        
+    };
+    
+});
+$('.vendor2').change(function(){
+    var row = $(this).parent().parent().parent().parent().parent().parent();
+    var rowIndex = row[0].rowIndex;
+
+    var check_type = 0;
+    var check_vendor = 0;
+
+    var val = $(this).val();
+    var type_val = $('.cost_type2:eq('+rowIndex+')').val();
+    $('.vendor2').each(function() { 
+        if (val == $(this).val()) {
+            check_vendor ++;
+
+            var row2 = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex2 = row2[0].rowIndex;
+            var type_val2 = $('.cost_type2:eq('+rowIndex2+')').val();
+            if (type_val == type_val2) {
+                check_type ++;
+            }
+        }
+    });
+
+
+    if (check_type >= 2 && check_vendor >= 2) {
+        alert('Vui lòng chọn loại phí khác cho vendor này!');
+        $(".cost_type2:last").val($(".cost_type2:last option:first").val());
+        $(".vendor2:last").val($(".vendor2:last option:first").val());
+        
+    };
+    
+});
+
+function get_number(id){
+    return $(id).val().replace(/[^0-9\.-]+/g,"");
+}
+
+    $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+         $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+}
+function deleteRow2(tableID){
+    try{
+        var table=document.getElementById(tableID);
+        var rowCount=table.rows.length;
+
+        var r = confirm("Bạn có chắc chắn không?");
+        if (r == true){
+            for(var i=0;i<rowCount;i++){
+                var row=table.rows[i];
+                var chkbox=row.cells[0].childNodes[0];
+                if(null!=chkbox&&true==chkbox.checked){
+                    if(chkbox.getAttribute("title") > 0){
+                        
+                            var data = chkbox.getAttribute("data");
+                            var type = chkbox.getAttribute("tabindex");
+                            var vendor = chkbox.className;
+                            $.post("<?php echo BASE_URL ?>/importtire/deletevendor", {data: data, vendor: vendor, type: type},
+                               function(data){
+                                //alert(data);
+                               }); 
+                        
+                    }
+                    if(rowCount<=1){
+                        alert("Cannot delete all the rows.");
+                        break;
+                    }
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+            }
+        }
+    }
+    catch(e){
+        alert(e);
+    }
+}
+
+function addRow4(tableID){
+    var table=document.getElementById(tableID);
+    var rowCount=table.rows.length;
+    var row=table.insertRow(rowCount);
+    var colCount=table.rows[0].cells.length;
+    for(var i=0;i<colCount;i++){
+        var newcell=row.insertCell(i);
+        newcell.innerHTML=table.rows[0].cells[i].innerHTML;
+        switch(newcell.childNodes[0].type){
+            case"text":newcell.childNodes[0].value="";
+            break;
+            case"checkbox":newcell.childNodes[0].checked=false;
+            break;
+            case"select-one":newcell.childNodes[0].selectedIndex=0;
+            break;
+        }
+    }
+
+    $('.cost_type4:last').attr('disabled',false);
+    $('.vendor4:last').attr('disabled',false);
+    $('.cost_vat4:last').val("");
+    $('.cost4:last').val("");
+    $('.cost_comment4:last').val("");
+    $('.vendor_expect_date4:last').val("");
+    $('.invoice_cost4:last').val("");
+    $('.pay_cost4:last').val("");
+    $('.document_cost4:last').val("");
+    $('.check_deposit4:last').attr("checked",false);
+    $('.check_deposit4:last').attr('disabled',false);
+    $('.check_deposit4:last').attr('checked',false);
+    $('input[name="chk4"]:last').attr('data',"");
+    $('input[name="chk4"]:last').attr('tabindex',0);
+    $('input[name="chk4"]:last').attr('title',"");
+    $('input[name="chk4"]:last').attr('class',"");
+    $(".cost_type4:last").val($(".cost_type4:last option:first").val());
+    $(".vendor4:last").val($(".vendor4:last option:first").val());
+
+        $('.cost').keyup(function(){
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        $('.invoice_cost:eq('+rowIndex+')').val(
+            Math.round(
+            parseFloat(get_number('.cost:eq('+rowIndex+')'))*0.1
+            )
+        );
+
+        $('.invoice_cost:eq('+rowIndex+')').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        
+    });
+
+    $('.cost2').keyup(function(){
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        $('.invoice_cost2:eq('+rowIndex+')').val(
+            Math.round(
+            parseFloat(get_number('.cost2:eq('+rowIndex+')'))*0.04
+            )
+        );
+
+        $('.invoice_cost2:eq('+rowIndex+')').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        
+    });
+
+    $('.cost4').keyup(function(){
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        $('.invoice_cost4:eq('+rowIndex+')').val(
+            Math.round(
+            parseFloat(get_number('.cost4:eq('+rowIndex+')'))*0.04
+            )
+        );
+
+        $('.invoice_cost4:eq('+rowIndex+')').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        
+    });
+
+$('.cost_type4').change(function(){
+    var row = $(this).parent().parent().parent().parent().parent().parent();
+    var rowIndex = row[0].rowIndex;
+
+    var check_type = 0;
+    var check_vendor = 0;
+
+    var val = $(this).val();
+    var vendor_val = $('.vendor4:eq('+rowIndex+')').val();
+    $('.cost_type4').each(function() { 
+        if (val == $(this).val()) {
+            check_type ++;
+
+            var row4 = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex4 = row4[0].rowIndex;
+            var vendor_val4 = $('.vendor4:eq('+rowIndex4+')').val();
+            if (vendor_val == vendor_val4) {
+                check_vendor ++;
+            }
+        }
+    });
+
+    
+
+    if (check_type >= 2 && check_vendor >= 2) {
+        alert('Vui lòng chọn loại phí khác cho vendor này!');
+        $(".cost_type4:last").val($(".cost_type4:last option:first").val());
+        $(".vendor4:last").val($(".vendor4:last option:first").val());
+        
+    };
+    
+});
+$('.vendor4').change(function(){
+    var row = $(this).parent().parent().parent().parent().parent().parent();
+    var rowIndex = row[0].rowIndex;
+
+    var check_type = 0;
+    var check_vendor = 0;
+
+    var val = $(this).val();
+    var type_val = $('.cost_type4:eq('+rowIndex+')').val();
+    $('.vendor4').each(function() { 
+        if (val == $(this).val()) {
+            check_vendor ++;
+
+            var row4 = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex4 = row4[0].rowIndex;
+            var type_val4 = $('.cost_type4:eq('+rowIndex4+')').val();
+            if (type_val == type_val4) {
+                check_type ++;
+            }
+        }
+    });
+
+
+    if (check_type >= 2 && check_vendor >= 2) {
+        alert('Vui lòng chọn loại phí khác cho vendor này!');
+        $(".cost_type4:last").val($(".cost_type4:last option:first").val());
+        $(".vendor4:last").val($(".vendor4:last option:first").val());
+        
+    };
+    
+});
+
+function get_number(id){
+    return $(id).val().replace(/[^0-9\.-]+/g,"");
+}
+
+    $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+         $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+}
+function deleteRow4(tableID){
+    try{
+        var table=document.getElementById(tableID);
+        var rowCount=table.rows.length;
+
+        var r = confirm("Bạn có chắc chắn không?");
+        if (r == true){
+            for(var i=0;i<rowCount;i++){
+                var row=table.rows[i];
+                var chkbox=row.cells[0].childNodes[0];
+                if(null!=chkbox&&true==chkbox.checked){
+                    if(chkbox.getAttribute("title") > 0){
+                        
+                            var data = chkbox.getAttribute("data");
+                            var type = chkbox.getAttribute("tabindex");
+                            var vendor = chkbox.className;
+                            $.post("<?php echo BASE_URL ?>/importtire/deletevendor4", {data: data, vendor: vendor, type: type},
+                               function(data){
+                                //alert(data);
+                               }); 
+                        
+                    }
+                    if(rowCount<=1){
+                        alert("Cannot delete all the rows.");
+                        break;
+                    }
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+            }
+        }
+    }
+    catch(e){
+        alert(e);
+    }
+}
+</script>
+</div>

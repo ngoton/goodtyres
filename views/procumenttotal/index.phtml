@@ -1,0 +1,1896 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'sale_report_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'sale_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'loc_from')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'loc_to')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'unit')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'unit2')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'transport')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'number')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'number2')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'expect_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'pay_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'username')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cusomer_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'revenue')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'revenue_vat')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cost_vat')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'ops_cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'ops_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'trucking_cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'trucking_cost_vat')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'trucking_vendor')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'barging_cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'barging_cost_vat')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'barging_vendor')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'feeder_cost_vat')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'feeder_vendor')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'handling_cost_vat')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'handling_port')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'handling_cost_vat2')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'handling_port2')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'commission_cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'commission_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'commission_phone')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'pay_cost_vat')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'bill_cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'document_cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> CHI PHÍ LÔ HÀNG </h1></center>
+
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+
+    <div class="tablenav top">
+        <div class="add-box">
+                  
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">  
+            
+        </div>
+        
+         <div class="add-box">
+            <a class="add_button" id="btnExport" >Export Excel</a>
+        </div>   
+    	<div class="alignleft actions">
+
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="5">Hiển thị 5 giá trị</option>
+            <option value="10">Hiển thị 10 giá trị</option>
+            <option value="15">Hiển thị 15 giá trị</option>
+            <option selected="selected" value="20">Hiển thị 20 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+        
+
+      </div>
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sale_vendor_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'sale_vendor_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','type','<?php echo $url_order ?>')">Loại chi phí <?php if ($order_by == 'type'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','vendor','<?php echo $url_order ?>')">Vendor <?php if ($order_by == 'vendor'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost_vat','<?php echo $url_order ?>')">Tiền có HĐ <?php if ($order_by == 'cost_vat'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost','<?php echo $url_order ?>')">Tiền 0 HĐ <?php if ($order_by == 'cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','invoice_cost','<?php echo $url_order ?>')">Phí mua HĐ <?php if ($order_by == 'invoice_cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        <th style="width:200px" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','expect_date','<?php echo $url_order ?>')">Dự chi <?php if ($order_by == 'expect_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','source','<?php echo $url_order ?>')">Tài khoản <?php if ($order_by == 'source'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','pay_cost','<?php echo $url_order ?>')">Phí chuyển tiền <?php if ($order_by == 'pay_cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','document_cost','<?php echo $url_order ?>')">Phí gửi chứng từ <?php if ($order_by == 'document_cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','comment','<?php echo $url_order ?>')">Ghi chú <?php if ($order_by == 'comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $check_code=0; ?>
+    <?php foreach ($sales as $sale) : ?>
+    <?php 
+    if ($check_code==0) {
+        $check_code = $sale->code; 
+    }
+        if($check_code!=$sale->code && $check_code>0){
+    ?>
+        <tr style="font-weight:bold;">
+            <td class="fix" colspan="3">
+                Tổng doanh thu
+            </td>
+            <td class="fix" colspan="2">
+                <?php echo $lib->formatMoney($sales_data[$check_code]['revenue']) ?>
+            </td>
+            <td class="fix" colspan="7"><?php echo $sales_data[$check_code]['comment'] ?></td>
+        </tr>
+        <tr style="font-weight:bold;">
+            <td class="fix" colspan="3">
+                Tổng chi phí
+            </td>
+            <td class="fix" colspan="2">
+                <?php echo $lib->formatMoney($sales_data[$check_code]['cost']) ?>
+            </td>
+            <td class="fix" colspan="7"></td>
+        </tr>
+        <tr style="font-weight:bold;">
+            <td class="fix" colspan="3">
+                Tổng phí mua HĐ
+            </td>
+            <td class="fix" colspan="2">
+                <?php echo isset($sales_data[$check_code]['invoice'])?$lib->formatMoney($sales_data[$check_code]['invoice']):null ?>
+            </td>
+            <td class="fix" colspan="7"></td>
+        </tr>
+        <tr style="font-weight:bold;">
+            <td class="fix" colspan="3">
+                Tổng phí gửi chứng từ
+            </td>
+            <td class="fix" colspan="2">
+                <?php echo isset($sales_data[$check_code]['document'])?$lib->formatMoney($sales_data[$check_code]['document']):null ?>
+            </td>
+            <td class="fix" colspan="7"></td>
+        </tr>
+        <tr style="font-weight:bold;">
+            <td class="fix" colspan="3">
+                Tổng phí chuyển tiền
+            </td>
+            <td class="fix" colspan="2">
+                <?php echo isset($sales_data[$check_code]['pay'])?$lib->formatMoney($sales_data[$check_code]['pay']):null ?>
+            </td>
+            <td class="fix" colspan="7"></td>
+        </tr>
+        <tr style="font-weight:bold;">
+            <td class="fix" colspan="3">
+                Tổng lợi nhuận
+            </td>
+            <td class="fix" colspan="2">
+                <?php echo $lib->formatMoney($sales_data[$check_code]['revenue']-$sales_data[$check_code]['cost']-(isset($sales_data[$check_code]['invoice'])?$sales_data[$check_code]['invoice']:0)-(isset($sales_data[$check_code]['document'])?$sales_data[$check_code]['document']:0)-(isset($sales_data[$check_code]['pay'])?$sales_data[$check_code]['pay']:0)) ?>
+            </td>
+            <td class="fix" colspan="7"></td>
+        </tr>
+    <?php
+        $check_code = $sale->code; 
+        }
+    
+    ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $sale->sale_vendor_id ?>" data="<?php echo $sale->procument_lock ?>" class="edit_tr">
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="code_<?php echo $sale->sale_vendor_id; ?>"><?php echo $sale->code; ?></td>
+            <td  class="fix" data="<?php echo $sale->type; ?>" id="type_<?php echo $sale->sale_vendor_id; ?>"><?php echo $sale->type==1?'Trucking':($sale->type==2?'Barging':($sale->type==3?'Feeder':($sale->type==4?'Thu hộ':($sale->type==5?'Hoa hồng':($sale->type==6?'TTHQ':($sale->type==7?'Khác':null)))))); ?></td>
+            <td class="fix" id="vendor_<?php echo $sale->sale_vendor_id; ?>"><?php echo $sale->shipment_vendor_name; ?></td>
+            <td class="fix" id="cost_vat_<?php echo $sale->sale_vendor_id; ?>"><?php echo $lib->formatMoney($sale->cost_vat); ?></td>
+            <td class="fix" id="cost_<?php echo $sale->sale_vendor_id; ?>"><?php echo $lib->formatMoney($sale->cost); ?></td>
+            <td class="fix" id="invoice_cost_<?php echo $sale->sale_vendor_id; ?>"><?php echo $lib->formatMoney($sale->invoice_cost); ?></td>
+            <td class="fix" id="expect_date_<?php echo $sale->sale_vendor_id; ?>"><?php echo $lib->hien_thi_ngay_thang($sale->expect_date); ?></td>
+            <td class="fix" id="source_<?php echo $sale->sale_vendor_id; ?>"><?php echo $sale->bank_name; ?></td>
+            <td class="fix" id="pay_cost_<?php echo $sale->sale_vendor_id; ?>"><?php echo $lib->formatMoney($sale->pay_cost); ?></td>
+            <td class="fix" id="document_cost_<?php echo $sale->sale_vendor_id; ?>"><?php echo $lib->formatMoney($sale->document_cost); ?></td>
+            <td class="fix" id="comment_<?php echo $sale->sale_vendor_id; ?>"><?php echo $sale->comment; ?></td>
+            
+        </tr>
+    <?php endforeach; ?>
+
+        <tr style="font-weight:bold;">
+            <td class="fix" colspan="3">
+                Tổng doanh thu
+            </td>
+            <td class="fix" colspan="2">
+                <?php echo $lib->formatMoney($sales_data[$check_code]['revenue']) ?>
+            </td>
+            <td class="fix" colspan="7"><?php echo $sales_data[$check_code]['comment'] ?></td>
+        </tr>
+        <tr style="font-weight:bold;">
+            <td class="fix" colspan="3">
+                Tổng chi phí
+            </td>
+            <td class="fix" colspan="2">
+                <?php echo $lib->formatMoney($sales_data[$check_code]['cost']) ?>
+            </td>
+            <td class="fix" colspan="7"></td>
+        </tr>
+        <tr style="font-weight:bold;">
+            <td class="fix" colspan="3">
+                Tổng phí mua HĐ
+            </td>
+            <td class="fix" colspan="2">
+                <?php echo isset($sales_data[$check_code]['invoice'])?$lib->formatMoney($sales_data[$check_code]['invoice']):null ?>
+            </td>
+            <td class="fix" colspan="7"></td>
+        </tr>
+        <tr style="font-weight:bold;">
+            <td class="fix" colspan="3">
+                Tổng phí gửi chứng từ
+            </td>
+            <td class="fix" colspan="2">
+                <?php echo isset($sales_data[$check_code]['document'])?$lib->formatMoney($sales_data[$check_code]['document']):null ?>
+            </td>
+            <td class="fix" colspan="7"></td>
+        </tr>
+        <tr style="font-weight:bold;">
+            <td class="fix" colspan="3">
+                Tổng phí chuyển tiền
+            </td>
+            <td class="fix" colspan="2">
+                <?php echo isset($sales_data[$check_code]['pay'])?$lib->formatMoney($sales_data[$check_code]['pay']):null ?>
+            </td>
+            <td class="fix" colspan="7"></td>
+        </tr>
+        <tr style="font-weight:bold;">
+            <td class="fix" colspan="3">
+                Tổng lợi nhuận
+            </td>
+            <td class="fix" colspan="2">
+                <?php echo $lib->formatMoney($sales_data[$check_code]['revenue']-$sales_data[$check_code]['cost']-(isset($sales_data[$check_code]['invoice'])?$sales_data[$check_code]['invoice']:0)-(isset($sales_data[$check_code]['document'])?$sales_data[$check_code]['document']:0)-(isset($sales_data[$check_code]['pay'])?$sales_data[$check_code]['pay']:0)) ?>
+            </td>
+            <td class="fix" colspan="7"></td>
+        </tr>
+
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('procument') ?>">&larr;</a></div>
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+
+<script type="text/javascript">
+
+
+var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $(".ngay").datepicker(pickerOpts);
+
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+   
+   $('#loc_from_list_id').slideUp(200);
+    $('#loc_to_list_id').slideUp(200);
+    $('#customer_list_id').slideUp(200);
+    $('#ops_vendor_list_id').slideUp(200);
+    $('#trucking_vendor_list_id').slideUp(200);
+    $('#feeder_vendor_list_id').slideUp(200);
+    $('#commission_vendor_list_id').slideUp(200);
+    $('#port1_vendor_list_id').slideUp(200);
+    $('#port2_vendor_list_id').slideUp(200);
+    $('#barging_vendor_list_id').slideUp(200);
+
+});
+
+$(':checkbox[name=customer_type]').bind('click',function(){
+     var th = $(this), name = th.prop('name'); 
+     if(th.is(':checked')){
+       $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
+       if ($(this).val() == "new") { 
+            $('#customer_name').attr('data',"");
+            $("#customer_name").prop('readonly', false);
+            $("#customer_phone").prop('readonly', false);
+            $("#customer_email").prop('readonly', false);
+            $('#customer_name').attr('value',"");
+            $('#customer_phone').attr('value',"");
+            $('#customer_email').attr('value',"");
+        }
+        else if ($(this).val() == "old") { 
+            $('#customer_name').attr('data',"");
+            $("#customer_name").prop('readonly', false);
+            $("#customer_phone").prop('readonly', true);
+            $("#customer_email").prop('readonly', true);
+            $('#customer_name').attr('value',"");
+            $('#customer_phone').attr('value',"");
+            $('#customer_email').attr('value',"");
+        }
+
+        $('#customer_name').focus();
+     }
+});
+
+
+    $('.edit_tr').click(function(){
+        var lock = $(this).attr('data');
+        if (lock==1) {
+            $('.add-field input[name="submit"]').hide();
+            $('.add-field input[name="reset"]').hide();
+            $('.add-field input[type="button"]').hide();
+        }
+
+        $('#dataTable tbody tr').remove();
+        
+        var sale_id = $(this).attr('id');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/procument/getvendor',
+            type: 'POST',
+            data: {sale_report:sale_id},
+            success:function(data){
+                //alert(data);
+                $('#dataTable tbody').append(data);
+                $('.cost').keyup(function(){
+                    var row = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex = row[0].rowIndex;
+
+                    $('.invoice_cost:eq('+rowIndex+')').val(
+                        Math.round(
+                        parseFloat(get_number('.cost:eq('+rowIndex+')'))*0.1
+                        )
+                    );
+
+                    $('.invoice_cost:eq('+rowIndex+')').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                    
+                });
+
+
+                $('.number').focus(function(){
+                    if ( $(this).val() == '0') {
+                       $(this).val(""); 
+                    };
+                    
+                });
+                $('.number').blur(function(){
+                    if ( $(this).val() == "") {
+                        $(this).val(0);
+                    };
+                    
+                });
+
+                $('.numbers').focus(function(){
+                    if ( $(this).val() == '0') {
+                       $(this).val(""); 
+                    };
+                    
+                });
+                $('.numbers').blur(function(){
+                    if ( $(this).val() == "") {
+                        $(this).val(0);
+                    };
+                    
+                });
+                $('.numbers').keyup(function(event) {
+
+                      // skip for arrow keys
+                  if(event.which >= 37 && event.which <= 40) return;
+
+                  // format number
+                  $(this).val(function(index, value) {
+                    return value
+                      .replace(/[^0-9-.]/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ;
+                  });
+                });
+
+            function get_number(id){
+                return $(id).val().replace(/[^0-9\.-]+/g,"");
+            }
+            }
+        });
+
+        //$('#dataTable tbody tr:not(.'+$(this).attr('id')+')').remove();
+
+        if(!$('.complete').is(':focus') && !$('.day').is(':focus')) { 
+
+        if(!$('.checkbox').is(':checked')){
+            $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        }
+        var loc_from = $(this).find("#loc_from_"+$(this).attr('id')).text();
+        var loc_to = $(this).find("#loc_to_"+$(this).attr('id')).text();
+
+        var dloc_from = $(this).find("#loc_from_"+$(this).attr('id')).attr('data');
+        var dloc_to = $(this).find("#loc_to_"+$(this).attr('id')).attr('data');
+
+        var dist_from = $(this).find("#dist_from_"+$(this).attr('id')).attr('data');
+        var dist_to = $(this).find("#dist_to_"+$(this).attr('id')).attr('data');
+
+        var sale_date = $(this).find("#sale_date_"+$(this).attr('id')).text();
+        
+        var number = $(this).find("#number_"+$(this).attr('id')).text();
+        var code = $(this).find("#code_"+$(this).attr('id')).text();
+        var unit = $(this).find("#unit_"+$(this).attr('id')).text();
+        var number2 = $(this).find("#number2_"+$(this).attr('id')).text();
+        var unit2 = $(this).find("#unit2_"+$(this).attr('id')).text();
+        var transport = $(this).find("#transport_"+$(this).attr('id')).text();
+        var comment = $(this).find("#comment_"+$(this).attr('id')).text();
+        var number = $(this).find("#number_"+$(this).attr('id')).text();
+        var revenue = $(this).find("#revenue_"+$(this).attr('id')).text();
+        var revenue_vat = $(this).find("#revenue_vat_"+$(this).attr('id')).text();
+        var ops_cost = $(this).find("#ops_cost_"+$(this).attr('id')).text();
+        var ops_name = $(this).find("#ops_name_"+$(this).attr('id')).text();
+        var ops = $(this).find("#ops_name_"+$(this).attr('id')).attr('data');
+        var ops_phone = $(this).find("#ops_phone_"+$(this).attr('id')).text();
+        var ops_expect_date = $(this).find("#ops_expect_date_"+$(this).attr('id')).text();
+        var trucking_cost = $(this).find("#trucking_cost_"+$(this).attr('id')).text();
+        var trucking_cost_vat = $(this).find("#trucking_cost_vat_"+$(this).attr('id')).text();
+        var trucking_vendor = $(this).find("#trucking_vendor_"+$(this).attr('id')).text();
+        var trucking = $(this).find("#trucking_vendor_"+$(this).attr('id')).attr('data');
+        var trucking_phone = $(this).find("#trucking_phone_"+$(this).attr('id')).text();
+        var trucking_expect_date = $(this).find("#trucking_expect_date_"+$(this).attr('id')).text();
+        var barging_cost = $(this).find("#barging_cost_"+$(this).attr('id')).text();
+        var barging_cost_vat = $(this).find("#barging_cost_vat_"+$(this).attr('id')).text();
+        var barging_vendor = $(this).find("#barging_vendor_"+$(this).attr('id')).text();
+        var barging = $(this).find("#barging_vendor_"+$(this).attr('id')).attr('data');
+        var barging_phone = $(this).find("#barging_phone_"+$(this).attr('id')).text();
+        var barging_expect_date = $(this).find("#barging_expect_date_"+$(this).attr('id')).text();
+        var feeder_cost_vat = $(this).find("#feeder_cost_vat_"+$(this).attr('id')).text();
+        var feeder_vendor = $(this).find("#feeder_vendor_"+$(this).attr('id')).text();
+        var feeder = $(this).find("#feeder_vendor_"+$(this).attr('id')).attr('data');
+        var feeder_phone = $(this).find("#feeder_phone_"+$(this).attr('id')).text();
+        var feeder_expect_date = $(this).find("#feeder_expect_date_"+$(this).attr('id')).text();
+        var handling_cost_vat = $(this).find("#handling_cost_vat_"+$(this).attr('id')).text();
+        var handling_port = $(this).find("#handling_port_"+$(this).attr('id')).text();
+        var port = $(this).find("#handling_port_"+$(this).attr('id')).attr('data');
+        var port1_expect_date = $(this).find("#port1_expect_date_"+$(this).attr('id')).text();
+        var handling_cost_vat2 = $(this).find("#handling_cost_vat2_"+$(this).attr('id')).text();
+        var handling_port2 = $(this).find("#handling_port2_"+$(this).attr('id')).text();
+        var port2 = $(this).find("#handling_port2_"+$(this).attr('id')).attr('data');
+        var port2_expect_date = $(this).find("#port2_expect_date_"+$(this).attr('id')).text();
+        var commission_cost = $(this).find("#commission_cost_"+$(this).attr('id')).text();
+        var commission_name = $(this).find("#commission_name_"+$(this).attr('id')).text();
+        var commission = $(this).find("#commission_"+$(this).attr('id')).text();
+        var commission_phone = $(this).find("#commission_phone_"+$(this).attr('id')).text();
+        var commission_expect_date = $(this).find("#commission_expect_date_"+$(this).attr('id')).text();
+        var pay_cost_vat = $(this).find("#pay_cost_vat_"+$(this).attr('id')).text();
+        var bill_cost = $(this).find("#bill_cost_"+$(this).attr('id')).text();
+        var document_cost = $(this).find("#document_cost_"+$(this).attr('id')).text();
+        var other_cost_vat = $(this).find("#other_cost_vat_"+$(this).attr('id')).text();
+        var other_cost = $(this).find("#other_cost_"+$(this).attr('id')).text();
+        var other_cost_vat2 = $(this).find("#other_cost_vat2_"+$(this).attr('id')).text();
+        var other_cost2 = $(this).find("#other_cost2_"+$(this).attr('id')).text();
+        var other_cost_vat3 = $(this).find("#other_cost_vat3_"+$(this).attr('id')).text();
+        var other_cost3 = $(this).find("#other_cost3_"+$(this).attr('id')).text();
+        var comment_cost_vat = $(this).find("#comment_cost_vat_"+$(this).attr('id')).text();
+        var comment_cost = $(this).find("#comment_cost_"+$(this).attr('id')).text();
+        var comment_cost_vat2 = $(this).find("#comment_cost_vat2_"+$(this).attr('id')).text();
+        var comment_cost2 = $(this).find("#comment_cost2_"+$(this).attr('id')).text();
+        var comment_cost_vat3 = $(this).find("#comment_cost_vat3_"+$(this).attr('id')).text();
+        var comment_cost3 = $(this).find("#comment_cost3_"+$(this).attr('id')).text();
+       
+        var customer_name = $(this).find("#customer_name_"+$(this).attr('id')).text();
+        var customer_phone = $(this).find("#customer_phone_"+$(this).attr('id')).text();
+        var customer_email = $(this).find("#customer_email_"+$(this).attr('id')).text();
+        var dcustomer_name = $(this).find("#customer_name_"+$(this).attr('id')).attr('data');
+        var expect_date = $(this).find("#expect_date_"+$(this).attr('id')).text();
+
+        var customer_source = $(this).find("#customer_source_"+$(this).attr('id')).text();
+        var ops_source = $(this).find("#ops_source_"+$(this).attr('id')).text();
+        var trucking_source = $(this).find("#trucking_source_"+$(this).attr('id')).text();
+        var barging_source = $(this).find("#barging_source_"+$(this).attr('id')).text();
+        var commission_source = $(this).find("#commission_source_"+$(this).attr('id')).text();
+        var feeder_source = $(this).find("#feeder_source_"+$(this).attr('id')).text();
+        var port1_source = $(this).find("#port1_source_"+$(this).attr('id')).text();
+        var port2_source = $(this).find("#port2_source_"+$(this).attr('id')).text();
+
+
+        //alert(sale_code);
+        $('#yes').val($(this).attr('id'));
+        
+        
+        $('#loc_from').val(loc_from);
+        $('#loc_to').val(loc_to);
+        $('#sale_date').val(sale_date.replace(/\//g,"-"));
+        $("#dis_from option:contains(" + dist_from + ")").attr('selected', 'selected');
+        $("#dis_to option:contains(" + dist_to + ")").attr('selected', 'selected');
+        $("#unit option:contains(" + unit + ")").attr('selected', 'selected');
+        $("#unit2 option:contains(" + unit2 + ")").attr('selected', 'selected');
+        $("#transport option:contains(" + transport + ")").attr('selected', 'selected');
+        $('#number2').val(number2);
+        $('#number').val(number);
+        $('#code').val(code);
+        $('#comment').val(comment);
+        $('#revenue').val(revenue);
+        $('#revenue_vat').val(revenue_vat);
+        $('#ops_cost').val(ops_cost);
+        $('#ops_name').val(ops_name);
+        $('#ops_name').attr('data',ops);
+        $('#ops_phone').val(ops_phone);
+        $('#ops_expect_date').val(ops_expect_date.replace(/\//g,"-"));
+        $('#trucking_cost').val(trucking_cost);
+        $('#trucking_cost_vat').val(trucking_cost_vat);
+        $('#trucking_vendor').val(trucking_vendor);
+        $('#trucking_vendor').attr('data',trucking);
+        $('#trucking_phone').val(trucking_phone);
+        $('#trucking_expect_date').val(trucking_expect_date.replace(/\//g,"-"));
+        $('#barging_cost').val(barging_cost);
+        $('#barging_cost_vat').val(barging_cost_vat);
+        $('#barging_vendor').val(barging_vendor);
+        $('#barging_vendor').attr('data',barging);
+        $('#barging_phone').val(barging_phone);
+        $('#barging_expect_date').val(barging_expect_date.replace(/\//g,"-"));
+        $('#feeder_cost_vat').val(feeder_cost_vat);
+        $('#feeder_vendor').val(feeder_vendor);
+        $('#feeder_vendor').attr('data',feeder);
+        $('#feeder_phone').val(feeder_phone);
+        $('#feeder_expect_date').val(feeder_expect_date.replace(/\//g,"-"));
+        $('#handling_cost_vat').val(handling_cost_vat);
+        $('#handling_port').val(handling_port);
+        $('#handling_port').attr('data',port);
+        $('#port1_expect_date').val(port1_expect_date.replace(/\//g,"-"));
+        $('#handling_cost_vat2').val(handling_cost_vat2);
+        $('#handling_port2').val(handling_port2);
+        $('#handling_port2').attr('data',port2);
+        $('#port2_expect_date').val(port2_expect_date.replace(/\//g,"-"));
+        $('#commission_cost').val(commission_cost);
+        $('#commission_name').val(commission_name);
+        $('#commission_name').attr('data',commission);
+        $('#commission_phone').val(commission_phone);
+        $('#commission_expect_date').val(commission_expect_date.replace(/\//g,"-"));
+        $('#pay_cost_vat').val(pay_cost_vat);
+        $('#bill_cost').val(bill_cost);
+        $('#document_cost').val(document_cost);
+        $('#other_cost_vat').val(other_cost_vat);
+        $('#other_cost').val(other_cost);
+        $('#other_cost_vat2').val(other_cost_vat2);
+        $('#other_cost2').val(other_cost2);
+        $('#other_cost_vat3').val(other_cost_vat3);
+        $('#other_cost3').val(other_cost3);
+        $('#comment_cost_vat').val(comment_cost_vat);
+        $('#comment_cost').val(comment_cost);
+        $('#comment_cost_vat2').val(comment_cost_vat2);
+        $('#comment_cost2').val(comment_cost2);
+        $('#comment_cost_vat3').val(comment_cost_vat3);
+        $('#comment_cost3').val(comment_cost3);
+        
+        $('#customer_name').val(customer_name);
+        $('#customer_phone').val(customer_phone);
+        $('#customer_email').val(customer_email);
+        $('#expect_date').val(expect_date.replace(/\//g,"-"));
+
+        $("#customer_source option:contains(" + customer_source + ")").attr('selected', 'selected');
+        $("#trucking_source option:contains(" + trucking_source + ")").attr('selected', 'selected');
+        $("#ops_source option:contains(" + ops_source + ")").attr('selected', 'selected');
+        $("#barging_source option:contains(" + barging_source + ")").attr('selected', 'selected');
+        $("#feeder_source option:contains(" + feeder_source + ")").attr('selected', 'selected');
+        $("#commission_source option:contains(" + commission_source + ")").attr('selected', 'selected');
+        $("#port1_source option:contains(" + port1_source + ")").attr('selected', 'selected');
+        $("#port2_source option:contains(" + port2_source + ")").attr('selected', 'selected');
+        
+        
+        $(':checkbox[name="customer_type"][value="old"]').prop("checked", true);
+
+        $('#loc_from').attr('data',dloc_from);
+        $('#loc_to').attr('data',dloc_to);
+        $('#customer_name').attr('data',dcustomer_name);
+
+        $("#code").prop('disabled', false);
+}
+
+
+
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+     $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
+     $(':checkbox[name="customer_type"]').attr("disabled", false);
+    $(':checkbox[name="customer_type"][value="old"]').prop("checked", true);
+    
+     $("#customer_name").prop('readonly', false);
+        $('#customer_name').val("");
+        $('#customer_phone').val("");
+        $('#customer_email').val("");
+        $('#sale_date').val("<?php echo date('d-m-Y') ?>");
+        $("#loc_from").prop('readonly', false);
+        $("#loc_from").prop('disabled', false);
+        $('#loc_from').val("");
+        $("#loc_to").prop('readonly', false);
+        $("#loc_to").prop('disabled', false);
+        $('#loc_to').val("");
+
+        $('#expect_date').val();
+        $("#unit option[value=1]").attr('selected', 'selected');
+        $("#unit2 option[value=1]").attr('selected', 'selected');
+        $("#transport option[value=1]").attr('selected', 'selected');
+        $("#dis_from option[value=1]").attr('selected', 'selected');
+        $("#dis_to option[value=1]").attr('selected', 'selected');
+        
+        
+        $('#number2').val(0);
+        $('#number').val(0);
+        $('#code').val(0);
+        $('#comment').val("");
+        $('#revenue').val(0);
+        $('#revenue_vat').val(0);
+        $('#ops_cost').val(0);
+        $('#ops_name').val("");
+        $('#ops_name').attr('data',"");
+        $('#ops_phone').val("");
+        $('#ops_expect_date').val("");
+        $('#trucking_cost').val(0);
+        $('#trucking_cost_vat').val(0);
+        $('#trucking_vendor').val("");
+        $('#trucking_vendor').attr('data',"");
+        $('#trucking_phone').val("");
+        $('#trucking_expect_date').val("");
+        $('#barging_cost').val(0);
+        $('#barging_cost_vat').val(0);
+        $('#barging_vendor').val("");
+        $('#barging_vendor').attr('data',"");
+        $('#barging_phone').val("");
+        $('#barging_expect_date').val("");
+        $('#feeder_cost_vat').val(0);
+        $('#feeder_vendor').val("");
+        $('#feeder_vendor').attr('data',"");
+        $('#feeder_phone').val("");
+        $('#feeder_expect_date').val("");
+        $('#handling_cost_vat').val(0);
+        $('#handling_port').val("");
+        $('#handling_port').attr('data',"");
+        $('#port1_expect_date').val("");
+        $('#handling_cost_vat2').val(0);
+        $('#handling_port2').val("");
+        $('#handling_port2').attr('data',"");
+        $('#port2_expect_date').val();
+        $('#commission_cost').val(0);
+        $('#commission_name').val("");
+        $('#commission_name').attr('data',"");
+        $('#commission_phone').val("");
+        $('#commission_expect_date').val("");
+        $('#pay_cost_vat').val(0);
+        $('#bill_cost').val(0);
+        $('#document_cost').val(0);
+        $('#other_cost_vat').val(0);
+        $('#other_cost').val(0);
+        $('#other_cost_vat2').val(0);
+        $('#other_cost2').val(0);
+        $('#other_cost_vat3').val(0);
+        $('#other_cost3').val(0);
+        $('#comment_cost_vat').val("");
+        $('#comment_cost').val("");
+        $('#comment_cost_vat2').val("");
+        $('#comment_cost2').val("");
+        $('#comment_cost_vat3').val("");
+        $('#comment_cost3').val("");
+        
+        
+        $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+        $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+   
+   $('#loc_from').attr('data',"");
+   $('#loc_to').attr('data',"");
+   $('#customer_name').attr('data',"");
+
+   $('input[name="submit"]').show();
+    $('input[name="reset"]').show();
+    $('input[type="button"]').show();
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_sale").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var sale_date = $('#sale_date').attr('value');
+                    var loc_from = $('#loc_from').attr('data');
+                    var loc_to = $('#loc_to').attr('data');
+                    var customer_type = $('input[name=customer_type]:checked').val();
+                    var code = $('#code').attr('value');
+                    var unit = $('#unit').attr('value');
+                    var unit2 = $('#unit2').attr('value');
+                    var transport = $('#transport').attr('value');
+                    var number = $('#number').attr('value');
+                    var comment = $('#comment').attr('value');
+                    var number2 = $('#number2').attr('value');
+                    var revenue = $('#revenue').attr('value');
+                    var revenue_vat = $('#revenue_vat').attr('value');
+                    var ops_cost = $('#ops_cost').attr('value');
+                    var ops_name = $('#ops_name').attr('value');
+                    var ops = $('#ops_name').attr('data');
+                    var ops_phone = $('#ops_phone').attr('value');
+                    var ops_expect_date = $('#ops_expect_date').attr('value');
+                    var trucking_cost = $('#trucking_cost').attr('value');
+                    var trucking_cost_vat = $('#trucking_cost_vat').attr('value');
+                    var trucking_vendor = $('#trucking_vendor').attr('value');
+                    var trucking = $('#trucking_vendor').attr('data');
+                    var trucking_phone = $('#trucking_phone').attr('value');
+                    var trucking_expect_date = $('#trucking_expect_date').attr('value');
+                    var barging_cost = $('#barging_cost').attr('value');
+                    var barging_cost_vat = $('#barging_cost_vat').attr('value');
+                    var barging_vendor = $('#barging_vendor').attr('value');
+                    var barging = $('#barging_vendor').attr('data');
+                    var barging_phone = $('#barging_phone').attr('value');
+                    var barging_expect_date = $('#barging_expect_date').attr('value');
+                    var feeder_cost_vat = $('#feeder_cost_vat').attr('value');
+                    var feeder_vendor = $('#feeder_vendor').attr('value');
+                    var feeder = $('#feeder_vendor').attr('data');
+                    var feeder_phone = $('#feeder_phone').attr('value');
+                    var feeder_expect_date = $('#feeder_expect_date').attr('value');
+                    var handling_cost_vat = $('#handling_cost_vat').attr('value');
+                    var handling_port = $('#handling_port').attr('value');
+                    var port1 = $('#handling_port').attr('data');
+                    var port1_expect_date = $('#port1_expect_date').attr('value');
+                    var handling_cost_vat2 = $('#handling_cost_vat2').attr('value');
+                    var handling_port2 = $('#handling_port2').attr('value');
+                    var port2 = $('#handling_port2').attr('data');
+                    var port2_expect_date = $('#port2_expect_date').attr('value');
+                    var commission_cost = $('#commission_cost').attr('value');
+                    var commission_name = $('#commission_name').attr('value');
+                    var commission = $('#commission_name').attr('data');
+                    var commission_phone = $('#commission_phone').attr('value');
+                    var commission_expect_date = $('#commission_expect_date').attr('value');
+                    var pay_cost_vat = $('#pay_cost_vat').attr('value');
+                    var bill_cost = $('#bill_cost').attr('value');
+                    var document_cost = $('#document_cost').attr('value');
+                    var other_cost = $('#other_cost').attr('value');
+                    var other_cost_vat = $('#other_cost_vat').attr('value');
+                    var other_cost2 = $('#other_cost2').attr('value');
+                    var other_cost_vat2 = $('#other_cost_vat2').attr('value');
+                    var other_cost3 = $('#other_cost3').attr('value');
+                    var other_cost_vat3 = $('#other_cost_vat3').attr('value');
+                    var comment_cost = $('#comment_cost').attr('value');
+                    var comment_cost_vat = $('#comment_cost_vat').attr('value');
+                    var comment_cost2 = $('#comment_cost2').attr('value');
+                    var comment_cost_vat2 = $('#comment_cost_vat2').attr('value');
+                    var comment_cost3 = $('#comment_cost3').attr('value');
+                    var comment_cost_vat3 = $('#comment_cost_vat3').attr('value');
+
+                    var customer_name = $('#customer_name').attr('value');
+                    var customer = $('#customer_name').attr('data');
+                    var customer_phone = $('#customer_phone').attr('value');
+                    var customer_email = $('#customer_email').attr('value');
+                    var status = $('input[name=status]:checked').val();
+                    var expect_date = $('#expect_date').attr('value');
+
+                    var customer_source = $('#customer_source').attr('value');
+                    var ops_source = $('#ops_source').attr('value');
+                    var trucking_source = $('#trucking_source').attr('value');
+                    var barging_source = $('#barging_source').attr('value');
+                    var feeder_source = $('#feeder_source').attr('value');
+                    var commission_source = $('#commission_source').attr('value');
+                    var port1_source = $('#port1_source').attr('value');
+                    var port2_source = $('#port2_source').attr('value');
+
+                    // if (ops_cost != "" && ops_name == "") {
+                    //     $('#ops_name').focus();
+                    //     return false;
+                    // }
+                    // if ((trucking_cost != "" || trucking_cost_vat != "") && trucking_vendor == "") {
+                    //     $('#trucking_vendor').focus();
+                    //     return false;
+                    // }
+                    // if ((barging_cost != "" || barging_cost_vat != "") && barging_vendor == "") {
+                    //     $('#barging_vendor').focus();
+                    //     return false;
+                    // }
+                    // if (feeder_cost_vat != "" && feeder_vendor == "") {
+                    //     $('#feeder_vendor').focus();
+                    //     return false;
+                    // }
+                    // if (commission_cost != "" && commission_name == "") {
+                    //     $('#commission_name').focus();
+                    //     return false;
+                    // }
+                    // if (handling_cost_vat != "" && handling_port == "") {
+                    //     $('#handling_port').focus();
+                    //     return false;
+                    // }
+                    // if (handling_cost_vat2 != "" && handling_port2 == "") {
+                    //     $('#handling_port2').focus();
+                    //     return false;
+                    // }
+
+                    if (number2 == "" || number2 == 0) {
+                        unit2 = "";
+                    }
+
+                    var vendor_cost = [];
+
+                    var cost_type = [];
+                    var vendor = [];
+                    var cost = [];
+                    var cost_vat = [];
+                    var vendor_expect_date = [];
+                    var vendor_source = [];
+                    var invoice_cost = [];
+                    var pay_cost = [];
+                    var document_cost = [];
+                    var cost_comment = [];
+                    var check_deposit = [];
+
+                    $('.cost_type').each(function() { 
+                        cost_type.push($(this).val());
+                    });
+
+                    $('.vendor').each(function() { 
+                        vendor.push($(this).val());
+                    });
+
+                    $('.cost').each(function() { 
+                        cost.push($(this).val());
+                    });
+                    $('.cost_vat').each(function() { 
+                        cost_vat.push($(this).val());
+                    });
+                    $('.vendor_expect_date').each(function() { 
+                        vendor_expect_date.push($(this).val());
+                    });
+                    $('.vendor_source').each(function() { 
+                        vendor_source.push($(this).val());
+                    });
+                    $('.invoice_cost').each(function() { 
+                        invoice_cost.push($(this).val());
+                    });
+                    $('.pay_cost').each(function() { 
+                        pay_cost.push($(this).val());
+                    });
+                    $('.document_cost').each(function() { 
+                        document_cost.push($(this).val());
+                    });
+                    $('.cost_comment').each(function() { 
+                        cost_comment.push($(this).val());
+                    });
+                    $('.check_deposit').each(function() { 
+                        if($(this).is(':checked')){
+                            check_deposit.push($(this).val());
+                        }
+                        else{
+                            check_deposit.push(0);
+                        }
+                    });
+
+                    
+                    for (var i = 0; i < cost_type.length; i++) {
+                        vendor_cost.push({'cost_type':cost_type[i], 'vendor':vendor[i], 'cost':cost[i], 'cost_vat':cost_vat[i], 'vendor_expect_date':vendor_expect_date[i], 'vendor_source':vendor_source[i], 'invoice_cost':invoice_cost[i], 'pay_cost':pay_cost[i], 'document_cost':document_cost[i], 'cost_comment':cost_comment[i], 'check_deposit':check_deposit[i]});
+                        
+                        
+                    };
+
+                    
+
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/procument/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            
+
+                            cost_type: cost_type,
+                            vendor: vendor,
+                            cost: cost,
+                            cost_vat: cost_vat,
+                            vendor_expect_date: vendor_expect_date,
+                            vendor_source: vendor_source,
+                            invoice_cost: invoice_cost,
+                            pay_cost: pay_cost,
+                            document_cost: document_cost,
+                            cost_comment: cost_comment,
+                            check_deposit: check_deposit,
+
+                            vendor_cost: vendor_cost,
+
+                            yes: yes,
+                            
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            //console.log(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (yes != "") {
+                                
+                                    setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                                    
+                                
+                            }
+                            else{
+                                
+                                    setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="sale_date_'+parseInt(lastID+1)+'">'+sale_date+'</td><td class="fix" id="loc_from_'+parseInt(lastID+1)+'">'+$("#loc_from").val()+'</td><td class="fix" id="loc_to_'+parseInt(lastID+1)+'">'+$("#loc_to").val()+'</td><td class="fix" id="size_'+parseInt(lastID+1)+'">'+$("#size option:selected").text()+'</td><td class="fix" id="type_'+parseInt(lastID+1)+'">'+$("#type option:selected").text()+'</td><td class="fix" id="ton_'+parseInt(lastID+1)+'">'+ton+'</td><td class="fix" id="number_'+parseInt(lastID+1)+'">'+number+'</td><td class="fix" id="price_'+parseInt(lastID+1)+'">'+price+'</td><td class="fix" id="price_change_'+parseInt(lastID+1)+'">'+price_change+'</td><td class="fix" id="customer_name_'+parseInt(lastID+1)+'">'+customer_name+'</td><td class="fix" id="sale_'+parseInt(lastID+1)+'">'+<?php echo $_SESSION['user_logined'] ?>+'</td><td class="fix" id="status_'+parseInt(lastID+1)+'">'+status==1?"Hoàn tất":"Đang thực hiện"+'</td><td class="fix" id="expect_date_'+parseInt(lastID+1)+'">'+expect_date+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   
+   $('#loc_from').keyup(function(){
+    $("#loc_from").attr("data","");
+        var dist = $('#dis_from').val();
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/quotation/getlocationfrom',
+            type: 'POST',
+            data: {keyword:keyword,district:dist},
+            success:function(data){
+                if (data.trim() == "") {
+                    $('#loc_from_list_id').slideUp(200);
+                }
+                else{
+                    $('#loc_from_list_id').slideDown(200);
+                    $('#loc_from_list_id').html(data);
+                }
+            }
+        });
+      
+   });
+$('#loc_to').keyup(function(){
+    $("#loc_to").attr("data","");
+        var dist = $('#dis_to').val();
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/quotation/getlocationto',
+            type: 'POST',
+            data: {keyword:keyword,district:dist},
+            success:function(data){
+                if (data.trim() == "") {
+                    $('#loc_to_list_id').slideUp(200);
+                }
+                else{
+                    $('#loc_to_list_id').slideDown(200);
+                    $('#loc_to_list_id').html(data);
+                }
+                
+            }
+        });
+      
+   });
+
+
+
+   
+$('#customer_name').keyup(function(){
+      if($(':checkbox[name="customer_type"]:checked').val()=="old"){
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/sales/getcustomer',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#customer_list_id').slideDown(200);
+                $('#customer_list_id').html(data);
+            }
+        });
+        if ($('#customer_name').val() == "" || $('#customer_name').attr('data') == "") {
+            $('#customer_phone').val("");
+            $('#customer_email').val("");
+            $('#customer_name').attr('data',"");
+        }
+      }
+      else{
+        $('#customer_name').val("");
+        alert('Vui lòng thêm thông tin khách hàng trước');
+      }
+   });  
+$('#customer_name').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#customer_name').attr('data',"");
+        }
+            
+      });  
+$('#loc_from').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#loc_from').attr('data',"");
+        }
+            
+      }); 
+$('#loc_to').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#loc_to').attr('data',"");
+        }
+            
+      }); 
+
+$('#ops_name').keyup(function(){
+        var type = 1;
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/salereport/getvendor',
+            type: 'POST',
+            data: {keyword:keyword, type:type},
+            success:function(data){
+                $('#ops_vendor_list_id').slideDown(200);
+                $('#ops_vendor_list_id').html(data);
+            }
+        });
+        if ($('#ops_name').val() == "" || $('#ops_name').attr('data') == "") {
+            $('#ops_phone').val("");
+            $('#ops_name').attr('data',"");
+        }
+      
+   });  
+$('#ops_name').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#ops_name').attr('data',"");
+        }
+            
+      }); 
+$('#trucking_vendor').keyup(function(){
+        var type = 2;
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/salereport/getvendor',
+            type: 'POST',
+            data: {keyword:keyword, type:type},
+            success:function(data){
+                $('#trucking_vendor_list_id').slideDown(200);
+                $('#trucking_vendor_list_id').html(data);
+            }
+        });
+        if ($('#trucking_vendor').val() == "" || $('#trucking_vendor').attr('data') == "") {
+            $('#trucking_phone').val("");
+            $('#trucking_vendor').attr('data',"");
+        }
+      
+   });  
+$('#trucking_vendor').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#trucking_vendor').attr('data',"");
+        }
+            
+      }); 
+$('#barging_vendor').keyup(function(){
+        var type = 3;
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/salereport/getvendor',
+            type: 'POST',
+            data: {keyword:keyword, type:type},
+            success:function(data){
+                $('#barging_vendor_list_id').slideDown(200);
+                $('#barging_vendor_list_id').html(data);
+            }
+        });
+        if ($('#barging_vendor').val() == "" || $('#barging_vendor').attr('data') == "") {
+            $('#barging_phone').val("");
+            $('#barging_vendor').attr('data',"");
+        }
+      
+   });  
+$('#barging_vendor').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#barging_vendor').attr('data',"");
+        }
+            
+      }); 
+$('#feeder_vendor').keyup(function(){
+        var type = 4;
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/salereport/getvendor',
+            type: 'POST',
+            data: {keyword:keyword, type:type},
+            success:function(data){
+                $('#feeder_vendor_list_id').slideDown(200);
+                $('#feeder_vendor_list_id').html(data);
+            }
+        });
+        if ($('#feeder_vendor').val() == "" || $('#feeder_vendor').attr('data') == "") {
+            $('#feeder_phone').val("");
+            $('#feeder_vendor').attr('data',"");
+        }
+      
+   });  
+$('#feeder_vendor').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#feeder_vendor').attr('data',"");
+        }
+            
+      }); 
+$('#commission_name').keyup(function(){
+        var type = 5;
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/salereport/getvendor',
+            type: 'POST',
+            data: {keyword:keyword, type:type},
+            success:function(data){
+                $('#commission_vendor_list_id').slideDown(200);
+                $('#commission_vendor_list_id').html(data);
+            }
+        });
+        if ($('#commission_name').val() == "" || $('#commission_name').attr('data') == "") {
+            $('#commission_phone').val("");
+            $('#commission_name').attr('data',"");
+        }
+      
+   });  
+$('#commission_name').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#commission_name').attr('data',"");
+        }
+            
+      }); 
+$('#handling_port').keyup(function(){
+        var type = 6;
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/salereport/getvendor',
+            type: 'POST',
+            data: {keyword:keyword, type:type},
+            success:function(data){
+                $('#port1_vendor_list_id').slideDown(200);
+                $('#port1_vendor_list_id').html(data);
+            }
+        });
+        if ($('#handling_port').val() == "" || $('#handling_port').attr('data') == "") {
+            $('#handling_port').attr('data',"");
+        }
+      
+   });  
+$('#handling_port').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#handling_port').attr('data',"");
+        }
+            
+      }); 
+ $('#handling_port2').keyup(function(){
+        var type = 6;
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/salereport/getvendor2',
+            type: 'POST',
+            data: {keyword:keyword, type:type},
+            success:function(data){
+                $('#port2_vendor_list_id').slideDown(200);
+                $('#port2_vendor_list_id').html(data);
+            }
+        });
+        if ($('#handling_port2').val() == "" || $('#handling_port2').attr('data') == "") {
+            $('#handling_port2').attr('data',"");
+        }
+      
+   });  
+$('#handling_port2').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#handling_port2').attr('data',"");
+        }
+            
+      }); 
+
+   $('.phone').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+          .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+        ;
+      });
+    });
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+    
+
+});
+function set_item(item,value,phone,address,email) {
+    // change input value
+    $('#customer_name').val(item);
+    $("#customer_name").attr("data",value);
+    $('#customer_phone').val(phone);
+    $('#customer_email').val(email);
+    // hide proposition list
+    $('#customer_list_id').hide();
+    $('#customer_name').focus();
+}
+function set_item_location_from(value,name) {
+    // change input value
+    $('#loc_from').val(name);
+    $("#loc_from").attr("data",value);
+    
+    // hide proposition list
+    $('#loc_from_list_id').hide();
+    $('#loc_from').focus();
+
+    
+}
+function set_item_location_to(value,name) {
+    // change input value
+    $('#loc_to').val(name);
+    $("#loc_to").attr("data",value);
+    
+    // hide proposition list
+    $('#loc_to_list_id').hide();
+    $('#loc_to').focus();
+
+}
+function set_item_vendor1(id,name,phone,type) {
+    // change input value
+    if(type==1){
+        $('#ops_name').val(name);
+        $("#ops_name").attr("data",id);
+        $('#ops_phone').val(phone);
+        $('#ops_vendor_list_id').hide();
+        $('#ops_name').focus();
+    }
+    else if(type==2){
+        $('#trucking_vendor').val(name);
+        $("#trucking_vendor").attr("data",id);
+        $('#trucking_phone').val(phone);
+        $('#trucking_vendor_list_id').hide();
+        $('#trucking_vendor').focus();
+    }
+    else if(type==3){
+        $('#barging_vendor').val(name);
+        $("#barging_vendor").attr("data",id);
+        $('#barging_phone').val(phone);
+        $('#barging_vendor_list_id').hide();
+        $('#barging_vendor').focus();
+    }
+    else if(type==4){
+        $('#feeder_vendor').val(name);
+        $("#feeder_vendor").attr("data",id);
+        $('#feeder_phone').val(phone);
+        $('#feeder_vendor_list_id').hide();
+        $('#feeder_vendor').focus();
+    }
+    else if(type==5){
+        $('#commission_name').val(name);
+        $("#commission_name").attr("data",id);
+        $('#commission_phone').val(phone);
+        $('#commission_vendor_list_id').hide();
+        $('#commission_name').focus();
+    }
+    else if(type==6){
+        $('#handling_port').val(name);
+        $("#handling_port").attr("data",id);
+        $('#port1_vendor_list_id').hide();
+        $('#handling_port').focus();
+    }
+    
+}
+function set_item_vendor2(id,name,phone,type) {
+    // change input value
+    if(type==1){
+        $('#ops_name').val(name);
+        $("#ops_name").attr("data",id);
+        $('#ops_phone').val(phone);
+        $('#ops_vendor_list_id').hide();
+        $('#ops_name').focus();
+    }
+    else if(type==2){
+        $('#trucking_vendor').val(name);
+        $("#trucking_vendor").attr("data",id);
+        $('#trucking_phone').val(phone);
+        $('#trucking_vendor_list_id').hide();
+        $('#trucking_vendor').focus();
+    }
+    else if(type==3){
+        $('#barging_vendor').val(name);
+        $("#barging_vendor").attr("data",id);
+        $('#barging_phone').val(phone);
+        $('#barging_vendor_list_id').hide();
+        $('#barging_vendor').focus();
+    }
+    else if(type==4){
+        $('#feeder_vendor').val(name);
+        $("#feeder_vendor").attr("data",id);
+        $('#feeder_phone').val(phone);
+        $('#feeder_vendor_list_id').hide();
+        $('#feeder_vendor').focus();
+    }
+    else if(type==5){
+        $('#commission_name').val(name);
+        $("#commission_name").attr("data",id);
+        $('#commission_phone').val(phone);
+        $('#commission_vendor_list_id').hide();
+        $('#commission_name').focus();
+    }
+    else if(type==6){
+        $('#handling_port2').val(name);
+        $("#handling_port2").attr("data",id);
+        $('#port2_vendor_list_id').hide();
+        $('#handling_port2').focus();
+    }
+    
+}
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+$('.complete').click(function(){
+    var id = $(this).attr("data");
+    var day = $(this).attr("value");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/salereport/complete", {data: id, day: day},
+           function(data){
+            
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+              }, 200);
+
+            $('#loading').fadeOut(200);
+            
+            
+           
+           }); 
+      }
+
+});
+$('.day').change(function(){
+    var val = $(this).val();
+    $('.complete').val(val);
+    $(".day").val(val);
+});
+
+</script>
+
+<script language="javascript">
+function addRow(tableID){
+    var table=document.getElementById(tableID);
+    var rowCount=table.rows.length;
+    var row=table.insertRow(rowCount);
+    var colCount=table.rows[0].cells.length;
+    for(var i=0;i<colCount;i++){
+        var newcell=row.insertCell(i);
+        newcell.innerHTML=table.rows[0].cells[i].innerHTML;
+        switch(newcell.childNodes[0].type){
+            case"text":newcell.childNodes[0].value="";
+            break;
+            case"checkbox":newcell.childNodes[0].checked=false;
+            break;
+            case"select-one":newcell.childNodes[0].selectedIndex=0;
+            break;
+        }
+    }
+
+    $('.cost_type:last').attr('disabled',false);
+    $('.vendor:last').attr('disabled',false);
+    $('.cost_vat:last').val("");
+    $('.cost:last').val("");
+    $('.cost_comment:last').val("");
+    $('.vendor_expect_date:last').val("");
+    $('.invoice_cost:last').val("");
+    $('.pay_cost:last').val("");
+    $('.document_cost:last').val("");
+    $('input[name="chk"]:last').attr('data',"");
+    $('input[name="chk"]:last').attr('tabindex',0);
+    $('input[name="chk"]:last').attr('title',"");
+    $('input[name="chk"]:last').attr('class',"");
+    $('.check_deposit:last').attr('disabled',false);
+    $('.check_deposit:last').attr('checked',false);
+
+    $(".cost_type:last").val($(".cost_type:last option:first").val());
+    $(".vendor:last").val($(".vendor:last option:first").val());
+
+        $('.cost').keyup(function(){
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        $('.invoice_cost:eq('+rowIndex+')').val(
+            Math.round(
+            parseFloat(get_number('.cost:eq('+rowIndex+')'))*0.1
+            )
+        );
+
+        $('.invoice_cost:eq('+rowIndex+')').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        
+    });
+
+    $('.cost2').keyup(function(){
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        $('.invoice_cost2:eq('+rowIndex+')').val(
+            Math.round(
+            parseFloat(get_number('.cost2:eq('+rowIndex+')'))*0.1
+            )
+        );
+
+        $('.invoice_cost2:eq('+rowIndex+')').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        
+    });
+
+
+$('.cost_type').change(function(){
+    var row = $(this).parent().parent().parent().parent().parent().parent();
+    var rowIndex = row[0].rowIndex;
+
+    var check_type = 0;
+    var check_vendor = 0;
+
+    var val = $(this).val();
+    var vendor_val = $('.vendor:eq('+rowIndex+')').val();
+    $('.cost_type').each(function() { 
+        if (val == $(this).val()) {
+            check_type ++;
+
+            var row2 = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex2 = row2[0].rowIndex;
+            var vendor_val2 = $('.vendor:eq('+rowIndex2+')').val();
+            if (vendor_val == vendor_val2) {
+                check_vendor ++;
+            }
+        }
+    });
+
+    
+
+    if (check_type >= 2 && check_vendor >= 2) {
+        alert('Vui lòng chọn loại phí khác cho vendor này!');
+        $(".cost_type:last").val($(".cost_type:last option:first").val());
+        $(".vendor:last").val($(".vendor:last option:first").val());
+        
+    };
+    
+});
+$('.vendor').change(function(){
+    var row = $(this).parent().parent().parent().parent().parent().parent();
+    var rowIndex = row[0].rowIndex;
+
+    var check_type = 0;
+    var check_vendor = 0;
+
+    var val = $(this).val();
+    var type_val = $('.cost_type:eq('+rowIndex+')').val();
+    $('.vendor').each(function() { 
+        if (val == $(this).val()) {
+            check_vendor ++;
+
+            var row2 = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex2 = row2[0].rowIndex;
+            var type_val2 = $('.cost_type:eq('+rowIndex2+')').val();
+            if (type_val == type_val2) {
+                check_type ++;
+            }
+        }
+    });
+
+
+    if (check_type >= 2 && check_vendor >= 2) {
+        alert('Vui lòng chọn loại phí khác cho vendor này!');
+        $(".cost_type:last").val($(".cost_type:last option:first").val());
+        $(".vendor:last").val($(".vendor:last option:first").val());
+        
+    };
+    
+});
+
+function get_number(id){
+    return $(id).val().replace(/[^0-9\.-]+/g,"");
+}
+
+    $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+         $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+}
+function deleteRow(tableID){
+    try{
+        var table=document.getElementById(tableID);
+        var rowCount=table.rows.length;
+
+        var r = confirm("Bạn có chắc chắn không?");
+        if (r == true){
+            for(var i=0;i<rowCount;i++){
+                var row=table.rows[i];
+                var chkbox=row.cells[0].childNodes[0];
+                if(null!=chkbox&&true==chkbox.checked){
+                    if(chkbox.getAttribute("title") > 0){
+                        
+                            var data = chkbox.getAttribute("data");
+                            var type = chkbox.getAttribute("tabindex");
+                            var vendor = chkbox.className;
+                            $.post("<?php echo BASE_URL ?>/procument/delete", {data: data, vendor: vendor, type: type},
+                               function(data){
+                                //alert(data);
+                               }); 
+                        
+                    }
+                    if(rowCount<=1){
+                        alert("Cannot delete all the rows.");
+                        break;
+                    }
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+            }
+        }
+    }
+    catch(e){
+        alert(e);
+    }
+}
+
+var ch = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+ch+']').attr('selected','selected');
+
+
+
+
+</script>
+
+<script type="text/javascript">
+        $('.cost').keyup(function(){
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        $('.invoice_cost:eq('+rowIndex+')').val(
+            Math.round(
+            parseFloat(get_number('.cost:eq('+rowIndex+')'))*0.1
+            )
+        );
+
+        $('.invoice_cost:eq('+rowIndex+')').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        
+    });
+
+
+function get_number(id){
+    return $(id).val().replace(/[^0-9\.-]+/g,"");
+}
+
+$('.lock').click(function(){
+    var id = $(this).attr("data");
+    var value = $(this).attr("value");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/procument/lock", {data: id, value: value},
+           function(data){
+            
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+              }, 200);
+
+            $('#loading').fadeOut(200);
+            
+            
+           
+           }); 
+      }
+
+});
+$('.unlock').click(function(){
+    var id = $(this).attr("data");
+    var value = $(this).attr("value");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/procument/lock", {data: id, value: value},
+           function(data){
+            
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+              }, 200);
+
+            $('#loading').fadeOut(200);
+            
+            
+           
+           }); 
+      }
+
+});
+
+</script>
+
+</div>

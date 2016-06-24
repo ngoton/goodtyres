@@ -1,0 +1,1231 @@
+<style type="text/css">
+    .table_data tr:nth-child(even) {background: rgba(255, 240, 250, 0.59)}
+    .table_data tr:nth-child(odd) {background: #FFF}
+    .table_data tr:hover, .office:hover, .sale:hover, .trading:hover, .agent:hover, .tcmt:hover, .financial:hover {cursor: pointer; background: rgba(37, 162, 226, 0.2)}
+    .table_data td.approve {color: green}
+    .table_data td.error {color: red}
+    #show {max-height: 500px; z-index: 99999; overflow:auto;}
+</style>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BÁO CÁO TÀI SẢN </h1></center>
+
+	<div class="search-box">
+        
+        <form id="report" name="report" action method="post">
+        <div class="add-box">
+                  
+            Tuần  <input style="width:30px" type="search" name="tuantruoc" id="tuantruoc" placeholder="Chọn tuần" <?php if(isset($tuantruoc)) echo "value='$tuantruoc'"; ?> >  
+            Năm <input style="width:50px" type="search" name="namtruoc" id="namtruoc" placeholder="Chọn năm" <?php if(isset($namtruoc)) echo "value='$namtruoc'"; ?> >
+            
+            
+        </div>
+        <div class="add-box">
+                  
+            Đến tuần <input style="width:30px" type="search" name="tuan" id="tuan" placeholder="Chọn tuần" <?php if(isset($tuan)) echo "value='$tuan'"; ?> >
+            Năm <input style="width:50px" type="search" name="nam" id="nam" placeholder="Chọn năm" <?php if(isset($nam)) echo "value='$nam'"; ?> >
+            
+            
+        </div>
+        <div class="add-box">
+                  
+             <input type="submit" name="submit" id="xem" value="Xem"> 
+            
+        </div>
+        </form>
+    </div>
+
+</div>
+
+<div id="printarea">
+    <table class="table_data">
+    <thead>
+        <tr>
+                
+                <th style="width:30px" class="fix" rowspan="2">
+                    <a >STT </a>
+                </th>
+                <th  class="fix" rowspan="2">
+                    <a >Nội dung </a>
+                </th>
+                <th class="fix" colspan="2">
+                    <a>Tuần <?php echo $tuantruoc ?> </a>
+                </th> 
+
+                <?php for ($i=1; $i < $number; $i++) { ?>
+                <th class="fix" colspan="2">
+                    <a >Tuần <?php echo $tuantruoc+$i ?> </a>
+                </th> 
+                <?php } ?>
+
+                <th class="fix" colspan="2">
+                    <a>Tuần <?php echo $tuan ?> </a>
+                </th>
+                
+               
+            </tr>
+            <tr>
+                
+                <th class="fix">
+                    <a>Có </a>
+                </th> 
+                  
+                <th class="fix">
+                    <a >Nợ </a>
+                </th> 
+
+                <?php for ($i=1; $i < $number; $i++) { ?>
+                <th class="fix">
+                    <a>Có </a>
+                </th> 
+                  
+                <th class="fix">
+                    <a >Nợ </a>
+                </th>
+                <?php } ?>
+                
+                <th class="fix">
+                    <a>Có </a>
+                </th> 
+                  
+                <th class="fix">
+                    <a >Nợ </a>
+                </th>
+               
+            </tr>
+        
+       </thead>
+       <tbody>
+        <tr class="bank" data="1" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" style=" font-weight: bold; color: red">
+                <td style="text-align:center;" class="fix">1</td>
+                <td class="fix">Tiền mặt</td>
+                <td class="fix " ><?php echo $lib->formatMoney(isset($asset_truoc[1])?$asset_truoc[1]:0) ?></td>
+                <td class="fix"></td>
+                
+
+                <?php 
+                //$new_asset_truoc[$tuan][1] = $asset[1];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][1])?$new_asset_truoc[$tuantruoc+$i-1][1]:0;
+                ?>
+                <td class="fix" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][1]))?$new_asset_truoc[$tuantruoc+$i][1]+$asset_truoc[1]+$truoc:$asset_truoc[1]+$truoc) ?>
+                </td>
+                <td class="fix"></td>
+                <?php } ?>
+
+                <td class="fix "><?php echo $lib->formatMoney(isset($asset[1])?$asset[1]:0) ?></td>
+                <td class="fix"></td>
+                
+            </tr>
+            <tr class="bank" data="2" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" style=" font-weight: bold; color: red">
+                <td style="text-align:center;" class="fix">2</td>
+                <td class="fix">USD (200)</td>
+                <td class="fix "><?php echo $lib->formatMoney(isset($asset_truoc[2])?$asset_truoc[2]:0) ?></td>
+                <td class="fix"></td>
+
+                <?php 
+                //$new_asset_truoc[$tuan][2] = $asset[2];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][2])?$new_asset_truoc[$tuantruoc+$i-1][2]:0;
+                ?>
+                <td class="fix" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][2]))?$new_asset_truoc[$tuantruoc+$i][2]+$asset_truoc[2]+$truoc:$asset_truoc[2]+$truoc) ?>
+                </td>
+                <td class="fix"></td>
+                <?php } ?>
+
+                <td class="fix "><?php echo $lib->formatMoney(isset($asset[2])?$asset[2]:0) ?></td>
+                <td class="fix"></td>
+                
+            </tr>
+            <?php 
+                
+                $tongnh_truoc = (isset($asset_truoc[3])?$asset_truoc[3]:0)+(isset($asset_truoc[4])?$asset_truoc[4]:0)+(isset($asset_truoc[5])?$asset_truoc[5]:0)+(isset($asset_truoc[6])?$asset_truoc[6]:0)+(isset($asset_truoc[7])?$asset_truoc[7]:0)+(isset($asset_truoc[8])?$asset_truoc[8]:0)+(isset($asset_truoc[9])?$asset_truoc[9]:0)+(isset($asset_truoc[10])?$asset_truoc[10]:0)+(isset($asset_truoc[11])?$asset_truoc[11]:0)+(isset($asset_truoc[12])?$asset_truoc[12]:0)+(isset($asset_truoc[13])?$asset_truoc[13]:0)+(isset($asset_truoc[14])?$asset_truoc[14]:0)+(isset($asset_truoc[15])?$asset_truoc[15]:0)+(isset($asset_truoc[16])?$asset_truoc[16]:0)+(isset($asset_truoc[17])?$asset_truoc[17]:0);
+
+                $tongnh = (isset($asset[3])?$asset[3]:0)+(isset($asset[4])?$asset[4]:0)+(isset($asset[5])?$asset[5]:0)+(isset($asset[6])?$asset[6]:0)+(isset($asset[7])?$asset[7]:0)+(isset($asset[8])?$asset[8]:0)+(isset($asset[9])?$asset[9]:0)+(isset($asset[10])?$asset[10]:0)+(isset($asset[11])?$asset[11]:0)+(isset($asset[12])?$asset[12]:0)+(isset($asset[13])?$asset[13]:0)+(isset($asset[14])?$asset[14]:0)+(isset($asset[15])?$asset[15]:0)+(isset($asset[16])?$asset[16]:0)+(isset($asset[17])?$asset[17]:0);
+
+                for ($i=1; $i < $number ; $i++) { 
+                    $new_tongnh_truoc[$tuantruoc+$i] = (isset($new_asset_truoc[$tuantruoc+$i][3])?$new_asset_truoc[$tuantruoc+$i][3]:0)+(isset($new_asset_truoc[$tuantruoc+$i][4])?$new_asset_truoc[$tuantruoc+$i][4]:0)+(isset($new_asset_truoc[$tuantruoc+$i][5])?$new_asset_truoc[$tuantruoc+$i][5]:0)+(isset($new_asset_truoc[$tuantruoc+$i][6])?$new_asset_truoc[$tuantruoc+$i][6]:0)+(isset($new_asset_truoc[$tuantruoc+$i][7])?$new_asset_truoc[$tuantruoc+$i][7]:0)+(isset($new_asset_truoc[$tuantruoc+$i][8])?$new_asset_truoc[$tuantruoc+$i][8]:0)+(isset($new_asset_truoc[$tuantruoc+$i][9])?$new_asset_truoc[$tuantruoc+$i][9]:0)+(isset($new_asset_truoc[$tuantruoc+$i][10])?$new_asset_truoc[$tuantruoc+$i][10]:0)+(isset($new_asset_truoc[$tuantruoc+$i][11])?$new_asset_truoc[$tuantruoc+$i][11]:0)+(isset($new_asset_truoc[$tuantruoc+$i][12])?$new_asset_truoc[$tuantruoc+$i][12]:0)+(isset($new_asset_truoc[$tuantruoc+$i][13])?$new_asset_truoc[$tuantruoc+$i][13]:0)+(isset($new_asset_truoc[$tuantruoc+$i][14])?$new_asset_truoc[$tuantruoc+$i][14]:0)+(isset($new_asset_truoc[$tuantruoc+$i][15])?$new_asset_truoc[$tuantruoc+$i][15]:0)+(isset($new_asset_truoc[$tuantruoc+$i][16])?$new_asset_truoc[$tuantruoc+$i][16]:0)+(isset($new_asset_truoc[$tuantruoc+$i][17])?$new_asset_truoc[$tuantruoc+$i][17]:0);
+                }
+                //$new_tongnh_truoc[$tuan] = $tongnh;
+
+             ?>
+            <tr style=" font-weight: bold; color: red">
+                <td style="text-align:center;" class="fix">3</td>
+                <td class="fix">Ngân hàng</td>
+                <td class="fix ">
+                    <?php echo $lib->formatMoney($tongnh_truoc) ?>
+                </td>
+                <td class="fix"></td>
+
+                <?php 
+                $truoc = 0;
+                for ($i=1; $i < $number ; $i++) { 
+                    $truoc += isset($new_tongnh_truoc[$tuantruoc+$i-1])?$new_tongnh_truoc[$tuantruoc+$i-1]:0;
+                ?>
+                <td class="fix ">
+                    <?php echo $lib->formatMoney($new_tongnh_truoc[$tuantruoc+$i]>0?$new_tongnh_truoc[$tuantruoc+$i]+$tongnh_truoc+$truoc:$tongnh_truoc+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+
+                <td class="fix ">
+                    <?php echo $lib->formatMoney($tongnh) ?>
+                </td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="3" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" >
+                <td class="fix"></td>
+                <td class="fix">ACB (CMT)</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[3])?$asset_truoc[3]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][3] = $asset[3];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][3])?$new_asset_truoc[$tuantruoc+$i-1][3]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][3]))?$new_asset_truoc[$tuantruoc+$i][3]+$asset_truoc[3]+$truoc:$asset_truoc[3]+$truoc) ?>
+                </td>
+                <td class="fix"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[3])?$asset[3]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="4" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">ACB (CMG)</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[4])?$asset_truoc[4]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][4] = $asset[4];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][4])?$new_asset_truoc[$tuantruoc+$i-1][4]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][4]))?$new_asset_truoc[$tuantruoc+$i][4]+$asset_truoc[4]+$truoc:$asset_truoc[4]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[4])?$asset[4]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="5" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">ACB_Oanh</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[5])?$asset_truoc[5]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][5] = $asset[5];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][5])?$new_asset_truoc[$tuantruoc+$i-1][5]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][5]) )?$new_asset_truoc[$tuantruoc+$i][5]+$asset_truoc[5]+$truoc:$asset_truoc[5]+$truoc) ?>
+                </td>
+                <td class="fix "></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[5])?$asset[5]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="6" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">ACB (TVCM)</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[6])?$asset_truoc[6]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][6] = $asset[6];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][6])?$new_asset_truoc[$tuantruoc+$i-1][6]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][6]))?$new_asset_truoc[$tuantruoc+$i][6]+$asset_truoc[6]+$truoc:$asset_truoc[6]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[6])?$asset[6]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="7" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">Standard (USD)</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[7])?$asset_truoc[7]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][7] = $asset[7];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][7])?$new_asset_truoc[$tuantruoc+$i-1][7]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][7]) )?$new_asset_truoc[$tuantruoc+$i][7]+$asset_truoc[7]+$truoc:$asset_truoc[7]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[7])?$asset[7]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="8" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">Standard (VND)</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[8])?$asset_truoc[8]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][8] = $asset[8];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][8])?$new_asset_truoc[$tuantruoc+$i-1][8]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][8]) )?$new_asset_truoc[$tuantruoc+$i][8]+$asset_truoc[8]+$truoc:$asset_truoc[8]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[8])?$asset[8]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="9" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">BIDV</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[9])?$asset_truoc[9]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][9] = $asset[9];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][9])?$new_asset_truoc[$tuantruoc+$i-1][9]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][9]) )?$new_asset_truoc[$tuantruoc+$i][9]+$asset_truoc[9]+$truoc:$asset_truoc[9]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[9])?$asset[9]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="10" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">VCB</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[10])?$asset_truoc[10]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][10] = $asset[10];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][10])?$new_asset_truoc[$tuantruoc+$i-1][10]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][10]) )?$new_asset_truoc[$tuantruoc+$i][10]+$asset_truoc[10]+$truoc:$asset_truoc[10]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[10])?$asset[10]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="11" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">CMG (USD)</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[11])?$asset_truoc[11]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][10] = $asset[10];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][11])?$new_asset_truoc[$tuantruoc+$i-1][11]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][11]) )?$new_asset_truoc[$tuantruoc+$i][11]+$asset_truoc[11]+$truoc:$asset_truoc[11]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[11])?$asset[11]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="12" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">ACB_VietTrade (VND)</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[12])?$asset_truoc[12]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][10] = $asset[10];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][12])?$new_asset_truoc[$tuantruoc+$i-1][12]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][12]) )?$new_asset_truoc[$tuantruoc+$i][12]+$asset_truoc[12]+$truoc:$asset_truoc[12]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[12])?$asset[12]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="13" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">ACB_VietTrade (USD)</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[13])?$asset_truoc[13]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][10] = $asset[10];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][13])?$new_asset_truoc[$tuantruoc+$i-1][13]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][13]) )?$new_asset_truoc[$tuantruoc+$i][13]+$asset_truoc[13]+$truoc:$asset_truoc[13]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[13])?$asset[13]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="14" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">BIDV_TVCM</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[14])?$asset_truoc[14]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][10] = $asset[10];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][14])?$new_asset_truoc[$tuantruoc+$i-1][14]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][14]) )?$new_asset_truoc[$tuantruoc+$i][14]+$asset_truoc[14]+$truoc:$asset_truoc[14]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[14])?$asset[14]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="15" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">BIDV_VietTrade</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[15])?$asset_truoc[15]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][10] = $asset[10];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][15])?$new_asset_truoc[$tuantruoc+$i-1][15]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][15]) )?$new_asset_truoc[$tuantruoc+$i][15]+$asset_truoc[15]+$truoc:$asset_truoc[15]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[15])?$asset[15]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="16" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">BIDV_GoodTyres</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[16])?$asset_truoc[16]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][10] = $asset[10];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][16])?$new_asset_truoc[$tuantruoc+$i-1][16]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][16]) )?$new_asset_truoc[$tuantruoc+$i][16]+$asset_truoc[16]+$truoc:$asset_truoc[16]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[16])?$asset[16]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+            <tr class="bank" data="17" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <td class="fix"></td>
+                <td class="fix">BIDV_Phương</td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[17])?$asset_truoc[17]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][10] = $asset[10];
+                $truoc = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc += isset($new_asset_truoc[$tuantruoc+$i-1][17])?$new_asset_truoc[$tuantruoc+$i-1][17]:0;
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$tuantruoc+$i][17]) )?$new_asset_truoc[$tuantruoc+$i][17]+$asset_truoc[17]+$truoc:$asset_truoc[17]+$truoc) ?>
+                </td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[17])?$asset[17]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+        <?php
+
+            $tongthuco_truoc = null;
+            $tongthuno_truoc = null;
+            $tongthuco = null;
+            $tongthuno = null;
+            $new_tongthuco_truoc = array();
+            $new_tongthuno_truoc = array();
+                    foreach ($customers_data as $customer) {  
+                        $tongthuco += (isset($obtains['money'][$customer->customer_id]) && $obtains['money'][$customer->customer_id]>0)?$obtains['money'][$customer->customer_id]:null;
+                        $tongthuno += (isset($obtains['money'][$customer->customer_id]) && $obtains['money'][$customer->customer_id]<0)?str_replace('-', '', $obtains['money'][$customer->customer_id]):null;
+
+                        $tongthuco_truoc += (isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0)?$obtains_truoc['money'][$customer->customer_id]:null;
+                        $tongthuno_truoc += (isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0)?str_replace('-', "", $obtains_truoc['money'][$customer->customer_id]):null;
+
+                        for ($i=1; $i < $number; $i++) { 
+                            $new_tongthuco_truoc[$tuantruoc+$i] = isset($new_tongthuco_truoc[$tuantruoc+$i])?($new_tongthuco_truoc[$tuantruoc+$i]+((isset($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]>0)?($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]):null)):(0+((isset($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]>0)?($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]):null));
+
+                            $new_tongthuno_truoc[$tuantruoc+$i] = isset($new_tongthuno_truoc[$tuantruoc+$i])?($new_tongthuno_truoc[$tuantruoc+$i]+((isset($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]<0)?($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]):null)):(0+((isset($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]<0)?($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]):null));
+
+                            
+                        }
+                        
+                    }
+            ?>
+            <tr style=" font-weight: bold; color: red">
+                <td style="text-align:center;" class="fix">4</td>
+                <td class="fix">Phải thu</td>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongthuco_truoc)) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongthuno_truoc)) ?></td>
+                <?php 
+                //$new_tongthuco_truoc[$tuan] = $tongthuco;
+                //$new_tongthuno_truoc[$tuan] = $tongthuno;
+                $truoc_co = 0;
+                $truoc_no = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc_co += isset($new_tongthuco_truoc[$tuantruoc+$i-1])?$new_tongthuco_truoc[$tuantruoc+$i-1]:0;
+                    $truoc_no += isset($new_tongthuno_truoc[$tuantruoc+$i-1])?$new_tongthuno_truoc[$tuantruoc+$i-1]:0;
+                ?>
+                <td class="fix error"><?php echo $lib->formatMoney(str_replace('-', "", $new_tongthuco_truoc[$tuantruoc+$i]+$tongthuco_truoc+$truoc_co)-str_replace('-', "", $new_tongthuno_truoc[$tuantruoc+$i]+$tongthuno_truoc+$truoc_no)) ?></td>
+                <td class="fix error"></td>
+                <?php } ?>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongthuco)) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongthuno)) ?></td>
+                 
+            </tr>
+            <?php foreach ($customers_data as $customer) {  ?>
+            <?php if((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0) || (isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0) || (isset($obtains['money'][$customer->customer_id]) && $obtains['money'][$customer->customer_id]>0) || (isset($obtains['money'][$customer->customer_id]) && $obtains['money'][$customer->customer_id]<0)) { ?>
+            <tr class="customer" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" data="<?php echo $customer->customer_id; ?>">
+                <td class="fix"></td>
+                <td class="fix"><?php echo $customer->customer_name; ?></td>
+                <td class="fix "><?php echo $lib->formatMoney((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0)?$obtains_truoc['money'][$customer->customer_id]:null); ?></td>
+                <td class="fix "><?php echo $lib->formatMoney((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0)?str_replace('-', '', $obtains_truoc['money'][$customer->customer_id]):null); ?></td>
+                <?php 
+                //$new_obtains_truoc[$tuan]['money'][$customer->customer_id] = $obtains['money'][$customer->customer_id];
+                $truoc_no = 0;
+                $truoc_co = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc_co += (isset($new_obtains_truoc[$tuantruoc+$i-1]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i-1]['money'][$customer->customer_id] > 0 )?$new_obtains_truoc[$tuantruoc+$i-1]['money'][$customer->customer_id]:0;
+                    $truoc_no += (isset($new_obtains_truoc[$tuantruoc+$i-1]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i-1]['money'][$customer->customer_id] < 0 )?str_replace('-', '', $new_obtains_truoc[$tuantruoc+$i-1]['money'][$customer->customer_id]):0;
+                ?>
+                <td class="fix ">
+                    <?php echo $lib->formatMoney( ( ( (isset($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id] > 0 ) ? $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]+((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0)?$obtains_truoc['money'][$customer->customer_id]:null)+$truoc_co : ((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0)?$obtains_truoc['money'][$customer->customer_id]:null)+$truoc_co ) - ( (isset($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id] < 0 ) ? str_replace('-', "", $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id])+((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0)?str_replace('-', '', $obtains_truoc['money'][$customer->customer_id]):null)+$truoc_no : ((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0)?str_replace('-', '', $obtains_truoc['money'][$customer->customer_id]):null)+$truoc_no ) ) > 0 ? ( ( (isset($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id] > 0 ) ? $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]+((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0)?$obtains_truoc['money'][$customer->customer_id]:null)+$truoc_co : ((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0)?$obtains_truoc['money'][$customer->customer_id]:null)+$truoc_co ) - ( (isset($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id] < 0 ) ? str_replace('-', "", $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id])+((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0)?str_replace('-', '', $obtains_truoc['money'][$customer->customer_id]):null)+$truoc_no : ((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0)?str_replace('-', '', $obtains_truoc['money'][$customer->customer_id]):null)+$truoc_no ) ) : null ); ?>
+                </td>
+                <td class="fix ">
+                    <?php echo $lib->formatMoney(str_replace('-', "", ( ( (isset($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id] > 0 ) ? $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]+((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0)?$obtains_truoc['money'][$customer->customer_id]:null)+$truoc_co : ((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0)?$obtains_truoc['money'][$customer->customer_id]:null)+$truoc_co ) - ( (isset($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id] < 0 ) ? str_replace('-', "", $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id])+((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0)?str_replace('-', '', $obtains_truoc['money'][$customer->customer_id]):null)+$truoc_no : ((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0)?str_replace('-', '', $obtains_truoc['money'][$customer->customer_id]):null)+$truoc_no ) ) < 0 ? ( ( (isset($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id] > 0 ) ? $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]+((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0)?$obtains_truoc['money'][$customer->customer_id]:null)+$truoc_co : ((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0)?$obtains_truoc['money'][$customer->customer_id]:null)+$truoc_co ) - ( (isset($new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id]) && $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id] < 0 ) ? str_replace('-', "", $new_obtains_truoc[$tuantruoc+$i]['money'][$customer->customer_id])+((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0)?str_replace('-', '', $obtains_truoc['money'][$customer->customer_id]):null)+$truoc_no : ((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0)?str_replace('-', '', $obtains_truoc['money'][$customer->customer_id]):null)+$truoc_no ) ) : null ) ); ?>
+                </td>
+                <?php } ?>
+                <td class="fix "><?php echo $lib->formatMoney($obtains['money'][$customer->customer_id]>0?$obtains['money'][$customer->customer_id]:null); ?></td>
+                <td class="fix "><?php echo $lib->formatMoney($obtains['money'][$customer->customer_id]<0?str_replace('-', '', $obtains['money'][$customer->customer_id]):null); ?></td>
+                 
+            </tr>
+            <?php }} ?>
+
+            <?php 
+            $tongtraco_truoc = null;
+            $tongtrano_truoc = null;
+            $tongtraco = null;
+            $tongtrano = null;
+            $new_tongtraco_truoc = array();
+            $new_tongtrano_truoc = array();
+                    foreach ($vendors_data as $vendor) {  
+                        $tongtraco_truoc += (isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', "", $owe_truoc['money'][$vendor->shipment_vendor_id]):null;
+                        $tongtrano_truoc += (isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null;
+                        $tongtraco += (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', "", $owe['money'][$vendor->shipment_vendor_id]):null;
+                        $tongtrano += (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]>0)?$owe['money'][$vendor->shipment_vendor_id]:null;
+
+                        for ($i=1; $i < $number; $i++) { 
+                            $new_tongtraco_truoc[$tuantruoc+$i] = isset($new_tongtraco_truoc[$tuantruoc+$i])?($new_tongtraco_truoc[$tuantruoc+$i]+((isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]<0)?$new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]:null)):(0+((isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]<0)?$new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]:null));
+
+                            $new_tongtrano_truoc[$tuantruoc+$i] = isset($new_tongtrano_truoc[$tuantruoc+$i])?($new_tongtrano_truoc[$tuantruoc+$i]+((isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]>0)?$new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]:null)):(0+((isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]>0)?$new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]:null));
+
+                            
+                        }
+                        
+                    }
+            ?>
+            <tr style=" font-weight: bold; color: red">
+                <td style="text-align:center;" class="fix">5</td>
+                <td class="fix">Phải trả</td>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongtraco_truoc)) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongtrano_truoc)) ?></td>
+                <?php 
+                //$new_tongtraco_truoc[$tuan] = $tongtraco;
+                //$new_tongtrano_truoc[$tuan] = $tongtrano;
+                $truoc_no = 0;
+                $truoc_co = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc_co += isset($new_tongtraco_truoc[$tuantruoc+$i-1])?$new_tongtraco_truoc[$tuantruoc+$i-1]:0;
+                    $truoc_no += isset($new_tongtrano_truoc[$tuantruoc+$i-1])?$new_tongtrano_truoc[$tuantruoc+$i-1]:0;
+                ?>
+                <td class="fix approve"></td>
+                <td class="fix error"><?php echo $lib->formatMoney(str_replace('-', "", $new_tongtrano_truoc[$tuantruoc+$i]+$tongtrano_truoc+$truoc_no)-str_replace('-', "", $new_tongtraco_truoc[$tuantruoc+$i]+$tongtraco_truoc+$truoc_co)) ?></td>
+                <?php } ?>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongtraco)) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongtrano)) ?></td>
+                 
+            </tr>
+            <?php foreach ($vendors_data as $vendor) {  ?>
+            <?php if((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0) || (isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0) || (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]<0) || (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]>0)){ ?>
+            <tr class="vendor" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" data="<?php echo $vendor->shipment_vendor_id; ?>">
+                <td class="fix"></td>
+                <td class="fix"><?php echo $vendor->shipment_vendor_name; ?></td>
+                <td class="fix "><?php echo $lib->formatMoney((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null); ?></td>
+                <td class="fix "><?php echo $lib->formatMoney((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null); ?></td>
+                
+                <?php 
+                //$new_owe_truoc[$tuan]['money'][$vendor->shipment_vendor_id] = $owe['money'][$vendor->shipment_vendor_id];
+                $truoc_no = 0;
+                $truoc_co = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc_co += (isset($new_owe_truoc[$tuantruoc+$i-1]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i-1]['money'][$vendor->shipment_vendor_id] < 0 )?str_replace('-', "", $new_owe_truoc[$tuantruoc+$i-1]['money'][$vendor->shipment_vendor_id]):0;
+                    $truoc_no += (isset($new_owe_truoc[$tuantruoc+$i-1]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i-1]['money'][$vendor->shipment_vendor_id] > 0 )?$new_owe_truoc[$tuantruoc+$i-1]['money'][$vendor->shipment_vendor_id]:0;
+
+                ?>
+                <td class="fix ">
+                    <?php echo $lib->formatMoney(str_replace('-', "", ( ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] > 0) ? $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no ) - ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] < 0) ? str_replace('-', "", $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id])+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co ) ) < 0 ? ( ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] > 0) ? $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no ) - ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] < 0) ? str_replace('-', "", $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id])+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co ) ) : null ) ); ?>
+                </td>
+                <td class="fix ">
+                    <?php echo $lib->formatMoney( ( ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] > 0) ? $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no ) - ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] < 0) ? str_replace('-', "", $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id])+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co ) ) > 0 ? ( ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] > 0) ? $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no ) - ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] < 0) ? str_replace('-', "", $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id])+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co ) ) : null ); ?>
+                </td>
+                <?php } ?>
+
+                <td class="fix "><?php echo $lib->formatMoney($owe['money'][$vendor->shipment_vendor_id]<0?str_replace('-', '', $owe['money'][$vendor->shipment_vendor_id]):null); ?></td>
+                <td class="fix "><?php echo $lib->formatMoney($owe['money'][$vendor->shipment_vendor_id]>0?$owe['money'][$vendor->shipment_vendor_id]:null); ?></td>
+                 
+                
+            </tr>
+            <?php }} ?>
+
+            <?php 
+            $tongopsco_truoc = null;
+            $tongopsno_truoc = null;
+            $tongopsco = null;
+            $tongopsno = null;
+            $new_tongopsco_truoc = array();
+            $new_tongopsno_truoc = array();
+
+            $co1 = array(); $no1 = array(); $co_truoc1 = array(); $no_truoc1 = array();
+
+                    foreach ($staffs_data as $staff) {  
+                        if (isset($debt_truoc['co'][$staff->staff_id]) && $debt_truoc['co'][$staff->staff_id] > 0) {
+                            $co_truoc1[$staff->staff_id] = isset($co_truoc1[$staff->staff_id])?($co_truoc1[$staff->staff_id] + $debt_truoc['co'][$staff->staff_id]):($debt_truoc['co'][$staff->staff_id]);
+                        }
+                        if (isset($debt_truoc['no'][$staff->staff_id]) && $debt_truoc['no'][$staff->staff_id] < 0) {
+                            $co_truoc1[$staff->staff_id] = isset($co_truoc1[$staff->staff_id])?($co_truoc1[$staff->staff_id] + str_replace('-', "", $debt_truoc['no'][$staff->staff_id])):(str_replace('-', "", $debt_truoc['no'][$staff->staff_id]));
+                        }
+
+                        if (isset($debt_truoc['co'][$staff->staff_id]) && $debt_truoc['co'][$staff->staff_id] < 0) {
+                            $no_truoc1[$staff->staff_id] = isset($no_truoc1[$staff->staff_id])?($no_truoc1[$staff->staff_id] + str_replace('-', "", $debt_truoc['co'][$staff->staff_id])):(str_replace('-', "", $debt_truoc['co'][$staff->staff_id]));
+                        }
+                        if (isset($debt_truoc['no'][$staff->staff_id]) && $debt_truoc['no'][$staff->staff_id] > 0) {
+                            $no_truoc1[$staff->staff_id] = isset($no_truoc1[$staff->staff_id])?($no_truoc1[$staff->staff_id] + $debt_truoc['no'][$staff->staff_id]):($debt_truoc['no'][$staff->staff_id]);
+                        }
+
+                        if (isset($debt['co'][$staff->staff_id]) && $debt['co'][$staff->staff_id] > 0) {
+                            $co1[$staff->staff_id] = isset($co1[$staff->staff_id])?($co1[$staff->staff_id] + $debt['co'][$staff->staff_id]):($debt['co'][$staff->staff_id]);
+                        }
+                        if (isset($debt['no'][$staff->staff_id]) && $debt['no'][$staff->staff_id] < 0) {
+                            $co1[$staff->staff_id] = isset($co1[$staff->staff_id])?($co1[$staff->staff_id] + str_replace('-', "", $debt['no'][$staff->staff_id]) ):(str_replace('-', "", $debt['no'][$staff->staff_id]));
+                        }
+
+                        if (isset($debt['co'][$staff->staff_id]) && $debt['co'][$staff->staff_id] < 0) {
+                            $no1[$staff->staff_id] = isset($no1[$staff->staff_id])?($no1[$staff->staff_id] + str_replace('-', "", $debt['co'][$staff->staff_id]) ):(str_replace('-', "", $debt['co'][$staff->staff_id]));
+                        }
+                        if (isset($debt['no'][$staff->staff_id]) && $debt['no'][$staff->staff_id] > 0) {
+                            $no1[$staff->staff_id] = isset($no1[$staff->staff_id])?($no1[$staff->staff_id] + $debt['no'][$staff->staff_id]):($debt['no'][$staff->staff_id]);
+                        }
+
+                        $tongopsco_truoc += isset($co_truoc1[$staff->staff_id]) ?$co_truoc1[$staff->staff_id]:null;
+                        $tongopsno_truoc += isset($no_truoc1[$staff->staff_id]) ?$no_truoc1[$staff->staff_id]:null;
+                        $tongopsco += isset($co1[$staff->staff_id]) ?$co1[$staff->staff_id]:null;
+                        $tongopsno += isset($no1[$staff->staff_id]) ?$no1[$staff->staff_id]:null;
+
+                        for ($i=1; $i < $number; $i++) { 
+                            $new_tongopsco_truoc[$tuantruoc+$i] = isset($new_tongopsco_truoc[$tuantruoc+$i])?($new_tongopsco_truoc[$tuantruoc+$i]+(((isset($new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]>0) ? str_replace('-', "", $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]):null )+((isset($new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]<0)?str_replace('-', "", $new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]):null ))):(0+(((isset($new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]>0) ? str_replace('-', "", $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]):null )+((isset($new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]<0)?str_replace('-', "", $new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]):null )));
+                            $new_tongopsno_truoc[$tuantruoc+$i] = isset($new_tongopsno_truoc[$tuantruoc+$i])?($new_tongopsno_truoc[$tuantruoc+$i]+(((isset($new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]>0)?str_replace('-', "", $new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]):null )+((isset($new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]<0) ? str_replace('-', "", $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]):null ))):(0+(((isset($new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]>0)?str_replace('-', "", $new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]):null )+((isset($new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]<0) ? str_replace('-', "", $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]):null )));
+                        }
+                    }
+
+                    foreach ($vendors_ops_data as $vendor) {
+                        $tongopsco += (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', "", $owe['money'][$vendor->shipment_vendor_id]):null;
+                        $tongopsno += (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]>0)?$owe['money'][$vendor->shipment_vendor_id]:null;
+
+                        $tongopsco_truoc += (isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', "", $owe_truoc['money'][$vendor->shipment_vendor_id]):null;
+                        $tongopsno_truoc += (isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null;
+
+                        for ($i=1; $i < $number; $i++) { 
+                            $new_tongopsco_truoc[$tuantruoc+$i] = isset($new_tongopsco_truoc[$tuantruoc+$i])?($new_tongopsco_truoc[$tuantruoc+$i]+((isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', "", $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]):null)):(0+((isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', "", $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]):null));
+                            $new_tongopsno_truoc[$tuantruoc+$i] = isset($new_tongopsno_truoc[$tuantruoc+$i])?($new_tongopsno_truoc[$tuantruoc+$i]+((isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]>0)?$new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]:null)):(0+((isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]>0)?$new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]:null));
+                        }
+
+                    }
+            ?>
+            <tr style=" font-weight: bold; color: red">
+                <td style="text-align:center;" class="fix">6</td>
+                <td class="fix">OPS</td>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongopsco_truoc)) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongopsno_truoc)) ?></td>
+                <?php 
+                //$new_tongopsco_truoc[$tuan] = $tongopsco;
+                //$new_tongopsno_truoc[$tuan] = $tongopsno;
+                $truoc_no = 0;
+                $truoc_co = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc_co += isset($new_tongopsco_truoc[$tuantruoc+$i-1])?$new_tongopsco_truoc[$tuantruoc+$i-1]:0;
+                    $truoc_no += isset($new_tongopsno_truoc[$tuantruoc+$i-1])?$new_tongopsno_truoc[$tuantruoc+$i-1]:0;
+                ?>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $new_tongopsco_truoc[$tuantruoc+$i]+$tongopsco_truoc+$truoc_co)) ?></td>
+                <td class="fix error"><?php echo $lib->formatMoney(str_replace('-', "", $new_tongopsno_truoc[$tuantruoc+$i]+$tongopsno_truoc+$truoc_no)) ?></td>
+                <?php } ?>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongopsco)) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongopsno)) ?></td>
+                 
+            </tr>
+            <?php $co = array(); $no = array(); $co_truoc = array(); $no_truoc = array(); ?>
+            <?php foreach ($staffs_data as $staff) {  ?>
+            <?php if((isset($debt_truoc['co'][$staff->staff_id]) && $debt_truoc['co'][$staff->staff_id] != 0) || (isset($debt_truoc['no'][$staff->staff_id]) && $debt_truoc['no'][$staff->staff_id] != 0 )){ ?>
+            <?php
+                if (isset($debt_truoc['co'][$staff->staff_id]) && $debt_truoc['co'][$staff->staff_id] > 0) {
+                    $co_truoc[$staff->staff_id] = isset($co_truoc[$staff->staff_id])?($co_truoc[$staff->staff_id] + $debt_truoc['co'][$staff->staff_id]):($debt_truoc['co'][$staff->staff_id]);
+                }
+                if (isset($debt_truoc['no'][$staff->staff_id]) && $debt_truoc['no'][$staff->staff_id] < 0) {
+                    $co_truoc[$staff->staff_id] = isset($co_truoc[$staff->staff_id])?($co_truoc[$staff->staff_id] + str_replace('-', "", $debt_truoc['no'][$staff->staff_id])):(str_replace('-', "", $debt_truoc['no'][$staff->staff_id]));
+                }
+
+                if (isset($debt_truoc['co'][$staff->staff_id]) && $debt_truoc['co'][$staff->staff_id] < 0) {
+                    $no_truoc[$staff->staff_id] = isset($no_truoc[$staff->staff_id])?($no_truoc[$staff->staff_id] + str_replace('-', "", $debt_truoc['co'][$staff->staff_id])):(str_replace('-', "", $debt_truoc['co'][$staff->staff_id]));
+                }
+                if (isset($debt_truoc['no'][$staff->staff_id]) && $debt_truoc['no'][$staff->staff_id] > 0) {
+                    $no_truoc[$staff->staff_id] = isset($no_truoc[$staff->staff_id])?($no_truoc[$staff->staff_id] + $debt_truoc['no'][$staff->staff_id]):($debt_truoc['no'][$staff->staff_id]);
+                }
+
+                if (isset($debt['co'][$staff->staff_id]) && $debt['co'][$staff->staff_id] > 0) {
+                    $co[$staff->staff_id] = isset($co[$staff->staff_id])?($co[$staff->staff_id] + $debt['co'][$staff->staff_id]):($debt['co'][$staff->staff_id]);
+                }
+                if (isset($debt['no'][$staff->staff_id]) && $debt['no'][$staff->staff_id] < 0) {
+                    $co[$staff->staff_id] = isset($co[$staff->staff_id])?($co[$staff->staff_id] + str_replace('-', "", $debt['no'][$staff->staff_id]) ):(str_replace('-', "", $debt['no'][$staff->staff_id]));
+                }
+
+                if (isset($debt['co'][$staff->staff_id]) && $debt['co'][$staff->staff_id] < 0) {
+                    $no[$staff->staff_id] = isset($no[$staff->staff_id])?($no[$staff->staff_id] + str_replace('-', "", $debt['co'][$staff->staff_id]) ):(str_replace('-', "", $debt['co'][$staff->staff_id]));
+                }
+                if (isset($debt['no'][$staff->staff_id]) && $debt['no'][$staff->staff_id] > 0) {
+                    $no[$staff->staff_id] = isset($no[$staff->staff_id])?($no[$staff->staff_id] + $debt['no'][$staff->staff_id]):($debt['no'][$staff->staff_id]);
+                }
+
+            ?>
+            <tr class="staff" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" data="<?php echo $staff->staff_id ?>">
+                <td class="fix"></td>
+                <td class="fix"><?php echo $staff->staff_name ?></td>
+                <td class="fix"><?php echo $lib->formatMoney(isset($co_truoc[$staff->staff_id])?$co_truoc[$staff->staff_id]:null); ?></td>
+                <td class="fix"><?php echo $lib->formatMoney(isset($no_truoc[$staff->staff_id]) ?$no_truoc[$staff->staff_id]:null); ?></td>
+
+                <?php 
+                $truoc_no = 0;
+                $truoc_co = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc_co += isset($new_debt_truoc[$tuantruoc+$i-1]['co'][$staff->staff_id])?$new_debt_truoc[$tuantruoc+$i-1]['co'][$staff->staff_id]:0;
+                    $truoc_no += isset($new_debt_truoc[$tuantruoc+$i-1]['no'][$staff->staff_id])?$new_debt_truoc[$tuantruoc+$i-1]['no'][$staff->staff_id]:0;
+                ?>
+                <td class="fix approve">
+                    <?php
+                    if (isset($new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id] < 0) {
+                        if (isset($new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id] > 0) {
+                            echo $lib->formatMoney(str_replace('-', "", ($new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]+$new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]+(isset($co_truoc[$staff->staff_id])?$co_truoc[$staff->staff_id]:null)+$truoc_co)));
+                        }
+                        else{
+                            echo $lib->formatMoney(str_replace('-', "", $new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]+(isset($co_truoc[$staff->staff_id])?$co_truoc[$staff->staff_id]:null)+$truoc_co));
+                        }
+                    }
+                    elseif (isset($new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id] > 0) {
+                        echo $lib->formatMoney($new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]+(isset($co_truoc[$staff->staff_id])?$co_truoc[$staff->staff_id]:null)+$truoc_co);
+                    }
+                    else{
+                        echo null;
+                    }
+                    ?>
+                    
+                </td>
+                <td class="fix error">
+                    <?php
+                    if (isset($new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id] > 0) {
+                        if (isset($new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id] < 0) {
+                            echo $lib->formatMoney(str_replace('-', "", ($new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]+$new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]+(isset($no_truoc[$staff->staff_id]) ?$no_truoc[$staff->staff_id]:null)+$truoc_no)));
+                        }
+                        else{
+                            echo $lib->formatMoney($new_debt_truoc[$tuantruoc+$i]['no'][$staff->staff_id]+(isset($no_truoc[$staff->staff_id]) ?$no_truoc[$staff->staff_id]:null)+$truoc_no);
+                        }
+                    }
+                    elseif (isset($new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]) && $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id] < 0) {
+                        echo $lib->formatMoney(str_replace('-', "", $new_debt_truoc[$tuantruoc+$i]['co'][$staff->staff_id]+(isset($no_truoc[$staff->staff_id]) ?$no_truoc[$staff->staff_id]:null)+$truoc_no));
+                    }
+                    else{
+                        echo null;
+                    }
+                    ?>
+                    
+                </td>
+                <?php } ?>
+
+                <td class="fix"><?php echo $lib->formatMoney(isset($co[$staff->staff_id])?$co[$staff->staff_id]:null); ?></td>
+                <td class="fix"><?php echo $lib->formatMoney(isset($no[$staff->staff_id]) ?$no[$staff->staff_id]:null); ?></td>
+                 
+            </tr>
+            <?php }} ?>
+            <?php foreach ($vendors_ops_data as $vendor) {  ?>
+            <?php if((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0) || (isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0) || (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]<0) || (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]>0)){ ?>
+            <tr class="vendor" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" data="<?php echo $vendor->shipment_vendor_id; ?>">
+                <td class="fix"></td>
+                <td class="fix"><?php echo $vendor->shipment_vendor_name; ?></td>
+                <td class="fix"><?php echo $lib->formatMoney((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null); ?></td>
+                <td class="fix"><?php echo $lib->formatMoney((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null); ?></td>
+                
+                <?php 
+                //$new_owe_truoc[$tuan]['money'][$vendor->shipment_vendor_id] = $owe['money'][$vendor->shipment_vendor_id];
+                $truoc_no = 0;
+                $truoc_co = 0;
+                for ($i=1; $i < $number; $i++) { 
+                    $truoc_co += (isset($new_owe_truoc[$tuantruoc+$i-1]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i-1]['money'][$vendor->shipment_vendor_id] < 0 )?str_replace('-', "", $new_owe_truoc[$tuantruoc+$i-1]['money'][$vendor->shipment_vendor_id]):0;
+                    $truoc_no += (isset($new_owe_truoc[$tuantruoc+$i-1]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i-1]['money'][$vendor->shipment_vendor_id] > 0 )?$new_owe_truoc[$tuantruoc+$i-1]['money'][$vendor->shipment_vendor_id]:0;
+
+                ?>
+                <td class="fix ">
+                    <?php echo $lib->formatMoney(str_replace('-', "", ( ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] > 0) ? $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no ) - ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] < 0) ? str_replace('-', "", $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id])+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co ) ) < 0 ? ( ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] > 0) ? $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no ) - ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] < 0) ? str_replace('-', "", $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id])+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co ) ) : null ) ); ?>
+                </td>
+                <td class="fix ">
+                    <?php echo $lib->formatMoney( ( ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] > 0) ? $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no ) - ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] < 0) ? str_replace('-', "", $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id])+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co ) ) > 0 ? ( ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] > 0) ? $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null)+$truoc_no ) - ( (isset($new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id] < 0) ? str_replace('-', "", $new_owe_truoc[$tuantruoc+$i]['money'][$vendor->shipment_vendor_id])+((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co : ((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null)+$truoc_co ) ) : null ); ?>
+                </td>
+                <?php } ?>
+
+                <td class="fix"><?php echo $lib->formatMoney($owe['money'][$vendor->shipment_vendor_id]<0?str_replace('-', '', $owe['money'][$vendor->shipment_vendor_id]):null); ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($owe['money'][$vendor->shipment_vendor_id]>0?$owe['money'][$vendor->shipment_vendor_id]:null); ?></td>
+                 
+                
+            </tr>
+            <?php } }?>
+            <?php $tongluong = $salary; $tongluong_truoc = $salary_truoc; 
+
+            $luongthang = 0;
+
+            $new_tongluong_truoc = array();
+            for ($i=1; $i < $number; $i++) { 
+                $new_tongluong_truoc[$tuantruoc+$i] = isset($new_salary_truoc[$tuantruoc+$i])?$new_salary_truoc[$tuantruoc+$i]:null; 
+                $luongthang += $new_tongluong_truoc[$tuantruoc+$i];
+            }
+            ?>
+            <tr style=" font-weight: bold; color: red">
+                <td style="text-align:center;" class="fix">7</td>
+                <td class="fix">Lương</td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($tongluong_truoc); ?></td>
+                <?php for ($i=1; $i < $number; $i++) {  ?>
+                <td class="fix"><?php echo $lib->formatMoney($new_tongluong_truoc[$tuantruoc+$i]<0?str_replace('-', "", $new_tongluong_truoc[$tuantruoc+$i]):null); ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($new_tongluong_truoc[$tuantruoc+$i]>0?$new_tongluong_truoc[$tuantruoc+$i]:null); ?></td>
+                <?php } ?>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($tongluong); ?></td>
+                 
+            </tr>
+            
+            <tr>
+                <td class="fix"></td>
+                <td class="fix">Lương tháng</td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($salary_truoc); ?></td>
+                <?php for ($i=1; $i < $number; $i++) {  ?>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney(isset($new_salary_truoc[$tuantruoc+$i])?$new_salary_truoc[$tuantruoc+$i]:null); ?></td>
+                <?php } ?>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($salary); ?></td>
+                 
+            </tr>
+        <tr style=" font-weight: bold; color: rgb(0, 90, 255);">
+                <td colspan="2" style="text-align:center;" class="fix">Tổng</td>
+                <td class="fix"><?php echo $lib->formatMoney((isset($asset_truoc[1])?$asset_truoc[1]:0)+(isset($asset_truoc[2])?$asset_truoc[2]:0)+str_replace('-', "", $tongnh_truoc)+str_replace('-', "", $tongthuco_truoc)+str_replace('-', "", $tongtraco_truoc)+str_replace('-', "", $tongopsco_truoc)) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongthuno_truoc)+str_replace('-', "", $tongtrano_truoc)+str_replace('-', "", $tongopsno_truoc)/*+str_replace('-', "", $tongluong_truoc)*/); ?></td>
+                
+                <?php 
+                $truoc_co_tm = 0;
+                $truoc_co_usd = 0;
+                $truoc_co_nh = 0;
+                $truoc_co_thu = 0;
+                $truoc_co_tra = 0;
+                $truoc_no_thu = 0;
+                $truoc_no_tra = 0;
+                $truoc_co_ops = 0;
+                $truoc_no_ops = 0;
+
+                for ($i=1; $i < $number; $i++) {  
+                    $truoc_co_tm += isset($new_asset_truoc[$tuantruoc+$i-1][1])?$new_asset_truoc[$tuantruoc+$i-1][1]:0;
+                    $truoc_co_usd += isset($new_asset_truoc[$tuantruoc+$i-1][2])?$new_asset_truoc[$tuantruoc+$i-1][2]:0;
+                    $truoc_co_nh += isset($new_tongnh_truoc[$tuantruoc+$i-1])?$new_tongnh_truoc[$tuantruoc+$i-1]:0;
+                    $truoc_co_thu += isset($new_tongthuco_truoc[$tuantruoc+$i-1])?str_replace('-', "", $new_tongthuco_truoc[$tuantruoc+$i-1]):0;
+                    $truoc_no_thu += isset($new_tongthuno_truoc[$tuantruoc+$i-1])?str_replace('-', "", $new_tongthuno_truoc[$tuantruoc+$i-1]):0;
+                    $truoc_co_tra += isset($new_tongtraco_truoc[$tuantruoc+$i-1])?str_replace('-', "", $new_tongtraco_truoc[$tuantruoc+$i-1]):0;
+                    $truoc_no_tra += isset($new_tongtrano_truoc[$tuantruoc+$i-1])?str_replace('-', "", $new_tongtrano_truoc[$tuantruoc+$i-1]):0;
+                    $truoc_co_ops += isset($new_tongopsco_truoc[$tuantruoc+$i-1])?str_replace('-', "", $new_tongopsco_truoc[$tuantruoc+$i-1]):0;
+                    $truoc_no_ops += isset($new_tongopsno_truoc[$tuantruoc+$i-1])?str_replace('-', "", $new_tongopsno_truoc[$tuantruoc+$i-1]):0;
+
+                ?>
+                <td class="fix"><?php echo $lib->formatMoney(((isset($new_asset_truoc[$tuantruoc+$i][1]) && $new_asset_truoc[$tuantruoc+$i][1]>0)?$new_asset_truoc[$tuantruoc+$i][1]:null)+((isset($new_asset_truoc[$tuantruoc+$i][2]) && $new_asset_truoc[$tuantruoc+$i][2]>0)?$new_asset_truoc[$tuantruoc+$i][1]:null)+($new_tongnh_truoc[$tuantruoc+$i]>0?str_replace('-', "", $new_tongnh_truoc[$tuantruoc+$i]):null)+str_replace('-', "", $new_tongthuco_truoc[$tuantruoc+$i])+str_replace('-', "", $new_tongtraco_truoc[$tuantruoc+$i])+str_replace('-', "", $new_tongopsco_truoc[$tuantruoc+$i])+($asset_truoc[1]+$truoc_co_tm)+($asset_truoc[2]+$truoc_co_usd)+($tongnh_truoc+$truoc_co_nh)+($tongthuco_truoc+$truoc_co_thu)+($tongtraco_truoc+$truoc_co_tra)+($tongopsco_truoc+$truoc_co_ops)) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney(((isset($new_asset_truoc[$tuantruoc+$i][1]) && $new_asset_truoc[$tuantruoc+$i][1]<0)?str_replace('-', "", $new_asset_truoc[$tuantruoc+$i][1]):null)+((isset($new_asset_truoc[$tuantruoc+$i][2]) && $new_asset_truoc[$tuantruoc+$i][2]<0)?str_replace('-', "", $new_asset_truoc[$tuantruoc+$i][2]):null)+($new_tongnh_truoc[$tuantruoc+$i]<0?str_replace('-', "", $new_tongnh_truoc[$tuantruoc+$i]):null)+str_replace('-', "", $new_tongthuno_truoc[$tuantruoc+$i])+str_replace('-', "", $new_tongtrano_truoc[$tuantruoc+$i])+str_replace('-', "", $new_tongopsno_truoc[$tuantruoc+$i])+($tongthuno_truoc+$truoc_no_thu)+($tongtrano_truoc+$truoc_no_tra)+($tongopsno_truoc+$truoc_no_ops)/*+str_replace('-', "", $new_tongluong_truoc[$tuantruoc+$i])*/); ?></td>
+                <?php } ?>
+
+                <td class="fix"><?php echo $lib->formatMoney((isset($asset[1])?$asset[1]:0)+(isset($asset[2])?$asset[2]:0)+$tongnh+str_replace('-', "", $tongthuco)+str_replace('-', "", $tongtraco)+str_replace('-', "", $tongopsco)) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongthuno)+str_replace('-', "", $tongtrano)+str_replace('-', "", $tongopsno)/*+str_replace('-', "", $tongluong)*/); ?></td>
+                 
+            </tr>
+            <tr style=" font-weight: bold; color: red">
+                <td colspan="2" style="text-align:center;" class="fix">Tổng tài sản</td>
+                <td colspan="2" class="fix"><?php echo $lib->formatMoney(((isset($asset_truoc[1])?$asset_truoc[1]:0)+(isset($asset_truoc[2])?$asset_truoc[2]:0)+$tongnh_truoc+str_replace('-', "", $tongthuco_truoc)+str_replace('-', "", $tongtraco_truoc)+str_replace('-', "", $tongopsco_truoc))-(str_replace('-', "", $tongthuno_truoc)+str_replace('-', "", $tongtrano_truoc)+str_replace('-', "", $tongopsno_truoc)/*+str_replace('-', "", $tongluong_truoc)*/)) ?></td>
+                
+                <?php 
+                $truoc_co_tm = 0;
+                $truoc_co_usd = 0;
+                $truoc_co_nh = 0;
+                $truoc_co_thu = 0;
+                $truoc_co_tra = 0;
+                $truoc_no_thu = 0;
+                $truoc_no_tra = 0;
+                $truoc_co_ops = 0;
+                $truoc_no_ops = 0;
+
+                for ($i=1; $i < $number; $i++) {  
+                    $truoc_co_tm += isset($new_asset_truoc[$tuantruoc+$i-1][1])?$new_asset_truoc[$tuantruoc+$i-1][1]:0;
+                    $truoc_co_usd += isset($new_asset_truoc[$tuantruoc+$i-1][2])?$new_asset_truoc[$tuantruoc+$i-1][2]:0;
+                    $truoc_co_nh += isset($new_tongnh_truoc[$tuantruoc+$i-1])?$new_tongnh_truoc[$tuantruoc+$i-1]:0;
+                    $truoc_co_thu += isset($new_tongthuco_truoc[$tuantruoc+$i-1])?str_replace('-', "", $new_tongthuco_truoc[$tuantruoc+$i-1]):0;
+                    $truoc_no_thu += isset($new_tongthuno_truoc[$tuantruoc+$i-1])?str_replace('-', "", $new_tongthuno_truoc[$tuantruoc+$i-1]):0;
+                    $truoc_co_tra += isset($new_tongtraco_truoc[$tuantruoc+$i-1])?str_replace('-', "", $new_tongtraco_truoc[$tuantruoc+$i-1]):0;
+                    $truoc_no_tra += isset($new_tongtrano_truoc[$tuantruoc+$i-1])?str_replace('-', "", $new_tongtrano_truoc[$tuantruoc+$i-1]):0;
+                    $truoc_co_ops += isset($new_tongopsco_truoc[$tuantruoc+$i-1])?str_replace('-', "", $new_tongopsco_truoc[$tuantruoc+$i-1]):0;
+                    $truoc_no_ops += isset($new_tongopsno_truoc[$tuantruoc+$i-1])?str_replace('-', "", $new_tongopsno_truoc[$tuantruoc+$i-1]):0;
+
+                ?>
+                <td colspan="2" class="fix"><?php echo $lib->formatMoney((((isset($new_asset_truoc[$tuantruoc+$i][1]) && $new_asset_truoc[$tuantruoc+$i][1]>0)?$new_asset_truoc[$tuantruoc+$i][1]:null)+((isset($new_asset_truoc[$tuantruoc+$i][2]) && $new_asset_truoc[$tuantruoc+$i][2]>0)?$new_asset_truoc[$tuantruoc+$i][1]:null)+($new_tongnh_truoc[$tuantruoc+$i]>0?str_replace('-', "", $new_tongnh_truoc[$tuantruoc+$i]):null)+str_replace('-', "", $new_tongthuco_truoc[$tuantruoc+$i])+str_replace('-', "", $new_tongtraco_truoc[$tuantruoc+$i])+str_replace('-', "", $new_tongopsco_truoc[$tuantruoc+$i])+($asset_truoc[1]+$truoc_co_tm)+($asset_truoc[2]+$truoc_co_usd)+($tongnh_truoc+$truoc_co_nh)+($tongthuco_truoc+$truoc_co_thu)+($tongtraco_truoc+$truoc_co_tra)+($tongopsco_truoc+$truoc_co_ops))-(((isset($new_asset_truoc[$tuantruoc+$i][1]) && $new_asset_truoc[$tuantruoc+$i][1]<0)?str_replace('-', "", $new_asset_truoc[$tuantruoc+$i][1]):null)+((isset($new_asset_truoc[$tuantruoc+$i][2]) && $new_asset_truoc[$tuantruoc+$i][2]<0)?str_replace('-', "", $new_asset_truoc[$tuantruoc+$i][2]):null)+($new_tongnh_truoc[$tuantruoc+$i]<0?str_replace('-', "", $new_tongnh_truoc[$tuantruoc+$i]):null)+str_replace('-', "", $new_tongthuno_truoc[$tuantruoc+$i])+str_replace('-', "", $new_tongtrano_truoc[$tuantruoc+$i])+str_replace('-', "", $new_tongopsno_truoc[$tuantruoc+$i])+($tongthuno_truoc+$truoc_no_thu)+($tongtrano_truoc+$truoc_no_tra)+($tongopsno_truoc+$truoc_no_ops)/*+str_replace('-', "", $new_tongluong_truoc[$tuantruoc+$i])*/)) ?></td>
+                <?php } ?>
+
+                <td colspan="2" class="fix"><?php echo $lib->formatMoney(((isset($asset[1])?$asset[1]:0)+(isset($asset[2])?$asset[2]:0)+$tongnh+str_replace('-', "", $tongthuco)+str_replace('-', "", $tongtraco)+str_replace('-', "", $tongopsco))-(str_replace('-', "", $tongthuno)+str_replace('-', "", $tongtrano)+str_replace('-', "", $tongopsno)/*+$tongluong*/)) ?></td>
+                 
+            </tr>
+       </tbody>
+    </table>
+</div>
+<div id="show" style="position:absolute; box-shadow: 0px 0px 5px rgb(145, 217, 244);"></div>
+
+<script type="text/javascript">
+    $('.vendor').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getVendor',
+            type: 'POST',
+            data: {vendor:val, tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.customer').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getCustomer',
+            type: 'POST',
+            data: {customer:val, tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.staff').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getStaff',
+            type: 'POST',
+            data: {staff:val, tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.bank').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getBank',
+            type: 'POST',
+            data: {bank:val, tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.office').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getOffice',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.office').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.sale').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getSale',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.sale').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.trading').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getTrading',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.trading').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.agent').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getAgent',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.agent').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.tcmt').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getTCMT',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.tcmt').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.financial').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getFinancial',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.financial').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.table_data').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-30
+    });
+});
+
+
+$(document).keyup(function(e) {
+  
+  if (e.keyCode == 27){   // esc
+    $('#show').html("");
+  }
+});
+
+var w = $(".table_data").width();
+
+      $(".container").width(w);
+      $(".navbar-inner").width(w);
+      $(".navbar").width(w);
+      $("#container").width(w);
+
+
+$(function(){
+  $(".table_data").colResizable({"disable": true});
+});
+
+</script>
+<style type="text/css">
+.data{
+    margin: 20px auto 20px 20px;
+    border: solid 2px red;
+}
+    .data td {
+  border: 1px solid #80C8E5;
+  padding: 4px 7px 2px;
+  vertical-align: top;
+  line-height: inherit;
+  overflow: hidden;
+}
+
+</style>

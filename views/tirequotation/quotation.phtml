@@ -1,0 +1,167 @@
+<link rel="stylesheet" type="text/css" href="<?php BASE_URL ?>/public/css/jquery.multiselect.css" />
+<script type="text/javascript" src="<?php BASE_URL ?>/public/js/jquery.multiselect.js"></script>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BẢNG GIÁ LỐP XE</h1></center>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Gửi bảng báo giá</a>
+    <a class="add_button" id="btnExport" href="#">Tải bảng báo giá</a>
+    
+</div>
+    <div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Search">
+        <input type="button" name="" id="search-submit" class="button-search" value="Search" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+       
+    </div>
+        <div class="alignleft actions">
+            <b>Mã gai : <input type="checkbox" onclick="checkall_2('checkbox_2', this)" name="checkall_2" id="checkall_2" checked />Tất cả </b>
+            <?php foreach ($tire_patterns as $tire_pattern) { ?>
+            <input name="check_2[]" type="checkbox" class="checkbox_2" id="tire_pattern_<?php echo $tire_pattern->tire_quotation_pattern_id ?>" value="<?php echo $tire_pattern->tire_quotation_pattern_id ?>" checked> <?php echo $tire_pattern->tire_quotation_pattern_name ?>
+            <?php } ?>
+        </div>
+        <div style="clear:both"></div>
+        <div class="alignleft actions">
+            <b> Kích cỡ : </b> <select style="width:100px" multiple="multiple" name="tire_size" id="tire_size" >
+                <?php foreach ($tire_size_lists as $tire_size) { ?>
+                    <option selected="selected" title="<?php echo $tire_size->tire_product_size_number ?>" value="<?php echo $tire_size->tire_product_size_id ?>"><?php echo $tire_size->tire_product_size_number ?></option>
+                <?php } ?>
+                
+            </select>
+            
+        </div>
+        <div style="clear:both"></div>
+        <div class="tablenav top">
+        <div class="alignleft actions">
+            <b>Thương hiệu : <br> <input type="checkbox" onclick="checkall('checkbox', this)" name="checkall" id="checkall" checked />Tất cả </b> <br>
+            <?php foreach ($tire_producers as $tire_producer) { ?>
+                <input name="check[]" type="checkbox" class="checkbox" id="tire_brand_<?php echo $tire_producer->tire_producer_id ?>" value="<?php echo $tire_producer->tire_producer_id ?>" checked><?php echo $tire_producer->tire_producer_name ?>
+            <?php } ?>
+            
+        </div>
+        
+        
+        
+    </div>
+
+</div>
+<table class="table_data" id="tblExport">
+    <thead>
+        <tr>
+            <th rowspan="2" class="fix">Mã gai</th>
+            <th rowspan="2" class="fix">Hình ảnh</th>
+            <th rowspan="2" class="fix">Kích cỡ</th>
+            <th colspan="<?php echo count($tire_producers) ?>" class="fix">Thương hiệu</th>
+        </tr>
+        <tr>
+            <?php foreach ($tire_producers as $tire_producer) { ?>
+            <th class="fix brand brand_<?php echo $tire_producer->tire_producer_id ?>"><?php echo $tire_producer->tire_producer_name ?></th>
+            <?php } ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($tire_patterns as $tire_pattern) { ?>
+            <tr class="pattern pattern_<?php echo $tire_pattern->tire_quotation_pattern_id ?>">
+                <td data="<?php echo $rowspan[$tire_pattern->tire_quotation_pattern_id] ?>" rowspan="<?php echo $rowspan[$tire_pattern->tire_quotation_pattern_id] ?>" data-locations='<?php echo json_encode($row_size[$tire_pattern->tire_quotation_pattern_id]) ?>' class="fix pt_row" style="text-align:center;vertical-align:middle"><?php echo $tire_pattern->tire_quotation_pattern_name ?></td>
+                <td data="<?php echo $rowspan[$tire_pattern->tire_quotation_pattern_id] ?>" rowspan="<?php echo $rowspan[$tire_pattern->tire_quotation_pattern_id] ?>" data-locations='<?php echo json_encode($row_size[$tire_pattern->tire_quotation_pattern_id]) ?>' class="fix pt_row" style="text-align:center;vertical-align:middle"><img style="width:100%; height:auto;" src="<?php echo BASE_URL.'/public/images/upload/'.$tire_pattern->tire_quotation_pattern_name.'.jpg' ?>"></td>
+            </tr>
+            <?php 
+            if (isset($tire_sizes['size_number'][$tire_pattern->tire_quotation_pattern_id])) {
+                foreach ($tire_sizes['size_number'][$tire_pattern->tire_quotation_pattern_id] as $tire_size) { ?>
+                <tr class="pattern pattern_<?php echo $tire_pattern->tire_quotation_pattern_id ?>" data="<?php echo $tire_size ?>">
+                    <td class="fix"><?php echo $tire_size ?></td>
+                    <?php foreach ($tire_producers as $tire_producer) { ?>
+                    <td class="fix brand brand_<?php echo $tire_producer->tire_producer_id ?>"><?php echo $lib->formatMoney(isset($tire_prices[$tire_producer->tire_producer_id][$tire_size][$tire_pattern->tire_quotation_pattern_name])?$tire_prices[$tire_producer->tire_producer_id][$tire_size][$tire_pattern->tire_quotation_pattern_name]:""); ?></td>
+                    <?php } ?>
+                </tr>
+            <?php }} ?>
+        <?php } ?>
+        
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $("#tire_size").multiselect({
+       click: function(event, ui){
+            if(ui.checked == 1){
+                $("tr[data='"+ui.text+"']").show();
+                $(".pt_row").each(function( index ) {
+                  var row = parseInt($(this).attr('rowspan'));
+                  var testOne = $(this).data('locations');
+                  if (testOne.indexOf(ui.value) > -1) {
+                    $(this).attr('rowspan',(row+1));
+                  }
+                  
+                });
+                
+            }
+            else{
+                $("tr[data='"+ui.text+"']").hide();
+                $(".pt_row").each(function( index ) {
+                  var row = parseInt($(this).attr('rowspan'));
+                  var testOne = $(this).data('locations');
+                  if (testOne.indexOf(ui.value) > -1) {
+                    $(this).attr('rowspan',(row-1));
+                  }
+                  
+                });
+            }
+       },
+       checkAll: function(){
+         $("tbody tr").show();
+         $(".pt_row").each(function( index ) {
+            $(this).attr('rowspan',$(this).attr('data'));
+         });
+       },
+       uncheckAll: function(){
+         $("tbody tr").hide();
+       },
+    });
+
+$('.checkbox_2').click(function(){
+    if ($(this).is(':checked') == true) {
+        $('.pattern_'+$(this).val()).show();
+    }
+    else{
+        $('.pattern_'+$(this).val()).hide();
+    }
+});
+$('#checkall_2').click(function(){
+    if ($(this).is(':checked') == true) {
+        $('.pattern').show();
+    }
+    else{
+        $('.pattern').hide();
+    }
+});
+
+$('.checkbox').click(function(){
+    if ($(this).is(':checked') == true) {
+        $('.brand_'+$(this).val()).show();
+    }
+    else{
+        $('.brand_'+$(this).val()).hide();
+    }
+});
+$('#checkall').click(function(){
+    if ($(this).is(':checked') == true) {
+        $('.brand').show();
+    }
+    else{
+        $('.brand').hide();
+    }
+});
+
+function checkall_2(class_name, obj) {
+    var items = document.getElementsByClassName(class_name);
+    if(obj.checked == true) 
+    {
+      for(i=0; i < items.length ; i++)
+        items[i].checked = true;
+    }
+    else { 
+      for(i=0; i < items.length ; i++)
+        items[i].checked = false;
+    }
+}
+</script>

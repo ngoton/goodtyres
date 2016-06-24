@@ -1,0 +1,236 @@
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> PHÂN TÍCH KHÁCH HÀNG </h1></center>
+
+    <div class="search-box">
+        <form id="report" name="report" action method="post">
+        <div class="add-box">
+                  
+            Từ tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn tháng" <?php if(isset($ngaytao)) echo "value='$ngaytao'"; ?> >    
+            Đến tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytaobatdau" id="chonngaytaobatdau" placeholder="Chọn tháng" <?php if(isset($ngaytaobatdau)) echo "value='$ngaytaobatdau'"; ?> >  
+             <input type="submit" name="submit" id="xem" value="Xem">  
+           
+            
+        </div>
+        <div class="add-box">
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn tuần" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >    
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn năm" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="submit" name="submit" id="xem" value="Xem">  
+            
+            
+        </div>
+        <div class="add-box">
+            <select style="width:200px" id="sl_trangthai" name="sl_trangthai">
+                <option value="0">Khách hàng</option>
+                <?php foreach ($customers as $customer) { ?>
+                    <option value="<?php echo $customer->customer_id ?>"><?php echo $customer->customer_name ?></option>
+                <?php } ?>
+            </select>
+            <input type="submit" name="submit" id="Chọn" value="Chọn">  
+            </form>
+        </div>
+    </div>
+
+</div>
+<div style="clear:both;"></div>
+
+<div id="chart2"></div>
+
+<script type="text/javascript">
+
+var x = "<?php echo $kh ?>";
+$('#sl_trangthai option[value='+x+']').attr('selected','selected');
+
+    var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytao").change();
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts);
+
+    $("#chonngaytao").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var firstDay = new Date(year, month, 1);
+
+        $('#batdau').datepicker("setDate", firstDay );
+    });
+
+    var pickerOpts5 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytaobatdau").change();
+         },
+         
+    };  
+    $("#chonngaytaobatdau").datepicker(pickerOpts5);
+
+    $("#chonngaytaobatdau").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var lastDay = new Date(year, month+1, 0);
+        $('#ketthuc').datepicker("setDate", lastDay );
+    });
+
+    $(".monthPicker").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+</script>
+<script type="text/javascript">
+    var batdau = "<?php echo strtotime($batdau) ?>";
+    var ketthuc = "<?php echo strtotime($ketthuc) ?>";
+    var kh = "<?php echo $kh ?>";
+    //load the Google Visualization API and the chart
+    google.load('visualization', '1', {'packages':['corechart','piechart']});
+ 
+    //set callback
+    google.setOnLoadCallback (createChart);
+ 
+    //callback function
+    function createChart() {
+ var jsonData = null;
+
+    var json = $.ajax({
+      url: "<?php echo BASE_URL ?>/tiresale/getAnalytics/"+batdau+"/"+ketthuc+"/"+kh, // make this url point to the data file
+      dataType: "json",
+      async: false,
+      success: (
+    function(data) {
+        jsonData = data;
+
+    // Create and populate the data table.
+    var data = new google.visualization.DataTable(jsonData);
+
+    // Create and draw the visualization.
+  var chart= new google.visualization.LineChart(document.getElementById('chart2')).
+        draw(data, {curveType: "function",
+                    width: $(window).width(), height: 600,
+                    /*vAxis: { 
+                        ticks: [0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300] 
+                    }*/
+
+                }
+            );
+
+    })
+    }).responseText;
+    }
+</script> 

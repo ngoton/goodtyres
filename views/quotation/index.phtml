@@ -1,0 +1,3119 @@
+
+<?php 
+
+if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+    $ip = $_SERVER['HTTP_CLIENT_IP'];
+} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+} else {
+    $ip = $_SERVER['REMOTE_ADDR'];
+}
+
+
+if ( (!isset($_COOKIE['cus']) || $_COOKIE['cus'] == null ) || ($_COOKIE['cus'] == 1 && !isset($_COOKIE['cus_email']) ) || (isset($_COOKIE['cus']) && $_COOKIE['cus'] == 2 && !isset($_SESSION['user_logined']))  ) { 
+
+    ?>
+<!-- ----------------------------------------------------------- -->
+<script type="text/javascript" src="public/js/jquery.cookie.js"></script>
+<div class="welcome-background"></div>
+<div id="welcome-cus" class="welcome-wrapper">
+<div class="welcome-inner">
+<div class="welcome-top"> 
+    <a href="<?php echo $this->url('') ?>" class="welcome-close" style="border: none;position: absolute;margin-top: -13px;margin-right: -13px;"> <img src="public/img/close_popupbox.png" alt=""> </a>
+</div>
+<div style="clear: both;"></div>
+<div class="welcome-slogan">
+Nhằm phục vụ nhu cầu của bạn được tốt hơn
+</div>
+<div class="welcome-cus">Hãy cho chúng tôi biết bạn là ai</div>
+<div class="select_cus">
+<select  name="cus_id" id="select-cus">
+
+<option value="1">Khách hàng</option>
+<option value="2">Nhân viên</option>
+</select>
+</div>
+<a href="#" style="margin-top:15px;" class="welcome-button-nd btn btn-large btn-danger" id="welcome-cus-button">Tiếp tục</a>
+<script type="text/javascript">
+            
+            
+            $("#welcome-cus-button").click(function() {
+                // check require
+                var cus_id = $('#select-cus').val();
+
+
+                var date = new Date();
+                date.setTime(date.getTime()+(30*24*60*60*500));
+                
+                $.cookie('cus', cus_id, {expires: date});
+
+
+                
+                if (cus_id == 2) {
+                    window.location.href = "<?php echo $this->url('user/login') ?>";
+                } else {
+                    $("#welcome-cus").animate({
+                        left: '-9999px'
+                    }, 400);
+                    $("#welcome-subscription").animate({
+                        left: '50%'
+                    }, 400);
+                    var href = $("#welcome-close").attr("href");
+                    href = href.replace(/cus_id=[0-9]*/, "cus_id=" + cus_id);
+                    $("#welcome-close").attr("href", href);
+
+                    $(".welcome_mail").attr("disabled", "disabled");
+
+                    if (cus_id == 437) {
+                        $("#welcome_mail_2").removeAttr("disabled");
+                    } else if (cus_id == 440) {
+                        $("#welcome_mail_3").removeAttr("disabled");
+                    }
+                }
+                return false;
+            });
+        </script>
+</div>
+</div>
+<div id="welcome-subscription" class="welcome-wrapper" style="left: 200%;">
+<div class="welcome-inner">
+<div class="welcome-top">
+<a href="<?php echo $this->url('quotation') ?>" class="welcome-close" id="welcome-close" style="border: none;position: absolute;margin-top: -13px;margin-right: -13px;"> <img src="public/img/close_popupbox.png" alt=""> </a>
+</div>
+<div style="clear: both;"></div>
+<div class="welcome-slogan">
+Để nhận bảng báo giá & hợp đồng...
+</div>
+<div class="welcome-cus">Vui lòng nhập thông tin</div>
+<div id="subscription-input">
+<div class="register_email">
+<form action="<?php echo $this->url('subscription') ?>" method="post" name="subscribe_form_welcome">
+<input name="redirect_url" value="quotation" type="hidden">
+<input name="newsletter_format" value="2" type="hidden">
+<input name="dispatch" value="newsletters.add_subscriber" type="hidden">
+<input name="mailing_lists[2]" class="welcome_mail" id="welcome_mail_2" value="1" type="hidden">
+<input name="mailing_lists[3]" class="welcome_mail" id="welcome_mail_3" value="1" type="hidden">
+<input name="subscr_name" id="subscr_name" type="text" autofocus tabindex="100" placeholder="Tên công ty"  required="required">
+<input name="subscr_email" id="subscr_email" size="20" tabindex="101" placeholder="Địa chỉ email" required="required" class="inputbox cm-hint" type="email">
+<input name="subscr_phone" id="subscr_phone" type="text" class="numbers" pattern=".{12,13}" minlength="12" maxlength="13" tabindex="102" required="required" placeholder="Số điện thoại">
+<input name="subscr_contact" id="subscr_contact" type="text" tabindex="103" required="required" placeholder="Người liên hệ">
+</form>
+</div>
+<div id="register_error"></div>
+</div>
+
+    <a style="margin-top:40px;" href="#" class="welcome-button-nd btn btn-large btn-danger" tabindex="104" id="welcome-subscribe-button">Tiếp tục</a>
+<script type="text/javascript">
+             
+
+            $("#welcome-subscribe-button").click(function() {
+                var name = $("#subscr_name").val();
+                var email = $("#subscr_email").val();
+                var phone = $("#subscr_phone").val();
+                var contact = $("#subscr_contact").val();
+                if (name == '' || name.indexOf("cai mep") != -1) {
+                    $("#subscr_name").focus();
+                     $("#subscr_name").val('');
+                }
+
+                else if (email == '' || !fn_is_valid_email(email)) {
+                    $("#register_error").html("Vui lòng nhập địa chỉ email hợp lệ.");
+                    $("#subscr_email").focus();
+                } 
+                else if (phone == '') {
+                    $("#subscr_phone").focus();
+                }
+                else if (contact == '') {
+                    $("#subscr_contact").focus();
+                }
+                else {
+                    //$("form[name='subscribe_form_welcome']").submit();
+                    $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+
+                    $.ajax({
+                        url: '<?php echo BASE_URL ?>/subscription/',
+                        type: 'POST',
+                        data: {
+                            subscr_name: name,
+                            subscr_email: email,
+                            subscr_phone: phone,
+                            subscr_contact: contact,
+                        },
+                        success:function(data){
+                           $('#loading').fadeOut(500);
+                            if (data.trim() != 'OK') {
+                                $("#register_error").html(data.trim());
+                                $("#subscr_name").focus();
+                            }
+                            else{
+                                var date = new Date();
+                                date.setTime(date.getTime()+(30*24*60*60*500));
+                                
+                                $.cookie('cus_email', email, {expires: date});
+
+                                window.location.href = "<?php echo $this->url('quotation') ?>";
+                            }
+                        }
+                    });
+                }
+                return false;
+            });
+        </script>
+</div>
+</div>
+<script type="text/javascript">
+    function fn_is_valid_email(email){
+        var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        return filter.test(email);
+    }
+
+   
+</script>
+
+<!-- ----------------------------------------------------------- -->
+<?php } ?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field" style="display:block">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Bảng giá cước <img src="<?php echo BASE_URL ?>/public/img/trans.png"></h3></span>
+            </legend>
+
+            <div class="tabs">
+                <ul class="tab-links">
+                    <li class="active"><a href="#tab1">Vận tải đường bộ</a></li>
+                    <li><a href="#tab7">Vận tải đường thủy</a></li>
+                    <li><a href="#tab5">Thủ tục hải quan</a></li>
+                    <li><a href="#tab6">Nâng hạ tại cảng</a></li>
+                    <li><a href="#tab10">Container</a></li>
+                    
+                </ul>
+             
+                <div class="tab-content">
+                    <div id="tab1" class="tab active">
+                        <form id="quotation" method="post" action="">
+                              <table class="quotation" style="margin:0px auto;">
+                                <tr>
+                                    
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    
+                                    
+                                </tr>
+                                <tr id="show_type_feet">
+                                    
+                                    <td>Điểm đi </td>
+                                    <td>
+                                        <select style="width:100px" id="loc_from" name="loc_from" autofocus required="required" tabindex="1">
+                                            <?php foreach($locations as $dist){ ?>
+                                            <option value="<?php echo $dist->district_id ?>"><?php echo $dist->district_name ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <input required="required" autocomplete="off" placeholder="Nhập tên hoặc * để chọn" type="text" name="loc_from_name" id="loc_from_name">
+                                        <ul id="loc_from_list_id"></ul>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td><input required="required" type="checkbox" name="con_type" value="feet" tabindex="3" /> Loại container </td>
+                                    <td>
+                                        
+                                        
+                                    </td>
+                                    <td>
+                                        
+                                    </td>
+                                    <td style="padding-left:5px"></td>
+                                    <td style="padding-left:5px"></td>
+
+                                    
+
+                                </tr>
+                                <tr id="show_type_ton">
+                                    
+                                    <td>Điểm đến </td>
+                                    <td>
+                                        <select style="width:100px" id="loc_to" name="loc_to"  required="required" tabindex="2">
+                                            <?php foreach($locations as $dist){ ?>
+                                            <option value="<?php echo $dist->district_id ?>"><?php echo $dist->district_name ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <input required="required" autocomplete="off" placeholder="Nhập tên hoặc * để chọn" type="text" name="loc_to_name" id="loc_to_name">
+                                        <ul id="loc_to_list_id"></ul>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td><input required="required" type="checkbox" name="con_type" value="ton" tabindex="4" /> Khối lượng</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <?php if (isset($_SESSION['role_logined']) && $_SESSION['role_logined'] == 4) { ?>
+
+                                <tr>
+                                    
+                                    <td>Tên khách hàng</td>
+                                    <td><input type="text" id="customer_name" name="customer_name"  tabindex="5"></td>
+                                    
+                                </tr>
+                                <tr>
+                                    
+                                    <td>Email</td>
+                                    <td><input style="width: 170px;" type="email" id="customer_email" name="customer_email"  tabindex="6"></td>
+                                
+                                    
+                                </tr>
+                                <tr>
+                                    <td>Số điện thoại</td>
+                                    <td><input type="text" class="numbers" pattern=".{12,13}" minlength="12" maxlength="13" id="customer_phone" name="customer_phone"  tabindex="7"></td>
+
+                                </tr>
+                                <?php } ?>
+                                <tr>
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input type="submit" name="submit" value="Xem giá" tabindex="8"></td>
+                                    <td ><input type="reset" name="reset" value="Chọn lại" tabindex="9"></td>
+                                    <td></td>
+
+                                     
+                                </tr>
+                                <tr>
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="9"><b style="margin-left:0px" id="none" class="error"></b></td>
+                                    
+                                    
+
+                                </tr>
+                                
+                                
+                                 
+                            </table> 
+                        </form>
+                        <?php if (isset($_SESSION['role_logined']) && ($_SESSION['role_logined'] == 4 || $_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 3) ) {  ?>
+                            <table style="display:none" id="export" class="quotation">
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><b>Giá Net</b></td>
+                                    <td colspan="2"><input type="text" id="price" name="price" readonly value="0" ></td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><b>Giá Chào</b></td>
+                                    <td colspan="2"><input type="text" id="price_fix" name="price_fix" readonly value="0" ></td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><b>Giá đề nghị</b></td>
+                                    <td colspan="2"><input type="text" class="number" id="price_suggest" name="price_suggest" tabindex="9"  value="0" > <input type="button" id="submit_suggest" name="submit_suggest" value="Đề nghị giá" tabindex="10"></td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    
+
+                                     
+                                </tr>
+                                <tr>
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <form  name="export" action="<?php echo $this->url('newquotation/export') ?>" method="post">
+                                            <input type="hidden" value="" name="loc_from" id="export_from">
+                                            <input type="hidden" value="" name="loc_to" id="export_to">
+                                            <input type="hidden" value="" name="normal" id="export_normal">
+                                            <input type="hidden" value="" name="special" id="export_special">
+                                            <input type="hidden" value="" name="tons" id="export_tons">
+                                            <input type="hidden" value="" name="soluong" id="export_soluong">
+                                            <input type="hidden" value="" name="sotan" id="export_sotan">
+                                            <input type="hidden" value="" name="quatai" id="export_quatai">
+                                            <input type="submit" value="Tải về file báo giá" name="submit">
+                                        </form>
+                                    </td>
+                                    
+                                    
+                                    
+                                </tr>
+                        </tbody></table>
+                        <?php } ?>
+                        <table id="show_all" class="table_data" style="width: 60%; margin: 0 auto;"></table>
+                    </div>
+                    <div id="tab5" class="tab">
+                        <ul class="tab-left">
+                            <li  class="active"><a href="#tab2">Mở tờ khai</a></li>
+                            <li><a href="#tab3">Chuyển cảng</a></li>
+                            <li><a href="#tab4">Manifest</a></li>
+                        </ul>
+                        <div class="tab-content-left">
+                            <div id="tab2" class="tab active">
+                                <form id="quotation_2" method="post" action="">
+                                      <table class="quotation" style="margin:0px auto;">
+                                        <tr>
+                                            
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td>
+                                                
+                                            </td>
+                                            <td>
+                                                
+                                            </td>
+                                            <td><input required="required" type="checkbox" name="import_export_type" value="import" tabindex="1" /> Nhập </td>
+                                            
+                                            <td><input required="required" type="checkbox" name="import_export_type" value="export" tabindex="2" /> Xuất </td>
+                                            
+                                            <td>
+                                                
+                                                
+                                            </td>
+                                            
+
+                                            
+
+                                        </tr>
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+
+                                        </tr>
+
+                                        <tr>
+                                            
+                                           
+                                            <td></td>
+                                            <td>Số lượng container</td>
+                                            <td>
+                                                <input type="text" min="1" class="number" tabindex="3" id="import_export" name="import_export" value="0" required="required">
+                                            </td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+
+                                        </tr>
+
+                                        <?php if (isset($_SESSION['role_logined']) && $_SESSION['role_logined'] == 4) { ?>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>Tên khách hàng</td>
+                                            <td><input type="text" id="imex_customer_name" name="imex_customer_name"  tabindex="4"></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>Email</td>
+                                            <td><input style="width: 170px;" type="email" id="imex_customer_email" name="imex_customer_email"  tabindex="5"></td>
+                                        
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>Số điện thoại</td>
+                                            <td><input type="text" class="numbers" pattern=".{12,13}" minlength="12" maxlength="13" id="imex_customer_phone" name="imex_customer_phone"  tabindex="6"></td>
+
+                                        </tr>
+                                        <?php } ?>
+                                        
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td><input type="submit" name="show_import_export" value="Xem giá" tabindex="7" id="show_import_export"></td>
+                                            <td ><input type="reset" name="reset" value="Chọn lại" tabindex="8"></td>
+                                            
+
+                                             
+                                        </tr>
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+                                            
+
+                                        </tr>
+
+                                    </table> 
+                                </form>
+
+                                <table style="display:none" id="tbtokhai" class="quotation">
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><b>Giá đơn hàng</b></td>
+                                            <td ><input type="text" id="price_import_export" name="price_import_export" readonly value="0" ></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="4">1. Giá trên chưa bao gồm V.A.T 10%</td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="4">2. Để có giá tốt hơn hãy liên hệ với nhân viên của chúng tôi qua hotline: <font class="error">096.881.3456 - 083.500.9000</font><p> Chúng tôi sẵn sàng cung cấp dịch vụ tốt nhất với chi phí thấp nhất cho khách hàng.</td>
+                                            
+                                        </tr>
+                                 
+                                    <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <form style="display:none" id="export_tokhai" name="export_tokhai" action="<?php echo $this->url('quotation/exporttokhai') ?>" method="post">
+                                                    <input type="hidden" value="" name="export_import_export_type" id="export_import_export_type">
+                                                    <input type="hidden" value="0" name="export_import_export" id="export_import_export">
+                                                    <input type="submit" value="Tải về file báo giá" name="submit">
+                                                </form>
+                                            </td>
+                                            
+                                            
+                                            
+                                        </tr>
+                                </table>
+                            </div>
+                     
+                            <div id="tab3" class="tab">
+                                <form id="quotation_3" method="post" action="">
+                                      <table class="quotation" style="margin:0px auto;">
+                                        <tr>
+                                            
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td>
+                                                
+                                            </td>
+                                            <td>
+                                                
+                                            </td>
+                                            <td><input required="required" type="checkbox" name="chuyencang_type" value="bo" tabindex="1" /> Đường bộ </td>
+                                            
+                                            <td><input required="required" type="checkbox" name="chuyencang_type" value="salan" tabindex="2" /> Sà lan </td>
+                                            
+                                            
+                                            
+                                            
+
+                                            
+
+                                        </tr>
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td>Số lượng container</td>
+                                            <td>
+                                                <input min="1" type="text" class="number" tabindex="3" id="chuyencang" name="chuyencang" value="0" required="required">
+                                            </td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+
+                                        </tr>
+
+                                        <?php if (isset($_SESSION['role_logined']) && $_SESSION['role_logined'] == 4) { ?>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>Tên khách hàng</td>
+                                            <td><input type="text" id="chuyencang_customer_name" name="chuyencang_customer_name"  tabindex="4"></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>Email</td>
+                                            <td><input style="width: 170px;" type="email" id="chuyencang_customer_email" name="chuyencang_customer_email"  tabindex="5"></td>
+                                        
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>Số điện thoại</td>
+                                            <td><input type="text" class="numbers" pattern=".{12,13}" minlength="12" maxlength="13" id="chuyencang_customer_phone" name="chuyencang_customer_phone"  tabindex="6"></td>
+
+                                        </tr>
+                                        <?php } ?>
+                                        
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td><input type="submit" name="show_chuyencang" value="Xem giá" tabindex="7" id="show_chuyencang"></td>
+                                            <td ><input type="reset" name="reset" value="Chọn lại" tabindex="8"></td>
+                                            
+
+                                             
+                                        </tr>
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+                                            
+
+                                        </tr>
+                                    </table> 
+                                </form>
+                                <table style="display:none" id="tbchuyencang" class="quotation">
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><b>Giá đơn hàng</b></td>
+                                            <td ><input type="text" id="price_chuyencang" name="price_chuyencang" readonly value="0" ></td>
+                                            <td></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                           
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="4">1. Giá trên chưa bao gồm V.A.T 10%</td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            
+                                            <td colspan="4">2. Để có giá tốt hơn hãy liên hệ với nhân viên của chúng tôi qua hotline: <font class="error">096.881.3456 - 083.500.9000</font><p> Chúng tôi sẵn sàng cung cấp dịch vụ tốt nhất với chi phí thấp nhất cho khách hàng.</td>
+                                            
+                                        </tr>
+                                         
+                                
+                                    <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <form style="display:none" id="export_chuyen_cang" name="export_chuyen_cang" action="<?php echo $this->url('quotation/exportchuyencang') ?>" method="post">
+                                                    <input type="hidden" value="" name="export_chuyencang_type" id="export_chuyencang_type">
+                                                    <input type="hidden" value="0" name="export_chuyencang" id="export_chuyencang">
+                                                    <input type="submit" value="Tải về file báo giá" name="submit">
+                                                </form>
+                                            </td>
+                                            
+                                            
+                                            
+                                        </tr>
+                                </table>
+                            </div>
+                     
+                            <div id="tab4" class="tab">
+                                <form id="quotation_4" method="post" action="">
+                                      <table class="quotation" style="margin:0px auto;">
+                                        <tr>
+                                            
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td></td>
+                                               <td>
+                                                
+                                            </td> 
+                                                
+                                            <td>
+                                                <select style="width:200px" id="type_1" name="type_1" autofocus  tabindex="1">
+                                                    <option value="-1"> -- Chỉnh chi tiết -- </option>
+                                                    <?php
+
+                                                    foreach ($type_1 as $type_1) {
+                                                      echo '<option value="'.$type_1->manifest_id.'">'.$type_1->manifest_case.'</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </td>
+                                            
+                                            <td>
+                                                <select style="width:200px" id="type_2" name="type_2"  tabindex="2">
+                                                    <option value="-1"> -- Chỉnh đặc biệt -- </option>
+                                                    <?php
+
+                                                    foreach ($type_2 as $type_2) {
+                                                      echo '<option value="'.$type_2->manifest_id.'">'.$type_2->manifest_case.'</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </td>
+                                            
+                                            
+
+                                            
+
+                                        </tr>
+                                         
+                                        
+                                        <tr>
+                                            
+                                            <td></td>
+                                            <td>Số lượng bill</td>
+                                            <td>
+                                                <input min="1" type="text" class="number" tabindex="3" id="manifest" name="manifest" value="0" required="required">
+                                            </td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            
+
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td><input required="required" type="checkbox" name="manifest_port" value="hcm" tabindex="4" /> HCM</td>
+                                            <td><input required="required" type="checkbox" name="manifest_port" value="caimep" tabindex="5" /> Cái Mép</td>
+                                            <td></td>
+                                            
+
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            
+                                            
+
+                                        </tr>
+
+                                        <?php if (isset($_SESSION['role_logined']) && $_SESSION['role_logined'] == 4) { ?>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>Tên khách hàng</td>
+                                            <td><input type="text" id="manifest_customer_name" name="manifest_customer_name"  tabindex="6"></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>Email</td>
+                                            <td><input style="width: 170px;" type="email" id="manifest_customer_email" name="manifest_customer_email"  tabindex="7"></td>
+                                        
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>Số điện thoại</td>
+                                            <td><input type="text" class="numbers" pattern=".{12,13}" minlength="12" maxlength="13" id="manifest_customer_phone" name="manifest_customer_phone"  tabindex="8"></td>
+
+                                        </tr>
+                                        <?php } ?>
+
+                                        <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            
+                                            
+
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="float:right"><input type="submit" name="show_manifest" value="Xem giá" tabindex="9" ></td>
+                                            <td ><input type="reset" name="reset" value="Chọn lại" tabindex="10"></td>
+                                            
+                                            
+
+                                             
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            
+
+                                        </tr>
+
+                                         
+                                    </table> 
+                                </form>
+                                <table class="quotation" style="display:none" id="tbmanifest">
+                                        <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><b>Giá đơn hàng</b></td>
+                                            <td ><input type="text" id="price_manifest" name="price_manifest" readonly value="0" ></td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+
+                                            <td></td>
+                                            <td colspan="2">1. Giá trên chưa bao gồm V.A.T 10%</td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="2">2. Trong trường hợp đặc biệt (chỉnh mô tả hàng hóa) chúng ta sẽ thảo luận tùy trường hợp <p> Chúng tôi sẵn sàng cung cấp dịch vụ tốt nhất với chi phí thấp nhất cho khách hàng.</td>
+                                            
+                                            
+                                        </tr>
+                                
+                                    <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <form style="display:none" id="export_chinhmanifest" name="export_chinhmanifest" action="<?php echo $this->url('quotation/exportmanifest') ?>" method="post">
+                                                    <input type="hidden" value="" name="export_type_1" id="export_type_1">
+                                                    <input type="hidden" value="" name="export_type_2" id="export_type_2">
+                                                    <input type="hidden" value="0" name="export_manifest" id="export_manifest">
+                                                    <input type="submit" value="Tải về file báo giá" name="submit">
+                                                </form>
+                                            </td>
+                                            
+                                            
+                                            
+                                        </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab6" class="tab">
+                        <form id="quotation_5" method="post" action="">
+                              <table class="quotation" style="margin:0px auto;">
+                                <tr>
+                                    
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    
+                                    
+                                </tr>
+                                <tr>
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input required="required" type="checkbox" name="truck_barge" value="1" tabindex="2" /> Xe <=> Bãi</td>
+                                    <td><input required="required" type="checkbox" name="truck_barge" value="0" tabindex="3" /> Sà lan <=> Bãi </td>
+                                    <td></td>
+
+                                </tr>
+                                <tr>
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td>Cảng </td>
+                                    <td>
+                                        <select style="width:150px" id="port" name="port" autofocus required="required" tabindex="1">
+                                            <?php
+                                            foreach ($ports as $port) {
+                                                $sl = $port->port_name=="Cát Lái"?"selected":"";
+                                                echo '<option '.$sl.' value="'.$port->port_id.'">'.$port->port_name.'</option>';
+                                            }
+                                            
+                                            ?>
+                                        </select>
+                                    </td>
+                                    
+                                    <td>
+                                        
+                                        
+                                    </td>
+                                    <td></td>
+
+                                    
+
+                                </tr>
+                                <tr class="nang_ha">
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                
+                                <tr class="nang_ha">
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td>Phương án</td>
+                                    <td><input required="required" type="checkbox" name="lift" value="1" tabindex="4" /> Nâng </td>
+                                    <td><input required="required" type="checkbox" name="lift" value="0" tabindex="5" /> Hạ </td>
+                                    <td></td>
+
+                                </tr>
+                                
+                                
+                                <tr class="nang_ha">
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <tr class="nang_ha">
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td>Trạng thái</td>
+                                    <td><input required="required" type="checkbox" name="status" value="1" tabindex="9" /> Hàng </td>
+                                    <td><input required="required" type="checkbox" name="status" value="0" tabindex="10" /> Rỗng </td>
+                                    <td></td>
+
+                                </tr>
+                                <tr class="nang_ha">
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <tr class="nang_ha">
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td>Loại container</td>
+                                    <td>
+                                        <select style="width:100px" name="handling_cont_type" id="handling_cont_type" tabindex="6">
+                                            <option value="20" >20'</option>
+                                            <option value="40" >40'</option>
+                                            <option value="45" >45'</option>
+                                        </select>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <tr class="nang_ha">
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <?php if (isset($_SESSION['role_logined']) && $_SESSION['role_logined'] == 4) { ?>
+
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Tên khách hàng</td>
+                                            <td><input type="text" id="handling_customer_name" name="handling_customer_name"  tabindex="7"></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Email</td>
+                                            <td><input style="width: 170px;" type="email" id="handling_customer_email" name="handling_customer_email"  tabindex="8"></td>
+                                        
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Số điện thoại</td>
+                                            <td><input type="text" class="numbers" pattern=".{12,13}" minlength="12" maxlength="13" id="handling_customer_phone" name="handling_customer_phone"  tabindex="9"></td>
+
+                                        </tr>
+                                        <?php } ?>
+                                
+                                <tr>
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input type="submit" name="submit" value="Xem giá" tabindex="10"></td>
+                                    <td ><input type="reset" name="reset" value="Chọn lại" tabindex="11"></td>
+                                    <td></td>
+
+                                     
+                                </tr>
+                                
+                                
+                                <tr>
+                                            
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>&nbsp;</td>
+                                        
+
+                                    </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td colspan="5"><b style="margin-left:0px" id="none_handling" class="error"></b></td>
+                                    
+                                    
+                                    <td></td>
+
+                                </tr>
+                            </table>
+                            <table class="quotation" style="display: none" id="tbnangha">
+
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><b>Giá đơn hàng</b></td>
+                                            <td ><input type="text" id="price_handling" name="price_handling" readonly value="0" ></td>
+                                            <td></td>
+                                            <td></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="4">1. Giá trên chưa bao gồm V.A.T 10%</td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="4">2. Để có giá tốt hơn hãy liên hệ với nhân viên của chúng tôi qua hotline: <font class="error">096.881.3456 - 083.500.9000</font><p> Chúng tôi sẵn sàng cung cấp dịch vụ tốt nhất với chi phí thấp nhất cho khách hàng.</td>
+                                            
+                                        </tr>
+                                
+                                
+                                
+                                 
+                            </table> 
+                            
+                        </form>
+                    </div>
+                    <div id="tab7" class="tab">
+                        <form id="quotation_6" method="post" action="">
+                              <table class="quotation" style="margin:0px auto;">
+                                <tr>
+                                    
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    
+                                    
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    
+                                    <td>Điểm đi </td>
+                                    <td>
+                                        <select style="width:150px" id="ship_from" name="ship_from" autofocus required="required" tabindex="1">
+                                            <?php
+                                            
+                                            foreach ($districts as $district) {
+                                                $port_from = $district->district_name;
+                                                if ($port_from=="TP Hải Phòng") {
+                                                    $port_from = "Hải Phòng";
+                                                }
+                                                else if ($port_from=="TP Đà Nẵng") {
+                                                    $port_from = "Đà Nẵng";
+                                                }
+                                                else if ($port_from=="Khánh Hòa") {
+                                                    $port_from = "Nha Trang";
+                                                }
+                                                else if ($port_from=="Bình Định") {
+                                                    $port_from = "Quy Nhơn";
+                                                }
+                                                else if ($port_from=="Bà Rịa - Vũng Tàu") {
+                                                    $port_from = "Cái Mép";
+                                                }
+                                                echo '<option value="'.$district->district_id.'">Cảng '.$port_from.'</option>';
+                                            }
+                                            
+                                            ?>
+                                        </select>
+                                    </td>
+                                    <td></td>
+                                    <td>Điểm đến </td>
+                                    <td>
+                                        <select style="width:150px" id="ship_to" name="ship_to" autofocus required="required" tabindex="2">
+                                            <?php
+                                            foreach ($districts as $district) {
+                                                $port_to = $district->district_name;
+                                                if ($port_to=="TP Hải Phòng") {
+                                                    $port_to = "Hải Phòng";
+                                                }
+                                                else if ($port_to=="TP Đà Nẵng") {
+                                                    $port_to = "Đà Nẵng";
+                                                }
+                                                else if ($port_to=="Khánh Hòa") {
+                                                    $port_to = "Nha Trang";
+                                                }
+                                                else if ($port_to=="Bình Định") {
+                                                    $port_to = "Quy Nhơn";
+                                                }
+                                                else if ($port_to=="Bà Rịa - Vũng Tàu") {
+                                                    $port_to = "Cái Mép";
+                                                }
+                                                echo '<option value="'.$district->district_id.'">Cảng '.$port_to.'</option>';
+                                            }
+                                            
+                                            ?>
+                                        </select>
+                                    </td>
+
+                                    
+
+                                </tr>
+                                
+                                <tr>
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input type="submit" name="submit" value="Xem giá" tabindex="5"></td>
+                                    <td ><input type="reset" name="reset" value="Chọn lại" tabindex="6"></td>
+                                    <td></td>
+
+                                     
+                                </tr>
+                                <tr>
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td colspan="5"><b style="margin-left:0px" id="none" class="error"></b></td>
+                                    
+                                    
+                                    <td></td>
+
+                                </tr>
+                                
+                                
+                                
+                                
+                                 
+                            </table> 
+                            <table id="price_shipping" width="100%" border="1" style="display:none">
+                                <thead>
+                                    <tr style="background: #43A9E2; color: white">
+                                        <th>CẢNG ĐI</th>
+                                        <th>CẢNG ĐẾN</th>
+                                        <th>20'</th>
+                                        <th>40'</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td align="center" id="shipping_from"></td>
+                                        <td align="center" id="shipping_to"></td>
+                                        <td align="center" class="number" id="shipping_c20"></td>
+                                        <td align="center" class="number" id="shipping_c40"></td>
+                                        
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                            <table id="note_ship" style="display:none">
+                                <tr>
+                                    
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    
+                                    <td colspan="4">1. Giá trên chưa bao gồm V.A.T 10%</td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    
+                                    <td colspan="4">2. Để có giá tốt hơn hãy liên hệ với nhân viên của chúng tôi qua hotline: <font class="error">096.881.3456 - 083.500.9000</font><p> Chúng tôi sẵn sàng cung cấp dịch vụ tốt nhất với chi phí thấp nhất cho khách hàng.</td>
+                                    
+                                </tr>
+                            </table>
+                        </form>
+                        <table class="quotation" id="thuy" style="display:none">
+                                    <tr>
+                                            
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <form id="export_thuy" name="export_thuy" action="<?php echo $this->url('quotation/exportship') ?>" method="post">
+                                                    <input type="hidden" value="1" name="export_port_from" id="export_port_from">
+                                                    <input type="hidden" value="1" name="export_port_to" id="export_port_to">
+                                                    <input type="submit" value="Tải về file báo giá" name="submit">
+                                                </form>
+                                            </td>
+                                            
+                                            
+                                            
+                                        </tr>
+                                </table>
+                    </div>
+
+                    <div id="tab10" class="tab">
+                        <ul class="tab-left">
+                            <li class="active"><a href="#tab8">Thuê container</a></li>
+                            <li><a href="#tab9">Mua container</a></li>
+                        </ul>
+                        <div class="tab-content-left">
+                            <div id="tab8" class="tab active">
+                                        <form id="quotation_7" method="post" action="">
+                                              <table class="quotation" style="margin:0px auto;">
+                                                <tr>
+                                                    
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td>
+                                                        
+                                                    </td>
+                                                    <td>
+                                                        Loại container
+                                                    </td>
+                                                    <td>
+                                                        <select id="cont_type">
+                                                            <option value="c20_dc">20' DC (Thường)</option>
+                                                            <option value="c40_dc">40' DC (Thường)</option>
+                                                            <option value="c20_ot">20' OT (Mở nắp)</option>
+                                                            <option value="c40_ot">40' OT (Mở nắp)</option>
+                                                            <option value="c20_vf">20' VF (Văn phòng)</option>
+                                                            <option value="c40_vf">40' VF (Văn phòng)</option>
+                                                        </select>
+                                                    </td>
+                                                    
+                                                    <td></td>
+                                                    
+                                                    <td>
+                                                        
+                                                        
+                                                    </td>
+                                                    
+
+                                                    
+
+                                                </tr>
+
+                                                <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                                    <td>Số ngày thuê </td>
+                                                    <td>
+                                                        <input type="text" min="1" class="number" tabindex="2" id="day_rent" name="day_rent" value="0" required="required">
+                                                    </td>
+                                                    <td></td>
+                                                    <td>&nbsp;</td>
+                                                    <td></td>
+
+                                                </tr>
+                                                
+
+                                                <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                                    <td>Số lượng container </td>
+                                                    <td>
+                                                        <input type="text" min="1" class="number" tabindex="3" id="cont_rent" name="cont_rent" value="0" required="required">
+                                                    </td>
+                                                    <td></td>
+                                                    <td>&nbsp;</td>
+                                                    <td></td>
+
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>&nbsp;</td>
+                                                    <td></td>
+
+                                                </tr>
+
+                                                <?php if (isset($_SESSION['role_logined']) && $_SESSION['role_logined'] == 4) { ?>
+
+                                            <tr>
+                                                <td></td>
+                                                <td>Tên khách hàng</td>
+                                                <td><input type="text" id="rent_customer_name" name="rent_customer_name"  tabindex="4"></td>
+                                                
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td>Email</td>
+                                                <td><input style="width: 170px;" type="email" id="rent_customer_email" name="rent_customer_email"  tabindex="5"></td>
+                                            
+                                                
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td>Số điện thoại</td>
+                                                <td><input type="text" class="numbers" pattern=".{12,13}" minlength="12" maxlength="13" id="rent_customer_phone" name="rent_customer_phone"  tabindex="6"></td>
+
+                                            </tr>
+                                            <?php } ?>
+                                                
+                                                <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>&nbsp;</td>
+                                                    <td></td>
+
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td><input type="submit" name="show_cont_rent" value="Xem giá" tabindex="7" id="show_cont_rent"></td>
+                                                    <td ><input type="reset" name="reset" value="Chọn lại" tabindex="8"></td>
+                                                    
+
+                                                     
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>&nbsp;</td>
+                                                    <td></td>
+
+                                                </tr>
+
+                                            </table> 
+                                        </form>
+                                        <table class="quotation" style="display:none" id="tbthue">
+                                                <tr>
+                                                    
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                                    <td><b>Giá đơn hàng</b></td>
+                                                    <td ><input type="text" id="price_cont_rent" name="price_cont_rent" readonly value="0" ></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>&nbsp;</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                                    
+                                                    <td colspan="4">1. Giá trên chưa bao gồm V.A.T 10%</td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                                    
+                                                    <td colspan="4">2. Để có giá tốt hơn hãy liên hệ với nhân viên của chúng tôi qua hotline: <font class="error">096.881.3456 - 083.500.9000</font><p> Chúng tôi sẵn sàng cung cấp dịch vụ tốt nhất với chi phí thấp nhất cho khách hàng.</td>
+                                                    
+                                                </tr>
+                                        
+                                            <tr>
+                                                    
+                                                   
+                                                    <td></td>
+                                                    <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                                    <td>
+                                                        <form style="display:none" id="export_thuecont" name="export_thuecont" action="<?php echo $this->url('quotation/exportthue') ?>" method="post">
+                                                            <input type="hidden" value="c20_dc" name="export_cont_type_rent" id="export_cont_type_rent">
+                                                            <input type="hidden" value="0" name="export_day_rent" id="export_day_rent">
+                                                            <input type="hidden" value="0" name="export_cont_rent" id="export_cont_rent">
+                                                            <input type="submit" value="Tải về file báo giá" name="submit">
+                                                        </form>
+                                                    </td>
+                                                    
+                                                    
+                                                    
+                                                </tr>
+                                        </table>
+                                    </div>
+                                    <div id="tab9" class="tab">
+                                        <form id="quotation_8" method="post" action="">
+                                              <table class="quotation" style="margin:0px auto;">
+                                                <tr>
+                                                    
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    
+                                                    
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td>
+                                                        
+                                                    </td>
+                                                    <td>
+                                                        Loại container
+                                                    </td>
+                                                    <td>
+                                                        <select tabindex="1" id="cont_type_buy">
+                                                            <option value="c20_dc">20' DC (Thường)</option>
+                                                            <option value="c40_dc">40' DC (Thường)</option>
+                                                            <option value="c20_ot">20' OT (Mở nắp)</option>
+                                                            <option value="c40_ot">40' OT (Mở nắp)</option>
+                                                            <option value="c20_vf">20' VF (Văn phòng)</option>
+                                                            <option value="c40_vf">40' VF (Văn phòng)</option>
+                                                        </select>
+                                                    </td>
+                                                    
+                                                    <td></td>
+                                                    
+                                                    <td>
+                                                        
+                                                        
+                                                    </td>
+                                                    
+
+                                                    
+
+                                                </tr>
+
+                                                
+
+                                                <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                                    <td>Số lượng container </td>
+                                                    <td>
+                                                        <input type="text" min="1" class="number" tabindex="2" id="cont_buy" name="cont_buy" value="0" required="required">
+                                                    </td>
+                                                    <td></td>
+                                                    <td>&nbsp;</td>
+                                                    <td></td>
+
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>&nbsp;</td>
+                                                    <td></td>
+
+                                                </tr>
+                                                <?php if (isset($_SESSION['role_logined']) && $_SESSION['role_logined'] == 4) { ?>
+
+                                                <tr>
+                                                    <td></td>
+                                                    <td>Tên khách hàng</td>
+                                                    <td><input type="text" id="buy_customer_name" name="buy_customer_name"  tabindex="3"></td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>Email</td>
+                                                    <td><input style="width: 170px;" type="email" id="buy_customer_email" name="buy_customer_email"  tabindex="4"></td>
+                                                
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>Số điện thoại</td>
+                                                    <td><input type="text" class="numbers" pattern=".{12,13}" minlength="12" maxlength="13" id="buy_customer_phone" name="buy_customer_phone"  tabindex="5"></td>
+
+                                                </tr>
+                                                <?php } ?>
+                                                
+                                                <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>&nbsp;</td>
+                                                    <td></td>
+
+                                                </tr>
+                                                <tr>
+                                                   
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td><input type="submit" name="show_cont_buy" value="Xem giá" tabindex="6" id="show_cont_buy"></td>
+                                                    <td ><input type="reset" name="reset" value="Chọn lại" tabindex="7"></td>
+                                                    
+
+                                                     
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>&nbsp;</td>
+                                                    <td></td>
+
+                                                </tr>
+
+                                            </table> 
+                                        </form>
+                                        <table class="quotation" style="display:none" id="tbban">
+                                                <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                                    <td><b>Giá đơn hàng</b></td>
+                                                    <td ><input type="text" id="price_cont_buy" name="price_cont_buy" readonly value="0" ></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>&nbsp;</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                   
+                                                    <td></td>
+                                                    <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                                    
+                                                    <td colspan="4">1. Giá trên chưa bao gồm V.A.T 10%</td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td></td>
+                                                    <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                                    
+                                                    <td colspan="4">2. Để có giá tốt hơn hãy liên hệ với nhân viên của chúng tôi qua hotline: <font class="error">096.881.3456 - 083.500.9000</font><p> Chúng tôi sẵn sàng cung cấp dịch vụ tốt nhất với chi phí thấp nhất cho khách hàng.</td>
+                                                    
+                                                </tr>
+                                        
+                                            <tr>
+                                                    
+                                                    
+                                                    <td></td>
+                                                    <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                                    <td>
+                                                        <form style="display:none" id="export_muacont" name="export_muacont" action="<?php echo $this->url('quotation/exportmua') ?>" method="post">
+                                                            <input type="hidden" value="c20_dc" name="export_cont_type_buy" id="export_cont_type_buy">
+                                                            <input type="hidden" value="0" name="export_cont_buy" id="export_cont_buy">
+                                                            <input type="submit" value="Tải về file báo giá" name="submit">
+                                                        </form>
+                                                    </td>
+                                                    
+                                                    
+                                                    
+                                                </tr>
+                                        </table>
+                                    </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+
+            
+        </fieldset>
+    </div>
+<script type="text/javascript">
+$("#loc_from option[value='1']").attr("selected", "selected");
+$("#loc_to option[value='1']").attr("selected", "selected");
+
+$(':checkbox[name="truck_barge"]').bind('click',function(){
+    
+    if ($('input[name="truck_barge"]').is(':checked')) {
+        $('.nang_ha').slideDown(300);
+    }
+    else{
+        $('.nang_ha').slideUp();
+    }
+});
+
+$(':checkbox').bind('click',function(){
+     var th = $(this), name = th.prop('name'); 
+     if(th.is(':checked')){
+         $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
+
+        
+        if ($(this).val() == "feet") { 
+            $('#show_type_ton td:nth-last-child(2)').empty();
+            $('#show_type_ton td:nth-last-child(3)').empty();
+            $('#show_type_ton td:nth-last-child(4)').empty();
+            $( "#show_type_ton td:last" ).empty();
+
+            $( "#show_type_feet td:nth-last-child(4)" )
+            .append(
+                'Kích thước <br><select id="normal"  style="width:100px" name="feet"  required="required"><option value="20">20 feet</option><option value="40">40 feet</option><option value="45">45 feet</option><option value="220">2x20 feet</option></select> &nbsp; '
+                );
+
+            $( "#show_type_feet td:nth-last-child(3)" )
+            .append(
+                'Loại container <br><select id="special"  style="width:100px" name="type" required="required"><option value="1">DC (Thường)</option><option value="2">HC (Cao)</option><option value="3">RE (Lạnh)</option><option value="4">HR (Lạnh, cao)</option><option value="5">OT (Có thể mở nắp)</option><option value="6">FR (Có thể mở nắp, mở cạnh)</option></select>'
+                );
+            $( "#show_type_feet td:nth-last-child(2)" )
+            .append(
+                'Số lượng container <br><input style="width:30px" min="1" type="text" value="1" class="number" name="soluong" id="soluong" required="required">'
+                );
+            $( "#show_type_feet td:last" )
+            .append(
+                'Số tấn/container <br><input style="width:30px" min="1" type="text" value="1" class="number" name="sotan" id="sotan" required="required"> '
+                );
+
+            $('#sotan').keyup(function(){
+                var tan = parseFloat($(this).val());
+                if (tan >= 29 && $( "#show_type_ton td:last" ).is(':empty')) {
+                    $( "#show_type_ton td:last" )
+                        .append(
+                            '<input type="checkbox" value="1" class="number" name="quatai" id="quatai" > Quá tải quá khổ'
+                            );
+
+                        $('#quatai').click(function(){
+                            $("#export_quatai").val($(':checkbox[name="quatai"]:checked').val());
+                        });
+                }
+                else if (tan < 29 && $( "#show_type_ton td:last" ).not(':empty')){
+                    $( "#show_type_ton td:last" ).empty();
+                }
+            });
+
+            
+            $('#normal').change(function(){
+                $("#export_normal").val($(this).val());
+            });
+            $('#special').change(function(){
+                $("#export_special").val($(this).val());
+            });
+            $('#soluong').keyup(function(){
+                $("#export_soluong").val($(this).val());
+            });
+            $('#sotan').keyup(function(){
+                $("#export_sotan").val($(this).val());
+            });
+            $("#export_tons").val("");
+
+        }
+        else if ($(this).val() == "ton") { 
+            $('#show_type_feet td:nth-last-child(4)').empty();
+            $('#show_type_feet td:nth-last-child(3)').empty();
+            $('#show_type_feet td:nth-last-child(2)').empty();
+            $('#show_type_feet td:last').empty();
+            $( "#show_type_ton td:last" ).empty();
+
+            $( "#show_type_ton td:nth-last-child(4)" )
+            .append('Loại hàng <br><input style="width:80px"  type="text"  name="types" id="types" required="required"> ');
+
+            $( "#show_type_ton td:nth-last-child(3)" )
+            .append('Số tấn/container <br><input style="width:30px" min="1" type="text" value="1" class="number" name="tons" id="tons" required="required"> ');
+            $( "#show_type_ton td:nth-last-child(2)" )
+            .append(
+                'Số lượng container <br><input style="width:30px" min="1" type="text" value="1" class="number" name="soluong" id="soluong" required="required">'
+                );
+
+            $('#tons').keyup(function(){
+                var tan = parseFloat($(this).val());
+                if (tan >= 29 && $( "#show_type_ton td:last" ).is(':empty')) {
+                    $( "#show_type_ton td:last" )
+                        .append(
+                            '<input type="checkbox" value="1" class="number" name="quatai" id="quatai" > Quá tải quá khổ'
+                            );
+                        $('#quatai').click(function(){
+                            $("#export_quatai").val($(':checkbox[name="quatai"]:checked').val());
+                        });
+                }
+                else if (tan < 29 && $( "#show_type_ton td:last" ).not(':empty')){
+                    $( "#show_type_ton td:last" ).empty();
+                }
+            });
+
+            
+            $('#tons').keyup(function(){
+                $("#export_tons").val($(this).val());
+            });
+            $('#soluong').keyup(function(){
+                $("#export_soluong").val($(this).val());
+            });
+            $("#export_normal").val("");
+            $("#export_special").val("");
+            $("#export_sotan").val("");
+
+            
+        }
+        
+    }
+    else{
+            $('#show_type_feet td:nth-last-child(2)').empty();
+            $('#show_type_feet td:nth-last-child(3)').empty();
+            $('#show_type_feet td:nth-last-child(4)').empty();
+            $('#show_type_feet td:last').empty();
+            $('#show_type_ton td:nth-last-child(2)').empty();
+            $('#show_type_ton td:nth-last-child(3)').empty();
+            $('#show_type_ton td:nth-last-child(4)').empty();
+            $( "#show_type_ton td:last" ).empty();
+        }
+    
+    $('.number').focus(function(){
+        if ( $(this).val() == '0') {
+           $(this).val(""); 
+        };
+        
+    });
+    $('.number').blur(function(){
+        if ( $(this).val() == "") {
+            $(this).val(0);
+        };
+        
+    });
+    
+});
+
+$("#quotation").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var loc_from = $('#loc_from_name').attr('data');
+                    var new_from = $('#loc_from_name').val();
+                    var loc_to = $('#loc_to_name').attr('data');
+                    var new_to = $('#loc_to_name').val();
+                    var normal = $('#normal').val();
+                    var special = $('#special').val();
+                    var tons = $('#tons').attr('value');
+                    var soluong = $('#soluong').attr('value');
+                    var sotan = $('#sotan').attr('value');
+                    var quatai = $(':checkbox[name="quatai"]:checked').val();
+                    var loaihang = $('#types').attr('value');
+
+                    if($('#customer_name') != null){
+                        var customer_name = $('#customer_name').attr('value');
+                        var customer_email = $('#customer_email').attr('value');
+                        var customer_phone = $('#customer_phone').attr('value');
+
+                        /*if (customer_name == '') {
+                            $('#customer_name').focus();
+                            return false;
+                        }
+                        if (customer_email == '') {
+                            $('#customer_email').focus();
+                            return false;
+                        }
+                        if (customer_phone == '') {
+                            $('#customer_phone').focus();
+                            return false;
+                        }*/
+                    }
+                    else{
+                        var customer_name = null;
+                        var customer_email = null;
+                        var customer_phone = null;
+                    }
+
+                    var dist_from = $('#loc_from').val();
+                    var dist_to = $('#loc_to').val();
+                    
+                    if (normal == -1) {
+                        $('#normal').attr('class','error');
+                        $('#normal').focus();
+                        return false;
+                    };
+                    if (special == -1) {
+                        $('#special').attr('class','error');
+                        $('#special').focus();
+                        return false;
+                    };
+
+                    var action      = "them";
+
+                    <?php if(!isset($_SESSION['user_logined'])){ ?>
+                    $('#none').fadeIn(100);
+                    $('#none').html('Bảng báo giá đã được gửi tới email của bạn. Hãy liên hệ hotline để được hỗ trợ: 083 500 900 - 096 498 1100');
+                    $('#none').fadeOut(20000);
+                    <?php } ?>
+
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL; ?>/newquotation/getTransport", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            loc_from: loc_from,
+                            new_from: new_from,
+                            loc_to: loc_to,
+                            new_to: new_to,
+                            normal: normal,
+                            special: special,
+                            tons: tons,
+                            soluong: soluong,
+                            sotan: sotan,
+                            quatai: quatai,
+                            dist_from: dist_from,
+                            dist_to: dist_to,
+                            customer_email: customer_email,
+                            customer_name: customer_name,
+                            customer_phone: customer_phone,
+                            loaihang: loaihang,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            <?php if(isset($_SESSION['user_logined']) && ($_SESSION['role_logined'] == 5 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 1 )){ ?>
+                            var data = jQuery.parseJSON(answer);
+                            $('#show_all').empty();
+                            $('#show_all').append('<tr><th class="fix">Vendor</th><th class="fix">SĐT</th><th class="fix">Giá</th></tr>');
+                            $.each(data.data, function(index, trans) {
+                                var gia = 0;
+                                var fix = 1;
+                                var cont = trans.c40_feet;
+
+                                if (normal == 20) {
+                                    cont = trans.c20_feet;
+                                }
+                                else if(normal == 40){
+                                    cont = trans.c40_feet;
+                                }
+                                else if(normal == 45){
+                                    cont = trans.c45_feet;
+                                }
+                                else if(normal == 220){
+                                    cont = trans.c2x20_feet;
+                                }
+
+                                if(special == 3 || special == 4 || special == 5 || special == 6){
+                                    fix = 1.5;
+                                }
+
+                                if(sotan != 0){
+                                    if(sotan > 0 && sotan <= 20){
+                                        gia = (cont-200000)*soluong*fix;
+                                    }
+                                    else if(sotan > 20 && sotan < 29){
+                                        gia = cont*soluong*fix;
+                                    }
+                                    else if(sotan >= 29){
+                                        if (quatai == 1) {
+                                            gia = cont*2*soluong*fix;
+                                        }
+                                        else{
+                                            gia = Math.round(cont/29*sotan)*soluong*fix;
+                                        }
+                                    }
+                                }
+
+                                if(tons != 0){
+                                    if(tons > 0 && tons <= 20){
+                                        gia = (cont-200000)*soluong*fix;
+                                    }
+                                    else if(tons > 20 && tons < 29){
+                                        gia = cont*soluong*fix;
+                                    }
+                                    else if(tons >= 29){
+                                        if (quatai == 1) {
+                                            gia = cont*2*soluong*fix;
+                                        }
+                                        else{
+                                            gia = Math.round(cont/29*tons)*soluong*fix;
+                                        }
+                                    }
+                                }
+
+
+                              $('#show_all').append('<tr><td class="fix">' + trans.vendor_name + ' </td><td class="fix">' +
+                                                    trans.vendor_phone + '</td><td class="fix num"> ' +
+                                                    gia + '</td></tr>');
+                            });
+                                $('.num').text(function(index, value) {
+                                return value
+                                  .replace(/[^0-9-.]/g, "")
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                ;
+                              });
+
+                            <?php } ?>
+
+                            <?php if(isset($_SESSION['user_logined']) && ($_SESSION['role_logined'] == 4 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 1 )){ ?>
+                            $('#none').fadeIn(100);
+
+                            var data = jQuery.parseJSON(answer);
+
+                            if (data.from != null) {
+                                $('#loc_from_name').attr('data',data.from);
+                            };
+                            if (data.to != null) {
+                                $('#loc_to_name').attr('data',data.to);
+                            };
+
+                            $('#none').html(data.err);
+                            $('#none').fadeOut(10000);
+                            
+                            $('#price').val(data.bo); 
+                            $('#price_suggest').val(data.bo);
+                            $('#price_fix').val(data.fix);
+
+                            $('#price').val(function(index, value) {
+                                return value
+                                  .replace(/[^0-9-.]/g, "")
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                ;
+                              });
+                            $('#price_fix').val(function(index, value) {
+                                return value
+                                  .replace(/[^0-9-.]/g, "")
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                ;
+                              });
+                            $('#price_suggest').val(function(index, value) {
+                                return value
+                                  .replace(/[^0-9-.]/g, "")
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                ;
+                              });
+                            $('#price').val($('#price').val()+" VNĐ/"+soluong+" cont");
+                            $('#price_fix').val($('#price_fix').val()+" VNĐ/"+soluong+" cont");
+
+                            $('#price_ship').val(data.thuy); 
+                            $('#price_ship').val(function(index, value) {
+                                return value
+                                  .replace(/[^0-9-.]/g, "")
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                ;
+                              });
+                            $('#price_ship').val($('#price_ship').val()+" VNĐ/"+soluong+" cont");
+
+                            $('#export').slideDown(300);
+                            <?php } ?>
+                            
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+
+$("#quotation_2").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                    if($(':checkbox[name="import_export_type"]:checked').val()=="import"){
+                        var price = parseInt($('#import_export').val()) * 300000 + 400000;
+                        $('#price_import_export').val(price);
+
+                        var type = 1;
+                        var number = $('#import_export').val();
+
+                    }
+                    else if($(':checkbox[name="import_export_type"]:checked').val()=="export"){
+                        var price = parseInt($('#import_export').val()) * 400000 + 400000;
+                        $('#price_import_export').val(price);
+
+                        var type = 2;
+                        var number = $('#import_export').val();
+                    }
+                    $('#price_import_export').val(function(index, value) {
+                            return value
+                              .replace(/[^0-9-.]/g, "")
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            ;
+                          });
+                    $('#price_import_export').val($('#price_import_export').val() + " VNĐ/"+$('#import_export').val()+" cont");
+
+                    $('#tbtokhai').slideDown(300);
+                    $('#export_tokhai').slideDown(300);
+
+                    if($('#imex_customer_name') != null){
+                        var customer_name = $('#imex_customer_name').attr('value');
+                        var customer_email = $('#imex_customer_email').attr('value');
+                        var customer_phone = $('#imex_customer_phone').attr('value');
+
+                        /*if (customer_name == '') {
+                            $('#imex_customer_name').focus();
+                            return false;
+                        }
+                        if (customer_email == '') {
+                            $('#imex_customer_email').focus();
+                            return false;
+                        }
+                        if (customer_phone == '') {
+                            $('#imex_customer_phone').focus();
+                            return false;
+                        }*/
+                    }
+                    else{
+                        var customer_name = null;
+                        var customer_email = null;
+                        var customer_phone = null;
+                    }
+
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL; ?>/newquotation/importexport", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            type: type,
+                            number: number,
+                            customer_name: customer_name,
+                            customer_phone: customer_phone,
+                            customer_email: customer_email,
+                            price: price,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            
+                            
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+$("#quotation_3").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                    if($(':checkbox[name="chuyencang_type"]:checked').val()=="bo"){
+                        var price = parseInt($('#chuyencang').val()) * 110000 + 200000;
+                        $('#price_chuyencang').val(price);
+
+                        var type = 1;
+                        var number = $('#chuyencang').val();
+
+                    }
+                    else if($(':checkbox[name="chuyencang_type"]:checked').val()=="salan"){
+                        var price = parseInt($('#chuyencang').val()) * 80000 + 200000;
+                        $('#price_chuyencang').val(price);
+
+                        var type = 2;
+                        var number = $('#chuyencang').val();
+                    }
+                    $('#price_chuyencang').val(function(index, value) {
+                            return value
+                              .replace(/[^0-9-.]/g, "")
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            ;
+                          });
+                    $('#price_chuyencang').val($('#price_chuyencang').val() + " VNĐ/"+$('#chuyencang').val()+" cont");
+
+                    $('#tbchuyencang').slideDown(300);
+                    $('#export_chuyen_cang').slideDown(300);
+
+                    if($('#chuyencang_customer_name') != null){
+                        var customer_name = $('#chuyencang_customer_name').attr('value');
+                        var customer_email = $('#chuyencang_customer_email').attr('value');
+                        var customer_phone = $('#chuyencang_customer_phone').attr('value');
+
+                        /*if (customer_name == '') {
+                            $('#chuyencang_customer_name').focus();
+                            return false;
+                        }
+                        if (customer_email == '') {
+                            $('#chuyencang_customer_email').focus();
+                            return false;
+                        }
+                        if (customer_phone == '') {
+                            $('#chuyencang_customer_phone').focus();
+                            return false;
+                        }*/
+                    }
+                    else{
+                        var customer_name = null;
+                        var customer_email = null;
+                        var customer_phone = null;
+                    }
+
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL; ?>/newquotation/chuyencang", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            type: type,
+                            number: number,
+                            customer_name: customer_name,
+                            customer_phone: customer_phone,
+                            customer_email: customer_email,
+                            price: price,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            
+                            
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+
+    $("#quotation_4").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var type_1 = $('#type_1').attr('value');
+                    var type_2 = $('#type_2').attr('value');
+                    var manifest = $('#manifest').val();
+                    var manifest_port = $(':checkbox[name="manifest_port"]:checked').val();
+                    
+                    if (type_1 == -1 && type_2 == -1) {
+                        $('#type_1').attr('class','error');
+                        $('#type_2').attr('class','error');
+                        $('#type_1').focus();
+                        return false;
+                    };
+                    
+                    if($('#manifest_customer_name') != null){
+                        var customer_name = $('#manifest_customer_name').attr('value');
+                        var customer_email = $('#manifest_customer_email').attr('value');
+                        var customer_phone = $('#manifest_customer_phone').attr('value');
+
+                        /*if (customer_name == '') {
+                            $('#manifest_customer_name').focus();
+                            return false;
+                        }
+                        if (customer_email == '') {
+                            $('#manifest_customer_email').focus();
+                            return false;
+                        }
+                        if (customer_phone == '') {
+                            $('#manifest_customer_phone').focus();
+                            return false;
+                        }*/
+                    }
+                    else{
+                        var customer_name = null;
+                        var customer_email = null;
+                        var customer_phone = null;
+                    }
+
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL; ?>/newquotation/getManifest", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            type_1: type_1,
+                            type_2: type_2,
+                            manifest: manifest,
+                            manifest_port: manifest_port,
+                            customer_email: customer_email,
+                            customer_phone: customer_phone,
+                            customer_name: customer_name,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            
+
+                            $('#price_manifest').val(answer);  
+                            $('#price_manifest').val(function(index, value) {
+                                return value
+                                  .replace(/[^0-9-.]/g, "")
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                ;
+                              });
+                            
+                            $('#price_manifest').val($('#price_manifest').val()+" VNĐ/"+$('#manifest').val()+" bill");
+                            
+                            $('#tbmanifest').slideDown(300);
+                            $('#export_chinhmanifest').slideDown(300);
+                            
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+$("#quotation_5").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var port = $('#port').attr('value');
+                    var truck_barge = $(':checkbox[name="truck_barge"]:checked').val();
+                    var lift = $(':checkbox[name="lift"]:checked').val();
+                    var status = $(':checkbox[name="status"]:checked').val();
+                    var handling_cont_type = $('#handling_cont_type').val();
+
+                    if($('#handling_customer_name') != null){
+                        var customer_name = $('#handling_customer_name').attr('value');
+                        var customer_email = $('#handling_customer_email').attr('value');
+                        var customer_phone = $('#handling_customer_phone').attr('value');
+
+                        /*if (customer_name == '') {
+                            $('#handling_customer_name').focus();
+                            return false;
+                        }
+                        if (customer_email == '') {
+                            $('#handling_customer_email').focus();
+                            return false;
+                        }
+                        if (customer_phone == '') {
+                            $('#handling_customer_phone').focus();
+                            return false;
+                        }*/
+                    }
+                    else{
+                        var customer_name = null;
+                        var customer_email = null;
+                        var customer_phone = null;
+                    }
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL; ?>/newquotation/getHandling", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            port: port,
+                            truck_barge: truck_barge,
+                            lift: lift,
+                            status: status,
+                            handling_cont_type: handling_cont_type,
+                            customer_name: customer_name,
+                            customer_phone: customer_phone,
+                            customer_email: customer_email,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            var data = jQuery.parseJSON(answer);
+                            
+                            $('#none_handling').html(data.err);
+                            $('#none_handling').fadeOut(10000);
+                            $('#price_handling').val(data.price);
+                            $('#price_handling').val(function(index, value) {
+                                return value
+                                  .replace(/[^0-9-.]/g, "")
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                ;
+                              });
+                            $('#price_handling').val($('#price_handling').val()+" VNĐ");
+                           
+                            $('#tbnangha').slideDown(300);
+                            
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+
+    $("#quotation_6").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var loc_from = $('#ship_from').attr('value');
+                    var loc_to = $('#ship_to').attr('value');
+                    
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL; ?>/newquotation/getShipping", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            loc_from: loc_from,
+                            loc_to: loc_to,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            var data = jQuery.parseJSON(answer);
+
+                            $('#price_shipping').slideDown(200);
+                            $('#note_ship').slideDown(200);
+                            $('#thuy').slideDown(200);
+
+                            
+                            var port_from = $("#ship_from option:selected").text();
+                            if (port_from=="TP Hải Phòng") {
+                                port_from = "Hải Phòng";
+                            }
+                            else if (port_from=="TP Đà Nẵng") {
+                                port_from = "Đà Nẵng";
+                            }
+                            else if (port_from=="Khánh Hòa") {
+                                port_from = "Nha Trang";
+                            }
+                            else if (port_from=="Bình Định") {
+                                port_from = "Quy Nhơn";
+                            }
+                            $('#shipping_from').text(port_from);
+
+                            var port_to = $("#ship_to option:selected").text();
+                            if (port_to=="TP Hải Phòng") {
+                                port_to = "Hải Phòng";
+                            }
+                            else if (port_to=="TP Đà Nẵng") {
+                                port_to = "Đà Nẵng";
+                            }
+                            else if (port_to=="Khánh Hòa") {
+                                port_to = "Nha Trang";
+                            }
+                            else if (port_to=="Bình Định") {
+                                port_to = "Quy Nhơn";
+                            }
+                            $('#shipping_to').text(port_to);
+
+                            $('#shipping_c20').text(data.shipping_c20);
+                            $('#shipping_c40').text(data.shipping_c40);
+
+                            $('.number').text(function(index, value) {
+                                return value
+                                  .replace(/[^0-9-.]/g, "")
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                ;
+                              });
+                            
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+$("#quotation_7").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                    if($('#cont_type').val() == "c20_dc"){
+                        if ($('#day_rent').val() <= 10) {
+                            var price = parseInt($('#day_rent').val()) * parseInt($('#cont_rent').val()) * 100000;
+                            $('#price_cont_rent').val(price);
+                        }
+                        else if ($('#day_rent').val() > 10 && $('#day_rent').val() <= 20) {
+                            var price = ((100000*10)+(100000*(parseInt($('#day_rent').val())-10))*0.5)*parseInt($('#cont_rent').val());
+                            $('#price_cont_rent').val(price);
+                        }
+                        else if ($('#day_rent').val() > 20) {
+                            var price = ((100000*10)+(100000*10)*0.5+(100000*(parseInt($('#day_rent').val())-20))*0.25)*parseInt($('#cont_rent').val());
+                            $('#price_cont_rent').val(price);
+                        }
+                        
+
+                    }
+                    else if($('#cont_type').val() == "c40_dc"){
+                        if ($('#day_rent').val() <= 10) {
+                            var price = parseInt($('#day_rent').val()) * parseInt($('#cont_rent').val()) * 300000;
+                            $('#price_cont_rent').val(price);
+                        }
+                        else if ($('#day_rent').val() > 10 && $('#day_rent').val() <= 20) {
+                            var price = ((300000*10)+(300000*(parseInt($('#day_rent').val())-10))*0.5)*parseInt($('#cont_rent').val());
+                            $('#price_cont_rent').val(price);
+                        }
+                        else if ($('#day_rent').val() > 20) {
+                            var price = ((300000*10)+(300000*10)*0.5+(300000*(parseInt($('#day_rent').val())-20))*0.25)*parseInt($('#cont_rent').val());
+                            $('#price_cont_rent').val(price);
+                        }
+                        
+
+                    }
+                    else if($('#cont_type').val() == "c20_ot"){
+                        if ($('#day_rent').val() <= 10) {
+                            var price = parseInt($('#day_rent').val()) * parseInt($('#cont_rent').val()) * 200000;
+                            $('#price_cont_rent').val(price);
+                        }
+                        else if ($('#day_rent').val() > 10 && $('#day_rent').val() <= 20) {
+                            var price = ((200000*10)+(200000*(parseInt($('#day_rent').val())-10))*0.5)*parseInt($('#cont_rent').val());
+                            $('#price_cont_rent').val(price);
+                        }
+                        else if ($('#day_rent').val() > 20) {
+                            var price = ((200000*10)+(200000*10)*0.5+(200000*(parseInt($('#day_rent').val())-20))*0.25)*parseInt($('#cont_rent').val());
+                            $('#price_cont_rent').val(price);
+                        }
+                        
+
+                    }
+                    else if($('#cont_type').val() == "c40_ot"){
+                        if ($('#day_rent').val() <= 10) {
+                            var price = parseInt($('#day_rent').val()) * parseInt($('#cont_rent').val()) * 300000;
+                            $('#price_cont_rent').val(price);
+                        }
+                        else if ($('#day_rent').val() > 10 && $('#day_rent').val() <= 20) {
+                            var price = ((300000*10)+(300000*(parseInt($('#day_rent').val())-10))*0.5)*parseInt($('#cont_rent').val());
+                            $('#price_cont_rent').val(price);
+                        }
+                        else if ($('#day_rent').val() > 20) {
+                            var price = ((300000*10)+(300000*10)*0.5+(300000*(parseInt($('#day_rent').val())-20))*0.25)*parseInt($('#cont_rent').val());
+                            $('#price_cont_rent').val(price);
+                        }
+                        
+
+                    }
+                    else if($('#cont_type').val() == "c20_vf"){
+                        if ($('#day_rent').val() <= 20) {
+                            var price = parseInt($('#day_rent').val()) * parseInt($('#cont_rent').val()) * 200000;
+                            $('#price_cont_rent').val(price);
+                        }
+                        else if ($('#day_rent').val() > 20) {
+                            var price = ((200000*20)+(100000*(parseInt($('#day_rent').val())-20)))*parseInt($('#cont_rent').val());
+                            $('#price_cont_rent').val(price);
+                        }
+                        
+
+                    }
+                    else if($('#cont_type').val() == "c40_vf"){
+                        if ($('#day_rent').val() <= 20) {
+                            var price = parseInt($('#day_rent').val()) * parseInt($('#cont_rent').val()) * 300000;
+                            $('#price_cont_rent').val(price);
+                        }
+                        else if ($('#day_rent').val() > 20) {
+                            var price = ((300000*20)+(150000*(parseInt($('#day_rent').val())-20)))*parseInt($('#cont_rent').val());
+                            $('#price_cont_rent').val(price);
+                        }
+                        
+
+                    }
+                    
+                    $('#price_cont_rent').val(function(index, value) {
+                            return value
+                              .replace(/[^0-9-.]/g, "")
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            ;
+                          });
+                    $('#price_cont_rent').val($('#price_cont_rent').val() + " VNĐ");
+
+                    $('#tbthue').slideDown(300);
+                    $('#export_thuecont').slideDown(300);
+
+
+                    var type = $('#cont_type').val();
+                    var day = $('#day_rent').val();
+                    var number = $('#cont_rent').val();
+
+                    if($('#rent_customer_name') != null){
+                        var customer_name = $('#rent_customer_name').attr('value');
+                        var customer_email = $('#rent_customer_email').attr('value');
+                        var customer_phone = $('#rent_customer_phone').attr('value');
+
+                        /*if (customer_name == '') {
+                            $('#rent_customer_name').focus();
+                            return false;
+                        }
+                        if (customer_email == '') {
+                            $('#rent_customer_email').focus();
+                            return false;
+                        }
+                        if (customer_phone == '') {
+                            $('#rent_customer_phone').focus();
+                            return false;
+                        }*/
+                    }
+                    else{
+                        var customer_name = null;
+                        var customer_email = null;
+                        var customer_phone = null;
+                    }
+
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL; ?>/newquotation/rent", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            type: type,
+                            day: day,
+                            number: number,
+                            customer_email: customer_email,
+                            customer_phone: customer_phone,
+                            customer_name: customer_name,
+                            price: price,
+                            }, // giá trị post
+                        success: function(answer){ 
+                            
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+$("#quotation_8").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                    if($('#cont_type_buy').val() == "c20_dc"){
+                        var price = parseInt($('#cont_buy').val()) * 25000000;
+                            $('#price_cont_buy').val(price);
+                        
+
+                    }
+                    else if($('#cont_type_buy').val() == "c40_dc"){
+                        var price = parseInt($('#cont_buy').val()) * 38000000;
+                            $('#price_cont_buy').val(price);
+                        
+
+                    }
+                    else if($('#cont_type_buy').val() == "c20_ot"){
+                        var price = parseInt($('#cont_buy').val()) * 25000000;
+                            $('#price_cont_buy').val(price);
+                        
+
+                    }
+                    else if($('#cont_type_buy').val() == "c40_ot"){
+                        var price = parseInt($('#cont_buy').val()) * 38000000;
+                            $('#price_cont_buy').val(price);
+                        
+
+                    }
+                    else if($('#cont_type_buy').val() == "c20_vf"){
+                        var price = parseInt($('#cont_buy').val()) * 55000000;
+                            $('#price_cont_buy').val(price);
+                        
+
+                    }
+                    else if($('#cont_type_buy').val() == "c40_vf"){
+                        var price = parseInt($('#cont_buy').val()) * 95000000;
+                            $('#price_cont_buy').val(price);
+                        
+
+                    }
+                    
+                    $('#price_cont_buy').val(function(index, value) {
+                            return value
+                              .replace(/[^0-9-.]/g, "")
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            ;
+                          });
+                    $('#price_cont_buy').val($('#price_cont_buy').val() + " VNĐ");
+
+                    $('#tbban').slideDown(300);
+                    $('#export_muacont').slideDown(300);
+
+                    var type = $('#cont_type_buy').val();
+                    var number = $('#cont_buy').val();
+
+                    if($('#buy_customer_name') != null){
+                        var customer_name = $('#buy_customer_name').attr('value');
+                        var customer_email = $('#buy_customer_email').attr('value');
+                        var customer_phone = $('#buy_customer_phone').attr('value');
+
+                        /*if (customer_name == '') {
+                            $('#buy_customer_name').focus();
+                            return false;
+                        }
+                        if (customer_email == '') {
+                            $('#buy_customer_email').focus();
+                            return false;
+                        }
+                        if (customer_phone == '') {
+                            $('#buy_customer_phone').focus();
+                            return false;
+                        }*/
+                    }
+                    else{
+                        var customer_name = null;
+                        var customer_email = null;
+                        var customer_phone = null;
+                    }
+
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL; ?>/newquotation/buy", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            type: type,
+                            number: number,
+                            customer_name: customer_name,
+                            customer_phone: customer_phone,
+                            customer_email: customer_email,
+                            price: price,
+                            }, // giá trị post
+                        success: function(answer){ 
+                            
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+
+    $('.number').focus(function(){
+        if ( $(this).val() == '0') {
+           $(this).val(""); 
+        };
+        
+    });
+    $('.number').blur(function(){
+        if ( $(this).val() == "") {
+            $(this).val(0);
+        };
+        
+    });
+
+
+$('#type_1').change(function(){
+    $("#type_2 option[value='-1']").attr("selected", "selected");
+    $("#export_type_1").val($(this).val());
+    $("#export_type_2").val("");
+});
+$('#type_2').change(function(){
+    $("#type_1 option[value='-1']").attr("selected", "selected");
+    $("#export_type_2").val($(this).val());
+    $("#export_type_1").val("");
+});
+$('#manifest').keyup(function(){
+    $("#export_manifest").val($(this).val());
+});
+$('#loc_from').change(function(){
+    $("#export_from").val($(this).val());
+    $("#loc_from_name").val("");
+    $("#loc_from_name").attr('data',"");
+});
+$('#loc_to').change(function(){
+    $("#export_to").val($(this).val());
+    $("#loc_to_name").val("");
+    $("#loc_to_name").attr('data',"");
+});
+
+
+$('#ship_from').change(function(){
+    $("#export_port_from").val($(this).val());
+});
+$('#ship_to').change(function(){
+    $("#export_port_to").val($(this).val());
+});
+$('#import_export').keyup(function(){
+    $("#export_import_export").val($(this).val());
+});
+$(':checkbox[name="import_export_type"]').bind('click',function(){
+    $("#export_import_export_type").val($(this).val());
+});
+$('#chuyencang').keyup(function(){
+    $("#export_chuyencang").val($(this).val());
+});
+$(':checkbox[name="chuyencang_type"]').bind('click',function(){
+    $("#export_chuyencang_type").val($(this).val());
+});
+
+$('#cont_type').change(function(){
+    $("#export_cont_type_rent").val($(this).val());
+});
+$('#day_rent').keyup(function(){
+    $("#export_day_rent").val($(this).val());
+});
+$('#cont_rent').keyup(function(){
+    $("#export_cont_rent").val($(this).val());
+});
+
+$('#cont_type_buy').change(function(){
+    $("#export_cont_type_buy").val($(this).val());
+});
+$('#cont_buy').keyup(function(){
+    $("#export_cont_buy").val($(this).val());
+});
+</script>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+    jQuery('.tabs .tab-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+ 
+        // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).slideDown(300).siblings().slideUp(300);
+ 
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+ 
+        e.preventDefault();
+    });
+
+    jQuery('.tabs .tab-left a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+ 
+        // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).slideDown(300).siblings().slideUp(300);
+ 
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+ 
+        e.preventDefault();
+    });
+});
+
+   /* $('#show_import_export').click(function(){
+        if($(':checkbox[name="import_export"]:checked').val()=="import"){
+            var price = parseInt($('#import_export').val()) * 300000 + 400000;
+            $('#price_import_export').val(price);
+
+        }
+        else if($(':checkbox[name="import_export"]:checked').val()=="export"){
+            var price = parseInt($('#import_export').val()) * 400000 + 400000;
+            $('#price_import_export').val(price);
+        }
+        $('#price_import_export').val(function(index, value) {
+                return value
+                  .replace(/[^0-9-.]/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+              });
+        $('#price_import_export').val($('#price_import_export').val() + " VNĐ");
+    });*/
+
+    /*$('#show_chuyencang').click(function(){
+        if($(':checkbox[name="chuyencang"]:checked').val()=="bo"){
+            var price = parseInt($('#chuyencang').val()) * 110000 + 200000;
+            $('#price_chuyencang').val(price);
+
+        }
+        else if($(':checkbox[name="chuyencang"]:checked').val()=="xalan"){
+            var price = parseInt($('#chuyencang').val()) * 80000 + 200000;
+            $('#price_chuyencang').val(price);
+        }
+        $('#price_chuyencang').val(function(index, value) {
+                return value
+                  .replace(/[^0-9-.]/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+              });
+        $('#price_chuyencang').val($('#price_chuyencang').val() + " VNĐ");
+    });*/
+
+
+$('#loc_from_name').keyup(function(){
+    $("#loc_from_name").attr("data","");
+        var dist = $('#loc_from').val();
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/quotation/getlocationfrom',
+            type: 'POST',
+            data: {keyword:keyword,district:dist},
+            success:function(data){
+                if (data.trim() == "") {
+                    $('#loc_from_list_id').slideUp(200);
+                }
+                else{
+                    $('#loc_from_list_id').slideDown(200);
+                    $('#loc_from_list_id').html(data);
+                }
+            }
+        });
+      
+   });
+$('#loc_to_name').keyup(function(){
+    $("#loc_to_name").attr("data","");
+        var dist = $('#loc_to').val();
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/quotation/getlocationto',
+            type: 'POST',
+            data: {keyword:keyword,district:dist},
+            success:function(data){
+                if (data.trim() == "") {
+                    $('#loc_to_list_id').slideUp(200);
+                }
+                else{
+                    $('#loc_to_list_id').slideDown(200);
+                    $('#loc_to_list_id').html(data);
+                }
+                
+            }
+        });
+      
+   });
+
+$('#loc_from_name').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#loc_from_name').attr('data',"");
+        }
+            
+      }); 
+$('#loc_to_name').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#loc_to_name').attr('data',"");
+        }
+            
+      }); 
+
+function set_item_location_from(value,name) {
+    // change input value
+    $('#loc_from_name').val(name);
+    $("#loc_from_name").attr("data",value);
+    
+    // hide proposition list
+    $('#loc_from_list_id').hide();
+    $('#loc_from_name').focus();
+
+    $("#export_from").val(value);
+    
+}
+function set_item_location_to(value,name) {
+    // change input value
+    $('#loc_to_name').val(name);
+    $("#loc_to_name").attr("data",value);
+    
+    // hide proposition list
+    $('#loc_to_list_id').hide();
+    $('#loc_to_name').focus();
+
+    $("#export_to").val(value);
+}
+
+$('html').click(function(e) {
+   $('#loc_from_list_id').slideUp(200);
+    $('#loc_to_list_id').slideUp(200);
+});
+
+$('#submit_suggest').click(function(){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+            var price = $('#price_suggest').val();
+            var loc_from = $('#loc_from_name').attr('data');
+            var loc_to = $('#loc_to_name').attr('data');
+            var normal = $('#normal').val();
+            var special = $('#special').val();
+            var tons = $('#tons').attr('value');
+            var soluong = $('#soluong').attr('value');
+            var sotan = $('#sotan').attr('value');
+            
+                    $.ajax({
+                        url: '<?php echo BASE_URL ?>/quotation/salesuggest',
+                        type: 'POST',
+                        data: {
+                            price: price,
+                            loc_from: loc_from,
+                            loc_to: loc_to,
+                            normal: normal,
+                            special: special,
+                            tons: tons,
+                            soluong: soluong,
+                            sotan: sotan,
+                        },
+                        success:function(data){
+                           $('#loading').fadeOut(500);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+data+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+                        }
+                    });
+    });
+
+$('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+$('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+          .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+        ;
+      });
+    });
+</script>
+</div>
+
+</div>

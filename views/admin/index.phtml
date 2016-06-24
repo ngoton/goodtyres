@@ -1,0 +1,462 @@
+<style type="text/css">
+    div.div__index_2
+    {
+        text-align:left;
+        width:100%;
+        background:#f9f9f9;
+        border:1px solid #cccccc;
+        margin:6px auto;
+    }
+    div.div__index_2 img
+    {
+        width:65px;
+        height:65px;
+        margin-top:6px
+    }
+    div.div__index_2 span
+    {
+        font-size:12px;
+        color:#666666;
+        cursor:default;
+    }
+    table.div__index_2___table_trai td
+    {
+        width:236px;
+        padding: 10px 0 10px 0;
+
+    }
+    table.div__index_2___table_trai td div
+    {
+        border:1px solid #f0f0f0;
+        height:110px;
+        width:105px;
+        background: white;
+        padding: 5px;
+    }
+    table.div__index_2___table_phai
+    {
+        width:470px;
+        border-collapse: collapse;
+        border:1px solid #cccccc
+    }
+    table.div__index_2___table_phai td
+    {
+        border:1px solid #cccccc;
+        
+    }
+    div.div__index_2 span.span__abc_1
+    {
+        color:#666666;
+        font-size:16px;
+        font-weight:bold
+    }
+    div.div__index_2 span.span__abc_2
+    {
+        color:#666666;
+        font-size:14px;
+        font-weight:bold
+    }
+    div.div__index_2 span.span__abc_3
+    {
+        color:#666666;
+        font-size:12px;
+    }
+    table.div__index_2___table_phai a
+    {
+        color:#666666;
+        font-size:12px
+    }
+    table.div__index_2___table_phai a:hover
+    {
+        color:black;
+        font-size:12px
+    }
+    table.div__index_2___table_trai a:hover div{
+    	box-shadow: 0 1px 10px #000000; 
+    }
+
+    .logo {
+    position: absolute;
+    left: 50%;
+    top: 10px;
+    margin-left: -263px;
+    width: 526px;
+    height: 99px;
+    float: none !important;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: url(../public/images/logo-bg.png);
+    z-index: 1;
+    }
+</style>
+<?php if ($_SESSION && $_SESSION['role_logined'] != 10) { ?>
+<div class="div__index_2">
+            <table style="margin:0 auto;">
+            <tbody><tr>
+                <td width="100%">
+                    <table class="div__index_2___table_trai" id="div__index_2___table_trai">
+                        
+                        <tbody>
+                            
+                            <tr>
+                            <?php if ($_SESSION && $_SESSION['role_logined'] == 1) { ?>
+                            <td>
+                                <center>
+                                	<a href="<?php echo $this->url('revenue') ?>">
+	                                    <div>
+	                                        
+	                                            <img src="public/images/revenue.png">
+	                                        
+	                                        <br>
+	                                        <span style="color: rgb(102, 102, 102);">Doanh số bán hàng</span>
+	                                        
+	                                    </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <?php } ?>
+                            <?php if ($_SESSION && ($_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 4)) { ?>
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('salereport') ?>">
+                                        <div>
+                                            
+
+                                                <img src="public/images/shipment.png">
+                                            
+                                            <br>
+                                            <span style="color: rgb(102, 102, 102);">Báo cáo</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('shipment') ?>">
+                                        <div>
+                                            
+
+                                                <img src="public/images/salereport.png">
+                                            
+                                            <br>
+                                            <span style="color: rgb(102, 102, 102);">Làm hàng</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <?php } ?>
+                            <?php if ($_SESSION && ($_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 4 || $_SESSION['role_logined'] == 1)) { ?>
+                            <td>
+                                <center>
+                                	<a href="<?php echo $this->url('sales') ?>">
+	                                    <div>
+	                                        
+
+	                                            <img src="public/images/sale.png">
+	                                        
+	                                        <br>
+	                                        <span style="color: rgb(102, 102, 102);">Báo cáo doanh thu</span>
+	                                        
+	                                    </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <?php } ?>
+                            <?php if ($_SESSION && ($_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 1)) { ?>
+                            <td>
+                                <center>
+                                	<a href="<?php echo $this->url('accounting') ?>">
+	                                    <div>
+	                                        
+	                                            <img src="public/images/accounting.png">
+	                                        
+	                                        <br>
+	                                        <span>Báo cáo kế toán</span>
+	                                        
+	                                    </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <?php } ?>
+                            <?php if ($_SESSION) { ?>
+                            <td>
+                                <center>
+                                	<a href="<?php echo $this->url('customer') ?>">
+	                                    <div>
+	                                        
+	                                            <img src="public/images/customer.png">
+	                                        
+	                                        <br>
+	                                        <span style="color: rgb(102, 102, 102);">Khách hàng</span>
+	                                        
+	                                    </div>
+                                    </a>
+                                </center>
+                            </td>
+                        	<?php } ?>
+                            <?php if ($_SESSION && ($_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 1)) { ?>
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('staff') ?>">
+                                        <div>
+                                            
+                                                <img src="public/images/staff.png">
+                                            
+                                            <br>
+                                            <span style="color: rgb(102, 102, 102);">Nhân viên</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <?php } ?>
+                        </tr>
+                        <tr>
+                           <?php if ($_SESSION && ($_SESSION['role_logined'] == 5 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 1)) { ?> 
+                            
+                            <td>
+                                <center>
+                                	<a href="<?php echo $this->url('newtransport') ?>">
+	                                    <div>
+	                                        
+	                                            <img src="public/images/transport.png">
+	                                        
+	                                        <br>
+	                                        <span style="color: rgb(102, 102, 102);">Giá cước vận tải đường bộ</span>
+	                                        
+	                                    </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('shipping') ?>">
+                                        <div>
+                                            
+                                                <img src="public/images/ship.png">
+                                            
+                                            <br>
+                                            <span style="color: rgb(102, 102, 102);">Giá cước vận tải đường thủy</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('handling') ?>">
+                                        <div>
+                                            
+                                                <img src="public/images/handling.png">
+                                            
+                                            <br>
+                                            <span style="color: rgb(102, 102, 102);">Giá cước nâng hạ</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <td>
+                                <center>
+                                	<a href="<?php echo $this->url('manifest') ?>">
+	                                    <div>
+	                                        
+	                                            <img src="public/images/manifest.png">
+	                                        
+	                                        <br>
+	                                        <span style="color: rgb(102, 102, 102);">Manifest</span>
+	                                        
+	                                    </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <?php } ?>
+                            <?php if ($_SESSION && ($_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 1)) { ?>
+                            <td>
+                                <center>
+                                	<a href="<?php echo $this->url('salary') ?>">
+	                                    <div>
+	                                        
+	                                            <img src="public/images/salary.png">
+	                                        
+	                                        <br>
+	                                        <span style="color: rgb(102, 102, 102);">Quản lý lương</span>
+	                                        
+	                                    </div>
+                                    </a>
+                                </center>
+                            </td>
+                            
+                            <?php } ?>
+                            <?php if ($_SESSION && ($_SESSION['role_logined'] == 2)) { ?>
+                            
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('costs') ?>">
+                                        <div>
+                                            
+
+                                                <img src="public/images/cost.png">
+                                            
+                                            <br>
+                                            <span style="color: rgb(102, 102, 102);">Chi phí</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <?php } ?>
+                        </tr>
+                        <tr>
+                             <?php if ($_SESSION && ($_SESSION['role_logined'] == 5 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 1)) { ?> 
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('location') ?>">
+                                        <div>
+                                            
+                                                <img src="public/images/location.png">
+                                            
+                                            <br>
+                                            <span>Quản lý địa điểm</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('port') ?>">
+                                        <div>
+                                            
+                                                <img src="public/images/port.png">
+                                            
+                                            <br>
+                                            <span>Quản lý cảng</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            
+                            <?php } ?>
+                        	
+                            <?php if ($_SESSION && $_SESSION['role_logined'] == 1) { ?>
+                            <td>
+                                <center>
+                                	<a href="<?php echo $this->url('user') ?>">
+	                                    <div>
+	                                        
+	                                            <img src="public/images/user.png">
+	                                        
+	                                        <br>
+	                                        <span style="color: rgb(102, 102, 102);">Tài khoản</span>
+	                                        
+	                                    </div>
+                                    </a>
+                                </center>
+                            </td>
+                        	<?php } ?>
+                        </tr>
+                        <?php if ($_SESSION && $_SESSION['role_logined'] == 9) { ?>
+                        <tr>
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('approved/costs') ?>">
+                                        <div>
+                                            
+                                                <img src="public/images/salary.png">
+                                            
+                                            <br>
+                                            <span style="color: rgb(102, 102, 102);">Thu chi đã duyệt</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('approved/payable') ?>">
+                                        <div>
+                                            
+                                                <img src="public/images/salary.png">
+                                            
+                                            <br>
+                                            <span style="color: rgb(102, 102, 102);">Chi vendor đã duyệt</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('approved/office') ?>">
+                                        <div>
+                                            
+                                                <img src="public/images/salary.png">
+                                            
+                                            <br>
+                                            <span style="color: rgb(102, 102, 102);">Chi phí nhân sự đã duyệt</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('approved/sale') ?>">
+                                        <div>
+                                            
+                                                <img src="public/images/salary.png">
+                                            
+                                            <br>
+                                            <span style="color: rgb(102, 102, 102);">Chi phí lô hàng đã duyệt</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('report/report') ?>">
+                                        <div>
+                                            
+                                                <img src="public/images/accounting.png">
+                                            
+                                            <br>
+                                            <span style="color: rgb(102, 102, 102);">Báo cáo tài sản</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            <td>
+                                <center>
+                                    <a href="<?php echo $this->url('statement') ?>">
+                                        <div>
+                                            
+                                                <img src="public/images/accounting.png">
+                                            
+                                            <br>
+                                            <span style="color: rgb(102, 102, 102);">Thực thu - Thực chi</span>
+                                            
+                                        </div>
+                                    </a>
+                                </center>
+                            </td>
+                            
+                        </tr>
+                        <?php } ?>
+                        
+                    </tbody></table>
+                </td>
+                
+            </tr>
+        </tbody></table>
+    </div>
+
+    <?php } ?>

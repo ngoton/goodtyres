@@ -1,0 +1,1385 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'agent_manifest_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'agent_manifest_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'customer_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'shipment_vendor_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'revenue_vat')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cost_sg')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cost_cm')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'driver_cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'commission_cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'document_cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'invoice_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'other_cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'other_staff')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> ĐƠN HÀNG </h1></center>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm đơn hàng</a>
+    <a class="add_button" id="import_excel" href="<?= $this->url('agentmanifest/import')?>">Import Excel</a>
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+     <div class="tablenav top">
+        <div class="add-box">
+                  
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">  
+            
+        </div>
+    </div>
+    <div class="tablenav top">
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="5">Hiển thị 5 giá trị</option>
+            <option value="10">Hiển thị 10 giá trị</option>
+            <option value="15">Hiển thị 15 giá trị</option>
+            <option selected="selected" value="20">Hiển thị 20 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','agent_manifest_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'agent_manifest_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','agent_manifest_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'agent_manifest_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_name','<?php echo $url_order ?>')">Khách hàng <?php if ($order_by == 'customer_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','shipment_vendor_name','<?php echo $url_order ?>')">Nhân viên <?php if ($order_by == 'shipment_vendor_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','comment','<?php echo $url_order ?>')">Nội dung <?php if ($order_by == 'comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','revenue_vat','<?php echo $url_order ?>')">Doanh thu <?php if ($order_by == 'revenue_vat'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost_sg','<?php echo $url_order ?>')">Phí hải quan SG <?php if ($order_by == 'cost_sg'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost_cm','<?php echo $url_order ?>')">Phí hải quan CM <?php if ($order_by == 'cost_cm'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','driver_cost','<?php echo $url_order ?>')">Phí xăng xe <?php if ($order_by == 'driver_cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','commission_cost','<?php echo $url_order ?>')">Hoa hồng <?php if ($order_by == 'commission_cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','commission','<?php echo $url_order ?>')">Người nhận <?php if ($order_by == 'commission'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','other_cost','<?php echo $url_order ?>')">Phí khác <?php if ($order_by == 'other_cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','revenue_vat','<?php echo $url_order ?>')">Lợi nhuận <?php if ($order_by == 'revenue_vat'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','invoice_date','<?php echo $url_order ?>')">Ngày xuất HĐ <?php if ($order_by == 'invoice_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($agents as $agent) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $agent->agent_manifest_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $agent->agent_manifest_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix"  id="agent_manifest_date_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->hien_thi_ngay_thang($agent->agent_manifest_date) ?></td>
+            <td class="fix" id="code_<?php echo $agent->agent_manifest_id; ?>"><?php echo $agent->code; ?></td>
+            <td class="fix"  data="<?php echo $agent->customer; ?>" id="customer_name_<?php echo $agent->agent_manifest_id; ?>"><?php echo $agent->customer_name; ?></td>
+            
+            <td class="fix"  id="staff_<?php echo $agent->agent_manifest_id; ?>"><?php echo $agent->shipment_vendor_name; ?></td>
+            <td class="fix"   id="comment_<?php echo $agent->agent_manifest_id; ?>"><?php echo $agent->comment; ?></td>
+            <td class="fix" id="revenue_all_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->revenue_vat+$agent->revenue); ?></td>
+            <td style="display:none" class="fix" id="revenue_vat_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->revenue_vat); ?></td>
+            <td style="display:none" class="fix" id="revenue_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->revenue); ?></td>
+            <td class="fix" id="cost_sg_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->cost_sg); ?></td>
+            <td class="fix"  id="cost_cm_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->cost_cm) ?></td>
+            <td class="fix"  id="driver_cost_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->driver_cost) ?></td>
+            <td class="fix"  id="commission_cost_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->commission_cost) ?></td>
+            <td class="fix" data="<?php echo $agent->commission ?>"  id="commission_<?php echo $agent->agent_manifest_id; ?>"><?php echo isset($commission[$agent->commission])?$commission[$agent->commission]:null; ?></td>
+            
+             <td  class="fix"  id="other_cost1_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->other_cost+$agent->document_cost+$agent->document_cost_2+$agent->pay_cost+$agent->other_vendor_cost) ?></td>
+             <td  class="fix"  id="other_cost2_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->revenue_vat+$agent->revenue-($agent->cost_sg+$agent->cost_cm+$agent->driver_cost+$agent->commission_cost+$agent->other_cost+$agent->document_cost+$agent->document_cost_2+$agent->pay_cost+$agent->other_vendor_cost)) ?></td>
+
+            <td class="fix"  id="invoice_date_<?php echo $agent->agent_manifest_id; ?>"><?php echo $agent->invoice_date>0?$lib->hien_thi_ngay_thang($agent->invoice_date):null; ?></td>
+            
+            <td  class="fix" style="display: none" id="other_cost_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->other_cost) ?></td>
+            <td  class="fix" style="display: none" id="document_cost_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->document_cost) ?></td>
+            <td style="display: none" class="fix" id="customer_email_<?php echo $agent->agent_manifest_id; ?>"><?php echo $agent->customer_email; ?></td>
+            <td style="display: none" class="fix" id="customer_phone_<?php echo $agent->agent_manifest_id; ?>"><?php echo $agent->customer_phone; ?></td>
+
+           
+            <td style="display: none" class="fix"  id="other_staff_<?php echo $agent->agent_manifest_id; ?>"><?php echo $agent->other_staff ?></td>
+            <td style="display: none" class="fix"  id="document_cost_2_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->document_cost_2) ?></td>
+            <td style="display: none" class="fix"  id="pay_cost_<?php echo $agent->agent_manifest_id; ?>"><?php echo $lib->formatMoney($agent->pay_cost) ?></td>
+            <td style="display: none" m="<?php echo $agent->m ?>" class="fix"  id="m_<?php echo $agent->agent_manifest_id; ?>"><?php echo (isset($staff['staff_id'][$agent->m]) && $agent->m==$staff['staff_id'][$agent->m])?$staff['staff_name'][$agent->m]:null ?></td>
+            <td style="display: none" s="<?php echo $agent->s ?>" class="fix"  id="s_<?php echo $agent->agent_manifest_id; ?>"><?php echo (isset($staff['staff_id'][$agent->s]) && $agent->s==$staff['staff_id'][$agent->s])?$staff['staff_name'][$agent->s]:null ?></td>
+            <td style="display: none" c="<?php echo $agent->c ?>" class="fix"  id="c_<?php echo $agent->agent_manifest_id; ?>"><?php echo (isset($staff['staff_id'][$agent->c]) && $agent->c==$staff['staff_id'][$agent->c])?$staff['staff_name'][$agent->c]:null ?></td>
+
+            <td>
+                <button class="error" onclick="del(<?php echo $agent->agent_manifest_id ?>)" >Xóa</button>
+                
+            </td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('agentmanifest') ?>">&larr;</a></div>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legstart>
+                <span><h3>Thông tin đơn hàng </h3></span>
+            </legstart>
+            <div class="login_body">
+                  <form id="add_agent" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+
+                            
+                        </tr>
+                        <tr>
+                            <td>Ngày </td>
+                            <td>
+                                <input style="width:90px" type="text" id="agent_manifest_date"  name="agent_manifest_date" tabindex="1" required="required" >
+                                
+                            </td>
+                            <td>Code </td>
+                            <td><input  style="width:90px" type="text" id="code"  name="code" tabindex="2" required="required" ></td>
+                            <td>Người làm thủ tục</td>
+                            <td>
+                                <select tabindex="3" style="width:100px" id="staff" name="staff"  required="required" >
+                                    <?php foreach($staffs as $staff){ ?>
+                                    <option value="<?php echo $staff->shipment_vendor_id ?>"><?php echo $staff->shipment_vendor_name ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                            
+                            
+                            
+                            <td><input type="checkbox" name="customer_type" value="new" tabindex="4">Khách hàng mới</td>
+                            <td><input type="checkbox" name="customer_type" value="old">Khách hàng cũ</td>
+
+                        </tr>
+                        <tr>
+                            
+                            <td>Nội dung</td>
+                            <td>
+                                <textarea name="comment" id="comment" tabindex="6"  required="required"></textarea>
+                            </td>
+                            <td>Doanh thu (VAT)</td>
+                            <td>
+                                <input type="text"  style="width:90px" class="number" id="revenue_vat" name="revenue_vat" tabindex="7"  >
+                            </td>
+                            <td>Doanh thu (0 VAT)</td>
+                            <td>
+                                <input type="text"  style="width:90px" class="number" id="revenue" name="revenue" tabindex="7"  >
+                            </td>
+                            <td>Khách hàng </td>
+                            <td><input type="text" style="width:120px" readonly id="customer_name" name="customer_name" tabindex="5"  autocomplete="off" required="required" placeholder="Nhập tên hoặc * để chọn" >
+                                <ul id="customer_list_id"></ul>
+                        </tr>
+                        <tr>
+                            <td>Phí hải quan SG</td>
+                            <td>
+                                <input type="text"  style="width:90px" class="number" id="cost_sg" name="cost_sg" tabindex="10">
+                            </td>
+                            <td>Phí hải quan CM</td>
+                            <td>
+                                <input type="text"  style="width:90px" class="number" id="cost_cm" name="cost_cm" tabindex="11" >
+                            </td>
+                            
+                           <td>Hoa hồng</td>
+                            <td>
+                                <input type="text"  style="width:90px" class="number" id="commission_cost" name="commission_cost" tabindex="8" >
+                            </td>
+                            <td>SĐT Khách hàng </td>
+                            <td><input style="width:120px" readonly pattern=".{12,13}" minlength="12" maxlength="13" type="text" class="phone" id="customer_phone" name="customer_phone" ></td>
+                        </tr>
+                        <tr>
+                            <td>Phí xăng xe</td>
+                            <td>
+                                <input type="text"  style="width:90px" class="number" id="driver_cost" name="driver_cost" tabindex="12">
+                            </td>
+                            <td>Phí mua HĐ</td>
+                            <td>
+                                <input type="text"  style="width:90px" class="number" id="document_cost" name="document_cost" tabindex="13" >
+                            </td>
+                            
+                            
+                            <td>Người nhận</td>
+                            <td>
+                                <input type="text"  style="width:120px"  id="commission" name="commission" tabindex="9" >
+                                <ul id="vendor_list_id"></ul>
+                            </td>
+                                
+                            </td>
+                            <td>Email khách hàng </td>
+                            <td>
+                              <input readonly style="width:120px" type="email" id="customer_email" name="customer_email" >
+                              
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Phí khác</td>
+                            <td>
+                                <input type="text"  style="width:90px" class="number" id="other_cost" name="other_cost" tabindex="15">
+                            </td>
+                            <td>Người nhận</td>
+                            <td>
+                                <select style="width:120px" id="other_staff" name="other_staff" tabindex="16">
+                                    <option value="-1">Nhân viên</option>
+                                    <?php foreach ($staffs as $o) { ?>
+                                        <option value="<?php echo $o->shipment_vendor_id ?>"><?php echo $o->shipment_vendor_name ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                            
+                            <td>Ngày xuất HĐ</td>
+                            <td>
+                                <input type="text"  style="width:90px" id="invoice_date" name="invoice_date" tabindex="14" >
+                            </td>
+                            <td>Phí gửi chứng từ</td>
+                            <td>
+                                <input type="text"  style="width:90px" class="number" id="document_cost_2" name="document_cost_2" tabindex="17">
+                            </td>
+                                
+                        </tr>
+                        <tr>
+                            
+                            <td>M </td>
+                            <td><input style="width:120px" autocomplete="off" type="text" id="m" name="m" tabindex="5"  placeholder="Nhập tên hoặc * để chọn" >
+                                <ul id="staff_list_id_m"></ul>
+                            </td>
+                            <td>S </td>
+                            <td><input style="width:120px" autocomplete="off" type="text" id="s" name="s" tabindex="6"  placeholder="Nhập tên hoặc * để chọn">
+                            <ul id="staff_list_id_s"></ul>
+                            </td>
+                            <td>C </td>
+                            <td><input style="width:120px" autocomplete="off" type="text"  id="c" name="c" tabindex="7"  placeholder="Nhập tên hoặc * để chọn" >
+                            <ul id="staff_list_id_c"></ul>
+                            </td> 
+                            <td>Phí chuyển tiền</td>
+                            <td>
+                                <input type="text"  style="width:90px" class="number" id="pay_cost" name="pay_cost" tabindex="18">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8">
+                                <input type="button" id="show_other_cost" value="Hiện chi phí khác">
+                            </td>
+                        </tr>
+                        <tr class="other_cost" style="display:none">
+                            <td colspan="8">
+                                <fieldset class="groupbox">
+                                    <legstart>
+                                        <span><h3>Chi phí khác </h3></span>
+                                    </legstart>
+                                    <table id="dataTable" border="1" style="width: 100%; border: 1px solid rgb(221, 217, 217); margin-bottom: 10px" >
+                                        <tbody>
+                                            
+                                            <tr>
+                                                <td><input type="checkbox" name="chk"></td>
+                                                <td>
+                                                    <table style="width: 100%">
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>Loại chi phí</td>
+                                                            <td>
+                                                                <select tabindex="1" class="cost_type" name="cost_type[]" style="width:100px">
+                                                                    <option value="1">Trucking</option>
+                                                                    <option value="2">Barging</option>
+                                                                    <option value="3">Feeder</option>
+                                                                    <option value="4">Thu hộ</option>
+                                                                    <option value="5">Hoa hồng</option>
+                                                                    <option value="6">TTHQ</option>
+                                                                    <option value="7">Khác</option>
+                                                                </select>
+                                                            </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                Vendor
+                                                            </td>
+                                                            <td>
+                                                                <select tabindex="2" class="vendor" name="vendor[]" style="width:200px">
+                                                                    <?php foreach ($vendor_list as $vendor) { ?>
+                                                                    <?php
+                                                                        if ($vendor->vendor_type == 1) {
+                                                                            $type = "TTHQ";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 2) {
+                                                                            $type = "Trucking";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 3) {
+                                                                            $type = "Barging";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 4) {
+                                                                            $type = "Feeder";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 5) {
+                                                                            $type = "Hoa hồng";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 6) {
+                                                                            $type = "Thu hộ";
+                                                                        }
+                                                                        else if ($vendor->vendor_type == 7) {
+                                                                            $type = "Khác";
+                                                                        }
+                                                                    ?>
+                                                                    <option class="<?php echo $vendor->vendor_type ?>" value="<?php echo $vendor->shipment_vendor_id ?>"><?php echo $vendor->shipment_vendor_name ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                Số tiền (VAT)
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="3" type="text" style="width:120px" class="numbers cost_vat"  name="cost_vat[]"  >
+                                                            </td>
+                                                            <td>
+                                                                Số tiền (0 VAT)
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="4" type="text" style="width:120px" class="numbers cost"  name="cost[]"  >
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            
+                                                            <td>
+                                                                Dự chi
+                                                            </td>
+                                                            <td>
+                                                                <input tabindex="5" class="vendor_expect_date" type="date"   name="vendor_expect_date[]" required="required" value="<?php echo date('Y-m-d') ?>" >
+                                                            </td>
+                                                            <td>
+                                                                Tài khoản
+                                                            </td>
+                                                            <td>
+                                                                <select tabindex="9"  style="width:120px" class="vendor_source"  name="vendor_source[]"  required="required">
+                                                                    <?php foreach($banks as $bank){ ?>
+                                                                    <option value="<?php echo $bank->bank_id ?>"><?php echo $bank->bank_name ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                Ghi chú
+                                                            </td>
+                                                            <td rowspan="2">
+                                                                <textarea tabindex="10" class="cost_comment" name="cost_comment[]" ></textarea>
+                                                            </td>
+                                                        </tr>
+                                                        
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            
+                                            
+
+                                            
+
+                                        </tbody>
+                                    </table>
+                                </fieldset>
+
+                                    <input type="button" value="Thêm chi phí khác" onclick="addRow('dataTable')">
+ 
+                                    <input type="button" value="Xóa chi phí" onclick="deleteRow('dataTable')">
+
+                                
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="19"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="20"></td>
+                            <td></td>
+                            <td></td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+var pickerOpts2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onSelect: function(date){
+            var date2 = $('#agent_manifest_date').datepicker('getDate');
+            date2.setDate(date2.getDate()+3);
+            $('#invoice_date').datepicker('setDate', date2);
+        }
+    }; 
+    $("#agent_manifest_date").datepicker(pickerOpts2);
+
+var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $("#invoice_date").datepicker(pickerOpts);
+
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+   
+   $('#vendor_list_id').slideUp(200);
+    $('#customer_list_id').slideUp(200);
+    $('#staff_list_id_m').slideUp(200);
+    $('#staff_list_id_s').slideUp(200);
+    $('#staff_list_id_c').slideUp(200);
+
+});
+
+$(':checkbox[name=customer_type]').bind('click',function(){
+     var th = $(this), name = th.prop('name'); 
+     if(th.is(':checked')){
+       $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
+       if ($(this).val() == "new") { 
+            $('#customer_name').attr('data',"");
+            $("#customer_name").prop('readonly', false);
+            $("#customer_phone").prop('readonly', false);
+            $("#customer_email").prop('readonly', false);
+            $('#customer_name').attr('value',"");
+            $('#customer_phone').attr('value',"");
+            $('#customer_email').attr('value',"");
+        }
+        else if ($(this).val() == "old") { 
+            $('#customer_name').attr('data',"");
+            $("#customer_name").prop('readonly', false);
+            $("#customer_phone").prop('readonly', true);
+            $("#customer_email").prop('readonly', true);
+            $('#customer_name').attr('value',"");
+            $('#customer_phone').attr('value',"");
+            $('#customer_email').attr('value',"");
+        }
+
+        $('#customer_name').focus();
+     }
+});
+
+
+    $('.edit_tr').click(function(e){
+
+        $('#dataTable tbody tr').remove();
+        
+        var sale_id = $(this).attr('id');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/agentmanifest/showvendor',
+            type: 'POST',
+            data: {sale_report:sale_id},
+            success:function(data){
+                //alert(data);
+                $('#dataTable tbody').append(data);
+                $('.other_cost').slideDown(300);
+            }
+        });
+
+
+        if(e.target != '[object HTMLButtonElement]' && !$('.checkbox').is(':focus') ){
+            if(!$('.checkbox').is(':checked') && !$('.checkbox').is(':focus')){
+                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+            }
+
+            var agent_manifest_date = $(this).find("#agent_manifest_date_"+$(this).attr('id')).text();
+            var code = $(this).find("#code_"+$(this).attr('id')).text();
+            var comment = $(this).find("#comment_"+$(this).attr('id')).text();
+            var staff = $(this).find("#staff_"+$(this).attr('id')).text();
+            var revenue_vat = $(this).find("#revenue_vat_"+$(this).attr('id')).text();
+            var revenue = $(this).find("#revenue_"+$(this).attr('id')).text();
+            var cost_sg = $(this).find("#cost_sg_"+$(this).attr('id')).text();
+            var cost_cm = $(this).find("#cost_cm_"+$(this).attr('id')).text();
+            var driver_cost = $(this).find("#driver_cost_"+$(this).attr('id')).text();
+            var commission_cost = $(this).find("#commission_cost_"+$(this).attr('id')).text();
+            var document_cost = $(this).find("#document_cost_"+$(this).attr('id')).text();
+            var commission_name = $(this).find("#commission_"+$(this).attr('id')).text();
+            var commission = $(this).find("#commission_"+$(this).attr('id')).attr('data');
+            var customer_name = $(this).find("#customer_name_"+$(this).attr('id')).text();
+            var customer_phone = $(this).find("#customer_phone_"+$(this).attr('id')).text();
+            var customer_email = $(this).find("#customer_email_"+$(this).attr('id')).text();
+            var customer = $(this).find("#customer_name_"+$(this).attr('id')).attr('data');
+            var invoice_date = $(this).find("#invoice_date_"+$(this).attr('id')).text();
+
+            var other_cost = $(this).find("#other_cost_"+$(this).attr('id')).text();
+            var other_staff = $(this).find("#other_staff_"+$(this).attr('id')).text();
+
+            var document_cost_2 = $(this).find("#document_cost_2_"+$(this).attr('id')).text();
+            var pay_cost = $(this).find("#pay_cost_"+$(this).attr('id')).text();
+
+            var m = $(this).find("#m_"+$(this).attr('id')).text();
+            var s = $(this).find("#s_"+$(this).attr('id')).text();
+            var c = $(this).find("#c_"+$(this).attr('id')).text();
+
+            //alert(agent_code);
+            $('#yes').val($(this).attr('id'));
+            
+            
+            $('#code').val(code);
+            $("#staff option:contains(" + staff + ")").attr('selected', 'selected');
+            $('#invoice_date').val(invoice_date.replace(/\//g,"-"));
+            $('#agent_manifest_date').val(agent_manifest_date.replace(/\//g,"-"));
+            $('#comment').val(comment);
+            $('#revenue_vat').val(revenue_vat);
+            $('#revenue').val(revenue);
+            $('#cost_sg').val(cost_sg);
+            $('#cost_cm').val(cost_cm);
+            $('#driver_cost').val(driver_cost);
+            $('#document_cost').val(document_cost);
+            $('#commission').val(commission_name);
+            $('#commission_cost').val(commission_cost);
+            $('#commission').attr('data',commission);
+
+            $('#other_cost').val(other_cost);
+            $("#other_staff [value="+other_staff+"]").attr('selected', 'selected');
+
+            $('#document_cost_2').val(document_cost_2);
+            $('#pay_cost').val(pay_cost);
+
+            $('#customer_email').val(customer_email);
+            $('#customer_phone').val(customer_phone);
+            $('#customer_name').val(customer_name);
+            $('#customer_name').attr('data',customer);
+
+            $('#m').val(m);
+            $('#s').val(s);
+            $('#c').val(c);
+            $('#m').attr('data',$(this).find("#m_"+$(this).attr('id')).attr('m'));
+            $('#s').attr('data',$(this).find("#s_"+$(this).attr('id')).attr('s'));
+            $('#c').attr('data',$(this).find("#c_"+$(this).attr('id')).attr('c'));
+            $("#m").attr("code",'true');
+            $("#s").attr("code",'true');
+            $("#c").attr("code",'true');
+
+            $( ".add-field" ).dialog( "open" );
+        }
+
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    if ($('#yes').val() != "") {
+        addRow('dataTable');
+        $("#dataTable>tbody>tr").filter("[class]").remove();
+    };
+
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+     $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
+     $(':checkbox[name="customer_type"]').attr("disabled", false);
+    $(':checkbox[name="customer_type"][value="old"]').prop("checked", true);
+    
+     $("#customer_name").prop('readonly', false);
+        $("#customer_name").attr("code",'false');
+        $('#customer_name').val("");
+        $('#customer_phone').val("");
+        $('#customer_email').val("");
+        $('#agent_manifest_date').val("");
+         $('#code').val("");
+        $('#comment').val("");
+        $('#revenue_vat').val(0);
+        $('#revenue').val(0);
+        $('#cost_sg').val(0);
+        $('#cost_cm').val(0);
+        $('#driver_cost').val(0);
+        $('#document_cost').val(0);
+        $('#commission').val("");
+        $('#commission_cost').val(0);
+        $('#commission').attr('data',"");
+        $('#invoice_date').val("");
+        $('#other_cost').val(0);
+        $("#other_staff [value=-1]").attr('selected', 'selected');
+
+        $('#document_cost_2').val(0);
+        $('#pay_cost').val(0);
+        $('#m').val("");
+        $('#s').val("");
+        $('#c').val("");
+        $('#m').attr("data","");
+        $('#s').attr("data","");
+        $('#c').attr("data","");
+
+        
+        $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+   
+   $('#customer_name').attr('data',"");
+
+   $( ".add-field" ).dialog( "open" );
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_agent").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                    
+                    if ($('#m').attr('value') != "" && $('#m').attr('code') == 'false') {
+                        $('#m').val("");
+                        $('#m').focus();
+                        return false;
+                    };
+                    if ($('#s').attr('value') != "" && $('#s').attr('code') == 'false') {
+                        $('#s').val("");
+                        $('#s').focus();
+                        return false;
+                    };
+                    if ($('#c').attr('value') != "" && $('#c').attr('code') == 'false') {
+                        $('#c').val("");
+                        $('#c').focus();
+                        return false;
+                    };
+                    if ($('#m').attr('value') == "" && $('#c').attr('value') == "" && $('#s').attr('value') == "") {
+                        $('#m').focus();
+                        return false;
+                    };
+
+                    var agent_manifest_date = $('#agent_manifest_date').attr('value');
+                    var code = $('#code').attr('value');
+                    var comment = $('#comment').attr('value');
+                    var staff = $('#staff').attr('value');
+                    var revenue_vat = $('#revenue_vat').attr('value');
+                    var revenue = $('#revenue').attr('value');
+                    var cost_sg = $('#cost_sg').attr('value');
+                    var cost_cm = $('#cost_cm').attr('value');
+                    var driver_cost = $('#driver_cost').attr('value');
+                    var commission_cost = $('#commission_cost').attr('value');
+                    var commission_name = $('#commission').attr('value');
+                    var commission = $('#commission').attr('data');
+                    var document_cost = $('#document_cost').attr('value');
+                    var customer = $('#customer_name').attr('data');
+                    var customer_name = $('#customer_name').attr('value');
+                    var customer_phone = $('#customer_phone').attr('value');
+                    var customer_email = $('#customer_email').attr('value');
+                    var invoice_date = $('#invoice_date').attr('value');
+                    var other_cost = $('#other_cost').attr('value');
+                    var other_staff = $('#other_staff').attr('value');
+
+                    var document_cost_2 = $('#document_cost_2').attr('value');
+                    var pay_cost = $('#pay_cost').attr('value');
+
+                    var m = $('#m').attr('data');
+                    var s = $('#s').attr('data');
+                    var c = $('#c').attr('data');
+
+                    if (commission_cost > 0 && commission_name == "") {
+                        $('#commission').focus();
+                        return;
+                    };
+
+                    var vendor_cost = [];
+
+                    var cost_type = [];
+                    var vendor = [];
+                    var cost = [];
+                    var cost_vat = [];
+                    var vendor_expect_date = [];
+                    var vendor_source = [];
+                    var cost_comment = [];
+
+                    $('.cost_type').each(function() { 
+                        cost_type.push($(this).val());
+                    });
+
+                    $('.vendor').each(function() { 
+                        vendor.push($(this).val());
+                    });
+
+                    $('.cost').each(function() { 
+                        cost.push($(this).val());
+                    });
+                    $('.cost_vat').each(function() { 
+                        cost_vat.push($(this).val());
+                    });
+                    $('.vendor_expect_date').each(function() { 
+                        vendor_expect_date.push($(this).val());
+                    });
+                    $('.vendor_source').each(function() { 
+                        vendor_source.push($(this).val());
+                    });
+                    $('.cost_comment').each(function() { 
+                        cost_comment.push($(this).val());
+                    });
+
+                    
+                    for (var i = 0; i < cost_type.length; i++) {
+                        vendor_cost.push({'cost_type':cost_type[i], 'vendor':vendor[i], 'cost':cost[i], 'cost_vat':cost_vat[i], 'vendor_expect_date':vendor_expect_date[i], 'vendor_source':vendor_source[i], 'cost_comment':cost_comment[i]});
+                        
+                        
+                    };
+
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/agentmanifest/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            agent_manifest_date: agent_manifest_date,
+                            code: code,
+                            comment: comment,
+                            staff: staff,
+                            revenue_vat: revenue_vat,
+                            revenue: revenue,
+                            cost_sg: cost_sg,
+                            cost_cm: cost_cm,
+                            driver_cost: driver_cost,
+                            commission_cost: commission_cost,
+                            commission_name: commission_name,
+                            commission: commission,
+                            document_cost: document_cost,
+                            customer_name:customer_name,
+                            customer: customer,
+                            customer_email: customer_email,
+                            customer_phone: customer_phone,
+                            invoice_date: invoice_date,
+                            other_staff: other_staff,
+                            other_cost: other_cost,
+                            document_cost_2: document_cost_2,
+                            pay_cost: pay_cost,
+
+                            cost_type: cost_type,
+                            vendor: vendor,
+                            cost: cost,
+                            cost_vat: cost_vat,
+                            vendor_expect_date: vendor_expect_date,
+                            vendor_source: vendor_source,
+                            cost_comment: cost_comment,
+                            vendor_cost: vendor_cost,
+                            m: m,
+                            s: s,
+                            c: c,
+                            
+                            yes: yes,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (yes != "") {
+                                
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 500);
+
+                                    $('#agent_manifest_date_'+yes).text(agent_manifest_date);
+                                
+                            }
+                            else{
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 500);
+                                
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .appstart(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="agent_manifest_date_'+parseInt(lastID+1)+'">'+agent_manifest_date+'</td><td class="fix" id="loc_from_'+parseInt(lastID+1)+'">'+$("#loc_from").val()+'</td><td class="fix" id="loc_to_'+parseInt(lastID+1)+'">'+$("#loc_to").val()+'</td><td class="fix" id="size_'+parseInt(lastID+1)+'">'+$("#size option:selected").text()+'</td><td class="fix" id="type_'+parseInt(lastID+1)+'">'+$("#type option:selected").text()+'</td><td class="fix" id="ton_'+parseInt(lastID+1)+'">'+ton+'</td><td class="fix" id="number_'+parseInt(lastID+1)+'">'+number+'</td><td class="fix" id="price_'+parseInt(lastID+1)+'">'+price+'</td><td class="fix" id="price_change_'+parseInt(lastID+1)+'">'+price_change+'</td><td class="fix" id="customer_name_'+parseInt(lastID+1)+'">'+customer_name+'</td><td class="fix" id="agent_'+parseInt(lastID+1)+'">'+<?php echo $_SESSION['user_logined'] ?>+'</td><td class="fix" id="status_'+parseInt(lastID+1)+'">'+status==1?"Hoàn tất":"Đang thực hiện"+'</td><td class="fix" id="start_date_'+parseInt(lastID+1)+'">'+start_date+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   
+
+   
+$('#customer_name').keyup(function(){
+      if($(':checkbox[name="customer_type"]:checked').val()=="old"){
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/salereport/getcustomer',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#customer_list_id').slideDown(200);
+                $('#customer_list_id').html(data);
+            }
+        });
+        if ($('#customer_name').val() == "" || $('#customer_name').attr('data') == "") {
+            $('#customer_phone').val("");
+            $('#customer_email').val("");
+            $('#customer_name').attr('data',"");
+        }
+      }
+   });  
+
+
+$('#customer_name').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#customer_name').attr('data',"");
+        }
+            
+      });  
+
+$('#commission').keyup(function(){
+      
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/agentmanifest/getvendor',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#vendor_list_id').slideDown(200);
+                $('#vendor_list_id').html(data);
+            }
+        });
+        if ($('#commission').val() == "" || $('#commission').attr('data') == "") {
+            
+            $('#commission').attr('data',"");
+        }
+      
+   });  
+
+
+$('#commission').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#commission').attr('data',"");
+        }
+            
+      });  
+
+$('#m').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#m').attr('data',"");
+            $('#m').attr('code',false);
+        }
+            
+      });
+   $('#s').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#s').attr('data',"");
+            $('#s').attr('code',false);
+        }
+            
+      });
+   $('#c').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#c').attr('data',"");
+            $('#c').attr('code',false);
+        }
+            
+      });
+
+    $('#m').keyup(function(){
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/salereport/getstaff',
+            type: 'POST',
+            data: {keyword:keyword,text_id:"m"},
+            success:function(data){
+                $('#staff_list_id_m').slideDown(200);
+                $('#staff_list_id_m').html(data);
+            }
+        });
+        if ($('#m').val() == "" || $('#m').attr('data') == "") {
+            
+            $('#m').attr('data',"");
+            $('#m').attr('code',false);
+        };
+   });
+
+   $('#s').keyup(function(){
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/salereport/getstaff',
+            type: 'POST',
+            data: {keyword:keyword,text_id:"s"},
+            success:function(data){
+                $('#staff_list_id_s').slideDown(200);
+                $('#staff_list_id_s').html(data);
+            }
+        });
+        if ($('#s').val() == "" || $('#s').attr('data') == "") {
+            
+            $('#s').attr('data',"");
+            $('#s').attr('code',false);
+        };
+   });
+
+   $('#c').keyup(function(){
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/salereport/getstaff',
+            type: 'POST',
+            data: {keyword:keyword,text_id:"c"},
+            success:function(data){
+                $('#staff_list_id_c').slideDown(200);
+                $('#staff_list_id_c').html(data);
+            }
+        });
+        if ($('#c').val() == "" || $('#c').attr('data') == "") {
+            
+            $('#c').attr('data',"");
+            $('#c').attr('code',false);
+        };
+   });
+   
+   $('.phone').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+          .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+        ;
+      });
+    });
+
+   $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+    
+
+});
+
+function set_item_m(item,value) {
+    // change input value
+    $('#m').val(item);
+    $("#m").attr("data",value);
+    $("#m").attr("code",'true');
+    // hide proposition list
+    $('#staff_list_id_m').hide();
+    $('#m').focus();
+}
+function set_item_s(item,value) {
+    // change input value
+    $('#s').val(item);
+    $("#s").attr("data",value);
+    $("#s").attr("code",'true');
+    // hide proposition list
+    $('#staff_list_id_s').hide();
+    $('#s').focus();
+}
+function set_item_c(item,value) {
+    // change input value
+    $('#c').val(item);
+    $("#c").attr("data",value);
+    $("#c").attr("code",'true');
+    // hide proposition list
+    $('#staff_list_id_c').hide();
+    $('#c').focus();
+}
+function set_item(item,value,phone,address,email) {
+    // change input value
+    $('#customer_name').val(item);
+    $("#customer_name").attr("data",value);
+    $('#customer_phone').val(phone);
+    $('#customer_email').val(email);
+    // hide proposition list
+    $('#customer_list_id').hide();
+    $('#customer_name').focus();
+}
+function set_item_vendor(value,name,phone) {
+    // change input value
+    $('#commission').val(name);
+    $("#commission").attr("data",value);
+    
+    // hide proposition list
+    $('#vendor_list_id').hide();
+    $('#commission').focus();
+
+}
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+    $(function() {
+    var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+              
+            
+    
+});
+
+</script>
+</div>
+
+
+<script type="text/javascript">
+
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Chỉnh manifest",
+    hide: 'fold',
+    show: 'blind'
+});
+
+function addRow(tableID){
+    var table=document.getElementById(tableID);
+    var rowCount=table.rows.length;
+    var row=table.insertRow(rowCount);
+    var colCount=table.rows[0].cells.length;
+    for(var i=0;i<colCount;i++){
+        var newcell=row.insertCell(i);
+        newcell.innerHTML=table.rows[0].cells[i].innerHTML;
+        switch(newcell.childNodes[0].type){
+            case"text":newcell.childNodes[0].value="";
+            break;
+            case"checkbox":newcell.childNodes[0].checked=false;
+            break;
+            case"select-one":newcell.childNodes[0].selectedIndex=0;
+            break;
+        }
+    }
+
+    $('.cost_type:last').attr('disabled',false);
+    $('.vendor:last').attr('disabled',false);
+    $('.cost_vat:last').val("");
+    $('.cost:last').val("");
+    $('.cost_comment:last').val("");
+    $('.vendor_expect_date:last').val("");
+    $('input[name="chk"]:last').attr('data',"");
+    $('input[name="chk"]:last').attr('tabindex',0);
+    $('input[name="chk"]:last').attr('title',"");
+    $('input[name="chk"]:last').attr('class',"");
+
+    $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+         $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+}
+function deleteRow(tableID){
+    try{
+        var table=document.getElementById(tableID);
+        var rowCount=table.rows.length;
+
+        var r = confirm("Bạn có chắc chắn không?");
+        if (r == true){
+            for(var i=0;i<rowCount;i++){
+                var row=table.rows[i];
+                var chkbox=row.cells[0].childNodes[0];
+                if(null!=chkbox&&true==chkbox.checked){
+                    if(chkbox.getAttribute("title") > 0){
+                        
+                            var data = chkbox.getAttribute("data");
+                            var type = chkbox.getAttribute("tabindex");
+                            var vendor = chkbox.className;
+                            $.post("<?php echo BASE_URL ?>/agentmanifest/deletevendor", {data: data, vendor: vendor, type: type},
+                               function(data){
+                                //alert(data);
+                               }); 
+                        
+                    }
+                    if(rowCount<=1){
+                        alert("Cannot delete all the rows.");
+                        break;
+                    }
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+            }
+        }
+    }
+    catch(e){
+        alert(e);
+    }
+}
+
+$('#show_other_cost').click(function(){
+    $('.other_cost').slideDown(300);
+    $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+         $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+});
+</script>

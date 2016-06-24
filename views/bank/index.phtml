@@ -1,0 +1,74 @@
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> TÀI KHOẢN </h1></center>
+
+    <div class="add-box">
+        <a class="add_button" id="btnExport" >Export Excel</a>
+    </div>
+	<div class="search-box">
+        <div class="add-box">
+                  <form id="report" name="report" action method="post">
+            Tuần  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn tuần" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >    
+            Năm  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn năm" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="submit" name="submit" id="xem" value="Xem">  
+            </form>
+            
+        </div>
+    </div>
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+    	
+        <th style="width:30px" class="fix">
+            <a >STT </a>
+        </th>
+        <th  class="fix">
+            <a >Tài khoản </a>
+        </th>
+        <th class="fix">
+            <a>Số tiền </a>
+        </th> 
+          
+        <th class="fix">
+            <a >Thêm </a>
+        </th> 
+        <th class="fix">
+            <a >Bớt </a>
+        </th>
+        <th class="fix">
+            <a >Tăng/Giảm </a>
+        </th>
+       
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $i=1; ?>
+    <?php foreach ($banks as $bank) { ?>
+    <?php
+    if (!isset($assets_tang[$bank->bank_id])) {
+        $assets_tang[$bank->bank_id] = 0;   
+    }
+    if (!isset($assets_giam[$bank->bank_id])) {
+        $assets_giam[$bank->bank_id] = 0;   
+    }
+    $sodu = $assets_tang[$bank->bank_id] - $assets_giam[$bank->bank_id];
+    ?>
+    <tr style="font-weight: bold;">
+        <td style="text-align:center;" class="fix"><?php echo $i++; ?></td>
+        <td class="fix"><?php echo $bank->bank_name; ?></td>
+        <td style="color: rgb(9, 74, 160)" class="fix"><?php echo $lib->formatMoney(isset($assets[$bank->bank_id])?$assets[$bank->bank_id]:0) ?></td>
+        <td style="color: rgb(24, 160, 9)" class="fix"><?php echo $lib->formatMoney(isset($assets_tang[$bank->bank_id])?$assets_tang[$bank->bank_id]:0) ?></td>
+        <td style="color: red" class="fix"><?php echo $lib->formatMoney(isset($assets_giam[$bank->bank_id])?$assets_giam[$bank->bank_id]:0) ?></td>
+        <td style="<?php echo $sodu>0?'color: rgb(24, 160, 9)':'color:red'; ?>" class="fix"><?php echo $lib->formatMoney($sodu) ?></td>
+    </tr>
+    <?php } ?>
+   </tbody>
+</table>
+

@@ -1,0 +1,43 @@
+/* For appearance */
+.sticky-wrap {
+	overflow-x: auto;
+	overflow-y: hidden;
+	position: relative;
+	margin: 3em 0;
+	width: 100%;
+}
+.sticky-wrap .sticky-thead,
+.sticky-wrap .sticky-col,
+.sticky-wrap .sticky-intersect {
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	transition: all .125s ease-in-out;
+	
+	width: auto; /* Prevent table from stretching to full size */
+}
+	.sticky-wrap .sticky-thead {
+		box-shadow: 0 0.25em 0.1em -0.1em rgba(0,0,0,.125);
+		
+		width: 100%; /* Force stretch */
+                background: #f5fafd;
+  		background-image: -webkit-gradient(linear,left bottom,left top,from(#eff8ff),to(#f7fcfe));
+  		background-image: -webkit-linear-gradient(bottom,#eff8ff,#f7fcfe);
+  		background-image: -moz-linear-gradient(bottom,#eff8ff,#f7fcfe);
+  		background-image: -o-linear-gradient(bottom,#eff8ff,#f7fcfe);
+  		background-image: linear-gradient(to top,#eff8ff,#f7fcfe);
+	}
+	.sticky-wrap .sticky-intersect {
+		opacity: 1;
+		
+
+	}
+		.sticky-wrap .sticky-intersect th {
+			background-color: #666;
+			color: #eee;
+		}
+.sticky-wrap td,
+.sticky-wrap th {
+	box-sizing: border-box;
+}

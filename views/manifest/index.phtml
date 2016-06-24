@@ -1,0 +1,345 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'manifest_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'manifest_case')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'manifest_type')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'hcm')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'caimep')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+<center style="clear:both;margin-bottom: -30px;"><h1> MANIFEST </h1></center>
+<div id="content" style="padding:5px;">
+    
+<div class="add-box"><a class="add_button" onClick="add_click();">Thêm bảng giá cước</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="2">Hiển thị 2 giá trị</option>
+            <option value="5">Hiển thị 5 giá trị</option>
+            <option value="8">Hiển thị 8 giá trị</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','manifest_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'manifest_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','manifest_case','<?php echo $url_order ?>')">Nội dung <?php if ($order_by == 'manifest_case'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','hcm','<?php echo $url_order ?>')">HCM <?php if ($order_by == 'hcm'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','caimep','<?php echo $url_order ?>')">Cái Mép <?php if ($order_by == 'caimep'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','manifest_type','<?php echo $url_order ?>')">Loại <?php if ($order_by == 'manifest_type'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($manifests as $manifest) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $manifest->manifest_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $manifest->manifest_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix"  id="manifest_case_<?php echo $manifest->manifest_id; ?>"><?php echo $manifest->manifest_case; ?></td>
+            
+            <td class="fix" id="hcm_<?php echo $manifest->manifest_id; ?>"><?php echo $lib->formatMoney($manifest->hcm); ?></td>
+            <td class="fix" id="caimep_<?php echo $manifest->manifest_id; ?>"><?php echo $lib->formatMoney($manifest->caimep); ?></td>
+            <td class="fix" data="<?php echo $manifest->manifest_type; ?>" id="manifest_type_<?php echo $manifest->manifest_id; ?>"><?php echo $manifest->manifest_type==1?'Chỉnh chi tiết':'Chỉnh đặc biệt'; ?></td>
+            
+            
+            <td>
+                <a class="error" href="#">Sửa</a>
+                | 
+                <a class="error" onclick="del(<?php echo $manifest->manifest_id ?>)" >Xóa</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Bảng giá cước </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_manifest" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td></td>
+                            <td>&nbsp;</td>
+                            <td><div class="add-box"><a class="add_button" onClick="add_click();">Thêm bảng giá cước</a></div></td>
+                            
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Nội dung </td>
+                            <td>
+                                <textarea style="width:100%" name="manifest_case" id="manifest_case" required="required" tabindex="1"></textarea>
+                            </td>
+                            <td></td>
+                            <td>HCM </td>
+                            <td><input type="text" id="hcm" class="number" name="hcm" tabindex="3" ></td>
+                            
+                            
+
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Loại </td>
+                            <td>
+                                <select style="width:200px" id="manifest_type" name="manifest_type"  required="required" tabindex="2">
+                                    <option value="1">Chỉnh chi tiết</option>
+                                    <option value="2">Chỉnh đặc biệt</option>
+                                </select>
+                            </td>
+                            <td></td>
+                            <td>Cái Mép </td>
+                            <td><input type="text" class="number" id="caimep" name="caimep" tabindex="4" ></td>
+                            
+                        </tr>
+                        
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="8"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="9"></td>
+                            <td></td>
+                            <td></td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+   
+});
+    $('.edit_tr').click(function(){
+        if(!$('.checkbox').is(':checked')){
+            $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        }
+        var manifest_case = $(this).find("#manifest_case_"+$(this).attr('id')).text();
+        var manifest_type = $(this).find("#manifest_type_"+$(this).attr('id')).attr('data');
+        var hcm = $(this).find("#hcm_"+$(this).attr('id')).text();
+        var caimep = $(this).find("#caimep_"+$(this).attr('id')).text();
+        
+        //alert(loc_from);
+        $('#yes').val($(this).attr('id'));
+        
+        $('#manifest_type option[value='+manifest_type+']').attr('selected','selected');
+        
+        
+        $('#hcm').val(hcm);
+        $('#caimep').val(caimep);
+        $('#manifest_case').val(manifest_case);
+        
+        
+        var radioLength = $("input[name='gender']").length;
+        for(var i = 0; i < radioLength; i++) {
+            $("input[name='gender']")[i].checked = false;
+            if($("input[name='gender']")[i].value == staff_gender) {
+                $("input[name='gender']")[i].checked = true;
+            }
+        }
+        $('#manifest_case').attr('data',manifest_case);
+        $('#manifest_case').focus();
+        
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+    $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+    
+        $('#manifest_case').attr('data',"");
+        $('#manifest_case').val("");
+        $('#manifest_case').focus();
+        $('#hcm').val(0);
+        $('#caimep').val(0);
+        
+        
+        $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_manifest").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var manifest_case = $('#manifest_case').attr('value');
+                    var manifest_type = $('#manifest_type').attr('value');
+                    var hcm = $('#hcm').attr('value');
+                    var caimep = $('#caimep').attr('value');
+                    
+                    var yes = $('#yes').attr('value');
+                    var check = $('#manifest_case').attr('data');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/manifest/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            manifest_case: manifest_case,
+                            manifest_type: manifest_type,
+                            hcm: hcm,
+                            caimep: caimep,
+                            
+                            yes: yes,
+                            check: check,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (check != "") {
+                                
+                                $('#hcm_'+yes).text(hcm);
+                                $('#caimep_'+yes).text(caimep);
+                                $('#manifest_type_'+yes).text($("#manifest_type option:selected").text());
+                                $('#manifest_case_'+yes).text(manifest_case);
+                                
+                            }
+                            else{
+                                if (answer.trim() != "Nội dung này đã tồn tại") {
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="manifest_case_'+parseInt(lastID+1)+'">'+manifest_case+'</td><td class="fix" id="hcm_'+parseInt(lastID+1)+'">'+hcm+'</td><td class="fix" id="caimep_'+parseInt(lastID+1)+'">'+caimep+'</td><td class="fix" id="manifest_type_'+parseInt(lastID+1)+'">'+$("#manifest_type option:selected").text()+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   
+   
+   
+
+   
+   $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+    
+
+});
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+</script>
+</div>

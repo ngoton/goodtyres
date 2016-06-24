@@ -1,0 +1,371 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'sec_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'sec_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'sec_type')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'sec_code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'sec_money')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'bank_in')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'bank_out')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'sec_comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> RÚT SEC - CHUYỂN TÀI KHOẢN </h1></center>
+    <div class="add-box">
+        <a class="add_button" id="btnExport" >Export Excel</a>
+    </div>
+<form id="report" name="report" action method="post">
+	<div class="search-box">
+        
+        <div class="add-box">
+                  
+            Từ tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn tháng" <?php if(isset($ngaytao)) echo "value='$ngaytao'"; ?> >    
+            Đến tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytaobatdau" id="chonngaytaobatdau" placeholder="Chọn tháng" <?php if(isset($ngaytaobatdau)) echo "value='$ngaytaobatdau'"; ?> >  
+            <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">  
+           
+            
+        </div>
+        <div class="add-box">
+                  
+            Từ  <input style="width:90px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            Đến  <input style="width:90px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+            <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');"> 
+        </div>
+    </div>
+</form>
+
+</div>
+
+<table id="tblExport" class="table_data">
+    <thead>
+    <tr>
+        <th  class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sec_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'sec_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sec_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'sec_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th nowrap class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sec_type','<?php echo $url_order ?>')">Mảng <?php if ($order_by == 'sec_type'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sec_code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'sec_code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sec_money','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'sec_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        <th nowrap class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','bank_out','<?php echo $url_order ?>')">Tài khoản ra <?php if ($order_by == 'bank_out'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sec_money','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'sec_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        <th nowrap class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','bank_in','<?php echo $url_order ?>')">Tài khoản vào<?php if ($order_by == 'bank_in'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sec_money','<?php echo $url_order ?>')">Balance <?php if ($order_by == 'sec_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        <th now
+        <th class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sec_comment','<?php echo $url_order ?>')">Lý do <?php if ($order_by == 'sec_comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+                
+           
+    </tr>
+    
+   </thead>
+    <tbody>
+    <?php $balance=0; ?>
+    <?php foreach ($secs as $cost) : ?>
+        <tr  style="font-weight:bold; background:rgba(153, 154, 249, 0.7)" onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $cost->sec_id ?>" class="edit_tr" >
+            <td ><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $cost->sec_id ?>"></td>
+            <td  class="fix"><?php echo $i++; ?></td>
+             <td  class="fix"  id="sec_date_<?php echo $cost->sec_id; ?>"><?php echo $lib->hien_thi_ngay_thang($cost->sec_date) ?></td>
+            
+            <td  class="fix" ></td>
+            <td  class="fix" ></td> 
+            <td class="fix" id="sec_money_<?php echo $cost->sec_id; ?>"><?php echo $lib->formatMoney($cost->sec_money); ?></td>
+            <td class="fix" id="bank_out_<?php echo $cost->sec_id; ?>"><?php echo isset($bank_data['name'][$cost->bank_out])?$bank_data['name'][$cost->bank_out]:null; ?></td>
+            <td class="fix" ></td>
+            <td class="fix" ></td>
+            <td class="fix" style="font-weight:bold; color: red" ><?php echo $lib->formatMoney($balance += $cost->sec_money); ?></td>
+             <td  class="fix" id="sec_comment_<?php echo $cost->sec_id; ?>"><?php echo $cost->sec_comment; ?></td> 
+            
+        </tr>
+        <?php $j = 'a'; $tongsd = 0; ?>
+        <?php foreach ($sec_datas[$cost->sec_id] as $sec) : ?>
+            <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $sec->sec_cost_id ?>" class="edit_tr" >
+                <td ><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $sec->sec_cost_id ?>"></td>
+                <td  class="fix">&nbsp; &nbsp;<?php echo $j++; ?></td>
+                 <td  class="fix"  id="sec_cost_date_<?php echo $sec->sec_cost_id; ?>"><?php echo $lib->hien_thi_ngay_thang($sec->sec_cost_date) ?></td>
+                
+                <td  class="fix" id="sec_cost_type_<?php echo $sec->sec_cost_id; ?>"><?php echo $sec->sec_cost_type==1?'Hành chính':($sec->sec_cost_type==2?'Sale':($sec->sec_cost_type==3?'Trading':($sec->sec_cost_type==4?'Agent':'TCMT'))); ?></td>
+                <td  class="fix" id="sec_code_<?php echo $sec->sec_cost_id; ?>"><?php echo $sec->sec_code; ?></td>
+                <td class="fix"></td> 
+                <td class="fix" ></td>
+                <td class="fix" id="sec_cost_money_<?php echo $sec->sec_cost_id; ?>"><?php echo $lib->formatMoney($sec->sec_cost_money); ?></td>
+                
+                <td class="fix" id="sec_cost_bank_<?php echo $sec->sec_cost_id; ?>"><?php echo isset($bank_data['name'][$sec->sec_cost_bank])?$bank_data['name'][$sec->sec_cost_bank]:null; ?></td>
+                <td class="fix" style="color: red" ><?php echo $lib->formatMoney($balance -= $sec->sec_cost_money); ?></td>
+                 <td  class="fix" id="sec_cost_comment_<?php echo $sec->sec_cost_id; ?>"><?php echo $sec->sec_cost_comment; ?></td> 
+                
+                 
+                <?php $tongsd += $sec->sec_cost_money; ?>
+            </tr>
+        <?php endforeach; ?>
+        <tr style="font-weight:bold; color: red" onClick="HighLightTR(this,'#4d90fe','cc3333');" class="edit_tr" >
+            <td style="text-align:center" colspan="5" class="fix">Còn lại</td>
+            <td class="fix" ></td>
+            <td class="fix" ></td>
+            <td class="fix" ></td>
+            <td class="fix" ></td>
+            <td class="fix" ><?php echo $lib->formatMoney($balance); ?></td>
+            <td class="fix" ></td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+    </table>
+
+
+
+<?php
+$this->helper('slidePaginator');
+?>
+
+
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+
+ $(function() {
+    var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+              
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytao").change();
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts);
+
+    $("#chonngaytao").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var firstDay = new Date(year, month, 1);
+
+        $('#batdau').datepicker("setDate", firstDay );
+    });
+
+    var pickerOpts5 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytaobatdau").change();
+         },
+         
+    };  
+    $("#chonngaytaobatdau").datepicker(pickerOpts5);
+
+    $("#chonngaytaobatdau").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var lastDay = new Date(year, month+1, 0);
+        $('#ketthuc').datepicker("setDate", lastDay );
+    });
+    $(".monthPicker").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });        
+    
+});
+
+
+</script>
+</div>
+<style type="text/css">
+
+.wrap {
+    width: 100%;
+    font-size: 12px;
+}
+
+.wrap table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.wrap td, .wrap th {
+    width: 100px;
+    word-wrap: break-word;
+}
+
+table.head tr td {
+    background: #eee;
+}
+
+.inner_table {
+    width: 100%;
+    height: 300px;
+    overflow-y: auto;
+    
+}
+
+</style>
+
+<script type="text/javascript">
+
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Chi sec",
+    hide: 'fold',
+    show: 'blind'
+});
+
+
+</script>

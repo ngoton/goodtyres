@@ -1,0 +1,345 @@
+
+<?php
+$i = 0;
+?>
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> LÔ HÀNG </h1></center>
+
+    
+    <div class="search-box">
+        <form id="report" name="report" action method="post">
+        <div class="add-box">
+                  
+            Từ tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn tháng" <?php if(isset($ngaytao)) echo "value='$ngaytao'"; ?> >    
+            Đến tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytaobatdau" id="chonngaytaobatdau" placeholder="Chọn tháng" <?php if(isset($ngaytaobatdau)) echo "value='$ngaytaobatdau'"; ?> >  
+             <input type="submit" name="submit" id="xem" value="Xem">  
+           
+            
+        </div>
+        <div class="add-box">
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >    
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="submit" name="submit" id="xem" value="Xem">  
+            
+            
+        </div>
+        <div class="add-box">
+            Code  <input style="width:100px" type="search" name="shipcode" id="shipcode" placeholder="Code" value="<?php echo $code ?>" >      
+             <input type="submit" name="submit" id="xem" value="Xem">  
+            </form>
+            
+        </div>
+    </div>
+    <div class="add-box">
+        <a class="add_button" id="btnExport" >Export Excel</a>
+    </div>
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+        
+        <th style="width:30px" class="fix">
+            <a >STT </a>
+        </th>
+        <th  class="fix">
+            <a >Ngày </a>
+        </th>
+        <th  class="fix">
+            <a>Code </a>
+        </th> 
+          
+        <th class="fix">
+            <a >Diễn giải </a>
+        </th> 
+        <th class="fix">
+            <a >Doanh thu </a>
+        </th>
+        <th class="fix">
+            <a >Chi phí </a>
+        </th>
+        <th class="fix">
+            <a >Lợi nhuận </a>
+        </th>
+       
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $doanhthu=0; $chiphi=0; ?>
+    <?php foreach ($sales as $sale) : ?>
+    <?php $doanhthu += $sale->revenue_vat+$sale->revenue+$sale->payhalf;
+            $chiphi += $sale->cost_vat+$sale->cost+$sale->estimate_cost+$sale->payhalf;
+    ?>
+    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" class="edit_tr" id="<?php echo $i++ ?>">
+        <td style="text-align:center;" class="fix"><?php echo $i ?></td>
+        <td class="fix" id="sale_date_<?php echo $i ?>"><?php echo $lib->hien_thi_ngay_thang($sale->sale_date) ?></td>
+        <td class="fix" id="code_<?php echo $i ?>"><a style="text-decoration: underline;" href="<?php echo $this->url('salereport/index/'.$sale->code) ?>"><?php echo $sale->code ?></a></td>
+        <td class="fix" id="comment_<?php echo $i ?>"><?php echo $sale->comment ?></td>
+        <td class="fix" id="revenue_<?php echo $i ?>"><a class="revenue" style="text-decoration: underline;" href="<?php echo $this->url('allshipment/receivable/'.$sale->code) ?>"><?php echo $lib->formatMoney($sale->revenue_vat+$sale->revenue+$sale->payhalf) ?></a></td>
+        <td class="fix" id="cost_<?php echo $i ?>"><a class="revenue" style="text-decoration: underline;" href="<?php echo $this->url('allshipment/payable/'.$sale->code) ?>"><?php echo $lib->formatMoney($sale->cost_vat+$sale->cost+$sale->estimate_cost+$sale->payhalf) ?></a></td>
+        <td class="fix" id="profit_<?php echo $i ?>"><?php echo $lib->formatMoney(($sale->revenue_vat+$sale->revenue+$sale->payhalf)-($sale->cost_vat+$sale->cost+$sale->estimate_cost+$sale->payhalf)) ?></td>
+    </tr>
+    <?php endforeach; ?>
+    <?php foreach ($tradings as $sale) : ?>
+    <?php $doanhthu += $sale->revenue_vat+$sale->revenue+$sale->payhalf;
+            $chiphi += $sale->cost_vat+$sale->cost+$sale->estimate_cost+$sale->payhalf;
+    ?>
+    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" class="edit_tr" id="<?php echo $i++ ?>">
+        <td style="text-align:center;" class="fix"><?php echo $i ?></td>
+        <td class="fix" id="sale_date_<?php echo $i ?>"><?php echo $lib->hien_thi_ngay_thang($sale->sale_date) ?></td>
+        <td class="fix" id="code_<?php echo $i ?>"><a style="text-decoration: underline;" href="<?php echo $this->url('salereport/index/'.$sale->code) ?>"><?php echo $sale->code ?></a></td>
+        <td class="fix" id="comment_<?php echo $i ?>"><?php echo $sale->comment ?></td>
+        <td class="fix" id="revenue_<?php echo $i ?>"><a class="revenue" style="text-decoration: underline;" href="<?php echo $this->url('allshipment/receivable/'.$sale->code) ?>"><?php echo $lib->formatMoney($sale->revenue_vat+$sale->revenue+$sale->payhalf) ?></a></td>
+        <td class="fix" id="cost_<?php echo $i ?>"><a class="revenue" style="text-decoration: underline;" href="<?php echo $this->url('allshipment/payable/'.$sale->code) ?>"><?php echo $lib->formatMoney($sale->cost_vat+$sale->cost+$sale->estimate_cost+$sale->payhalf) ?></a></td>
+        <td class="fix" id="profit_<?php echo $i ?>"><?php echo $lib->formatMoney(($sale->revenue_vat+$sale->revenue+$sale->payhalf)-($sale->cost_vat+$sale->cost+$sale->estimate_cost+$sale->payhalf)) ?></td>
+    </tr>
+    <?php endforeach; ?>
+    <?php foreach ($agents as $sale) : ?>
+    <?php $doanhthu += $sale->total_offer;
+            $chiphi += $sale->total_cost;
+    ?>
+    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" class="edit_tr" id="<?php echo $i++ ?>">
+        <td style="text-align:center;" class="fix"><?php echo $i ?></td>
+        <td class="fix" id="sale_date_<?php echo $i ?>"><?php echo $lib->hien_thi_ngay_thang($sale->agent_date) ?></td>
+        <td class="fix" id="code_<?php echo $i ?>"><a style="text-decoration: underline;" href="<?php echo $this->url('agent/index/'.$sale->code) ?>"><?php echo $sale->code ?></a></td>
+        <td class="fix" id="comment_<?php echo $i ?>"><?php echo $sale->name ?></td>
+        <td class="fix" id="revenue_<?php echo $i ?>"><a class="revenue" style="text-decoration: underline;" href="<?php echo $this->url('allshipment/receivable/'.$sale->code) ?>"><?php echo $lib->formatMoney($sale->total_offer) ?></a></td>
+        <td class="fix" id="cost_<?php echo $i ?>"><a class="revenue" style="text-decoration: underline;" href="<?php echo $this->url('allshipment/payable/'.$sale->code) ?>"><?php echo $lib->formatMoney($sale->total_cost) ?></a></td>
+        <td class="fix" id="profit_<?php echo $i ?>"><?php echo $lib->formatMoney($sale->total_offer-$sale->total_cost) ?></td>
+    </tr>
+    <?php endforeach; ?>
+    <?php foreach ($manifests as $sale) : ?>
+    <?php $doanhthu += $sale->revenue_vat+$sale->revenue;
+            $chiphi += $sale->cost_sg+$sale->cost_cm+$sale->driver_cost+$sale->commission_cost+$sale->other_cost+$sale->document_cost+$sale->document_cost_2+$sale->pay_cost+$sale->other_vendor_cost;
+    ?>
+    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" class="edit_tr" id="<?php echo $i++ ?>">
+        <td style="text-align:center;" class="fix"><?php echo $i ?></td>
+        <td class="fix" id="sale_date_<?php echo $i ?>"><?php echo $lib->hien_thi_ngay_thang($sale->agent_manifest_date) ?></td>
+        <td class="fix" id="code_<?php echo $i ?>"><a style="text-decoration: underline;" href="<?php echo $this->url('agentmanifest/index/'.$sale->code) ?>"><?php echo $sale->code ?></a></td>
+        <td class="fix" id="comment_<?php echo $i ?>"><?php echo $sale->comment ?></td>
+        <td class="fix" id="revenue_<?php echo $i ?>"><a class="revenue" style="text-decoration: underline;" href="<?php echo $this->url('allshipment/receivable/'.$sale->code) ?>"><?php echo $lib->formatMoney($sale->revenue_vat+$sale->revenue) ?></a></td>
+        <td class="fix" id="cost_<?php echo $i ?>"><a class="revenue" style="text-decoration: underline;" href="<?php echo $this->url('allshipment/payable/'.$sale->code) ?>"><?php echo $lib->formatMoney($sale->cost_sg+$sale->cost_cm+$sale->driver_cost+$sale->commission_cost+$sale->other_cost+$sale->document_cost+$sale->document_cost_2+$sale->pay_cost+$sale->other_vendor_cost) ?></a></td>
+        <td class="fix" id="profit_<?php echo $i ?>"><?php echo $lib->formatMoney(($sale->revenue_vat+$sale->revenue)-($sale->cost_sg+$sale->cost_cm+$sale->driver_cost+$sale->commission_cost+$sale->other_cost+$sale->document_cost+$sale->document_cost_2+$sale->pay_cost+$sale->other_vendor_cost)) ?></td>
+    </tr>
+    <?php endforeach; ?>
+    <?php foreach ($invoices as $sale) : ?>
+    <?php $doanhthu += $sale->receive;
+            $chiphi += $sale->pay1+$sale->pay2+$sale->pay3;
+    ?>
+    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" class="edit_tr" id="<?php echo $i++ ?>">
+        <td style="text-align:center;" class="fix"><?php echo $i ?></td>
+        <td class="fix" id="sale_date_<?php echo $i ?>"><?php echo $lib->hien_thi_ngay_thang($sale->invoice_date) ?></td>
+        <td class="fix" id="code_<?php echo $i ?>"><a style="text-decoration: underline;" href="<?php echo $this->url('invoice/index/'.$sale->invoice_id) ?>"><?php echo $sale->invoice_number ?></a></td>
+        <td class="fix" id="comment_<?php echo $i ?>"><?php echo $sale->comment ?></td>
+        <td class="fix" id="revenue_<?php echo $i ?>"><a class="revenue" style="text-decoration: underline;" href="<?php echo $this->url('allshipment/receivable/'.$sale->invoice_number) ?>"><?php echo $lib->formatMoney($sale->receive) ?></a></td>
+        <td class="fix" id="cost_<?php echo $i ?>"><a class="revenue" style="text-decoration: underline;" href="<?php echo $this->url('allshipment/payable/'.$sale->invoice_number) ?>"><?php echo $lib->formatMoney($sale->pay1+$sale->pay2+$sale->pay3) ?></a></td>
+        <td class="fix" id="profit_<?php echo $i ?>"><?php echo $lib->formatMoney($sale->profit) ?></td>
+    </tr>
+    <?php endforeach; ?>
+    <tr style="font-weight:bold; color:red">
+        <td class="fix" colspan="4">Tổng cộng</td>
+        <td class="fix" ><?php echo $lib->formatMoney($doanhthu) ?></td>
+        <td class="fix" ><?php echo $lib->formatMoney($chiphi) ?></td>
+        <td class="fix" ><?php echo $lib->formatMoney($doanhthu-$chiphi) ?></td>
+    </tr>
+   </tbody>
+</table>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('allshipment') ?>">&larr;</a></div>
+
+<style type="text/css">
+    .table_data tbody tr th.fix {
+        border: 1px solid #80C8E5;
+        }
+</style>
+<script type="text/javascript">
+    var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytao").change();
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts);
+
+    $("#chonngaytao").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var firstDay = new Date(year, month, 1);
+
+        $('#batdau').datepicker("setDate", firstDay );
+    });
+
+    var pickerOpts5 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytaobatdau").change();
+         },
+         
+    };  
+    $("#chonngaytaobatdau").datepicker(pickerOpts5);
+
+    $("#chonngaytaobatdau").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var lastDay = new Date(year, month+1, 0);
+        $('#ketthuc').datepicker("setDate", lastDay );
+    });
+
+    $(".monthPicker").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+
+
+$(".revenue").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:'100%',
+            resizable: false,
+            title:'Dự thu',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+$(".payable").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:'100%',
+            resizable: false,
+            title:'Dự chi',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+</script>

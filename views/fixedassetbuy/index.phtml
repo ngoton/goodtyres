@@ -1,0 +1,404 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'fixed_asset_buy_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'fixed_asset_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'bank_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'fixed_asset_buy_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'fixed_asset_buy_money')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> MUA TÀI SẢN </h1></center>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm ngày mua</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+			<option value="20">Hiển thị 20 giá trị</option>
+            <option value="30">Hiển thị 30 giá trị</option>
+            <option value="50">Hiển thị 50 giá trị</option>
+            
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','fixed_asset_buy_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'fixed_asset_buy_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','fixed_asset_name','<?php echo $url_order ?>')">Tên tài sản <?php if ($order_by == 'fixed_asset_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','fixed_asset_buy_date','<?php echo $url_order ?>')">Ngày mua <?php if ($order_by == 'fixed_asset_buy_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','fixed_asset_buy_money','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'fixed_asset_buy_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','bank_name','<?php echo $url_order ?>')">Tài khoản <?php if ($order_by == 'bank_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($assets as $fixed_asset_buy) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $fixed_asset_buy->fixed_asset_buy_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $fixed_asset_buy->fixed_asset_buy_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix"  id="fixed_asset_name_<?php echo $fixed_asset_buy->fixed_asset_buy_id; ?>"><?php echo $fixed_asset_buy->fixed_asset_name ?></td>
+            <td class="fix"  id="fixed_asset_buy_date_<?php echo $fixed_asset_buy->fixed_asset_buy_id; ?>"><?php echo $fixed_asset_buy->fixed_asset_buy_date>0?$lib->hien_thi_ngay_thang($fixed_asset_buy->fixed_asset_buy_date):null; ?></td>
+            <td class="fix"  id="fixed_asset_buy_money_<?php echo $fixed_asset_buy->fixed_asset_buy_id; ?>"><?php echo $lib->formatMoney($fixed_asset_buy->fixed_asset_buy_money); ?></td>
+            <td class="fix"  id="fixed_asset_buy_source_<?php echo $fixed_asset_buy->fixed_asset_buy_id; ?>"><?php echo $lib->formatMoney($fixed_asset_buy->bank_name); ?></td>
+            
+            <td>
+                <a class="error" href="#">Sửa</a>
+                | 
+                <a class="error del" data="<?php echo $fixed_asset_buy->fixed_asset_buy_id ?>"  >Xóa</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('fixedasset') ?>">&larr;</a></div>
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Thông tin </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_fixed_asset_buy" method="post" action="">
+                      <table style="margin:0 auto;width:100%">
+                        <tr>
+                            
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><div class="add-box"><a class="add_button" onClick="add_click();">Thêm mới</a></div></td>
+                            
+                        </tr>
+                        <tr>
+                            
+                            <td>Ngày mua</td>
+                            <td>
+                                <input class="ngay" type="text" id="fixed_asset_buy_date"  name="fixed_asset_buy_date" tabindex="1" required="required" >
+                            </td>
+                            <td>Số tiền</td>
+                            <td>
+                                <input class="numbers" type="text" id="fixed_asset_buy_money"  name="fixed_asset_buy_money" tabindex="2" required="required" >
+                            </td>
+                            <td>Tài khoản</td>
+                            <td>
+                                <select  style="width:120px" id="fixed_asset_buy_source"  name="fixed_asset_buy_source" tabindex="3" required="required">
+                                    <?php foreach($banks as $bank){ ?>
+                                    <option value="<?php echo $bank->bank_id ?>"><?php echo $bank->bank_name ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+
+                        </tr>
+                        
+                        <tr>
+                            <td><input type="hidden" readonly id="fixed_asset" name="fixed_asset" required="required" value="<?php echo $fixed_asset ?>" > </td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="4"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="5"></td>
+                            <td></td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+   
+});
+    $('.edit_tr').click(function(){
+        if(!$('.checkbox').is(':checked')){
+            $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        }
+        var fixed_asset_buy_date = $(this).find("#fixed_asset_buy_date_"+$(this).attr('id')).text();
+        var fixed_asset_buy_money = $(this).find("#fixed_asset_buy_money_"+$(this).attr('id')).text();
+        var fixed_asset_buy_source = $(this).find("#fixed_asset_buy_source_"+$(this).attr('id')).text();
+        
+        //alert(fixed_asset_buy_code);
+        $('#yes').val($(this).attr('id'));
+
+        $('#fixed_asset_buy_date').val(fixed_asset_buy_date.replace(/\//g,"-"));
+        $("#fixed_asset_buy_source option:contains(" + fixed_asset_buy_source + ")").attr('selected', 'selected');
+        $('#fixed_asset_buy_money').val(fixed_asset_buy_money);
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+    $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+    
+        
+        $('#fixed_asset_buy_date').val("");
+        $('#fixed_asset_buy_money').val(0);
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_fixed_asset_buy").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var fixed_asset_buy_date = $('#fixed_asset_buy_date').attr('value');
+                    var fixed_asset_buy_money = $('#fixed_asset_buy_money').attr('value');
+                    var fixed_asset_buy_source = $('#fixed_asset_buy_source').attr('value');
+                    var fixed_asset = $('#fixed_asset').attr('value');
+
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/fixedassetbuy/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            fixed_asset_buy_date: fixed_asset_buy_date,
+                            fixed_asset_buy_money: fixed_asset_buy_money,
+                            fixed_asset_buy_source: fixed_asset_buy_source,
+                            fixed_asset: fixed_asset,
+                            yes: yes,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (yes != "") {
+                                if (answer.trim() != "Thông tin đã tồn tại") {
+                                    $('#fixed_asset_buy_name_'+yes).text(fixed_asset_buy_name);
+                                    $('#fixed_asset_buy_number_'+yes).text(fixed_asset_buy_number);
+
+                                    setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+                                }
+                            }
+                            else{
+                                if (answer.trim() != "Thông tin đã tồn tại") {
+                                    setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="fixed_asset_buy_name_'+parseInt(lastID+1)+'">'+fixed_asset_buy_name+'</td><td class="fix" id="fixed_asset_buy_number_'+parseInt(lastID+1)+'">'+fixed_asset_buy_number+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   
+   
+   
+
+   $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+        ;
+      });
+    });
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+   $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+    $('.number').blur(function(){
+        if ( $(this).val() == "") {
+            $(this).val(0);
+        };
+        
+    });
+    
+
+});
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+var pickerOpts6 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $(".ngay").datepicker(pickerOpts6);
+
+$('#fixed_asset_buy_charge').keyup(function(event) {
+
+       var val = parseInt(get_number('#fixed_asset_buy_number'));
+       var val2 = parseInt(get_number('#fixed_asset_buy_charge'));
+
+       $('#fixed_asset_buy_money').val(Math.round(val*val2));
+       
+        $('.numbers').val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+
+});
+
+$('.del').click(function(){
+    var id = $(this).attr("data");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/fixedassetbuy/delete", {data: id},
+           function(data){
+
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+            $('#loading').fadeOut(500);
+           
+           }); 
+      }
+
+});
+</script>
+</div>

@@ -1,0 +1,431 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'payable_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'expect_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'week')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'money')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'bank_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'shipment_vendor_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cost_type')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> CÔNG NỢ </h1></center>
+
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+        <div class="add-box">
+             <select style="width: 100px;" name="ketthuc" id="ketthuc">
+                <option selected="selected" value="0">Phải trả</option>
+                <option  value="1">Phải thu</option>
+            </select>
+            
+            <?php if(isset($payables)){ ?>
+            <select style="width: 100px;" name="sl_status" id="sl_status">
+                <option value="0">Chưa trả</option>
+                <option  value="1">Đã trả</option>
+            </select>
+            <?php } ?>
+
+            <?php if(isset($receivables)){ ?>
+            <select style="width: 100px;" name="sl_status" id="sl_status">
+                <option value="0">Chưa thu</option>
+                <option  value="1">Đã thu</option>
+            </select>
+            <?php } ?>
+
+            <input type="button" name="chon" id="chon" value="Chọn" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');"> 
+            
+        </div>
+    </div>
+    <div class="tablenav top">
+        <div style="clear:both"></div>
+        
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="5">Hiển thị 5 giá trị</option>
+            <option value="10">Hiển thị 10 giá trị</option>
+            <option value="15">Hiển thị 15 giá trị</option>
+            <option selected="selected" value="50">Hiển thị 50 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+        <div class="add-box">
+            <a class="add_button" id="btnExport" >Export Excel</a>
+        </div>
+
+      </div>
+
+</div>
+
+<?php if(isset($payables)){ ?>
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payable_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'payable_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','vendor','<?php echo $url_order ?>')">Tên <?php if ($order_by == 'vendor'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="3" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost','<?php echo $url_order ?>')">0 VAT <?php if ($order_by == 'cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="3" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost_vat','<?php echo $url_order ?>')"> VAT <?php if ($order_by == 'cost_vat'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="3" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost','<?php echo $url_order ?>')">Đã chi <?php if ($order_by == 'cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="3" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost','<?php echo $url_order ?>')">Còn lại <?php if ($order_by == 'cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+          
+        
+    </tr>
+    <tr>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','expect_date','<?php echo $url_order ?>')"> Ngày <?php if ($order_by == 'expect_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost','<?php echo $url_order ?>')"> Số tiền <?php if ($order_by == 'cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','invoice_number','<?php echo $url_order ?>')"> Số chứng từ <?php if ($order_by == 'invoice_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','expect_date','<?php echo $url_order ?>')"> Ngày <?php if ($order_by == 'expect_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost_vat','<?php echo $url_order ?>')"> Số tiền <?php if ($order_by == 'cost_vat'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','invoice_number','<?php echo $url_order ?>')"> Số chứng từ <?php if ($order_by == 'invoice_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','pay_money','<?php echo $url_order ?>')"> Số tiền <?php if ($order_by == 'pay_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','pay_date','<?php echo $url_order ?>')"> Ngày <?php if ($order_by == 'pay_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','source','<?php echo $url_order ?>')"> Tài khoản <?php if ($order_by == 'source'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','pay_money','<?php echo $url_order ?>')"> Số tiền <?php if ($order_by == 'pay_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','pay_date','<?php echo $url_order ?>')"> Ngày dự kiến <?php if ($order_by == 'pay_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','source','<?php echo $url_order ?>')"> Tài khoản <?php if ($order_by == 'source'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+    </tr>
+    
+    
+   </thead>
+   <tbody>
+    <?php $tong = 0; $tongtra= 0; $tongcon = 0; ?>
+    <?php foreach ($payables as $payable) : ?>
+    <?php $tong += $payable->money; ?>
+    <?php $tongtra += $payable->pay_money; ?>
+    <?php $tongcon += ($payable->money-$payable->pay_money); ?>
+    <?php
+        if ($payable->sale_report > 0) {
+            $link = 'salereport/index/'.$payable->code;
+        }
+        else if ($payable->agent > 0) {
+            $link = 'agent/index/'.$payable->code;
+        }
+        else if ($payable->agent_manifest > 0) {
+            $link = 'agentmanifest/index/'.$payable->code;
+        }
+        else if ($payable->trading > 0) {
+            $link = 'trading/index/'.$payable->code;
+        }
+        else if ($payable->invoice > 0) {
+            $link = 'invoice/index/'.$payable->invoice;
+        }
+    ?>
+    <?php if($_SESSION['role_logined'] == 10){ $link = "#"; } ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $payable->payable_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $payable->payable_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="code_<?php echo $payable->payable_id; ?>"><a style="text-decoration: underline;" href="<?php echo $this->url($link) ?>"><?php echo $payable->code; ?></a></td> 
+            <td class="fix" id="vendor_<?php echo $payable->payable_id; ?>"><?php echo isset($customers['name'][$payable->customer])?$customers['name'][$payable->customer]:(isset($vendors['name'][$payable->vendor])?$vendors['name'][$payable->vendor]:null); ?></td> 
+            <td class="fix" id="payable_date_<?php echo $payable->payable_id; ?>"><?php echo $payable->check_vat==0?$lib->hien_thi_ngay_thang($payable->expect_date):null; ?></td>
+            <td class="fix" id="cost_<?php echo $payable->payable_id; ?>"><?php echo $lib->formatMoney($payable->check_vat==0?$payable->money:null); ?></td>
+            <td class="fix" id="invoice_number_<?php echo $payable->payable_id; ?>"><?php echo $payable->check_vat==0?$payable->invoice_number:null; ?></td>  
+            <td class="fix" id="payable_date_<?php echo $payable->payable_id; ?>"><?php echo $payable->check_vat==1?$lib->hien_thi_ngay_thang($payable->expect_date):null; ?></td>
+            <td class="fix" id="cost_vat_<?php echo $payable->payable_id; ?>"><?php echo $lib->formatMoney($payable->check_vat==1?$payable->money:null); ?></td>   
+            <td class="fix" id="invoice_number_<?php echo $payable->payable_id; ?>"><?php echo $payable->check_vat==1?$payable->invoice_number:null; ?></td>    
+            <td class="fix" id="chi_<?php echo $payable->payable_id; ?>"><?php echo $lib->formatMoney($payable->pay_money); ?></td>
+            <td class="fix" id="ngaychi_<?php echo $payable->payable_id; ?>"><?php echo ($payable->pay_date>0)?$lib->hien_thi_ngay_thang($payable->pay_date):null; ?></td>
+            <td class="fix" id="bank_name_<?php echo $payable->payable_id; ?>"><?php echo ($payable->pay_money>0)?$payable->bank_name:null; ?></td>  
+            <td class="fix" id="conlai_<?php echo $payable->payable_id; ?>"><?php echo $lib->formatMoney($payable->money-$payable->pay_money); ?></td>
+            <td class="fix" id="duchi_<?php echo $payable->payable_id; ?>"><?php echo $lib->hien_thi_ngay_thang((($payable->pay_money!=$payable->money) && ($payable->expect_date < strtotime(date('d-m-Y'))))?(strtotime(date('d-m-Y'))):$payable->expect_date); ?></td>
+            <td class="fix" id="bank_name_<?php echo $payable->payable_id; ?>"><?php echo ($payable->pay_money!=$payable->money)?$payable->bank_name:null; ?></td> 
+            
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+   <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="10" >Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tongtra); ?></td>
+        <td class="fix"></td>
+        <td class="fix"></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongcon); ?></td>
+        <td class="fix"></td>
+        <td class="fix"></td>
+        <td class="fix"></td>
+    </tr>
+</table>
+<?php } else if(isset($receivables)){ ?>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+        <th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','receivable_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'receivable_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer','<?php echo $url_order ?>')">Tên <?php if ($order_by == 'customer'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="3" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','revenue','<?php echo $url_order ?>')">0 VAT <?php if ($order_by == 'revenue'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="3" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','revenue_vat','<?php echo $url_order ?>')"> VAT <?php if ($order_by == 'revenue_vat'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="3" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','receive','<?php echo $url_order ?>')">Đã thu <?php if ($order_by == 'receive'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="4" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','receive','<?php echo $url_order ?>')">Còn lại <?php if ($order_by == 'receive'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+          
+        
+    </tr>
+    <tr>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','expect_date','<?php echo $url_order ?>')"> Ngày <?php if ($order_by == 'expect_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','revenue','<?php echo $url_order ?>')"> Số tiền <?php if ($order_by == 'revenue'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','invoice_number','<?php echo $url_order ?>')"> Số chứng từ <?php if ($order_by == 'invoice_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','expect_date','<?php echo $url_order ?>')"> Ngày <?php if ($order_by == 'expect_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','revenue_vat','<?php echo $url_order ?>')"> Số tiền <?php if ($order_by == 'revenue_vat'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','invoice_number','<?php echo $url_order ?>')"> Số chứng từ <?php if ($order_by == 'invoice_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','pay_money','<?php echo $url_order ?>')"> Số tiền <?php if ($order_by == 'pay_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','pay_date','<?php echo $url_order ?>')"> Ngày <?php if ($order_by == 'pay_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','source','<?php echo $url_order ?>')"> Tài khoản <?php if ($order_by == 'source'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','pay_money','<?php echo $url_order ?>')"> Số tiền <?php if ($order_by == 'pay_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','new_expect_date','<?php echo $url_order ?>')"> Ngày <?php if ($order_by == 'new_expect_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','source','<?php echo $url_order ?>')"> Tài khoản <?php if ($order_by == 'source'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','user_expect','<?php echo $url_order ?>')"> NV <?php if ($order_by == 'user_expect'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $tong = 0; $tongthu= 0; $tongcon = 0; ?>
+    <?php foreach ($receivables as $receivable) : ?>
+    <?php $tong += $receivable->money; ?>
+    <?php $tongthu += $receivable->pay_money; ?>
+    <?php $tongcon += ($receivable->money-$receivable->pay_money); ?>
+    <?php
+        if ($receivable->sale_report > 0) {
+            $link = 'salereport/index/'.$receivable->code;
+        }
+        else if ($receivable->agent > 0) {
+            $link = 'agent/index/'.$receivable->code;
+        }
+        else if ($receivable->agent_manifest > 0) {
+            $link = 'agentmanifest/index/'.$receivable->code;
+        }
+        else if ($receivable->trading > 0) {
+            $link = 'trading/index/'.$receivable->code;
+        }
+        else if ($receivable->invoice > 0) {
+            $link = 'invoice/index/'.$receivable->invoice;
+        }
+    ?>
+    
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $receivable->receivable_id ?>" class="edit_tr">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $receivable->receivable_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="code_<?php echo $receivable->receivable_id; ?>"><a style="text-decoration: underline;" href="<?php echo $this->url($link) ?>"><?php echo $receivable->code; ?></a></td>
+            <td class="fix" id="customer_<?php echo $receivable->receivable_id; ?>"><?php echo isset($customers['name'][$receivable->customer])?$customers['name'][$receivable->customer]:(isset($vendors['name'][$receivable->vendor])?$vendors['name'][$receivable->vendor]:null); ?></td>
+            <td class="fix" id="receivable_date_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->check_vat==0?$lib->hien_thi_ngay_thang($receivable->expect_date):null; ?></td>
+            <td class="fix" id="revenue_<?php echo $receivable->receivable_id; ?>"><?php echo $lib->formatMoney($receivable->check_vat==0?$receivable->money:null); ?></td>
+            <td class="fix" id="invoice_number_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->check_vat==0?$receivable->invoice_number:null; ?></td>  
+            <td class="fix" id="receivable_date_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->check_vat==1?$lib->hien_thi_ngay_thang($receivable->expect_date):null; ?></td>
+            <td class="fix" id="revenue_vat_<?php echo $receivable->receivable_id; ?>"><?php echo $lib->formatMoney($receivable->check_vat==1?$receivable->money:null); ?></td>   
+            <td class="fix" id="invoice_number_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->check_vat==1?$receivable->invoice_number:null; ?></td>    
+            <td class="fix" id="thu_<?php echo $receivable->receivable_id; ?>"><?php echo $lib->formatMoney($receivable->pay_money); ?></td>
+            <td class="fix" id="ngaythu_<?php echo $receivable->receivable_id; ?>"><?php echo ($receivable->pay_date>0)?$lib->hien_thi_ngay_thang($receivable->pay_date):null; ?></td>
+            <td class="fix" id="bank_name_<?php echo $receivable->receivable_id; ?>"><?php echo ($receivable->pay_money>0)?$receivable->bank_name:null; ?></td>   
+            <td class="fix" id="conlai_<?php echo $receivable->receivable_id; ?>"><?php echo $lib->formatMoney($receivable->money-$receivable->pay_money); ?></td>
+            <td class="fix" id="new_expect_date_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->new_expect_date>0?$lib->hien_thi_ngay_thang($receivable->new_expect_date):null; ?></td>
+            <td class="fix" id="bank_name_<?php echo $receivable->receivable_id; ?>"><?php echo ($receivable->money!=$receivable->pay_money)?$receivable->bank_name:null; ?></td>     
+             <td class="fix" id="user_expect_<?php echo $receivable->receivable_id; ?>"><?php echo isset($users['name'][$receivable->user_expect])?$users['name'][$receivable->user_expect]:null; ?></td>            
+            
+        </tr>
+        
+    <?php endforeach; ?>
+   </tbody>
+   <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="10" >Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tongthu); ?></td>
+        <td class="fix"></td>
+        <td class="fix"></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongcon); ?></td>
+        <td class="fix"></td>
+        <td class="fix"></td>
+        <td class="fix"></td>
+    </tr>
+</table>
+
+<?php } ?>
+<?php
+$this->helper('slidePaginator');
+?>
+
+<script type="text/javascript">
+    var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+var ch = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+ch+']').attr('selected','selected');
+
+var kt = "<?php echo $ketthuc ?>";
+$('#ketthuc option[value='+kt+']').attr('selected','selected');
+
+$('#ketthuc').change(function(){
+    var val = $(this).val();
+    if (val == 0) {
+        $('#sl_status option[value="0"]').text("Chưa trả");
+        $('#sl_status option[value="1"]').text("Đã trả");
+    }
+    else{
+        $('#sl_status option[value="0"]').text("Chưa thu");
+        $('#sl_status option[value="1"]').text("Đã thu");
+    }
+});
+
+var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#chonngaytao" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts4);
+</script>
+</div>

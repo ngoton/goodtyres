@@ -1,0 +1,1428 @@
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<style type="text/css">
+    .table_data tr:nth-child(even) {background: rgba(255, 240, 250, 0.59)}
+    .table_data tr:nth-child(odd) {background: #FFF}
+    .table_data tr:hover, .office:hover, .khoanthu:hover, .sale:hover, .trading:hover, .agent:hover, .tcmt:hover, .financial:hover, .lopxe:hover {cursor: pointer; background: rgba(37, 162, 226, 0.2)}
+    .table_data td.approve {color: green}
+    .table_data td.error {color: red}
+    #show {max-height: 500px; z-index: 99999; overflow:auto;}
+</style>
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BÁO CÁO TÀI SẢN </h1></center>
+
+	<div class="search-box">
+        <form id="report" name="report" action method="post">
+        <div class="add-box">
+                  
+            Tuần  <input style="width:30px" type="search" name="tuantruoc" id="tuantruoc" placeholder="Chọn tuần" <?php if(isset($tuantruoc)) echo "value='$tuantruoc'"; ?> >  
+            Năm <input style="width:50px" type="search" name="namtruoc" id="namtruoc" placeholder="Chọn năm" <?php if(isset($namtruoc)) echo "value='$namtruoc'"; ?> >
+            
+            
+        </div>
+        <div class="add-box">
+                  
+            Đến tuần <input style="width:30px" type="search" name="tuan" id="tuan" placeholder="Chọn tuần" <?php if(isset($tuan)) echo "value='$tuan'"; ?> >
+            Năm <input style="width:50px" type="search" name="nam" id="nam" placeholder="Chọn năm" <?php if(isset($nam)) echo "value='$nam'"; ?> >
+            
+            
+        </div>
+        <div class="add-box">
+                  
+             <input type="submit" name="submit" id="xem" value="Xem"> 
+            
+        </div>
+        </form>
+
+        <div class="alignleft" style="padding: 0 5px 5px 10px">
+            <a onclick="printDiv('printarea')"   id="print_content" class="icon_portal_thethao icon_printer" alt="Print" title="Print">&nbsp;</a>
+            <!-- <a class="add_button" id="export_excel" href="<?= $this->url('report/export/'.$tuan.'/'.$nam)?>">Export Excel</a> -->
+            <a class="add_button" id="btnExport" >Export Excel</a>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div id="printarea">
+    <table class="table_data" id="tblExport">
+    <thead>
+        <tr>
+        	
+            <th style="width:30px" class="fix" rowspan="2">
+                <a >STT </a>
+            </th>
+            <th  class="fix" rowspan="2">
+                <a >Nội dung </a>
+            </th>
+            <th class="fix" colspan="2">
+                <a>Số dư đầu kỳ </a>
+            </th> 
+
+            <?php for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+            ?>
+            <th class="fix" colspan="2">
+                <a >Phát sinh tuần <?php echo $t ?> </a>
+            </th> 
+            <?php } ?>
+
+            <th class="fix" colspan="2">
+                <a>Số dư cuối kỳ </a>
+            </th>
+            
+           
+        </tr>
+        <tr>
+            
+            <th class="fix">
+                <a>Có </a>
+            </th> 
+              
+            <th class="fix">
+                <a >Nợ </a>
+            </th> 
+
+            <?php for ($i=1; $i <= $number; $i++) { ?>
+            <th class="fix">
+                <a>Có </a>
+            </th> 
+              
+            <th class="fix">
+                <a >Nợ </a>
+            </th>
+            <?php } ?>
+            
+            <th class="fix">
+                <a>Có </a>
+            </th> 
+              
+            <th class="fix">
+                <a >Nợ </a>
+            </th>
+           
+        </tr>
+        
+       </thead>
+       <tbody>
+        <tr class="bank" data="1" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" style=" font-weight: bold; color: red">
+            <td style="text-align:center;" class="fix">1</td>
+            <td class="fix">Tiền mặt</td>
+            <td class="fix " ><?php echo $lib->formatMoney(isset($asset_truoc[1])?$asset_truoc[1]:0) ?></td>
+            <td class="fix"></td>
+            
+
+            <?php 
+            //$new_asset_truoc[$tuan][1] = $asset[1];
+            for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+            ?>
+            <td class="fix approve" >
+                <?php echo $lib->formatMoney((isset($new_asset_truoc[$t][$n][1]) && $new_asset_truoc[$t][$n][1]>0)?$new_asset_truoc[$t][$n][1]:null) ?>
+            </td>
+            <td class="fix error">
+                <?php echo $lib->formatMoney( (isset($new_asset_truoc[$t][$n][1]) && $new_asset_truoc[$t][$n][1] <0 )?str_replace('-', "", $new_asset_truoc[$t][$n][1]):null ) ?>
+            </td>
+            <?php } ?>
+
+            <td class="fix "><?php echo $lib->formatMoney(isset($asset[1])?$asset[1]:0) ?></td>
+            <td class="fix"></td>
+            
+        </tr>
+        <tr class="bank" data="2" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" style=" font-weight: bold; color: red">
+            <td style="text-align:center;" class="fix">2</td>
+            <td class="fix">USD (200)</td>
+            <td class="fix "><?php echo $lib->formatMoney(isset($asset_truoc[2])?$asset_truoc[2]:0) ?></td>
+            <td class="fix"></td>
+
+            <?php 
+            //$new_asset_truoc[$tuan][2] = $asset[2];
+            for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+            ?>
+            <td class="fix approve" >
+                <?php echo $lib->formatMoney((isset($new_asset_truoc[$t][$n][2]) && $new_asset_truoc[$t][$n][2]>0)?$new_asset_truoc[$t][$n][2]:null) ?>
+            </td>
+            <td class="fix error">
+                <?php echo $lib->formatMoney( (isset($new_asset_truoc[$t][$n][2]) && $new_asset_truoc[$t][$n][2] <0 )?str_replace('-', "", $new_asset_truoc[$t][$n][2]):null ) ?>
+            </td>
+            <?php } ?>
+
+            <td class="fix "><?php echo $lib->formatMoney(isset($asset[2])?$asset[2]:0) ?></td>
+            <td class="fix"></td>
+            
+        </tr>
+        <?php 
+            $disable_bank = array();
+            //$new_tongnh_truoc[$tuan] = $tongnh;
+            $tongnh_truoc = 0; $tongnh = 0;
+            foreach ($bankings as $banking) {
+                $tongnh_truoc += (isset($asset_truoc[$banking->bank_id])?$asset_truoc[$banking->bank_id]:0);
+                $tongnh += (isset($asset[$banking->bank_id])?$asset[$banking->bank_id]:0);
+                for ($i=1; $i <= $number ; $i++) { 
+                    $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                    $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+
+                    $new_tongnh_truoc[$t][$n] = isset($new_tongnh_truoc[$t][$n])?$new_tongnh_truoc[$t][$n]+(isset($new_asset_truoc[$t][$n][$banking->bank_id])?$new_asset_truoc[$t][$n][$banking->bank_id]:0):(isset($new_asset_truoc[$t][$n][$banking->bank_id])?$new_asset_truoc[$t][$n][$banking->bank_id]:0);
+                }
+
+                for ($i=1; $i <= $number ; $i++) { 
+                    $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                    $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+
+                    $disable_bank[$banking->bank_id] = isset($new_asset_truoc[$t][$n][$banking->bank_id])?($new_asset_truoc[$t][$n][$banking->bank_id]==0?1:0):1;
+                    if ( (isset($asset_truoc[$banking->bank_id]) && $asset_truoc[$banking->bank_id] != 0) || (isset($asset[$banking->bank_id]) && $asset[$banking->bank_id] != 0) ) {
+                        $disable_bank[$banking->bank_id] = 0;
+                    }
+
+                    if ($disable_bank[$banking->bank_id] == 0) {
+                        break;
+                    }
+                }
+
+            }
+
+         ?>
+        <tr style=" font-weight: bold; color: red">
+            <td style="text-align:center;" class="fix">3</td>
+            <td class="fix">Ngân hàng</td>
+            <td class="fix ">
+                <?php echo $lib->formatMoney($tongnh_truoc) ?>
+            </td>
+            <td class="fix"></td>
+
+            <?php for ($i=1; $i <= $number ; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+
+                ?>
+            <td class="fix approve">
+                <?php echo $lib->formatMoney($new_tongnh_truoc[$t][$n]>0?$new_tongnh_truoc[$t][$n]:null) ?>
+            </td>
+            <td class="fix error">
+                <?php echo $lib->formatMoney($new_tongnh_truoc[$t][$n]<0?str_replace('-', "", $new_tongnh_truoc[$t][$n]):null) ?>
+            </td>
+            <?php } ?>
+
+            <td class="fix ">
+                <?php echo $lib->formatMoney($tongnh) ?>
+            </td>
+            <td class="fix"></td>
+             
+        </tr>
+
+        <?php foreach ($bankings as $banking) { 
+            if($disable_bank[$banking->bank_id] != 1){
+        ?>
+            <tr class="bank" data="<?php echo $banking->bank_id ?>" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" >
+                <td class="fix"></td>
+            <td class="fix"><?php echo $banking->bank_name ?></td>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset_truoc[$banking->bank_id])?$asset_truoc[$banking->bank_id]:0) ?></td>
+                <td class="fix"></td>
+                <?php 
+                //$new_asset_truoc[$tuan][3] = $asset[3];
+                for ($i=1; $i <= $number; $i++) {
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc; 
+                ?>
+                <td class="fix approve" >
+                    <?php echo $lib->formatMoney((isset($new_asset_truoc[$t][$n][$banking->bank_id]) && $new_asset_truoc[$t][$n][$banking->bank_id]>0)?$new_asset_truoc[$t][$n][$banking->bank_id]:null) ?>
+                </td>
+                <td class="fix error">
+                    <?php echo $lib->formatMoney( (isset($new_asset_truoc[$t][$n][$banking->bank_id]) && $new_asset_truoc[$t][$n][$banking->bank_id] <0 )?str_replace('-', "", $new_asset_truoc[$t][$n][$banking->bank_id]):null ) ?>
+                </td>
+                <?php } ?>
+                <td class="fix approve"><?php echo $lib->formatMoney(isset($asset[$banking->bank_id])?$asset[$banking->bank_id]:0) ?></td>
+                <td class="fix"></td>
+                 
+            </tr>
+        <?php } } ?>
+
+        
+        <?php
+
+        $tongthuco_truoc = null;
+        $tongthuno_truoc = null;
+        $tongthuco = null;
+        $tongthuno = null;
+        $new_tongthuco_truoc = array();
+        $new_tongthuno_truoc = array();
+                foreach ($customers_data as $customer) {  
+                    $tongthuco += (isset($obtains['money'][$customer->customer_id]) && $obtains['money'][$customer->customer_id]>0)?$obtains['money'][$customer->customer_id]:null;
+                    $tongthuno += (isset($obtains['money'][$customer->customer_id]) && $obtains['money'][$customer->customer_id]<0)?str_replace('-', '', $obtains['money'][$customer->customer_id]):null;
+
+                    $tongthuco_truoc += (isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0)?$obtains_truoc['money'][$customer->customer_id]:null;
+                    $tongthuno_truoc += (isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0)?str_replace('-', "", $obtains_truoc['money'][$customer->customer_id]):null;
+
+                    for ($i=1; $i <= $number; $i++) { 
+                        $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                        $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+
+                        $new_tongthuco_truoc[$t][$n] = isset($new_tongthuco_truoc[$t][$n])?($new_tongthuco_truoc[$t][$n]+((isset($new_obtains_truoc[$t][$n]['money'][$customer->customer_id]) && $new_obtains_truoc[$t][$n]['money'][$customer->customer_id]>0)?($new_obtains_truoc[$t][$n]['money'][$customer->customer_id]):null)):(0+((isset($new_obtains_truoc[$t][$n]['money'][$customer->customer_id]) && $new_obtains_truoc[$t][$n]['money'][$customer->customer_id]>0)?($new_obtains_truoc[$t][$n]['money'][$customer->customer_id]):null));
+
+                        $new_tongthuno_truoc[$t][$n] = isset($new_tongthuno_truoc[$t][$n])?($new_tongthuno_truoc[$t][$n]+((isset($new_obtains_truoc[$t][$n]['money'][$customer->customer_id]) && $new_obtains_truoc[$t][$n]['money'][$customer->customer_id]<0)?($new_obtains_truoc[$t][$n]['money'][$customer->customer_id]):null)):(0+((isset($new_obtains_truoc[$t][$n]['money'][$customer->customer_id]) && $new_obtains_truoc[$t][$n]['money'][$customer->customer_id]<0)?($new_obtains_truoc[$t][$n]['money'][$customer->customer_id]):null));
+
+                        
+                    }
+                    
+                }
+        ?>
+        <tr style=" font-weight: bold; color: red">
+            <td style="text-align:center;" class="fix">4</td>
+            <td class="fix">Phải thu</td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongthuco_truoc)) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongthuno_truoc)) ?></td>
+            <?php 
+            //$new_tongthuco_truoc[$tuan] = $tongthuco;
+            //$new_tongthuno_truoc[$tuan] = $tongthuno;
+            for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+            ?>
+            <td class="fix approve"><?php echo $lib->formatMoney(str_replace('-', "", $new_tongthuco_truoc[$t][$n])) ?></td>
+            <td class="fix error"><?php echo $lib->formatMoney(str_replace('-', "", $new_tongthuno_truoc[$t][$n])) ?></td>
+            <?php } ?>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongthuco)) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongthuno)) ?></td>
+             
+        </tr>
+        <?php foreach ($customers_data as $customer) {  ?>
+        <?php if((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0) || (isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0) || (isset($obtains['money'][$customer->customer_id]) && $obtains['money'][$customer->customer_id]>0) || (isset($obtains['money'][$customer->customer_id]) && $obtains['money'][$customer->customer_id]<0)) { ?>
+        <tr class="customer" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" data="<?php echo $customer->customer_id; ?>">
+            <td class="fix"></td>
+            <td class="fix"><?php echo $customer->customer_name; ?></td>
+            <td class="fix approve"><?php echo $lib->formatMoney((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]>0)?$obtains_truoc['money'][$customer->customer_id]:null); ?></td>
+            <td class="fix error"><?php echo $lib->formatMoney((isset($obtains_truoc['money'][$customer->customer_id]) && $obtains_truoc['money'][$customer->customer_id]<0)?str_replace('-', '', $obtains_truoc['money'][$customer->customer_id]):null); ?></td>
+            <?php 
+            //$new_obtains_truoc[$tuan]['money'][$customer->customer_id] = $obtains['money'][$customer->customer_id];
+            for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+            ?>
+            <td class="fix approve">
+                <?php echo $lib->formatMoney( (isset($new_obtains_truoc[$t][$n]['money'][$customer->customer_id]) && $new_obtains_truoc[$t][$n]['money'][$customer->customer_id] > 0 ) ? $new_obtains_truoc[$t][$n]['money'][$customer->customer_id] : null ); ?>
+            </td>
+            <td class="fix error">
+                <?php echo $lib->formatMoney( (isset($new_obtains_truoc[$t][$n]['money'][$customer->customer_id]) && $new_obtains_truoc[$t][$n]['money'][$customer->customer_id] < 0 ) ? str_replace('-', "", $new_obtains_truoc[$t][$n]['money'][$customer->customer_id]) : null ); ?>
+            </td>
+            <?php } ?>
+            <td class="fix approve"><?php echo $lib->formatMoney($obtains['money'][$customer->customer_id]>0?$obtains['money'][$customer->customer_id]:null); ?></td>
+            <td class="fix error"><?php echo $lib->formatMoney($obtains['money'][$customer->customer_id]<0?str_replace('-', '', $obtains['money'][$customer->customer_id]):null); ?></td>
+             
+        </tr>
+        <?php }} ?>
+
+        <?php 
+        $tongtraco_truoc = null;
+        $tongtrano_truoc = null;
+        $tongtraco = null;
+        $tongtrano = null;
+        $new_tongtraco_truoc = array();
+        $new_tongtrano_truoc = array();
+                foreach ($vendors_data as $vendor) {  
+                    $tongtraco_truoc += (isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', "", $owe_truoc['money'][$vendor->shipment_vendor_id]):null;
+                    $tongtrano_truoc += (isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null;
+                    $tongtraco += (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', "", $owe['money'][$vendor->shipment_vendor_id]):null;
+                    $tongtrano += (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]>0)?$owe['money'][$vendor->shipment_vendor_id]:null;
+
+                    for ($i=1; $i <= $number; $i++) { 
+                        $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                        $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+
+                        $new_tongtraco_truoc[$t][$n] = isset($new_tongtraco_truoc[$t][$n])?($new_tongtraco_truoc[$t][$n]+((isset($new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]<0)?$new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]:null)):(0+((isset($new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]<0)?$new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]:null));
+
+                        $new_tongtrano_truoc[$t][$n] = isset($new_tongtrano_truoc[$t][$n])?($new_tongtrano_truoc[$t][$n]+((isset($new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]>0)?$new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]:null)):(0+((isset($new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]>0)?$new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]:null));
+
+                        
+                    }
+                    
+                }
+
+                foreach ($lenders_data as $vendor) {  
+                    $tongtraco_truoc += (isset($lender_owe_truoc['money'][$vendor->lender_id]) && $lender_owe_truoc['money'][$vendor->lender_id]<0)?str_replace('-', "", $lender_owe_truoc['money'][$vendor->lender_id]):null;
+                    $tongtrano_truoc += (isset($lender_owe_truoc['money'][$vendor->lender_id]) && $lender_owe_truoc['money'][$vendor->lender_id]>0)?$lender_owe_truoc['money'][$vendor->lender_id]:null;
+                    $tongtraco += (isset($lender_owe['money'][$vendor->lender_id]) && $lender_owe['money'][$vendor->lender_id]<0)?str_replace('-', "", $lender_owe['money'][$vendor->lender_id]):null;
+                    $tongtrano += (isset($lender_owe['money'][$vendor->lender_id]) && $lender_owe['money'][$vendor->lender_id]>0)?$lender_owe['money'][$vendor->lender_id]:null;
+
+                    for ($i=1; $i <= $number; $i++) { 
+                        $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                        $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+
+                        $new_tongtraco_truoc[$t][$n] = isset($new_tongtraco_truoc[$t][$n])?($new_tongtraco_truoc[$t][$n]+((isset($new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]) && $new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]<0)?$new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]:null)):(0+((isset($new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]) && $new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]<0)?$new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]:null));
+
+                        $new_tongtrano_truoc[$t][$n] = isset($new_tongtrano_truoc[$t][$n])?($new_tongtrano_truoc[$t][$n]+((isset($new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]) && $new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]>0)?$new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]:null)):(0+((isset($new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]) && $new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]>0)?$new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]:null));
+
+                        
+                    }
+                    
+                }
+        ?>
+        <tr style=" font-weight: bold; color: red">
+            <td style="text-align:center;" class="fix">5</td>
+            <td class="fix">Phải trả</td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongtraco_truoc)) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongtrano_truoc)) ?></td>
+            <?php 
+            //$new_tongtraco_truoc[$tuan] = $tongtraco;
+            //$new_tongtrano_truoc[$tuan] = $tongtrano;
+            for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+            ?>
+            <td class="fix approve"><?php echo $lib->formatMoney(str_replace('-', "", $new_tongtraco_truoc[$t][$n])) ?></td>
+            <td class="fix error"><?php echo $lib->formatMoney(str_replace('-', "", $new_tongtrano_truoc[$t][$n])) ?></td>
+            <?php } ?>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongtraco)) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongtrano)) ?></td>
+             
+        </tr>
+        <?php foreach ($vendors_data as $vendor) {  ?>
+        <?php if((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0) || (isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0) || (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]<0) || (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]>0)){ ?>
+        <tr class="vendor" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" data="<?php echo $vendor->shipment_vendor_id; ?>">
+            <td class="fix"></td>
+            <td class="fix"><?php echo $vendor->shipment_vendor_name; ?></td>
+            <td class="fix approve"><?php echo $lib->formatMoney((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null); ?></td>
+            <td class="fix error"><?php echo $lib->formatMoney((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null); ?></td>
+            
+            <?php 
+            //$new_owe_truoc[$tuan]['money'][$vendor->shipment_vendor_id] = $owe['money'][$vendor->shipment_vendor_id];
+            for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+            ?>
+            <td class="fix approve">
+                <?php echo $lib->formatMoney( (isset($new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id] < 0) ? str_replace('-', "", $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) : null ); ?>
+            </td>
+            <td class="fix error">
+                <?php echo $lib->formatMoney( (isset($new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id] > 0) ? $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id] : null ); ?>
+            </td>
+            <?php } ?>
+
+            <td class="fix approve"><?php echo $lib->formatMoney($owe['money'][$vendor->shipment_vendor_id]<0?str_replace('-', '', $owe['money'][$vendor->shipment_vendor_id]):null); ?></td>
+            <td class="fix error"><?php echo $lib->formatMoney($owe['money'][$vendor->shipment_vendor_id]>0?$owe['money'][$vendor->shipment_vendor_id]:null); ?></td>
+             
+            
+        </tr>
+        <?php }} ?>
+
+        <?php foreach ($lenders_data as $vendor) {  ?>
+        <?php if((isset($lender_owe_truoc['money'][$vendor->lender_id]) && $lender_owe_truoc['money'][$vendor->lender_id]<0) || (isset($lender_owe_truoc['money'][$vendor->lender_id]) && $lender_owe_truoc['money'][$vendor->lender_id]>0) || (isset($lender_owe['money'][$vendor->lender_id]) && $lender_owe['money'][$vendor->lender_id]<0) || (isset($lender_owe['money'][$vendor->lender_id]) && $lender_owe['money'][$vendor->lender_id]>0)){ ?>
+        <tr class="vendor" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" data="<?php echo $vendor->lender_id; ?>">
+            <td class="fix"></td>
+            <td class="fix"><?php echo $vendor->lender_name; ?></td>
+            <td class="fix approve"><?php echo $lib->formatMoney((isset($lender_owe_truoc['money'][$vendor->lender_id]) && $lender_owe_truoc['money'][$vendor->lender_id]<0)?str_replace('-', '', $lender_owe_truoc['money'][$vendor->lender_id]):null); ?></td>
+            <td class="fix error"><?php echo $lib->formatMoney((isset($lender_owe_truoc['money'][$vendor->lender_id]) && $lender_owe_truoc['money'][$vendor->lender_id]>0)?$lender_owe_truoc['money'][$vendor->lender_id]:null); ?></td>
+            
+            <?php 
+            //$new_lender_owe_truoc[$tuan]['money'][$vendor->lender_id] = $lender_owe['money'][$vendor->lender_id];
+            for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+            ?>
+            <td class="fix approve">
+                <?php echo $lib->formatMoney( (isset($new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]) && $new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id] < 0) ? str_replace('-', "", $new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]) : null ); ?>
+            </td>
+            <td class="fix error">
+                <?php echo $lib->formatMoney( (isset($new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id]) && $new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id] > 0) ? $new_lender_owe_truoc[$t][$n]['money'][$vendor->lender_id] : null ); ?>
+            </td>
+            <?php } ?>
+
+            <td class="fix approve"><?php echo $lib->formatMoney($lender_owe['money'][$vendor->lender_id]<0?str_replace('-', '', $lender_owe['money'][$vendor->lender_id]):null); ?></td>
+            <td class="fix error"><?php echo $lib->formatMoney($lender_owe['money'][$vendor->lender_id]>0?$lender_owe['money'][$vendor->lender_id]:null); ?></td>
+             
+            
+        </tr>
+        <?php }} ?>
+
+
+        <?php 
+        $tongopsco_truoc = null;
+        $tongopsno_truoc = null;
+        $tongopsco = null;
+        $tongopsno = null;
+        $new_tongopsco_truoc = array();
+        $new_tongopsno_truoc = array();
+
+        $co1 = array(); $no1 = array(); $co_truoc1 = array(); $no_truoc1 = array();
+
+                foreach ($staffs_data as $staff) {  
+
+                    if (isset($debt_truoc['co'][$staff->staff_id]) && $debt_truoc['co'][$staff->staff_id] > 0) {
+                        $co_truoc1[$staff->staff_id] = isset($co_truoc1[$staff->staff_id])?($co_truoc1[$staff->staff_id] + $debt_truoc['co'][$staff->staff_id]):($debt_truoc['co'][$staff->staff_id]);
+                    }
+                    if (isset($debt_truoc['no'][$staff->staff_id]) && $debt_truoc['no'][$staff->staff_id] < 0) {
+                        $co_truoc1[$staff->staff_id] = isset($co_truoc1[$staff->staff_id])?($co_truoc1[$staff->staff_id] + str_replace('-', "", $debt_truoc['no'][$staff->staff_id])):(str_replace('-', "", $debt_truoc['no'][$staff->staff_id]));
+                    }
+
+                    if (isset($debt_truoc['co'][$staff->staff_id]) && $debt_truoc['co'][$staff->staff_id] < 0) {
+                        $no_truoc1[$staff->staff_id] = isset($no_truoc1[$staff->staff_id])?($no_truoc1[$staff->staff_id] + str_replace('-', "", $debt_truoc['co'][$staff->staff_id])):(str_replace('-', "", $debt_truoc['co'][$staff->staff_id]));
+                    }
+                    if (isset($debt_truoc['no'][$staff->staff_id]) && $debt_truoc['no'][$staff->staff_id] > 0) {
+                        $no_truoc1[$staff->staff_id] = isset($no_truoc1[$staff->staff_id])?($no_truoc1[$staff->staff_id] + $debt_truoc['no'][$staff->staff_id]):($debt_truoc['no'][$staff->staff_id]);
+                    }
+
+                    if (isset($debt['co'][$staff->staff_id]) && $debt['co'][$staff->staff_id] > 0) {
+                        $co1[$staff->staff_id] = isset($co1[$staff->staff_id])?($co1[$staff->staff_id] + $debt['co'][$staff->staff_id]):($debt['co'][$staff->staff_id]);
+                    }
+                    if (isset($debt['no'][$staff->staff_id]) && $debt['no'][$staff->staff_id] < 0) {
+                        $co1[$staff->staff_id] = isset($co1[$staff->staff_id])?($co1[$staff->staff_id] + str_replace('-', "", $debt['no'][$staff->staff_id]) ):(str_replace('-', "", $debt['no'][$staff->staff_id]));
+                    }
+
+                    if (isset($debt['co'][$staff->staff_id]) && $debt['co'][$staff->staff_id] < 0) {
+                        $no1[$staff->staff_id] = isset($no1[$staff->staff_id])?($no1[$staff->staff_id] + str_replace('-', "", $debt['co'][$staff->staff_id]) ):(str_replace('-', "", $debt['co'][$staff->staff_id]));
+                    }
+                    if (isset($debt['no'][$staff->staff_id]) && $debt['no'][$staff->staff_id] > 0) {
+                        $no1[$staff->staff_id] = isset($no1[$staff->staff_id])?($no1[$staff->staff_id] + $debt['no'][$staff->staff_id]):($debt['no'][$staff->staff_id]);
+                    }
+
+                    $tongopsco_truoc += isset($co_truoc1[$staff->staff_id]) ?$co_truoc1[$staff->staff_id]:null;
+                    $tongopsno_truoc += isset($no_truoc1[$staff->staff_id]) ?$no_truoc1[$staff->staff_id]:null;
+                    $tongopsco += isset($co1[$staff->staff_id]) ?$co1[$staff->staff_id]:null;
+                    $tongopsno += isset($no1[$staff->staff_id]) ?$no1[$staff->staff_id]:null;
+
+                    for ($i=1; $i <= $number; $i++) { 
+                        $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                        $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+
+                        $new_tongopsco_truoc[$t][$n] = isset($new_tongopsco_truoc[$t][$n])?($new_tongopsco_truoc[$t][$n]+(((isset($new_debt_truoc[$t][$n]['co'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['co'][$staff->staff_id]>0) ? str_replace('-', "", $new_debt_truoc[$t][$n]['co'][$staff->staff_id]):null )+((isset($new_debt_truoc[$t][$n]['no'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['no'][$staff->staff_id]<0)?str_replace('-', "", $new_debt_truoc[$t][$n]['no'][$staff->staff_id]):null ))):(0+(((isset($new_debt_truoc[$t][$n]['co'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['co'][$staff->staff_id]>0) ? str_replace('-', "", $new_debt_truoc[$t][$n]['co'][$staff->staff_id]):null )+((isset($new_debt_truoc[$t][$n]['no'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['no'][$staff->staff_id]<0)?str_replace('-', "", $new_debt_truoc[$t][$n]['no'][$staff->staff_id]):null )));
+                        $new_tongopsno_truoc[$t][$n] = isset($new_tongopsno_truoc[$t][$n])?($new_tongopsno_truoc[$t][$n]+(((isset($new_debt_truoc[$t][$n]['no'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['no'][$staff->staff_id]>0)?str_replace('-', "", $new_debt_truoc[$t][$n]['no'][$staff->staff_id]):null )+((isset($new_debt_truoc[$t][$n]['co'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['co'][$staff->staff_id]<0) ? str_replace('-', "", $new_debt_truoc[$t][$n]['co'][$staff->staff_id]):null ))):(0+(((isset($new_debt_truoc[$t][$n]['no'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['no'][$staff->staff_id]>0)?str_replace('-', "", $new_debt_truoc[$t][$n]['no'][$staff->staff_id]):null )+((isset($new_debt_truoc[$t][$n]['co'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['co'][$staff->staff_id]<0) ? str_replace('-', "", $new_debt_truoc[$t][$n]['co'][$staff->staff_id]):null )));
+                    }
+                }
+
+                foreach ($vendors_ops_data as $vendor) {
+                    $tongopsco += (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', "", $owe['money'][$vendor->shipment_vendor_id]):null;
+                    $tongopsno += (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]>0)?$owe['money'][$vendor->shipment_vendor_id]:null;
+
+                    $tongopsco_truoc += (isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', "", $owe_truoc['money'][$vendor->shipment_vendor_id]):null;
+                    $tongopsno_truoc += (isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null;
+
+                    for ($i=1; $i <= $number; $i++) { 
+                        $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                        $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+
+                        $new_tongopsco_truoc[$t][$n] = isset($new_tongopsco_truoc[$t][$n])?($new_tongopsco_truoc[$t][$n]+((isset($new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', "", $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]):null)):(0+((isset($new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', "", $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]):null));
+                        $new_tongopsno_truoc[$t][$n] = isset($new_tongopsno_truoc[$t][$n])?($new_tongopsno_truoc[$t][$n]+((isset($new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]>0)?$new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]:null)):(0+((isset($new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]>0)?$new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]:null));
+                    }
+
+                }
+        ?>
+        <tr style=" font-weight: bold; color: red">
+            <td style="text-align:center;" class="fix">6</td>
+            <td class="fix">OPS</td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongopsco_truoc)) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongopsno_truoc)) ?></td>
+            <?php 
+            //$new_tongopsco_truoc[$tuan] = $tongopsco;
+            //$new_tongopsno_truoc[$tuan] = $tongopsno;
+            for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+            ?>
+            <td class="fix approve"><?php echo $lib->formatMoney(str_replace('-', "", $new_tongopsco_truoc[$t][$n])) ?></td>
+            <td class="fix error"><?php echo $lib->formatMoney(str_replace('-', "", $new_tongopsno_truoc[$t][$n])) ?></td>
+            <?php } ?>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongopsco)) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongopsno)) ?></td>
+             
+        </tr>
+        <?php $co = array(); $no = array(); $co_truoc = array(); $no_truoc = array(); ?>
+        <?php foreach ($staffs_data as $staff) {  ?>
+        <?php if( ((isset($debt_truoc['co'][$staff->staff_id]) && $debt_truoc['co'][$staff->staff_id] != 0) || (isset($debt_truoc['no'][$staff->staff_id]) && $debt_truoc['no'][$staff->staff_id] != 0 ) ) || ( (isset($debt['co'][$staff->staff_id]) && $debt['co'][$staff->staff_id] != 0) || (isset($debt['no'][$staff->staff_id]) && $debt['no'][$staff->staff_id] != 0 ) )){ ?>
+        <?php
+            if (isset($debt_truoc['co'][$staff->staff_id]) && $debt_truoc['co'][$staff->staff_id] > 0) {
+                $co_truoc[$staff->staff_id] = isset($co_truoc[$staff->staff_id])?($co_truoc[$staff->staff_id] + $debt_truoc['co'][$staff->staff_id]):($debt_truoc['co'][$staff->staff_id]);
+            }
+            if (isset($debt_truoc['no'][$staff->staff_id]) && $debt_truoc['no'][$staff->staff_id] < 0) {
+                $co_truoc[$staff->staff_id] = isset($co_truoc[$staff->staff_id])?($co_truoc[$staff->staff_id] + str_replace('-', "", $debt_truoc['no'][$staff->staff_id])):(str_replace('-', "", $debt_truoc['no'][$staff->staff_id]));
+            }
+
+            if (isset($debt_truoc['co'][$staff->staff_id]) && $debt_truoc['co'][$staff->staff_id] < 0) {
+                $no_truoc[$staff->staff_id] = isset($no_truoc[$staff->staff_id])?($no_truoc[$staff->staff_id] + str_replace('-', "", $debt_truoc['co'][$staff->staff_id])):(str_replace('-', "", $debt_truoc['co'][$staff->staff_id]));
+            }
+            if (isset($debt_truoc['no'][$staff->staff_id]) && $debt_truoc['no'][$staff->staff_id] > 0) {
+                $no_truoc[$staff->staff_id] = isset($no_truoc[$staff->staff_id])?($no_truoc[$staff->staff_id] + $debt_truoc['no'][$staff->staff_id]):($debt_truoc['no'][$staff->staff_id]);
+            }
+
+            if (isset($debt['co'][$staff->staff_id]) && $debt['co'][$staff->staff_id] > 0) {
+                $co[$staff->staff_id] = isset($co[$staff->staff_id])?($co[$staff->staff_id] + $debt['co'][$staff->staff_id]):($debt['co'][$staff->staff_id]);
+            }
+            if (isset($debt['no'][$staff->staff_id]) && $debt['no'][$staff->staff_id] < 0) {
+                $co[$staff->staff_id] = isset($co[$staff->staff_id])?($co[$staff->staff_id] + str_replace('-', "", $debt['no'][$staff->staff_id]) ):(str_replace('-', "", $debt['no'][$staff->staff_id]));
+            }
+
+            if (isset($debt['co'][$staff->staff_id]) && $debt['co'][$staff->staff_id] < 0) {
+                $no[$staff->staff_id] = isset($no[$staff->staff_id])?($no[$staff->staff_id] + str_replace('-', "", $debt['co'][$staff->staff_id]) ):(str_replace('-', "", $debt['co'][$staff->staff_id]));
+            }
+            if (isset($debt['no'][$staff->staff_id]) && $debt['no'][$staff->staff_id] > 0) {
+                $no[$staff->staff_id] = isset($no[$staff->staff_id])?($no[$staff->staff_id] + $debt['no'][$staff->staff_id]):($debt['no'][$staff->staff_id]);
+            }
+
+        ?>
+        <tr class="staff" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" data="<?php echo $staff->staff_id ?>">
+            <td class="fix"></td>
+            <td class="fix"><?php echo $staff->staff_name ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(isset($co_truoc[$staff->staff_id])?$co_truoc[$staff->staff_id]:null); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(isset($no_truoc[$staff->staff_id]) ?$no_truoc[$staff->staff_id]:null); ?></td>
+
+            <?php 
+            for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+            ?>
+            <td class="fix approve">
+                <?php
+                if (isset($new_debt_truoc[$t][$n]['no'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['no'][$staff->staff_id] < 0) {
+                    if (isset($new_debt_truoc[$t][$n]['co'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['co'][$staff->staff_id] > 0) {
+                        echo $lib->formatMoney(str_replace('-', "", ($new_debt_truoc[$t][$n]['no'][$staff->staff_id]+$new_debt_truoc[$t][$n]['co'][$staff->staff_id])));
+                    }
+                    else{
+                        echo $lib->formatMoney(str_replace('-', "", $new_debt_truoc[$t][$n]['no'][$staff->staff_id]));
+                    }
+                }
+                elseif (isset($new_debt_truoc[$t][$n]['co'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['co'][$staff->staff_id] > 0) {
+                    echo $lib->formatMoney($new_debt_truoc[$t][$n]['co'][$staff->staff_id]);
+                }
+                else{
+                    echo null;
+                }
+                ?>
+                
+            </td>
+            <td class="fix error">
+                <?php
+                if (isset($new_debt_truoc[$t][$n]['no'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['no'][$staff->staff_id] > 0) {
+                    if (isset($new_debt_truoc[$t][$n]['co'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['co'][$staff->staff_id] < 0) {
+                        echo $lib->formatMoney(str_replace('-', "", ($new_debt_truoc[$t][$n]['no'][$staff->staff_id]+$new_debt_truoc[$t][$n]['co'][$staff->staff_id])));
+                    }
+                    else{
+                        echo $lib->formatMoney($new_debt_truoc[$t][$n]['no'][$staff->staff_id]);
+                    }
+                }
+                elseif (isset($new_debt_truoc[$t][$n]['co'][$staff->staff_id]) && $new_debt_truoc[$t][$n]['co'][$staff->staff_id] < 0) {
+                    echo $lib->formatMoney(str_replace('-', "", $new_debt_truoc[$t][$n]['co'][$staff->staff_id]));
+                }
+                else{
+                    echo null;
+                }
+                ?>
+                
+            </td>
+            <?php } ?>
+
+            <td class="fix"><?php echo $lib->formatMoney(isset($co[$staff->staff_id])?$co[$staff->staff_id]:null); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(isset($no[$staff->staff_id]) ?$no[$staff->staff_id]:null); ?></td>
+             
+        </tr>
+        <?php }} ?>
+        <?php foreach ($vendors_ops_data as $vendor) {  ?>
+        <?php if((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0) || (isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0) || (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]<0) || (isset($owe['money'][$vendor->shipment_vendor_id]) && $owe['money'][$vendor->shipment_vendor_id]>0)){ ?>
+        <tr class="vendor" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>" data="<?php echo $vendor->shipment_vendor_id; ?>">
+            <td class="fix"></td>
+            <td class="fix"><?php echo $vendor->shipment_vendor_name; ?></td>
+            <td class="fix"><?php echo $lib->formatMoney((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]<0)?str_replace('-', '', $owe_truoc['money'][$vendor->shipment_vendor_id]):null); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney((isset($owe_truoc['money'][$vendor->shipment_vendor_id]) && $owe_truoc['money'][$vendor->shipment_vendor_id]>0)?$owe_truoc['money'][$vendor->shipment_vendor_id]:null); ?></td>
+            
+            <?php 
+            //$new_owe_truoc[$tuan]['money'][$vendor->shipment_vendor_id] = $owe['money'][$vendor->shipment_vendor_id];
+            for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+            ?>
+            <td class="fix approve">
+                <?php echo $lib->formatMoney( (isset($new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id] < 0 ) ? str_replace('-', "", $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) : null ); ?>
+            </td>
+            <td class="fix error">
+                <?php echo $lib->formatMoney( (isset($new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id]) && $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id] > 0 ) ? $new_owe_truoc[$t][$n]['money'][$vendor->shipment_vendor_id] : null ); ?>
+            </td>
+            <?php } ?>
+
+            <td class="fix"><?php echo $lib->formatMoney($owe['money'][$vendor->shipment_vendor_id]<0?str_replace('-', '', $owe['money'][$vendor->shipment_vendor_id]):null); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($owe['money'][$vendor->shipment_vendor_id]>0?$owe['money'][$vendor->shipment_vendor_id]:null); ?></td>
+             
+            
+        </tr>
+        <?php } }?>
+
+        <?php $tongtamung = isset($imports_data['money'])?$imports_data['money']:0; $tongtamung_truoc = isset($imports_data_truoc['money'])?$imports_data_truoc['money']:0; 
+
+        $new_tongtamung_truoc = array();
+        for ($i=1; $i <= $number; $i++) { 
+            $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+            $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+            $new_tongtamung_truoc['money'][$t][$n] = isset($new_imports_data_truoc['money'][$t][$n])?$new_imports_data_truoc['money'][$t][$n]:null; 
+        }
+        ?>
+        <tr style=" font-weight: bold; color: red">
+            <td style="text-align:center;" class="fix">7</td>
+            <td class="fix">Tạm ứng</td>
+            <td class="fix"><?php echo $lib->formatMoney($tongtamung_truoc); ?></td>
+            <td class="fix"></td>
+            <?php for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+             ?>
+            
+            <td class="fix"><?php echo $lib->formatMoney(isset($new_tongtamung_truoc['money'][$t][$n]) && $new_tongtamung_truoc['money'][$t][$n]>0?$new_tongtamung_truoc['money'][$t][$n]:null); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(isset($new_tongtamung_truoc['money'][$t][$n]) && $new_tongtamung_truoc['money'][$t][$n]<0?str_replace('-', "", $new_tongtamung_truoc['money'][$t][$n]):null); ?></td>
+            <?php } ?>
+            <td class="fix"><?php echo $lib->formatMoney($tongtamung); ?></td>
+            <td class="fix"></td>
+             
+        </tr>
+        
+        <tr>
+            <td class="fix"></td>
+            <td class="fix">Tạm ứng lốp xe</td>
+            <td class="fix"><?php echo $lib->formatMoney(isset($imports_data_truoc['money'])?$imports_data_truoc['money']:0); ?></td>
+            <td class="fix"></td>
+            
+            <?php for ($i=1; $i <= $number; $i++) {  
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+                ?>
+            <td class="fix"><?php echo $lib->formatMoney((isset($new_imports_data_truoc['money'][$t][$n]) && $new_imports_data_truoc['money'][$t][$n]>0)?$new_imports_data_truoc['money'][$t][$n]:null); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney((isset($new_imports_data_truoc['money'][$t][$n]) && $new_imports_data_truoc['money'][$t][$n]<0)?str_replace('-', "", $new_imports_data_truoc['money'][$t][$n]):null); ?></td>
+            <?php } ?>
+            <td class="fix"><?php echo $lib->formatMoney(isset($imports_data['money'])?$imports_data['money']:0); ?></td>
+            <td class="fix"></td>
+            
+             
+        </tr>
+
+        <?php $tongluong = $salary; $tongluong_truoc = $salary_truoc;  $tongtonkho = $tonkho; $tongtonkho_truoc = $tonkho_truoc; 
+
+        $new_tongtonkho_truoc = array();
+
+        $luongthang = 0;
+
+        $new_tongluong_truoc = array();
+        for ($i=1; $i <= $number; $i++) { 
+            $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+            $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+
+            $new_tongluong_truoc[$t][$n] = isset($new_salary_truoc[$t][$n])?$new_salary_truoc[$t][$n]:null; 
+            $luongthang += $new_tongluong_truoc[$t][$n];
+
+            $new_tongtonkho_truoc[$t][$n] = isset($new_tonkho_truoc[$t][$n])?$new_tonkho_truoc[$t][$n]:null; 
+        }
+        ?>
+        <tr style=" font-weight: bold; color: red">
+            <td style="text-align:center;" class="fix">8</td>
+            <td class="fix">Lương</td>
+            <td class="fix"></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongluong_truoc); ?></td>
+            <?php for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+             ?>
+            <td class="fix"><?php echo $lib->formatMoney($new_tongluong_truoc[$t][$n]<0?str_replace('-', "", $new_tongluong_truoc[$t][$n]):null); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($new_tongluong_truoc[$t][$n]>0?$new_tongluong_truoc[$t][$n]:null); ?></td>
+            <?php } ?>
+            <td class="fix"></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongluong); ?></td>
+             
+        </tr>
+        
+        <tr>
+            <td class="fix"></td>
+            <td class="fix">Lương tháng</td>
+            <td class="fix"></td>
+            <td class="fix"><?php echo $lib->formatMoney($salary_truoc); ?></td>
+            <?php for ($i=1; $i <= $number; $i++) {  
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+                ?>
+            <td class="fix"></td>
+            <td class="fix"><?php echo $lib->formatMoney(isset($new_salary_truoc[$t][$n])?$new_salary_truoc[$t][$n]:null); ?></td>
+            <?php } ?>
+            <td class="fix"></td>
+            <td class="fix"><?php echo $lib->formatMoney($salary); ?></td>
+             
+        </tr>
+        <tr style=" font-weight: bold; color: red">
+            <td style="text-align:center;" class="fix">9</td>
+            <td class="fix">Tồn kho</td>
+            <td class="fix"><?php echo $lib->formatMoney($tongtonkho_truoc); ?></td>
+            <td class="fix"></td>
+            <?php for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+             ?>
+            
+            <td class="fix"><?php echo $lib->formatMoney($new_tongtonkho_truoc[$t][$n]>0?$new_tongtonkho_truoc[$t][$n]:null); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($new_tongtonkho_truoc[$t][$n]<0?str_replace('-', "", $new_tongtonkho_truoc[$t][$n]):null); ?></td>
+            <?php } ?>
+            <td class="fix"><?php echo $lib->formatMoney($tongtonkho); ?></td>
+            <td class="fix"></td>
+             
+        </tr>
+        
+        <tr>
+            <td class="fix"></td>
+            <td class="fix">Tồn kho lốp xe</td>
+            <td class="fix"><?php echo $lib->formatMoney($tonkho_truoc); ?></td>
+            <td class="fix"></td>
+            
+            <?php for ($i=1; $i <= $number; $i++) {  
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+                ?>
+            <td class="fix"><?php echo $lib->formatMoney(($new_tonkho_truoc[$t][$n]>0)?$new_tonkho_truoc[$t][$n]:null); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(($new_tonkho_truoc[$t][$n]<0)?str_replace('-', "", $new_tonkho_truoc[$t][$n]):null); ?></td>
+            <?php } ?>
+            <td class="fix"><?php echo $lib->formatMoney($tonkho); ?></td>
+            <td class="fix"></td>
+            
+             
+        </tr>
+        <tr style=" font-weight: bold; color: rgb(0, 90, 255);">
+            <td colspan="2" style="text-align:center;" class="fix">Tổng</td>
+            <td class="fix"><?php echo $lib->formatMoney((isset($asset_truoc[1])?$asset_truoc[1]:0)+(isset($asset_truoc[2])?$asset_truoc[2]:0)+$tongnh_truoc+str_replace('-', "", $tongthuco_truoc)+str_replace('-', "", $tongtraco_truoc)+str_replace('-', "", $tongopsco_truoc)+$tongtonkho_truoc+$tongtamung_truoc) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongthuno_truoc)+str_replace('-', "", $tongtrano_truoc)+str_replace('-', "", $tongopsno_truoc)/*+str_replace('-', "", $tongluong_truoc)*/); ?></td>
+            
+            <?php for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+             ?>
+            <td class="fix"><?php echo $lib->formatMoney(((isset($new_asset_truoc[$t][$n][1]) && $new_asset_truoc[$t][$n][1]>0)?$new_asset_truoc[$t][$n][1]:null)+((isset($new_asset_truoc[$t][$n][2]) && $new_asset_truoc[$t][$n][2]>0)?$new_asset_truoc[$t][$n][1]:null)+($new_tongnh_truoc[$t][$n]>0?str_replace('-', "", $new_tongnh_truoc[$t][$n]):null)+str_replace('-', "", $new_tongthuco_truoc[$t][$n])+str_replace('-', "", $new_tongtraco_truoc[$t][$n])+str_replace('-', "", $new_tongopsco_truoc[$t][$n])+(($new_tonkho_truoc[$t][$n]>0)?$new_tonkho_truoc[$t][$n]:null)+((isset($new_imports_data_truoc['money'][$t][$n]) && $new_imports_data_truoc['money'][$t][$n]>0)?$new_imports_data_truoc['money'][$t][$n]:null)) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(((isset($new_asset_truoc[$t][$n][1]) && $new_asset_truoc[$t][$n][1]<0)?str_replace('-', "", $new_asset_truoc[$t][$n][1]):null)+((isset($new_asset_truoc[$t][$n][2]) && $new_asset_truoc[$t][$n][2]<0)?str_replace('-', "", $new_asset_truoc[$t][$n][2]):null)+($new_tongnh_truoc[$t][$n]<0?str_replace('-', "", $new_tongnh_truoc[$t][$n]):null)+str_replace('-', "", $new_tongthuno_truoc[$t][$n])+str_replace('-', "", $new_tongtrano_truoc[$t][$n])+str_replace('-', "", $new_tongopsno_truoc[$t][$n])/*+str_replace('-', "", $new_tongluong_truoc[$t][$n])*/+(($new_tonkho_truoc[$t][$n]<0)?str_replace('-', "", $new_tonkho_truoc[$t][$n]):null)+((isset($new_imports_data_truoc['money'][$t][$n]) && $new_imports_data_truoc['money'][$t][$n]<0)?str_replace('-', "", $new_imports_data_truoc['money'][$t][$n]):null)); ?></td>
+            <?php } ?>
+
+            <td class="fix"><?php echo $lib->formatMoney((isset($asset[1])?$asset[1]:0)+(isset($asset[2])?$asset[2]:0)+$tongnh+str_replace('-', "", $tongthuco)+str_replace('-', "", $tongtraco)+str_replace('-', "", $tongopsco)+$tongtonkho+$tongtamung) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', "", $tongthuno)+str_replace('-', "", $tongtrano)+str_replace('-', "", $tongopsno)/*+str_replace('-', "", $tongluong)*/); ?></td>
+             
+        </tr>
+        <tr style=" font-weight: bold; color: red">
+            <td colspan="2" style="text-align:center;" class="fix">Tổng tài sản</td>
+            <td colspan="2" class="fix"><?php echo $lib->formatMoney(((isset($asset_truoc[1])?$asset_truoc[1]:0)+(isset($asset_truoc[2])?$asset_truoc[2]:0)+$tongnh_truoc+str_replace('-', "", $tongthuco_truoc)+str_replace('-', "", $tongtraco_truoc)+str_replace('-', "", $tongopsco_truoc))-(str_replace('-', "", $tongthuno_truoc)+str_replace('-', "", $tongtrano_truoc)+str_replace('-', "", $tongopsno_truoc)/*+str_replace('-', "", $tongluong_truoc)*/)+$tongtonkho_truoc+$tongtamung_truoc) ?></td>
+            
+            <?php for ($i=1; $i <= $number; $i++) {  ?>
+            <td colspan="2" class="fix"></td>
+            <?php } ?>
+
+            <td colspan="2" class="fix"><?php echo $lib->formatMoney(((isset($asset[1])?$asset[1]:0)+(isset($asset[2])?$asset[2]:0)+$tongnh+str_replace('-', "", $tongthuco)+str_replace('-', "", $tongtraco)+str_replace('-', "", $tongopsco))-(str_replace('-', "", $tongthuno)+str_replace('-', "", $tongtrano)+str_replace('-', "", $tongopsno)/*+$tongluong*/)+$tongtonkho+$tongtamung) ?></td>
+             
+        </tr>
+        <tr style=" font-weight: bold; color: rgb(0, 128, 0);">
+            <td colspan="2" style="text-align:center;" class="fix">Tăng giảm TTS</td>
+            <td colspan="2" class="fix"></td>
+            
+            <?php for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+             ?>
+            <td colspan="2" class="fix"><?php echo $tanggiam[$t][$n] = $lib->formatMoney((((isset($new_asset_truoc[$t][$n][1]) && $new_asset_truoc[$t][$n][1]>0)?$new_asset_truoc[$t][$n][1]:null)+((isset($new_asset_truoc[$t][$n][2]) && $new_asset_truoc[$t][$n][2]>0)?$new_asset_truoc[$t][$n][1]:null)+($new_tongnh_truoc[$t][$n]>0?$new_tongnh_truoc[$t][$n]:null)+$new_tongthuco_truoc[$t][$n]+str_replace('-', "", $new_tongtraco_truoc[$t][$n])+str_replace('-', "", $new_tongopsco_truoc[$t][$n])) - (((isset($new_asset_truoc[$t][$n][1]) && $new_asset_truoc[$t][$n][1]<0)?str_replace('-', "", $new_asset_truoc[$t][$n][1]):null)+((isset($new_asset_truoc[$t][$n][2]) && $new_asset_truoc[$t][$n][2]<0)?str_replace('-', "", $new_asset_truoc[$t][$n][2]):null)+($new_tongnh_truoc[$t][$n]<0?str_replace('-', "", $new_tongnh_truoc[$t][$n]):null)+str_replace('-', "", $new_tongthuno_truoc[$t][$n])+str_replace('-', "", $new_tongtrano_truoc[$t][$n])+str_replace('-', "", $new_tongopsno_truoc[$t][$n])/*+str_replace('-', "", $new_tongluong_truoc[$t][$n])*/)+(isset($new_tonkho_truoc[$t][$n])?$new_tonkho_truoc[$t][$n]:null)+(isset($new_imports_data_truoc['money'][$t][$n])?$new_imports_data_truoc['money'][$t][$n]:null)) ?></td>
+            <?php } ?>
+
+            <td colspan="2" class="fix"></td>
+             
+        </tr>
+        <tr>
+            <td colspan="4" class="fix"></td>
+            
+            <?php for ($i=1; $i <= $number; $i++) { 
+                $t = ($tuantruoc+$i)>52?($tuantruoc+$i-52):$tuantruoc+$i;
+                $n = ($tuantruoc+$i)>52?$nam:$namtruoc;
+             ?>
+            <td colspan="2" class="fix">
+                <?php if(str_replace(',', '', $tanggiam[$t][$n]) >= 50000000){ ?>
+                    <table>
+                        <tr>
+                            <th>Code</th>
+                            <th>Doanh thu</th>
+                            <th>Chi phí</th>
+                            <th>Lợi nhuận</th>
+                            <th>LN sau thuế</th>
+                        </tr>
+                    <?php foreach ($max_array[$t][$n] as $arr) { ?>
+                        <tr>
+                            <td class="fix"><?php echo $arr['code'] ?></td>
+                            <td class="fix" nowrap><?php echo $lib->formatMoney(round($arr['doanhthu'])) ?></td>
+                            <td class="fix" nowrap><?php echo $lib->formatMoney(round($arr['chiphi'])) ?></td>
+                            <td class="fix" nowrap><?php echo $lib->formatMoney(round($arr['loinhuan'])) ?></td>
+                            <td class="fix" nowrap><?php echo $lib->formatMoney(round($arr['loinhuansau'])) ?></td>
+                        </tr>
+                    <?php } ?>
+                    </table>
+                    <table >
+                        <tr style="color:red">
+                            <th colspan="2">Doanh thu tài chính</th>
+                        </tr>
+                        <tr>
+                            <th>Code</th>
+                            <th>Doanh thu</th>
+                        </tr>
+                    <?php foreach ($max_financial[$t][$n] as $arr) { ?>
+                        <tr>
+                            <td class="fix"><?php echo $arr['code'] ?></td>
+                            <td class="fix"><?php echo $lib->formatMoney(round($arr['doanhthu'])) ?></td>
+                        </tr>
+                    <?php } ?>
+                    </table>
+                <?php } else if(str_replace(',', '', $tanggiam[$t][$n]) < 0){ ?>
+                    <table>
+                        <tr>
+                            <th>Ngày</th>
+                            <th>Doanh thu</th>
+                            <th>Số tiền chi</th>
+                            <th>Nội dung</th>
+                        </tr>
+                    <?php foreach ($min_array[$t][$n] as $arr) { ?>
+                        <tr>
+                            <td class="fix" nowrap><?php echo $lib->hien_thi_ngay_thang($arr['date']) ?></td>
+                            <td class="fix" nowrap><?php echo $lib->formatMoney($arr['money_in'])?></td>
+                            <td class="fix" nowrap><?php echo $lib->formatMoney(str_replace('-', '', $arr['money']))?></td>
+                            <td class="fix" nowrap><?php echo $arr['comment'] ?></td>
+                        </tr>
+                    <?php } ?>
+                    <?php foreach ($min_arrays[$t][$n] as $arr) { ?>
+                        <tr>
+                            <td class="fix" nowrap><?php echo $lib->hien_thi_ngay_thang($arr['date']) ?></td>
+                            <td class="fix" nowrap><?php echo $lib->formatMoney($arr['money_in'])?></td>
+                            <td class="fix" nowrap><?php echo $lib->formatMoney(str_replace('-', '', $arr['money']))?></td>
+                            <td class="fix" nowrap><?php echo $arr['comment'] ?></td>
+                        </tr>
+                    <?php } ?>
+                    <?php if(isset($new_salary_truoc[$t][$n]) && $new_salary_truoc[$t][$n]>0){ ?>
+                        <tr>
+                            <td class="fix" nowrap>Tuần <?php echo $tuantruoc+$i ?></td>
+                            <td class="fix" nowrap>0</td>
+                            <td class="fix" nowrap><?php echo $lib->formatMoney($new_salary_truoc[$t][$n]) ?></td>
+                            <td class="fix" nowrap>Lương</td>
+                        </tr>
+                    <?php } ?>
+                    </table>
+                <?php } ?>
+            </td>
+            <?php } ?>
+
+            <td colspan="2" class="fix"></td>
+             
+        </tr>
+    </tbody>
+    </table>
+    <?php
+        $loinhuansale = $sale_data['doanhthu']-$sale_data['chiphi']-round($sale_data['kvat']*0.1);
+        $loinhuanagent = $agent_data['doanhthu']-$agent_data['chiphi']-round($agent_data['kvat']*0.1);
+        $loinhuantrading = $trading_data['doanhthu']-$trading_data['chiphi']-round($trading_data['kvat']*0.1);
+        $loinhuantcmt = $invoice_data['doanhthu']-$invoice_data['chiphi']-$invoice_data['invoice'];
+        $loinhuantc = round(($sale_data['kvat']+$agent_data['kvat']+$trading_data['kvat'])*0.1)-($sale_data['invoice']+$agent_data['invoice']+$trading_data['invoice']);
+        $loinhuanlopxe = $lopxe_data['doanhthu']-$lopxe_data['chiphi'];
+    ?>
+    <table class="data">
+        <tbody>
+
+        <tr style="text-align:right; font-weight: bold; color: rgb(255, 0, 174);">
+            <td colspan="2" class="fix">
+                Lợi nhuận Sale
+            </td>
+            <td class="fix sale" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <?php echo $lib->formatMoney($loinhuansale-round($loinhuansale*0.1)) ?>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr style="text-align:right; font-weight: bold; color: rgb(255, 0, 174);">
+            <td colspan="2" class="fix">
+                Lợi nhuận Agent
+            </td>
+            <td class="fix agent" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <?php echo $lib->formatMoney($loinhuanagent-round($loinhuanagent*0.1)) ?>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr style="text-align:right; font-weight: bold; color: rgb(255, 0, 174);">
+            <td colspan="2" class="fix" >
+                Lợi nhuận Trading
+            </td>
+            <td class="fix trading" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <?php echo $lib->formatMoney($loinhuantrading-round($loinhuantrading*0.1)) ?>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr style="text-align:right; font-weight: bold; color: rgb(255, 0, 174);">
+            <td colspan="2" class="fix" >
+                Lợi nhuận TCMT
+            </td>
+            <td class="fix tcmt" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <?php echo $lib->formatMoney($loinhuantcmt) ?>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr style="text-align:right; font-weight: bold; color: rgb(255, 0, 174);">
+            <td colspan="2" class="fix">
+                Lợi nhuận Tài chính
+            </td>
+            <td class="fix financial" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <?php echo $lib->formatMoney($loinhuantc+round($loinhuansale*0.1)+round($loinhuantrading*0.1)+round($loinhuanagent*0.1)) ?>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr style="text-align:right; font-weight: bold; color: rgb(255, 0, 174);">
+            <td colspan="2" class="fix" >
+                Lợi nhuận Lốp xe
+            </td>
+            <td class="fix lopxe" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>">
+                <?php echo $lib->formatMoney($loinhuanlopxe) ?>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr style="text-align:center; font-weight: bold; color: rgb(0, 90, 255);">
+            
+            <td class="fix" >Cuối kỳ </td>
+            <td class="fix"> Đầu kỳ</td>
+            <td class="fix" >Lợi nhuận </td>
+            <td class="fix"> Chi phí hành chính</td>
+            <td class="fix"> Lương</td>
+            <td class="fix"> Mua TS</td>
+            <td class="fix"> Các khoản thu vào</td>
+        </tr>
+        <tr style="text-align:center; font-weight: bold; color: rgb(255, 0, 58);">
+            
+            <td class="fix">
+                <?php echo $lib->formatMoney(((isset($asset[1])?$asset[1]:0)+(isset($asset[2])?$asset[2]:0)+$tongnh+str_replace('-', "", $tongthuco)+str_replace('-', "", $tongtraco)+str_replace('-', "", $tongopsco))-(str_replace('-', "", $tongthuno)+str_replace('-', "", $tongtrano)+str_replace('-', "", $tongopsno)/*+$tongluong*/)+$tongtonkho+$tongtamung) ?> 
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(((isset($asset_truoc[1])?$asset_truoc[1]:0)+(isset($asset_truoc[2])?$asset_truoc[2]:0)+$tongnh_truoc+str_replace('-', "", $tongthuco_truoc)+str_replace('-', "", $tongtraco_truoc)+str_replace('-', "", $tongopsco_truoc))-(str_replace('-', "", $tongthuno_truoc)+str_replace('-', "", $tongtrano_truoc)+str_replace('-', "", $tongopsno_truoc)/*+str_replace('-', "", $tongluong_truoc)*/)+$tongtonkho_truoc+$tongtamung_truoc) ?>
+            </td>
+            <td class="fix" >
+                <?php echo $lib->formatMoney($loinhuansale+$loinhuanagent+$loinhuantrading+$loinhuantcmt+$loinhuantc+$loinhuanlopxe) ?>
+            </td>
+            <td class="fix office" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>"> 
+                <?php echo $lib->formatMoney($hanhchinh<=0?str_replace('-', "", $hanhchinh)-$luongthang:'-'.$hanhchinh-$luongthang+$khoanthu/*+(isset($tongluong)?$tongluong:0)*/) ?>
+            </td>
+            <td class="fix"> 
+                <?php echo $lib->formatMoney(str_replace('-', "", $luongthang)/*+(isset($tongluong)?$tongluong:0)*/) ?>
+            </td>
+            <td class="fix"> 
+                <?php echo $lib->formatMoney($mua_ts) ?>
+            </td>
+            <td class="fix khoanthu" alt="<?php echo $tuantruoc ?>" tabindex="<?php echo $tuan ?>" title="<?php echo $nam ?>" name="<?php echo $namtruoc ?>"> 
+                <?php echo $lib->formatMoney($khoanthu) ?>
+            </td>
+        </tr>
+        <tr style="text-align:center; font-weight: bold; color: rgb(0, 90, 255);">
+            
+            <td class="fix" colspan="2">
+                <?php echo $lib->formatMoney((((isset($asset[1])?$asset[1]:0)+(isset($asset[2])?$asset[2]:0)+$tongnh+str_replace('-', "", $tongthuco)+str_replace('-', "", $tongtraco)+str_replace('-', "", $tongopsco))-(str_replace('-', "", $tongthuno)+str_replace('-', "", $tongtrano)+str_replace('-', "", $tongopsno)/*+$tongluong*/)+$tongtonkho+$tongtamung) - (((isset($asset_truoc[1])?$asset_truoc[1]:0)+(isset($asset_truoc[2])?$asset_truoc[2]:0)+$tongnh_truoc+str_replace('-', "", $tongthuco_truoc)+str_replace('-', "", $tongtraco_truoc)+str_replace('-', "", $tongopsco_truoc))-(str_replace('-', "", $tongthuno_truoc)+str_replace('-', "", $tongtrano_truoc)+str_replace('-', "", $tongopsno_truoc)/*+str_replace('-', "", $tongluong_truoc)*/)+$tongtonkho_truoc+$tongtamung_truoc)) ?>
+            </td>
+            <td class="fix" colspan="5">
+                <?php echo $lib->formatMoney(($loinhuansale+$loinhuanagent+$loinhuantrading+$loinhuantcmt+$loinhuantc+$loinhuanlopxe) - ($hanhchinh<=0?str_replace('-', "", $hanhchinh):(-$hanhchinh))-$mua_ts/*-(isset($tongluong)?$tongluong:0)*/) ?>
+            </td>
+            
+        </tr>
+        <tr style="text-align:center; font-weight: bold; color: rgb(0, 90, 255);">
+            
+            <td class="fix" colspan="7">
+                <?php echo $lib->formatMoney(((((isset($asset[1])?$asset[1]:0)+(isset($asset[2])?$asset[2]:0)+$tongnh+str_replace('-', "", $tongthuco)+str_replace('-', "", $tongtraco)+str_replace('-', "", $tongopsco))-(str_replace('-', "", $tongthuno)+str_replace('-', "", $tongtrano)+str_replace('-', "", $tongopsno)/*+$tongluong*/)+$tongtonkho+$tongtamung) - (((isset($asset_truoc[1])?$asset_truoc[1]:0)+(isset($asset_truoc[2])?$asset_truoc[2]:0)+$tongnh_truoc+str_replace('-', "", $tongthuco_truoc)+str_replace('-', "", $tongtraco_truoc)+str_replace('-', "", $tongopsco_truoc))-(str_replace('-', "", $tongthuno_truoc)+str_replace('-', "", $tongtrano_truoc)+str_replace('-', "", $tongopsno_truoc)/*+str_replace('-', "", $tongluong_truoc)*/)+$tongtonkho_truoc+$tongtamung_truoc)) - (($loinhuansale+$loinhuanagent+$loinhuantrading+$loinhuantcmt+$loinhuantc+$loinhuanlopxe) - ($hanhchinh<=0?str_replace('-', "", $hanhchinh):(-$hanhchinh))-$mua_ts/*-(isset($tongluong)?$tongluong:0)*/)) ?>
+            </td>
+        </tr>
+       </tbody>
+    </table>
+</div>
+
+<div id="chart2"></div>
+
+<div id="show" style="position:absolute; box-shadow: 0px 0px 5px rgb(145, 217, 244);"></div>
+
+<script type="text/javascript">
+    $('.vendor').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getVendor',
+            type: 'POST',
+            data: {vendor:val, tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.customer').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getCustomer',
+            type: 'POST',
+            data: {customer:val, tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.staff').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getStaff',
+            type: 'POST',
+            data: {staff:val, tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.bank').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getBank',
+            type: 'POST',
+            data: {bank:val, tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.office').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getOffice',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.khoanthu').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+    $('.khoanthu').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getKhoanthu',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.khoanthu').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.sale').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getSale',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.sale').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.trading').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getTrading',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.trading').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.agent').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getAgent',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.agent').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.tcmt').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getTCMT',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.tcmt').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.financial').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getFinancial',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.financial').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.lopxe').toggle(function(){
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        var namtruoc = $(this).attr('name');
+        var nam = $(this).attr('title');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/report/getLopxe',
+            type: 'POST',
+            data: {tuantruoc: tuantruoc, tuan: tuan, nam: nam, namtruoc: namtruoc},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.lopxe').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-200
+    });
+});
+
+$('.table_data').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-30
+    });
+});
+
+
+$(document).keyup(function(e) {
+  
+  if (e.keyCode == 27){   // esc
+    $('#show').html("");
+  }
+});
+
+var w = $(".table_data").width();
+
+      $(".container").width(w);
+      $(".navbar-inner").width(w);
+      $(".navbar").width(w);
+      $("#container").width(w);
+
+
+$(function(){
+  $(".table_data").colResizable({"disable": true});
+});
+
+</script>
+<style type="text/css">
+.data{
+    margin: 20px auto 20px 20px;
+    border: solid 2px red;
+}
+    .data td {
+  border: 1px solid #80C8E5;
+  padding: 4px 7px 2px;
+  vertical-align: top;
+  line-height: inherit;
+  overflow: hidden;
+}
+
+</style>
+
+<script type="text/javascript">
+    var tuan = "<?php echo $tuan ?>";
+    var tuantruoc = "<?php echo $tuantruoc ?>";
+    var namtruoc = "<?php echo $namtruoc ?>";
+    var nam = "<?php echo $nam ?>";
+    //load the Google Visualization API and the chart
+    google.load('visualization', '1', {'packages':['corechart','piechart']});
+ 
+    //set callback
+    google.setOnLoadCallback (createChart);
+ 
+    //callback function
+    function createChart() {
+ var jsonData = null;
+
+    var json = $.ajax({
+      url: "<?php echo BASE_URL ?>/report/getAnalytics/"+tuantruoc+"/"+tuan+"/"+namtruoc+"/"+nam, // make this url point to the data file
+      dataType: "json",
+      async: false,
+      success: (
+    function(data) {
+        jsonData = data;
+
+    // Create and populate the data table.
+    var data = new google.visualization.DataTable(jsonData);
+
+    // Create and draw the visualization.
+  var chart= new google.visualization.ComboChart(document.getElementById('chart2')).
+        draw(data, {curveType: "function",
+                    width: $(window).width(), height: 600,
+                    seriesType: 'bars',
+                    series: {
+                        1: {type: 'line'}
+                        },
+                    /*vAxis: { 
+                        ticks: [-200000000,-100000000,0,100000000,200000000,300000000,400000000,500000000,600000000,700000000,800000000,900000000,1000000000,1100000000,1200000000,1300000000,1400000000,1500000000] 
+                    }*/
+
+                }
+            );
+
+    })
+    }).responseText;
+    }
+</script> 

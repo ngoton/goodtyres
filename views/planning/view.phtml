@@ -1,0 +1,677 @@
+<link href="<?php echo BASE_URL ?>/public/css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo BASE_URL ?>/public/css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+<script src="<?php echo BASE_URL ?>/public/js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+<?php
+$url_order = 'ASC';
+if ($order_by == 'work_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'work_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> <?php echo $project_name; ?> </h1></center>
+<div class="add-box">
+    <a data="<?php echo $project; ?>" class="add_button" onClick="add_click();" data="">Add Task</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Search">
+        <input type="button" name="" id="search-submit" class="button-search" value="Search" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+       
+    </div>
+    <div class="tablenav top">
+
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Select</option>
+                
+                <option value="delete">Delete</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Apply" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+            <option  value="18446744073709">All</option>
+            <option value="15">15 items</option>
+            <option value="20">20 items</option>
+            <option value="50">50 items</option>
+            <option selected="selected" value="100">100 items</option>
+        </select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Apply" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+        
+      </div>
+
+</div>
+
+<div class="post">
+    <ol class="skills">
+        <?php foreach($works as $work): ?>
+        <li id="<?php echo $work->work_id ?>" data="<?php echo $work->project ?>" class="edit_cost">
+            <a <?php echo date('W',$work->deadline) != date('W',strtotime(date('d-m-Y'))) ? 'class="error"': null ?> ><?php echo $work->work_name; ?></a>
+            <span class="error" style="float:right; margin-right:55px"><?php echo $lib->hien_thi_ngay_thang($work->deadline); ?></span>
+            <span title="Delete" data="<?php echo $work->work_id; ?>" class="del"></span>
+            <span title="Complete" data="<?php echo $work->work_id; ?>" alt="<?php echo $lib->hien_thi_ngay_thang($work->deadline); ?>" name="<?php echo $work->work_name.' '.$work->comment; ?>" tabindex="<?php echo date('W',$work->deadline) != date('W',strtotime(date('d-m-Y'))) ? 1: 0 ?>" class="complete editButton"></span>
+
+            <ul style="display:none;" >
+                <li  class="fix"  id="work_name_<?php echo $work->work_id; ?>"><?php echo $work->work_name ?></li>
+                <li  class="fix"  id="comment_<?php echo $work->work_id; ?>"><?php echo $work->comment ?></li>
+                <li  class="fix" id="owner_<?php echo $work->work_id; ?>"><?php echo $staff_data['name'][$work->owner]; ?></li>
+                <li  class="fix" id="contributor_<?php echo $work->work_id; ?>">
+                    <?php 
+                    if($work->contributor != ""){
+                        $contributors = explode(',', $work->contributor);
+                        foreach ($contributors as $key) {
+                            echo ','.$staff_data['name'][$key];
+                        }
+                    }
+                    ?>
+                </li> 
+                <li class="fix" id="hour_<?php echo $work->work_id; ?>"><?php echo $work->hour; ?></li>
+                <li class="fix" id="deadline_<?php echo $work->work_id; ?>"><?php echo $lib->hien_thi_ngay_thang($work->deadline); ?></li>
+                
+            </ul>
+        </li>
+        <?php endforeach; ?>
+    </ol>
+</div>
+
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('planning') ?>">&larr;</a></div>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field-cost">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Task</h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_work_cost" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            <td>Task </td>
+                            <td>
+                                <input type="text" id="work_name"  name="work_name" tabindex="1"  required="required" >
+                                
+                            </td>
+                            <td>Comment </td>
+                            <td>
+                                <textarea name="comment" id="comment" tabindex="2"></textarea>
+                                
+                            </td>
+                            <td>Support </td>
+                            <td>
+                                <input type="text" id="contributor"  name="contributor" tabindex="3"  >
+                                <ul id="mytags"></ul>
+
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <td>Hours</td>
+                            <td>
+                                <input type="text" class="numbers" id="hour"  name="hour" tabindex="4"  required="required" >
+                            </td>
+                            <td>Deadline</td>
+                            <td>
+                                <input type="text" id="deadline"  name="deadline" tabindex="5"  required="required" >
+                            </td>
+                            <td></td>
+                            <td>
+                            </td>
+                        </tr>
+                        
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes_cost" name="yes_cost" required="required" ></td>
+                            <td><input type="hidden" readonly id="project" name="project" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Submit" tabindex="6"></td>
+                            
+                            <td ><input type="reset" name="reset" value="Reset" tabindex="7"></td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+
+<div id="dialogContent" title="Task Complete">
+    
+    
+    <form action="#" method="post" id="editForm">
+        <label>
+            <span class="add-on"><i class="icon-comment" ></i></span>
+            <span>Comment: </span>
+            <textarea id="i_work_comment" name="i_work_comment" required="required" ></textarea>
+        </label>
+        <label>
+            <span class="add-on"><i class="icon-calendar" ></i></span>
+            <span>Date: </span>
+            <input type="hidden" id="i_work" name="i_work" value="" />
+            <input type="text" id="i_work_date" name="i_work_date" value="" class="pay_date" required="required" />
+        </label>
+        
+        
+    </form>
+</div>
+
+
+<script type="text/javascript">
+
+var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $("#deadline").datepicker(pickerOpts);
+
+  
+$('.add-field-cost').hide();  
+
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);  
+        $('.add-field-cost').slideUp(500);    
+    }
+    
+});
+
+
+
+    $('.edit_cost').click(function(e){
+        if(e.target != '[object HTMLButtonElement]' && e.target != '[object HTMLSpanElement]' && !$('.checkbox').is(':focus')) { 
+            if(!$('.checkbox').is(':focus')){
+                $("html, body").animate({ scrollTop: $('.add-field-cost').offset().top }, 300);
+            }
+            var work_name = $(this).find("#work_name_"+$(this).attr('id')).text();
+            var comment = $(this).find("#comment_"+$(this).attr('id')).text();
+            var hour = $(this).find("#hour_"+$(this).attr('id')).text();
+            var deadline = $(this).find("#deadline_"+$(this).attr('id')).text();
+            
+            var contributor = $(this).find("#contributor_"+$(this).attr('id')).text();
+
+            //alert(cost_code);
+            $('#yes_cost').val($(this).attr('id'));
+            $('#project').val($(this).attr('data'));
+            
+                       
+            $('#deadline').val(deadline.replace(/\//g,"-"));
+            $('#work_name').val(work_name);
+            $('#comment').val(comment);
+            $('#hour').val(hour);
+            $('#contributor').val(contributor.trim().substring(1));
+
+            $( ".add-field-cost" ).dialog( "open" );
+
+           $("#contributor").tagit({
+              tagSource: function(search, showChoices) {
+                $.ajax({
+                  url: "<?php echo BASE_URL ?>/planning/getContributor",
+                  data: {search: search.term},
+                  success: function(choices) {
+                    showChoices(choices);
+                  }
+                });
+              }
+            });
+
+        }
+
+        
+        
+    });
+
+
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes_cost').val("");
+    $('#project').val($('.add_button').attr('data'));
+    $('.add-field-cost').slideDown(500);
+     $("html, body").animate({ scrollTop: $('.add-field-cost').offset().top }, 300);   
+     
+        $('#deadline').val("");
+        $('#work_name').val("");
+        $('#comment').val("");
+        $('#hour').val("");
+        $('#contributor').val("");
+
+                
+        $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+    $( ".add-field-cost" ).dialog( "open" );
+
+    $("#contributor").tagit({
+              tagSource: function(search, showChoices) {
+                $.ajax({
+                  url: "<?php echo BASE_URL ?>/planning/getContributor",
+                  data: {search: search.term},
+                  success: function(choices) {
+                    showChoices(choices);
+                  }
+                });
+              }
+            });
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_work_cost").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var work_name = $('#work_name').attr('value');
+                    
+                    var comment = $('#comment').attr('value');
+                    var hour = $('#hour').attr('value');
+                    var deadline = $('#deadline').attr('value');
+                    var contributor = $('#contributor').val().trim();
+                    var project = $('#project').attr('value');
+
+                    
+                    var yes = $('#yes_cost').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/planning/addwork", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            work_name: work_name,
+                            comment: comment,
+                            hour: hour,
+                            deadline: deadline,
+                            contributor: contributor,
+                            project: project,
+                            yes: yes,
+
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (yes != "") {
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                                    $('#expect_date_'+yes).text(expect_date);
+                                    $('#comment_'+yes).text(comment);
+                                    $('#money_'+yes).text(money);
+                                    $('#source_'+yes).text($("#source option:selected").text());
+                                    $('#source_in_'+yes).text($("#source_in option:selected").text());
+                            }
+                            else{
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="vendor_'+parseInt(lastID+1)+'">'+vendor+'</td><td class="fix" id="money_'+parseInt(lastID+1)+'">'+money+'</td><td class="fix" id="expect_date_'+parseInt(lastID+1)+'">'+expect_date+'</td><td class="fix" id="week_'+parseInt(lastID+1)+'"></td><td class="fix" id="code_'+parseInt(lastID+1)+'">'+code+'</td><td class="fix" id="source_'+parseInt(lastID+1)+'">'+$("#source option:selected").text()+'</td><td class="fix" id="comment_'+parseInt(lastID+1)+'">'+comment+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+
+
+
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+    $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-]/g, "")
+        ;
+      });
+    });
+    
+
+});
+
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+function set_item(item,name) {
+    // change input value
+    $('#work_code').val(item);
+    $("#work_code").attr("data",name);
+    
+    $('#code_list_id').hide();
+    $('#work_code').focus();
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+
+ $(function() {
+    var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+              
+    var pickerOpay2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $("#i_work_date").datepicker(pickerOpay2);        
+    
+});
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+
+</script>
+</div>
+
+<script type="text/javascript">
+
+
+$( ".add-field-cost" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Task",
+    hide: 'fold',
+    show: 'blind',
+    close: function(){
+        setTimeout(function() {
+                    sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                  }, 10);
+    }
+});
+
+$('.del').click(function(){
+    var data = $(this).attr('data');
+    var r = confirm("Bạn có chắc chắn không?");
+    if (r == true){
+         $.post("<?php echo BASE_URL ?>/planning/deletework", {data: data},
+           function(data){
+                setTimeout(function() {
+                    sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                  }, 200);
+           }); 
+    }
+});
+
+
+$('.editButton')
+    .button({ icons: { primary: "ui-icon-document" }})
+    .click(function() {
+        var check = $(this).attr('tabindex');
+        
+            $('#i_work').val($(this).attr('data'));
+            $('#i_work_date').val($(this).attr('alt').replace(/\//g,"-"));
+            $('#i_work_comment').val($(this).attr('name'));
+
+            $( "#dialogContent" ).dialog( "open" );
+        
+        
+    });
+
+
+//set up the dialog box.
+$( "#dialogContent" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var id = $('#i_work').val();
+            var date = $('#i_work_date').val();
+            var comment = $('#i_work_comment').val();
+        
+                
+                $.post("<?php echo BASE_URL ?>/planning/complete", {data: id, date: date, comment: comment},
+                   function(data){
+                    alert(data);
+                    $("html, body").animate({ scrollTop: 0 }, 100);
+                    setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                   
+                   }); 
+              
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
+
+</script>
+
+<style type="text/css">
+.post{width:100%; margin: 0;}
+.post ol{ counter-reset:li; list-style: none; *list-style: decimal; margin-left:0; padding-left:0 } 
+.post ol li{ position: relative; display: block; padding: .4em .4em .4em .8em; *padding: .4em; margin: .5em 0 .5em 4.5em; text-decoration: none; border-bottom:1px solid #e2e3e2; /* màu bottom border của chữ */ background:#f2f2f2;}
+.post ol li:before{ content: counter(li); counter-increment: li; position: absolute;    left: -30px; top: 50%; margin-top: -1em; color: #fff; /* màu của số */ background: #00afee; /* màu background của số */ height: 2em; width: 2em; line-height: 2em; text-align: center; font-weight: bold; } 
+.post ol li:after{ position: absolute; content: ''; left: -5px; margin-top: -.7em;    top: 50%; width: 0;  height: 0;  border-top: 8px solid transparent; border-bottom: 8px solid transparent;  border-left:8px solid #00afee; /* màu background của the right arrow*/ }
+.post li:hover{cursor: pointer; color: #00afee;}
+.post .del {
+  position: absolute;
+  right: .3em;
+  bottom: 0;
+  width: 20px;
+  margin: -10px 0 0 0;
+  padding: 1px;
+  height: 20px;
+  background: url(../../public/js/ui/images/close-button.png) center center;
+  border: none;
+}
+.post .complete {
+  position: absolute;
+  right: .3em;
+  bottom: 0;
+  width: 20px;
+  margin: -10px 25px 0 0;
+  padding: 1px;
+  height: 20px;
+  background: url(../../public/js/ui/images/icon-complete.png) center center;
+  border: none;
+}
+.post ol li a, .post ol li span.error{
+    font-size: 12px;
+}
+
+</style>
+<?php if(count($works)%2 == 0){ ?>
+<style type="text/css">
+.skills
+{ 
+    -moz-column-count: 2;
+    -moz-column-gap: 2.5em;
+    -webkit-column-count: 2;
+    -webkit-column-gap: 2.5em;
+     column-count: 2;
+     column-gap: 2.5em;
+}
+</style>
+<?php } 
+else if(count($works)%3 == 0){ ?>
+<style type="text/css">
+.skills
+{ 
+    -moz-column-count: 3;
+    -moz-column-gap: 2.5em;
+    -webkit-column-count: 3;
+    -webkit-column-gap: 2.5em;
+     column-count: 3;
+     column-gap: 2.5em;
+}
+</style>
+<?php } ?>

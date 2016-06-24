@@ -1,0 +1,465 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'handling_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'port_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'c20_feet')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'c40_feet')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'c45_feet')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'truck_barge')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'lift')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'status')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+<center style="clear:both;margin-bottom: -30px;"><h1> GIÁ NÂNG HẠ </h1></center>
+<div id="content" style="padding:5px;">
+    
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm bảng giá nâng hạ</a>
+    <a class="add_button" id="import_excel" href="<?= $this->url('handling/import')?>">Import Excel</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="2">Hiển thị 2 giá trị</option>
+            <option value="5">Hiển thị 5 giá trị</option>
+            <option value="8">Hiển thị 8 giá trị</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','handling_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'handling_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','port_name','<?php echo $url_order ?>')">Cảng <?php if ($order_by == 'port_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','truck_barge','<?php echo $url_order ?>')">Xe/Thủy <?php if ($order_by == 'truck_barge'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lift','<?php echo $url_order ?>')">Nâng/Hạ <?php if ($order_by == 'lift'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','status','<?php echo $url_order ?>')">Hàng/Rỗng <?php if ($order_by == 'status'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','c20_feet','<?php echo $url_order ?>')">20 feet <?php if ($order_by == 'c20_feet'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','c40_feet','<?php echo $url_order ?>')">40 feet <?php if ($order_by == 'c40_feet'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','c45_feet','<?php echo $url_order ?>')">45 feet <?php if ($order_by == 'c45_feet'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($handlings as $handling) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $handling->handling_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $handling->handling_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix" data="<?php echo $handling->port_id; ?>"  id="port_name_<?php echo $handling->handling_id; ?>"><?php echo $handling->port_name; ?></td>
+            
+            <td class="fix" data="<?php echo $handling->truck_barge; ?>" id="truck_barge_<?php echo $handling->handling_id; ?>"><?php echo $handling->truck_barge==1?'Xe':'Thủy'; ?></td>
+            <td class="fix" data="<?php echo $handling->lift; ?>" id="lift_<?php echo $handling->handling_id; ?>"><?php echo $handling->lift==1?'Nâng':'Hạ'; ?></td>
+            <td class="fix" data="<?php echo $handling->status; ?>" id="status_<?php echo $handling->handling_id; ?>"><?php echo $handling->status==1?'Hàng':'Rỗng'; ?></td>
+            <td class="fix" id="c20_feet_<?php echo $handling->handling_id; ?>"><?php echo $lib->formatMoney($handling->c20_feet); ?></td>
+            <td class="fix" id="c40_feet_<?php echo $handling->handling_id; ?>"><?php echo $lib->formatMoney($handling->c40_feet); ?></td>
+            <td class="fix" id="c45_feet_<?php echo $handling->handling_id; ?>"><?php echo $lib->formatMoney($handling->c45_feet); ?></td>
+            
+            <td>
+                <a class="error" href="#">Sửa</a>
+                | 
+                <a class="error" onclick="del(<?php echo $handling->handling_id ?>)" >Xóa</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Bảng giá cước </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_handling" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td></td>
+                            <td>&nbsp;</td>
+                            <td><div class="add-box"><a class="add_button" onClick="add_click();">Thêm bảng giá cước</a></div></td>
+                            
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Cảng </td>
+                            <td>
+                                <input type="text" autofocus autocomplete="off"  id="port" name="port" tabindex="1" required="required" placeholder="Nhập tên hoặc * để chọn" >
+                                <ul id="port_list_id"></ul>
+                            </td>
+                            <td></td>
+                            <td>20 feet </td>
+                            <td><input type="text" id="c20_feet" class="number" name="c20_feet" tabindex="3" ></td>
+                            
+                            
+
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <input type="checkbox" name="truck_barge" value="1" checked>&nbsp; Xe
+                            </td>
+                            <td>
+                                <input type="checkbox" name="truck_barge" value="0">&nbsp; Thủy
+                            </td>
+                            <td></td>
+                            <td>40 feet </td>
+                            <td><input type="text" class="number" id="c40_feet" name="c40_feet" tabindex="4" ></td>
+                            
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <input type="checkbox" name="lift" value="1" checked>&nbsp; Nâng
+                            </td>
+                            <td>
+                                <input type="checkbox" name="lift" value="0">&nbsp; Hạ
+                            </td>
+                            <td></td>
+                            <td>45 feet </td>
+                            <td><input type="text" class="number" id="c45_feet" name="c45_feet" tabindex="4" ></td>
+                            
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <input type="checkbox" name="status" value="1" checked>&nbsp; Hàng
+                            </td>
+                            <td>
+                                <input type="checkbox" name="status" value="0">&nbsp; Rỗng
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            
+                        </tr>
+                        
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="8"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="9"></td>
+                            <td></td>
+                            <td></td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+   
+});
+    $('.edit_tr').click(function(){
+        if(!$('.checkbox').is(':checked')){
+            $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        }
+        var port_name = $(this).find("#port_name_"+$(this).attr('id')).text();
+        var port = $(this).find("#port_name_"+$(this).attr('id')).attr('data');
+        var truck_barge = $(this).find("#truck_barge_"+$(this).attr('id')).attr('data');
+        var lift = $(this).find("#lift_"+$(this).attr('id')).attr('data');
+        var status = $(this).find("#status_"+$(this).attr('id')).attr('data');
+        var c20_feet = $(this).find("#c20_feet_"+$(this).attr('id')).text();
+        var c40_feet = $(this).find("#c40_feet_"+$(this).attr('id')).text();
+        var c45_feet = $(this).find("#c45_feet_"+$(this).attr('id')).text();
+        //alert(loc_from);
+        $('#yes').val($(this).attr('id'));
+        
+        $(':checkbox[name="truck_barge"][value='+truck_barge+']').prop('checked',true);
+        $(':checkbox[name="truck_barge"]').not($(':checkbox[name="truck_barge"][value='+truck_barge+']')).prop('checked',false);
+
+        $(':checkbox[name="lift"][value='+lift+']').prop('checked',true);
+        $(':checkbox[name="lift"]').not($(':checkbox[name="lift"][value='+lift+']')).prop('checked',false);
+
+        $(':checkbox[name="status"][value='+status+']').prop('checked',true);
+        $(':checkbox[name="status"]').not($(':checkbox[name="status"][value='+status+']')).prop('checked',false);
+
+        $('#c20_feet').val(c20_feet);
+        $('#c40_feet').val(c40_feet);
+        $('#c45_feet').val(c45_feet);
+        $('#port').val(port_name);
+        
+        
+        $("#port").attr('disabled', true);
+        $('#port').attr('data',port);
+        $('#port').focus();
+        
+    });
+
+$(':checkbox').bind('click',function(){
+     var th = $(this), name = th.prop('name'); 
+     if(th.is(':checked')){
+       $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
+       
+
+        $('#port').focus();
+     }
+});
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+    $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+    
+        $('#port').attr('data',"");
+        $('#port').val("");
+        $('#port').focus();
+        $('#c20_feet').val(0);
+        $('#c40_feet').val(0);
+        $('#c45_feet').val(0);
+        $("#port").attr('disabled', false);
+        
+        $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_handling").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var port = $('#port').attr('data');
+                    var truck_barge = $(':checkbox[name="truck_barge"]:checked').val();
+                    var lift = $(':checkbox[name="lift"]:checked').val();
+                    var status = $(':checkbox[name="status"]:checked').val();
+                    var c20_feet = $('#c20_feet').attr('value');
+                    var c40_feet = $('#c40_feet').attr('value');
+                    var c45_feet = $('#c45_feet').attr('value');
+                    
+                    var yes = $('#yes').attr('value');
+                    var check = $('#port').attr('data');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/handling/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            port: port,
+                            truck_barge: truck_barge,
+                            lift: lift,
+                            status: status,
+                            c20_feet: c20_feet,
+                            c40_feet: c40_feet,
+                            c45_feet: c45_feet,
+                            
+                            yes: yes,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (yes != "") {
+                                
+                                $('#c20_feet_'+yes).text(c20_feet);
+                                $('#c40_feet_'+yes).text(c40_feet);
+                                $('#c45_feet_'+yes).text(c45_feet);
+                                $('#port_name_'+yes).text($("#port").val());
+                                $('#truck_barge_'+yes).text(truck_barge==1?'Xe':'Thủy');
+                                $('#lift_'+yes).text(lift==1?'Nâng':'Hạ');
+                                $('#status_'+yes).text(status==1?'Hàng':'Rỗng');
+                                
+                            }
+                            else{
+                                if (answer.trim() != "Bảng giá này đã tồn tại") {
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="port_name_'+parseInt(lastID+1)+'">'+$("#port").val()+'</td><td class="fix" id="truck_barge_'+parseInt(lastID+1)+'">'+truck_barge==1?'Xe':'Thủy'+'</td><td class="fix" id="lift_'+parseInt(lastID+1)+'">'+lift==1?'Nâng':'Hạ'+'</td><td class="fix" id="status_'+parseInt(lastID+1)+'">'+status==1?'Hàng':'Rỗng'+'</td><td class="fix" id="c20_feet_'+parseInt(lastID+1)+'">'+c20_feet+'</td><td class="fix" id="c40_feet_'+parseInt(lastID+1)+'">'+c40_feet+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   
+   
+   $('#port').keyup(function(){
+      
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/handling/getport',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#port_list_id').slideDown(200);
+                $('#port_list_id').html(data);
+            }
+        });
+        if ($('#port').val() == "" || $('#port').attr('data') == "") {
+            
+            $('#port').attr('data',"");
+        }
+      
+   });
+   $('#port').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#port').attr('data',"");
+        }
+            
+      });
+
+   
+   $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+    
+
+});
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+function set_item(item,value) {
+    // change input value
+    $('#port').val(item);
+    $("#port").attr("data",value);
+    // hide proposition list
+    $('#port_list_id').hide();
+    $('#port').focus();
+}
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+    $("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:200,
+            width:500,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+</script>
+</div>

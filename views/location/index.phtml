@@ -1,0 +1,86 @@
+
+<?php
+$url_order = 'DESC';
+if ($order_by == 'location_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+if ($order_by == 'location_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'district')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+$i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> DANH SÁCH ĐỊA ĐIỂM </h1></center>
+<div class="add-box"><a class="add_button" href="<?php
+echo $this->url('location/add');
+?>">Thêm địa điểm mới</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+    
+    	
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="2">Hiển thị 2 giá trị</option>
+            <option value="5">Hiển thị 5 giá trị</option>
+            <option value="8">Hiển thị 8 giá trị</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+      </div>
+   
+<table class="table_data">
+<thead>
+    <tr>
+    	<th><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th><a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','location_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'location_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+        <th>
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','location_name','<?php echo $url_order ?>')">Địa điểm <?php if ($order_by == 'location_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th>
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','district_name','<?php echo $url_order ?>')">Tỉnh thành <?php if ($order_by == 'district_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+            
+           
+        <th>&nbsp;</th>
+    </tr>
+   </thead>
+   <tbody>
+    <?php foreach ($locations as $location) : ?>
+        <tr id="<?php echo $location->location_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $location->location_id ?>"></td>
+            <td><?php echo $i++; ?></td>
+            <td><?php echo $location->location_name; ?></td>
+            <td><?php echo $location->district_name; ?></td>
+            
+            <td>
+                <a class="error" href="<?php echo $this->url("location/edit/$location->location_id"); ?>">Sửa</a>
+                | 
+                <a class="error" onclick="del(<?php echo $location->location_id ?>)" >Xóa</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+</div>

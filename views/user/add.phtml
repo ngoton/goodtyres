@@ -1,0 +1,76 @@
+<script type="text/javascript">
+$(document).ready(function(){
+	
+			// Validate form
+			$("#add").validate({
+				errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+				rules: {
+					username: { rangelength: [2,10] }, //Chiều dài chuỗi trong khoảng từ 4 - 10 ký tự
+					password: { rangelength: [4,16] },
+					confirmpassword: {
+            equalTo: "#password" //So sánh với trường cpassword với thành trường có id là password
+          },
+				}
+					 
+				 
+			});
+	
+});
+</script>
+<div class="login_form">
+  <div class="goback"><a href="<?php echo $this->url('user') ?>">&larr;</a></div>      
+        <div class="login_body">
+          <h1>ĐĂNG KÝ TÀI KHOẢN</h1>
+              <form id="add" method="post" action="">
+                  <table style="margin-top:20px;">
+                    <tr>
+                        <td>Tên đăng nhập </td>
+                        <td><input type="text" id="username" name="username" tabindex="1" autofocus required="required"></td>
+                        
+                    </tr>
+                    <tr>
+                        <td>Mật khẩu </td>
+                        <td><input type="password" id="password" name="password" tabindex="2" required="required"></td>
+                    </tr>
+                    <tr>
+                        <td>Nhập lại mật khẩu </td>
+                        <td><input type="password" id="confirmpassword" name="confirmpassword" tabindex="2" required="required"></td>
+                    </tr>
+                    <tr>
+                        <td>Họ tên </td>
+                        <td>
+                          <select name="staff" id="staff" tabindex="3" >
+                            <option value="">--------Họ tên nhân viên--------</option>
+                            <?php
+                            foreach ($staff as $staff) {
+                              echo '<option value="'.$staff->staff_id.'">'.$staff->staff_name.'</option>';
+                            }
+                            ?>
+                          </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Quyền </td>
+                        <td>
+                          <select name="role" id="role" tabindex="4" required="required">
+                            <option value="">--------------Quyền---------------</option>
+                            <?php
+                            foreach ($role as $role) {
+                              echo '<option value="'.$role->role_id.'">'.$role->role_name.'</option>';
+                            }
+                            ?>
+                          </select>
+                        </td>
+                    </tr>
+                    
+                     <tr>
+                        <td ><input type="reset" name="reset" value="Nhập lại" tabindex="6"></td>
+                         <td><input type="submit" name="submit" value="Hoàn tất" tabindex="5"></td>
+                         
+                    </tr>
+                </table> 
+            </form>
+        </div>
+        <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+        </div>
+

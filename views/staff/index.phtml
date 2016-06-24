@@ -1,0 +1,529 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'staff_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff_code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff_birth')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff_gender')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff_address')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff_phone')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff_email')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cmnd')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'bank')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'username')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> DANH SÁCH NHÂN VIÊN </h1></center>
+    <?php if($_SESSION['role_logined'] != 10){ ?>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm nhân viên</a>
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+<?php } ?>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+        <?php if($_SESSION['role_logined'] != 10){ ?>
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+        <?php } ?>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="2">Hiển thị 2 giá trị</option>
+            <option value="5">Hiển thị 5 giá trị</option>
+            <option value="8">Hiển thị 8 giá trị</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'staff_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_code','<?php echo $url_order ?>')">Mã nhân viên <?php if ($order_by == 'staff_code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_name','<?php echo $url_order ?>')">Họ tên <?php if ($order_by == 'staff_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_birth','<?php echo $url_order ?>')">Ngày sinh <?php if ($order_by == 'staff_birth'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_gender','<?php echo $url_order ?>')">Giới tính <?php if ($order_by == 'staff_gender'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_address','<?php echo $url_order ?>')">Địa chỉ <?php if ($order_by == 'staff_address'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_phone','<?php echo $url_order ?>')">Số điện thoại <?php if ($order_by == 'staff_phone'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_email','<?php echo $url_order ?>')">Email <?php if ($order_by == 'staff_email'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>   
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cmnd','<?php echo $url_order ?>')">CMND <?php if ($order_by == 'cmnd'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','bank','<?php echo $url_order ?>')">Tài khoản ngân hàng <?php if ($order_by == 'bank'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','username','<?php echo $url_order ?>')">Tên truy cập <?php if ($order_by == 'username'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','position','<?php echo $url_order ?>')">Chức vụ <?php if ($order_by == 'position'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($staffs as $staff) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $staff->staff_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $staff->staff_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix"  id="staff_code_<?php echo $staff->staff_id; ?>"><?php echo $staff->staff_code ?></td>
+            <td class="fix"  id="staff_name_<?php echo $staff->staff_id; ?>"><?php echo $staff->staff_name ?></td>
+            <td class="fix" id="staff_birth_<?php echo $staff->staff_id; ?>"><?php echo $staff->staff_birth; ?></td>
+            <td class="fix" data="<?php echo $staff->staff_gender; ?>" id="staff_gender_<?php echo $staff->staff_id; ?>"><?php echo $staff->staff_gender==null?"":($staff->staff_gender==0?"Nam":"Nữ"); ?></td>
+            <td class="fix" id="staff_address_<?php echo $staff->staff_id; ?>"><?php echo $staff->staff_address; ?></td>
+            <td class="fix" id="staff_phone_<?php echo $staff->staff_id; ?>"><?php echo $staff->staff_phone; ?></td>
+            <td class="fix" id="staff_email_<?php echo $staff->staff_id; ?>"><?php echo $staff->staff_email; ?></td>
+            <td class="fix" id="cmnd_<?php echo $staff->staff_id; ?>"><?php echo $staff->cmnd; ?></td>
+            <td class="fix" id="bank_<?php echo $staff->staff_id; ?>"><?php echo $staff->bank; ?></td>
+            <td class="fix" data="<?php echo $staff->account; ?>" id="account_<?php echo $staff->staff_id; ?>"><?php echo $staff->account>0?($staff->account==$user['user_id'][$staff->account]?$user['username'][$staff->account]:null):""; ?></td>
+            <td class="fix" id="position_<?php echo $staff->staff_id; ?>"><?php echo $staff->position; ?></td>
+            <td style="display:none" class="fix" id="status_<?php echo $staff->staff_id; ?>"><?php echo $staff->status; ?></td>
+            <td>
+                <?php if($_SESSION['role_logined'] != 10){ ?>
+                <button onclick="del(<?php echo $staff->staff_id ?>)" >Xóa</button>
+                <?php } ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('staff') ?>">&larr;</a></div>
+
+
+
+<div class="add-field">
+    <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Thông tin nhân viên </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_staff" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+
+                            
+                        </tr>
+                        <tr>
+                            <td>Mã nhân viên </td>
+                            <td>
+                                <input type="text" id="staff_code"  name="staff_code" tabindex="1" required="required" >
+                            </td>
+                            <td>Họ tên </td>
+                            <td>
+                                <input type="text" id="staff_name"  name="staff_name" tabindex="2" required="required" >
+                            </td>
+                            
+                            <td>Địa chỉ </td>
+                            <td><input type="text" id="staff_address"  name="staff_address" tabindex="6" ></td>
+                            <td>CMND </td>
+                            <td><input type="text" id="cmnd" class="number"  name="cmnd" tabindex="9" ></td>
+                            
+
+                        </tr>
+                        <tr>
+                            
+                            <td>Trạng thái </td>
+                            <td>
+                                <input type="radio" checked  name="status" tabindex="4" value="1"> Làm việc
+                                <input type="radio"  name="status" tabindex="5" value="0"> Đã nghỉ
+                            </td>
+                            <td>Ngày sinh </td>
+                            <td><input type="text" id="staff_birth"  name="staff_birth" tabindex="3" required="required" ></td>
+                            <td>Số diện thoại </td>
+                            <td>
+                                <input type="text" class="numbers" id="staff_phone" name="staff_phone" tabindex="7" >
+                            </td>
+                            <td>Tài khoản ngân hàng </td>
+                            <td><input type="text"  id="bank" name="bank" tabindex="10" ></td>
+                        </tr>
+                        <tr>
+                            <td>Chức vụ</td>
+                            <td><input type="text"  id="position" name="position" tabindex="10" ></td>
+                            <td>Giới tính </td>
+                            <td>
+                                <input type="radio" checked  name="staff_gender" tabindex="4" value="0"> Nam
+                                <input type="radio"  name="staff_gender" tabindex="5" value="1"> Nữ
+                            </td>
+                            
+                            <td>Email </td>
+                            <td><input type="email"  id="staff_email" name="staff_email" tabindex="8" ></td>
+                            <td>Tên truy cập </td>
+                            <td>
+                                <select id="account">
+                                    <option value="0">Không sử dụng</option>
+                                    <?php foreach ($users as $users) {
+                                        echo '<option value="'.$users->user_id.'">'.$users->username.'</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        <?php if($_SESSION['role_logined'] != 10){ ?>
+                         <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="8"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="9"></td>
+                            <td></td>
+                            <td></td>
+                             
+                        </tr>
+                        <?php }?>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+var pickerOpts2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd/mm/yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $("#staff_birth").datepicker(pickerOpts2);
+
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+   
+});
+    $('.edit_tr').click(function(e){
+        if(e.target != '[object HTMLButtonElement]' && !$('.checkbox').is(':focus')){
+            if(!$('.checkbox').is(':focus')){
+                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+            }
+            var staff_code = $(this).find("#staff_code_"+$(this).attr('id')).text();
+            var staff_name = $(this).find("#staff_name_"+$(this).attr('id')).text();
+            var staff_birth = $(this).find("#staff_birth_"+$(this).attr('id')).text();
+            var staff_gender = $(this).find("#staff_gender_"+$(this).attr('id')).attr('data');
+            var staff_address = $(this).find("#staff_address_"+$(this).attr('id')).text();
+            var staff_phone = $(this).find("#staff_phone_"+$(this).attr('id')).text();
+            var staff_email = $(this).find("#staff_email_"+$(this).attr('id')).text();
+            var account = $(this).find("#account_"+$(this).attr('id')).attr('data');
+            var cmnd = $(this).find("#cmnd_"+$(this).attr('id')).text();
+            var bank = $(this).find("#bank_"+$(this).attr('id')).text();
+            var status = $(this).find("#status_"+$(this).attr('id')).text();
+            var position = $(this).find("#position_"+$(this).attr('id')).text();
+            //alert(staff_code);
+            $('#yes').val($(this).attr('id'));
+            
+            
+            $('#account option[value='+account+']').attr('selected','selected');
+            $('#staff_code').val(staff_code);
+            $('#staff_name').val(staff_name);
+            $('#staff_birth').val(staff_birth);
+            $('#staff_address').val(staff_address);
+            $('#staff_phone').val(staff_phone);
+            $('#staff_email').val(staff_email);
+            $('#cmnd').val(cmnd);
+            $('#bank').val(bank);
+            $('#position').val(position);
+            
+            var radioLength = $("input[name='staff_gender']").length;
+            for(var i = 0; i < radioLength; i++) {
+                $("input[name='staff_gender']")[i].checked = false;
+                if($("input[name='staff_gender']")[i].value == staff_gender) {
+                    $("input[name='staff_gender']")[i].checked = true;
+                }
+            }
+
+            var radioLength2 = $("input[name='status']").length;
+            for(var i = 0; i < radioLength2; i++) {
+                $("input[name='status']")[i].checked = false;
+                if($("input[name='status']")[i].value == status) {
+                    $("input[name='status']")[i].checked = true;
+                }
+            }
+
+            $('#staff_code').focus();
+            $('#staff_code').attr('data',"true");
+
+            $( ".add-field" ).dialog( "open" );
+        }
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+     $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
+        $('#staff_code').val("");
+        $('#staff_name').val("");
+        $('#staff_birth').val("");
+        $('#account option[value=""]').attr('selected','selected');
+        $("input[name='staff_gender'][value='0']").attr('checked',true);
+        $('#staff_address').val("");
+        $('#staff_phone').val("");
+        $('#staff_email').val("");
+        $('#position').val("");
+        $("input[name='status'][value='1']").attr('checked',true);
+        
+        $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+   $('#staff_code').focus();
+   $('#staff_code').attr('data',"false");
+
+   $( ".add-field" ).dialog( "open" );
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_staff").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var staff_code = $('#staff_code').attr('value');
+                    var staff_name = $('#staff_name').attr('value');
+                    var staff_birth = $('#staff_birth').attr('value');
+                    var staff_gender = $('input[name=staff_gender]:checked').val();
+                    var staff_address = $('#staff_address').attr('value');
+                    var staff_phone = $('#staff_phone').attr('value');
+                    var staff_email = $('#staff_email').attr('value');
+                    var cmnd = $('#cmnd').attr('value');
+                    var bank = $('#bank').attr('value');
+                    var account = $('#account').attr('value');
+                    var status = $('input[name=status]:checked').val();
+                    var position = $('#position').attr('value');
+
+                    var yes = $('#yes').attr('value');
+                    var check = $('#staff_code').attr('data');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/staff/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            staff_code: staff_code,
+                            staff_name: staff_name,
+                            staff_birth: staff_birth,
+                            staff_gender: staff_gender,
+                            staff_address: staff_address,
+                            staff_phone: staff_phone,
+                            staff_email: staff_email,
+                            cmnd:cmnd,
+                            bank:bank,
+                            account:account,
+                            status: status,
+                            position:position,
+                            yes: yes,
+                            check: check,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (check == "true") {
+                                if (answer.trim() != "Tên truy cập đã được sử dụng" && answer.trim() != "Mã nhân viên đã được sử dụng") {
+                                    $('#staff_code_'+yes).text(staff_code);
+                                    $('#staff_name_'+yes).text(staff_name);
+                                    $('#staff_birth_'+yes).text(staff_birth);
+                                    $('#staff_gender_'+yes).text(staff_gender==0?"Nam":"Nữ");
+                                    $('#staff_address_'+yes).text(staff_address);
+                                    $('#staff_phone_'+yes).text(staff_phone);
+                                    $('#staff_email_'+yes).text(staff_email);
+                                    $('#cmnd_'+yes).text(cmnd);
+                                    $('#bank_'+yes).text(bank);
+                                    $('#account_'+yes).text($("#account option:selected").text());
+                                }
+                            }
+                            else{
+                                if (answer.trim() != "Nhân viên này đã tồn tại" && answer.trim() != "Tên truy cập đã được sử dụng" && answer.trim() != "Mã nhân viên đã được sử dụng") {
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="staff_code_'+parseInt(lastID+1)+'">'+staff_code+'</td><td class="fix" id="staff_name_'+parseInt(lastID+1)+'">'+staff_name+'</td><td class="fix" id="staff_birth_'+parseInt(lastID+1)+'">'+staff_birth+'</td><td class="fix" id="staff_gender_'+parseInt(lastID+1)+'">'+staff_gender==0?"Nam":"Nữ"+'</td><td class="fix" id="staff_address_'+parseInt(lastID+1)+'">'+staff_address+'</td><td class="fix" id="staff_phone_'+parseInt(lastID+1)+'">'+staff_phone+'</td><td class="fix" id="staff_email_'+parseInt(lastID+1)+'">'+staff_email+'</td><td class="fix" id="cmnd_'+parseInt(lastID+1)+'">'+cmnd+'</td><td class="fix" id="bank_'+parseInt(lastID+1)+'">'+bank+'</td><td class="fix" id="account_'+parseInt(lastID+1)+'">'+$("#account option:selected").text()+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   
+   
+   
+    $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+        ;
+      });
+    });
+   
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+          .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+        ;
+      });
+    });
+    
+
+});
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+</script>
+</div>
+
+<script type="text/javascript">
+
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Nhân viên",
+    hide: 'fold',
+    show: 'blind'
+});
+</script>

@@ -1,0 +1,350 @@
+<style type="text/css">
+    .table_data tr:nth-child(even) {background: rgba(255, 240, 250, 0.59)}
+    .table_data tr:nth-child(odd) {background: #FFF}
+    .table_data tr:hover{background: rgba(68, 157, 245, 0.56); cursor: pointer;}
+</style>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> HÓA ĐƠN </h1></center>
+<form id="report" name="report" action method="post">
+	<div class="search-box">
+        <form id="report" name="report" action method="post">
+        <div class="add-box">
+                  
+            Từ tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn tháng" <?php if(isset($ngaytao)) echo "value='$ngaytao'"; ?> >    
+            Đến tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytaobatdau" id="chonngaytaobatdau" placeholder="Chọn tháng" <?php if(isset($ngaytaobatdau)) echo "value='$ngaytaobatdau'"; ?> >  
+             <input type="submit" name="submit" id="xem" value="Xem">  
+           
+            
+        </div>
+        <div class="add-box">
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >    
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="submit" name="submit" id="xem" value="Xem">  
+           
+            
+        </div>
+
+        <div class="tablenav top">
+        <div class="alignleft actions">
+        <select style="width: 100px;" name="sl_status" id="sl_status">
+                <option selected="selected" value="0">Tất cả</option>
+                <option  value="1">Sale</option>
+                <option  value="2">Trading</option>
+                <option  value="3">Agent</option>
+                <option  value="4">TCMT</option>
+            </select>
+        <input type="submit" name="submit" id="chon" value="Chọn">                             
+        </div>
+        
+        <div class="add-box">
+            <a class="add_button" id="btnExport" >Export Excel</a>
+        </div>
+
+      </div>
+
+
+    </div>
+
+</form>  
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+    	
+        <th style="width:30px" class="fix">
+            <a >STT </a>
+        </th>
+        <th class="fix">
+            <a>Code </a>
+        </th> 
+          
+        <th class="fix">
+            <a >Doanh thu (VAT)</a>
+        </th> 
+        <th class="fix">
+            <a >Doanh thu (0 VAT)</a>
+        </th> 
+        <th class="fix">
+            <a >Chi phí có HĐ </a>
+        </th>
+        <th class="fix">
+            <a >Chi phí không HĐ </a>
+        </th>
+        <th class="fix">
+            <a >Lợi nhuận </a>
+        </th>
+        <th class="fix">
+            <a >Lợi nhuận sau thuế </a>
+        </th>
+        <th class="fix">
+            <a >Trích </a>
+        </th>
+        <th class="fix">
+            <a >Số tiền cần mua </a>
+        </th>
+        <th class="fix">
+            <a >Quỹ </a>
+        </th>
+       
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $i=1; $tongthu=0; $tongthuvat=0; $tongkhd=0; $tonghd=0; $tonglech=0; $tongmua=0; $tongquy=0; $tongtrich=0; $tongln=0; $tonglnsau=0; ?>
+    
+    <?php for($j=0; $j<$total; $j++) { ?>
+    <?php
+        $tongthu += $bills['revenue'][$j];
+        $tongthuvat += $bills['revenue_vat'][$j];
+        $tongkhd += $bills['cost'][$j];
+        $tonghd += $bills['cost_vat'][$j];
+        $tongmua += $bills['mua'][$j];
+        $tongquy += $bills['quy'][$j];
+        $tongtrich += $bills['trich'][$j];
+        
+        $tongln += round($bills['revenue'][$j]+$bills['revenue_vat'][$j]-($bills['cost_vat'][$j]+$bills['cost'][$j]*1.1));
+        $tonglnsau += round((($bills['revenue'][$j]+$bills['revenue_vat'][$j]-($bills['cost_vat'][$j]+$bills['cost'][$j]*1.1)))-($bills['revenue'][$j]+$bills['revenue_vat'][$j]-($bills['cost_vat'][$j]+$bills['cost'][$j]*1.1))*0.1);
+    ?>
+    <?php
+        if ($bills['check'][$j]==4) {
+            $link = 'salereport/index/'.$bills['code'][$j];
+        }
+        else if ($bills['check'][$j]==2) {
+            $link = 'agent/index/'.$bills['code'][$j];
+        }
+        else if ($bills['check'][$j]==3) {
+            $link = 'agentmanifest/index/'.$bills['code'][$j];
+        }
+        else if ($bills['check'][$j]==5) {
+            $link = 'trading/index/'.$bills['code'][$j];
+        }
+        else if ($bills['check'][$j]==1) {
+            $link = 'invoice/index/'.$bills['invoice_number'][$j];
+        }
+    ?>
+    <?php if($_SESSION['role_logined'] == 10){ $link = "#"; } ?>
+    <tr class="view">
+        <td style="text-align:center;" class="fix"><?php echo $i++; ?></td>
+        <td class="fix"><a style="text-decoration: underline;" href="<?php echo $this->url($link) ?>"><?php echo $bills['code'][$j]; ?></a></td>
+        <td class="fix"><?php echo $lib->formatMoney($bills['revenue_vat'][$j]) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($bills['revenue'][$j]) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($bills['cost_vat'][$j]) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($bills['cost'][$j]) ?></td>
+        
+        <td class="fix"><?php echo $lib->formatMoney(round($bills['revenue'][$j]+$bills['revenue_vat'][$j]-($bills['cost_vat'][$j]+$bills['cost'][$j]*1.1))) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney(round((($bills['revenue'][$j]+$bills['revenue_vat'][$j]-($bills['cost_vat'][$j]+$bills['cost'][$j]*1.1)))-($bills['revenue'][$j]+$bills['revenue_vat'][$j]-($bills['cost_vat'][$j]+$bills['cost'][$j]*1.1))*0.1)) ?></td>
+        
+        <td class="fix"><?php echo $lib->formatMoney($bills['trich'][$j]) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($bills['mua'][$j]) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($bills['quy'][$j]) ?></td>
+        
+        
+    </tr>
+    <?php } ?>
+    
+
+    <tr style="font-weight: bold; color: rgb(0, 90, 255);">
+        <td colspan="2" class="fix">Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tongthuvat) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongthu) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($tonghd) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongkhd) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongln) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($tonglnsau) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongtrich) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongmua) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongquy) ?></td>
+        
+        
+    </tr>
+   </tbody>
+</table>
+
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('bill') ?>">&larr;</a></div>
+
+<script type="text/javascript">
+    $(':checkbox').bind('click',function(){
+     var th = $(this), name = th.prop('name'); 
+     if(th.is(':checked')){
+       $(':checkbox').not($(this)).prop('checked',false);
+       
+     }
+});
+
+function getDateRangeOfWeek(weekNo){
+    var d1 = new Date();
+    numOfdaysPastSinceLastMonday = eval(d1.getDay()- 1);
+    d1.setDate(d1.getDate() - numOfdaysPastSinceLastMonday);
+    var weekNoToday = d1.getWeek();
+    var weeksInTheFuture = eval( weekNo - weekNoToday );
+    d1.setDate(d1.getDate() + eval( 7 * weeksInTheFuture ));
+    var rangeIsFrom = eval(d1.getMonth()+1) +"/" + d1.getDate() + "/" + d1.getFullYear();
+    d1.setDate(d1.getDate() + 6);
+    var rangeIsTo = eval(d1.getMonth()+1) +"/" + d1.getDate() + "/" + d1.getFullYear() ;
+    return rangeIsFrom + " to "+rangeIsTo;
+};
+
+var v = "<?php echo $hanhchinh ?>";
+$('#hanhchinh option[value='+v+']').attr('selected','selected');
+
+</script>
+<script type="text/javascript">
+    var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytao").change();
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts);
+
+    $("#chonngaytao").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var firstDay = new Date(year, month, 1);
+
+        $('#batdau').datepicker("setDate", firstDay );
+    });
+
+    var pickerOpts5 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytaobatdau").change();
+         },
+         
+    };  
+    $("#chonngaytaobatdau").datepicker(pickerOpts5);
+
+    $("#chonngaytaobatdau").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var lastDay = new Date(year, month+1, 0);
+        $('#ketthuc').datepicker("setDate", lastDay );
+    });
+
+    $(".monthPicker").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+
+
+var ch = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+ch+']').attr('selected','selected');
+</script>

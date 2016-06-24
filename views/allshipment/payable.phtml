@@ -1,0 +1,149 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'payable_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'expect_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'week')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'money')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'bank_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'vendor')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'customer')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cost_type')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<table id="tblExport" class="table_data">
+    <thead>
+    <tr>
+        <th style="width:20px" rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th style="width:40px" rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payable_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'payable_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th style="width:60px" class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th  rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost_type','<?php echo $url_order ?>')">Loại chi phí <?php if ($order_by == 'cost_type'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" colspan="2">
+            <a class="sort">Phải trả </a>
+        </th>  
+        <th style="width:90px" class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','money','<?php echo $url_order ?>')">Nợ <?php if ($order_by == 'money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>   
+          
+        <th  class="fix" colspan="2" >
+            <a class="sort" >Dự kiến trả </a>
+        </th> 
+        
+        <th class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','bank','<?php echo $url_order ?>')">Tài khoản đi <?php if ($order_by == 'bank'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th style="width:200px" class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','comment','<?php echo $url_order ?>')">Ghi chú<?php if ($order_by == 'comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th style="width:90px" class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','pay_money','<?php echo $url_order ?>')">Đã trả <?php if ($order_by == 'pay_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        
+        
+        <th style="width:90px" class="fix" rowspan="2">Còn lại</th>
+        
+        
+    </tr>
+    <tr>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','vendor','<?php echo $url_order ?>')">Vendor <?php if ($order_by == 'vendor'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer','<?php echo $url_order ?>')">Khách hàng <?php if ($order_by == 'customer'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','expect_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'expect_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','week','<?php echo $url_order ?>')">Tuần <?php if ($order_by == 'week'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+    </tr>
+    
+   </thead>
+    <tbody>
+    <?php $tong = 0; $tongcon = 0; $tongtt = 0; ?>
+    <?php foreach ($payables as $payable) : ?>
+    <?php $tong += $payable->money; ?>
+    <?php $tongtt += $payable->pay_money; ?>
+    <?php $tongcon += ($payable->money-$payable->pay_money); ?>
+    <?php
+        if ($payable->sale_report > 0) {
+            $link = 'salereport/index/'.$payable->code;
+        }
+        else if ($payable->agent > 0) {
+            $link = 'agent/index/'.$payable->code;
+        }
+        else if ($payable->agent_manifest > 0) {
+            $link = 'agentmanifest/index/'.$payable->code;
+        }
+        else if ($payable->trading > 0) {
+            $link = 'trading/index/'.$payable->code;
+        }
+        else if ($payable->invoice > 0) {
+            $link = 'invoice/index/'.$payable->invoice;
+        }
+    ?>
+    <?php if($_SESSION['role_logined'] == 10){ $link = "#"; } ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $payable->payable_id ?>" class="edit_tr">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $payable->payable_id ?>"></td>
+            <td  class="fix"><?php echo $i++; ?></td>
+            <td  class="fix" id="code_<?php echo $payable->payable_id; ?>"><a style="text-decoration: underline;" href="<?php echo $this->url($link) ?>"><?php echo $payable->code; ?></a></td>
+            <td  class="fix" data="<?php echo $payable->cost_type; ?>" id="cost_type_<?php echo $payable->payable_id; ?>"><?php echo $payable->cost_type==1?'Trucking':($payable->cost_type==2?'Barging':($payable->cost_type==3?'Feeder':($payable->cost_type==4?'Thu hộ':($payable->cost_type==5?'Hoa hồng':($payable->cost_type==6?'TTHQ':($payable->cost_type==7?'Khác':null)))))); ?></td>
+            
+            <td  class="fix" data="<?php echo $payable->vendor; ?>" id="vendor_<?php echo $payable->payable_id; ?>"><a style="text-decoration: underline;" href="<?php echo ($_SESSION['role_logined'] != 10)?$this->url('shipmentvendor/index/'.$payable->vendor):"#" ?>"><?php echo isset($vendors['name'][$payable->vendor])?$vendors['name'][$payable->vendor]:null; ?></a></td>
+            <td  class="fix" data="<?php echo $payable->customer; ?>" id="customer_<?php echo $payable->payable_id; ?>"><?php echo isset($customers['name'][$payable->customer])?$customers['name'][$payable->customer]:null; ?></td>
+            
+            
+            <td  class="fix" id="money_<?php echo $payable->payable_id; ?>"><?php echo $lib->formatMoney($payable->money); ?></td>
+            <td class="fix"  id="expect_date_<?php echo $payable->payable_id; ?>"><?php echo $lib->hien_thi_ngay_thang($payable->expect_date) ?></td>
+            <td  class="fix" id="week_<?php echo $payable->payable_id; ?>"><?php echo $payable->week; ?></td>
+            
+            <td class="fix" id="source_<?php echo $payable->payable_id; ?>"><?php echo $payable->bank_name; ?></td>
+            <td class="fix" id="comment_<?php echo $payable->payable_id; ?>"><?php echo $payable->comment; ?></td> 
+            <td class="fix" id="pay_money_<?php echo $payable->payable_id; ?>"><a style="text-decoration: underline;" href="<?php echo $this->url('pay/index/'.$payable->payable_id) ?>"><?php echo $lib->formatMoney($payable->pay_money); ?></a></td>
+              
+            <td class="fix" id="conlai_<?php echo $payable->payable_id; ?>"><?php echo $lib->formatMoney($payable->money-$payable->pay_money); ?></td>
+            <td class="fix" style="display:none" id="type_<?php echo $payable->payable_id; ?>"><?php echo $payable->type; ?></td>         
+            <td class="fix" style="display:none" id="invoice_number_<?php echo $payable->payable_id; ?>"><?php echo $payable->invoice_number; ?></td> 
+            
+           
+        </tr>
+        
+    <?php endforeach; ?>
+    <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="6" >Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
+        <td class="fix" colspan="4" ></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongtt); ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongcon); ?></td>
+        
+    </tr>
+   </tbody>
+</table>
+
+
+<?php
+$this->helper('slidePaginator');
+?>

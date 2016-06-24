@@ -1,0 +1,717 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'lender_pay_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'lender_pay_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'lender_pay_expect')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'rate')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'money')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'bank_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'lender_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> PHẢI CHI VAY VỐN </h1></center>
+<?php if($_SESSION['role_logined'] != 10){ ?>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm mới</a>
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+<?php } ?>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+        <div class="add-box">
+                  
+            Tuần  <input style="width:50px" type="search" name="batdau" id="batdau" placeholder="Chọn tuần" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">  
+        </div>
+    </div>
+    <div class="tablenav top">
+        <div style="clear:both"></div>
+        <?php if($_SESSION['role_logined'] != 10){ ?>
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+        <?php } ?>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="5">Hiển thị 5 giá trị</option>
+            <option value="10">Hiển thị 10 giá trị</option>
+            <option value="15">Hiển thị 15 giá trị</option>
+            <option selected="selected" value="20">Hiển thị 20 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+
+      </div>
+
+</div>
+
+<table id="tblExport" class="table_data">
+    <thead>
+    <tr>
+        <th style="width:20px"  class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th style="width:40px" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lender_pay_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'lender_pay_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th style="width:75px" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lender_pay_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'lender_pay_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lender_money','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'lender_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lender_name','<?php echo $url_order ?>')">Phải trả <?php if ($order_by == 'lender_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lender_pay_money','<?php echo $url_order ?>')">Đã trả <?php if ($order_by == 'lender_pay_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        <th style="width:200px" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','comment','<?php echo $url_order ?>')">Nội dung<?php if ($order_by == 'comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th style="width:75px" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lender_pay_expect','<?php echo $url_order ?>')">Dự kiến trả <?php if ($order_by == 'lender_pay_expect'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','bank_name','<?php echo $url_order ?>')">Tài khoản <?php if ($order_by == 'bank_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        
+           
+        <th  class="fix">Action</th>
+    </tr>
+    
+   </thead>
+        <tbody>
+    <?php $tong = 0; $datra=0; ?>
+    <?php foreach ($lender_pays as $pay) : ?>
+    <?php $tong += $pay->lender_money; $datra += $pay->lender_pay_money;  ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $pay->lender_pay_id ?>" class="edit_tr" >
+            <td ><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $pay->lender_pay_id ?>"></td>
+            <td  class="fix"><?php echo $i++; ?></td>
+             <td  class="fix"  id="lender_pay_date_<?php echo $pay->lender_pay_id; ?>"><?php echo $lib->hien_thi_ngay_thang($pay->lender_pay_date) ?></td>
+            
+            <td  class="fix" id="lender_money_<?php echo $pay->lender_pay_id; ?>"><?php echo $lib->formatMoney($pay->lender_money); ?></td>
+            <td  class="fix" data="<?php echo $pay->lender ?>" id="lender_<?php echo $pay->lender_pay_id; ?>"><?php echo $pay->lender_name; ?></td> 
+            <td  class="fix" id="lender_pay_money_<?php echo $pay->lender_pay_id; ?>"><?php echo $lib->formatMoney($pay->lender_pay_money); ?></td>
+             <td  class="fix" id="comment_<?php echo $pay->lender_pay_id; ?>"><?php echo $pay->comment; ?></td> 
+            <td class="fix"  id="lender_pay_expect_<?php echo $pay->lender_pay_id; ?>"><?php echo $lib->hien_thi_ngay_thang($pay->lender_pay_expect) ?></td>
+            <td class="fix" id="source_<?php echo $pay->lender_pay_id; ?>"><?php echo $pay->bank_name; ?></td>
+             
+            <td >
+                <?php if($_SESSION['role_logined'] != 10){ ?>
+                <?php if(($pay->lender_pay_money != $pay->lender_money ) && ($_SESSION['role_logined'] <= 2 || $_SESSION['role_logined']==7 || $_SESSION['role_logined']==8)){ ?>
+
+                <button alt="<?php echo date('d-m-Y') ?>"  name="<?php echo $lib->formatMoney($pay->lender_money-$pay->lender_pay_money) ?>" data="<?php echo $pay->source ?>" value="<?php echo $pay->lender_pay_id ?>" class="editButton">Trả</button>
+
+                 <button  onclick="del(<?php echo $pay->lender_pay_id ?>)" >Xóa</button>
+                <?php } } ?>
+                
+                
+              
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="3" >Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
+        <td class="fix"></td>
+        <td class="fix"><?php echo $lib->formatMoney($datra); ?></td>
+        <td class="fix" colspan="4" ></td>
+    </tr>
+   </tbody>
+    </table>
+
+
+
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('lenderpay') ?>">&larr;</a></div>
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Vay vốn </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_pay" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        
+                        <tr>
+                            <td>Ngày </td>
+                            <td>
+                                <input type="text" id="lender_pay_date"  name="lender_pay_date" tabindex="1"  required="required" >
+                                
+                            </td>
+                            <td>Số tiền</td>
+                            <td>
+                                <input type="text" class="numbers"  id="lender_money"  name="lender_money" tabindex="2" required="required"  >
+                                
+                            </td>
+                            <td>Người cho vay</td>
+                           <td>
+                                <input type="text" id="lender"  name="lender" tabindex="3" autocomplete="off" placeholder="Nhập tên hoặc * để chọn" >
+                                <ul id="code_list_id"></ul>
+                            </td>
+                            <td>Tài khoản</td>
+                            <td>
+                                <select  style="width:120px" id="source"  name="source" tabindex="4" required="required">
+                                    <?php foreach($banks as $bank){ ?>
+                                    <option value="<?php echo $bank->bank_id ?>"><?php echo $bank->bank_name ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                           
+                        </tr>
+                        <tr>
+
+                            <td>Nội dung</td>
+                            <td><textarea id="comment" name="comment" tabindex="5" required="required"></textarea></td>
+                            
+                            <td>Dự kiến trả</td>
+                            <td>
+                                <input type="text" id="lender_pay_expect"  name="lender_pay_expect" tabindex="6"  required="required" >
+                                
+                            </td>
+                            <td>Đã trả</td>
+                            <td>
+                                <input type="text" class="numbers"  id="lender_pay_money"  name="lender_pay_money" tabindex="7" required="required"  >
+                                
+                            </td>
+
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        <?php if($_SESSION['role_logined'] != 10){ ?>
+                         <tr>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="8"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="9"></td>
+                            <td></td>
+                             
+                        </tr>
+                        <?php } ?>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+
+<div id="dialogContent" title="Thu chi">
+    
+    
+    <form action="#" method="post" id="editForm">
+        
+        <label>
+            <span class="add-on"><i class="icon-ok-circle" ></i></span>
+            <span>Tài khoản chi: </span>
+            <select id="i_source" name="i_source" style="width:150px" required="required" >
+                <?php foreach($banks as $bank){ ?>
+                    <option value="<?php echo $bank->bank_id ?>"><?php echo $bank->bank_name ?></option>
+                <?php } ?>
+            </select>
+        </label>
+        
+        <label>
+            <span class="add-on"><i class="icon-retweet" ></i></span>
+            <span>Số tiền chi: </span>
+            <input type="text" id="i_pay_money" name="i_pay_money" value="" class="numbers" required="required" />
+        </label>
+        <label>
+            <span class="add-on"><i class="icon-calendar" ></i></span>
+            <span>Ngày: </span>
+            <input type="hidden" id="i_costs" name="i_costs" value="" />
+            <input type="text" id="i_pay_date" name="i_pay_date" value="" class="pay_date" required="required" />
+        </label>
+    </form>
+</div>
+
+<script type="text/javascript">
+
+var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+10",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $("#lender_pay_date").datepicker(pickerOpts);
+
+var pickerOpts8 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+10",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $("#lender_pay_expect").datepicker(pickerOpts8);
+
+  
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+    $('#code_list_id').slideUp(200);
+});
+
+
+
+    $('.edit_tr').click(function(e){
+        if(e.target != '[object HTMLButtonElement]' && e.target != '[object HTMLSpanElement]' && !$('.checkbox').is(':focus')) { 
+            if(!$('.checkbox').is(':focus')){
+                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+            }
+            var lender_pay_date = $(this).find("#lender_pay_date_"+$(this).attr('id')).text();
+            var lender_pay_expect = $(this).find("#lender_pay_expect_"+$(this).attr('id')).text();
+            var comment = $(this).find("#comment_"+$(this).attr('id')).text();
+            var lender_money = $(this).find("#lender_money_"+$(this).attr('id')).text();
+            var source = $(this).find("#source_"+$(this).attr('id')).text();
+            var lender_name = $(this).find("#lender_"+$(this).attr('id')).text();
+            var lender = $(this).find("#lender_"+$(this).attr('id')).attr('data');
+
+            var lender_pay_money = $(this).find("#lender_pay_money_"+$(this).attr('id')).text();
+            
+
+            //alert(pay_code);
+            $('#yes').val($(this).attr('id'));
+
+                       
+            $('#lender_pay_date').val(lender_pay_date.replace(/\//g,"-"));
+            $('#lender_pay_expect').val(lender_pay_date.replace(/\//g,"-"));
+            $('#comment').val(comment);
+            $('#lender_money').val(lender_money);
+            $('#lender').val(lender_name);
+            $('#lender').attr('data',lender);
+            $("#source option:contains(" + source + ")").attr('selected', 'selected');
+            $('#lender_pay_money').val(lender_pay_money);
+
+            
+            $( ".add-field" ).dialog( "open" );
+        }
+
+        
+        
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+     $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
+     
+        $("#source option[value=-1]").attr('selected', 'selected');
+
+        $('#lender_pay_date').val("");
+        $('#lender_pay_expect').val("");
+        $('#comment').val("");
+        $('#lender_money').val(0);
+        $('#lender').val("");
+        $('#lender').attr('data',"");
+        $('#lender_pay_money').val(0);
+        
+        $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+    $( ".add-field" ).dialog( "open" );
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_pay").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var lender_pay_date = $('#lender_pay_date').attr('value');
+                    
+                    var lender_money = $('#lender_money').attr('value');
+                    var comment = $('#comment').attr('value');
+                    var source = $('#source').attr('value');
+                    var lender_name = $('#lender').attr('value');
+
+                    var lender = $('#lender').attr('data');
+                    var lender_pay_money = $('#lender_pay_money').attr('value');
+                    var lender_pay_expect = $('#lender_pay_expect').attr('value');
+                    
+
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/lenderpay/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            lender_pay_date: lender_pay_date,
+                            lender_money: lender_money,
+                            comment: comment,
+                            source: source,
+                            lender: lender,
+                            lender_name: lender_name,
+                            lender_pay_expect: lender_pay_expect,
+                            lender_pay_money: lender_pay_money,
+                            
+                            yes: yes,
+
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (yes != "") {
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                                    $('#expect_date_'+yes).text(expect_date);
+                                    $('#comment_'+yes).text(comment);
+                                    $('#money_'+yes).text(money);
+                                    $('#source_'+yes).text($("#source option:selected").text());
+                                    $('#source_in_'+yes).text($("#source_in option:selected").text());
+                            }
+                            else{
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="vendor_'+parseInt(lastID+1)+'">'+vendor+'</td><td class="fix" id="money_'+parseInt(lastID+1)+'">'+money+'</td><td class="fix" id="expect_date_'+parseInt(lastID+1)+'">'+expect_date+'</td><td class="fix" id="week_'+parseInt(lastID+1)+'"></td><td class="fix" id="code_'+parseInt(lastID+1)+'">'+code+'</td><td class="fix" id="source_'+parseInt(lastID+1)+'">'+$("#source option:selected").text()+'</td><td class="fix" id="comment_'+parseInt(lastID+1)+'">'+comment+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+
+   $('#lender').keyup(function(){
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/lendercost/getlender',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#code_list_id').slideDown(200);
+                $('#code_list_id').html(data);
+            }
+        });
+        if ($('#lender').val() == "" || $('#lender').attr('data') == "") {
+            
+            $('#lender').attr('data',"");
+        };
+
+   });
+$('#lender').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#lender').attr('data',"");
+        }
+            
+      }); 
+
+
+   
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+    $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-]/g, "")
+        ;
+      });
+    });
+    
+
+});
+
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+function set_item(item,name) {
+    // change input value
+    $('#lender').val(item);
+    $("#lender").attr("data",name);
+    
+    $('#code_list_id').hide();
+    $('#lender').focus();
+}
+
+
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+
+
+var ch = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+ch+']').attr('selected','selected');
+
+    
+
+</script>
+</div>
+<style type="text/css">
+
+.wrap {
+    width: 100%;
+    font-size: 12px;
+}
+
+.wrap table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.wrap td, .wrap th {
+    width: 100px;
+    word-wrap: break-word;
+}
+
+table.head tr td {
+    background: #eee;
+}
+
+.inner_table {
+    width: 100%;
+    height: 300px;
+    overflow-y: auto;
+    
+}
+
+</style>
+
+<script type="text/javascript">
+
+
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Vay vốn",
+    hide: 'fold',
+    show: 'blind'
+});
+
+
+$('.pay').click(function(){
+    var id = $(this).attr("value");
+    var source = $(this).attr("data");
+    var money = $(this).attr("name");
+    var pay_date = $(this).attr("alt");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/lenderpay/pay", {data: id, source: source, money: money, pay_date: pay_date},
+           function(data){
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+            $('#loading').fadeOut(500);
+           
+           }); 
+      }
+
+});
+$('.source').change(function(){
+    var val = $(this).val();
+    $('.pay').attr('data',val);
+    $(".source option[value="+val+"]").attr('selected', 'selected');
+});
+$('.money').keyup(function(event) {
+        var val = $(this).val();
+        $('.pay').attr('name',val);
+    });
+$('.pay_date').change(function(){
+    var val = $(this).val();
+    $('.pay').attr('alt',val);
+    $('.pay_date').val(val);
+});
+
+var pickerOpay2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $(".pay_date").datepicker(pickerOpay2);
+
+
+$('.editButton')
+    .button({ icons: { primary: "ui-icon-document" }})
+    .click(function() {
+        
+        $('#i_costs').val($(this).attr('value'));
+        $('#i_pay_date').val($(this).attr('alt'));
+        $('#i_source option[value='+$(this).attr('data')+']').attr('selected','selected');
+        $('#i_pay_money').val($(this).attr('name'));
+        $('#i_pay_money').focus();
+
+        $( "#dialogContent" ).dialog( "open" )
+    });
+
+
+//set up the dialog box.
+$( "#dialogContent" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var id = $('#i_costs').val();
+            var source = $('#i_source').val();
+            var money = $('#i_pay_money').val();
+            var pay_date = $('#i_pay_date').val();
+                
+                $.post("<?php echo BASE_URL ?>/lenderpay/pay", {data: id, source: source,money: money, pay_date: pay_date},
+                   function(data){
+                    $("html, body").animate({ scrollTop: 0 }, 100);
+                    setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                   
+                   }); 
+              
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
+
+</script>

@@ -1,0 +1,452 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'tire_cskh_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_cskh_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_cskh_company')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_cskh_co')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_cskh_email')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_cskh_sdt')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_cskh_mst')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> KHÁCH HÀNG CHƯA NHẬN </h1></center>
+<div class="add-box">
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+            <option value="20">Hiển thị 20 giá trị</option>
+			<option value="30">Hiển thị 30 giá trị</option>
+            <option value="50">Hiển thị 50 giá trị</option>
+            <option value="100">Hiển thị 100 giá trị</option>
+            
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+    	<th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_cskh_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'tire_cskh_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_cskh_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'tire_cskh_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_cskh_co','<?php echo $url_order ?>')">Công ty <?php if ($order_by == 'tire_cskh_co'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_cskh_mst','<?php echo $url_order ?>')">MST <?php if ($order_by == 'tire_cskh_mst'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_cskh_address','<?php echo $url_order ?>')">Địa chỉ <?php if ($order_by == 'tire_cskh_address'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_cskh_sdt','<?php echo $url_order ?>')">Số điện thoại <?php if ($order_by == 'tire_cskh_sdt'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_cskh_email','<?php echo $url_order ?>')">Email <?php if ($order_by == 'tire_cskh_email'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>   
+        
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($customers as $customer) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $customer->tire_cskh_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $customer->tire_cskh_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix"  id="tire_cskh_date_<?php echo $customer->tire_cskh_id; ?>"><?php echo $lib->hien_thi_ngay_thang($customer->tire_cskh_date) ?></td>
+            <td class="fix"  id="tire_cskh_co_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_co; ?></td>
+            
+            <td class="fix"  id="tire_cskh_mst_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_mst; ?></td>
+            <td class="fix" id="tire_cskh_address_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_street.', '.$customer->tire_cskh_ward.', '.$customer->tire_cskh_district.', '.$customer->tire_cskh_city.', '.$customer->tire_cskh_province; ?></td>
+            <td class="fix" id="tire_cskh_sdt_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_sdt; ?></td>
+            <td class="fix" id="tire_cskh_email_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_email; ?></td>
+            <td class="fix" style="display:none" id="tire_cskh_company_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_company; ?></td>
+            <td class="fix" style="display:none" id="tire_cskh_fax_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_fax; ?></td>
+            <td class="fix" style="display:none" id="tire_cskh_director_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_director; ?></td>
+            <td class="fix" style="display:none" id="tire_cskh_contact_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_contact; ?></td>
+            <td class="fix" style="display:none" id="tire_cskh_contact_sdt_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_contact_sdt; ?></td>
+            <td class="fix" style="display:none" data="<?php echo $customer->tire_cskh_vehicle ?>" id="tire_cskh_vehicle_<?php echo $customer->tire_cskh_id; ?>"><?php echo isset($vehicle_type['name'][$customer->tire_cskh_vehicle])?$vehicle_type['name'][$customer->tire_cskh_vehicle]:null; ?></td>
+            <td class="fix" style="display:none" id="tire_cskh_vehicle_number_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_vehicle_number; ?></td>
+            <td class="fix" style="display:none" id="tire_cskh_street_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_street; ?></td>
+            <td class="fix" style="display:none" id="tire_cskh_ward_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_ward; ?></td>
+            <td class="fix" style="display:none" id="tire_cskh_district_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_district; ?></td>
+            <td class="fix" style="display:none" id="tire_cskh_city_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_city; ?></td>
+            <td class="fix" style="display:none" id="tire_cskh_province_<?php echo $customer->tire_cskh_id; ?>"><?php echo $customer->tire_cskh_province; ?></td>
+
+            <td>
+                <button  class="receive" data="<?php echo $customer->tire_cskh_id; ?>" >Nhận</button>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('tirepending') ?>">&larr;</a></div>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Thông tin khách hàng </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_customer" method="post" action="">
+                      <table style="margin:0 auto;width:100%">
+                        <tr>
+                            
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><div class="add-box"><a class="add_button" onClick="add_click();">Thêm mới</a></div></td>
+                            
+                        </tr>
+                        <tr>
+                            
+                            <td>Tên công ty</td>
+                            <td>
+                                <input type="text" id="tire_cskh_company"  name="tire_cskh_company" tabindex="1" required="required" >
+                            </td>
+                            <td>Tên rút gọn</td>
+                            <td>
+                                <input type="text" id="tire_cskh_co"  name="tire_cskh_co" tabindex="2" required="required" >
+                            </td>
+                            <td>Mã số thuế </td>
+                            <td><input type="text" class="number" id="tire_cskh_mst"  name="tire_cskh_mst" tabindex="3" required="required" ></td>
+                            <td>SĐT </td>
+                            <td><input type="text" class="numbers" id="tire_cskh_sdt"  name="tire_cskh_sdt" tabindex="4" ></td>
+                            
+
+                        </tr>
+                        <tr>
+                            <td>Fax</td>
+                            <td><input type="text" class="numbers" id="tire_cskh_fax"  name="tire_cskh_fax" tabindex="5" ></td>
+                            <td>Giám đốc </td>
+                            <td><input type="text" id="tire_cskh_director"  name="tire_cskh_director" tabindex="6" ></td>
+                            <td>Người liên hệ </td>
+                            <td>
+                                <input type="text" id="tire_cskh_contact" name="tire_cskh_contact" tabindex="7" >
+                            </td>
+                            <td>SĐT liên hệ </td>
+                            <td>
+                                <input type="text" class="numbers" id="tire_cskh_contact_sdt" name="tire_cskh_contact_sdt" tabindex="8" >
+                            </td>
+                        </tr>
+                        <tr>
+                            
+                            
+                            <td>Email </td>
+                            <td><input type="email"  id="tire_cskh_email" name="tire_cskh_email" tabindex="9" ></td>
+                            <td>Loại xe </td>
+                            <td><input type="text"  id="tire_cskh_vehicle" name="tire_cskh_vehicle" tabindex="10" autocomplete="off" >
+                                <ul id="staff_list_id_m"></ul>
+                            </td>
+                            <td>Số lượng xe </td>
+                            <td><input type="text" class="numbers"  id="tire_cskh_vehicle_number" name="tire_cskh_vehicle_number" tabindex="11" ></td>
+                            
+                        </tr>
+                        <tr>
+                            
+                            <td>Đường </td>
+                            <td><textarea id="tire_cskh_street"  name="tire_cskh_street" tabindex="12" ></textarea></td>
+                            <td>Phường/Xã </td>
+                            <td><textarea id="tire_cskh_ward"  name="tire_cskh_ward" tabindex="13" ></textarea></td>
+                            <td>Quận/Huyện</td>
+                            <td><textarea id="tire_cskh_district"  name="tire_cskh_district" tabindex="14" ></textarea></td>
+                            <td>Thành phố</td>
+                            <td><textarea id="tire_cskh_city"  name="tire_cskh_city" tabindex="15" ></textarea></td>
+                            
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Tỉnh/TP</td>
+                            <td>
+                                <select  style="width:100px"  id="tire_cskh_province"  name="tire_cskh_province" tabindex="16">
+                                    <?php foreach($districts as $district){ ?>
+                                    <option value="<?php echo $district->district_id ?>"><?php echo $district->district_name ?></option>
+                                    <?php } ?>
+                                </select> 
+                            </td>
+                        </tr>
+                        
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+   
+});
+    $('.edit_tr').click(function(){
+        if(!$('.checkbox').is(':checked')){
+            $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        }
+        var tire_cskh_company = $(this).find("#tire_cskh_company_"+$(this).attr('id')).text();
+        var tire_cskh_co = $(this).find("#tire_cskh_co_"+$(this).attr('id')).text();
+        var tire_cskh_mst = $(this).find("#tire_cskh_mst_"+$(this).attr('id')).text();
+        var tire_cskh_fax = $(this).find("#tire_cskh_fax_"+$(this).attr('id')).text();
+        var tire_cskh_email = $(this).find("#tire_cskh_email_"+$(this).attr('id')).text();
+        var tire_cskh_director = $(this).find("#tire_cskh_director_"+$(this).attr('id')).text();
+        var tire_cskh_contact = $(this).find("#tire_cskh_contact_"+$(this).attr('id')).text();
+        var tire_cskh_contact_sdt = $(this).find("#tire_cskh_contact_sdt_"+$(this).attr('id')).text();
+        var tire_cskh_sdt = $(this).find("#tire_cskh_sdt_"+$(this).attr('id')).text();
+        var tire_cskh_vehicle = $(this).find("#tire_cskh_vehicle_"+$(this).attr('id')).text();
+        var tire_cskh_vehicle_data = $(this).find("#tire_cskh_vehicle_"+$(this).attr('id')).attr('data');
+        var tire_cskh_vehicle_number = $(this).find("#tire_cskh_vehicle_number_"+$(this).attr('id')).text();
+
+        var tire_cskh_street = $(this).find("#tire_cskh_street_"+$(this).attr('id')).text();
+        var tire_cskh_ward = $(this).find("#tire_cskh_ward_"+$(this).attr('id')).text();
+        var tire_cskh_district = $(this).find("#tire_cskh_district_"+$(this).attr('id')).text();
+        var tire_cskh_city = $(this).find("#tire_cskh_city_"+$(this).attr('id')).text();
+        var tire_cskh_province = $(this).find("#tire_cskh_province_"+$(this).attr('id')).text();
+        
+        //alert(customer_code);
+        $('#yes').val($(this).attr('id'));
+        
+        
+        
+        $('#tire_cskh_company').val(tire_cskh_company);
+        $('#tire_cskh_co').val(tire_cskh_co);
+        $('#tire_cskh_mst').val(tire_cskh_mst);
+        $('#tire_cskh_fax').val(tire_cskh_fax);
+        $('#tire_cskh_email').val(tire_cskh_email);
+       
+       $('#tire_cskh_director').val(tire_cskh_director);
+       $('#tire_cskh_contact').val(tire_cskh_contact);
+       $('#tire_cskh_contact_sdt').val(tire_cskh_contact_sdt);
+       $('#tire_cskh_sdt').val(tire_cskh_sdt);
+       $('#tire_cskh_vehicle').val(tire_cskh_vehicle);
+       $('#tire_cskh_vehicle').attr('data',tire_cskh_vehicle_data);
+       $('#tire_cskh_vehicle_number').val(tire_cskh_vehicle_number);
+       
+       $('#tire_cskh_street').val(tire_cskh_street);
+       $('#tire_cskh_ward').val(tire_cskh_ward);
+       $('#tire_cskh_district').val(tire_cskh_district);
+       $('#tire_cskh_city').val(tire_cskh_city);
+       $("#tire_cskh_province option[value=" + tire_cskh_province + "]").attr('selected', 'selected');
+
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+    $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+    
+        
+        $('#tire_cskh_company').val("");
+        $('#tire_cskh_co').val("");
+        $('#tire_cskh_mst').val("");
+        $('#tire_cskh_fax').val("");
+        $('#tire_cskh_email').val("");
+       
+       $('#tire_cskh_director').val("");
+       $('#tire_cskh_contact').val("");
+       $('#tire_cskh_contact_sdt').val("");
+       $('#tire_cskh_sdt').val("");
+       $('#tire_cskh_vehicle').val("");
+       $('#tire_cskh_vehicle').attr('data',"");
+       $('#tire_cskh_vehicle_number').val("");
+       
+       $('#tire_cskh_street').val("");
+       $('#tire_cskh_ward').val("");
+       $('#tire_cskh_district').val("");
+       $('#tire_cskh_city').val("");
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            
+   
+   
+   
+
+   $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+        ;
+      });
+    });
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+          .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+        ;
+      });
+    });
+    
+
+});
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+$('#tire_cskh_vehicle').keyup(function(){
+      
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/customertire/getvehicle',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#staff_list_id_m').slideDown(200);
+                $('#staff_list_id_m').html(data);
+            }
+        });
+        if ($('#tire_cskh_vehicle').val() == "" || $('#tire_cskh_vehicle').attr('data') == "") {
+            
+            $('#tire_cskh_vehicle').attr('data',"");
+        }
+      
+   });  
+
+
+$('#tire_cskh_vehicle').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#tire_cskh_vehicle').attr('data',"");
+        }
+            
+      });
+
+function set_item_vehicle(item,value) {
+    // change input value
+    $('#tire_cskh_vehicle').val(item);
+    $("#tire_cskh_vehicle").attr("data",value);
+    // hide proposition list
+    $('#staff_list_id_m').hide();
+    $('#tire_cskh_vehicle').focus();
+}
+
+$('.receive').click(function(){
+    var id = $(this).attr("data");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/tirepending/receive", {data: id},
+           function(data){
+            
+
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+            $('#loading').fadeOut(500);
+           
+           }); 
+      }
+
+});
+</script>
+</div>

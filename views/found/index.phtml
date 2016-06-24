@@ -1,0 +1,453 @@
+
+<?php
+$doanhthu_tc = 0;
+$chiphi_tc = 0;
+
+$doanhthu_tcmt = isset($invoice_data['doanhthu'])?$invoice_data['doanhthu']:0;
+$chiphi_tcmt = isset($invoice_data['chiphi'])?$invoice_data['chiphi']:0;
+$phimuahoadon_tcmt = isset($invoice_data['kvat'])?$invoice_data['kvat']:0;
+$phichuyenphat_tcmt = isset($invoice_data['phichuyenphat'])?$invoice_data['phichuyenphat']:0;
+$phichuyentien_tcmt = isset($invoice_data['phichuyentien'])?$invoice_data['phichuyentien']:0;
+
+$doanhthu_sale = isset($sale_data['doanhthu'])?$sale_data['doanhthu']:0;
+$chiphi_sale = isset($sale_data['chiphi'])?$sale_data['chiphi']:0;
+$phimuahoadon_sale = isset($sale_data['kvat'])?round($sale_data['kvat']*0.1):0;
+$phichuyenphat_sale = isset($sale_data['phichuyenphat'])?$sale_data['phichuyenphat']:0;
+$phichuyentien_sale = isset($sale_data['phichuyentien'])?$sale_data['phichuyentien']:0;
+
+$doanhthu_trading = isset($trading_data['doanhthu'])?$trading_data['doanhthu']:0;
+$chiphi_trading = isset($trading_data['chiphi'])?$trading_data['chiphi']:0;
+$phimuahoadon_trading = isset($trading_data['kvat'])?round($trading_data['kvat']*0.1):0;
+$phichuyenphat_trading = isset($trading_data['phichuyenphat'])?$trading_data['phichuyenphat']:0;
+$phichuyentien_trading = isset($trading_data['phichuyentien'])?$trading_data['phichuyentien']:0;
+
+$doanhthu_agent = isset($agent_data['doanhthu'])?$agent_data['doanhthu']:0;
+$chiphi_agent = isset($agent_data['chiphi'])?$agent_data['chiphi']:0;
+$phimuahoadon_agent = isset($agent_data['kvat'])?round($agent_data['kvat']*0.1):0;
+$xangxe_agent = isset($agent_data['xangxe'])?$agent_data['xangxe']:0;
+$phihoahong_agent = isset($agent_data['phihoahong'])?$agent_data['phihoahong']:0;
+$phichuyenphat_agent = isset($agent_data['phichuyenphat'])?$agent_data['phichuyenphat']:0;
+$phichuyentien_agent = isset($agent_data['phichuyentien'])?$agent_data['phichuyentien']:0;
+
+$doanhthu = $doanhthu_agent+$doanhthu_sale+$doanhthu_tcmt;
+$chiphi = $chiphi_agent+$chiphi_sale+$chiphi_tcmt+$chiphi_tc-$doanhthu_tc;
+$phimuahoadon = $phimuahoadon_sale+$phimuahoadon_agent+$phimuahoadon_tcmt+$doanhthu_tc;
+$phichuyentien = $phichuyentien_agent+$phichuyentien_sale+$phichuyentien_tcmt;
+$phichuyenphat = $phichuyenphat_agent+$phichuyenphat_sale+$phichuyenphat_tcmt;
+
+$startTimeStamp = strtotime($batdau);
+$endTimeStamp = strtotime($ketthuc);
+
+$timeDiff = abs($endTimeStamp - $startTimeStamp);
+
+$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+
+
+$thang = (int)date('m',$startTimeStamp);
+$nam = (int)date('Y',$startTimeStamp);
+
+
+$numberDays = intval($numberDays)+1;
+
+
+$nhansu[10][2014] = 4;
+$nhansu[11][2014] = 4;
+$nhansu[12][2014] = 4;
+$nhansu[1][2015] = 4;
+$nhansu[2][2015] = 4;
+$nhansu[3][2015] = 3;
+$nhansu[4][2015] = 3;
+$nhansu[5][2015] = 2;
+$nhansu[6][2015] = 2;
+$nhansu[7][2015] = 2;
+$nhansu[8][2015] = 2;
+$nhansu[9][2015] = 2;
+$nhansu[10][2015] = 2;
+$nhansu[11][2015] = 2;
+$nhansu[12][2015] = 2;
+
+$luong_thang[10][2014] = 4000000;
+$luong_thang[11][2014] = 4000000;
+$luong_thang[12][2014] = 4000000;
+$luong_thang[1][2015] = 4000000;
+$luong_thang[2][2015] = 4000000;
+$luong_thang[3][2015] = 4000000;
+$luong_thang[4][2015] = 4000000;
+$luong_thang[5][2015] = 4000000;
+$luong_thang[6][2015] = 4000000;
+$luong_thang[7][2015] = 4000000;
+$luong_thang[8][2015] = 4000000;
+$luong_thang[9][2015] = 4000000;
+$luong_thang[10][2015] = 4000000;
+$luong_thang[11][2015] = 4000000;
+$luong_thang[12][2015] = 4000000;
+
+$dienthoai_thang[10][2014] = 200000;
+$dienthoai_thang[11][2014] = 200000;
+$dienthoai_thang[12][2014] = 200000;
+$dienthoai_thang[1][2015] = 200000;
+$dienthoai_thang[2][2015] = 200000;
+$dienthoai_thang[3][2015] = 600000;
+$dienthoai_thang[4][2015] = 200000;
+$dienthoai_thang[5][2015] = 200000;
+$dienthoai_thang[6][2015] = 200000;
+$dienthoai_thang[7][2015] = 200000;
+$dienthoai_thang[8][2015] = 200000;
+$dienthoai_thang[9][2015] = 200000;
+$dienthoai_thang[10][2015] = 200000;
+$dienthoai_thang[11][2015] = 200000;
+$dienthoai_thang[12][2015] = 200000;
+
+
+$luong_sale = round((($nhansu[$thang][$nam]*$luong_thang[$thang][$nam]*1.2)/30)*$numberDays);
+$dienthoai_sale = round(($nhansu[$thang][$nam]*$dienthoai_thang[$thang][$nam]/30)*$numberDays);
+
+$nhansu[10][2014] = 2;
+$nhansu[11][2014] = 2;
+$nhansu[12][2014] = 2;
+$nhansu[1][2015] = 2;
+$nhansu[2][2015] = 2;
+$nhansu[3][2015] = 2;
+$nhansu[4][2015] = 2;
+$nhansu[5][2015] = 2;
+$nhansu[6][2015] = 2;
+$nhansu[7][2015] = 2;
+$nhansu[8][2015] = 2;
+$nhansu[9][2015] = 2;
+$nhansu[10][2015] = 2;
+$nhansu[11][2015] = 2;
+$nhansu[12][2015] = 2;
+
+$luong_thang[10][2014] = 7250000;
+$luong_thang[11][2014] = 7250000;
+$luong_thang[12][2014] = 7250000;
+$luong_thang[1][2015] = 7250000;
+$luong_thang[2][2015] = 7250000;
+$luong_thang[3][2015] = 7250000;
+$luong_thang[4][2015] = 7250000;
+$luong_thang[5][2015] = 7250000;
+$luong_thang[6][2015] = 7250000;
+$luong_thang[7][2015] = 7250000;
+$luong_thang[8][2015] = 7250000;
+$luong_thang[9][2015] = 7250000;
+$luong_thang[10][2015] = 7250000;
+$luong_thang[11][2015] = 7250000;
+$luong_thang[12][2015] = 7250000;
+
+$dienthoai_thang[10][2014] = 250000;
+$dienthoai_thang[11][2014] = 250000;
+$dienthoai_thang[12][2014] = 250000;
+$dienthoai_thang[1][2015] = 250000;
+$dienthoai_thang[2][2015] = 250000;
+$dienthoai_thang[3][2015] = 250000;
+$dienthoai_thang[4][2015] = 250000;
+$dienthoai_thang[5][2015] = 250000;
+$dienthoai_thang[6][2015] = 250000;
+$dienthoai_thang[7][2015] = 250000;
+$dienthoai_thang[8][2015] = 250000;
+$dienthoai_thang[9][2015] = 250000;
+$dienthoai_thang[10][2015] = 250000;
+$dienthoai_thang[11][2015] = 250000;
+$dienthoai_thang[12][2015] = 250000;
+
+
+$luong_trading = round((($nhansu[$thang][$nam]*$luong_thang[$thang][$nam]*1.2)/30)*$numberDays);
+$dienthoai_trading = round(($nhansu[$thang][$nam]*$dienthoai_thang[$thang][$nam]/30)*$numberDays);
+
+$nhansu[10][2014] = 2;
+$nhansu[11][2014] = 2;
+$nhansu[12][2014] = 2;
+$nhansu[1][2015] = 2;
+$nhansu[2][2015] = 2;
+$nhansu[3][2015] = 2;
+$nhansu[4][2015] = 2;
+$nhansu[5][2015] = 2;
+$nhansu[6][2015] = 2;
+$nhansu[7][2015] = 2;
+$nhansu[8][2015] = 2;
+$nhansu[9][2015] = 2;
+$nhansu[10][2015] = 2;
+$nhansu[11][2015] = 2;
+$nhansu[12][2015] = 2;
+
+$luong_thang[10][2014] = 3750000;
+$luong_thang[11][2014] = 3750000;
+$luong_thang[12][2014] = 3750000;
+$luong_thang[1][2015] = 3750000;
+$luong_thang[2][2015] = 3750000;
+$luong_thang[3][2015] = 3750000;
+$luong_thang[4][2015] = 3750000;
+$luong_thang[5][2015] = 3750000;
+$luong_thang[6][2015] = 3750000;
+$luong_thang[7][2015] = 3750000;
+$luong_thang[8][2015] = 3750000;
+$luong_thang[9][2015] = 3750000;
+$luong_thang[10][2015] = 3750000;
+$luong_thang[11][2015] = 3750000;
+$luong_thang[12][2015] = 3750000;
+
+$dienthoai_thang[10][2014] = 200000;
+$dienthoai_thang[11][2014] = 200000;
+$dienthoai_thang[12][2014] = 200000;
+$dienthoai_thang[1][2015] = 200000;
+$dienthoai_thang[2][2015] = 200000;
+$dienthoai_thang[3][2015] = 200000;
+$dienthoai_thang[4][2015] = 200000;
+$dienthoai_thang[5][2015] = 200000;
+$dienthoai_thang[6][2015] = 200000;
+$dienthoai_thang[7][2015] = 200000;
+$dienthoai_thang[8][2015] = 200000;
+$dienthoai_thang[9][2015] = 200000;
+$dienthoai_thang[10][2015] = 200000;
+$dienthoai_thang[11][2015] = 200000;
+$dienthoai_thang[12][2015] = 200000;
+
+
+$luong_agent = round((($nhansu[$thang][$nam]*$luong_thang[$thang][$nam]*1.2)/30)*$numberDays);
+$dienthoai_agent = round(($nhansu[$thang][$nam]*$dienthoai_thang[$thang][$nam]/30)*$numberDays);
+
+$luong = $luong_agent+$luong_trading+$luong_sale;
+$dienthoai = $dienthoai_agent+$dienthoai_trading+$dienthoai_sale;
+
+?>
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> QUỸ TRÍCH LŨY </h1></center>
+
+	<div class="search-box">
+        <form id="report" name="report" action method="post">
+        <div class="add-box">
+                  
+            Từ tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn tháng" <?php if(isset($ngaytao)) echo "value='$ngaytao'"; ?> >    
+            Đến tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytaobatdau" id="chonngaytaobatdau" placeholder="Chọn tháng" <?php if(isset($ngaytaobatdau)) echo "value='$ngaytaobatdau'"; ?> >  
+             <input type="submit" name="submit" id="xem" value="Xem">  
+           
+            
+        </div>
+        <div class="add-box">
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn tuần" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >    
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn năm" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="submit" name="submit" id="xem" value="Xem">  
+            </form>
+            
+        </div>
+    </div>
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+    	
+        <th style="width:30px" class="fix">
+            <a >STT </a>
+        </th>
+        <th  class="fix">
+            <a >Danh mục </a>
+        </th>
+        <th  class="fix">
+            <a>Nội dung </a>
+        </th> 
+          
+        <th class="fix">
+            <a >Số tiền </a>
+        </th> 
+        <th width="500" class="fix">
+            <a >Ghi chú </a>
+        </th>
+        
+       
+    </tr>
+    
+   </thead>
+   <tbody>
+    
+    <tr style="font-weight: bold;">
+        <td style="text-align:center;" class="fix">1</td>
+        <th rowspan="3" class="fix">Lợi nhuận</th>
+        <td style="color: rgb(9, 74, 160)" class="fix">Lợi nhuận phòng Sale</td>
+        <td style="text-align:right; color: rgb(24, 160, 9)" class="fix"><?php echo $lib->formatMoney($doanhthu_sale-$chiphi_sale-$phimuahoadon_sale-$phichuyenphat_sale-$phichuyentien_sale-$luong_sale-$dienthoai_sale) ?></td>
+        <td style="color: red" class="fix"></td>
+    </tr>
+    <tr style="font-weight: bold;">
+        <td style="text-align:center;" class="fix">2</td>
+        
+        <td style="color: rgb(9, 74, 160)" class="fix">Lợi nhuận phòng Agent</td>
+        <td style="text-align:right; color: rgb(24, 160, 9)" class="fix"><?php echo $lib->formatMoney($doanhthu_agent-$chiphi_agent-$phimuahoadon_agent-$phichuyenphat_agent-$phichuyentien_agent-$luong_agent-$dienthoai_agent) ?></td>
+        <td style="color: red" class="fix"></td>
+    </tr>
+    <tr style="font-weight: bold;">
+        <td style="text-align:center;" class="fix">3</td>
+        
+        <td style="color: rgb(9, 74, 160)" class="fix">Lợi nhuận phòng Trading</td>
+        <td style="text-align:right; color: rgb(24, 160, 9)" class="fix"><?php echo $lib->formatMoney($doanhthu_trading-$chiphi_trading-$phimuahoadon_trading-$phichuyenphat_trading-$phichuyentien_trading-$luong_trading-$dienthoai_trading) ?></td>
+        <td style="color: red" class="fix"></td>
+    </tr>
+    <tr style="font-weight: bold; color: red">
+        <td style="text-align:center;" class="fix">5</td>
+        <th class="fix">Quỹ trích lũy</th>
+        <td class="fix">Trích lũy</td>
+        <td style="text-align:right; " class="fix"><?php echo $lib->formatMoney(round((($doanhthu_sale-$chiphi_sale-$phimuahoadon_sale-$phichuyenphat_sale-$phichuyentien_sale-$luong_sale-$dienthoai_sale)+($doanhthu_agent-$chiphi_agent-$phimuahoadon_agent-$phichuyenphat_agent-$phichuyentien_agent-$luong_agent-$dienthoai_agent)+($doanhthu_trading-$chiphi_trading-$phimuahoadon_trading-$phichuyenphat_trading-$phichuyentien_trading-$luong_trading-$dienthoai_trading))*0.3)) ?></td>
+        <td style="color: red" class="fix"></td>
+    </tr>
+   </tbody>
+</table>
+
+<style type="text/css">
+    .table_data tbody tr th.fix {
+        border: 1px solid #80C8E5;
+        }
+</style>
+<script type="text/javascript">
+    var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytao").change();
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts);
+
+    $("#chonngaytao").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var firstDay = new Date(year, month, 1);
+
+        $('#batdau').datepicker("setDate", firstDay );
+    });
+
+    var pickerOpts5 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytaobatdau").change();
+         },
+         
+    };  
+    $("#chonngaytaobatdau").datepicker(pickerOpts5);
+
+    $("#chonngaytaobatdau").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var lastDay = new Date(year, month+1, 0);
+        $('#ketthuc').datepicker("setDate", lastDay );
+    });
+
+    $(".monthPicker").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+</script>

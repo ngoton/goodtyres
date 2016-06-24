@@ -1,0 +1,738 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'transport_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'loc_from')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'loc_to')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'c20_feet')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'c40_feet')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'c20_ton')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'c28_ton')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'over_28_ton')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BẢNG GIÁ CƯỚC VẬN TẢI </h1></center>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm bảng giá cước</a>
+    <a class="add_button" id="import_excel" href="<?= $this->url('transport/import')?>">Import Excel</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="2">Hiển thị 2 giá trị</option>
+            <option value="5">Hiển thị 5 giá trị</option>
+            <option value="8">Hiển thị 8 giá trị</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','transport_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'transport_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','loc_from','<?php echo $url_order ?>')">Điểm đi <?php if ($order_by == 'loc_from'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','loc_to','<?php echo $url_order ?>')">Điểm đến <?php if ($order_by == 'loc_to'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','c20_feet','<?php echo $url_order ?>')">20 feet <?php if ($order_by == 'c20_feet'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','c40_feet','<?php echo $url_order ?>')">40 feet <?php if ($order_by == 'c40_feet'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','c20_ton','<?php echo $url_order ?>')">20 tấn <?php if ($order_by == 'c20_ton'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','c28_ton','<?php echo $url_order ?>')">Từ 20-28 tấn <?php if ($order_by == 'c28_ton'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','over_28_ton','<?php echo $url_order ?>')">Trên 28 tấn <?php if ($order_by == 'over_28_ton'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>    
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($transports as $transport) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $transport->transport_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $transport->transport_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix" data="<?php echo $transport->loc_from; ?>" id="loc_from_<?php echo $transport->transport_id; ?>"><?php echo $transport->loc_from==$location['location_id'][$transport->loc_from]?$location['location_name'][$transport->loc_from]:null ?></td>
+            <td class="fix" data="<?php echo $transport->loc_to; ?>" id="loc_to_<?php echo $transport->transport_id; ?>"><?php echo $transport->loc_to==$location['location_id'][$transport->loc_to]?$location['location_name'][$transport->loc_to]:null ?></td>
+            <td class="fix" id="c20_feet_<?php echo $transport->transport_id; ?>"><?php echo $lib->formatMoney($transport->c20_feet); ?></td>
+            <td class="fix" id="c40_feet_<?php echo $transport->transport_id; ?>"><?php echo $lib->formatMoney($transport->c40_feet); ?></td>
+            <td class="fix" id="c20_ton_<?php echo $transport->transport_id; ?>"><?php echo $lib->formatMoney($transport->c20_ton); ?></td>
+            <td class="fix" id="c28_ton_<?php echo $transport->transport_id; ?>"><?php echo $lib->formatMoney($transport->c28_ton); ?></td>
+            <td class="fix" id="over_28_ton_<?php echo $transport->transport_id; ?>"><?php echo $lib->formatMoney($transport->over_28_ton); ?></td>
+            
+            <td>
+                <a class="error" href="#">Sửa</a>
+                | 
+                <a class="error" onclick="del(<?php echo $transport->transport_id ?>)" >Xóa</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Bảng giá cước </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_transport" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><div class="add-box"><a class="add_button" onClick="add_click();">Thêm bảng giá cước</a></div></td>
+                            
+                        </tr>
+                        <tr>
+                            <td>Điểm đi </td>
+                            <td>
+                                <!-- <select id="loc_from" name="loc_from" autofocus required="required" tabindex="1">
+                                    <?php
+                                
+                                    /*foreach ($locations as $location) {
+                                      echo '<option value="'.$location->location_id.'">'.$location->location_name.'</option>';
+                                    }*/
+                                    ?>
+                                </select>  -->
+                                <input type="text" autofocus autocomplete="off"  id="loc_from" name="loc_from" tabindex="1" required="required" placeholder="Nhập tên hoặc * để chọn" >
+                                <ul id="loc_from_list_id"></ul>
+                            
+                            </td>
+                            
+                            <td>20 feet </td>
+                            <td><input type="text" id="c20_feet" class="number" name="c20_feet" tabindex="3" ></td>
+                            <td>20 tấn </td>
+                            <td><input type="text" id="c20_ton" class="number" name="c20_ton" tabindex="5" ></td>
+                            <td>&nbsp;</td>
+
+                        </tr>
+                        <tr>
+                            <td>Điểm đến </td>
+                            <td>
+                                <!-- <select id="loc_to" name="loc_to"  required="required" tabindex="2">
+                                    <?php
+                                    /*foreach ($locations as $location) {
+                                      echo '<option value="'.$location->location_id.'">'.$location->location_name.'</option>';
+                                    }*/
+                                    ?>
+                                </select> -->
+                                <input type="text" autofocus autocomplete="off"  id="loc_to" name="loc_to" tabindex="2" required="required" placeholder="Nhập tên hoặc * để chọn" >
+                                <ul id="loc_to_list_id"></ul>
+                            </td>
+                            
+                            <td>40 feet </td>
+                            <td><input type="text" class="number" id="c40_feet" name="c40_feet" tabindex="4" ></td>
+                            <td>Từ 20-28 tấn </td>
+                            <td><input type="text" class="number" id="c28_ton" name="c28_ton" tabindex="6" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            
+                            <td>Trên 28 tấn </td>
+                            <td><input type="text" class="number" id="over_28_ton" name="over_28_ton" tabindex="7" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="8"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="9"></td>
+                            <td></td>
+                            <td></td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+    $('#loc_from_list_id').slideUp(200);
+    $('#loc_to_list_id').slideUp(200);
+   
+});
+    $('.edit_tr').click(function(){
+        if(!$('.checkbox').is(':checked')){
+            $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        }
+        var loc_from = $(this).find("#loc_from_"+$(this).attr('id')).text();
+        var loc_to = $(this).find("#loc_to_"+$(this).attr('id')).text();
+        var c20_feet = $(this).find("#c20_feet_"+$(this).attr('id')).text();
+        var c40_feet = $(this).find("#c40_feet_"+$(this).attr('id')).text();
+        var c20_ton = $(this).find("#c20_ton_"+$(this).attr('id')).text();
+        var c28_ton = $(this).find("#c28_ton_"+$(this).attr('id')).text();
+        var over_28_ton = $(this).find("#over_28_ton_"+$(this).attr('id')).text();
+        //alert(loc_from);
+        $('#yes').val($(this).attr('id'));
+        
+        //$('#loc_from option[value='+loc_from+']').attr('selected','selected');
+        //$('#loc_to option[value='+loc_to+']').attr('selected','selected');
+        $('#loc_from').val(loc_from);
+        $('#loc_to').val(loc_to);
+        
+        $('#c20_feet').val(c20_feet);
+        $('#c40_feet').val(c40_feet);
+        $('#c20_ton').val(c20_ton);
+        $('#c28_ton').val(c28_ton);
+        $('#over_28_ton').val(over_28_ton);
+        
+        var radioLength = $("input[name='gender']").length;
+        for(var i = 0; i < radioLength; i++) {
+            $("input[name='gender']")[i].checked = false;
+            if($("input[name='gender']")[i].value == staff_gender) {
+                $("input[name='gender']")[i].checked = true;
+            }
+        }
+        //$('#loc_from').attr('data',loc_from);
+        //$('#loc_from').attr('disabled', true);
+        //$('#loc_to').attr('data',loc_to);
+        //$('#loc_to').attr('disabled', true);
+        $('#loc_from').attr('data',"");
+        $("#loc_from").prop('readonly', true);
+        $("#loc_from").prop('disabled', true);
+        $("#loc_from").attr("code",'true');
+        $('#loc_to').attr('data',"");
+        $("#loc_to").prop('readonly', true);
+        $("#loc_to").prop('disabled', true);
+        $("#loc_to").attr("code",'true');
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+    $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        //$('#loc_from').attr('data',"");
+        //$('#loc_from').attr('disabled', false);
+        //$('#loc_to').attr('data',"");
+        //$('#loc_to').attr('disabled', false);
+        $("#loc_from").prop('readonly', false);
+        $("#loc_from").prop('disabled', false);
+        $("#loc_from").attr("code",'false');
+        $('#loc_from').val("");
+        $("#loc_to").prop('readonly', false);
+        $("#loc_to").prop('disabled', false);
+        $("#loc_to").attr("code",'false');
+        $('#loc_to').val("");
+
+        $('#c20_feet').val(0);
+        $('#c40_feet').val(0);
+        $('#c20_ton').val(0);
+        $('#c28_ton').val(0);
+        $('#over_28_ton').val(0);
+        
+        $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+     /*$('#loc_to').change(function(){
+        if ($('#loc_from').val() != 1) {
+            if($(this).val() == 1){
+                $('#c20_feet').val(0);
+                $('#c40_feet').val(0);
+                $('#c20_ton').val(0);
+                $('#c28_ton').val(0);
+                $('#over_28_ton').val(0);
+            }
+            var loc_to = $(this).val();
+            var loc_from = $('#loc_from').val();
+            $.ajax({
+                url: '<?php echo BASE_URL ?>/transport/gettransportauto',
+                type: 'POST',
+                data: {loc_from:loc_from,loc_to:loc_to},
+                success:function(data){
+                    var data = jQuery.parseJSON(data);
+                    //alert(data.c20_feet);
+                    $('#c20_feet').val(data.c20_feet);
+                    $('#c40_feet').val(data.c40_feet);
+                    $('#c20_ton').val(data.c20_ton);
+                    $('#c28_ton').val(data.c28_ton);
+                    $('#over_28_ton').val(data.over_28_ton);
+                    $('.number').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                   
+                }
+            });
+        }
+
+        
+    }); 
+    $('#loc_from').change(function(){
+        if ($('#loc_to').val() != 1) {
+            if($(this).val() == 1){
+                $('#c20_feet').val(0);
+                $('#c40_feet').val(0);
+                $('#c20_ton').val(0);
+                $('#c28_ton').val(0);
+                $('#over_28_ton').val(0);
+            }
+            var loc_from = $(this).val();
+            var loc_to = $('#loc_to').val();
+            $.ajax({
+                url: '<?php echo BASE_URL ?>/transport/gettransportauto',
+                type: 'POST',
+                data: {loc_from:loc_from,loc_to:loc_to},
+                success:function(data){
+                    var data = jQuery.parseJSON(data);
+                    //alert(data.c20_feet);
+                    $('#c20_feet').val(data.c20_feet);
+                    $('#c40_feet').val(data.c40_feet);
+                    $('#c20_ton').val(data.c20_ton);
+                    $('#c28_ton').val(data.c28_ton);
+                    $('#over_28_ton').val(data.over_28_ton);
+
+                    $('.number').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                }
+            });
+        }
+        
+        
+    }); */
+
+    
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_transport").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+
+                    if ($('#loc_from').attr('code') == 'false') {
+                        $('#loc_from').val("");
+                        $('#loc_from').focus();
+                        return false;
+                    };
+                    if ($('#loc_to').attr('code') == 'false') {
+                        $('#loc_to').val("");
+                        $('#loc_to').focus();
+                        return false;
+                    };
+                
+                    var loc_from = $('#loc_from').attr('data');
+                    var loc_to = $('#loc_to').attr('data');
+                    var c20_feet = $('#c20_feet').attr('value');
+                    var c40_feet = $('#c40_feet').attr('value');
+                    var c20_ton = $('#c20_ton').attr('value');
+                    var c28_ton = $('#c28_ton').attr('value');
+                    var over_28_ton = $('#over_28_ton').attr('value');
+                    var yes = $('#yes').attr('value');
+                    var check = $('#loc_from').attr('data');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/transport/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            loc_from: loc_from,
+                            loc_to: loc_to,
+                            c20_feet: c20_feet,
+                            c40_feet: c40_feet,
+                            c20_ton: c20_ton,
+                            c28_ton: c28_ton,
+                            over_28_ton: over_28_ton,
+                            yes: yes,
+                            check: check,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (check == "") {
+                                
+                                $('#c20_feet_'+yes).text(c20_feet);
+                                $('#c40_feet_'+yes).text(c40_feet);
+                                $('#c20_ton_'+yes).text(c20_ton);
+                                $('#c28_ton_'+yes).text(c28_ton);
+                                $('#over_28_ton_'+yes).text(over_28_ton);
+                                
+                            }
+                            else{
+                                if (answer.trim() != "Tuyến đường này đã tồn tại") {
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="loc_from_'+parseInt(lastID+1)+'">'+$( "#loc_from" ).val()+'</td><td class="fix" id="loc_to_'+parseInt(lastID+1)+'">'+$( "#loc_to" ).val()+'</td><td class="fix" id="c20_feet_'+parseInt(lastID+1)+'">'+c20_feet+'</td><td class="fix" id="c40_feet_'+parseInt(lastID+1)+'">'+c40_feet+'</td><td class="fix" id="c20_ton_'+parseInt(lastID+1)+'">'+c20_ton+'</td><td class="fix" id="c28_ton_'+parseInt(lastID+1)+'">'+c28_ton+'</td><td class="fix" id="over_28_ton_'+parseInt(lastID+1)+'">'+over_28_ton+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+
+    $('#loc_from').keyup(function(){
+      
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/transport/getlocationfrom',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#loc_from_list_id').slideDown(200);
+                $('#loc_from_list_id').html(data);
+            }
+        });
+        if ($('#loc_from').val() == "" || $('#loc_from').attr('data') == "") {
+            //$('#loc_from').val("");
+            $('#loc_from').attr('data',"");
+            $('#loc_from').attr('code',false);
+        }
+      
+   });
+    $('#loc_to').keyup(function(){
+      
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/transport/getlocationto',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#loc_to_list_id').slideDown(200);
+                $('#loc_to_list_id').html(data);
+            }
+        });
+        if ($('#loc_to').val() == "" || $('#loc_to').attr('data') == "") {
+            //$('#loc_to').val("");
+            $('#loc_to').attr('data',"");
+            $('#loc_to').attr('code',false);
+        }
+      
+   });
+    $('#loc_from').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#loc_from').attr('code',false);
+            $('#loc_from').attr('data',"");
+        }
+            
+      });
+    $('#loc_to').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#loc_to').attr('data',"");
+            $('#loc_to').attr('code',false);
+        }
+            
+      });
+
+   $('#c20_feet').keyup(function(){
+        $('#c40_feet').val(
+        Math.round(
+        parseFloat(get_number('#c20_feet'))+parseFloat(300000)
+        )
+        );
+
+
+        $('#c40_feet').val(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+
+        
+        $('#c20_ton').val(
+        Math.round(
+        parseFloat(get_number('#c40_feet'))-parseFloat(200000)
+        )
+        );
+        $('#c20_ton').val(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+
+        $('#c28_ton').val(
+        Math.round(
+        parseFloat(get_number('#c40_feet'))
+        )
+        );
+        $('#c28_ton').val(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+
+        $('#over_28_ton').val(
+        Math.round(
+        parseFloat(get_number('#c28_ton'))+parseFloat(get_number('#c20_ton'))*30/100
+        )
+        );
+        $('#over_28_ton').val(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+        
+   });
+   
+   
+   
+
+   
+   $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+    
+
+});
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+function set_item(item,value,code,birth,gender) {
+    // change input value
+    $('#loc_from').val(item);
+    $("#loc_from").attr("data",value);
+    $('#staff_code').val(code);
+    $('#staff_birth').val(birth);
+    $('#staff_gender').val(gender);
+    var radioLength = $("input[name='gender']").length;
+        for(var i = 0; i < radioLength; i++) {
+            $("input[name='gender']")[i].checked = false;
+            if($("input[name='gender']")[i].value == gender) {
+                $("input[name='gender']")[i].checked = true;
+            }
+        }
+    // hide proposition list
+    $('#staff_list_id').hide();
+    $('#loc_from').focus();
+}
+
+function set_item_loc_from(value,name) {
+    // change input value
+    $('#loc_from').val(name);
+    $("#loc_from").attr("data",value);
+    $("#loc_from").attr("code",'true');
+    
+    // hide proposition list
+    $('#loc_from_list_id').hide();
+    $('#loc_from').focus();
+
+    if ($('#loc_to').attr("data") != 1) {
+            if($('#loc_from').attr("data") == 1){
+                $('#c20_feet').val(0);
+                $('#c40_feet').val(0);
+                $('#c20_ton').val(0);
+                $('#c28_ton').val(0);
+                $('#over_28_ton').val(0);
+            }
+            var loc_to = $('#loc_to').attr("data");
+            var loc_from = $('#loc_from').attr("data");
+            if(loc_from != null && loc_to != null){
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/transport/gettransportauto',
+                    type: 'POST',
+                    data: {loc_from:loc_from,loc_to:loc_to},
+                    success:function(data){
+                        var data = jQuery.parseJSON(data);
+                        //alert(data.c20_feet);
+                        $('#c20_feet').val(data.c20_feet);
+                        $('#c40_feet').val(data.c40_feet);
+                        $('#c20_ton').val(data.c20_ton);
+                        $('#c28_ton').val(data.c28_ton);
+                        $('#over_28_ton').val(data.over_28_ton);
+                        $('.number').val(function(index, value) {
+                            return value
+                              .replace(/\D/g, "")
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            ;
+                          });
+                       
+                    }
+                });
+            }
+    }
+
+}
+function set_item_loc_to(value,name) {
+    // change input value
+    $('#loc_to').val(name);
+    $("#loc_to").attr("data",value);
+    $("#loc_to").attr("code",'true');
+    
+    // hide proposition list
+    $('#loc_to_list_id').hide();
+    $('#loc_to').focus();
+     
+     if ($('#loc_from').attr("data") != 1) {
+            if($('#loc_to').attr("data") == 1){
+                $('#c20_feet').val(0);
+                $('#c40_feet').val(0);
+                $('#c20_ton').val(0);
+                $('#c28_ton').val(0);
+                $('#over_28_ton').val(0);
+            }
+            var loc_to = $('#loc_to').attr("data");
+            var loc_from = $('#loc_from').attr("data");
+            if(loc_from != null && loc_to != null){
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/transport/gettransportauto',
+                    type: 'POST',
+                    data: {loc_from:loc_from,loc_to:loc_to},
+                    success:function(data){
+                        var data = jQuery.parseJSON(data);
+                        //alert(data.c20_feet);
+                        $('#c20_feet').val(data.c20_feet);
+                        $('#c40_feet').val(data.c40_feet);
+                        $('#c20_ton').val(data.c20_ton);
+                        $('#c28_ton').val(data.c28_ton);
+                        $('#over_28_ton').val(data.over_28_ton);
+                        $('.number').val(function(index, value) {
+                            return value
+                              .replace(/\D/g, "")
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            ;
+                          });
+                       
+                    }
+                });
+            }
+    }
+}
+
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:500,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+</script>
+</div>

@@ -1,0 +1,157 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'receivable_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'expect_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'money')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'week')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'customer')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'bank_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'vendor')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+        <th style="width:20px" rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th style="width:40px" rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','receivable_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'receivable_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th style="width:60px" class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix" colspan="3">
+            <a class="sort" >Phải thu </a>
+        </th> 
+        <th style="width:90px" class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','money','<?php echo $url_order ?>')">Có <?php if ($order_by == 'money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>   
+          
+        <th class="fix" colspan="3" >
+            <a class="sort" >Dự kiến thu </a>
+        </th> 
+         <th class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','expect_date','<?php echo $url_order ?>')">Quá hạn <?php if ($order_by == 'expect_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        
+        <th class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','bank_name','<?php echo $url_order ?>')">Tài khoản đến <?php if ($order_by == 'bank_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th style="width:200px" class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','comment','<?php echo $url_order ?>')">Ghi chú<?php if ($order_by == 'comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th style="width:90px" class="fix" rowspan="2">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','pay_money','<?php echo $url_order ?>')">Đã thu <?php if ($order_by == 'pay_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        
+        
+        <th style="width:90px" class="fix" rowspan="2">Còn lại</th>  
+
+    </tr>
+    <tr>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer','<?php echo $url_order ?>')">Khách hàng <?php if ($order_by == 'customer'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','vendor','<?php echo $url_order ?>')">Vendor <?php if ($order_by == 'vendor'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff','<?php echo $url_order ?>')">Nhân viên <?php if ($order_by == 'staff'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','expect_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'expect_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','new_expect_date','<?php echo $url_order ?>')">Ngày mới <?php if ($order_by == 'new_expect_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','week','<?php echo $url_order ?>')">Tuần <?php if ($order_by == 'week'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $tong = 0; $tongcon = 0; $tongtt = 0; ?>
+    <?php foreach ($receivables as $receivable) : ?>
+    <?php $tong += $receivable->money; ?>
+    <?php $tongcon += ($receivable->money-$receivable->pay_money); ?>
+    <?php $tongtt += $receivable->pay_money; ?>
+    <?php 
+        $timeDiff = strtotime(date('d-m-Y')) - $receivable->expect_date;
+
+        $numberDays = $timeDiff/86400;  // 86400 seconds in one day
+
+        // and you might want to convert to integer
+        $numberDays = intval($numberDays); 
+    ?>
+    <?php
+        if ($receivable->sale_report > 0) {
+            $link = 'salereport/index/'.$receivable->code;
+        }
+        else if ($receivable->agent > 0) {
+            $link = 'agent/index/'.$receivable->code;
+        }
+        else if ($receivable->agent_manifest > 0) {
+            $link = 'agentmanifest/index/'.$receivable->code;
+        }
+        else if ($receivable->trading > 0) {
+            $link = 'trading/index/'.$receivable->code;
+        }
+        else if ($receivable->invoice > 0) {
+            $link = 'invoice/index/'.$receivable->invoice;
+        }
+    ?>
+    <?php if($_SESSION['role_logined'] == 10){ $link = "#"; } ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $receivable->receivable_id ?>" class="edit_tr masterTooltip" <?php echo $numberDays>90?'title="Vui lòng cập nhật ngày dự kiến thu"':null ?>>
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $receivable->receivable_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="code_<?php echo $receivable->receivable_id; ?>"><a style="text-decoration: underline;" href="<?php echo $this->url($link) ?>"><?php echo $receivable->code; ?></a></td>
+            <td class="fix" data="<?php echo $receivable->customer; ?>" id="customer_<?php echo $receivable->receivable_id; ?>"><a style="text-decoration: underline;" href="<?php echo $_SESSION['role_logined'] != 10?$this->url('cusdebts/index/'.$receivable->customer):"#" ?>"><?php echo isset($customers['name'][$receivable->customer])?$customers['name'][$receivable->customer]:null; ?></a></td>
+            <td class="fix" data="<?php echo $receivable->vendor; ?>" id="vendor_<?php echo $receivable->receivable_id; ?>"><?php echo isset($vendors['name'][$receivable->vendor])?$vendors['name'][$receivable->vendor]:null; ?></td>
+            <td class="fix" data="<?php echo $receivable->staff; ?>" id="staff_<?php echo $receivable->receivable_id; ?>"><a style="text-decoration: underline;" href="<?php echo $this->url('staffdebts/index/'.$receivable->staff) ?>"><?php echo isset($staffs['name'][$receivable->staff])?$staffs['name'][$receivable->staff]:null; ?></a></td>
+            <td class="fix" id="money_<?php echo $receivable->receivable_id; ?>"><?php echo $lib->formatMoney($receivable->money); ?></td>
+            <td class="fix"  style="color:<?php echo $numberDays>90?'red':null; ?>"  id="expect_date_<?php echo $receivable->receivable_id; ?>"><?php echo $lib->hien_thi_ngay_thang($receivable->expect_date) ?></td>
+            <td class="fix"  style="color:<?php echo $numberDays>90?'red':null; ?>"  id="new_expect_date_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->new_expect_date>0?$lib->hien_thi_ngay_thang($receivable->new_expect_date):null ?></td>
+            <td class="fix" id="week_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->week; ?></td>
+            <td style="color:<?php echo $numberDays>0?'red':($numberDays==0?'rgb(255, 193, 66)':'green'); ?>" class="fix" id="time_<?php echo $receivable->receivable_id; ?>"><?php echo $numberDays>0?$numberDays.' ngày':($numberDays==0?'Ngày cuối':abs($numberDays).' ngày nữa'); ?></td>
+            
+            <td class="fix" id="source_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->bank_name; ?></td>
+            <td class="fix" id="comment_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->comment; ?></td>
+            <td class="fix" id="pay_money_<?php echo $receivable->receivable_id; ?>"><a style="text-decoration: underline;" href="<?php echo $this->url('receive/index/'.$receivable->receivable_id) ?>"><?php echo $lib->formatMoney($receivable->pay_money); ?></a></td>
+             
+            <td class="fix" id="conlai_<?php echo $receivable->receivable_id; ?>"><?php echo $lib->formatMoney($receivable->money-$receivable->pay_money); ?></td>
+            <td class="fix" style="display:none" id="type_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->type; ?></td>
+            <td class="fix" style="display:none" id="invoice_number_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->invoice_number; ?></td>             
+            
+        </tr>
+        
+    <?php endforeach; ?>
+    <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="6" >Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
+        <td class="fix" colspan="6" ></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongtt); ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongcon); ?></td>
+    </tr>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>

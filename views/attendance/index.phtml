@@ -1,0 +1,1102 @@
+<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL ?>/public/css/jquery.datetimepicker.css"/ >
+<script src="<?php echo BASE_URL ?>/public/js/build/jquery.datetimepicker.full.min.js"></script>
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'attendance_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'attendance_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'attendance_day')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'check_in_1')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'check_out_1')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'check_in_2')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'check_out_2')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'attendance_late')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'attendance_soon')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'attendance_comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'attendance_total')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+    
+$tongngay = 0;
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BẢNG CHẤM CÔNG </h1></center>
+    <?php if($_SESSION['role_logined'] != 10){ ?>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm bảng chấm công</a>
+    
+    <a class="add_button" id="import_excel" href="<?= $this->url('attendance/import')?>">Import Excel</a>
+    <a class="add_button" id="btnExport"> Export Excel</a>
+     
+
+</div>
+<?php } ?>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+        <div class="add-box">
+        	Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">  
+                                
+        </div>
+    	<div class="alignleft actions">
+            <?php if($_SESSION['role_logined'] != 10){ ?>
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+        <?php } ?>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="5">Hiển thị 5 giá trị</option>
+            <option value="10">Hiển thị 10 giá trị</option>
+            <option value="15">Hiển thị 15 giá trị</option>
+            <option selected="selected" value="20">Hiển thị 20 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+
+        </div>
+        
+      </div>
+
+
+</div>
+
+<table class="table_data" id="tblExport">
+<thead>
+    <tr>
+    	<th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','attendance_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'attendance_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_name','<?php echo $url_order ?>')">Họ tên <?php if ($order_by == 'staff_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>   
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','attendance_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'attendance_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','attendance_day','<?php echo $url_order ?>')">Thứ <?php if ($order_by == 'attendance_day'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','check_in_1','<?php echo $url_order ?>')">Giờ vào 1 <?php if ($order_by == 'check_in_1'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','check_out_1','<?php echo $url_order ?>')">Giờ ra 1 <?php if ($order_by == 'check_out_1'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','check_in_2','<?php echo $url_order ?>')">Giờ vào 2 <?php if ($order_by == 'check_in_2'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','check_out_2','<?php echo $url_order ?>')">Giờ ra 2 <?php if ($order_by == 'check_out_2'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','attendance_late','<?php echo $url_order ?>')">Trễ <?php if ($order_by == 'attendance_late'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','attendance_soon','<?php echo $url_order ?>')">Sớm <?php if ($order_by == 'attendance_soon'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','attendance_comment','<?php echo $url_order ?>')">Ghi chú <?php if ($order_by == 'attendance_comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','attendance_total','<?php echo $url_order ?>')">Tổng giờ <?php if ($order_by == 'attendance_total'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($attendances as $salary) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $salary->attendance_id ?>" class="edit_tr">
+        	<td>
+                <input name="check[]" type="checkbox" class="checkbox" value="<?php echo $salary->attendance_id ?>">
+                
+            </td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="staff_name_<?php echo $salary->attendance_id; ?>"><?php echo $salary->staff_name; ?></td>
+            <td class="fix" id="attendance_date_<?php echo $salary->attendance_id; ?>"><?php echo $lib->hien_thi_ngay_thang($salary->attendance_date); ?></td>
+            <td class="fix" id="attendance_day_<?php echo $salary->attendance_id; ?>"><?php echo $salary->attendance_day; ?></td>
+            <td class="fix" id="check_in_1_<?php echo $salary->attendance_id; ?>"><?php echo $salary->check_in_1; ?></td>
+            <td class="fix" id="check_out_1_<?php echo $salary->attendance_id; ?>"><?php echo $salary->check_out_1; ?></td>
+            <td class="fix" id="check_in_2_<?php echo $salary->attendance_id; ?>"><?php echo $salary->check_in_2; ?></td>
+            <td class="fix" id="check_out_2_<?php echo $salary->attendance_id; ?>"><?php echo $salary->check_out_2; ?></td>
+            <td class="fix" id="attendance_late_<?php echo $salary->attendance_id; ?>"><?php echo $salary->attendance_late; ?></td>
+            <td class="fix" id="attendance_soon_<?php echo $salary->attendance_id; ?>"><?php echo $salary->attendance_soon; ?></td>
+            <td class="fix" id="attendance_comment_<?php echo $salary->attendance_id; ?>"><?php echo $salary->attendance_comment; ?></td>
+            <td class="fix" id="attendance_total_<?php echo $salary->attendance_id; ?>"><?php echo $salary->attendance_total; ?></td>
+            
+            <td>
+                <?php if($_SESSION['role_logined'] != 10){ ?>
+                <button onclick="del(<?php echo $salary->attendance_id ?>)" >Xóa</button>
+                <?php } ?>
+            </td>
+        </tr>
+        <?php 
+        $tongngay += $salary->attendance_total;
+        ?>
+    <?php endforeach; ?>
+   </tbody>
+   <tfoot>
+       <tr>    
+           <td></td>
+           <td></td>
+           <td colspan="10"><b>Tổng cộng</b></td>
+           <td class="total error" id="total_work_day" ><?php echo $tongngay ?></td>
+       </tr>
+       
+   </tfoot>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('attendance') ?>">&larr;</a></div>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Thông tin nhân viên</h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_salary" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td style="float:right;padding:10px">Ngày</td>
+                            <td><input type="text" id="attendance_date" name="attendance_date" tabindex="1" required="required"></td>
+                            
+                        </tr>
+                        <tr>
+                            <td>Họ tên </td>
+                            <td><input type="text" readonly id="staff_name" name="staff_name" tabindex="2" autofocus autocomplete="off" required="required" placeholder="Nhập tên hoặc * để chọn" >
+                                <ul id="staff_list_id"></ul>
+                            </td>
+                            <td>Giờ vào 1 </td>
+                            <td><input type="text" class="cong" id="check_in_1" value="0"  name="check_in_1" tabindex="3"  ></td>
+                            <td>Giờ ra 1 </td>
+                            <td><input type="text" class="cong" id="check_out_1" value="0" name="check_out_1" tabindex="4"  ></td>
+                            
+    
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Giờ vào 2 </td>
+                            <td><input type="text" class="cong" id="check_in_2" value="0" name="check_in_2" tabindex="5"  ></td>
+                            <td>Giờ ra 2 </td>
+                            <td><input type="text" class="cong" id="check_out_2" value="0" name="check_out_2" tabindex="6"  ></td>
+                        </tr>
+                        <tr>
+                            <td>Tổng giờ </td>
+                            <td><input type="text" id="attendance_total"  name="attendance_total" tabindex="9" value="0"  required="required"></td>
+                            <td>Sớm </td>
+                            <td><input type="text" id="attendance_soon"  name="attendance_soon" tabindex="7" ></td>
+                            <td>Trễ </td>
+                            <td><input type="text" id="attendance_late"  name="attendance_late" tabindex="8" ></td>
+                             
+    
+                        </tr>
+                        <tr>
+                            <td>Ghi chú</td>
+                            <td colspan="5"><textarea name="attendance_comment" id="attendance_comment"></textarea></td>
+                        </tr>
+                        
+                        
+                        <?php if($_SESSION['role_logined'] != 10){ ?>
+                         <tr>
+                            <td></td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="10"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="11"></td>
+                            
+                             
+                        </tr>
+                        <?php } ?>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+   $('#staff_list_id').slideUp(200);
+});
+    $('.edit_tr').click(function(e){
+
+        if(e.target != '[object HTMLButtonElement]' && !$('.checkbox').is(':focus')){
+            if(!$('.checkbox').is(':checked')){
+                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+            }
+            var staff_name = $(this).find("#staff_name_"+$(this).attr('id')).text();
+            var attendance_day = $(this).find("#attendance_day_"+$(this).attr('id')).text();
+            var attendance_date = $(this).find("#attendance_date_"+$(this).attr('id')).text();
+            var attendance_late = $(this).find("#attendance_late_"+$(this).attr('id')).text();
+            var attendance_total = $(this).find("#attendance_total_"+$(this).attr('id')).text();
+            var attendance_soon = $(this).find("#attendance_soon_"+$(this).attr('id')).text();
+            var check_in_1 = $(this).find("#check_in_1_"+$(this).attr('id')).text();
+            var check_out_1 = $(this).find("#check_out_1_"+$(this).attr('id')).text();
+            var check_in_2 = $(this).find("#check_in_2_"+$(this).attr('id')).text();
+            var check_out_2 = $(this).find("#check_out_2_"+$(this).attr('id')).text();
+            var attendance_comment = $(this).find("#attendance_comment_"+$(this).attr('id')).text();
+            //alert(staff_name);
+
+            //$('.cong').datetimepicker();
+
+            $('#yes').val($(this).attr('id'));
+            $('#staff_name').val(staff_name);
+            $('#attendance_day').val(attendance_day);
+            $('#attendance_date').val(attendance_date.replace(/\//g,"-"));
+            $('#attendance_late').val(attendance_late);
+            $('#attendance_total').val(attendance_total);
+            $('#attendance_soon').val(attendance_soon);
+            $('#attendance_comment').val(attendance_comment);
+            
+
+            $('#staff_name').attr('data',"");
+            $("#staff_name").prop('readonly', true);
+            $("#staff_name").prop('disabled', true);
+            $('#staff_name').attr('code','true');
+            
+            jQuery('#check_in_1').datetimepicker({
+              datepicker:false,
+              format:'H:i',
+              value: check_in_1,
+              onClose:function(ct,$i){
+                var vao_1 = $('#check_in_1').datetimepicker('getValue');
+                var ra_1 = $('#check_out_1').datetimepicker('getValue');
+
+                var diff = ra_1.getTime() - vao_1.getTime();
+
+                if (diff < 0) {
+                    $('#check_in_1').val($('#check_out_1').val());
+                }
+
+                var time1 = $("#check_in_1").val().split(':'), time2 = $("#check_out_1").val().split(':');
+                 var hours1 = parseInt(time1[0], 10), 
+                     hours2 = parseInt(time2[0], 10),
+                     mins1 = parseInt(time1[1], 10),
+                     mins2 = parseInt(time2[1], 10);
+                 var hours = hours2 - hours1, mins = 0;
+                 if(hours < 0) hours = 24 + hours;
+                 if(mins2 >= mins1) {
+                     mins = mins2 - mins1;
+                 }
+                 else {
+                     mins = (mins2 + 60) - mins1;
+                     hours--;
+                 }
+                 mins = mins / 60; // take percentage in 60
+                 hours += mins;
+                 hours = parseFloat(hours.toFixed(2));
+
+                 var time1 = $("#check_in_2").val().split(':'), time2 = $("#check_out_2").val().split(':');
+                 var hours1 = parseInt(time1[0], 10), 
+                     hours2 = parseInt(time2[0], 10),
+                     mins1 = parseInt(time1[1], 10),
+                     mins2 = parseInt(time2[1], 10);
+                 var hours_2 = hours2 - hours1, mins = 0;
+                 if(hours_2 < 0) hours_2 = 24 + hours_2;
+                 if(mins2 >= mins1) {
+                     mins = mins2 - mins1;
+                 }
+                 else {
+                     mins = (mins2 + 60) - mins1;
+                     hours_2--;
+                 }
+                 mins = mins / 60; // take percentage in 60
+                 hours_2 += mins;
+                 hours_2 = parseFloat(hours_2.toFixed(2));
+
+
+                 $("#attendance_total").val(hours_2+hours);
+
+                }
+            });
+            jQuery('#check_out_1').datetimepicker({
+              datepicker:false,
+              format:'H:i',
+              value: check_out_1,
+              onClose:function(ct,$i){
+                var vao_1 = $('#check_in_1').datetimepicker('getValue');
+                var ra_1 = $('#check_out_1').datetimepicker('getValue');
+
+                var diff = ra_1.getTime() - vao_1.getTime();
+
+                if (diff < 0) {
+                    $('#check_out_1').val($('#check_in_1').val());
+                }
+                
+                var time1 = $("#check_in_1").val().split(':'), time2 = $("#check_out_1").val().split(':');
+                 var hours1 = parseInt(time1[0], 10), 
+                     hours2 = parseInt(time2[0], 10),
+                     mins1 = parseInt(time1[1], 10),
+                     mins2 = parseInt(time2[1], 10);
+                 var hours = hours2 - hours1, mins = 0;
+                 if(hours < 0) hours = 24 + hours;
+                 if(mins2 >= mins1) {
+                     mins = mins2 - mins1;
+                 }
+                 else {
+                     mins = (mins2 + 60) - mins1;
+                     hours--;
+                 }
+                 mins = mins / 60; // take percentage in 60
+                 hours += mins;
+                 hours = parseFloat(hours.toFixed(2));
+
+                 var time1 = $("#check_in_2").val().split(':'), time2 = $("#check_out_2").val().split(':');
+                 var hours1 = parseInt(time1[0], 10), 
+                     hours2 = parseInt(time2[0], 10),
+                     mins1 = parseInt(time1[1], 10),
+                     mins2 = parseInt(time2[1], 10);
+                 var hours_2 = hours2 - hours1, mins = 0;
+                 if(hours_2 < 0) hours_2 = 24 + hours_2;
+                 if(mins2 >= mins1) {
+                     mins = mins2 - mins1;
+                 }
+                 else {
+                     mins = (mins2 + 60) - mins1;
+                     hours_2--;
+                 }
+                 mins = mins / 60; // take percentage in 60
+                 hours_2 += mins;
+                 hours_2 = parseFloat(hours_2.toFixed(2));
+
+
+                 $("#attendance_total").val(hours_2+hours);
+
+                }
+            });
+            jQuery('#check_in_2').datetimepicker({
+              datepicker:false,
+              format:'H:i',
+              value: check_in_2,
+              onClose:function(ct,$i){
+                var vao_1 = $('#check_in_2').datetimepicker('getValue');
+                var ra_1 = $('#check_out_2').datetimepicker('getValue');
+
+                var ra = $('#check_out_1').datetimepicker('getValue');
+
+                var diff1 = vao_1.getTime() - ra.getTime();
+                if (diff1 < 0) {
+                    $('#check_in_2').val($('#check_out_1').val());
+                }
+
+                var diff = ra_1.getTime() - vao_1.getTime();
+
+                if (diff < 0) {
+                    $('#check_in_2').val($('#check_out_2').val());
+                }
+                
+                var time1 = $("#check_in_1").val().split(':'), time2 = $("#check_out_1").val().split(':');
+                 var hours1 = parseInt(time1[0], 10), 
+                     hours2 = parseInt(time2[0], 10),
+                     mins1 = parseInt(time1[1], 10),
+                     mins2 = parseInt(time2[1], 10);
+                 var hours = hours2 - hours1, mins = 0;
+                 if(hours < 0) hours = 24 + hours;
+                 if(mins2 >= mins1) {
+                     mins = mins2 - mins1;
+                 }
+                 else {
+                     mins = (mins2 + 60) - mins1;
+                     hours--;
+                 }
+                 mins = mins / 60; // take percentage in 60
+                 hours += mins;
+                 hours = parseFloat(hours.toFixed(2));
+
+                 var time1 = $("#check_in_2").val().split(':'), time2 = $("#check_out_2").val().split(':');
+                 var hours1 = parseInt(time1[0], 10), 
+                     hours2 = parseInt(time2[0], 10),
+                     mins1 = parseInt(time1[1], 10),
+                     mins2 = parseInt(time2[1], 10);
+                 var hours_2 = hours2 - hours1, mins = 0;
+                 if(hours_2 < 0) hours_2 = 24 + hours_2;
+                 if(mins2 >= mins1) {
+                     mins = mins2 - mins1;
+                 }
+                 else {
+                     mins = (mins2 + 60) - mins1;
+                     hours_2--;
+                 }
+                 mins = mins / 60; // take percentage in 60
+                 hours_2 += mins;
+                 hours_2 = parseFloat(hours_2.toFixed(2));
+
+
+                 $("#attendance_total").val(hours_2+hours);
+
+                }
+            });
+            jQuery('#check_out_2').datetimepicker({
+              datepicker:false,
+              format:'H:i',
+              value: check_out_2,
+              onClose:function(ct,$i){
+                var vao_1 = $('#check_in_2').datetimepicker('getValue');
+                var ra_1 = $('#check_out_2').datetimepicker('getValue');
+
+                var diff = ra_1.getTime() - vao_1.getTime();
+
+                if (diff < 0) {
+                    $('#check_out_2').val($('#check_in_2').val());
+                }
+                
+                var time1 = $("#check_in_1").val().split(':'), time2 = $("#check_out_1").val().split(':');
+                 var hours1 = parseInt(time1[0], 10), 
+                     hours2 = parseInt(time2[0], 10),
+                     mins1 = parseInt(time1[1], 10),
+                     mins2 = parseInt(time2[1], 10);
+                 var hours = hours2 - hours1, mins = 0;
+                 if(hours < 0) hours = 24 + hours;
+                 if(mins2 >= mins1) {
+                     mins = mins2 - mins1;
+                 }
+                 else {
+                     mins = (mins2 + 60) - mins1;
+                     hours--;
+                 }
+                 mins = mins / 60; // take percentage in 60
+                 hours += mins;
+                 hours = parseFloat(hours.toFixed(2));
+
+                 var time1 = $("#check_in_2").val().split(':'), time2 = $("#check_out_2").val().split(':');
+                 var hours1 = parseInt(time1[0], 10), 
+                     hours2 = parseInt(time2[0], 10),
+                     mins1 = parseInt(time1[1], 10),
+                     mins2 = parseInt(time2[1], 10);
+                 var hours_2 = hours2 - hours1, mins = 0;
+                 if(hours_2 < 0) hours_2 = 24 + hours_2;
+                 if(mins2 >= mins1) {
+                     mins = mins2 - mins1;
+                 }
+                 else {
+                     mins = (mins2 + 60) - mins1;
+                     hours_2--;
+                 }
+                 mins = mins / 60; // take percentage in 60
+                 hours_2 += mins;
+                 hours_2 = parseFloat(hours_2.toFixed(2));
+
+
+                 $("#attendance_total").val(hours_2+hours);
+
+                }
+            });
+
+
+            $( ".add-field" ).dialog( "open" );
+        }
+
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+    $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+    
+     $("#staff_name").prop('readonly', false);
+     $("#staff_name").prop('disabled', false);
+     $('#staff_name').val("");
+     $('#staff_name').attr('code','false');
+        
+        $('#attendance_day').val("");
+        $('#attendance_date').val("");
+        $('#attendance_late').val("");
+        $('#attendance_total').val("8");
+        $('#attendance_soon').val("");
+        $('#attendance_comment').val("");
+        
+        jQuery('#check_in_1').datetimepicker({
+          datepicker:false,
+          format:'H:i',
+          value:'08:00',
+        });
+        jQuery('#check_out_1').datetimepicker({
+          datepicker:false,
+          format:'H:i',
+          value:'12:00',
+        });
+        jQuery('#check_in_2').datetimepicker({
+          datepicker:false,
+          format:'H:i',
+          value:'13:00',
+        });
+        jQuery('#check_out_2').datetimepicker({
+          datepicker:false,
+          format:'H:i',
+          value:'17:00',
+        });
+
+
+        $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+        var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+         },
+         
+    };  
+    $("#attendance_date").datepicker(pickerOpts);
+
+    $( ".add-field" ).dialog( "open" );
+
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_salary").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                    if ($('#staff_name').attr('code') == 'false') {
+                        $('#staff_name').val("");
+                        $('#staff_name').focus();
+                        return false;
+                    };
+                
+                    var staff = $('#staff_name').attr('data');
+                    var attendance_day = $('#attendance_day').attr('value');
+                    var attendance_date = $('#attendance_date').attr('value');
+                    var attendance_late = $('#attendance_late').attr('value');
+                    var attendance_total = $('#attendance_total').attr('value');
+                    var attendance_soon = $('#attendance_soon').attr('value');
+                    var check_in_1 = $('#check_in_1').attr('value');
+                    var check_out_1 = $('#check_out_1').attr('value');
+                    var check_in_2 = $('#check_in_2').attr('value');
+                    var check_out_2 = $('#check_out_2').attr('value');
+                    var attendance_comment = $('#attendance_comment').attr('value');
+
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/attendance/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            staff: staff,
+                            attendance_day: attendance_day,
+                            attendance_date: attendance_date,
+                            attendance_late: attendance_late,
+                            attendance_total: attendance_total,
+                            attendance_soon: attendance_soon,
+                            attendance_comment: attendance_comment,
+                            check_in_1: check_in_1,
+                            check_out_1: check_out_1,
+                            check_in_2: check_in_2,
+                            check_out_2: check_out_2,
+                            yes: yes,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (staff == "") {
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+                                
+                            }
+                            else{
+                                if (answer.trim() != "Bảng lương này đã tồn tại") {
+
+                                    setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="staff_name_'+parseInt(lastID+1)+'">'+$("#staff_name").attr("value")+'</td><td class="fix" id="basic_salary_'+parseInt(lastID+1)+'">'+basic_salary+'</td><td class="fix" id="work_day_'+parseInt(lastID+1)+'">'+work_day+'</td><td class="fix" id="overtime_'+parseInt(lastID+1)+'">'+overtime+'</td><td class="fix" id="total_salary_'+parseInt(lastID+1)+'">'+total_salary+'</td><td class="fix" id="mileage_allowance_'+parseInt(lastID+1)+'">'+mileage_allowance+'</td><td class="fix" id="phone_allowance_'+parseInt(lastID+1)+'">'+phone_allowance+'</td><td class="fix" id="insurance_allowance_'+parseInt(lastID+1)+'">'+insurance_allowance+'</td><td class="fix" id="effect_add_'+parseInt(lastID+1)+'">'+effect_add+'</td><td class="fix" id="graded_'+parseInt(lastID+1)+'">'+graded+'</td><td class="fix" id="bonus_'+parseInt(lastID+1)+'">'+bonus+'</td><td class="fix" id="attendance_allowance_'+parseInt(lastID+1)+'">'+attendance_allowance+'</td><td class="fix" id="total_allowance_'+parseInt(lastID+1)+'">'+total_allowance+'</td><td class="fix" id="phone_detruct_'+parseInt(lastID+1)+'">'+phone_detruct+'</td><td class="fix" id="insurance_deduct_'+parseInt(lastID+1)+'">'+insurance_deduct+'</td><td class="fix" id="tu_detruct_'+parseInt(lastID+1)+'">'+tu_detruct+'</td><td class="fix" id="attendance_detruct_'+parseInt(lastID+1)+'">'+attendance_detruct+'</td><td class="fix" id="total_detruct_'+parseInt(lastID+1)+'">'+total_detruct+'</td><td class="fix" id="total_'+parseInt(lastID+1)+'">'+total+'</td><td style="display:none;" id="staff_code_'+parseInt(lastID+1)+'">'+$("#staff_code").attr("value")+'</td><td style="display:none;" id="staff_birth_'+parseInt(lastID+1)+'">'+$("#staff_birth").attr("value")+'</td><td style="display:none;" id="staff_gender_'+parseInt(lastID+1)+'">'+$("input[name=gender]:checked").val()+'</td><td style="display:none;" id="create_time_'+parseInt(lastID+1)+'">'+$("#create_time").attr("value")+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+
+                                    
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   $('#staff_name').keyup(function(){
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/attendance/getstaff',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#staff_list_id').slideDown(200);
+                $('#staff_list_id').html(data);
+            }
+        });
+        if ($('#staff_name').val() == "" || $('#staff_name').attr('data') == "") {
+            $('#staff_name').attr('data',"");
+            $('#staff_name').attr('code',false);
+        };
+   });
+   $('#staff_name').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#staff_name').attr('data',"");
+            $('#staff_name').attr('code',false);
+        }
+            
+      });
+   
+
+
+$('.number').keyup(function(){
+    // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+});
+
+
+
+});
+  
+function get_number(id){
+    return $(id).val().replace(/[^0-9\.-]+/g,"");
+}
+function set_item(item,value,code,birth,gender) {
+    // change input value
+    $('#staff_name').val(item);
+    $("#staff_name").attr("data",value);
+    $('#staff_list_id').hide();
+    $('#staff_name').focus();
+    $('#staff_name').attr('code','true');
+}
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+</script>
+</div>
+
+<script type="text/javascript">
+
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Bảng chấm công",
+    hide: 'fold',
+    show: 'blind'
+});
+
+jQuery('#check_in_1').datetimepicker({
+  datepicker:false,
+  format:'H:i',
+  onClose:function(ct,$i){
+    var vao_1 = $('#check_in_1').datetimepicker('getValue');
+    var ra_1 = $('#check_out_1').datetimepicker('getValue');
+
+    var diff = ra_1.getTime() - vao_1.getTime();
+
+    if (diff < 0) {
+        $('#check_in_1').val($('#check_out_1').val());
+    }
+
+    var time1 = $("#check_in_1").val().split(':'), time2 = $("#check_out_1").val().split(':');
+     var hours1 = parseInt(time1[0], 10), 
+         hours2 = parseInt(time2[0], 10),
+         mins1 = parseInt(time1[1], 10),
+         mins2 = parseInt(time2[1], 10);
+     var hours = hours2 - hours1, mins = 0;
+     if(hours < 0) hours = 24 + hours;
+     if(mins2 >= mins1) {
+         mins = mins2 - mins1;
+     }
+     else {
+         mins = (mins2 + 60) - mins1;
+         hours--;
+     }
+     mins = mins / 60; // take percentage in 60
+     hours += mins;
+     hours = parseFloat(hours.toFixed(2));
+
+     var time1 = $("#check_in_2").val().split(':'), time2 = $("#check_out_2").val().split(':');
+     var hours1 = parseInt(time1[0], 10), 
+         hours2 = parseInt(time2[0], 10),
+         mins1 = parseInt(time1[1], 10),
+         mins2 = parseInt(time2[1], 10);
+     var hours_2 = hours2 - hours1, mins = 0;
+     if(hours_2 < 0) hours_2 = 24 + hours_2;
+     if(mins2 >= mins1) {
+         mins = mins2 - mins1;
+     }
+     else {
+         mins = (mins2 + 60) - mins1;
+         hours_2--;
+     }
+     mins = mins / 60; // take percentage in 60
+     hours_2 += mins;
+     hours_2 = parseFloat(hours_2.toFixed(2));
+
+
+     $("#attendance_total").val(hours_2+hours);
+
+    }
+});
+jQuery('#check_out_1').datetimepicker({
+  datepicker:false,
+  format:'H:i',
+  onClose:function(ct,$i){
+    var vao_1 = $('#check_in_1').datetimepicker('getValue');
+    var ra_1 = $('#check_out_1').datetimepicker('getValue');
+
+    var diff = ra_1.getTime() - vao_1.getTime();
+
+    if (diff < 0) {
+        $('#check_out_1').val($('#check_in_1').val());
+    }
+    
+    var time1 = $("#check_in_1").val().split(':'), time2 = $("#check_out_1").val().split(':');
+     var hours1 = parseInt(time1[0], 10), 
+         hours2 = parseInt(time2[0], 10),
+         mins1 = parseInt(time1[1], 10),
+         mins2 = parseInt(time2[1], 10);
+     var hours = hours2 - hours1, mins = 0;
+     if(hours < 0) hours = 24 + hours;
+     if(mins2 >= mins1) {
+         mins = mins2 - mins1;
+     }
+     else {
+         mins = (mins2 + 60) - mins1;
+         hours--;
+     }
+     mins = mins / 60; // take percentage in 60
+     hours += mins;
+     hours = parseFloat(hours.toFixed(2));
+
+     var time1 = $("#check_in_2").val().split(':'), time2 = $("#check_out_2").val().split(':');
+     var hours1 = parseInt(time1[0], 10), 
+         hours2 = parseInt(time2[0], 10),
+         mins1 = parseInt(time1[1], 10),
+         mins2 = parseInt(time2[1], 10);
+     var hours_2 = hours2 - hours1, mins = 0;
+     if(hours_2 < 0) hours_2 = 24 + hours_2;
+     if(mins2 >= mins1) {
+         mins = mins2 - mins1;
+     }
+     else {
+         mins = (mins2 + 60) - mins1;
+         hours_2--;
+     }
+     mins = mins / 60; // take percentage in 60
+     hours_2 += mins;
+     hours_2 = parseFloat(hours_2.toFixed(2));
+
+
+     $("#attendance_total").val(hours_2+hours);
+
+    }
+});
+jQuery('#check_in_2').datetimepicker({
+  datepicker:false,
+  format:'H:i',
+  onClose:function(ct,$i){
+    var vao_1 = $('#check_in_2').datetimepicker('getValue');
+    var ra_1 = $('#check_out_2').datetimepicker('getValue');
+
+    var ra = $('#check_out_1').datetimepicker('getValue');
+
+    var diff1 = vao_1.getTime() - ra.getTime();
+    if (diff1 < 0) {
+        $('#check_in_2').val($('#check_out_1').val());
+    }
+
+    var diff = ra_1.getTime() - vao_1.getTime();
+
+    if (diff < 0) {
+        $('#check_in_2').val($('#check_out_2').val());
+    }
+    
+    var time1 = $("#check_in_1").val().split(':'), time2 = $("#check_out_1").val().split(':');
+     var hours1 = parseInt(time1[0], 10), 
+         hours2 = parseInt(time2[0], 10),
+         mins1 = parseInt(time1[1], 10),
+         mins2 = parseInt(time2[1], 10);
+     var hours = hours2 - hours1, mins = 0;
+     if(hours < 0) hours = 24 + hours;
+     if(mins2 >= mins1) {
+         mins = mins2 - mins1;
+     }
+     else {
+         mins = (mins2 + 60) - mins1;
+         hours--;
+     }
+     mins = mins / 60; // take percentage in 60
+     hours += mins;
+     hours = parseFloat(hours.toFixed(2));
+
+     var time1 = $("#check_in_2").val().split(':'), time2 = $("#check_out_2").val().split(':');
+     var hours1 = parseInt(time1[0], 10), 
+         hours2 = parseInt(time2[0], 10),
+         mins1 = parseInt(time1[1], 10),
+         mins2 = parseInt(time2[1], 10);
+     var hours_2 = hours2 - hours1, mins = 0;
+     if(hours_2 < 0) hours_2 = 24 + hours_2;
+     if(mins2 >= mins1) {
+         mins = mins2 - mins1;
+     }
+     else {
+         mins = (mins2 + 60) - mins1;
+         hours_2--;
+     }
+     mins = mins / 60; // take percentage in 60
+     hours_2 += mins;
+     hours_2 = parseFloat(hours_2.toFixed(2));
+
+
+     $("#attendance_total").val(hours_2+hours);
+
+    }
+});
+jQuery('#check_out_2').datetimepicker({
+  datepicker:false,
+  format:'H:i',
+  onClose:function(ct,$i){
+    var vao_1 = $('#check_in_2').datetimepicker('getValue');
+    var ra_1 = $('#check_out_2').datetimepicker('getValue');
+
+    var diff = ra_1.getTime() - vao_1.getTime();
+
+    if (diff < 0) {
+        $('#check_out_2').val($('#check_in_2').val());
+    }
+    
+    var time1 = $("#check_in_1").val().split(':'), time2 = $("#check_out_1").val().split(':');
+     var hours1 = parseInt(time1[0], 10), 
+         hours2 = parseInt(time2[0], 10),
+         mins1 = parseInt(time1[1], 10),
+         mins2 = parseInt(time2[1], 10);
+     var hours = hours2 - hours1, mins = 0;
+     if(hours < 0) hours = 24 + hours;
+     if(mins2 >= mins1) {
+         mins = mins2 - mins1;
+     }
+     else {
+         mins = (mins2 + 60) - mins1;
+         hours--;
+     }
+     mins = mins / 60; // take percentage in 60
+     hours += mins;
+     hours = parseFloat(hours.toFixed(2));
+
+     var time1 = $("#check_in_2").val().split(':'), time2 = $("#check_out_2").val().split(':');
+     var hours1 = parseInt(time1[0], 10), 
+         hours2 = parseInt(time2[0], 10),
+         mins1 = parseInt(time1[1], 10),
+         mins2 = parseInt(time2[1], 10);
+     var hours_2 = hours2 - hours1, mins = 0;
+     if(hours_2 < 0) hours_2 = 24 + hours_2;
+     if(mins2 >= mins1) {
+         mins = mins2 - mins1;
+     }
+     else {
+         mins = (mins2 + 60) - mins1;
+         hours_2--;
+     }
+     mins = mins / 60; // take percentage in 60
+     hours_2 += mins;
+     hours_2 = parseFloat(hours_2.toFixed(2));
+
+
+     $("#attendance_total").val(hours_2+hours);
+
+    }
+});
+
+
+
+function diff(start, end) {
+    start = start.split(":");
+    end = end.split(":");
+    var startDate = new Date(0, 0, 0, start[0], start[1], 0);
+    var endDate = new Date(0, 0, 0, end[0], end[1], 0);
+    var diff = endDate.getTime() - startDate.getTime();
+    var hours = Math.floor(diff / 1000 / 60 / 60);
+    diff -= hours * 1000 * 60 * 60;
+    var minutes = Math.floor(diff / 1000 / 60);
+    
+    return (hours < 9 ? "0" : "") + hours + ":" + (minutes < 9 ? "0" : "") + minutes;
+}
+
+
+$(function() {
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+              
+            
+    
+});
+</script>

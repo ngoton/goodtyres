@@ -1,0 +1,184 @@
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> TỔNG HỢP </h1></center>
+
+	<div class="search-box">
+        
+        <div class="add-box">
+                  <form id="report" name="report" action method="post">
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="submit" name="submit" id="xem" value="Xem"> 
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+    	
+        <th style="width:30px" class="fix">
+            <a >STT </a>
+        </th>
+        <th  class="fix">
+            <a >Code </a>
+        </th>
+        <th class="fix">
+            <a>Có </a>
+        </th> 
+          
+        <th class="fix">
+            <a >Nợ </a>
+        </th> 
+        <th style="width: 500px" class="fix">
+            <a >Ghi chú </a>
+        </th> 
+       
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php
+    $i = 1;
+    $tongco = 0;
+    $tongno = 0;
+
+    foreach ($sales as $sale) {
+        $tongco += ($sale->revenue+$sale->revenue_vat+$sale->other_revenue+$sale->other_revenue_vat);
+        $tongno += ($sale->cost+$sale->cost_vat);
+    ?>
+    <tr>
+        <td style="text-align:center;" class="fix"><?php echo $i++; ?></td>
+        <td class="fix"><?php echo $sale->code ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($sale->revenue+$sale->revenue_vat+$sale->other_revenue+$sale->other_revenue_vat) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($sale->cost+$sale->cost_vat) ?></td>
+        <td style="width: 500px" class="fix"><?php echo $sale->comment ?></td> 
+    </tr>
+    <?php } ?>
+    <?php
+    foreach ($agents as $agent) {
+        $tongco += $agent->total_offer;
+        $tongno += $agent->total_cost;
+    ?>
+    <tr>
+        <td style="text-align:center;" class="fix"><?php echo $i++; ?></td>
+        <td class="fix"><?php echo $agent->code ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($agent->total_offer) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($agent->total_cost) ?></td>
+        <td style="width: 500px" class="fix"><?php echo $agent->name ?></td> 
+    </tr>
+    <?php } ?>
+    <?php
+    foreach ($manifests as $agent) {
+        $tongco += $agent->revenue_vat+$agent->revenue;
+        $tongno += ($agent->cost_sg+$agent->cost_cm+$agent->driver_cost+$agent->commission_cost+$agent->document_cost+$agent->other_cost);
+    ?>
+    <tr>
+        <td style="text-align:center;" class="fix"><?php echo $i++; ?></td>
+        <td class="fix"><?php echo $agent->code ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($agent->revenue_vat+$agent->revenue) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($agent->cost_sg+$agent->cost_cm+$agent->driver_cost+$agent->commission_cost+$agent->document_cost+$agent->other_cost) ?></td>
+        <td style="width: 500px" class="fix"><?php echo $agent->comment ?></td> 
+    </tr>
+    <?php } ?>
+    <?php
+    foreach ($invoices as $invoice) {
+        $tongco += $invoice->receive;
+        $tongno += ($invoice->pay1+$invoice->pay2+$invoice->pay3);
+    ?>
+    <tr>
+        <td style="text-align:center;" class="fix"><?php echo $i++; ?></td>
+        <td class="fix"><?php echo $invoice->invoice_number ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($invoice->receive) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($invoice->pay1+$invoice->pay2+$invoice->pay3) ?></td>
+        <td style="width: 500px" class="fix"><?php echo $invoice->comment ?></td> 
+    </tr>
+    <?php } ?>
+    <tr style="font-weight:bold; background-color:rgba(203, 226, 249, 0.71); color:red">
+        <td class="fix" colspan="2">Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tongco) ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongno) ?></td>
+        <td style="width: 500px" class="fix"></td> 
+    </tr>
+    <tr style="font-weight:bold; background-color:rgba(203, 226, 249, 0.71); color:rgb(0, 71, 255);">
+        <td class="fix" ></td>
+        <td class="fix" ></td>
+        <td class="fix" colspan="2"><?php echo $lib->formatMoney($tongco-$tongno) ?></td>
+        <td style="width: 500px" class="fix"></td> 
+    </tr>
+   </tbody>
+</table>
+
+<script type="text/javascript">
+        $(function() {
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+              
+            
+    
+});
+</script>

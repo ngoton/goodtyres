@@ -1,0 +1,30 @@
+<form id="import_excel" method="post" action="<?php echo BASE_URL ?>/newtransport/import" enctype="multipart/form-data">
+	<table >
+		
+		<tr>
+			<td>
+				<input type="radio" name="type" value="1" checked> Loại 1
+				<img src="<?php echo BASE_URL ?>/public/images/type1.jpg" width="500px" height="400px" />
+				
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="radio" name="type" value="2"> Loại 2
+				<img src="<?php echo BASE_URL ?>/public/images/type2.jpg" width="500px" height="400px" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="file" name="import">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="submit" name="submit" value="Import">
+			</td>
+		</tr>
+	</table>
+	
+	
+</form>

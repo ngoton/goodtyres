@@ -1,0 +1,281 @@
+<div id="content" style="padding:5px;">
+<center style="margin-bottom: 10px;"><h1> TỔNG HỢP </h1></center>
+
+<form id="report" name="report" action method="post">
+<div style="margin-top: -15px" >
+    <div class="add-box">
+        <a class="add_button" id="btnExport" >Export Excel</a>
+    </div>
+
+    <select id="sl_round" name="sl_round" style="width:90px; margin-left:5px;">
+     <?php 
+        for ($i=1; $i < 13; $i++) { 
+            echo '<option value="'.$i.'">Tháng '.$i.'</option>';
+        }
+     ?>
+    </select>
+    <select id="sl_trangthai" name="sl_trangthai" style="width:100px">
+     <?php 
+        $nam = date('Y');
+        for ($i=($nam-5); $i < ($nam+5); $i++) { 
+            echo '<option value="'.$i.'">Năm '.$i.'</option>';
+        }
+     ?>
+    </select>
+    <input type="submit" name="submit" id="xem" value="Xem">  
+</div>
+<div >
+    
+    Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+    Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+     <input type="submit" name="submit" id="xem" value="Xem">  
+                            
+</div>
+
+</form> 
+
+<?php
+$tong = array();
+?>
+
+<table class="table_data" id="tblExport">
+    <thead>
+        <tr>
+            <th class="fix">Ngày</th>
+            <?php foreach ($users as $user): ?>
+            <th class="fix"><?php echo $user->staff_name ?></th>
+            <?php endforeach; ?>
+        </tr>
+   </thead>
+   <tbody>
+        <?php foreach ($customers as $customer): ?>
+        <tr style=" color:rgb(0, 32, 96); font-weight:bold;">
+            
+            <td class="fix"><?php echo $lib->hien_thi_ngay_thang($customer->customer_tire_date); ?></td>
+            <?php foreach ($users as $user): 
+            $sl = isset($sales[$user->user_id][$customer->customer_tire_date])?$sales[$user->user_id][$customer->customer_tire_date]:0;
+                $tong[$user->user_id] = isset($tong[$user->user_id])?$tong[$user->user_id]+$sl:$sl;
+            ?>
+            <td class="fix masterTooltip" title="<?php echo $user->staff_name ?>"><?php echo $sl ?></td>
+            <?php endforeach; ?>
+        </tr>
+        <?php endforeach; ?>
+        <tr style=" color:rgb(211, 11, 57); text-align: center; font-weight:bold;">
+            <td class="fix">Tổng cộng</td>
+            <?php foreach ($users as $user): ?>
+            <td class="fix"><?php echo $tong[$user->user_id] ?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr style=" color: green; text-align: center; font-weight:bold;">
+            <td class="fix">Hệ số</td>
+            <?php foreach ($users as $user): ?>
+            <td class="fix"><?php echo $lib->formatMoney(round($data_salary[$user->user_id]/$tong[$user->user_id])) ?></td>
+            <?php endforeach; ?>
+        </tr>
+   </tbody>
+</table>
+
+<script type="text/javascript">
+    $(function() {
+
+        var w = $(".report").width();
+
+      $(".report-right-fix").width(w-355);
+
+
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+              
+            
+    
+});
+
+
+
+</script>
+<style type="text/css">
+    #ui-datepicker-div{
+        font-size: 13px;
+    }
+    .table_data tbody tr td.fix{
+        min-width: 100px;
+    }
+.table_data tbody tr td.fix:nth-child(1){
+        min-width: 30px;
+    }
+.report{
+    width: 100%;
+    margin: -5px auto;
+}
+.report-left{
+    float: left;
+    width: 150px;
+}
+.report-right{
+    
+    overflow: auto;
+}
+.showtooltip {
+        display:none;
+        position:absolute;
+        border:1px solid #333;
+        background-color:#161616;
+        border-radius:5px;
+        padding:10px;
+        color:#fff;
+        font-size:12px Arial;
+    }
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+// Tooltip only Text
+$('.masterTooltip').hover(function(){
+        // Hover over code
+        var title = $(this).attr('title');
+        $(this).data('tipText', title).removeAttr('title');
+        $('<p class="showtooltip"></p>')
+        .text(title)
+        .appendTo('body')
+        .fadeIn('slow');
+}, function() {
+        // Hover out code
+        $(this).attr('title', $(this).data('tipText'));
+        $('.showtooltip').remove();
+}).mousemove(function(e) {
+        var mousex = e.pageX + 20; //Get X coordinates
+        var mousey = e.pageY + 10; //Get Y coordinates
+        $('.showtooltip')
+        .css({ top: mousey, left: mousex })
+});
+
+
+});
+
+var w = $("#container").width();
+
+      $(".container").width(w);
+      $(".navbar-inner").width(w);
+      $(".navbar").width(w);
+
+$(document).ready(function() {
+    function fixDiv() {
+      
+      var $cache = $('.navbar-fixed-top'); 
+      if ($(window).scrollTop() > 42) {
+        $cache.css({'position': 'fixed', 'top': '0'}); 
+        $(".navbar-inner").css({'width':'100%'});
+        $(".navbar").css({'width':'100%'});
+      }
+      else{
+        var w = $("#container").width();
+        $cache.css({'position': 'relative', 'top': 'auto'});
+        $(".navbar-inner").width(w);
+        $(".navbar").width(w);
+      }
+      
+    }
+  $(window).scroll(fixDiv);
+  fixDiv();
+
+
+});
+
+
+var v = "<?php echo $vong ?>";
+$('#sl_round option[value='+v+']').attr('selected','selected');
+
+var tt = "<?php echo $trangthai ?>";
+$('#sl_trangthai option[value='+tt+']').attr('selected','selected');
+
+</script>
+</div>
+
+<script type="text/javascript">
+    
+    $('#sl_round').change(function(){
+        var m = $(this).val();
+        var y = $('#sl_trangthai').val();
+        var firstDay = new Date(y, m-1, 1);
+        var lastDay = new Date(y, m, 0);
+
+        $('#batdau').datepicker("setDate", firstDay );
+        $('#ketthuc').datepicker("setDate", lastDay );
+
+    });
+
+    $('#sl_trangthai').change(function(){
+        var y = $(this).val();
+        var m = $('#sl_round').val();
+        var firstDay = new Date(y, m-1, 1);
+        var lastDay = new Date(y, m, 0);
+
+        $('#batdau').datepicker("setDate", firstDay );
+        $('#ketthuc').datepicker("setDate", lastDay );
+
+    });
+
+
+</script>

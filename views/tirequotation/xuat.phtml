@@ -1,0 +1,503 @@
+
+<div >
+    <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+        
+            <div class="login_body">
+                  <form id="export_price_tire" method="post" action="<?= $this->url('tirequotation/exportexcel')?>" enctype="multipart/form-data">
+                    <fieldset class="groupbox">
+                    <legend>
+                        <span><h3>Bảng giá </h3></span>
+                    </legend>
+                      <table id="quotation" style="margin-top:0px;width:50%;float:left">
+                        
+                        <tr>
+                            <td>Mã gai</td>
+                            <td>
+                                <select style="width:100px" multiple="multiple" name="tire_quotation_pattern_2" id="tire_quotation_pattern_2" tabindex="6"  required="required">
+                                    <?php foreach ($tire_quotation_patterns as $tire_quotation_pattern) { ?>
+                                        <option title="<?php echo $tire_quotation_pattern->tire_quotation_pattern_name ?>" value="<?php echo $tire_quotation_pattern->tire_quotation_pattern_id ?>"><?php echo $tire_quotation_pattern->tire_quotation_pattern_name ?></option>
+                                    <?php } ?>
+                                    
+                                </select>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Kích thước</td>
+                            <td>
+                                <select style="width:100px" multiple="multiple" name="tire_quotation_size_2" id="tire_quotation_size_2" tabindex="7"  required="required">
+                                    <?php foreach ($tire_quotation_sizes as $tire_quotation_size) { ?>
+                                        <option title="<?php echo $tire_quotation_size->tire_quotation_size_number ?>" value="<?php echo $tire_quotation_size->tire_quotation_size_id ?>"><?php echo $tire_quotation_size->tire_quotation_size_number ?></option>
+                                    <?php } ?>
+                                    
+                                </select>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Thương hiệu</td>
+                            <td>
+                                <select style="width:100px" multiple="multiple" name="tire_quotation_brand_2" id="tire_quotation_brand_2" tabindex="8"  required="required">
+                                    <?php foreach ($tire_quotation_brands as $tire_quotation_brand) { ?>
+                                        <option title="<?php echo $tire_quotation_brand->tire_quotation_brand_name ?>" value="<?php echo $tire_quotation_brand->tire_quotation_brand_id ?>"><?php echo $tire_quotation_brand->tire_quotation_brand_name ?></option>
+                                    <?php } ?>
+                                    
+                                </select>
+                                
+                            </td>
+                            
+                            
+                            
+                        </tr>
+                        
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="submit" id="submit_form" name="submit" value="Submit" tabindex="10">
+                                
+                                <input type="reset" name="reset" value="Reset" tabindex="11">
+
+                            </td>
+                             
+                        </tr>
+                                           
+                        
+                        
+                    </table> 
+                    <table>
+                        <tr>
+                            <td>Tỷ lệ (%)</td>
+                            <td><input style="width:30px" type="text" id="percent_2" name="percent_2" value="100"></td>
+                        </tr>
+                        <tr id="quotation">
+                            <td colspan="6">
+                                <table border="1" style="border-collapse: collapse;">
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <table >
+                                                <tr>
+                                                    <?php foreach ($tire_quotation_brands as $tire_quotation_brand) { ?>
+                                                        <td id="brand_percent_2_<?php echo $tire_quotation_brand->tire_quotation_brand_id ?>"></td>
+                                                    <?php } ?>
+                                                </tr>
+                                                <tr>
+                                                    <?php foreach ($tire_quotation_brands as $tire_quotation_brand) { ?>
+                                                        <td id="brand_2_<?php echo $tire_quotation_brand->tire_quotation_brand_id ?>"></td>
+                                                    <?php } ?>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        
+                                    </tr>
+                                    <?php foreach ($tire_quotation_patterns as $tire_quotation_pattern) { ?>
+                                        <tr>
+                                            <td id="pattern_2_<?php echo $tire_quotation_pattern->tire_quotation_pattern_id ?>"></td>
+                                            <td id="pattern_size_2_<?php echo $tire_quotation_pattern->tire_quotation_pattern_id ?>">
+                                                <table >
+                                                    <?php foreach ($tire_quotation_sizes as $tire_quotation_size) { ?>
+                                                    <tr class="size_2_<?php echo $tire_quotation_size->tire_quotation_size_id ?>">
+                                                        <td></td>
+                                                        <?php foreach ($tire_quotation_brands as $tire_quotation_brand) { ?>
+                                                            <td class="price_2_<?php echo $tire_quotation_brand->tire_quotation_brand_id ?>">
+                                                            </td>
+                                                        <?php } ?>
+                                                    </tr>
+                                                    <?php } ?>
+                                                </table>
+                                            </td>
+                                            
+                                        </tr>
+                                    <?php } ?>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    </fieldset>
+                    
+                </form>
+            </div>
+        
+    </div>
+
+
+</div>
+
+<script type="text/javascript">
+
+var myform = document.getElementById('export_price_tire');
+myform.onsubmit = function(){ 
+    var brand = $('select#tire_quotation_brand_2').val();
+    var pattern = $('select#tire_quotation_pattern_2').val();
+    var size = $('select#tire_quotation_size_2').val();
+
+    var tire_price = new Array();
+    var pattern_arr = [];
+    var size_arr = [];
+    var brand_arr = [];
+    
+    for (var i = 0; i < pattern.length; i++) {
+        $('#export_price_tire').append('<input type="hidden" name="pattern_arr_2['+i+']" value="' + pattern[i] + '"/>');
+        pattern_arr[i] = pattern[i];
+        tire_price[i] = new Array();
+        for (var j = 0; j < size.length; j++) {
+            $('#export_price_tire').append('<input type="hidden" name="size_arr_2['+j+']" value="' + size[j] + '"/>');
+            size_arr[j] = size[j];
+            tire_price[i][j] = new Array();
+            for (var z = 0; z < brand.length; z++) {
+                $('#export_price_tire').append('<input type="hidden" name="brand_arr_2['+z+']" value="' + brand[z] + '"/>');
+                brand_arr[z] = brand[z];
+                tire_price[i][j][z] = $('.price_2[data='+brand[z]+'][alt='+size[j]+'][tabindex='+pattern[i]+']').val();
+                $('#export_price_tire').append('<input type="hidden" name="tire_price_2['+i+']['+j+']['+z+']" value="' + tire_price[i][j][z] + '"/>');
+            }
+        }
+    }
+
+  };
+</script>
+<script type="text/javascript">
+
+$(function(){
+    $('#percent_2').keyup(function(){
+        var percent = $(this).val();
+        $('.brand_percent_2').val(percent);
+
+        var arr = $('select#tire_quotation_pattern_2').val();
+        var arr2 = $('select#tire_quotation_size_2').val();
+        var arr3 = $('select#tire_quotation_brand_2').val();
+
+        for (var i = 0; i < arr.length; i++) {
+            for (var j = 0; j < arr2.length; j++) {
+                for (var z = 0; z < arr3.length; z++) {
+                    check_price(arr[i],arr2[j],arr3[z],"#pattern_size_2_"+arr[i]+" .size_2_"+arr2[j]+" .price_2_"+arr3[z]+" input[class=price_2][data="+arr3[z]+"]",percent);
+                }
+            }
+        }
+
+    });
+
+    $('.brand_percent_2').keyup(function(){
+        var percent = $(this).val();
+        var brand = $(this).attr('data');
+
+        var arr = $('select#tire_quotation_pattern_2').val();
+        var arr2 = $('select#tire_quotation_size_2').val();
+
+        for (var i = 0; i < arr.length; i++) {
+            for (var j = 0; j < arr2.length; j++) {
+                    check_price(arr[i],arr2[j],brand,"#pattern_size_2_"+arr[i]+" .size_2_"+arr2[j]+" .price_2_"+brand+" input[class=price_2][data="+brand+"]",percent);
+                
+            }
+        }
+
+    });
+
+    function check_price(pattern, size, brand, elem, per){
+        var price = "";
+        $.post("<?php echo BASE_URL ?>/tirequotation/checkprice", 
+        {
+            pattern: pattern,
+            size: size,
+            brand: brand,
+         },
+       function(answer){
+            $(elem).val((answer.trim()*per)/100);
+            $(elem).attr('alt',size);
+            $(elem).attr('tabindex',pattern);
+            $(elem).val(function(index, value) {
+                return value
+                  .replace(/[^0-9-.]/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+              });
+            $('.price').keyup(function(event) {
+
+                  // skip for arrow keys
+              if(event.which >= 37 && event.which <= 40) return;
+
+              // format number
+              $(this).val(function(index, value) {
+                return value
+                  .replace(/[^0-9-.]/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+              });
+            });
+
+            
+
+       }); 
+    }
+
+    var hang = -3; cot = 0; arr_text = []; 
+    var CSS_COLOR_NAMES = ["AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","Darkorange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"];
+
+    $("select#tire_quotation_brand_2").multiselect({
+       click: function(event, ui){
+        var arr = $('select#tire_quotation_size_2').val();
+        var arr2 = $('select#tire_quotation_pattern_2').val();
+
+            if(ui.checked == 1){
+                var text = '<input style="width:100px" disabled type="text" name="brand_name_2[]" class="brand_name_2" data="'+ui.value+'" value="'+ui.text+'">';
+                $('#brand_2_'+ui.value).html(text);
+                $('#brand_2_'+ui.value+' input').css("background-color",CSS_COLOR_NAMES[ui.value]);
+
+                var text_per = '<input style="width:30px" type="text" id="brand_per_2_'+ui.value+'" name="brand_percent_2[]" class="brand_percent_2" data="'+ui.value+'" value="'+$('#percent_2').val()+'">';
+                $('#brand_percent_2_'+ui.value).html(text_per);
+
+                $('.brand_percent_2').keyup(function(){
+                    var percent = $(this).val();
+                    var brand = $(this).attr('data');
+
+                    var arr = $('select#tire_quotation_pattern_2').val();
+                    var arr2 = $('select#tire_quotation_size_2').val();
+
+                    for (var i = 0; i < arr.length; i++) {
+                        for (var j = 0; j < arr2.length; j++) {
+                                check_price(arr[i],arr2[j],brand,"#pattern_size_2_"+arr[i]+" .size_2_"+arr2[j]+" .price_2_"+brand+" input[class=price_2][data="+brand+"]",percent);
+                            
+                        }
+                    }
+
+                });
+
+                if (arr2 != null) {
+                    for (var j = 0; j < arr2.length; j++) {
+                        if(arr != null){
+                            for (var i = 0; i < arr.length; i++) {
+                                var text2 = '<input style="width:100px" type="text" name="price_2[]" class="price_2" data="'+ui.value+'" >';
+                                $('#pattern_size_2_'+arr2[j]+' .size_2_'+arr[i]+' .price_2_'+ui.value).html(text2);
+                                $('#pattern_size_2_'+arr2[j]+' .size_2_'+arr[i]+' .price_2_'+ui.value+' input').css("background-color",CSS_COLOR_NAMES[ui.value]);
+
+                                check_price(arr2[j],arr[i],ui.value,"#pattern_size_2_"+arr2[j]+" .size_2_"+arr[i]+" .price_2_"+ui.value+" input[class=price_2][data="+ui.value+"]",$('#brand_per_2_'+ui.value).val());
+                                
+                            }
+                        }
+                    }
+                    
+                }
+                
+            }
+            else{
+                $('#brand_2_'+ui.value).html('');
+                $('#brand_percent_2_'+ui.value).html('');
+                $('.brand_percent_2').keyup(function(){
+                    var percent = $(this).val();
+                    var brand = $(this).attr('data');
+
+                    var arr = $('select#tire_quotation_pattern_2').val();
+                    var arr2 = $('select#tire_quotation_size_2').val();
+
+                    for (var i = 0; i < arr.length; i++) {
+                        for (var j = 0; j < arr2.length; j++) {
+                                check_price(arr[i],arr2[j],brand,"#pattern_size_2_"+arr[i]+" .size_2_"+arr2[j]+" .price_2_"+brand+" input[class=price_2][data="+brand+"]",percent);
+                            
+                        }
+                    }
+
+                });
+                for (var j = 0; j < arr2.length; j++) {
+                        if(arr != null){
+                            for (var i = 0; i < arr.length; i++) {
+                                $('#pattern_size_2_'+arr2[j]+' .size_2_'+arr[i]+' .price_2_'+ui.value).html('');
+                            }
+                        }
+                    }
+            }
+       },
+       checkAll: function(){
+        var arr = $('select#tire_quotation_size_2').val();
+        var arr2 = $('select#tire_quotation_pattern_2').val();
+          var n = $("select#tire_quotation_brand_2 option").length;
+          for (var z = 0; z < n; z++) {
+            var val = $("select#tire_quotation_brand_2 option").eq(z).val();
+            var tex = $("select#tire_quotation_brand_2 option").eq(z).text();
+            var text = '<input style="width:100px" disabled type="text" name="brand_name_2[]" class="brand_name_2" data="'+val+'" value="'+tex+'">';
+                $('#brand_2_'+val).html(text);
+                $('#brand_2_'+val+' input').css("background-color",CSS_COLOR_NAMES[val]);
+
+                var text_per = '<input style="width:30px" type="text" id="brand_per_2_'+val+'" name="brand_percent_2[]" class="brand_percent_2" data="'+val+'" value="'+$('#percent_2').val()+'">';
+                $('#brand_percent_2_'+val).html(text_per);
+
+                $('.brand_percent_2').keyup(function(){
+                    var percent = $(this).val();
+                    var brand = $(this).attr('data');
+
+                    var arr = $('select#tire_quotation_pattern_2').val();
+                    var arr2 = $('select#tire_quotation_size_2').val();
+
+                    for (var i = 0; i < arr.length; i++) {
+                        for (var j = 0; j < arr2.length; j++) {
+                                check_price(arr[i],arr2[j],brand,"#pattern_size_2_"+arr[i]+" .size_2_"+arr2[j]+" .price_2_"+brand+" input[class=price_2][data="+brand+"]",percent);
+                            
+                        }
+                    }
+
+                });
+
+                if (arr2 != null) {
+                    for (var j = 0; j < arr2.length; j++) {
+                        if(arr != null){
+                            for (var i = 0; i < arr.length; i++) {
+                                var text2 = '<input style="width:100px" type="text" name="price_2[]" class="price_2" data="'+val+'" >';
+                                $('#pattern_size_2_'+arr2[j]+' .size_2_'+arr[i]+' .price_2_'+val).html(text2);
+                                $('#pattern_size_2_'+arr2[j]+' .size_2_'+arr[i]+' .price_2_'+val+' input').css("background-color",CSS_COLOR_NAMES[val]);
+
+                                check_price(arr2[j],arr[i],val,"#pattern_size_2_"+arr2[j]+" .size_2_"+arr[i]+" .price_2_"+val+" input[class=price_2][data="+val+"]",$('#brand_per_2_'+val).val());
+                                
+                            }
+                        }
+                    }
+                    
+                }
+          }
+       },
+       uncheckAll: function(){
+            <?php foreach ($tire_quotation_patterns as $tire_quotation_pattern) { ?>
+                <?php foreach ($tire_quotation_sizes as $tire_quotation_size) { ?>
+                    <?php foreach ($tire_quotation_brands as $tire_quotation_brand) { ?>
+                        $('#brand_2_<?php echo $tire_quotation_brand->tire_quotation_brand_id ?>').html('');
+                        $('#brand_percent_2_<?php echo $tire_quotation_brand->tire_quotation_brand_id ?>').html('');
+                        $('#pattern_size_2_<?php echo $tire_quotation_pattern->tire_quotation_pattern_id ?> .size_2_<?php echo $tire_quotation_size->tire_quotation_size_id ?> .price_2_<?php echo $tire_quotation_brand->tire_quotation_brand_id ?>').html('');
+                    <?php } ?>
+                <?php } ?>
+            <?php } ?>
+       },
+    });
+
+    $("select#tire_quotation_size_2").multiselect({
+       click: function(event, ui){
+        var arr = $('select#tire_quotation_pattern_2').val();
+        var arr2 = $('select#tire_quotation_brand_2').val();
+            if(ui.checked == 1){
+                var text = '<input style="width:80px" disabled type="text" name="size_2[]" class="size_2" data="'+ui.value+'" value="'+ui.text+'">';
+                for (var i = 0; i < arr.length; i++) {
+                    $('#pattern_size_2_'+arr[i]+' table .size_2_'+ui.value+' td').eq(0).html(text);
+                    if (arr2 != null) {
+                        for (var j = 0; j < arr2.length; j++) {
+                            var text2 = '<input style="width:100px" type="text" name="price_2[]" class="price_2" data="'+arr2[j]+'" >';
+                            $('#pattern_size_2_'+arr[i]+' .size_2_'+ui.value+' .price_2_'+arr2[j]).html(text2);
+                            $('#pattern_size_2_'+arr[i]+' .size_2_'+ui.value+' .price_2_'+arr2[j]+' input').css("background-color",CSS_COLOR_NAMES[arr2[j]]);
+
+                            check_price(arr[i],ui.value,arr2[j],"#pattern_size_2_"+arr[i]+" .size_2_"+ui.value+" .price_2_"+arr2[j]+" input[class=price_2][data="+arr2[j]+"]",$('#brand_per_2_'+arr2[j]).val());
+                        }
+                    }
+                    
+                }
+                arr_text[ui.value] = ui.text;
+            }
+            else{
+                for (var i = 0; i < arr.length; i++) {
+                    $('#pattern_size_2_'+arr[i]+' table .size_2_'+ui.value+' td').html('');
+                }
+            }
+       },
+       checkAll: function(){
+            var arr = $('select#tire_quotation_pattern_2').val();
+            var arr2 = $('select#tire_quotation_brand_2').val();
+
+          var n = $("select#tire_quotation_size_2 option").length;
+          for (var z = 0; z < n; z++) {
+              var val = $("select#tire_quotation_size_2 option").eq(z).val();
+              var tex = $("select#tire_quotation_size_2 option").eq(z).text();
+
+               var text = '<input style="width:80px" disabled type="text" name="size_2[]" class="size_2" data="'+val+'" value="'+tex+'">';
+                for (var i = 0; i < arr.length; i++) {
+                    $('#pattern_size_2_'+arr[i]+' table .size_2_'+val+' td').eq(0).html(text);
+                    if (arr2 != null) {
+                        for (var j = 0; j < arr2.length; j++) {
+                            var text2 = '<input style="width:100px" type="text" name="price_2[]" class="price_2" data="'+arr2[j]+'" >';
+                            $('#pattern_size_2_'+arr[i]+' .size_2_'+val+' .price_2_'+arr2[j]).html(text2);
+                            $('#pattern_size_2_'+arr[i]+' .size_2_'+val+' .price_2_'+arr2[j]+' input').css("background-color",CSS_COLOR_NAMES[arr2[j]]);
+
+                            check_price(arr[i],val,arr2[j],"#pattern_size_2_"+arr[i]+" .size_2_"+val+" .price_2_"+arr2[j]+" input[class=price_2][data="+arr2[j]+"]",$('#brand_per_2_'+arr2[j]).val());
+                        }
+                    }
+                    
+                }
+          }
+       },
+       uncheckAll: function(){
+            <?php foreach ($tire_quotation_patterns as $tire_quotation_pattern) { ?>
+                <?php foreach ($tire_quotation_sizes as $tire_quotation_size) { ?>
+                    $('#pattern_size_2_<?php echo $tire_quotation_pattern->tire_quotation_pattern_id ?> table .size_2_<?php echo $tire_quotation_size->tire_quotation_size_id ?> td').html('');
+                <?php } ?>
+            <?php } ?>
+       },
+    });
+
+    $("select#tire_quotation_pattern_2").multiselect({
+        
+       click: function(event, ui){
+        var arr = $('select#tire_quotation_size_2').val();
+        var arr2 = $('select#tire_quotation_brand_2').val();
+            if(ui.checked == 1){
+                var text = '<input style="width:50px" disabled type="text" name="pattern_2[]" class="pattern_2" data="'+ui.value+'" value="'+ui.text+'">';
+                $('#pattern_2_'+ui.value).html(text);
+                if(arr != null){
+                    for (var i = 0; i < arr.length; i++) {
+                        var text = '<input style="width:80px" disabled type="text" name="size_2[]" class="size_2" data="'+arr[i]+'" value="'+arr_text[arr[i]]+'">';
+                        $('#pattern_size_2_'+ui.value+' table .size_2_'+arr[i]+' td').eq(0).html(text);
+                        if(arr2 != null){
+                            for (var j = 0; j < arr2.length; j++) {
+                                var text2 = '<input style="width:100px" type="text" name="price_2[]" class="price_2" data="'+arr2[j]+'" value="'+arr2[j]+'">';
+                                $('#pattern_size_2_'+ui.value+' .size_2_'+arr[i]+' .price_2_'+arr2[j]).html(text2);
+                                $('#pattern_size_2_'+ui.value+' .size_2_'+arr[i]+' .price_2_'+arr2[j]+' input').css("background-color",CSS_COLOR_NAMES[arr2[j]]);
+
+                                check_price(ui.value,arr[i],arr2[j],"#pattern_size_2_"+ui.value+" .size_2_"+arr[i]+" .price_2_"+arr2[j]+" input[class=price_2][data="+arr2[j]+"]",$('#brand_per_2_'+arr2[j]).val());
+                            }
+                        }
+                        
+                    }
+                }
+                
+            }
+            else{
+                $('#pattern_2_'+ui.value).html('');
+                if(arr != null){
+                    for (var i = 0; i < arr.length; i++) {
+                        $('#pattern_size_2_'+ui.value+' table .size_2_'+arr[i]+' td').html('');
+                    }
+                }
+            }
+       },
+       checkAll: function(){
+        var arr = $('select#tire_quotation_size_2').val();
+        var arr2 = $('select#tire_quotation_brand_2').val();
+          var n = $("select#tire_quotation_pattern_2 option").length;
+          for (var z = 0; z < n; z++) {
+              var val = $("select#tire_quotation_pattern_2 option").eq(z).val();
+              var tex = $("select#tire_quotation_pattern_2 option").eq(z).text();
+                var text = '<input style="width:50px" disabled type="text" name="pattern_2[]" class="pattern_2" data="'+val+'" value="'+tex+'">';
+                $('#pattern_2_'+val).html(text);
+                if(arr != null){
+                    for (var i = 0; i < arr.length; i++) {
+                        var text = '<input style="width:80px" disabled type="text" name="size_2[]" class="size_2" data="'+arr[i]+'" value="'+arr_text[arr[i]]+'">';
+                        $('#pattern_size_2_'+val+' table .size_2_'+arr[i]+' td').eq(0).html(text);
+                        if(arr2 != null){
+                            for (var j = 0; j < arr2.length; j++) {
+                                var text2 = '<input style="width:100px" type="text" name="price_2[]" class="price_2" data="'+arr2[j]+'" value="'+arr2[j]+'">';
+                                $('#pattern_size_2_'+val+' .size_2_'+arr[i]+' .price_2_'+arr2[j]).html(text2);
+                                $('#pattern_size_2_'+val+' .size_2_'+arr[i]+' .price_2_'+arr2[j]+' input').css("background-color",CSS_COLOR_NAMES[arr2[j]]);
+
+                                check_price(val,arr[i],arr2[j],"#pattern_size_2_"+val+" .size_2_"+arr[i]+" .price_2_"+arr2[j]+" input[class=price_2][data="+arr2[j]+"]",$('#brand_per_2_'+arr2[j]).val());
+                            }
+                        }
+                        
+                    }
+                }
+          }
+       },
+       uncheckAll: function(){
+
+            <?php foreach ($tire_quotation_patterns as $tire_quotation_pattern) { ?>
+                $('#pattern_2_<?php echo $tire_quotation_pattern->tire_quotation_pattern_id ?>').html('');
+                <?php foreach ($tire_quotation_sizes as $tire_quotation_size) { ?>
+                    $('#pattern_size_2_<?php echo $tire_quotation_pattern->tire_quotation_pattern_id ?> table .size_2_<?php echo $tire_quotation_size->tire_quotation_size_id ?> td').html('');
+                <?php } ?>
+            <?php } ?>
+            
+       },
+    });
+});
+</script>

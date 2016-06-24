@@ -1,0 +1,415 @@
+<?php
+$url_order = 'ASC';
+if ($order_by == 'account_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'account_number')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'account_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> SỐ TÀI KHOẢN</h1></center>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Nhập tài khoản mới</a>
+    <a class="add_button" id="import_excel" href="<?= $this->url('account/import')?>">Import Excel</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Search">
+        <input type="button" name="" id="search-submit" class="button-search" value="Search" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+       
+    </div>
+    <div class="tablenav top">
+
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Select</option>
+                
+                <option value="delete">Delete</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Apply" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">All</option>
+			<option value="15">15 items</option>
+            <option value="20">20 items</option>
+            <option value="50">50 items</option>
+            <option selected="selected" value="100">100 items</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Apply" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+        
+      </div>
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+        <th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','account_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'account_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','account_number','<?php echo $url_order ?>')">Số tài khoản <?php if ($order_by == 'account_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','account_name','<?php echo $url_order ?>')">Tên tài khoản <?php if ($order_by == 'account_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','account_parent','<?php echo $url_order ?>')">Tài khoản <?php if ($order_by == 'account_parent'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        <th class="fix"></th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($accounts as $account) : ?>
+    
+        
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $account->account_id ?>" class="edit_tr" <?php echo ($account->account_parent == "" || $account->account_parent == 0)?'style="font-weight:bold"':'style="font-style:italic"' ?> >
+            
+            <td>
+                <input name="check[]" type="checkbox" class="checkbox" value="<?php echo $account->account_id ?>">
+            </td>
+            
+            <td  class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="account_number_<?php echo $account->account_id; ?>"><?php echo $account->account_number; ?></td>
+            <td class="fix" id="account_name_<?php echo $account->account_id; ?>"><?php echo $account->account_name; ?></td>
+            
+            <td class="fix" data="<?php echo $account->account_parent; ?>" id="account_parent_<?php echo $account->account_id; ?>"><?php echo isset($account_data[$account->account_parent])?$account_data[$account->account_parent]:""; ?></td>
+            <td>
+                <button class="error" onclick="del(<?php echo $account->account_id ?>)" >Xóa</button>
+                
+               
+            </td>
+        </tr>
+
+
+    <?php endforeach; ?>
+     
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div style="display:none" id="lasted"></div>
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Tài khoản </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_account" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            
+                            <td>Số TK</td>
+                            <td>
+                                <input style="width:80px"  type="text" id="account_number"  name="account_number" tabindex="1"  required="required" >
+                                
+                            </td>
+                            <td>Tên TK</td>
+                            <td>
+                                <input   type="text" id="account_name"  name="account_name" tabindex="2"  required="required" >
+                                
+                            </td>
+                            
+                            <td>Tài khoản</td>
+                            <td>
+                                <select name="account_parent" id="account_parent" tabindex="3">
+                                    <option value="0">Tài khoản cấp cao</option>
+                                    <?php foreach ($account_parents as $account_parent) { ?>
+                                        <option value="<?php echo $account_parent->account_id ?>"><?php echo $account_parent->account_number." - ".$account_parent->account_name ?></option>
+                                    <?php } ?>
+                                </select>
+                                
+                            </td>
+                            
+                            
+                        </tr>
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+                            <td>
+                                <input type="submit" name="submit" value="Submit" tabindex="4">
+                                
+                            </td>
+                            <td>
+                                <input type="reset" name="reset" value="Reset" tabindex="5">
+                            </td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+
+
+<script type="text/javascript">
+
+
+  
+$('.add-field').hide();  
+
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);      
+    }
+    
+});
+
+
+
+    $('.edit_tr').click(function(e){
+        if(e.target != '[object HTMLButtonElement]' && e.target != '[object HTMLSpanElement]' && !$('.checkbox').is(':focus')) { 
+            if(!$('.checkbox').is(':focus')){
+                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+            }
+            
+            var account_number = $(this).find("#account_number_"+$(this).attr('id')).text();
+            var account_name = $(this).find("#account_name_"+$(this).attr('id')).text();
+            var account_parent = $(this).find("#account_parent_"+$(this).attr('id')).attr('data');
+
+            //alert(cost_code);
+            $('#yes').val($(this).attr('id'));
+            
+            $("#account_parent option[value=" + account_parent + "]").attr('selected', 'selected');
+            $('#account_number').val(account_number);
+            $('#account_name').val(account_name);
+
+            $( ".add-field" ).dialog( "open" );
+        }
+
+        
+        
+    });
+
+
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+     $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
+     
+        $('#account_number').val("");
+        $('#account_name').val("");
+        $("#account_parent option[value=0]").attr('selected', 'selected');
+                
+        $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+    $( ".add-field" ).dialog( "open" );
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_account").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var account_number = $('#account').attr('value');
+                    var account_name = $('#account_name').attr('value');
+                    var account_parent = $('#account_parent').attr('value');
+                    
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/account/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            
+                            account_number: account_number,
+                            account_name: account_name,
+                            account_parent: account_parent,
+
+                            yes: yes,
+
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (yes != "") {
+                                if (answer.trim() != "Tài khoản đã tồn tại") {
+                                    setTimeout(function() {
+                                            sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                          }, 200);
+                                }
+                            }
+                            else{
+                                if (answer.trim() != "Tài khoản đã tồn tại") {
+                                    setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+                                }
+                                
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+
+
+
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+    $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-]/g, "")
+        ;
+      });
+    });
+    
+
+});
+
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+function set_item(item,name) {
+    // change input value
+    $('#work_code').val(item);
+    $("#work_code").attr("data",name);
+    
+    $('#code_list_id').hide();
+    $('#work_code').focus();
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+
+ 
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+
+</script>
+</div>
+
+<script type="text/javascript">
+
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Tài khoản",
+    hide: 'fold',
+    show: 'blind'
+});
+
+
+
+$(".show").click(function(){
+    $("#winpopup").dialog({
+        draggable:true,
+        modal: true,
+        autoOpen: false,
+        width: "90%",
+        resizable: false,
+        position: "top",
+        title:'Chi tiết',
+        buttons: {
+            OK: function() {
+                $( this ).dialog( "close" );
+            },
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        }
+    });
+    $("#winpopup").load($(this).attr('href'));
+    $("#winpopup").dialog("open");
+    return false;
+});
+
+</script>
+

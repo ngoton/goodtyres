@@ -1,0 +1,128 @@
+
+<div class="slide-content" id="thong-tin-khac">
+        <div class="item-page">
+            <h2>Thông tin khác</h2>
+
+            <p class="map" id="mapid1" style="height: 400px; width: 100%"></p>
+
+
+            <p>- Hotline: </p>
+            <p>    
+                <a href="skype:cmghotline?chat">
+                    <img alt='Skype' title="Hotline - Skype" src='http://mystatus.skype.com/smallclassic/cmghotline' border='0' >
+                </a> 
+                 - 096 525 3456
+            </p>
+            <p>- Mr.Thanh: </p>
+            <p>    
+                <a href="skype:phunggiangthanh?chat">
+                    <img alt='Skype' title="Hotline - Skype" src='http://mystatus.skype.com/smallclassic/phunggiangthanh' border='0' >
+                </a> 
+                 - 0933 639 815
+            </p>
+            
+            <p>- Mr.Chung: </p>
+            <p>    
+                <a href="skype:chungtcmt?chat">
+                    <img alt='Skype' title="Hotline - Skype" src='http://mystatus.skype.com/smallclassic/chungtcmt' border='0' >
+                </a> 
+                 - 096 497 44 66
+            </p>
+            <p>- Mr.Tien: </p>
+            <p>    
+                <a href="skype:pettertien?chat">
+                    <img alt='Skype' title="Hotline - Skype" src='http://mystatus.skype.com/smallclassic/pettertien' border='0' >
+                </a> 
+                 - 0933 202 815
+            </p>
+            <p>- Ms.Oanh: </p>
+            <p>    
+                <a href="skype:zen281993?chat">
+                    <img alt='Skype' title="Hotline - Skype" src='http://mystatus.skype.com/smallclassic/zen281993' border='0' >
+                </a> 
+                 - 0933 199 815
+            </p>
+            <p>- Ms.Lan Anh: </p>
+            <p>    
+                <a href="skype:lanna937?chat">
+                    <img alt='Skype' title="Hotline - Skype" src='http://mystatus.skype.com/smallclassic/lanna937' border='0' >
+                </a> 
+                 - 093 36 36 845
+            </p>
+            <p>- Ms.Quynh: </p>
+            <p>    
+                <a href="skype:lavyn.quynh?chat">
+                    <img alt='Skype' title="Hotline - Skype" src='http://mystatus.skype.com/smallclassic/lavyn.quynh' border='0' >
+                </a> 
+                 
+            </p>
+        </div>
+    </div> 
+
+<script type="text/javascript">
+    closeSidepage('#thong-tin-khac');
+   openSidepage('#thong-tin-khac');
+</script>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&language=vi" type="text/javascript"></script>
+    <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
+    <script type="text/javascript">
+    
+        function initialize() {
+            var text1 = "<div class='maptitle'><p><img src='public/img/cmg.png' /></p><p style='font-weight:bold;color:#EEFF53;font-size:18px'>Cai Mep Global Logistics</p></div><div class='mapcontent'><p>Add: Số 29, QL 51, Phước Tân, Biên Hòa, Đồng Nai, Việt Nam</p><p>Tel: 0613 937 677</p><p>Email: biz@caimeptrading.com</p><p>Website: <a href='<?php echo BASE_URL ?>'><?php echo BASE_URL ?></a></p></div>";
+            var x1 = 10.888929;
+            var y1 = 106.896855;
+            var z1 = 17;
+            var xdiv1 = "mapid1";
+            mapGoogle(x1, y1, z1, text1, xdiv1);
+
+            
+        }
+$(window).load(function(){
+    initialize();
+});
+
+
+        function mapGoogle(xmap, ymap, zmap, xText, xdiv) {
+            var loc, map, marker, infobox;
+
+            loc = new google.maps.LatLng(xmap, ymap, zmap);
+
+            map = new google.maps.Map(document.getElementById(xdiv), {
+                zoom: 13,
+                center: loc,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            marker = new google.maps.Marker({
+                map: map,
+                position: loc,
+                visible: true
+            });
+
+            infobox = new InfoBox({
+                content: xText,
+                disableAutoPan: true,
+                pixelOffset: new google.maps.Size(-138, -103),
+                zIndex: null,
+                closeBoxURL: "public/images/close.png",
+                infoBoxClearance: new google.maps.Size(1, 1)
+            });
+
+            google.maps.event.addListener(marker, 'click', function () {
+                infobox.open(map, marker);
+                map.panTo(loc);
+                marker.setVisible(false);
+            });
+
+            google.maps.event.addListener(infobox, 'closeclick', function () {
+                marker.setVisible(true);
+                // then, remove the infowindows name from the array
+            });
+
+            infobox.open(map, marker);
+            map.panTo(loc);
+            marker.setVisible(false);
+
+
+        }
+    </script>

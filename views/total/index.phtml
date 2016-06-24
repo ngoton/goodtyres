@@ -1,0 +1,585 @@
+<style type="text/css">
+    .table_data tr:nth-child(even) {background: rgba(255, 240, 250, 0.59)}
+    .table_data tr:nth-child(odd) {background: #FFF}
+    .table_data tr:hover {cursor: pointer;}
+    .table_data td.approve {color: green}
+    .table_data td.error {color: red}
+    #show {max-height: 500px; z-index: 99999;}
+</style>
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> LỢI NHUẬN - CHI PHÍ </h1></center>
+
+	<div class="search-box">
+        <form id="report" name="report" action method="post">
+        <div class="add-box">
+                  
+            Tuần <input style="width:30px" type="search" name="tuan" id="tuan" placeholder="Chọn tuần" <?php if(isset($tuan)) echo "value='$tuan'"; ?> >
+            Năm <input style="width:50px" type="search" name="nam" id="nam" placeholder="Chọn năm" <?php if(isset($nam)) echo "value='$nam'"; ?> >
+            
+            
+        </div>
+        <div class="add-box">
+                  
+             <input type="submit" name="submit" id="xem" value="Xem"> 
+            
+        </div>
+        </form>
+    </div>
+
+</div>
+
+<table class="table_data" style="width:80%; margin: 0 auto;">
+<thead>
+    <tr>
+    	<th class="fix" colspan="2" rowspan="2" style="width:30px" >STT</th>
+        <th class="fix" colspan="4">
+            <a >Phát sinh tuần <?php echo $tuan ?> </a>
+        </th> 
+    </tr>
+    <tr>
+        <th  class="fix" style="width:70px">
+            <a >Lô hàng </a>
+        </th>
+        <th  class="fix" style="width:500px">
+            <a >Nội dung </a>
+        </th>
+        <th  class="fix" style="width:150px">
+            <a >Lợi nhuận </a>
+        </th>
+        <th  class="fix" style="width:150px">
+            <a >Chi phí </a>
+        </th>
+        
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $stt=1; ?>
+    <?php $ln_sale = 0; $cp_sale = 0; $ln_trading = 0; $cp_trading = 0; $ln_agent = 0; $cp_agent = 0; $ln_invoice = 0; $cp_invoice = 0; $ln_hc = 0; $cp_hc = 0; $tongco = 0; $tongno = 0; ?>
+        <?php foreach ($sales as $sale) { ?>
+        <tr class="<?php echo $stt ?>" >
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->comment ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->revenue+$sale->revenue_vat) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->cost+$sale->cost_vat) ?>
+            </td>
+            
+        </tr>
+
+        <?php
+
+            $tongco += ($sale->revenue+$sale->revenue_vat);
+            $tongno += ($sale->cost+$sale->cost_vat);   
+
+            $ln_sale += ($sale->revenue+$sale->revenue_vat);
+            $cp_sale += ($sale->cost+$sale->cost_vat);     
+                  
+        ?>
+        <?php } ?>
+        
+
+        <?php foreach ($tradings as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->comment ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->revenue+$sale->revenue_vat+$sale->other_revenue+$sale->other_revenue_vat) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->cost+$sale->cost_vat) ?>
+            </td>
+            
+        </tr>
+
+        <?php
+
+            $tongco += ($sale->revenue+$sale->revenue_vat+$sale->other_revenue+$sale->other_revenue_vat);
+            $tongno += ($sale->cost+$sale->cost_vat);   
+
+            $ln_trading += ($sale->revenue+$sale->revenue_vat+$sale->other_revenue+$sale->other_revenue_vat);
+            $cp_trading += ($sale->cost+$sale->cost_vat);     
+                  
+        ?>
+        <?php } ?>
+        
+
+        <?php foreach ($agents as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->name ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->total_offer) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->total_cost+$sale->bill_cost-(($sale->cost_17*160000)+($sale->cost_18*40000))) ?>
+            </td>
+            
+        </tr>
+        <?php
+            $tongco += ($sale->total_offer+$agent_data_cost[$sale->agent_id]);
+            $tongno += ($sale->total_cost+$sale->bill_cost-(($sale->cost_17*160000)+($sale->cost_18*40000)));   
+
+            $ln_agent += ($sale->total_offer+$agent_data_cost[$sale->agent_id]);
+            $cp_agent += ($sale->total_cost+$sale->bill_cost-(($sale->cost_17*160000)+($sale->cost_18*40000)));  
+  
+        ?>
+        <?php } ?>
+        <?php foreach ($manifests as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->comment ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->revenue_vat) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->cost_sg+$sale->cost_cm+$sale->driver_cost+$sale->commission_cost+$sale->other_cost) ?>
+            </td>
+            
+        </tr>
+        <?php
+            $tongco += ($sale->revenue_vat);
+            $tongno += ($sale->cost_sg+$sale->cost_cm+$sale->driver_cost+$sale->commission_cost+$sale->other_cost);   
+
+            $ln_agent += ($sale->revenue_vat);
+            $cp_agent += ($sale->cost_sg+$sale->cost_cm+$sale->driver_cost+$sale->commission_cost+$sale->other_cost);
+        ?>
+        <?php } ?>
+        
+
+        <?php foreach ($invoices as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->invoice_number ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->comment ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->receive) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->pay1+$sale->pay2+$sale->pay3) ?>
+            </td>
+            
+        </tr>
+        <?php
+            $tongco += ($sale->receive);
+            $tongno += ($sale->pay1+$sale->pay2+$sale->pay3);   
+
+            $ln_invoice += ($sale->receive);
+            $cp_invoice += ($sale->pay1+$sale->pay2+$sale->pay3);
+        ?>
+        <?php } ?>
+        
+        
+        
+        <?php foreach ($costs as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                <?php echo $sale->comment ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->total>0?$sale->total:null) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->total<0?str_replace('-', "", $sale->total):null) ?>
+            </td>
+        </tr>
+        <?php
+            $tongco += ($sale->total>0?$sale->total:null);
+            $tongno += ($sale->total<0?str_replace('-', "", $sale->total):null);   
+
+            $ln_hc += ($sale->total>0?$sale->total:null);
+            $cp_hc += ($sale->total<0?str_replace('-', "", $sale->total):null);
+        ?>
+        <?php } ?>
+        <tr style="font-weight:bold; color:rgb(0, 71, 255);">
+            <td></td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                Tổng Sale
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($ln_sale) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($cp_sale) ?>
+            </td>
+            
+        </tr>
+        <tr style="font-weight:bold; color:rgb(255, 0, 194);">
+            <td></td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($ln_sale-$cp_sale) ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            
+        </tr>
+        <tr style="font-weight:bold; color:rgb(0, 71, 255);">
+            <td></td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                Tổng Trading
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($ln_trading) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($cp_trading) ?>
+            </td>
+            
+        </tr>
+        <tr style="font-weight:bold; color:rgb(255, 0, 194);">
+            <td></td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($ln_trading-$cp_trading) ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            
+        </tr>
+        <tr style="font-weight:bold; color:rgb(0, 71, 255);">
+            <td></td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                Tổng Agent
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($ln_agent) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($cp_agent) ?>
+            </td>
+            
+        </tr>
+        <tr style="font-weight:bold; color:rgb(255, 0, 194);">
+            <td></td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($ln_agent-$cp_agent) ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            
+        </tr>
+        <tr style="font-weight:bold; color:rgb(0, 71, 255);">
+            <td></td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                Tổng TCMT
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($ln_invoice) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($cp_invoice) ?>
+            </td>
+            
+        </tr>
+        <tr style="font-weight:bold; color:rgb(255, 0, 194);">
+            <td></td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($ln_invoice-$cp_invoice) ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            
+        </tr>
+        <tr style="font-weight:bold; color:rgb(0, 71, 255);">
+            <td></td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                Tổng Hành chính
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($ln_hc) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($cp_hc) ?>
+            </td>
+            
+        </tr>
+        <tr style="font-weight:bold; color:rgb(255, 0, 194);">
+            <td></td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+            </td>
+            <td class="fix">
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($ln_hc-$cp_hc) ?>
+            </td>
+            
+        </tr>
+        
+        <tr style="font-weight:bold; background-color:rgba(203, 226, 249, 0.71); color:red">
+            <td class="fix" colspan="3"></td>
+            <td class="fix">Tổng cộng</td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($tongco) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($tongno) ?>
+            </td>
+        </tr>
+        <tr style="font-weight:bold; background-color:rgba(203, 226, 249, 0.71); color:rgb(0, 71, 255);">
+            <td class="fix" colspan="4"></td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(($tongco-$tongno)>0?($tongco-$tongno):null) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(($tongco-$tongno)<0?($tongco-$tongno):null) ?>
+            </td>
+        </tr>
+        
+   </tbody>
+</table>
+
+<div id="show" style="position:absolute; box-shadow: 0px 0px 5px rgb(145, 217, 244);"></div>
+
+<script type="text/javascript">
+    $('.vendor').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/general/getVendor',
+            type: 'POST',
+            data: {vendor:val, tuantruoc: tuantruoc, tuan: tuan},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.customer').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/general/getCustomer',
+            type: 'POST',
+            data: {customer:val, tuantruoc: tuantruoc, tuan: tuan},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.staff').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/general/getStaff',
+            type: 'POST',
+            data: {staff:val, tuantruoc: tuantruoc, tuan: tuan},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.bank').click(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/general/getBank',
+            type: 'POST',
+            data: {bank:val, tuantruoc: tuantruoc, tuan: tuan},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.checkbox').toggle(function(){
+        var val = $(this).val();
+        
+        $('.'+val).css({
+            backgroundColor: 'rgba(169, 242, 172, 0.6)',
+        });
+        
+
+    },function(){
+        var val = $(this).val();
+        
+        $('.'+val).css({
+            backgroundColor: 'rgba(255, 255, 255, 0)',
+        });
+        
+
+    });
+$('.table_data tbody tr').toggle(function(){
+        var val = $(this).val();
+        
+        $('.'+val).css({
+            backgroundColor: 'rgba(169, 242, 172, 0.6)',
+        });
+        
+
+    },function(){
+        var val = $(this).val();
+        
+        $('.'+val).css({
+            backgroundColor: 'rgba(255, 255, 255, 0)',
+        });
+        
+
+    });
+
+$(document).on('mousemove', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-30
+    });
+});
+
+$(document).keyup(function(e) {
+  
+  if (e.keyCode == 27){   // esc
+    $('#show').html("");
+  }
+});
+
+var w = $(".table_data").width();
+
+      $(".container").width(w);
+      $(".navbar-inner").width(w);
+      $(".navbar").width(w);
+      $("#container").width(w);
+
+</script>

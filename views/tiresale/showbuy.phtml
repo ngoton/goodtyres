@@ -1,0 +1,367 @@
+<?php $i=1; $j=1; $total=array(); $total_kvat=array(); ?>
+
+<center><h2><?php echo $tire_brand_name.' - '.$tire_size_name.' - '.$tire_pattern_name ?></h2></center>
+<div class="tabs">
+    <ul class="tab-links">
+        <?php foreach ($codes as $code) { ?>
+            <li <?php echo $i==1?'class="active"':null ?> ><a href="#tab<?php echo $i++ ?>">Chi phí <?php echo $volume[$code['code']] ?> cái</a></li>
+        <?php } ?>
+            <li ><a href="#tab<?php echo $i++ ?>">Chi phí 1 cái</a></li>
+        
+    </ul>
+ 
+    <div class="tab-content">
+        <?php foreach ($codes as $code) { ?>
+        <div class="tab <?php echo $j==1?'active':null ?>" id="tab<?php echo $j++ ?>" >
+            <div style="width:60%; margin:0 auto">
+                <table class="table_data">
+                   <thead>
+                    <tr>
+                        <td colspan="6" align="right" ><b><?php echo $lib->formatMoney($prices['rate'][$code['code']]).' / USD'; ?></b></td>
+                    </tr>
+                    <tr>
+                        <th class="fix">No</th>
+                        <th class="fix" colspan="2">Costing</th>
+                        <th class="fix">In VAT</th>
+                        <th class="fix">Ex VAT</th>
+                        <th class="fix">Total</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                    <tr>
+                        <td class="fix" rowspan="2">1</td>
+                        <td class="fix" rowspan="2">Supplier</td>
+                        <td class="fix">Shipper</td>
+                        <td class="fix"><?php echo $lib->formatMoney($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']]) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']]) ?></td>
+                        <?php $total[$code['code']] = isset($total[$code['code']])?($total[$code['code']]+$prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']]):$prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']] ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">Solow</td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney($prices['solow'][$code['code']]*$prices['rate'][$code['code']]) ?></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*1.1) ?></td>
+                        <?php $total[$code['code']] = isset($total[$code['code']])?($total[$code['code']]+($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*1.1):($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*1.1; ?>
+                        <?php $total_kvat[$code['code']] = isset($total_kvat[$code['code']])?($total_kvat[$code['code']]+$prices['solow'][$code['code']]*$prices['rate'][$code['code']]):$prices['solow'][$code['code']]*$prices['rate'][$code['code']]; ?>
+                    </tr>
+                    <tr>
+                        <td class="fix" rowspan="2">2</td>
+                        <td class="fix" rowspan="2">Bank</td>
+                        <td class="fix">Transfer</td>
+                        <td class="fix"><?php echo $lib->formatMoney(round(($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']])*0.002 + ($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*0.0005)) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round(($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']])*0.002 + ($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*0.0005)) ?></td>
+                        <?php $total[$code['code']] = isset($total[$code['code']])?($total[$code['code']]+round(($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']])*0.002 + ($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*0.0005)):round(($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']])*0.002 + ($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*0.0005) ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">Exchange</td>
+                        <td class="fix"><?php echo $lib->formatMoney(round(33*$prices['rate'][$code['code']]*$volume[$code['code']]/$tongsl)) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round(33*$prices['rate'][$code['code']]*$volume[$code['code']]/$tongsl)) ?></td>
+                        <?php $total[$code['code']] = isset($total[$code['code']])?$total[$code['code']]+round(33*$prices['rate'][$code['code']]*$volume[$code['code']]/$tongsl):round(33*$prices['rate'][$code['code']]*$volume[$code['code']]/$tongsl); ?>
+                    </tr>
+                    <tr>
+                        <td class="fix" rowspan="2">3</td>
+                        <td class="fix" rowspan="2">Shipping</td>
+                        <td class="fix">Ocean Freight</td>
+                        <td class="fix"><?php echo $lib->formatMoney($prices['ocean_freight'][$code['code']]*$prices['rate'][$code['code']]) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney($prices['ocean_freight'][$code['code']]*$prices['rate'][$code['code']]) ?></td>
+                        <?php $total[$code['code']] = isset($total[$code['code']])?($total[$code['code']]+$prices['ocean_freight'][$code['code']]*$prices['rate'][$code['code']]):$prices['ocean_freight'][$code['code']]*$prices['rate'][$code['code']] ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">Local Charge</td>
+                        <td class="fix"><?php echo $lib->formatMoney($prices['local_charge'][$code['code']]*$prices['rate'][$code['code']]) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney($prices['local_charge'][$code['code']]*$prices['rate'][$code['code']]) ?></td>
+                        <?php $total[$code['code']] = isset($total[$code['code']])?($total[$code['code']]+$prices['local_charge'][$code['code']]*$prices['rate'][$code['code']]):$prices['local_charge'][$code['code']]*$prices['rate'][$code['code']] ?>
+                    </tr>
+                    <tr>
+                        <td class="fix" rowspan="2">4</td>
+                        <td class="fix" rowspan="2">Clearance</td>
+                        <td class="fix">Customs</td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney(0) ?></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(0) ?></td>
+                        <?php 
+                        /*
+                        $total[$code['code']] = isset($total[$code['code']])?($total[$code['code']]+($prices['customs_amount'][$code['code']]*$prices['rate'][$code['code']])*1.1):($prices['customs_amount'][$code['code']]*$prices['rate'][$code['code']])*1.1; 
+                        $total_kvat[$code['code']] = isset($total_kvat[$code['code']])?($total_kvat[$code['code']]+$prices['customs_amount'][$code['code']]*$prices['rate'][$code['code']]):$prices['customs_amount'][$code['code']]*$prices['rate'][$code['code']];*/
+                        $tax_amount[$code['code']] = ($prices['shipper'][$code['code']]+$prices['ocean_freight'][$code['code']])*0.25+($prices['shipper'][$code['code']]+$prices['ocean_freight'][$code['code']]+(($prices['shipper'][$code['code']]+$prices['ocean_freight'][$code['code']])*0.25))*0.1;
+                        ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">Tax</td>
+                        <td class="fix"><?php echo $lib->formatMoney(round($tax_amount[$code['code']]*$prices['rate'][$code['code']])) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round($tax_amount[$code['code']]*$prices['rate'][$code['code']])) ?></td>
+                        <?php $total[$code['code']] = isset($total[$code['code']])?($total[$code['code']]+round($tax_amount[$code['code']]*$prices['rate'][$code['code']])):round($tax_amount[$code['code']]*$prices['rate'][$code['code']]) ?>
+                    </tr>
+                    <tr>
+                        <td class="fix" rowspan="3">5</td>
+                        <td class="fix" rowspan="3">Tally</td>
+                        <td class="fix">Lift on/off</td>
+                        <td class="fix"><?php echo $lib->formatMoney($prices['lift'][$code['code']]) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney($prices['lift'][$code['code']]) ?></td>
+                        <?php $total[$code['code']] = isset($total[$code['code']])?($total[$code['code']]+$prices['lift'][$code['code']]):$prices['lift'][$code['code']] ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">Stevedore</td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney($prices['stevedore'][$code['code']]*$prices['rate'][$code['code']]) ?></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(($prices['stevedore'][$code['code']]*$prices['rate'][$code['code']])*1.1) ?></td>
+                        <?php $total[$code['code']] = isset($total[$code['code']])?($total[$code['code']]+($prices['stevedore'][$code['code']]*$prices['rate'][$code['code']])*1.1):($prices['stevedore'][$code['code']]*$prices['rate'][$code['code']])*1.1; ?>
+                        <?php $total_kvat[$code['code']] = isset($total_kvat[$code['code']])?($total_kvat[$code['code']]+$prices['stevedore'][$code['code']]*$prices['rate'][$code['code']]):$prices['stevedore'][$code['code']]*$prices['rate'][$code['code']]; ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">Transport</td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney(3500000*$volume[$code['code']]/$tongsl) ?></td>
+                        <td class="fix error"><?php echo $lib->formatMoney((3500000*$volume[$code['code']]/$tongsl)*1.1) ?></td>
+                        <?php $total[$code['code']] += (3500000*$volume[$code['code']]/$tongsl)*1.1 ?>
+                        <?php $total_kvat[$code['code']] += 3500000*$volume[$code['code']]/$tongsl; ?>
+                    </tr>
+                    
+                    <tr style="font-weight:bold; color:red">
+                        <td class="fix" colspan="3">Total cost</td>
+                        <td class="fix"></td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney($total_cost = round($total[$code['code']])) ?></td>
+                    </tr>
+                    <?php 
+                    $tongps = 0; $tongkvat=0;
+                        foreach ($costs[$code['code']] as $cost) { 
+                            $tongps += $cost->tire_excess*1.1+$cost->tire_excess_vat;
+                            $tongkvat += $cost->tire_excess;
+                        }
+                    $tax[$code['code']] = round($tongkvat*0.1);
+                    $tongps += $tax[$code['code']];
+                    ?>
+                    <tr class="cost" data="<?php echo $code['code'] ?>" style="font-weight:bold;">
+                        <td class="fix" colspan="3">Additional costs</td>
+                        <td class="fix"></td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney(round($tongps)) ?></td>
+                    </tr>
+                    
+                    <tr style="font-weight:bold;" >
+                        <td class="fix" colspan="2" >VAT</td>
+                        <td class="fix">Tax</td>
+                        <td class="fix"><?php echo $lib->formatMoney($tax_cost = round($total_kvat[$code['code']]*0.1)+$tax[$code['code']]) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix"></td>
+                    </tr>
+                    
+                    <tr style="font-weight:bold; color:red">
+                        <td class="fix" colspan="3">Total</td>
+                        <td class="fix"></td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney(round($total_cost+$tongps)) ?></td>
+                    </tr>
+                    
+                    
+                   </tbody>
+                </table>
+                </div>
+        </div>
+        <div class="tab <?php echo $j==1?'active':null ?>" id="tab<?php echo $j++ ?>" >
+            <div style="width:60%; margin:0 auto">
+                <table class="table_data">
+                   <thead>
+                    <tr>
+                        <td colspan="6" align="right" ><b><?php echo $lib->formatMoney($prices['rate'][$code['code']]).' / USD'; ?></b></td>
+                    </tr>
+                    <tr>
+                        <th class="fix">No</th>
+                        <th class="fix" colspan="2">Costing</th>
+                        <th class="fix">In VAT</th>
+                        <th class="fix">Ex VAT</th>
+                        <th class="fix">Total</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                    <tr>
+                        <td class="fix" rowspan="2">1</td>
+                        <td class="fix" rowspan="2">Supplier</td>
+                        <td class="fix">Shipper</td>
+                        <td class="fix"><?php echo $lib->formatMoney(round(($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']])/$volume[$code['code']])) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round(($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']])/$volume[$code['code']])) ?></td>
+                        <?php $total2[$code['code']] = isset($total2[$code['code']])?($total2[$code['code']]+round(($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']])/$volume[$code['code']])):round(($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']])/$volume[$code['code']]) ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">Solow</td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney(round(($prices['solow'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])) ?></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round((($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*1.1)/$volume[$code['code']])) ?></td>
+                        <?php $total2[$code['code']] = isset($total2[$code['code']])?($total2[$code['code']]+round((($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*1.1)/$volume[$code['code']])):round((($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*1.1)/$volume[$code['code']]); ?>
+                        <?php $total_kvat2[$code['code']] = isset($total_kvat2[$code['code']])?($total_kvat2[$code['code']]+round(($prices['solow'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])):round(($prices['solow'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']]); ?>
+                    </tr>
+                    <tr>
+                        <td class="fix" rowspan="2">2</td>
+                        <td class="fix" rowspan="2">Bank</td>
+                        <td class="fix">Transfer</td>
+                        <td class="fix"><?php echo $lib->formatMoney(round((round(($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']])*0.002 + ($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*0.0005))/$volume[$code['code']])) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round((round(($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']])*0.002 + ($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*0.0005))/$volume[$code['code']])) ?></td>
+                        <?php $total2[$code['code']] = isset($total2[$code['code']])?($total2[$code['code']]+round((round(($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']])*0.002 + ($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*0.0005))/$volume[$code['code']])):round((round(($prices['shipper'][$code['code']]*$prices['rate_shipper'][$code['code']])*0.002 + ($prices['solow'][$code['code']]*$prices['rate'][$code['code']])*0.0005))/$volume[$code['code']]) ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">Exchange</td>
+                        <td class="fix"><?php echo $lib->formatMoney(round(round(33*$prices['rate'][$code['code']]*$volume[$code['code']]/$tongsl)/$volume[$code['code']])) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round(round(33*$prices['rate'][$code['code']]*$volume[$code['code']]/$tongsl)/$volume[$code['code']])) ?></td>
+                        <?php $total2[$code['code']] = isset($total2[$code['code']])?$total2[$code['code']]+round(round(33*$prices['rate'][$code['code']]*$volume[$code['code']]/$tongsl)/$volume[$code['code']]):round(round(33*$prices['rate'][$code['code']]*$volume[$code['code']]/$tongsl)/$volume[$code['code']]); ?>
+                    </tr>
+                    <tr>
+                        <td class="fix" rowspan="2">3</td>
+                        <td class="fix" rowspan="2">Shipping</td>
+                        <td class="fix">Ocean Freight</td>
+                        <td class="fix"><?php echo $lib->formatMoney(round(($prices['ocean_freight'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round(($prices['ocean_freight'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])) ?></td>
+                        <?php $total2[$code['code']] = isset($total2[$code['code']])?($total2[$code['code']]+round(($prices['ocean_freight'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])):round(($prices['ocean_freight'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']]) ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">Local Charge</td>
+                        <td class="fix"><?php echo $lib->formatMoney(round(($prices['local_charge'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round(($prices['local_charge'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])) ?></td>
+                        <?php $total2[$code['code']] = isset($total2[$code['code']])?($total2[$code['code']]+round(($prices['local_charge'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])):round(($prices['local_charge'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']]) ?>
+                    </tr>
+                    <tr>
+                        <td class="fix" rowspan="2">4</td>
+                        <td class="fix" rowspan="2">Clearance</td>
+                        <td class="fix">Customs</td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney(0) ?></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(0) ?></td>
+                        <?php 
+                        /*
+                        $total[$code['code']] = isset($total[$code['code']])?($total[$code['code']]+($prices['customs_amount'][$code['code']]*$prices['rate'][$code['code']])*1.1):($prices['customs_amount'][$code['code']]*$prices['rate'][$code['code']])*1.1; 
+                        $total_kvat[$code['code']] = isset($total_kvat[$code['code']])?($total_kvat[$code['code']]+$prices['customs_amount'][$code['code']]*$prices['rate'][$code['code']]):$prices['customs_amount'][$code['code']]*$prices['rate'][$code['code']];*/
+                        $tax_amount[$code['code']] = ($prices['shipper'][$code['code']]+$prices['ocean_freight'][$code['code']])*0.25+($prices['shipper'][$code['code']]+$prices['ocean_freight'][$code['code']]+(($prices['shipper'][$code['code']]+$prices['ocean_freight'][$code['code']])*0.25))*0.1;
+                        ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">Tax</td>
+                        <td class="fix"><?php echo $lib->formatMoney(round(($tax_amount[$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round(($tax_amount[$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])) ?></td>
+                        <?php $total2[$code['code']] = isset($total2[$code['code']])?($total2[$code['code']]+round(($tax_amount[$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])):round(($tax_amount[$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']]) ?>
+                    </tr>
+                    <tr>
+                        <td class="fix" rowspan="3">5</td>
+                        <td class="fix" rowspan="3">Tally</td>
+                        <td class="fix">Lift on/off</td>
+                        <td class="fix"><?php echo $lib->formatMoney(round($prices['lift'][$code['code']]/$volume[$code['code']])) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round($prices['lift'][$code['code']]/$volume[$code['code']])) ?></td>
+                        <?php $total2[$code['code']] = isset($total2[$code['code']])?($total2[$code['code']]+round($prices['lift'][$code['code']]/$volume[$code['code']])):round($prices['lift'][$code['code']]/$volume[$code['code']]) ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">Stevedore</td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney(round(($prices['stevedore'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])) ?></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round((($prices['stevedore'][$code['code']]*$prices['rate'][$code['code']])*1.1)/$volume[$code['code']])) ?></td>
+                        <?php $total2[$code['code']] = isset($total2[$code['code']])?($total2[$code['code']]+round((($prices['stevedore'][$code['code']]*$prices['rate'][$code['code']])*1.1)/$volume[$code['code']])):round((($prices['stevedore'][$code['code']]*$prices['rate'][$code['code']])*1.1)/$volume[$code['code']]); ?>
+                        <?php $total_kvat2[$code['code']] = isset($total_kvat2[$code['code']])?($total_kvat2[$code['code']]+round(($prices['stevedore'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']])):round(($prices['stevedore'][$code['code']]*$prices['rate'][$code['code']])/$volume[$code['code']]); ?>
+                    </tr>
+                    <tr>
+                        <td class="fix">Transport</td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney(round((3500000*$volume[$code['code']]/$tongsl)/$volume[$code['code']])) ?></td>
+                        <td class="fix error"><?php echo $lib->formatMoney(round(((3500000*$volume[$code['code']]/$tongsl)*1.1)/$volume[$code['code']])) ?></td>
+                        <?php $total2[$code['code']] += round(((3500000*$volume[$code['code']]/$tongsl)*1.1)/$volume[$code['code']]) ?>
+                        <?php $total_kvat2[$code['code']] += round((3500000*$volume[$code['code']]/$tongsl)/$volume[$code['code']]); ?>
+                    </tr>
+                    
+                    <tr style="font-weight:bold; color:red">
+                        <td class="fix" colspan="3">Total cost</td>
+                        <td class="fix"></td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney($total_cost2 = round($total2[$code['code']])) ?></td>
+                    </tr>
+                    <?php 
+                    $tongps2 = 0; $tongkvat2=0;
+                        foreach ($costs[$code['code']] as $cost) { 
+                            $tongps2 += $cost->tire_excess*1.1+$cost->tire_excess_vat;
+                            $tongkvat2 += $cost->tire_excess;
+                        }
+                    $tax2[$code['code']] = round($tongkvat2*0.1);
+                    $tongps2 += $tax2[$code['code']];
+                    ?>
+                    <tr class="cost" data="<?php echo $code['code'] ?>" style="font-weight:bold;">
+                        <td class="fix" colspan="3">Additional costs</td>
+                        <td class="fix"></td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney(round($tongps2/$volume[$code['code']])) ?></td>
+                    </tr>
+                    
+                    <tr style="font-weight:bold;" >
+                        <td class="fix" colspan="2" >VAT</td>
+                        <td class="fix">Tax</td>
+                        <td class="fix"><?php echo $lib->formatMoney($tax_cost2 = round(round($total_kvat2[$code['code']]*0.1)+$tax2[$code['code']]/$volume[$code['code']])) ?></td>
+                        <td class="fix"></td>
+                        <td class="fix"></td>
+                    </tr>
+                    
+                    <tr style="font-weight:bold; color:red">
+                        <td class="fix" colspan="3">Total</td>
+                        <td class="fix"></td>
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $lib->formatMoney(round($total_cost2+$tongps2/$volume[$code['code']])) ?></td>
+                    </tr>
+                    
+                    
+                   </tbody>
+                </table>
+                </div>
+        </div>
+        <?php } ?>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+    jQuery('.tabs .tab-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+        // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).slideDown(300).siblings().slideUp(300);
+ 
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+ 
+        e.preventDefault();
+    });
+
+    jQuery('.tabs .tab-left a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+ 
+        // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).slideDown(300).siblings().slideUp(300);
+ 
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+ 
+        e.preventDefault();
+    });
+});
+
+$('.cost').toggle(function(){
+    var code = $(this).attr('data');
+    $('.excess_cost_'+code).slideDown(300);
+},function(){
+    var code = $(this).attr('data');
+    $('.excess_cost_'+code).slideUp(300);
+});
+</script>
+<style type="text/css">
+    .cost:hover{
+        cursor: pointer;
+        background: rgba(67, 169, 226, 0.56);
+    }
+</style>

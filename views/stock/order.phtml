@@ -1,0 +1,53 @@
+<?php $l=1 ; $tong=0;?>
+<table class="table_data">
+<thead>
+    <tr>
+        <th class="fix">
+            <a class="sort">STT</a>
+        </th>
+        <th class="fix">
+            <a class="sort" >Ngày </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Sale </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Thương hiệu </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Size </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Mã gai </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Số lượng đặt </a>
+        </th>
+        
+           
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($tire_orders as $tire_order) : 
+        $tong += $tire_order->tire_number;
+    ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_order->order_tire_list_id ?>" class="edit_tr" data="<?php echo $_SESSION['userid_logined']==$tire_order->sale?1:0 ?>">
+            <td class="fix"><?php echo $l++; ?></td>
+            <td class="fix"  id="order_tire_date_<?php echo $tire_order->order_tire_list_id; ?>"><?php echo $lib->hien_thi_ngay_thang($tire_order->order_tire_date) ?></td>
+            <td class="fix"  id="sale_<?php echo $tire_order->order_tire_list_id; ?>"><?php echo $tire_order->username; ?></td>
+            <td class="fix" data="<?php echo $tire_order->tire_brand; ?>"  id="tire_brand_<?php echo $tire_order->order_tire_list_id; ?>"><?php echo $tire_order->tire_brand_name; ?></td>
+            <td class="fix" data="<?php echo $tire_order->tire_size; ?>" id="tire_size_<?php echo $tire_order->order_tire_list_id; ?>"><?php echo $tire_order->tire_size_number; ?></td>
+            <td class="fix" data="<?php echo $tire_order->tire_pattern; ?>" id="tire_pattern_<?php echo $tire_order->order_tire_list_id; ?>">
+                <?php echo $tire_order->tire_pattern_name ?>
+            </td>
+            <td class="fix"  id="tire_number_<?php echo $tire_order->order_tire_list_id; ?>"><?php echo $tire_order->tire_number; ?></td>
+            
+        </tr>
+    <?php endforeach; ?>
+    <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="6" >Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
+    </tr>
+   </tbody>
+</table>

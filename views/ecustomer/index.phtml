@@ -1,0 +1,381 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'e_customer_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'e_customer_co')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'e_e_customer_address')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'e_customer_phone')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'e_customer_email')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'e_customer_contact')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'customer_status')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'e_customer_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> DANH SÁCH KHÁCH HÀNG </h1></center>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm khách hàng mới</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="2">Hiển thị 2 giá trị</option>
+            <option value="5">Hiển thị 5 giá trị</option>
+            <option value="8">Hiển thị 8 giá trị</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','e_customer_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'e_customer_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','e_customer_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'e_customer_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','e_customer_co','<?php echo $url_order ?>')">Tên khách hàng <?php if ($order_by == 'e_customer_co'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','e_e_customer_address','<?php echo $url_order ?>')">Địa chỉ <?php if ($order_by == 'e_customer_address'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','e_customer_phone','<?php echo $url_order ?>')">Số điện thoại <?php if ($order_by == 'e_customer_phone'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','e_customer_email','<?php echo $url_order ?>')">Email <?php if ($order_by == 'e_customer_email'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>   
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','e_customer_contact','<?php echo $url_order ?>')">Người liên hệ <?php if ($order_by == 'e_customer_contact'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>   
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_status','<?php echo $url_order ?>')">Trạng thái <?php if ($order_by == 'customer_status'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($customers as $customer) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $customer->e_customer_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $customer->e_customer_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix"  id="e_customer_date_<?php echo $customer->e_customer_id; ?>"><?php echo $lib->hien_thi_ngay_thang($customer->e_customer_date) ?></td>
+            <td class="fix"  id="e_customer_co_<?php echo $customer->e_customer_id; ?>"><?php echo $customer->e_customer_co ?></td>
+            <td class="fix" id="e_customer_address_<?php echo $customer->e_customer_id; ?>"><?php echo $customer->e_customer_address; ?></td>
+            <td class="fix" id="e_customer_phone_<?php echo $customer->e_customer_id; ?>"><?php echo $customer->e_customer_phone; ?></td>
+            <td class="fix" id="e_customer_email_<?php echo $customer->e_customer_id; ?>"><?php echo $customer->e_customer_email; ?></td>
+            <td class="fix" id="e_customer_contact_<?php echo $customer->e_customer_id; ?>"><?php echo $customer->e_customer_contact; ?></td>
+            <td class="fix" data="<?php echo $customer->customer_status; ?>"  id="customer_status_<?php echo $customer->e_customer_id; ?>"><?php echo $customer->customer_status==0?'Khóa':'Mở'; ?></td>
+            <td>
+                <a class="error" href="#">Sửa</a>
+                | 
+                <a class="error" onclick="del(<?php echo $customer->e_customer_id ?>)" >Xóa</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Thông tin khách hàng </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_customer" method="post" action="">
+                      <table style="margin:0 auto;width:100%">
+                        <tr>
+                            
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+                            <td><div class="add-box"><a class="add_button" onClick="add_click();">Thêm khách hàng mới</a></div></td>
+                            
+                        </tr>
+                        <tr>
+                            
+                            <td>Công ty </td>
+                            <td>
+                                <input type="text" id="e_customer_co"  name="e_customer_co" tabindex="1" required="required" >
+                            </td>
+                            
+                            <td>Địa chỉ </td>
+                            <td><input type="text" id="e_customer_address"  name="e_customer_address" tabindex="3" ></td>
+                            <td>Người liên hệ</td>
+                            <td><input type="text" id="e_customer_contact"  name="e_customer_contact" tabindex="5" ></td>
+                            <td></td>
+
+                        </tr>
+                        <tr>
+                            
+                            <td>Email </td>
+                            <td><input type="email"  id="e_customer_email" name="e_customer_email" tabindex="2" ></td>
+                            <td>Số diện thoại </td>
+                            <td>
+                                <input type="text" class="numbers" id="e_customer_phone" name="e_customer_phone" tabindex="4" >
+                            </td>
+                            <td>Trạng thái</td>
+                            <td><input type="radio" name="customer_status" tabindex="6" value="1" checked >Mở <input type="radio" name="customer_status" tabindex="7" value="0">Khóa </td>
+                            <td></td>
+                        </tr>
+                        
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="8"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="9"></td>
+                            
+                            <td></td>
+                            <td></td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+   
+});
+    $('.edit_tr').click(function(){
+        if(!$('.checkbox').is(':checked')){
+            $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        }
+        var e_customer_co = $(this).find("#e_customer_co_"+$(this).attr('id')).text();
+        
+        var e_customer_address = $(this).find("#e_customer_address_"+$(this).attr('id')).text();
+        var e_customer_phone = $(this).find("#e_customer_phone_"+$(this).attr('id')).text();
+        var e_customer_email = $(this).find("#e_customer_email_"+$(this).attr('id')).text();
+        var e_customer_contact = $(this).find("#e_customer_contact_"+$(this).attr('id')).text();
+        var customer_status = $(this).find("#customer_status_"+$(this).attr('id')).attr('data');
+        
+        //alert(customer_code);
+        $('#yes').val($(this).attr('id'));
+        
+        
+        
+        $('#e_customer_co').val(e_customer_co);
+        $('#e_customer_address').val(e_customer_address);
+        $('#e_customer_phone').val(e_customer_phone);
+        $('#e_customer_email').val(e_customer_email);
+        $('#e_customer_contact').val(e_customer_contact);
+        $('input:radio[name="customer_status"]').filter('[value="'+customer_status+'"]').attr('checked', true);
+       
+
+        $('#e_customer_co').focus();
+        $('#e_customer_co').attr('data',"true");
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+    $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+    
+        
+        $('#e_customer_co').val("");
+        $('#e_customer_address').val("");
+        $('#e_customer_phone').val("");
+        $('#e_customer_email').val("");
+        $('#e_customer_contact').val("");
+        
+
+   $('#e_customer_co').focus();
+   $('#e_customer_co').attr('data',"false");
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_customer").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var e_customer_co = $('#e_customer_co').attr('value');
+                    var e_customer_address = $('#e_customer_address').attr('value');
+                    var e_customer_phone = $('#e_customer_phone').attr('value');
+                    var e_customer_email = $('#e_customer_email').attr('value');
+                    var e_customer_contact = $('#e_customer_contact').attr('value');
+                    var customer_status = $('input:radio[name="customer_status"]:checked').val();
+                    
+
+                    var yes = $('#yes').attr('value');
+                    var check = $('#e_customer_co').attr('data');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/ecustomer/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            e_customer_co: e_customer_co,
+                            e_customer_address: e_customer_address,
+                            e_customer_phone: e_customer_phone,
+                            e_customer_email: e_customer_email,
+                            e_customer_contact: e_customer_contact,
+                            customer_status: customer_status,
+                            yes: yes,
+                            check: check,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (check == "true") {
+                                if (answer.trim() != "Thông tin khách hàng đã tồn tại") {
+                                    $('#e_customer_co_'+yes).text(e_customer_co);
+                                    $('#e_customer_address_'+yes).text(e_customer_address);
+                                    $('#e_customer_phone_'+yes).text(e_customer_phone);
+                                    $('#e_customer_email_'+yes).text(e_customer_email);
+                                    $('#e_customer_contact_'+yes).text(e_customer_contact);
+                                    $('#customer_status_'+yes).text(customer_status==1?'Mở':'Khóa');
+                                }
+                            }
+                            else{
+                                if (answer.trim() != "Thông tin khách hàng đã tồn tại") {
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="e_customer_co_'+parseInt(lastID+1)+'">'+e_customer_co+'</td><td class="fix" id="e_e_customer_address_'+parseInt(lastID+1)+'">'+e_e_customer_address+'</td><td class="fix" id="e_customer_phone_'+parseInt(lastID+1)+'">'+e_customer_phone+'</td><td class="fix" id="e_customer_email_'+parseInt(lastID+1)+'">'+e_customer_email+'</td><td class="fix" id="e_customer_contact_'+parseInt(lastID+1)+'">'+e_customer_contact+'</td><td class="fix" id="customer_status_'+parseInt(lastID+1)+'">'+(customer_status==1?'Mở':'Khóa')+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   
+   
+   
+
+   $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+        ;
+      });
+    });
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+          .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+        ;
+      });
+    });
+    
+
+});
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+</script>
+</div>

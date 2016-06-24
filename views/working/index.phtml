@@ -1,0 +1,776 @@
+<link href="<?php echo BASE_URL ?>/public/css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo BASE_URL ?>/public/css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+<script src="<?php echo BASE_URL ?>/public/js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL ?>/public/css/jquery.datetimepicker.css"/ >
+<script src="<?php echo BASE_URL ?>/public/js/jquery.datetimepicker.full.min.js"></script>
+<?php
+$url_order = 'ASC';
+if ($order_by == 'report_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'report_title')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'report_start_time')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'report_end_time')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BÁO CÁO </h1></center>
+
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm bảng báo cáo</a>
+    <a class="add_button" id="import_excel" href="<?= $this->url('working/import')?>">Import Excel</a>
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+    <div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+
+    <div class="tablenav top">
+        <div class="add-box">
+                  
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">  
+            
+        </div>
+        <div class="alignleft actions">
+            <select name="action" id="action">
+                <option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+        </div>
+        <div class="alignleft actions">
+        <select name="m" id="chonloc">
+            <option  value="18446744073709">Hiển thị tất cả</option>
+            <option value="5">Hiển thị 5 giá trị</option>
+            <option value="10">Hiển thị 10 giá trị</option>
+            <option value="15">Hiển thị 15 giá trị</option>
+            <option selected="selected" value="20">Hiển thị 20 giá trị</option>
+        </select>
+        <input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">                               
+        </div>
+
+      </div>
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+        <th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','report_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'report_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','report_title','<?php echo $url_order ?>')">Công việc <?php if ($order_by == 'report_title'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','report_start_time','<?php echo $url_order ?>')">Bắt đầu <?php if ($order_by == 'report_start_time'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','report_end_time','<?php echo $url_order ?>')">Kết thúc <?php if ($order_by == 'report_end_time'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','report_comment','<?php echo $url_order ?>')">Ghi chú <?php if ($order_by == 'report_comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_name','<?php echo $url_order ?>')">Nhân viên <?php if ($order_by == 'staff_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','report_partner','<?php echo $url_order ?>')">Hỗ trợ <?php if ($order_by == 'report_partner'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','report_repeat','<?php echo $url_order ?>')">Tần suất <?php if ($order_by == 'report_repeat'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($works as $work) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $work->report_id ?>"  class="edit_tr">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $work->report_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="report_title_<?php echo $work->report_id; ?>"><?php echo $work->report_title; ?></td>
+            <td class="fix"  id="report_start_time_<?php echo $work->report_id; ?>"><?php echo date('d-m-Y H:i',$work->report_start_time) ?></td>
+            <td class="fix"  id="report_end_time_<?php echo $work->report_id; ?>"><?php echo date('d-m-Y H:i',$work->report_end_time) ?></td>
+            <td class="fix" id="report_comment_<?php echo $work->report_id; ?>"><?php echo $work->report_comment; ?></td>
+            <td class="fix" id="staff_name_<?php echo $work->report_id; ?>"><?php echo $work->staff_name; ?></td>
+            <td class="fix" id="report_partner_<?php echo $work->report_id; ?>">
+                <?php 
+                    if($work->report_partner != ""){
+                        $contributors = explode(',', $work->report_partner);
+                        foreach ($contributors as $key) {
+                            echo ','.$staff_data['name'][$key];
+                        }
+                    }
+                    ?>
+            </td>
+            
+            <td class="fix" id="report_repeat_<?php echo $work->report_id; ?>"><?php echo $work->report_repeat==5?'Hàng năm':($work->report_repeat==1?'Hàng ngày':($work->report_repeat==2?'Hàng tuần':($work->report_repeat==3?'2 Tuần':($work->report_repeat==4?'Hàng tháng':'Không lặp lại')))); ?></td>
+            
+            <td class="fix" style="display:none" id="report_full_time_<?php echo $work->report_id; ?>"><?php echo $work->report_full_time; ?></td>
+
+            <td class="fix" >
+                <button class="error" onclick="del(<?php echo $work->report_id ?>)" >Xóa</button>
+            </td>
+            
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('working') ?>">&larr;</a></div>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Công việc</h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_work_cost" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            <td>Tên công việc </td>
+                            <td colspan="4">
+                                <input style="width:100%" type="text" id="report_title"  name="report_title" tabindex="1"  required="required" >
+                                
+                            </td>
+                            
+                            
+                            
+                            
+                        </tr>
+                        <tr>
+                            
+                            <td>Bắt đầu </td>
+                            <td>
+                                <input type="text" name="report_start_time" id="report_start_time" tabindex="3" required="required">
+                                
+                            </td>
+                            <td>Kết thúc </td>
+                            <td>
+                                <input type="text" id="report_end_time"  name="report_end_time" tabindex="4" required="required" >
+
+                            </td>
+                            <td><b>Cả ngày</b></td>
+                            <td><input type="checkbox" name="report_full_time" id="report_full_time" tabindex="2" value="1"></td>
+                        </tr>
+                        <tr>
+                            <td>Lặp lại </td>
+                            <td>
+                                <select id="report_repeat" name="report_repeat" tabindex="5">
+                                    <option value="0">Không lặp lại</option>
+                                    <option value="1">Hàng ngày</option>
+                                    <option value="2">Hàng tuần</option>
+                                    <option value="3">2 Tuần</option>
+                                    <option value="4">Hàng tháng</option>
+                                    <option value="5">Hàng năm</option>
+                                </select>
+                                
+                            </td>
+                            <td>Ghi chú </td>
+                            <td colspan="4">
+                                <textarea style="width:90%" name="report_comment" id="report_comment" tabindex="6"></textarea>
+                                
+                            </td>
+                            
+                            
+                        </tr>
+                        <tr>
+                            <td>Hỗ trợ </td>
+                            <td colspan="4">
+                                <input type="text" id="report_partner"  name="report_partner" tabindex="7"  >
+                                <ul id="mytags"></ul>
+
+                            </td>
+                        </tr>
+                        
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Submit" tabindex="8"></td>
+                            <td></td>
+                            <td ><input type="reset" name="reset" value="Reset" tabindex="9"></td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+
+
+
+
+<script type="text/javascript">
+
+var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $("#deadline").datepicker(pickerOpts);
+
+  
+$('.add-field').hide();  
+
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);  
+        $('.add-field-cost').slideUp(500);    
+    }
+    
+});
+
+
+
+    $('.edit_tr').click(function(e){
+        if(e.target != '[object HTMLButtonElement]' && e.target != '[object HTMLSpanElement]' && !$('.checkbox').is(':focus')) { 
+            if(!$('.checkbox').is(':focus')){
+                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+            }
+            var report_title = $(this).find("#report_title_"+$(this).attr('id')).text();
+            var report_comment = $(this).find("#report_comment_"+$(this).attr('id')).text();
+            var report_start_time = $(this).find("#report_start_time_"+$(this).attr('id')).text();
+            var report_end_time = $(this).find("#report_end_time_"+$(this).attr('id')).text();
+            var report_full_time = $(this).find("#report_full_time_"+$(this).attr('id')).text();
+            var report_repeat = $(this).find("#report_repeat_"+$(this).attr('id')).text();
+            
+            var report_partner = $(this).find("#report_partner_"+$(this).attr('id')).text();
+
+
+            //alert(cost_code);
+            $('#yes').val($(this).attr('id'));
+            
+                       
+            $('#report_title').val(report_title);
+            $('#report_comment').val(report_comment);
+            $('#report_start_time').val(report_start_time);
+            $('#report_end_time').val(report_end_time);
+            $('#report_partner').val(report_partner.trim().substring(1));
+
+            $("#report_repeat option:contains(" + report_repeat +")").attr("selected", true);
+
+            if (report_full_time == 1) {
+                $('#report_full_time').attr('checked',true);
+            }
+
+            $( ".add-field" ).dialog( "open" );
+
+           $("#report_partner").tagit({
+              tagSource: function(search, showChoices) {
+                $.ajax({
+                  url: "<?php echo BASE_URL ?>/working/getContributor",
+                  data: {search: search.term},
+                  success: function(choices) {
+                    showChoices(choices);
+                  }
+                });
+              }
+            });
+
+        }
+
+        
+        
+    });
+
+
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+     $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
+     
+        $('#report_title').val("");
+        $('#report_comment').val("");
+        $('#report_start_time').val("");
+        $('#report_end_time').val("");
+        $('#report_partner').val("");
+        $('#report_full_time').attr('checked',false);
+
+                
+        $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+    $( ".add-field" ).dialog( "open" );
+
+    $("#report_partner").tagit({
+              tagSource: function(search, showChoices) {
+                $.ajax({
+                  url: "<?php echo BASE_URL ?>/working/getContributor",
+                  data: {search: search.term},
+                  success: function(choices) {
+                    showChoices(choices);
+                  }
+                });
+              }
+            });
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_work_cost").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var report_title = $('#report_title').attr('value');
+                    
+                    var report_comment = $('#report_comment').attr('value');
+                    var report_repeat = $('#report_repeat').attr('value');
+                    var report_start_time = $('#report_start_time').attr('value');
+                    var report_end_time = $('#report_end_time').attr('value');
+                    var report_partner = $('#report_partner').val().trim();
+                    var report_full_time = $('#report_full_time').attr('value');
+
+
+                    if($('#report_full_time').is(':checked')){
+                        report_full_time = 1;
+                    }
+                    else{
+                        report_full_time = 0;
+                    }
+                    
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/working/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            report_title: report_title,
+                            report_comment: report_comment,
+                            report_repeat: report_repeat,
+                            report_start_time: report_start_time,
+                            report_partner: report_partner,
+                            report_end_time: report_end_time,
+                            report_full_time: report_full_time,
+                            yes: yes,
+
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (yes != "") {
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                            }
+                            else{
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="vendor_'+parseInt(lastID+1)+'">'+vendor+'</td><td class="fix" id="money_'+parseInt(lastID+1)+'">'+money+'</td><td class="fix" id="expect_date_'+parseInt(lastID+1)+'">'+expect_date+'</td><td class="fix" id="week_'+parseInt(lastID+1)+'"></td><td class="fix" id="code_'+parseInt(lastID+1)+'">'+code+'</td><td class="fix" id="source_'+parseInt(lastID+1)+'">'+$("#source option:selected").text()+'</td><td class="fix" id="comment_'+parseInt(lastID+1)+'">'+comment+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+
+
+
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+    $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-]/g, "")
+        ;
+      });
+    });
+    
+
+});
+
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+function set_item(item,name) {
+    // change input value
+    $('#work_code').val(item);
+    $("#work_code").attr("data",name);
+    
+    $('#code_list_id').hide();
+    $('#work_code').focus();
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+
+ $(function() {
+    var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+              
+    var pickerOpay2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $("#i_work_date").datepicker(pickerOpay2);        
+    
+});
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+
+</script>
+</div>
+
+<script type="text/javascript">
+
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Task",
+    hide: 'fold',
+    show: 'blind',
+    
+});
+
+$('.del').click(function(){
+    var data = $(this).attr('data');
+    var r = confirm("Bạn có chắc chắn không?");
+    if (r == true){
+         $.post("<?php echo BASE_URL ?>/planning/deletework", {data: data},
+           function(data){
+                setTimeout(function() {
+                    sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                  }, 200);
+           }); 
+    }
+});
+
+
+$('.editButton')
+    .button({ icons: { primary: "ui-icon-document" }})
+    .click(function() {
+        var check = $(this).attr('tabindex');
+        
+            $('#i_work').val($(this).attr('data'));
+            $('#i_work_date').val($(this).attr('alt').replace(/\//g,"-"));
+            $('#i_work_comment').val($(this).attr('name'));
+
+            $( "#dialogContent" ).dialog( "open" );
+        
+        
+    });
+
+
+//set up the dialog box.
+$( "#dialogContent" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var id = $('#i_work').val();
+            var date = $('#i_work_date').val();
+            var comment = $('#i_work_comment').val();
+        
+                
+                $.post("<?php echo BASE_URL ?>/planning/complete", {data: id, date: date, comment: comment},
+                   function(data){
+                    alert(data);
+                    $("html, body").animate({ scrollTop: 0 }, 100);
+                    setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                   
+                   }); 
+              
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
+
+</script>
+
+<style type="text/css">
+.post{width:100%; margin: 0;}
+.post ol{ counter-reset:li; list-style: none; *list-style: decimal; margin-left:0; padding-left:0 } 
+.post ol li{ position: relative; display: block; padding: .4em .4em .4em .8em; *padding: .4em; margin: .5em 0 .5em 4.5em; text-decoration: none; border-bottom:1px solid #e2e3e2; /* màu bottom border của chữ */ background:#f2f2f2;}
+.post ol li:before{ content: counter(li); counter-increment: li; position: absolute;    left: -30px; top: 50%; margin-top: -1em; color: #fff; /* màu của số */ background: #00afee; /* màu background của số */ height: 2em; width: 2em; line-height: 2em; text-align: center; font-weight: bold; } 
+.post ol li:after{ position: absolute; content: ''; left: -5px; margin-top: -.7em;    top: 50%; width: 0;  height: 0;  border-top: 8px solid transparent; border-bottom: 8px solid transparent;  border-left:8px solid #00afee; /* màu background của the right arrow*/ }
+.post li:hover{cursor: pointer; color: #00afee;}
+.post .del {
+  position: absolute;
+  right: .3em;
+  bottom: 0;
+  width: 20px;
+  margin: -10px 0 0 0;
+  padding: 1px;
+  height: 20px;
+  background: url(../../public/js/ui/images/close-button.png) center center;
+  border: none;
+}
+.post .complete {
+  position: absolute;
+  right: .3em;
+  bottom: 0;
+  width: 20px;
+  margin: -10px 25px 0 0;
+  padding: 1px;
+  height: 20px;
+  background: url(../../public/js/ui/images/icon-complete.png) center center;
+  border: none;
+}
+.post ol li a, .post ol li span.error{
+    font-size: 12px;
+}
+
+</style>
+<?php if(count($works)%2 == 0){ ?>
+<style type="text/css">
+.skills
+{ 
+    -moz-column-count: 2;
+    -moz-column-gap: 2.5em;
+    -webkit-column-count: 2;
+    -webkit-column-gap: 2.5em;
+     column-count: 2;
+     column-gap: 2.5em;
+}
+</style>
+<?php } 
+else if(count($works)%3 == 0){ ?>
+<style type="text/css">
+.skills
+{ 
+    -moz-column-count: 3;
+    -moz-column-gap: 2.5em;
+    -webkit-column-count: 3;
+    -webkit-column-gap: 2.5em;
+     column-count: 3;
+     column-gap: 2.5em;
+}
+</style>
+<?php } ?>
+
+<script type="text/javascript">
+jQuery(function(){
+ jQuery('#report_start_time').datetimepicker({
+  format:'d-m-Y H:i',
+  mask:'39-19-9999 29:59',
+  
+ });
+ jQuery('#report_end_time').datetimepicker({
+  format:'d-m-Y H:i',
+  mask:'39-19-9999 29:59',
+  
+ });
+});
+
+
+
+$('#report_full_time').bind('click',function(){
+     var th = $(this), name = th.prop('name'); 
+     if(th.is(':checked')){
+        var date = $('#report_start_time').val();
+            date = date==""?"<?php echo date('d-m-Y H:i') ?>":date;
+        var nam = date.substr(6,4);
+        var thang = date.substr(3,2);
+        var ngay = date.substr(0,2);
+        $('#report_start_time').val(ngay+'-'+thang+'-'+nam+' 07:30');
+
+        var date = $('#report_end_time').val();
+            date = date==""?"<?php echo date('d-m-Y H:i') ?>":date;
+        var nam = date.substr(6,4);
+        var thang = date.substr(3,2);
+        var ngay = date.substr(0,2);
+        $('#report_end_time').val(ngay+'-'+thang+'-'+nam+' 17:00');
+     }
+});
+
+</script>

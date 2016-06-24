@@ -1,0 +1,2190 @@
+Time|User|Action|Id|Table|Fields
+
+25/10/2014 14:30:35|admin|edit|8|user|827ccb0eea8a706c4c34a16891f84e7b-4
+
+25/10/2014 14:35:31|admin|edit|1|user|81dc9bdb52d04dc20036dbd8313ed055
+
+29/10/2014 13:44:21|admin|edit|135|transport|2800000-3100000-2900000-3100000-3970000-1-1414565061
+
+08/11/2014 13:21:50|admin|edit||handling|16-930000-1393000-1393000-1-0-1
+
+08/11/2014 13:27:33|admin|add|2|handling|16-930000-1393000-1393000-1-0-1
+
+08/11/2014 14:44:51|admin|edit|2|handling|16-9300001-13930001-13930001-0-1-0
+
+08/11/2014 14:45:11|admin|edit|2|handling|16-930000-1393000-1393000-1-0-1
+
+10/11/2014 10:42:42|admin|delete|2|handling|
+
+10/11/2014 17:19:03|admin|add|1|shipping|5800000-11900000-1-11
+
+10/11/2014 17:33:06|admin|edit|1|shipping|58000001-119000001
+
+10/11/2014 17:33:15|admin|edit|1|shipping|5800000-11900000
+
+10/11/2014 19:28:42|admin|add|2|shipping|3200000-4200000-11-1
+
+10/11/2014 19:29:52|admin|add|3|shipping|6000000-11500000-1-9
+
+10/11/2014 19:30:32|admin|add|4|shipping|3200000-4200000-9-1
+
+10/11/2014 19:36:24|admin|add|5|shipping|9000000-14500000-1-17
+
+10/11/2014 19:36:49|admin|add|6|shipping|4500000-7500000-17-1
+
+10/11/2014 19:37:27|admin|add|7|shipping|5000000-8000000-1-33
+
+10/11/2014 19:37:50|admin|add|8|shipping|3500000-4500000-33-1
+
+10/11/2014 19:38:55|admin|add|9|shipping|6000000-9500000-11-17
+
+10/11/2014 19:39:25|admin|add|10|shipping|6000000-9500000-17-11
+
+10/11/2014 19:40:06|admin|add|11|shipping|4500000-5500000-11-9
+
+10/11/2014 19:40:54|admin|add|12|shipping|4700000-6300000-9-11
+
+10/11/2014 19:41:27|admin|add|13|shipping|3200000-4600000-11-33
+
+10/11/2014 19:41:55|admin|add|14|shipping|7000000-15000000-1-41
+
+10/11/2014 19:42:17|admin|add|15|shipping|8000000-10000000-41-1
+
+25/11/2014 13:08:40|admin|delete|1036|transport|
+
+25/11/2014 13:08:40|admin|delete|1037|transport|
+
+25/11/2014 13:08:40|admin|delete|1038|transport|
+
+25/11/2014 13:08:40|admin|delete|1039|transport|
+
+25/11/2014 13:08:47|admin|delete|1021|transport|
+
+25/11/2014 13:08:47|admin|delete|1022|transport|
+
+25/11/2014 13:08:47|admin|delete|1023|transport|
+
+25/11/2014 13:08:48|admin|delete|1024|transport|
+
+25/11/2014 13:08:48|admin|delete|1025|transport|
+
+25/11/2014 13:08:48|admin|delete|1026|transport|
+
+25/11/2014 13:08:48|admin|delete|1027|transport|
+
+25/11/2014 13:08:48|admin|delete|1028|transport|
+
+25/11/2014 13:08:48|admin|delete|1029|transport|
+
+25/11/2014 13:08:48|admin|delete|1030|transport|
+
+25/11/2014 13:08:48|admin|delete|1031|transport|
+
+25/11/2014 13:08:48|admin|delete|1032|transport|
+
+25/11/2014 13:08:48|admin|delete|1033|transport|
+
+25/11/2014 13:08:48|admin|delete|1034|transport|
+
+25/11/2014 13:08:48|admin|delete|1035|transport|
+
+25/11/2014 13:08:55|admin|delete|1006|transport|
+
+25/11/2014 13:08:55|admin|delete|1007|transport|
+
+25/11/2014 13:08:55|admin|delete|1008|transport|
+
+25/11/2014 13:08:55|admin|delete|1009|transport|
+
+25/11/2014 13:08:55|admin|delete|1010|transport|
+
+25/11/2014 13:08:55|admin|delete|1011|transport|
+
+25/11/2014 13:08:55|admin|delete|1012|transport|
+
+25/11/2014 13:08:55|admin|delete|1013|transport|
+
+25/11/2014 13:08:55|admin|delete|1014|transport|
+
+25/11/2014 13:08:55|admin|delete|1015|transport|
+
+25/11/2014 13:08:55|admin|delete|1016|transport|
+
+25/11/2014 13:08:55|admin|delete|1017|transport|
+
+25/11/2014 13:08:55|admin|delete|1018|transport|
+
+25/11/2014 13:08:55|admin|delete|1019|transport|
+
+25/11/2014 13:08:55|admin|delete|1020|transport|
+
+25/11/2014 13:09:01|admin|delete|991|transport|
+
+25/11/2014 13:09:02|admin|delete|992|transport|
+
+25/11/2014 13:09:02|admin|delete|993|transport|
+
+25/11/2014 13:09:02|admin|delete|994|transport|
+
+25/11/2014 13:09:02|admin|delete|995|transport|
+
+25/11/2014 13:09:02|admin|delete|996|transport|
+
+25/11/2014 13:09:02|admin|delete|997|transport|
+
+25/11/2014 13:09:02|admin|delete|998|transport|
+
+25/11/2014 13:09:02|admin|delete|999|transport|
+
+25/11/2014 13:09:02|admin|delete|1000|transport|
+
+25/11/2014 13:09:02|admin|delete|1001|transport|
+
+25/11/2014 13:09:02|admin|delete|1002|transport|
+
+25/11/2014 13:09:02|admin|delete|1003|transport|
+
+25/11/2014 13:09:02|admin|delete|1004|transport|
+
+25/11/2014 13:09:02|admin|delete|1005|transport|
+
+25/11/2014 13:14:06|admin|delete|1070|transport|
+
+25/11/2014 13:14:06|admin|delete|1071|transport|
+
+25/11/2014 13:14:06|admin|delete|1072|transport|
+
+25/11/2014 13:14:06|admin|delete|1073|transport|
+
+25/11/2014 13:14:06|admin|delete|1074|transport|
+
+25/11/2014 13:14:06|admin|delete|1075|transport|
+
+25/11/2014 13:14:06|admin|delete|1076|transport|
+
+25/11/2014 13:14:06|admin|delete|1077|transport|
+
+25/11/2014 13:14:06|admin|delete|1078|transport|
+
+25/11/2014 13:14:06|admin|delete|1079|transport|
+
+25/11/2014 13:14:06|admin|delete|1080|transport|
+
+25/11/2014 13:14:06|admin|delete|1081|transport|
+
+25/11/2014 13:14:06|admin|delete|1082|transport|
+
+25/11/2014 13:14:06|admin|delete|1083|transport|
+
+25/11/2014 13:14:06|admin|delete|1084|transport|
+
+25/11/2014 13:14:15|admin|delete|1055|transport|
+
+25/11/2014 13:14:15|admin|delete|1056|transport|
+
+25/11/2014 13:14:15|admin|delete|1057|transport|
+
+25/11/2014 13:14:15|admin|delete|1058|transport|
+
+25/11/2014 13:14:15|admin|delete|1059|transport|
+
+25/11/2014 13:14:15|admin|delete|1060|transport|
+
+25/11/2014 13:14:15|admin|delete|1061|transport|
+
+25/11/2014 13:14:15|admin|delete|1062|transport|
+
+25/11/2014 13:14:15|admin|delete|1063|transport|
+
+25/11/2014 13:14:15|admin|delete|1064|transport|
+
+25/11/2014 13:14:15|admin|delete|1065|transport|
+
+25/11/2014 13:14:15|admin|delete|1066|transport|
+
+25/11/2014 13:14:15|admin|delete|1067|transport|
+
+25/11/2014 13:14:16|admin|delete|1068|transport|
+
+25/11/2014 13:14:16|admin|delete|1069|transport|
+
+25/11/2014 13:14:25|admin|delete|1040|transport|
+
+25/11/2014 13:14:25|admin|delete|1041|transport|
+
+25/11/2014 13:14:25|admin|delete|1042|transport|
+
+25/11/2014 13:14:25|admin|delete|1043|transport|
+
+25/11/2014 13:14:26|admin|delete|1044|transport|
+
+25/11/2014 13:14:26|admin|delete|1045|transport|
+
+25/11/2014 13:14:26|admin|delete|1046|transport|
+
+25/11/2014 13:14:26|admin|delete|1047|transport|
+
+25/11/2014 13:14:26|admin|delete|1048|transport|
+
+25/11/2014 13:14:26|admin|delete|1049|transport|
+
+25/11/2014 13:14:26|admin|delete|1050|transport|
+
+25/11/2014 13:14:26|admin|delete|1051|transport|
+
+25/11/2014 13:14:26|admin|delete|1052|transport|
+
+25/11/2014 13:14:26|admin|delete|1053|transport|
+
+25/11/2014 13:14:26|admin|delete|1054|transport|
+
+25/11/2014 13:14:34|admin|delete|1085|transport|
+
+25/11/2014 13:14:34|admin|delete|1086|transport|
+
+25/11/2014 13:14:34|admin|delete|1087|transport|
+
+25/11/2014 13:14:34|admin|delete|1088|transport|
+
+25/11/2014 13:14:34|admin|delete|1089|transport|
+
+25/11/2014 13:29:32|admin|delete|1120|transport|
+
+25/11/2014 13:29:32|admin|delete|1121|transport|
+
+25/11/2014 13:29:45|admin|delete|1109|transport|
+
+25/11/2014 13:29:46|admin|delete|1110|transport|
+
+25/11/2014 13:29:46|admin|delete|1111|transport|
+
+25/11/2014 13:29:46|admin|delete|1112|transport|
+
+25/11/2014 13:29:46|admin|delete|1113|transport|
+
+25/11/2014 13:29:46|admin|delete|1114|transport|
+
+25/11/2014 13:29:46|admin|delete|1115|transport|
+
+25/11/2014 13:29:46|admin|delete|1116|transport|
+
+25/11/2014 13:29:46|admin|delete|1117|transport|
+
+25/11/2014 13:29:46|admin|delete|1118|transport|
+
+25/11/2014 13:29:46|admin|delete|1119|transport|
+
+25/11/2014 13:30:57|admin|delete|1138|transport|
+
+25/11/2014 13:30:57|admin|delete|1139|transport|
+
+25/11/2014 13:30:57|admin|delete|1140|transport|
+
+25/11/2014 13:30:57|admin|delete|1141|transport|
+
+25/11/2014 13:30:57|admin|delete|1142|transport|
+
+25/11/2014 13:30:57|admin|delete|1143|transport|
+
+25/11/2014 13:30:57|admin|delete|1144|transport|
+
+25/11/2014 13:30:57|admin|delete|1145|transport|
+
+25/11/2014 13:30:57|admin|delete|1146|transport|
+
+25/11/2014 13:30:57|admin|delete|1147|transport|
+
+25/11/2014 13:31:05|admin|delete|1158|transport|
+
+25/11/2014 13:31:05|admin|delete|1159|transport|
+
+25/11/2014 13:31:05|admin|delete|1160|transport|
+
+25/11/2014 13:31:06|admin|delete|1161|transport|
+
+25/11/2014 13:31:06|admin|delete|1162|transport|
+
+25/11/2014 13:31:06|admin|delete|1163|transport|
+
+25/11/2014 13:31:06|admin|delete|1164|transport|
+
+25/11/2014 13:31:06|admin|delete|1165|transport|
+
+25/11/2014 13:31:06|admin|delete|1166|transport|
+
+25/11/2014 13:31:06|admin|delete|1167|transport|
+
+25/11/2014 13:31:06|admin|delete|1168|transport|
+
+25/11/2014 13:31:06|admin|delete|1169|transport|
+
+25/11/2014 13:31:06|admin|delete|1170|transport|
+
+25/11/2014 13:31:06|admin|delete|1171|transport|
+
+25/11/2014 13:31:06|admin|delete|1172|transport|
+
+25/11/2014 13:31:14|admin|delete|1173|transport|
+
+25/11/2014 13:31:14|admin|delete|1174|transport|
+
+25/11/2014 13:31:14|admin|delete|1175|transport|
+
+25/11/2014 13:31:14|admin|delete|1176|transport|
+
+25/11/2014 13:31:14|admin|delete|1177|transport|
+
+25/11/2014 13:31:14|admin|delete|1178|transport|
+
+25/11/2014 13:31:14|admin|delete|1179|transport|
+
+25/11/2014 13:31:14|admin|delete|1180|transport|
+
+25/11/2014 13:31:14|admin|delete|1181|transport|
+
+25/11/2014 13:31:14|admin|delete|1182|transport|
+
+25/11/2014 13:31:27|admin|delete|1148|transport|
+
+25/11/2014 13:31:27|admin|delete|1149|transport|
+
+25/11/2014 13:31:27|admin|delete|1150|transport|
+
+25/11/2014 13:31:27|admin|delete|1151|transport|
+
+25/11/2014 13:31:27|admin|delete|1152|transport|
+
+25/11/2014 13:31:27|admin|delete|1153|transport|
+
+25/11/2014 13:31:27|admin|delete|1154|transport|
+
+25/11/2014 13:31:27|admin|delete|1155|transport|
+
+25/11/2014 13:31:27|admin|delete|1156|transport|
+
+25/11/2014 13:31:28|admin|delete|1157|transport|
+
+27/12/2014 08:47:50|admin|delete|116|transport|
+
+27/12/2014 08:47:50|admin|delete|117|transport|
+
+27/12/2014 08:47:50|admin|delete|118|transport|
+
+27/12/2014 08:47:50|admin|delete|119|transport|
+
+27/12/2014 08:47:50|admin|delete|120|transport|
+
+27/12/2014 08:47:50|admin|delete|121|transport|
+
+27/12/2014 08:48:15|admin|delete|89|transport|
+
+27/12/2014 08:48:15|admin|delete|90|transport|
+
+27/12/2014 08:48:15|admin|delete|91|transport|
+
+27/12/2014 08:48:16|admin|delete|92|transport|
+
+27/12/2014 08:48:16|admin|delete|93|transport|
+
+27/12/2014 08:48:16|admin|delete|94|transport|
+
+27/12/2014 08:48:16|admin|delete|95|transport|
+
+27/12/2014 08:48:30|admin|delete|103|transport|
+
+27/12/2014 08:48:30|admin|delete|104|transport|
+
+27/12/2014 08:48:30|admin|delete|105|transport|
+
+27/12/2014 08:48:30|admin|delete|106|transport|
+
+27/12/2014 08:48:30|admin|delete|107|transport|
+
+27/12/2014 08:48:30|admin|delete|108|transport|
+
+27/12/2014 08:48:30|admin|delete|109|transport|
+
+27/12/2014 08:48:30|admin|delete|110|transport|
+
+27/12/2014 08:48:30|admin|delete|111|transport|
+
+27/12/2014 08:48:30|admin|delete|112|transport|
+
+27/12/2014 08:48:45|admin|delete|113|transport|
+
+27/12/2014 08:48:45|admin|delete|114|transport|
+
+27/12/2014 08:48:45|admin|delete|115|transport|
+
+27/12/2014 08:49:00|admin|delete|96|transport|
+
+27/12/2014 08:49:00|admin|delete|97|transport|
+
+27/12/2014 08:49:00|admin|delete|98|transport|
+
+27/12/2014 08:49:00|admin|delete|99|transport|
+
+27/12/2014 08:49:00|admin|delete|100|transport|
+
+27/12/2014 08:49:01|admin|delete|101|transport|
+
+27/12/2014 08:49:01|admin|delete|102|transport|
+
+27/12/2014 08:55:27|admin|delete|139|transport|
+
+27/12/2014 08:55:27|admin|delete|140|transport|
+
+27/12/2014 08:55:27|admin|delete|141|transport|
+
+27/12/2014 08:55:27|admin|delete|142|transport|
+
+27/12/2014 08:55:28|admin|delete|143|transport|
+
+27/12/2014 08:55:28|admin|delete|144|transport|
+
+27/12/2014 08:55:28|admin|delete|145|transport|
+
+27/12/2014 08:55:28|admin|delete|146|transport|
+
+27/12/2014 08:55:28|admin|delete|147|transport|
+
+27/12/2014 08:55:28|admin|delete|148|transport|
+
+27/12/2014 08:55:39|admin|delete||transport|
+
+27/12/2014 08:55:50|admin|delete|129|transport|
+
+27/12/2014 08:55:50|admin|delete|130|transport|
+
+27/12/2014 08:55:50|admin|delete|131|transport|
+
+27/12/2014 08:55:50|admin|delete|132|transport|
+
+27/12/2014 08:55:50|admin|delete|133|transport|
+
+27/12/2014 08:55:51|admin|delete|134|transport|
+
+27/12/2014 08:55:51|admin|delete|135|transport|
+
+27/12/2014 08:55:51|admin|delete|136|transport|
+
+27/12/2014 08:55:51|admin|delete|137|transport|
+
+27/12/2014 08:55:51|admin|delete|138|transport|
+
+27/12/2014 08:56:09|admin|delete|122|transport|
+
+27/12/2014 08:56:09|admin|delete|123|transport|
+
+27/12/2014 08:56:09|admin|delete|124|transport|
+
+27/12/2014 08:56:09|admin|delete|125|transport|
+
+27/12/2014 08:56:09|admin|delete|126|transport|
+
+27/12/2014 08:56:09|admin|delete|127|transport|
+
+27/12/2014 08:56:10|admin|delete|128|transport|
+
+27/12/2014 08:56:29|admin|delete|149|transport|
+
+27/12/2014 08:56:29|admin|delete|150|transport|
+
+27/12/2014 08:56:30|admin|delete|151|transport|
+
+27/12/2014 08:56:30|admin|delete|152|transport|
+
+27/12/2014 08:56:30|admin|delete|153|transport|
+
+27/12/2014 08:56:30|admin|delete|154|transport|
+
+27/12/2014 09:01:35|admin|delete|170|transport|
+
+27/12/2014 09:01:35|admin|delete|171|transport|
+
+27/12/2014 09:01:53|admin|delete|174|transport|
+
+27/12/2014 09:01:53|admin|delete|175|transport|
+
+27/12/2014 09:01:54|admin|delete|176|transport|
+
+27/12/2014 09:01:54|admin|delete|177|transport|
+
+27/12/2014 09:01:54|admin|delete|178|transport|
+
+27/12/2014 09:01:54|admin|delete|179|transport|
+
+27/12/2014 09:01:54|admin|delete|180|transport|
+
+27/12/2014 09:01:54|admin|delete|181|transport|
+
+27/12/2014 09:01:54|admin|delete|182|transport|
+
+27/12/2014 09:02:15|admin|delete|172|transport|
+
+27/12/2014 09:02:15|admin|delete|173|transport|
+
+27/12/2014 09:07:46|admin|delete|188|transport|
+
+27/12/2014 09:07:46|admin|delete|189|transport|
+
+27/12/2014 09:07:47|admin|delete|190|transport|
+
+27/12/2014 09:07:47|admin|delete|191|transport|
+
+27/12/2014 16:14:35|admin|delete|248|transport|
+
+27/12/2014 16:14:35|admin|delete|250|transport|
+
+27/12/2014 16:14:35|admin|delete|251|transport|
+
+27/12/2014 16:14:35|admin|delete|252|transport|
+
+27/12/2014 16:14:35|admin|delete|253|transport|
+
+27/12/2014 16:14:35|admin|delete|254|transport|
+
+27/12/2014 16:14:35|admin|delete|255|transport|
+
+27/12/2014 16:17:05|admin|delete|357|transport|
+
+27/12/2014 16:17:05|admin|delete|358|transport|
+
+27/12/2014 16:17:05|admin|delete|359|transport|
+
+27/12/2014 16:17:05|admin|delete|360|transport|
+
+27/12/2014 16:17:05|admin|delete|361|transport|
+
+27/12/2014 16:17:05|admin|delete|362|transport|
+
+27/12/2014 16:24:35|admin|delete|257|transport|
+
+27/12/2014 16:24:35|admin|delete|258|transport|
+
+27/12/2014 16:24:35|admin|delete|259|transport|
+
+27/12/2014 16:24:35|admin|delete|260|transport|
+
+27/12/2014 16:24:35|admin|delete|267|transport|
+
+27/12/2014 16:24:35|admin|delete|268|transport|
+
+27/12/2014 16:25:03|admin|delete|229|transport|
+
+27/12/2014 16:25:03|admin|delete|236|transport|
+
+27/12/2014 16:25:03|admin|delete|243|transport|
+
+27/12/2014 16:25:03|admin|delete|244|transport|
+
+27/12/2014 16:25:03|admin|delete|256|transport|
+
+29/12/2014 14:35:48|admin|edit|31|e_customer|Tân Cảng Miền Trung-Ngô Tôn-090 208 5911-info@ngoton.com-Quy Nhơn-0
+
+29/12/2014 14:36:33|admin|edit|30|e_customer|Tân Cảng Miền Trung1-Karl1-0932671-biz1@caimeptrading.com-Quy Nhơn-0
+
+29/12/2014 14:37:00|admin|edit|30|e_customer|Tân Cảng Miền Trung-Karl-093 267 8989-biz@caimeptrading.com-Quy Nhơn-1
+
+30/12/2014 09:17:34|admin|delete|426|transport|
+
+30/12/2014 09:17:34|admin|delete|427|transport|
+
+30/12/2014 09:17:34|admin|delete|428|transport|
+
+10/01/2015 09:26:35|admin|add|1|shipment|11-01-2015-1-7-8-4200000-4000000-4500000-1-8-12-01-2015-0-sắt-10-tấn-40'-bộ-300,000-chuyển khoản-3800000-12
+
+10/01/2015 09:34:47|admin|add|2|shipment|1420930800-1-4-6-4300000-4000000-4500000-1-8-1421103600-0-sắt-10-tấn-40'-bộ-300,000-chuyển khoản-3800000-3-1
+
+10/01/2015 09:47:16|admin|edit|2|shipment|1420930800-1-4-6-4300000-4000000-4000000-1-8-1421103600-0-sắt-10-tấn-40'-bộ-300000-chuyển khoản-3800000-3-1
+
+10/01/2015 15:06:03|admin|delete|87|salary|
+
+10/01/2015 15:06:11|admin|delete|66|staff|
+
+10/01/2015 15:26:05|admin|delete|84|salary|
+
+10/01/2015 15:29:54|admin|delete|89|salary|
+
+12/01/2015 13:02:31|admin|edit|1|user|c94457828e8a2fd76b806c78baa7e005
+
+12/01/2015 13:03:09|admin|edit|1|user|81dc9bdb52d04dc20036dbd8313ed055
+
+15/01/2015 19:05:31|admin|edit|65|staff|nv07-Phạm Đình Tiến-15/01/2015-0------11-1-1421323530
+
+15/01/2015 19:05:54|admin|edit|55|staff|nv12-Nguyễn Thị Phương-08/01/2015-1------9-1-1421323554
+
+15/01/2015 19:06:11|admin|edit|63|staff|nv13-Phùng Giang Thanh-05/01/2015-0------10-1-1421323571
+
+15/01/2015 19:35:27|admin|edit|11|cont_sale|721-1-----1--1----21
+
+15/01/2015 19:57:14|admin|delete|15|sale_report|
+
+15/01/2015 19:57:17|admin|delete|18|sale_report|
+
+20/01/2015 19:38:53|admin|add|1|receivable|1421708400-Thu tiền vendor-141204-3-4-4380000--1422313200-2-1
+
+20/01/2015 21:06:47|admin|edit|1|receivable|1421708400-Thu tiền vendor-141204-3-4-4380000-0-1422313200-5-1
+
+20/01/2015 21:12:39|admin|edit|1|receivable|1421708400-Thu tiền-141204-3-4-4380000-0-1422313200-5-1
+
+20/01/2015 21:14:17|admin|add|1|payable|1421708400-Vendor-141207-1-10-5000000-1421881200-4-1
+
+20/01/2015 21:15:37|admin|add|1|costs|1421708400-TT tiền điện thoại-1000000-1423695600-7-1
+
+20/01/2015 21:25:46|admin|edit|1|costs|1421708400-TT tiền điện thoại-1000000-1423695600-7-1-4
+
+20/01/2015 21:27:47|admin|add|1|advance|1421708400-Tạm ứng-200000-1421794800-4-1
+
+20/01/2015 21:36:56|admin|edit|1|advance|1421708400-Tạm ứng-200000-1421794800-4-1-1
+
+21/01/2015 09:08:00|nancy|approve|1|advance|
+
+21/01/2015 09:48:22|nancy|approve|1|advance|
+
+21/01/2015 10:07:45|nancy|approve|1|advance|
+
+21/01/2015 11:13:59|nancy|approve|1|receivable|
+
+21/01/2015 11:15:47|nancy|approve|1|receivable|
+
+21/01/2015 11:17:55|nancy|approve|1|receivable|
+
+21/01/2015 13:28:24|nancy|approve|1|payable|
+
+21/01/2015 14:03:57|nancy|approve|1|costs|
+
+21/01/2015 14:04:42|nancy|approve|1|costs|
+
+21/01/2015 15:18:50|admin|edit|1|receivable|1421794800-Thu tiền-141204-1-4-4380000-0-1422313200-5-1-1
+
+21/01/2015 15:19:06|admin|edit|1|payable|1421794800-Vendor-141207-4-10-5000000-1421881200-4-1-1
+
+22/01/2015 09:28:54|admin|add|2|receivable|1421881200-Thu tiền mặt-141205-1-5-4400000--1421967600-4-1-1-2015
+
+22/01/2015 10:43:59|admin|add|3|receivable|1421881200-dsdsd--1--50000-54-1421967600-4-1-5-2015
+
+22/01/2015 10:44:27|admin|approve|3|receivable|
+
+22/01/2015 11:33:57|admin|add|4|receivable|1421881200-thu--5-26-50000000--1422399600-5-1-2-2015
+
+22/01/2015 11:34:09|admin|approve|4|receivable|
+
+24/01/2015 09:37:15|admin|delete|26|costs|
+
+27/01/2015 08:36:46|admin|add|2|advance|1422313200-tạm ứng-500000-1422486000-5-1-1-2015
+
+27/01/2015 08:49:14|sas|approve|2|advance|
+
+27/01/2015 08:49:52|linda|approve|2|advance|
+
+27/01/2015 08:50:16|nancy|approve|2|advance|
+
+27/01/2015 08:51:22|admin|approve|2|advance|
+
+27/01/2015 08:53:50|admin|approve|2|advance|
+
+27/01/2015 08:54:29|admin|approve|2|advance|
+
+27/01/2015 08:56:40|admin|approve|2|advance|
+
+27/01/2015 08:59:35|admin|approve|2|advance|
+
+27/01/2015 09:01:39|admin|approve|2|advance|
+
+28/01/2015 07:51:51|admin|approve|8|receivable|
+
+28/01/2015 10:18:20|admin|complete|23|sale_report|
+
+31/01/2015 10:48:13|admin|delete|1|trading|
+
+31/01/2015 11:10:35|admin|delete|2|trading|
+
+03/02/2015 13:34:27|admin|approve|156|receivable|
+
+05/02/2015 08:49:22|admin|pay|333|payable|
+
+05/02/2015 11:15:45|admin|add|334|payable|1423090800-tt-150109-1--1000000-1423004400-6-1-1-2015
+
+05/02/2015 14:44:41|admin|delete|155|receivable|
+
+05/02/2015 14:44:42|admin|delete|157|receivable|
+
+05/02/2015 14:44:42|admin|delete|158|receivable|
+
+05/02/2015 14:44:42|admin|delete|159|receivable|
+
+05/02/2015 14:44:42|admin|delete|160|receivable|
+
+05/02/2015 14:44:42|admin|delete|161|receivable|
+
+05/02/2015 14:44:42|admin|delete|162|receivable|
+
+05/02/2015 14:44:42|admin|delete|163|receivable|
+
+05/02/2015 14:44:42|admin|delete|164|receivable|
+
+05/02/2015 14:44:42|admin|delete|165|receivable|
+
+05/02/2015 14:44:42|admin|delete|166|receivable|
+
+05/02/2015 14:44:42|admin|delete|167|receivable|
+
+05/02/2015 14:44:42|admin|delete|113|receivable|
+
+05/02/2015 14:44:42|admin|delete|114|receivable|
+
+05/02/2015 14:44:42|admin|delete|116|receivable|
+
+05/02/2015 14:44:43|admin|delete|169|receivable|
+
+05/02/2015 14:44:43|admin|delete|174|receivable|
+
+05/02/2015 14:44:43|admin|delete|117|receivable|
+
+05/02/2015 14:44:43|admin|delete|185|receivable|
+
+05/02/2015 14:44:43|admin|delete|180|receivable|
+
+10/02/2015 08:20:51|admin|pay|178|receivable|
+
+10/02/2015 09:06:38|admin|pay|189|receivable|
+
+10/02/2015 09:10:45|admin|pay|182|receivable|
+
+10/02/2015 09:47:44|admin|pay|314|payable|
+
+10/02/2015 11:09:24|admin|pay|197|receivable|
+
+10/02/2015 13:24:01|admin|add|1|costs|1423522800-phí-10000-1423609200-7-1-1--2015--1-0
+
+13/02/2015 14:00:35|admin|lock|47|sale_report|1
+
+13/02/2015 14:02:28|admin|lock|47|sale_report|0
+
+13/02/2015 15:36:18|admin|add|71|sale_report|1423782000-2-3-1-150201-2-2-3-3-6-111-46-1424300400-10000-200000-0--0-0--0-0--0--0--0--0----0-0-0-4-1-1-1-1-1-1-1-1-0-0-10000-200000-------
+
+13/02/2015 16:00:50|admin|edit|71|procument|1-130-2-9870-199998
+
+13/02/2015 16:56:33|admin|add|72|sale_report|1423782000-4-7-1-150202-4-1-0--3-4x20'-53-1424300400-20000000-200000-0--0-0--0-0--0--0--0--0----0-0-0-1-1-1-1-1-1-1-1-1-0-0-20000000-200000-------
+
+14/02/2015 11:11:19|admin|add|73|sale_report|1423868400---1-150203-20-1-0--1-2x40'-61-1424386800-2000000-1000000-0--0-0--0-0--0--0--0--0----0-0-0-3-1-1-1-1-1-1-1-1-0-0-2000000-1000000-------
+
+14/02/2015 11:12:55|admin|edit|73|procument|1-980000-300000-1020000-700000
+
+14/02/2015 14:02:53|admin|pay|337|payable|
+
+16/02/2015 11:12:24|admin|add|45|agent|1424214000-150204-4--ada-2-2-0-1-0-0-0-0-0-0-1-0-0-1-0-0-0-0-950000-1540000-65
+
+16/02/2015 11:14:46|admin|add||agent_manifest|1423522800-150205-4--fsfs-0-0-0-0-0-0-1423782000-66
+
+16/02/2015 11:15:48|admin|add|46|agent|1423609200-150206-4--fgd-2-2-0-1-0-0-0-0-0-0-1-0-0-1-0-0-0-0-950000-1540000-65
+
+17/02/2015 09:33:15|admin|add|2|costs|1424127600-ch-0-1424214000-8-1-1-1-2015--1-0-0-55660000
+
+17/02/2015 09:34:09|admin|pay|2|costs|
+
+24/02/2015 14:29:50|admin|edit|71|procument|1---10000-200000
+
+24/02/2015 14:44:09|admin|edit|71|procument|1-10000365-200022--9990365--22
+
+24/02/2015 14:46:04|admin|edit|71|procument|1-20000364-400002--19990364--200002
+
+24/02/2015 15:45:49|admin|pay|197|receivable|
+
+26/02/2015 07:36:32|admin|add|11|invoice|1424991600-hd007-69-HD-1000000000-100000000-810000000--1425078000-1424991600-1424991600-90000000
+
+26/02/2015 08:13:45|admin|add|12|invoice|1424905200-009-69-kjkh-10000000-500000-8550000-380000-1424905200-1424905200-1424905200-570000
+
+26/02/2015 08:16:51|admin|delete|12|invoice|
+
+02/03/2015 23:33:12|admin|edit|72|procument|1-0-100000-20000000-100000
+
+02/03/2015 23:36:01|admin|edit|72|procument|1-330000-550000-19670000--350000
+
+02/03/2015 23:38:25|admin|edit|72|procument|1-530000-550000-19470000--350000
+
+03/03/2015 00:08:59|admin|edit|72|procument|1-1230000-750000-18770000--550000
+
+06/03/2015 07:48:41|admin|edit|1|user|81dc9bdb52d04dc20036dbd8313ed055
+
+06/03/2015 16:24:21|admin|edit|119|receivable|1425596400-150109/ Thu ti??n (TCMT) ti??n nh??p cont l??p xe-150109-6-32-1636800000-0-1419894000-1-1-4-2015-1636800000-hd0001
+
+06/03/2015 16:27:46|admin|edit|379|payable|1425596400-dd-150110-1-38-4800000-1421017200-3-1-1-2015-4800000-hd009
+
+06/03/2015 21:14:01|admin|add|60|trading|1-0-500000-0--500000
+
+06/03/2015 21:25:39|admin|add|61|trading|1-0-4000000-0-196000000
+
+06/03/2015 21:31:29|admin|add|62|trading|1-0-2000000-0-18000000
+
+06/03/2015 21:38:35|admin|add|63|trading|1-0-2323-0-399997677
+
+06/03/2015 21:40:04|admin|add|64|trading|1-0-30000000-0--30000000
+
+06/03/2015 21:48:48|admin|add|65|trading|1425596400---1-150304-0-1-0--1--32-1425078000-0-0-0--0-0--0-0--0--0--0--0----0-0-0-1-1-1-1-1-1-1-1-1-2--1-0--------0-0
+
+07/03/2015 00:31:57|admin|add|39|agent|1425423600-79799-4-1-khkhk-2-2-0-1-0-0-0-0-0-0-1-0-0-1-0-0-0-0-950000-1540000-26
+
+07/03/2015 07:46:01|admin|delete|60|trading|
+
+07/03/2015 07:46:01|admin|delete|61|trading|
+
+07/03/2015 07:46:01|admin|delete|62|trading|
+
+07/03/2015 07:46:01|admin|delete|63|trading|
+
+07/03/2015 07:46:01|admin|delete|64|trading|
+
+07/03/2015 07:46:02|admin|delete|65|trading|
+
+07/03/2015 07:55:35|admin|edit|66|trading|1425682800-0-0-1-100000-0-1-0--1-sdsdsd-32-1425078000-0-500000000-0--0-0--0-0--0--0--0--0----0-0-0-1-1-1-1-1-1-1-1-1-2-14-5000000-------
+
+07/03/2015 07:56:42|admin|add|67|trading|1425682800---1-989-0-1-0--1--32-1425078000-0-656765765765-0--0-0--0-0--0--0--0--0----0-0-0-1-1-1-1-1-1-1-1-1-2-14-5900000--------0-0
+
+07/03/2015 13:54:22|admin|add|40|agent|1426201200-7587-4-1-hvjh-2-2-0-1-0-0-0-0-0-0-1-0-0-1-0-0-0-0-950000-1540000-26
+
+07/03/2015 14:34:29|admin|pay|240|receivable|
+
+09/03/2015 15:34:16|admin|add|381|costs|1425855600-sas-20000-1426719600-12-1-1--2015--1-0-0-0-150111
+
+10/03/2015 08:09:12|admin|edit|59|procument|1-0-10000-550000--10000
+
+10/03/2015 08:10:07|admin|edit|52|procument|1-3283200-43701000--3283200-12103980
+
+10/03/2015 08:12:00|admin|edit|52|procument|1-3283200-43701000--3283200-12103980
+
+18/03/2015 13:52:32|admin|delete|15|newsalary|
+
+18/03/2015 13:52:32|admin|delete|16|newsalary|
+
+18/03/2015 13:52:32|admin|delete|17|newsalary|
+
+18/03/2015 13:52:33|admin|delete|18|newsalary|
+
+18/03/2015 13:52:33|admin|delete|19|newsalary|
+
+18/03/2015 13:52:33|admin|delete|20|newsalary|
+
+18/03/2015 13:52:33|admin|delete|21|newsalary|
+
+18/03/2015 13:52:33|admin|delete|22|newsalary|
+
+18/03/2015 13:52:33|admin|delete|23|newsalary|
+
+18/03/2015 13:52:34|admin|delete|24|newsalary|
+
+18/03/2015 13:52:34|admin|delete|25|newsalary|
+
+18/03/2015 13:52:34|admin|delete|26|newsalary|
+
+18/03/2015 13:52:34|admin|delete|27|newsalary|
+
+18/03/2015 13:52:35|admin|delete|28|newsalary|
+
+18/03/2015 13:52:35|admin|delete|29|newsalary|
+
+18/03/2015 14:09:18|admin|add|87|salary|5000000-24----0---0---0-----0-4615385--1-6
+
+18/03/2015 14:11:27|admin|add|88|salary|5000000-24----0---0---0-----0-4615385--1-6
+
+18/03/2015 14:11:46|admin|add|40|newsalary|5000000-24-4615385-0-0-0-0-0--0-0--0-4615385-1422745200-1-6
+
+18/03/2015 14:12:41|admin|add|41|newsalary|5000000-24-4615385-0-0-0-0-0--0-0--0-4615385-1425164400-1-6
+
+18/03/2015 14:14:42|admin|add|42|newsalary|5000000-24-4615385-0-0-0-0-0-0-0-0--0-4615385-1422745200-1-6
+
+18/03/2015 14:16:09|admin|add|43|newsalary|5000000-24-4615385-0-0-0-0-0-0-0-0--0-4615385-1425164400-1-6
+
+18/03/2015 14:26:14|admin|add|44|newsalary|5000000-24-4615385-0-0-0-0-0-0-0-0-0-0-4615385-1422745200-1-6
+
+18/03/2015 14:27:44|admin|edit|41|newsalary|5000000-24-4615385-0-0-0-0-0-0-0-0-NaN-0-4615385--1
+
+18/03/2015 14:31:15|admin|add|45|newsalary|4000000-26-4000000-0-0-259615-0-0-0-0-0-4259615-0-4259615-1425164400-1-28
+
+20/03/2015 15:05:08|admin|add|16|invoice|1425510000-0008989-32-ikjk-10000000-0-9000000-400000-1425078000--1427324400-1426806000-9---600000
+
+20/03/2015 16:27:50|admin|edit|59|procument|1-0-2010000-550000--2010000
+
+20/03/2015 16:28:54|admin|edit|59|procument|1-0-310000-550000--310000
+
+20/03/2015 16:32:52|admin|edit|58|procument|1-15000-1320000000--15000--1305700000
+
+21/03/2015 13:50:55|admin|edit|73|procument|1-226138000-0--113138000-124300000
+
+21/03/2015 16:01:38|admin|add|102|customer|Công ty Duy Khương----Công ty Duy Khương-----null----1-03/2015
+
+21/03/2015 16:02:07|admin|add|103|customer|Công ty Hoàng Gia----Công ty Hoàng Gia-----null----1-03/2015
+
+21/03/2015 16:17:49|admin|add|82|vendor|A Thắng (Liên Sơn)-----Công ty Liên Sơn-----null---2---
+
+21/03/2015 16:19:10|admin|add|83|vendor|Công ty Tân Thanh-----Công ty Tân Thanh-----null---1---
+
+21/03/2015 16:19:43|admin|add|84|vendor|Công Ty Hoàng Gia-----Công Ty Hoàng Gia-----null---2---
+
+21/03/2015 16:20:01|admin|edit|83|vendor|Công ty Tân Thanh-----Công ty Tân Thanh-----null---2----1-1426929601
+
+23/03/2015 09:07:48|admincmg|edit|58|procument|1-20030000-13230000--20030000-1070000
+
+23/03/2015 09:11:35|admincmg|edit|58|procument|1-20030000-13230000--20030000-1070000
+
+23/03/2015 10:00:02|admincmg|edit|59|procument|1-50000-115000-500000--115000
+
+23/03/2015 10:00:38|admincmg|edit|59|procument|1-100000-5130000-450000--5130000
+
+23/03/2015 10:05:15|admincmg|edit|59|procument|1-50000-5015000-500000--5015000
+
+23/03/2015 10:05:58|admincmg|edit|59|procument|1-3050000-5015000--2500000--5015000
+
+23/03/2015 10:23:32|admincmg|edit|59|procument|1-2003050000-5015000--2002500000--5015000
+
+23/03/2015 10:34:47|admincmg|edit|59|procument|1-2043050000-5015000--2042500000--5015000
+
+23/03/2015 11:18:03|admincmg|edit|59|procument|1-2056100000-10030000--2055550000--10030000
+
+23/03/2015 11:25:11|admincmg|edit|59|procument|1-2063000000-20060000--2062450000--20060000
+
+23/03/2015 13:01:49|admincmg|edit|59|procument|1-50000-5015000-500000--5015000
+
+23/03/2015 13:03:00|admincmg|edit|59|procument|1-3100000-9030000--2550000--9030000
+
+23/03/2015 13:11:38|admincmg|edit|59|procument|1-0-600000-550000--600000
+
+23/03/2015 13:12:48|admincmg|edit|59|procument|1-0-7600000-550000--7600000
+
+23/03/2015 13:17:26|admincmg|edit|59|procument|1-0-600000-550000--600000
+
+23/03/2015 13:17:56|admincmg|edit|59|procument|1-5000000-600000--4450000--600000
+
+23/03/2015 13:23:29|admincmg|edit|59|procument|1-5000000-700000--4450000--700000
+
+23/03/2015 13:36:37|admincmg|edit|59|procument|1-2000000-100000--1450000--100000
+
+23/03/2015 13:41:10|admincmg|edit|59|procument|1-5000000-100000--4450000--100000
+
+23/03/2015 17:00:18|admincmg|edit|417|costs|1427065200-Chi Phí thuê cont 4 x 20\' OT-2640000-1421794800-4-1-4--2015--1----150142-1
+
+23/03/2015 17:01:06|admincmg|edit|417|costs|1427065200-Chi Phí thuê cont 4 x 20\' OT-2640000-1421794800-4-1-4--2015--1-0-0-0-150142-1
+
+23/03/2015 17:01:35|admincmg|edit|417|costs|1427065200-Chi Phí thuê cont 4 x 20\' OT-264000-1421794800-4-1-4--2015--1-0-0-0-150142-1
+
+23/03/2015 17:01:44|admincmg|edit|417|costs|1427065200-Chi Phí thuê cont 4 x 20\' OT-264000-1421794800-4-1-4--2015-17-264000-0-0-150142-1
+
+24/03/2015 08:28:50|admincmg|edit|59|procument|1-11000000-100000--10450000--100000
+
+24/03/2015 08:29:38|admincmg|edit|59|procument|1-11356878-100000--10806878--100000
+
+24/03/2015 08:50:12|admincmg|edit|59|procument|1-11356878-100000--10806878--100000
+
+24/03/2015 08:51:18|admincmg|edit|59|procument|1-14333333-106000--13783333--106000
+
+24/03/2015 09:02:43|admincmg|edit|59|procument|1-4356878-200000--3806878--200000
+
+24/03/2015 09:03:36|admincmg|edit|59|procument|1-40437800-250000--39887800--250000
+
+25/03/2015 10:59:54|admincmg|edit|11|invoice|1414364400-0000007-30-Xuất hộ HĐ TCMT (0000007)-580421909-0-522379718-23216876-1417302000-1417388400-1417388400-1419721200-9-24-73-34825315
+
+27/03/2015 17:54:04|admincmg|edit|521|costs|1427410800-150222 Phí chuyển tiền cho cty Trugn Hiếu-20000-1426460400-12-1-4--2015--1-0-21000-0--1-0
+
+28/03/2015 09:57:48|admincmg|edit|551|costs|1427497200-Chi tiền gửi chứng từ xe hoa mai cho Mr Tín tuần 13-30000-1426978800-12-1-1--2015--1-0-30000-0--1-0-1
+
+04/04/2015 14:09:47|admincmg|complete|56|sale_report|
+
+04/04/2015 14:10:06|admincmg|lock|56|sale_report|1
+
+04/04/2015 14:11:43|admincmg|lock|56|sale_report|0
+
+04/04/2015 14:15:05|admincmg|lock|56|sale_report|1
+
+06/04/2015 08:39:31|admincmg|invoice|46|agent|
+
+06/04/2015 15:17:47|admincmg|edit|512|costs|1428271200-Thanh toán tiền truyền hình cáp tháng 2/2015-93000-1426719600-12-1-1--2015--1-0-93000-1426806000-0--1-0-0-0
+
+09/04/2015 13:22:08|admincmg|edit|72|sale_report|1426633200-1-360-1-150311-1-1-0--1-V/c: 1x20/ CL- PM-12-1427410800-0-8170000-0--0-0--0-0--0--0--0--0----0-0-0-4-1-1-1-1-1-1-1-1-1-0--------0-8170000
+
+09/04/2015 14:55:20|admincmg|edit|84|pay|1423004400-5-150000-6-2015
+
+10/04/2015 14:09:36|admincmg|add||agent_manifest|1427925600-150401-6-1-150401-2371050-200000-0-200000-425100-40000-1428184800-0--1-64-27
+
+17/04/2015 08:47:35|admincmg|add|557|costs|1429221600-bvfbfg-40090-1429308000-16-1-1--2015--1-0-0--0--1-0-0-0-0-0
+
+17/04/2015 08:48:14|admincmg|edit|557|costs|1429221600-bvfbfg-40090-1429308000-16-1-1--2015-15-40090-0--0--1-0-0-0-0-0
+
+17/04/2015 08:49:10|admincmg|delete|557|costs|
+
+17/04/2015 09:14:22|admincmg|add|558|costs|1429221600-sdsd-50000-1429308000-16-1-1--2015--1-0-0--0--1-0-0-0-0-0
+
+17/04/2015 09:14:39|admincmg|edit|558|costs|1429221600-sdsd-50000-1429308000-16-1-1--2015-1-50000-0--0--1-0-0-0-0-0
+
+17/04/2015 15:58:44|admincmg|add|51|agent_manifest|1428616800-150402-4-1-xas-0-0-0-200000-0-0-1428876000-0--1-27
+
+21/04/2015 16:14:48|admincmg|add|47|agent|1427839200-150505-4-1-asasa-2-2-0-1-0-0-0-0-0-0-1-0-0-1-0-0-5-4-0-20000-hi-20000-15000-1930000-1540000-995000-26
+
+21/04/2015 16:15:35|admincmg|edit|47|agent|1427839200-150505-4-1-asasa-2-2-0-1-0-0-0-0-0-0-1-0-0-1-0-0-5-4-0-20000-hi-20000-35000-1930000-1540000-1015000-26
+
+21/04/2015 17:04:23|admincmg|add|52|agent_manifest|1429653600-1500502-4-1-fsd-1000000-1000000-0-0-0-50000-1429912800-0--1-30000-15000-95000-27
+
+21/04/2015 17:05:37|admincmg|edit|52|agent_manifest|1429653600-1500502-4-1-fsd-1000000-1000000-0-0-0-50000-1429912800-0--1-30000-15000-95000-27
+
+22/04/2015 10:58:06|admincmg|add|87|vendor|a-----a-----null---1---
+
+22/04/2015 13:44:11|admincmg|edit|15|invoice|1422572400-0000020-45-Cước vc mì lát từ Hoa Lư - Khánh Hội-2661700800-2079453750-524022345-23289882-1427666400-1428962400-1428962400-1421535600-9-24-73-10000-200000-34934823-210000
+
+27/04/2015 09:50:44|admincmg|edit|651|costs|1430085600-Thanh toán cước Inter vinaphone T03: 1124219-385000-1429048800-16-1-1--2015--1-0-385000-1429048800-0--1-0-1-0-0-0-0-0-0-0-0-0
+
+28/04/2015 00:00:35|admincmg|pay|74|receivable|
+
+28/04/2015 00:17:55|admincmg|pay|891|payable|
+
+28/04/2015 00:33:24|admincmg|pay|545|costs|
+
+28/04/2015 00:47:23|admincmg|edit|460|costs|1430085600-Cát Lái - KCN Cát Lái-15000-1428012000-14-1-1--2015--1-0-0--0-150311-1-0-0-0-0-0-0-0-0-0-1-0
+
+28/04/2015 00:49:40|admincmg|add|699|costs|1430085600-chuyển tiền solow-11111-1428876000-16-1-4--2015--1-0-0--0--1-0-0-0-0-0-0-1-0-0-0-0
+
+28/04/2015 00:49:51|admincmg|delete|699|costs|
+
+28/04/2015 01:56:40|admincmg|edit|263|receivable|1430085600-1x40\' QuingDao - Đồng Nai--1-0-0-31690000-1-1423695600-7-1-5-2015-19690000-
+
+30/04/2015 21:35:42|admincmg|add|3|advance|1430344800-fdf-10000--1429135200-16--1-2015
+
+30/04/2015 21:40:46|admincmg|add|4|advance|1430344800-dsds-112121-1429048800-16--1-2015
+
+30/04/2015 21:41:12|admincmg|add|5|advance|1430344800-ewd-12121-1428962400-16--1-2015
+
+07/05/2015 09:19:25|admincmg|add|699|costs|1430949600-hi-0-1431036000-19-1-1-4-2015--1-0-0--100000--1-0-0-0-0-0-0-1-0-0-0-0
+
+07/05/2015 09:22:15|admincmg|add|700|costs|1430949600-dsd-10000-1431640800-20-1-4--2015--1-0-0--0--1-0-0-0-0-0-0-1-0-0-0-0
+
+07/05/2015 09:26:30|admincmg|add|701|costs|1430949600-chi phi-10000-1431036000-19-1-6--2015--1-0-0--0--1-0-0-0-0-0-0-1-0-0-0-0
+
+07/05/2015 09:29:12|admincmg|pay|701|costs|
+
+07/05/2015 09:29:50|admincmg|pay|699|costs|
+
+12/05/2015 13:42:01|admincmg|edit|99|receive|1425164400-4-11990000-9-2015-hi
+
+12/05/2015 13:55:37|admincmg|edit|549|pay|1425164400-5-9000000-9-2015-hi
+
+12/05/2015 14:22:32|admincmg|pay|276|receivable|
+
+12/05/2015 14:26:15|admincmg|pay|887|payable|
+
+14/05/2015 11:07:48|admincmg|edit|69|sale_report|1421794800-0-0-1-150142-4-1-0--1-Cho Thuê 4 x 20\\\'OT-32-1424473200-0-27060000-0--0-0--0-0--0--0--0--0----0-0-0-3-1-1-1-1-1-1-1-1-1-90000000---------300000-12980000
+
+14/05/2015 11:09:36|admincmg|edit|69|sale_report|1421794800-0-0-1-150142-4-1-0--1-Cho Thuê 4 x 20\\\'OT-32-1424473200-0-27060000-0--0-0--0-0--0--0--0--0----0-0-0-3-1-1-1-1-1-1-1-1-1-100000000---------300000-12980000
+
+14/05/2015 11:10:40|admincmg|edit|69|sale_report|1421794800-0-0-1-150142-4-1-0--1-Cho Thuê 4 x 20\\\'OT-32-1424473200-0-27060000-0--0-0--0-0--0--0--0--0----0-0-0-3-1-1-1-1-1-1-1-1-1-90000000---------300000-12980000
+
+14/05/2015 11:12:18|admincmg|edit|69|sale_report|1421794800-0-0-1-150142-4-1-0--1-Cho Thuê 4 x 20\\\'OT-32-1424473200-10-27060001-0--0-0--0-0--0--0--0--0----0-0-0-3-1-1-1-1-1-1-1-1-1-90000000---------300000-12980000
+
+14/05/2015 11:12:56|admincmg|edit|69|sale_report|1421794800-0-0-1-150142-4-1-0--1-Cho Thuê 4 x 20\\\'OT-32-1424473200-101-27060000-0--0-0--0-0--0--0--0--0----0-0-0-3-1-1-1-1-1-1-1-1-1-90000000---------299990-12980001
+
+14/05/2015 11:18:05|admincmg|edit|69|sale_report|1421794800-0-0-1-150142-4-1-0--1-Cho Thuê 4 x 20\\\'OT-32-1424473200-10-27060000-0--0-0--0-0--0--0--0--0----0-0-0-3-1-1-1-1-1-1-1-1-1-90000000---------299899-12980000
+
+14/05/2015 11:18:44|admincmg|edit|69|sale_report|1421794800-0-0-1-150142-4-1-0--1-Cho Thuê 4 x 20\\\'OT-32-1424473200-101-270600001-0--0-0--0-0--0--0--0--0----0-0-0-3-1-1-1-1-1-1-1-1-1-900000001---------299990-12980000
+
+14/05/2015 11:19:34|admincmg|edit|69|sale_report|1421794800-0-0-1-150142-4-1-0--1-Cho Thuê 4 x 20\\\'OT-32-1424473200-0-27060000-0--0-0--0-0--0--0--0--0----0-0-0-3-1-1-1-1-1-1-1-1-1-100000000---------299899-256520001
+
+14/05/2015 16:32:56|admincmg|delete|893|pay|
+
+14/05/2015 16:34:14|admincmg|delete|894|pay|
+
+14/05/2015 16:35:28|admincmg|delete|895|pay|
+
+14/05/2015 16:36:51|admincmg|delete|896|pay|
+
+14/05/2015 16:58:03|admincmg|delete|897|pay|
+
+15/05/2015 17:03:20|admincmg|edit|56|procument|1-600000-14080000--600000--880000-2700000
+
+15/05/2015 17:29:41|admincmg|edit|56|procument|1-900000-21120000--900000--7920000-4050000
+
+15/05/2015 18:01:56|admincmg|edit|84|trading|1427752800-0-0-1-150403-1-1-0--6-nhập 1x40\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\-32-1430258400-0-1320000000-0--0-0--0-0--0--0--0--0----0-0-0-4-1-1-1-1-1-1-1-1-2--1-0-------
+
+19/05/2015 08:11:13|admincmg|edit|700|costs|1431986400-dsd-10000-1431640800-20-1-4--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-0-0-0-1-1-0-0
+
+19/05/2015 08:12:22|admincmg|edit|700|costs|1431986400-dsd-10000-1431640800-20-1-4--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-0-0-0-1-1-0-0
+
+19/05/2015 08:19:49|admincmg|edit|700|costs|1431986400-dsd-10000-1431640800-20-1-4--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-0-0-0-1-0-1-0
+
+19/05/2015 08:19:57|admincmg|edit|700|costs|1431986400-dsd-10000-1431640800-20-1-4--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-0-0-0-1-0-0-1
+
+19/05/2015 08:20:05|admincmg|edit|700|costs|1431986400-dsd-10000-1431640800-20-1-4--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-0-1-0-0-1-0-0
+
+19/05/2015 08:20:20|admincmg|edit|700|costs|1431986400-dsd-10000-1431640800-20-1-4--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-1-0-0-0-0-1-0
+
+19/05/2015 09:01:38|admincmg|edit|700|costs|1431986400-dsd-10000-1431640800-20-1-4--2015--1-0-0--0--1-0-0-0-0-0-0-1-0-0-0-0-0-0-0-0
+
+21/05/2015 08:02:54|admincmg|add|1|fixed_asset|Tivi-3
+
+21/05/2015 08:03:12|admincmg|edit|1|fixed_asset|Tivi-2
+
+21/05/2015 16:07:22|admincmg|edit|51|agent_manifest|1427151600-150323-6-1-150223/ TTHQ thông quan hàng hóa-7000000-6000000-0-100000-0-160000-1427410800-0--1-0-0-160000-27
+
+21/05/2015 16:12:34|admincmg|edit|56|agent_manifest|1427839200-150402-6-1-150402/ 3x40\' hàng xuất trả b/l YMLUI252816401-6000000-6100000-0-200000-0-160000-1428098400-0--1-0-0-160000-28
+
+21/05/2015 16:17:05|admincmg|edit|56|agent_manifest|1427839200-150402-6-1-150402/ 3x40\' hàng xuất trả b/l YMLUI252816401-6000000-6100000-0-200000-0-160000-1428098400-0--1-0-0-160000-28
+
+23/05/2015 08:16:14|admincmg|edit|20|invoice|1424991600-0000052--32-Phí đóng rút, cước vc-102389403-0-93081275-3483240-1427666400--3600-1432936800-1429221600-20-24-73-0-0-5824888-0
+
+29/05/2015 15:59:02|admincmg|lock|56|sale_report|1
+
+29/05/2015 15:59:13|admincmg|lock|56|sale_report|0
+
+29/05/2015 15:59:20|admincmg|lock|98|trading|1
+
+29/05/2015 16:08:15|admincmg|lock|97|sale_report|1
+
+29/05/2015 16:16:02|admincmg|edit|884|costs|1432850400-150521/ BAN 9.870USD vào tk CMG (USD) - 21.870 để chuyển DR-215856900-1432418400-21-1-4-11-2015--1-0-215856900-1432418400-215856900-150521-1-0-0-0-0-0-0-0-1-0-0-0-0-0-0-0
+
+01/06/2015 10:01:09|admincmg|lock|85|sale_report|1
+
+01/06/2015 10:01:32|admincmg|lock|85|sale_report|0
+
+01/06/2015 10:54:15|admincmg|add|107|sale_report|1393628400---1-141301-1-1-0--1--31-1420066800-0-185000000-0--0-0--0-0--0--0--0--0----0-0-0-1-1-1-1-1-1-1-1-1-1-0--------0-0
+
+16/06/2015 09:50:27|admincmg|add|72|sec_cost|1434492000-hi-4000000-7-3-141239-11
+
+16/06/2015 09:50:43|admincmg|delete|72|sec_cost|
+
+18/06/2015 15:21:47|admincmg|lock|56|sale_report|1
+
+18/06/2015 16:45:28|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0--------1
+
+18/06/2015 17:02:25|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0--------2-1
+
+19/06/2015 07:39:36|admincmg|lock|100|trading|0
+
+19/06/2015 07:39:58|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0--------3-1
+
+19/06/2015 09:44:51|admincmg|lock|100|trading|0
+
+19/06/2015 09:50:24|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0--------4-1
+
+19/06/2015 09:53:41|admincmg|lock|100|trading|0
+
+20/06/2015 10:41:06|admincmg|approve|315|payable|
+
+20/06/2015 10:41:24|admincmg|approve|543|costs|
+
+22/06/2015 11:06:06|admincmg|edit|59|sale_report|1425337200-0-0-2-3-20-150219-0-1-0--5-Ch?nh Manifest BL RTM0629744-12-1426287600-550000-0-0--0-0--0-0--0--0--0--0----0-0-0-4-1-1-1-1-1-1-1-1-1-0--------550000-0-1
+
+22/06/2015 11:06:33|admincmg|lock|55|sale_report|0
+
+22/06/2015 11:09:33|admincmg|edit|59|sale_report|1425337200-0-0-2-3-3-150219-0-1-0--5-Ch?nh Manifest BL RTM0629744-12-1426287600-550000-0-0--0-0--0-0--0--0--0--0----0-0-0-4-1-1-1-1-1-1-1-1-1-0--------550000-0-2-1
+
+22/06/2015 11:09:39|admincmg|lock|59|sale_report|0
+
+22/06/2015 11:26:16|admincmg|edit|59|sale_report|1425337200-0-0-2-3-3-150219-0-1-0--5-Ch?nh Manifest BL RTM0629744-12-1426287600-550000-0-0--0-0--0-0--0--0--0--0----0-0-0-4-1-1-1-1-1-1-1-1-1-0--------550000-0-3-1
+
+22/06/2015 11:29:08|admincmg|lock|59|sale_report|0
+
+22/06/2015 11:29:11|admincmg|edit|59|sale_report|1425337200-0-0-2-3-3-150219-0-1-0--5-Ch?nh Manifest BL RTM0629744-12-1426287600-550000-0-0--0-0--0-0--0--0--0--0----0-0-0-4-1-1-1-1-1-1-1-1-1-0--------550000-0-4-1
+
+22/06/2015 11:31:39|admincmg|lock|59|sale_report|0
+
+22/06/2015 11:31:42|admincmg|edit|59|sale_report|1425337200-0-0-2-3-3-150219-0-1-0--5-Ch?nh Manifest BL RTM0629744-12-1426287600-550000-0-0--0-0--0-0--0--0--0--0----0-0-0-4-1-1-1-1-1-1-1-1-1-0--------550000-0-5-1
+
+22/06/2015 13:22:25|admincmg|edit|59|procument|1-0-0-550000-0-80000-1
+
+22/06/2015 13:33:23|admincmg|edit|59|procument|1-0-0-550000-0-65000-2
+
+22/06/2015 14:16:25|admincmg|edit|84|trading|1427752800-0-0-150403-1-1-0--6-nhập 1x40-32-1430258400-0-1320000000-0--0-0--0-0--0--0--0--0----0-0-0-4-1-1-1-1-1-1-1-1-2--1-0-2-3-2--------1
+
+22/06/2015 15:09:08|admincmg|edit|67|agent|2-3-5-1431813600-150512-4-1-CM 16 V.132E - 133W-2-2-5941350-1-63-9-9-43-43-59-1-0-3-1-3-0-1-0-0-0--30000-15000-0-0-0-0-0-0-0-0-0-16196350-19036985-205000-26
+
+22/06/2015 16:04:00|admincmg|edit|62|agent_manifest|2-3-3-1431813600-150513-107-1-150513/ Nhập seal 1x20\\\'-32983363-5000000-0-200000-7500000-360000-1432418400-0--1-0-0-360000-64-27
+
+22/06/2015 16:08:13|admincmg|edit|62|agent_manifest|2-3-3-1431813600-150513-107-1-150513/ Nhập seal 1x20\\\'-32983363-5000000-0-200000-7500000-360000-1432418400-0--1-0-0-360000-64-27
+
+22/06/2015 16:09:17|admincmg|edit|62|agent_manifest|2-3-3-1431813600-150513-107-1-150513/ Nhập seal 1x20\\\'-32983363-5000000-0-200000-7500000-360000-1432418400-0--1-0-0-360000-64-27
+
+22/06/2015 16:10:19|admincmg|edit|62|agent_manifest|2-3-3-1431813600-150513-107-1-150513/ Nhập seal 1x20\\\'-32983363-5000000-0-200000-7500000-360000-1432418400-0--1-0-0-360000-64-27
+
+22/06/2015 20:57:30|admincmg|edit|85|sale_report|1428962400-741-360-2-2-2-150410-1-1-0--1-v/c:1x20x3MT CL-PM (cmalogs//đphuong)-12-1429826400-0-8219400-0--0-0--0-0--0--0--0--0----0-0-0-4-1-1-1-1-1-1-1-1-1-0-1000000---------300000-6014400-1
+
+22/06/2015 21:15:22|admincmg|edit|83|procument|1-4832000-44000000--2000000-4400000-50000-1
+
+22/06/2015 21:16:08|admincmg|edit|83|procument|1-4832000-44000000--2000000-4400000-50000-2
+
+22/06/2015 21:16:51|admincmg|edit|83|procument|1-2000000-0-832000-48400000-15000-3
+
+24/06/2015 11:13:35|admincmg|add|1|project|TMS-
+
+24/06/2015 11:15:04|admincmg|add|1|work|1435183200-Input-1.5-Typing--No-1
+
+24/06/2015 11:19:30|admincmg|edit|1|work|1435183200-Input-1.5-Typing--No one-<br />
+<b>Notice</b>:  Undefined property: stdClass::$work in <b>D:\webproject\caimeptrading\views\work\index.phtml</b> on line <b>119</b><br />
+
+24/06/2015 13:41:24|admincmg|delete|1|work|
+
+24/06/2015 13:41:32|admincmg|delete|1|project|
+
+29/06/2015 11:32:46|admincmg|add|1|work_update|1435100400-1435528800-0.5--12--131
+
+29/06/2015 14:45:48|admincmg|edit|193|work|1435615200-Discuss with suppliers about price, specification and payment terms.-3-hi-14-,Cao Thị Kiều Oanh,Karl-77
+
+29/06/2015 14:47:04|admincmg|edit|193|work|1435615200-Discuss with suppliers about price, specification and payment terms.-3-hi-14-2,15-77
+
+29/06/2015 15:10:31|admincmg|edit|193|work|1435615200-Discuss with suppliers about price, specification and payment terms.-3-hi-14-2,15,3-77
+
+29/06/2015 15:15:11|admincmg|edit|192|work|1435356000-Find & update suppliers of agriculture products such as Corn grain, Soybean meal, Canola Meal and Coconut meal.-3-hoho-14-15-77
+
+29/06/2015 16:14:09|admincmg|add|2|work_update|1435615200--3-Hoàn thành-14-2,15,3-193
+
+29/06/2015 16:19:23|admincmg|add|3|work_update|1435615200-1435528800-3-hi-14-2,15,3-193
+
+29/06/2015 16:21:42|admincmg|add|4|work_update|1435356000-1435356000-3-hoho-14-15-192
+
+29/06/2015 16:25:02|admincmg|edit|193|work|1434319200-Discuss with suppliers about price, specification and payment terms.-3-hi-14-2,15,3-77
+
+29/06/2015 16:26:06|admincmg|edit|193|work|1435615200-Discuss with suppliers about price, specification and payment terms.-3-hi-14-2,15,3-77
+
+29/06/2015 16:37:26|admincmg|add|5|work_update|1435356000-1435356000-3-hoho-14-15-192
+
+29/06/2015 17:06:28|admincmg|edit|123|work|1435615200-Đòi nợ đợt cũ-0.2--14--57-0
+
+06/07/2015 16:28:21|admincmg|delete|99|newsalary|
+
+06/07/2015 17:04:53|admincmg|add|6|work_update|1435100400-1435096800-1-Hợp đồng-3--145
+
+06/07/2015 17:05:01|admincmg|add|7|work_update|1435100400-1435096800-1-Hợp đồng-3--145
+
+06/07/2015 17:05:08|admincmg|add|8|work_update|1435100400-1435096800-1-Hợp đồng-3--145
+
+06/07/2015 20:49:08|admincmg|add|219|work|1435960800-a-0.2--14--64-0
+
+06/07/2015 20:49:58|admincmg|delete|219|work|
+
+06/07/2015 20:50:10|admincmg|add|220|work|1436133600-s-0.3--14--64-0
+
+06/07/2015 20:50:47|admincmg|delete|220|work|
+
+06/07/2015 20:50:56|admincmg|add|221|work|1436133600-ds-2--14--64-0
+
+06/07/2015 20:52:46|admincmg|delete|221|work|
+
+06/07/2015 20:52:56|admincmg|add|222|work|1436133600-sd-9--14--64-0
+
+08/07/2015 08:14:37|admincmg|add|1|tire_buy|150419---
+
+08/07/2015 08:16:05|admincmg|edit|1|tire_buy|150419-240-1-2
+
+08/07/2015 09:41:05|admincmg|edit|1|tire_buy|150419-240-1-2-21830
+
+08/07/2015 10:06:55|admincmg|add|1|tire_sale|150419-100-1-1-4500000
+
+08/07/2015 10:08:09|admincmg|edit|1|tire_sale|150419-100-1-1-4500000
+
+08/07/2015 10:12:38|admincmg|add|2|tire_buy|112-32-1-1-32323
+
+08/07/2015 10:14:17|admincmg|delete|2|tire_buy|
+
+08/07/2015 10:16:54|admincmg|edit|1|tire_sale|150419-100-1-1-4500000
+
+08/07/2015 10:17:25|admincmg|add|2|tire_sale|150419-2-1-1-32323
+
+08/07/2015 10:17:29|admincmg|delete|2|tire_sale|
+
+11/07/2015 08:50:11|admincmg|approve|85|salary|
+
+11/07/2015 08:50:47|admincmg|approve|01-06-2015|salary|
+
+11/07/2015 10:54:24|admincmg|approve|55|salary|
+
+11/07/2015 10:55:56|admincmg|approve|56|salary|
+
+11/07/2015 10:58:09|admincmg|approve|57|salary|
+
+11/07/2015 21:03:17|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0-15-2-2--------5-1
+
+11/07/2015 21:03:54|admincmg|lock|100|trading|0
+
+11/07/2015 21:04:19|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0-15-2-2--------6-1
+
+11/07/2015 21:07:23|admincmg|lock|100|trading|0
+
+11/07/2015 21:07:44|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0-15-2-2--------7-1
+
+11/07/2015 21:09:20|admincmg|lock|100|trading|0
+
+11/07/2015 21:10:21|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0-15-2-2--------8-1
+
+11/07/2015 21:10:52|admincmg|lock|100|trading|0
+
+11/07/2015 21:11:13|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0-15-2-2--------9-1
+
+11/07/2015 21:12:14|admincmg|lock|100|trading|0
+
+11/07/2015 21:12:36|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0-15-2-2--------10-1
+
+11/07/2015 21:13:16|admincmg|lock|100|trading|0
+
+11/07/2015 21:13:47|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0-15-2-2--------11-1
+
+11/07/2015 21:14:08|admincmg|lock|100|trading|0
+
+11/07/2015 21:14:31|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0-15-2-2--------12-1
+
+11/07/2015 21:18:58|admincmg|edit|83|procument|1-22000000-500000--19168000-47900000-2215000-4-1
+
+11/07/2015 21:20:25|admincmg|edit|83|procument|1-2000000-0-832000-48400000-215000-5-1
+
+11/07/2015 21:35:25|admincmg|lock|100|trading|0
+
+11/07/2015 21:36:11|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0-15-2-2--------13-1
+
+11/07/2015 21:36:37|admincmg|lock|100|trading|0
+
+11/07/2015 21:37:00|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0-15-2-2--------14-1
+
+11/07/2015 22:00:19|admincmg|lock|100|trading|0
+
+11/07/2015 22:00:46|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0-15-2-2--------15-1
+
+11/07/2015 22:01:24|admincmg|lock|100|trading|0
+
+11/07/2015 22:01:52|admincmg|edit|100|trading|1431640800-0-0-150511-1-1-0--6-nhập lốp xe 1x20-32-1432850400-0-709280000-0--0-0--0-0--0--0--0--0----0-0-0-6-1-1-1-1-1-1-1-1-2--1-0-15-2-2--------16-1
+
+13/07/2015 15:57:29|admincmg|edit|893|costs|1436777849-1436738400-Thanh toán tiền lương tháng 05-2015 Từ Thị Mai Thanh-1651715-1434319200-25-1-1--2015--1-0-----1-1-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+14/07/2015 15:46:06|admincmg|add|895|costs|1436863566-1436824800-sds-442323-1436306400-28-1-1--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-1-0-0-0-0-0-0-0-0
+
+14/07/2015 15:47:51|admincmg|pending|895|costs|
+
+15/07/2015 10:28:28|admincmg|add|68|agent|2-4-5-1436997600-150751-4-1-dsds-2-2-43535353-1-6-2-2-4-4-5-1-1-2-1-1-3-0-1-10000-20000--30000-20000-0-0-0-0-0-0-0-0-0-46325353-51287888.3-90000-26-1
+
+15/07/2015 10:46:08|admincmg|add|64|agent_manifest|2-3-4-1436997600-150756-4-1-fsds-3000000-20000-3000000-400000-200000-0-0-1437256800-490000-104-40000-43000-83000-27-1
+
+15/07/2015 10:46:55|admincmg|edit|64|agent_manifest|2-3-4-1436997600-150756-4-1-fsds-1000000-20000-3000000-400000-200000-0-0-1437256800-490000-104-40000-43000-83000-27
+
+15/07/2015 10:47:54|admincmg|edit|64|agent_manifest|2-3-4-1436997600-150756-4-1-fsds-1000000-20000-5000000-400000-200000-0-0-1437256800-490000-104-40000-43000-83000-27
+
+15/07/2015 13:25:24|admincmg|add|26|invoice|1436997600-9675-343-32-ho-500000000-100000000-360000000-16000000-1435615200-1437170400-1437429600-1436911200-124--73-30000-2226565-21743435-2256565
+
+15/07/2015 13:26:15|admincmg|edit|26|invoice|1436997600-9675-343-32-ho-500000000-200000000-270000000-12000000-1435615200-1437170400-1437429600-1436911200-124--73-0-2226565-15773435-2226565
+
+15/07/2015 13:28:38|admincmg|edit|26|invoice|1436997600-9675-343-32-ho-500000000-30000000-423000000-18800000-1435615200-1437170400-1437429600-1436911200-64--73-0-2226565-25973435-2226565
+
+15/07/2015 13:55:34|admincmg|add|108|sale_report|1436911200---3-2-3-160743-2-1-0--1--7-1435615200-33333333-4444444444-0--0-0--0-0--0--0--0--0----0-0-0-1-1-1-1-1-1-1-1-1-1-0-100000--------0-0-1
+
+15/07/2015 13:56:45|admincmg|edit|108|procument|1-20000000-40000000-13333333-4404444444-2000000-1
+
+15/07/2015 13:57:36|admincmg|edit|108|procument|1-30000000-40000000-3333333-4404444444-3000000-2
+
+15/07/2015 14:40:14|admincmg|add|109|trading|1436911200---105442-1-1-0--1-sfsd-4-1435615200-200000-30000000-0--0-0--0-0--0--0--0--0----0-0-0-1-1-1-1-1-1-1-1-1-2--1-0-3-3-2--------0-0-1
+
+15/07/2015 14:40:53|admincmg|edit|109|trading|1436911200-0-0-105442-1-1-0--1-sfsd-4-1435615200-200000-30000000-0--0-0--0-0--0--0--0--0----0-0-0-1-1-1-1-1-1-1-1-1-2--1-0-3-3-2--------1
+
+15/07/2015 16:33:25|admincmg|approve|1|pending_costs|
+
+15/07/2015 17:01:12|admincmg|approve2|1|pending_payable|
+
+20/07/2015 10:57:38|admincmg|edit|3|fixed_asset|Đồng hồ-2-400000-800000-1437429600-6-500000-1437516000-1
+
+20/07/2015 10:59:17|admincmg|edit|4|fixed_asset|Tivi-1-4000000-4000000-1437429600-6---1
+
+20/07/2015 11:31:45|admincmg|edit|3|fixed_asset|Đồng hồ-2-400000-800000-1437429600-6-500000-1437516000-1
+
+20/07/2015 11:32:25|admincmg|edit|3|fixed_asset|Đồng hồ-2-400000-800000-1437429600-6-500000-1437516000-1
+
+20/07/2015 11:38:28|admincmg|edit|3|fixed_asset|Đồng hồ-2-400000-800000-1437429600-6-500000-1437516000-1
+
+20/07/2015 13:29:56|admincmg|add|5|fixed_asset|Xe-3-400000-1200000-1437170400-1-0--1
+
+20/07/2015 15:59:20|admincmg|add|151|newsalary|4000000-26-4000000-1000000-200000-0-0-0-0-0-0-200000-5200000-200000-3800000-1433109600-1-2
+
+20/07/2015 16:00:19|admincmg|delete|151|newsalary|
+
+20/07/2015 16:00:46|admincmg|add|152|newsalary|4000000-26-4000000-700000-0-0-0-0-0-0-0-200000-4700000-200000-3800000-1435701600-1-2
+
+21/07/2015 11:20:36|admincmg|add|153|newsalary|3500000-26-3500000-729740-200000-0-0-0-0-0-0-348285-4429740-0-3151715-1433109600-1-2
+
+23/07/2015 11:30:25|admincmg|add|1|tire_excess|150521-Chênh lệch-1-200000-300000
+
+23/07/2015 11:31:02|admincmg|edit|1|tire_excess|150521-Chênh lệch-1-200000-100000
+
+23/07/2015 11:31:15|admincmg|add|2|tire_excess|150521-hi-2-30000-0
+
+23/07/2015 11:31:23|admincmg|delete|2|tire_excess|
+
+23/07/2015 16:43:32|admincmg|add|3|tire_excess|150511-CP-4-400000-0
+
+23/07/2015 16:43:48|admincmg|add|4|tire_excess|150511-thuế-5-0-500000
+
+24/07/2015 15:15:04|admincmg|edit|1032|costs|1437725704-1437688800-Thanh toán tiền cân đối hóa đơn tháng 4 (TCMT)-12068805-1436652000-28-1-5--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-0-0-1-0-0-1-0-0-0--
+
+24/07/2015 15:16:21|admincmg|edit|1033|costs|1437725781-1437688800-Thanh toán tiền cân đối hóa đơn tháng 4 (Agent)-5127103-1436652000-28-1-5--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-0-1-0-0-0-1-0-0-0--
+
+24/07/2015 15:17:08|admincmg|edit|1033|costs|1437725828-1437688800-Thanh toán tiền cân đối hóa đơn tháng 4 (Agent)-5127103-1436652000-28-1-5--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-0-1-0-0-0-1-0-0-0--
+
+24/07/2015 15:18:25|admincmg|edit|1033|costs|1437725905-1437688800-Thanh toán tiền cân đối hóa đơn tháng 4 (Agent)-5127103-1436652000-28-1-5--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-0-1-0-0-0-1-0-0-0--
+
+24/07/2015 15:18:54|admincmg|edit|1033|costs|1437725934-1437688800-Thanh toán tiền cân đối hóa đơn tháng 4 (Agent)-5127103-1436652000-28-1-5--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-0-1-0-0-0-1-0-0-0--
+
+24/07/2015 15:23:59|admincmg|edit|1033|costs|1437726239-1437688800-Thanh toán tiền cân đối hóa đơn tháng 4 (Agent)-5127103-1436652000-28-1-5--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-0-1-0-0-0-1-0-0-0--
+
+24/07/2015 15:26:34|admincmg|edit|1033|costs|1437726394-1437688800-Thanh toán tiền cân đối hóa đơn tháng 4 (Agent)-5127103-1436652000-28-1-5--2015--1-0-0--0--1-0-0-0-0-0-0-0-0-0-1-0-0-0-1-0-0-0-1427839200-
+
+24/07/2015 21:10:14|admincmg|add|1|fixed_asset_buy|1-2000000-1436997600-2
+
+24/07/2015 21:17:42|admincmg|edit|1|fixed_asset_buy|1-3000000-1436997600-1
+
+24/07/2015 21:32:38|admincmg|delete|1|fixed_asset_buy|
+
+24/07/2015 21:45:12|admincmg|add|2|fixed_asset_buy|3-3000000-1437602400-6
+
+25/07/2015 10:37:44|admincmg|edit|4|tire_buy|150521-240-2-1-21870-21780-1437688800-1437688800
+
+25/07/2015 10:57:48|admincmg|edit|10|tire_sale|150521-119-2-1-6820000--1437602400
+
+25/07/2015 10:58:00|admincmg|edit|10|tire_sale|150521-119-2-1-6820000--1437602400
+
+25/07/2015 10:58:14|admincmg|edit|10|tire_sale|150521-119-2-1-6820000--1437602400
+
+25/07/2015 10:59:05|admincmg|edit|10|tire_sale|150521-119-2-1-6820000-32-1437602400
+
+27/07/2015 16:08:34|admincmg|edit|1|tire_buy|150403-240-2-1-21625-21625-1430431200-1430431200-1430431200
+
+28/07/2015 08:50:19|admincmg|edit|1|tire_price|1-1-146-125-47.9--
+
+28/07/2015 08:51:13|admincmg|edit|1|tire_price|1-1-146-125-47.9-1430517600-1437688800
+
+28/07/2015 09:25:20|admincmg|edit|1|tire_ocean_freight|1-600-1430431200-1437688800
+
+28/07/2015 09:25:49|admincmg|edit|1|tire_ocean_freight|1-601-1430431200-1437688800
+
+28/07/2015 09:25:55|admincmg|edit|1|tire_ocean_freight|1-600-1430431200-1437688800
+
+28/07/2015 10:07:09|admincmg|add|7|tire_price|1-1-300-15-45-1437602400-1532296800
+
+28/07/2015 10:07:25|admincmg|edit|7|tire_price|1-1-300-15-45-1438120800-1532815200
+
+28/07/2015 10:19:09|admincmg|add|3|tire_ocean_freight|1-300-1437516000-1532210400
+
+28/07/2015 10:19:21|admincmg|edit|3|tire_ocean_freight|1-300-1438207200-1532901600
+
+28/07/2015 14:04:03|admincmg|edit|118|procument|1-0-32500000-0-2300000-0-2
+
+28/07/2015 14:04:44|admincmg|edit|118|procument|1-0-42500000-0--7700000-0-3
+
+28/07/2015 15:39:58|admincmg|edit|7|tire_price|1-1-136-15-45-1438120800-1532815200
+
+28/07/2015 18:17:01|admincmg|approve|1|pending_costs|
+
+30/07/2015 10:55:34|admincmg|add|1|cargo_buy|1932323-3-1-9-20000-60000-1436997600
+
+30/07/2015 11:03:42|admincmg|add|2|cargo_buy|545454-3-1-57-3333-9999-1436565600
+
+06/08/2015 10:30:18|admincmg|edit|1|tire_excess|150521-Chênh lệch-1-300000-100000-2-1
+
+06/08/2015 17:27:49|admincmg|edit|1|tire_excess|150521-Chênh lệch-1-300000-100000-2-1-32
+
+06/08/2015 17:27:57|admincmg|edit|1|tire_excess|150521-Chênh lệch-1-300000-100000-2-1-30
+
+06/08/2015 17:28:33|admincmg|edit|1|tire_excess|150521-Chênh lệch-1-300000-100000-2-1-
+
+07/08/2015 07:51:21|admincmg|edit|1|tire_excess|150521-Chênh lệch-1-300000-100000-2-1-32
+
+08/08/2015 14:12:53|admincmg|add|26|staff|nv212-Phạm thị thúy lời-07/08/2015-1-------1-08/2015
+
+08/08/2015 14:13:15|admincmg|delete|152|newsalary|
+
+08/08/2015 14:27:55|admincmg|edit|154|newsalary|5000000-26-5000000-0-200000-520000-0-0--0-0-0-5720000-0-5000000-1435701600-1
+
+08/08/2015 14:28:08|admincmg|edit|155|newsalary|3500000-26-3500000-729740-200000-0-0-0--0-0-348285-4429740-348285-3151715-1435701600-1
+
+08/08/2015 14:28:23|admincmg|edit|156|newsalary|3000000-26-3000000-729740-0-0-0-0-0-0-0-348285-3729740-0-2651715-1435701600-1
+
+08/08/2015 14:28:32|admincmg|edit|157|newsalary|4000000-24-3692308-0-200000-0-0-0-0-0-0-0-3892308-0-3692308-1435701600-1
+
+08/08/2015 14:28:52|admincmg|edit|158|newsalary|6500000-25.5-6375000-0-0-500000-0-0-0-0-0-1950000-6875000-0-4425000-1435701600-1
+
+08/08/2015 14:29:22|admincmg|edit|160|newsalary|4000000-17.5-2692308-0-200000-340000-0-0-0-0-33000-0-3232308-33000-2659308-1435701600-1
+
+08/08/2015 14:29:30|admincmg|edit|158|newsalary|6500000-25.5-6375000-0-0-500000-0-0-0-0-0-1950000-6875000-0-4425000-1435701600-1
+
+08/08/2015 14:29:38|admincmg|edit|160|newsalary|4000000-17.5-2692308-0-200000-340000-0-0-0-0-33000-0-3232308-33000-2659308-1435701600-1
+
+08/08/2015 14:29:46|admincmg|edit|162|newsalary|4000000-26-4000000-0-0-0-0-0-0-0-39000-0-4000000-39000-3961000-1435701600-1
+
+08/08/2015 14:29:55|admincmg|edit|163|newsalary|4000000-23.5-3615385-0-200000-1380000-0-0-0-0-0-0-5195385-0-3615385-1435701600-1
+
+08/08/2015 14:30:02|admincmg|edit|166|newsalary|10890000-25.5-10680577-0-780000-1500000-0-0-0-0-0-0-12960577-0-10680577-1435701600-1
+
+08/08/2015 14:30:16|admincmg|edit|165|newsalary|0-0-0-0-200000-380000-0-0-0-0-0-0-580000-0-0-1435701600-1
+
+08/08/2015 14:31:02|admincmg|edit|163|newsalary|4000000-23.5-3615385-0-200000-1380000-0-0-0-0-0-0-5195385-0-3615385-1435701600-1
+
+08/08/2015 14:31:15|admincmg|edit|166|newsalary|10890000-25.5-10680577-0-0-1500000-0-0-0-0-0-0-12180577-0-10680577-1435701600-1
+
+08/08/2015 14:31:37|admincmg|edit|160|newsalary|4000000-17.5-2692308-0-400000-340000-0-0-0-0-33000-0-3432308-33000-2659308-1435701600-1
+
+08/08/2015 14:31:49|admincmg|edit|161|newsalary|4000000-4-615385-0-0-240000-0-0-0-0-0-0-855385-0-615385-1435701600-1
+
+08/08/2015 14:32:00|admincmg|edit|156|newsalary|3000000-26-3000000-729740-0-0-0-0-0-0-0-348285-3729740-0-2651715-1435701600-1
+
+08/08/2015 14:32:08|admincmg|edit|157|newsalary|4000000-24-3692308-0-200000-0-0-0-0-0-0-0-3892308-0-3692308-1435701600-1
+
+08/08/2015 14:32:16|admincmg|edit|159|newsalary|4000000-23.5-3615385-729740-200000-1380000-0-0-0-0-0-348285-5925125-0-3267100-1435701600-1
+
+08/08/2015 14:33:08|admincmg|edit|155|newsalary|3500000-26-3500000-729740-200000-0-0-0-0-0-0-348285-4429740-0-3151715-1435701600-1
+
+08/08/2015 14:33:55|admincmg|edit|160|newsalary|4000000-17.5-2692308-0-400000-340000-0-0-0-0-33000-0-3432308-33000-2659308-1435701600-1
+
+08/08/2015 14:34:37|admincmg|edit|160|newsalary|4000000-17.5-2692308-0-400000-340000-0-0-0-0-33000-0-3432308-33000-2659308-1435701600-1
+
+08/08/2015 14:34:47|admincmg|edit|160|newsalary|4000000-17.5-2692308-0-400000-340000-0-0-0-0-33000-0-3432308-33000-2659308-1435701600-1
+
+08/08/2015 14:35:03|admincmg|edit|160|newsalary|4000000-17.5-2692308-0-400000-340000-0-0-0-0-33000-0-3432308-33000-2659308-1435701600-1
+
+08/08/2015 14:35:11|admincmg|edit|161|newsalary|4000000-4-615385-0-0-240000-0-0-0-0-0-0-855385-0-615385-1435701600-1
+
+08/08/2015 14:35:24|admincmg|edit|160|newsalary|4000000-17.5-2692308-0-0-340000-0-0-0-0-33000-0-3032308-33000-2659308-1435701600-1
+
+08/08/2015 14:35:40|admincmg|edit|160|newsalary|4000000-17.5-2692308-0-400000-340000-0-0-0-0-0-0-3432308-0-2692308-1435701600-1
+
+08/08/2015 14:35:55|admincmg|edit|160|newsalary|4000000-17.5-2692308-0-400000-340000-0-0-0-0-33000-0-3432308-33000-2659308-1435701600-1
+
+08/08/2015 14:47:55|admincmg|edit|154|newsalary|5000000-26-5000000-0-200000-520000-0-0-0-0-0-0-5720000-0-5000000-1435701600-1
+
+08/08/2015 14:48:01|admincmg|edit|155|newsalary|3500000-26-3500000-729740-200000-0-0-0-0-0-0-348285-4429740-0-3151715-1435701600-1
+
+08/08/2015 14:48:12|admincmg|edit|156|newsalary|3000000-26-3000000-729740-0-0-0-0-0-0-0-348285-3729740-0-2651715-1435701600-1
+
+08/08/2015 14:48:18|admincmg|edit|158|newsalary|6500000-25.5-6375000-0-0-500000-0-0-0-0-0-1950000-6875000-0-4425000-1435701600-1
+
+08/08/2015 14:48:23|admincmg|edit|159|newsalary|4000000-23.5-3615385-729740-200000-1380000-0-0-0-0-0-348285-5925125-0-3267100-1435701600-1
+
+08/08/2015 14:48:27|admincmg|edit|160|newsalary|4000000-17.5-2692308-0-200000-340000-0-0-0-0-33000-0-3232308-33000-2659308-1435701600-1
+
+08/08/2015 14:49:34|admincmg|edit|160|newsalary|4000000-17.5-2692308-0-400000-340000-0-0-0-0-33000-0-3432308-33000-2659308-1435701600-1
+
+08/08/2015 14:49:58|admincmg|edit|161|newsalary|4000000-4-615385-0-0-240000-0-0-0-0-0-0-855385-0-615385-1435701600-1
+
+08/08/2015 14:50:24|admincmg|edit|166|newsalary|10890000-25.5-10680577-0-0-1500000-0-0-0-0-0-0-12180577-0-10680577-1435701600-1
+
+09/08/2015 21:16:30|admincmg|add|17|user|nvtinh
+
+10/08/2015 08:18:38|admincmg|lock|112|trading|0
+
+17/08/2015 08:17:27|admincmg|lock|110|procument|0
+
+18/08/2015 20:27:17|admincmg|add||comment|-1439903296-1-payable-1175
+
+18/08/2015 20:29:32|admincmg|add||comment|-1439903312-1-payable-1175
+
+18/08/2015 20:31:16|admincmg|add||comment|-1439903296-1-payable-1175
+
+18/08/2015 20:32:21|admincmg|add||comment|hi-1439903301-1-payable-1175
+
+18/08/2015 20:35:45|admincmg|add||comment|hi-1439904945-1-payable-1175
+
+18/08/2015 20:40:52|admincmg|add||comment|hi-1439905252-1-payable-1175
+
+18/08/2015 20:42:20|admincmg|add||comment|hi-1439905340-1-payable-1175
+
+18/08/2015 20:43:20|admincmg|add||comment|fsd-1439905400-1-payable-1175
+
+18/08/2015 20:44:26|admincmg|add||comment|hi-1439905466-1-payable-1175
+
+18/08/2015 20:46:51|admincmg|add||comment|sds-1439905610-1-payable-1175
+
+18/08/2015 20:46:51|admincmg|add||comment|dsd-1439905611-1-payable-1175
+
+18/08/2015 20:46:52|admincmg|add||comment|dsd-1439905612-1-payable-1175
+
+18/08/2015 20:46:53|admincmg|add||comment|ds-1439905613-1-payable-1175
+
+18/08/2015 20:46:54|admincmg|add||comment|dsd-1439905614-1-payable-1175
+
+18/08/2015 20:46:56|admincmg|add||comment|sd-1439905616-1-payable-1175
+
+18/08/2015 20:47:41|admincmg|add||comment|dsd-1439905661-1-payable-1175
+
+18/08/2015 20:47:43|admincmg|add||comment|sdsd-1439905663-1-payable-1175
+
+18/08/2015 20:48:13|admincmg|add||comment|dsd-1439905693-1-payable-1175
+
+18/08/2015 20:48:14|admincmg|add||comment|dsd-1439905694-1-payable-1175
+
+18/08/2015 20:48:14|admincmg|add||comment|dsd-1439905694-1-payable-1175
+
+18/08/2015 20:48:15|admincmg|add||comment|dsd-1439905695-1-payable-1175
+
+18/08/2015 20:48:18|admincmg|add||comment|sds-1439905698-1-payable-1175
+
+18/08/2015 20:49:20|admincmg|add||comment|hi-1439905760-1-payable-1175
+
+18/08/2015 20:49:25|admincmg|add||comment|sd-1439905765-1-payable-1175
+
+18/08/2015 20:49:26|admincmg|add||comment|dsd-1439905766-1-payable-1175
+
+18/08/2015 20:49:26|admincmg|add||comment|dsd-1439905766-1-payable-1175
+
+18/08/2015 20:52:12|admincmg|add||comment|df-1439905932-1-payable-1175
+
+18/08/2015 20:52:13|admincmg|add||comment|fsd-1439905933-1-payable-1175
+
+18/08/2015 20:52:13|admincmg|add||comment|dsd-1439905933-1-payable-1175
+
+18/08/2015 20:52:14|admincmg|add||comment|ds-1439905934-1-payable-1175
+
+18/08/2015 20:52:15|admincmg|add||comment|dsd-1439905935-1-payable-1175
+
+18/08/2015 20:52:16|admincmg|add||comment|dsd-1439905936-1-payable-1175
+
+18/08/2015 20:52:17|admincmg|add||comment|fdf-1439905937-1-payable-1175
+
+18/08/2015 20:55:09|admincmg|add||comment|cc-1439906109-1-payable-1175
+
+18/08/2015 20:56:52|admincmg|add||comment|fdf-1439906212-1-payable-1175
+
+18/08/2015 20:57:19|admincmg|add||comment|cxc-1439906239-1-payable-1175
+
+18/08/2015 20:57:51|admincmg|add||comment|cds-1439906271-1-payable-1175
+
+18/08/2015 20:57:53|admincmg|add||comment|dsd-1439906273-1-payable-1175
+
+18/08/2015 20:57:54|admincmg|add||comment|fdf-1439906274-1-payable-1175
+
+18/08/2015 20:59:42|admincmg|add||comment|dsd-1439906382-1-payable-1175
+
+18/08/2015 20:59:42|admincmg|add||comment|fdf-1439906382-1-payable-1175
+
+18/08/2015 20:59:43|admincmg|add||comment|fdf-1439906383-1-payable-1175
+
+18/08/2015 20:59:43|admincmg|add||comment|fdf-1439906383-1-payable-1175
+
+18/08/2015 20:59:44|admincmg|add||comment|fdf-1439906384-1-payable-1175
+
+18/08/2015 20:59:45|admincmg|add||comment|fdf-1439906385-1-payable-1175
+
+18/08/2015 20:59:46|admincmg|add||comment|fdf-1439906386-1-payable-1175
+
+18/08/2015 20:59:46|admincmg|add||comment|fd-1439906386-1-payable-1175
+
+18/08/2015 20:59:47|admincmg|add||comment|fd-1439906387-1-payable-1175
+
+18/08/2015 20:59:47|admincmg|add||comment|fdf-1439906387-1-payable-1175
+
+18/08/2015 20:59:48|admincmg|add||comment|fdf-1439906388-1-payable-1175
+
+18/08/2015 20:59:49|admincmg|add||comment|fdf-1439906389-1-payable-1175
+
+18/08/2015 21:00:02|admincmg|add||comment|-1439906402-1-payable-1175
+
+18/08/2015 21:00:04|admincmg|add||comment|-1439906404-1-payable-1175
+
+18/08/2015 21:00:05|admincmg|add||comment|-1439906405-1-payable-1175
+
+18/08/2015 21:00:10|admincmg|add||comment|fd-1439906410-1-payable-1175
+
+18/08/2015 21:00:12|admincmg|add||comment|dfd-1439906412-1-payable-1175
+
+18/08/2015 21:00:13|admincmg|add||comment|fdf-1439906413-1-payable-1175
+
+18/08/2015 21:01:35|admincmg|add||comment|dsd-1439906495-1-payable-1175
+
+18/08/2015 21:01:36|admincmg|add||comment|sd-1439906496-1-payable-1175
+
+18/08/2015 21:01:37|admincmg|add||comment|ds-1439906497-1-payable-1175
+
+18/08/2015 21:01:37|admincmg|add||comment|dsd-1439906497-1-payable-1175
+
+18/08/2015 21:01:38|admincmg|add||comment|dsd-1439906498-1-payable-1175
+
+18/08/2015 21:01:39|admincmg|add||comment|dsd-1439906499-1-payable-1175
+
+18/08/2015 21:01:39|admincmg|add||comment|dsd-1439906499-1-payable-1175
+
+18/08/2015 21:01:40|admincmg|add||comment|sd-1439906500-1-payable-1175
+
+18/08/2015 21:01:41|admincmg|add||comment|sds-1439906501-1-payable-1175
+
+18/08/2015 21:01:41|admincmg|add||comment|dsd-1439906501-1-payable-1175
+
+18/08/2015 21:01:42|admincmg|add||comment|sds-1439906502-1-payable-1175
+
+18/08/2015 21:01:43|admincmg|add||comment|sd-1439906503-1-payable-1175
+
+18/08/2015 21:01:48|admincmg|add||comment|sd-1439906508-1-payable-1175
+
+18/08/2015 21:01:49|admincmg|add||comment|ds-1439906509-1-payable-1175
+
+18/08/2015 21:01:50|admincmg|add||comment|-1439906510-1-payable-1175
+
+18/08/2015 21:01:50|admincmg|add||comment|sd-1439906510-1-payable-1175
+
+18/08/2015 21:01:51|admincmg|add||comment|-1439906511-1-payable-1175
+
+18/08/2015 21:01:51|admincmg|add||comment|-1439906511-1-payable-1175
+
+18/08/2015 21:01:51|admincmg|add||comment|-1439906511-1-payable-1175
+
+18/08/2015 21:01:51|admincmg|add||comment|-1439906511-1-payable-1175
+
+18/08/2015 21:01:52|admincmg|add||comment|-1439906512-1-payable-1175
+
+18/08/2015 21:02:47|admincmg|add||comment|-1439906567-1-payable-1175
+
+18/08/2015 21:02:48|admincmg|add||comment|-1439906568-1-payable-1175
+
+18/08/2015 21:02:49|admincmg|add||comment|-1439906569-1-payable-1175
+
+18/08/2015 21:02:50|admincmg|add||comment|-1439906570-1-payable-1175
+
+18/08/2015 21:04:00|admincmg|add||comment|d-1439906640-1-payable-1175
+
+18/08/2015 21:04:22|admincmg|add||comment|ff-1439906662-1-payable-1175
+
+18/08/2015 21:04:25|admincmg|add||comment|j-1439906665-1-payable-1175
+
+18/08/2015 21:11:54|admincmg|add||comment|ff-1439907114-1-payable-1175
+
+18/08/2015 21:18:14|admincmg|add|4|comment|jj-1439907494-1-payable-1175
+
+18/08/2015 21:30:55|admincmg|add|5|comment|ss-1439908255-1-payable-1175
+
+18/08/2015 21:48:04|admincmg|pending|1175|payable|
+
+18/08/2015 21:50:48|admincmg|pending|1175|payable|
+
+18/08/2015 21:52:19|admincmg|pending|1175|payable|
+
+18/08/2015 21:52:26|admincmg|pending|1175|payable|
+
+18/08/2015 21:57:13|admincmg|pending|1032|costs|
+
+18/08/2015 21:57:36|admincmg|add|6|comment|hi-1439909856-1-costs-1032
+
+18/08/2015 22:05:52|admincmg|pending|1|payable|
+
+18/08/2015 22:05:56|admincmg|add|7|comment|hh-1439910356-1-pending_payable-1
+
+18/08/2015 22:06:06|admincmg|add|8|comment|kk-1439910366-1-pending_payable-1
+
+18/08/2015 22:09:39|admincmg|pending|1|costs|
+
+18/08/2015 22:09:41|admincmg|add|9|comment|hd-1439910581-1-pending_costs-1
+
+18/08/2015 22:09:50|admincmg|add|10|comment|d-1439910590-1-pending_costs-1
+
+25/08/2015 09:09:03|admincmg|edit|74|receivable|1440453600-Xu?t h? hóa ??n-141216-1-13-0-6170810-0-1419980400-1-1-1-2015-0--1440626400-35-2015-1
+
+26/08/2015 16:21:43|admincmg|add|1|customer_tire|CMG-A-090 293 2453-das@fsf.com-1440540000-32-200000-1440712800-1
+
+26/08/2015 16:35:57|admincmg|edit|1|customer_tire|CMG-A-090 293 2453-das@fsf.com-1440540000-32-200000-1440712800-1-1-5-5
+
+26/08/2015 16:36:22|admincmg|edit|1|customer_tire|CMG-A-090 293 2453-das@fsf.com-1440540000-32-200000-1440712800-1-1-2-2
+
+27/08/2015 14:20:21|admincmg|edit|1|customer_tire|CMG-A-090 293 2453-das@fsf.com-32--1440712800-1-1
+
+27/08/2015 14:20:57|admincmg|edit|1|customer_tire|CMG-A-090 293 2453-das@fsf.com-32--1440712800-1-1
+
+27/08/2015 14:23:34|admincmg|edit|1|customer_tire|CMG-A-090 293 2453-das@fsf.com-32-1440712800-1-1
+
+27/08/2015 14:30:14|admincmg|edit|1|customer_tire|CMG-A-090 293 2453-das@fsf.com-32-1440712800-1-1
+
+27/08/2015 15:11:45|admincmg|edit|1|customer_tire|CMG-A-090 293 2453-das@fsf.com-32-1440712800-1-1
+
+27/08/2015 15:13:22|admincmg|edit|1|customer_tire|CMG-A-090 293 2453-das@fsf.com-32-1440712800-1-1
+
+27/08/2015 15:14:12|admincmg|edit|1|customer_tire|CMG-A-090 293 2453-das@fsf.com-32-1440712800-1-1
+
+12/09/2015 09:34:21|admincmg|add|29|staff|CMG-CMG-12/09/1983-0-------1-09/2015
+
+12/09/2015 09:35:33|admincmg|edit|29|staff|CMG-CMG-12/09/1983-0-------1-1442025333
+
+16/09/2015 16:51:33|admincmg|add|34|tire_sale|--1-1--6-
+
+16/09/2015 16:53:33|admincmg|add|1|tire_order|1443132000-2-1-1-1400000-7-1441836000
+
+19/09/2015 13:18:18|admincmg|add|125|agent|2---1441749600-2323-4-1-fdfdfdf-2-2-343434-1-0-2-2-1-1-0-1-0-0-1-0-0-0-0-0-0--0-0-0-0-0-0-0-0-0-0-0-3223232-2173434-6136509.4-0-26-1
+
+19/09/2015 13:59:43|admincmg|edit|125|agent|2-0-0-1441749600-2323-4-1-fdfdfdf-2-2-343434-1-0-2-2-1-1-0-1-0-0-1-0-0-0-0-0-0--0-0-0-0-0-0-0-0-0-0-0-1000000-2173434-3913277.4-0-26
+
+29/09/2015 13:42:08|admincmg|edit|1|tire_order|1446246000-2-1-1-1400000-7-1441836000
+
+29/09/2015 14:42:48|admincmg|edit|24|tire_sale|150624-40-1-3-4600000-125-1444773600
+
+30/09/2015 08:51:16|admincmg|delete|22|tire_sale|
+
+28/10/2015 14:09:53|admincmg|add|1|absence|1445986800-b-a-1445378400-1445378400-1
+
+28/10/2015 14:10:07|admincmg|edit|1|absence|1445986800-b-a-1445378400-1446073200-1
+
+28/10/2015 15:38:22|admincmg|delete|30|staff|
+
+21/11/2015 09:30:29|admincmg|add|1|report|1448094600-1448107200-1448060400-A-aa-14-2-0-1
+
+21/11/2015 09:34:31|admincmg|edit|1|report|1448094600-1448107200-1448060400-A-aa-14-2-1-1
+
+05/12/2015 11:06:47|admincmg|edit|648|tire_product|4-HF--2-47-18-0-0-0-129-4900000-4900000--
+
+05/12/2015 14:14:37|admincmg|edit|477|tire_product|1-a-TTF-1-1-16-0-0-330-111-3900000-3900000-vdf-
+
+05/12/2015 14:15:23|admincmg|edit|477|tire_product|1-a-TTF-1-1-16-0-0-330-111-3900000-3900000---22819.png
+
+05/12/2015 14:29:41|admincmg|edit|477|tire_product|1-dsd-TTF-1-1-16-0-0-330-111-3900000-3900000-xas-
+
+05/12/2015 14:32:19|admincmg|edit|477|tire_product|1-cz-TTF-1-1-16-0-0-330-111-3900000-3900000--
+
+05/12/2015 14:38:32|admincmg|edit|477|tire_product|1-aaaa-TTF-1-1-16-0-0-330-111-3900000-3900000-cdfdf-<p>
+	sdfs<strong>dsd</strong></p>
+
+05/12/2015 14:45:30|admincmg|edit|477|tire_product|1-d-TTF-1-1-16-0-0-330-111-3900000-3900000-g-<p>
+	sds<strong>dsd</strong></p>
+
+05/12/2015 14:49:26|admincmg|edit|477|tire_product|1-d-TTF-1-1-16-0-0-330-111-3900000-3900000-ggd-<p>
+	dsd</p>
+
+19/12/2015 14:47:58|admincmg|edit|523|tire_product|2-ABS399 - 47--3-23-18-82.34-26-240-160-5500000-5500000---1-1-== XE TẢI & BUS ==-1-abs399-47
+
+19/12/2015 14:49:54|admincmg|edit|528|tire_product|2-ABS358 - 52--3-24-18-75.45-18.5-240-146-5100000-5100000---1-1-== XE TẢI & BUS ==-1-abs358-52
+
+19/12/2015 15:05:14|admincmg|edit|523|tire_product|2-ABS399 - 47--3-23-18-82.34-26-240-160-5500000-5500000---1-1-3-1-abs399-47
+
+22/12/2015 09:33:38|admincmg|edit|543|tire_product|2-ABS300 - 67--1-16-16-55.32-15.5-317-115-4200000-4200000---1-1-2-1-abs300-67
+
+22/12/2015 09:34:24|admincmg|edit|543|tire_product|2-ABS300 - 67--1-16-16-55.32-15.5-317-115-4200000-4200000-a-<p>
+	a</p>-2-2-1-1-abs300-671
+
+22/12/2015 09:36:27|admincmg|edit|543|tire_product|2-ABS300 - 67--1-16-16-55.32-15.5-317-115-4200000-4200000---2-2-1-1-abs300-67
+
+22/12/2015 09:46:06|admincmg|edit|543|tire_product|2-ABS300 - 67--1-16-16-55.32-15.5-3171-115-4200000-4200000--<p>
+	a</p>-1-1-4-2-abs300-67
+
+22/12/2015 09:46:46|admincmg|edit|543|tire_product|2-ABS300 - 67--1-16-16-55.32-15.5-317-115-4200000-4200000--<p>
+	a</p>-1-1-3-2-abs300-67
+
+22/12/2015 09:47:28|admincmg|edit|543|tire_product|2-ABS300 - 67--1-16-16-55.32-15.5-317-115-4200000-4200000--<p>
+	a</p>-1-1-2-1-abs300-67
+
+25/12/2015 11:10:10|admincmg|approve|1169|payable|
+
+25/12/2015 11:11:22|admincmg|approve|1166|payable|
+
+26/12/2015 14:48:58|admincmg|approve|Array|payable|
+
+26/12/2015 14:50:35|admincmg|approve|Array|payable|
+
+26/12/2015 14:53:16|admincmg|approve|1145|payable|
+
+26/12/2015 14:53:35|admincmg|approve|1011|costs|
+
+26/12/2015 14:53:59|admincmg|approve|1032|costs|
+
+26/12/2015 14:57:53|admincmg|approve|1033|costs|
+
+26/12/2015 15:07:36|admincmg|approve|1034|costs|
+
+26/12/2015 15:15:27|admincmg|approve|1035|costs|
+
+26/12/2015 15:15:27|admincmg|approve|1012|costs|
+
+26/12/2015 15:20:16|admincmg|approve|1031|costs|
+
+26/12/2015 15:20:40|admincmg|approve|1020|costs|
+
+23/02/2016 14:01:16|admincmg|add|474|customer_tire|a-a ton-023 232 32323-ngoton.it@gmail.com---1-1456182000
+
+25/02/2016 08:20:29|admincmg|delete|474|customer_tire|
+
+25/02/2016 08:20:44|admincmg|add|475|customer_tire|a-a ton-023 232 32323-ngoton.it@gmail.com-0--1-1456354800
+
+01/03/2016 16:10:53|admincmg|add|1|tire_cskh|1456786800-fsd-sdsd-sdsd-dsd-dsd-sds-1-344-ff@dsd.sd-2423-32323-dsd-ffs-323-32-1-14
+
+01/03/2016 16:11:22|admincmg|receive|1|tire_cskh|
+
+27/03/2016 17:02:12|admincmg|add|166|trading|1459033200---232323-0-1-2-1-1-dsds-5-1456700400-0-232323-1-1-2--1-0-0--20--0-0-1
+
+27/03/2016 17:02:57|admincmg|edit|166|trading|1459033200-0-0-232323-0-1-2-1-1-dsds-5-1456700400-0-232323-1-1-2--1-0-0-0-20-0-1
+
+27/03/2016 17:04:11|admincmg|approve|1739|payable|
+
+27/03/2016 17:04:25|admincmg|pay|1739|payable|
+
+27/03/2016 17:04:57|admincmg|edit|166|trading|1459033200-0-0-232323-0-1-2-1-1-dsds-5-1456700400-0-232323-1-1-2--1-0-0-0-20-0-2-1
+
+27/03/2016 17:26:28|admincmg|lock|166|trading|0
+
+27/03/2016 17:26:52|admincmg|edit|166|trading|1459033200-0-0-232323-0-1-2-1-1-dsds-5-1456700400-0-232323-1-1-2--1-0-0-0-20-0-3-1
+
+27/03/2016 17:27:45|admincmg|lock|166|trading|0
+
+27/03/2016 17:28:05|admincmg|edit|166|trading|1459033200-0-0-232323-0-1-2-1-1-dsds-5-1456700400-0-232323-1-1-2--1-0-0-0-20-0-4-1
+
+27/03/2016 17:29:47|admincmg|lock|166|trading|0
+
+27/03/2016 17:30:08|admincmg|edit|166|trading|1459033200-0-0-232323-0-1-2-1-1-dsds-5-1456700400-0-232323-1-1-2--1-0-0-0-20-0-5-1
+
+27/03/2016 17:30:32|admincmg|lock|166|trading|0
+
+27/03/2016 17:30:53|admincmg|edit|166|trading|1459033200-0-0-232323-0-1-2-1-1-dsds-5-1456700400-0-232323-1-1-2--1-0-0-0-20-0-6-1
+
+27/03/2016 22:05:05|admincmg|lock|166|trading|0
+
+27/03/2016 22:06:02|admincmg|edit|166|trading|1459033200-0-0-232323-0-1-2-1-1-dsds-5-1456700400-0-232323-1-1-2--1-0-0-0-20-0-7-1
+
+27/03/2016 22:06:22|admincmg|lock|166|trading|0
+
+27/03/2016 22:06:44|admincmg|edit|166|trading|1459033200-0-0-232323-0-1-2-1-1-dsds-5-1456700400-0-232323-1-1-2--1-0-0-0-20-0-8-1
+
+27/03/2016 22:07:10|admincmg|lock|166|trading|0
+
+27/03/2016 22:07:28|admincmg|edit|166|trading|1459033200-0-0-232323-0-1-2-1-1-dsds-5-1456700400-0-232323-1-1-2--1-0-0-0-20-0-9-1
+
+27/03/2016 22:07:49|admincmg|lock|166|trading|0
+
+27/03/2016 22:08:06|admincmg|edit|166|trading|1459033200-0-0-232323-0-1-2-1-1-dsds-5-1456700400-0-232323-1-1-2--1-0-0-0-20-0-10-1
+
+27/03/2016 22:25:01|admincmg|lock|165|procument|0
+
+27/03/2016 22:25:13|admincmg|edit|165|procument|1-0-256329255-0-37892145-0-8-1
+
+27/03/2016 22:26:06|admincmg|lock|165|procument|0
+
+27/03/2016 22:26:19|admincmg|edit|165|procument|1-256329255-0--256329255-294221400-10253170-9-1
+
+27/03/2016 22:26:51|admincmg|lock|165|procument|0
+
+27/03/2016 22:27:03|admincmg|edit|165|procument|1-0-256329250-0-37892150-0-10-1
+
+28/03/2016 16:59:38|admincmg|delete|5|tire_desired|
+
+30/03/2016 15:07:57|admincmg|delete|1|tire_order_sale|
+
+08/04/2016 10:51:48|admincmg|add|167|trading|1460066400---160676-1-1-0--1-afdf-119-1459375200-0-1-1-1-2--1-0-0-2---0-0-1
+
+08/04/2016 10:53:22|admincmg|edit|167|trading|1460066400-0-0-160676-1-1-0--1-afdf-119-1459375200-0-1-1-1-2--1-0-0-2-0-0-1
+
+08/04/2016 10:54:58|admincmg|edit|167|trading|1460066400-0-0-160676-1-1-0--1-afdf-119-1459375200-0-1-1-1-2--1-0-0-2-0-0-2-1
+
+08/04/2016 10:55:17|admincmg|lock|167|trading|0
+
+08/04/2016 10:55:34|admincmg|edit|167|trading|1460066400-0-0-160676-1-1-0--1-afdf-119-1459375200-0-1-1-1-2--1-0-0-2-0-0-3-1
+
+08/04/2016 10:57:36|admincmg|lock|167|trading|0
+
+08/04/2016 10:57:54|admincmg|edit|167|trading|1460066400-0-0-160676-1-1-0--1-afdf-119-1459375200-0-1-1-1-2--1-0-0-2-0-0-4-1
+
+08/04/2016 10:58:00|admincmg|lock|167|trading|0
+
+08/04/2016 10:58:13|admincmg|edit|167|trading|1460066400-0-0-160676-1-1-0--1-afdf-119-1459375200-0-1-1-1-2--1-0-0-2-0-0-5-1
+
+18/04/2016 15:01:03|admincmg|edit|8|tire_going|
+
+18/04/2016 15:03:55|admincmg|edit|8|tire_going|
+
+18/04/2016 15:22:26|admincmg|edit|8|tire_going|
+
+18/04/2016 15:23:31|admincmg|edit|8|tire_going|
+
+18/04/2016 15:26:38|admincmg|edit|8|tire_going|
+
+21/04/2016 10:23:35|admincmg|add||import_tire|1461189600-160230-asdds--1461189600-1-0-0-1
+
+21/04/2016 10:31:56|admincmg|add||import_tire|1460066400-160509-gfjhjhbjb-1461362400-1-0-0-1
+
+21/04/2016 10:45:05|admincmg|add||import_tire|1461880800-160343-gggggg-1461276000-1-0-0
+
+21/04/2016 10:47:14|admincmg|add||import_tire|1460671200-232-fdfdf-1460584800-1-0-0
+
+21/04/2016 11:07:25|admincmg|add|1|import_tire|1460066400-67677-guguug-1460584800-1-0-0
+
+21/04/2016 11:14:20|admincmg|edit|1|import_tire|1460066400-67677-guguug-1460584800-0-1
+
+27/04/2016 11:31:42|admincmg|add|1|order_tire|1461708000-1-12-1-1----------1-1-0-720000-100000-5-300000-1461794400-5480000
+
+27/04/2016 11:35:21|admincmg|add|2|order_tire|1461708000-1-12-2-1-30-1000000-1461794400-6000000-1461794400-----0-1-0-600000--5-300000-1461880800-5700000
+
+28/04/2016 08:59:42|admincmg|add|3|order_tire|1461794400-1-163-1-1----------1-1-1-840000--10-1200000-1461880800-12360000-6
+
+28/04/2016 11:45:50|admincmg|delete|3|order_tire_list|
+
+28/04/2016 14:09:16|admincmg|edit|3|order_tire|
+
+28/04/2016 14:27:57|admincmg|edit|2|order_tire|
+
+28/04/2016 14:28:27|admincmg|edit|2|order_tire|
+
+28/04/2016 14:29:08|admincmg|edit|2|order_tire|
+
+28/04/2016 14:29:27|admincmg|edit|2|order_tire|
+
+29/04/2016 13:33:47|admincmg|edit||order_tire_list|
+
+29/04/2016 13:50:11|admincmg|edit|Array|order_tire_list|
+
+03/05/2016 13:56:47|admincmg|edit|2|order_tire|
+
+03/05/2016 13:57:28|admincmg|edit|2|order_tire|
+
+03/05/2016 13:57:46|admincmg|edit|2|order_tire|
+
+03/05/2016 13:59:31|admincmg|edit|3|order_tire|
+
+03/05/2016 16:18:18|admincmg|edit|3|order_tire|
+
+03/05/2016 16:34:03|admincmg|edit|3-25-2-6-3000000|order_tire_list|
+
+03/05/2016 16:39:41|admincmg|edit|3-25-2-6-2000000|order_tire_list|
+
+03/05/2016 16:44:04|admincmg|edit|3-25-2-6-3000000|order_tire_list|
+
+03/05/2016 16:46:53|admincmg|edit|3-25-2-6-2000000|order_tire_list|
+
+03/05/2016 16:47:10|admincmg|edit|3-25-2-6-3000000|order_tire_list|
+
+03/05/2016 16:49:01|admincmg|edit|3-25-2-6-2000000|order_tire_list|
+
+04/05/2016 10:49:41|admincmg|edit|3|order_tire|
+
+04/05/2016 11:24:26|admincmg|edit|3|order_tire|
+
+05/05/2016 09:44:26|admincmg|add|9|tire_desired|
+
+05/05/2016 09:47:43|admincmg|add|11|tire_desired|
+
+05/05/2016 11:10:41|admincmg|delete|2|order_tire_list|
+
+05/05/2016 11:57:33|admincmg|edit|15--21-2-5-700000|tire_desired|
+
+17/05/2016 19:21:03|admincmg|add|9|tire_going|
+
+17/05/2016 19:23:12|admincmg|add|4|order_tire|2-1463436000-1-7-1-1----------0-0-0------4000000-1-0
+
+17/05/2016 20:10:47|admincmg|edit|4|order_tire|
+
+17/05/2016 20:11:00|admincmg|edit|4|order_tire|
+
+17/05/2016 20:11:09|admincmg|edit|4|order_tire|
+
+17/05/2016 20:12:11|admincmg|edit|3-25-2-2-5000000|order_tire_list|
+
+17/05/2016 20:14:10|admincmg|edit|3-25-2-1-5000000|order_tire_list|
+
+17/05/2016 20:15:13|admincmg|add|3-25-2-0-1000000-4|order_tire_list|
+
+17/05/2016 20:59:16|admincmg|delete|3|order_tire_list|
+
+18/05/2016 08:35:56|admincmg|edit|3-17-2-1-5000000|order_tire_list|
+
+18/05/2016 08:40:18|admincmg|edit|3-25-2-1-5000000|order_tire_list|
+
+18/05/2016 10:34:19|admincmg|edit|4|order_tire|
+
+26/05/2016 14:45:55|admincmg|add|2|import_tire|1464213600-122323-fsfs-1462917600-0-0-0
+
+26/05/2016 16:05:15|admincmg|edit|2|import_tire|1464213600-122323-fsfs-1462917600-0-1
+
+26/05/2016 16:05:50|admincmg|edit|2|import_tire|1464213600-122323-fsfs-1462917600-1-2
+
+27/05/2016 10:03:05|admincmg|add|10|tire_going|
+
+02/06/2016 13:38:50|admincmg|add|1|tire_profit|1-15
+
+02/06/2016 13:50:49|admincmg|add|2|tire_profit|9-10
+
+14/06/2016 11:53:52|admincmg|edit|44|staff|boty-Bố Tý-02/12/1980-0------0-0-1-1465880032
+
+14/06/2016 11:54:05|admincmg|edit|44|staff|boty-Bố Tý-02/12/1980-0------0-1-1-1465880045
+
+14/06/2016 13:49:06|admincmg|edit|45|staff|NV 46-Lê Văn Mấn-25/02/1993-0------33-1-1-1465886946
+
+14/06/2016 16:26:06|admincmg|add|1|eating|3-4-20000-240000-120000-1462053600-2
+
+15/06/2016 15:07:32|admincmg|add|1|attendance|-08:30-13:12-17:00-17:00-3-2--4.7-1465941600-2
+
+15/06/2016 15:20:49|admincmg|edit|1|attendance|-06:00-17:00-14:00-18:00-3-2--15-
+
+15/06/2016 15:29:35|admincmg|add|2|attendance|1465423200-Năm-08:00-12:00-13:00-17:00-2-4--8-2
+
+15/06/2016 15:30:28|admincmg|add|3|attendance|1466114400-Sáu-08:00-12:00-13:00-17:00----8-1
+
+15/06/2016 15:30:46|admincmg|edit|1|attendance|1473112800-Ba-07:00-17:00-14:00-18:00-3-2--14
+
+15/06/2016 15:31:17|admincmg|edit|2|attendance|1473112800-Ba-08:00-12:00-13:00-17:00-2-4--8
+
+15/06/2016 16:04:40|admincmg|add|4|attendance|1465336800-Tư-08:00-12:00-13:00-17:00----8-2
+
+15/06/2016 16:07:12|admincmg|edit|3|attendance|-Năm-08:00-12:00-13:00-17:00-0-0--8
+
+15/06/2016 16:07:28|admincmg|add|5|attendance|1466114400-Sáu-08:00-12:00-13:00-17:00----8-3
+
+15/06/2016 16:09:32|admincmg|edit|5|attendance|-Năm-08:00-12:00-13:00-17:00-0-0--8
+
+15/06/2016 16:13:53|admincmg|edit|4|attendance|1470434400-Bảy-08:00-12:00-13:00-17:00-0-0--8
+
+15/06/2016 16:14:33|admincmg|add|6|attendance|1465855200-Ba-08:00-12:00-13:00-17:00----8-3
+
+15/06/2016 16:16:38|admincmg|edit|5|attendance|1465855200-Ba-09:00-12:00-13:00-17:00-0-0--7
+
+15/06/2016 16:16:43|admincmg|edit|5|attendance|1465855200-Ba-09:00-12:00-13:00-17:00-0-0-cxcx-7
+
+16/06/2016 08:16:07|admincmg|add|1|phone_allowance|200000-1462053600-2
+
+16/06/2016 08:16:15|admincmg|edit|1|phone_allowance|100000-1462053600
+
+16/06/2016 14:52:41|admincmg|add|7|attendance|1465423200-Năm-08:00-12:00-13:00-17:00----8-45
+
+16/06/2016 14:57:57|admincmg|add|2|phone_allowance|200000-1464732000-45
+
+16/06/2016 15:11:37|admincmg|add|19|eating|20-1-20000-400000-200000-1464732000-45
+
+16/06/2016 16:58:07|admincmg|curricular|Array|curricular|
+
+16/06/2016 16:58:23|admincmg|curricular|Array|curricular|
+
+16/06/2016 17:03:17|admincmg|curricular|Array|curricular|
+
+20/06/2016 08:18:21|admincmg|curricular|Array|curricular|
+
+20/06/2016 08:23:44|admincmg|curricular|Array|curricular|
+
+20/06/2016 08:23:47|admincmg|position_salary|Array|position_salary|
+
+20/06/2016 08:27:56|admincmg|curricular|Array|curricular|
+
+20/06/2016 08:28:00|admincmg|position_salary|Array|position_salary|
+
+20/06/2016 08:29:02|admincmg|curricular|Array|curricular|
+
+20/06/2016 08:29:17|admincmg|curricular|Array|curricular|
+
+20/06/2016 08:29:41|admincmg|curricular|Array|curricular|
+
+20/06/2016 08:31:28|admincmg|curricular|Array|curricular|
+
+20/06/2016 09:28:10|admincmg|add|1|insurrance|1078025-348285-3317000-1462053600-45
+
+20/06/2016 09:28:24|admincmg|edit|1|insurrance|1078025-348285-3317001-1462053600
+
+20/06/2016 09:28:30|admincmg|edit|1|insurrance|1078025-348285-3317000-1462053600
+
+20/06/2016 09:28:45|admincmg|add|2|insurrance|1078025-348285-3317000-1464732000-45
+
+20/06/2016 09:35:39|admincmg|position_salary|Array|position_salary|
+
+20/06/2016 09:35:46|admincmg|position_salary|Array|position_salary|
+
+20/06/2016 09:36:13|admincmg|curricular|Array|curricular|
+
+22/06/2016 10:36:52|admincmg|add|5|order_tire|2-1466546400-1-6-1-1----------1-1-0-360000--10-800000-1466632800-8440000-2-0
+
+22/06/2016 10:37:19|admincmg|edit|5|order_tire|
+
+22/06/2016 10:37:47|admincmg|edit|5|order_tire|
+
+22/06/2016 10:38:06|admincmg|edit|5|order_tire|
+
+22/06/2016 10:38:29|admincmg|edit|5|order_tire|
+
+22/06/2016 10:38:44|admincmg|edit|5|order_tire|
+
+22/06/2016 10:39:01|admincmg|pay|973|receivable|
+
+22/06/2016 10:39:11|admincmg|edit|5|order_tire|
+

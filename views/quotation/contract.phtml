@@ -1,0 +1,161 @@
+
+
+<div class="mainbox-body">
+<div class="checkout-steps clear cm-save-fields" id="checkout_steps">
+<div style="border: 1px solid #DDDDDD; float:left; width: 100%" class="bg_step_row_first " id="step_one">                                            
+<div class="per_step_row2 float-left">
+<h2 class="step-title">
+<span>HỢP ĐỒNG VẬN CHUYỂN</span>
+</h2>
+<div class="">
+<div class="clear">
+<div class="order_product float-left">
+<div>
+<div class="cart_product_item">
+    <div class="order_product_shortname float-left">
+CMG trân trọng cảm ơn quý khách đã tin dùng dịch vụ của chúng tôi. Rất mong được hợp tác lâu dài cùng quý khách hàng.          
+</div>
+<div class="order_product_shortname float-left">
+Hãy điền đầy đủ thông tin vào form dưới này, nhân viên của chúng tôi sẽ liên lạc với quý khách hàng trong thời gian sớm nhất.                
+</div>
+
+</div>
+</div>
+<div class="float-left">
+    <div class="cart_info_order_field">
+    <div class="order_product_code">
+    <label>Số HĐ : </label>
+    <span class="float-right"><?php echo date('d').date('m').'-'.$id_customer.'/'.date('Y') ?>/HĐNTVC</span>
+    </div>
+    </div>
+    <div class="cart_info_order_field">
+    <div class="order_product_price">
+    <label>Điểm đi : </label>
+    <span class="float-right"><?php echo $from ?></span>
+    </div>
+    </div>
+    <div class="cart_info_order_field">
+    <div class="order_product_price">
+    <label>Điểm đến : </label>
+    <span class="float-right"><?php echo $to ?></span>
+    </div>
+    </div>
+    <div class="cart_info_order_field">
+    <div class="order_product_price">
+    <label>Số lượng container : </label>
+    <span class="float-right"><?php echo $sl ?></span>
+    </div>
+    </div>
+    <div class="cart_info_order_field">
+    <div class="order_product_price">
+    <label>Loại container : </label>
+    <span class="float-right"><?php echo $size.' '.$type ?></span>
+    </div>
+    </div>
+    <div class="cart_info_order_field">
+    <div class="order_product_price">
+    <label>Trọng tải/container : </label>
+    <span class="float-right"><?php echo $ton ?></span>
+    </div>
+    </div>
+
+    <div class="cart_info_order_field">
+    <div class="order_product_quantity">
+    <label>Thành tiền:</label>
+    <span class="float-right"><strong><?php echo $total ?></strong></span>
+    </div>
+    </div>
+</div>
+<div id="step_one_register" class="width50 hidden">
+
+<form style="margin:0;" name="step_one_register_form" action="#" method="post">
+
+<div class="form-field">
+<label for="name" class="cm-required cm-name">Tên công ty:</label>
+<div class="input-prepend">
+<span class="add-on"><i class="icon-company"></i></span>
+<input type="text" id="name" name="name"  value="<?php echo $co_customer ?>" class="input-text cm-autocomplete-off" autocomplete="off">
+</div>
+</div>
+<div class="form-field">
+<label for="address" class="cm-required cm-address">Địa chỉ:</label>
+<div class="input-prepend">
+<span class="add-on"><i class="icon-home"></i></span>
+<input type="text" id="address" name="address"  value="<?php echo $add_customer ?>" class="input-text cm-autocomplete-off" autocomplete="off">
+</div>
+</div>
+<div class="form-field">
+<label for="email" class="cm-required cm-email cm-trim">Email:</label>
+<div class="input-prepend">
+<span class="add-on"><i class="icon-envelope"></i></span>
+<input type="email" id="email" name="email"  value="<?php echo $email_customer ?>" class="input-text">
+</div>
+</div>
+
+
+<div class="form-field">
+<label for="phone" class="cm-required">Số điện thoại:</label>
+<div class="input-prepend">
+<span class="add-on"><i class="icon-calendar" ></i></span>
+<input type="text" id="phone" name="phone" class="input-text-medium cm-phone " value="<?php echo $phone_customer ?>" >
+</div>
+</div>  
+<div class="form-field">
+<label for="contact" class="cm-required">Người liên hệ:</label>
+<div class="input-prepend">
+<span class="add-on"><i class="icon-user"></i></span>
+<input type="text" id="contact" name="contact" class="input-text-medium cm-contact " value="<?php echo $contact_customer ?>" >
+</div>
+</div>  
+<div style="text-align:center">
+<span class="button-submit"><input type="button" id="ok" name="ok" value="Tiếp tục"></span>
+&nbsp; 
+<span class="button-submit"><input type="button" onClick="window.location.href='<?php echo $this->url('quotation') ?>'" name="cancel" value="Hủy bỏ"></span>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+</div>
+</form>
+</div>
+<div style="margin-bottom: 20px;display: inline-block;"></div>
+<div class="clear"></div>       
+</div>                  
+</div>
+</div>  
+
+</div>
+
+
+
+<!--checkout_steps--></div>
+
+</div>
+
+<div style="clear: both"></div>
+<script type="text/javascript">
+    $('#ok').click(function(){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+            var name = $('#name').val();
+            var address = $('#address').val();
+            var email = $('#email').val();
+            var phone = $('#phone').val();
+            var contact = $('#contact').val();
+                    $.ajax({
+                        url: '#',
+                        type: 'POST',
+                        data: {
+                            name: name,
+                            email: email,
+                            phone: phone,
+                            contact: contact,
+                            address: address,
+                        },
+                        success:function(data){
+                           $('#loading').fadeOut(500);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+data+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+                        }
+                    });
+    });
+</script>

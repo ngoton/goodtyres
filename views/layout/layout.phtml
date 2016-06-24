@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title><?php echo isset($title) ? $title : null ?> - <?php echo $_SERVER["SERVER_NAME"]=='caimeptrading.com'?'Cai Mep Trading':($_SERVER["SERVER_NAME"]=='www.caimeptrading.com'?'Cai Mep Trading':'Cai Mep Global Logistics') ?></title>
+  <meta name="keywords" content="Logistics, Xuất Khẩu, Nhập Khẩu, Xuất Nhập Khẩu, Vận Chuyển Hàng Hóa, Vận Chuyển, Hàng Siêu Trọng, Salan, Xà Lan, Sà Lan, Vận Chuyển Sà Lan, Thủ Tục Hải Quan, Hải Quan, Thông Quan, Mở Tờ Khai, Hun Trùng, Đóng Cont, Đóng Hàng, Forwarder, Stufffing, Unstuffing, Export, Import, Terminal, Port, Sea Port, Transhit, Transhipment, OOG, Over Weight, Over Hight, Over Length, Barge, Barging, Barge team, Barge Fleet, Inland Water Way, IWW, Ship, Vessel, Canoe, River, Channal, Pilot, Boarding Agent, Đại lý tàu, Husbanding Agent, Cambudia, Barging Service, Customs, Customs transhipment, Customs Clearance, EDI, Manifest, E-Manifest, chỉnh sửa Manifest, Adjust Manifest, Inbound, Outbound, Cargo, container, 20', 40', Reefer container, Flatrach, Tank, Hàng Quá Khổ, Cấm Tải, Chất lượng,">
+  <meta property="og:description" itemprop="description" name="description" content="<?php echo isset($title) ? $title.' - ' : null ?>Logistics - Vận chuyển - Thủ tục hải quan - Manifest - Container">
+  <meta name="generator" content="Cai Mep Trading">
+  <meta name="alexaVerifyID" content="_9gi6egDJ1Z4jT9va1ez-U0qOno"/>
+  <meta name="alexaVerifyID" content="tNObsCQ5mlcxtMgOmpzWfhtjTkc"/>
+  <meta http-equiv="content-language" content="vi" />
+  <meta property="og:title" itemprop="name" content="<?php echo isset($title) ? $title : null ?> - <?php echo $_SERVER["SERVER_NAME"]=='caimeptrading.com'?'Cai Mep Trading':($_SERVER["SERVER_NAME"]=='www.caimeptrading.com'?'Cai Mep Trading':'Cai Mep Global Logistics') ?>">
+  <meta property="og:url" content="<?php echo BASE_URL.$_SERVER['REQUEST_URI'] ?>">
+  <meta property="og:type" content="website">
+  <meta property="og:image" itemprop="image" name="thumbnail" content="<?php echo BASE_URL ?>/public/img/logo-cmg.png">
+  <link rel="alternate" href="<?php echo BASE_URL ?>" hreflang="vi-vn" />
+  <link rel="publisher" href="https://plus.google.com/111952529763008010249" title="Cai Mep Global Logistics"/>
+  <link href="<?php BASE_URL ?>/public/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+	<link rel="stylesheet" type="text/css" href="<?php BASE_URL ?>/public/css/style.css">
+	<link rel="stylesheet" type="text/css" href="<?php BASE_URL ?>/public/css/bootstrap.min.css">
+	<!-- <link rel="stylesheet" type="text/css" href="<?php BASE_URL ?>/public/css/bootstrap-responsive.min.css"> -->
+  <link rel="stylesheet" type="text/css" href="<?php BASE_URL ?>/public/js/ui/jquery-ui.css">
+  <script type="text/javascript" src="<?php BASE_URL ?>/public/js/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="<?php BASE_URL ?>/public/js/ui/jquery-ui.js"></script>
+	<script type="text/javascript" src="<?php BASE_URL ?>/public/js/html5.js"></script>
+	<script type="text/javascript" src="<?php BASE_URL ?>/public/js/jquery.form.js"></script>
+	<script type="text/javascript" src="<?php BASE_URL ?>/public/js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="<?php BASE_URL ?>/public/js/custom.js"></script>
+  <script type="text/javascript" src="<?php BASE_URL ?>/public/js/localization/messages_vi.js"></script>
+  <script type="text/javascript" src="<?php BASE_URL ?>/public/js/bootstrap.js"></script>
+  <script type="text/javascript" src="<?php BASE_URL ?>/public/js/bootstrap.min.js"></script>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56488212-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-507e26a03bf7f1f7" async="async"></script>
+<script src="<?php BASE_URL ?>/public/js/pace.min.js"></script>
+
+</head>
+
+<body>
+  <script type="text/javascript">
+    $(function () {
+      var w = $("#container").width();
+
+      $(".container").width(w);
+      $(".navbar-inner").width(w);
+      $(".navbar").width(w);
+      $("#container").width(w);
+      $(".fix_img").width(w);
+      $(".footer-nav").width(w);
+      $("footer").width(w);
+
+        setNavigation();
+        $('.home').click(function(){
+
+          var hrefval = $(this).attr("data");
+          
+              if(hrefval != "#") {
+                closeSidepage('.slide-content');
+                openSidepage(hrefval);
+
+                $('.nav li').removeClass('active');
+
+                $(this).closest('li').addClass('active');
+                $(this).closest('li').parents('li').addClass('active');
+
+                $("html, body").animate({ scrollTop: 0 }, 1);
+              }
+
+        });
+
+        
+        $('.png').click(function(){
+          $('#support').animate({
+            height: '300px'
+          }, 300);
+        });
+        $('.close').click(function(){
+          $('#support').animate({
+            height: '22px'
+          }, 300);
+        });
+
+
+      
+    });
+
+
+      function openSidepage(id) {
+        $(id).css({display: "block"});
+        $(id).animate({
+          left: '0px'
+        }, 500, 'easeOutBack'); 
+      }
+      
+      function closeSidepage(id){
+        
+        $(id).animate({
+          left: '-1500px'
+        }, 100, 'easeOutQuint');  
+        $(id).css({left: "-1500px",display: "none"});
+      }
+
+    function setNavigation() {
+        var path = window.location.pathname;
+        path = path.replace(/\/$/, "");
+        path = decodeURIComponent(path);
+
+        $(".nav a").each(function () {
+            var href = "/"+$(this).attr('data');
+
+            if (path === href) {
+                $(this).closest('li').addClass('active');
+                $(this).closest('li').parents('li').addClass('active');
+
+            }
+            if (window.location.hash == $(this).attr("data")) {
+              var hrefval = $(this).attr("data");
+          
+              if(hrefval != "#") {
+                closeSidepage('.slide-content');
+                openSidepage(hrefval);
+
+                $(this).closest('li').addClass('active');
+                $(this).closest('li').parents('li').addClass('active');
+
+                $("html, body").animate({ scrollTop: 0 }, 1);
+              }
+            }
+            
+        });
+
+        if (path == "" && window.location.hash == "") {
+            closeSidepage('.slide-content');
+            openSidepage('#index');
+
+            $('li').first().addClass('active');
+
+        }
+    }
+
+
+$(document).ready(function() {
+    function fixDiv() {
+      var $cache = $('.navbar-fixed-top'); 
+      var $pace = $('.pace'); 
+      if ($(window).scrollTop() > 100){
+        $cache.css({'position': 'fixed', 'top': '0'}); 
+        $pace.css({'position': 'fixed', 'top': '40px'}); 
+      }
+      else{
+        $cache.css({'position': 'relative', 'top': 'auto'});
+        $pace.css({'position': 'fixed', 'top': '140px'}); 
+      }
+    }
+  $(window).scroll(fixDiv);
+  fixDiv();
+});
+
+
+  </script>
+
+  <span itemscope itemtype="http://schema.org/LocalBusiness">
+  <div>
+    <img style="height:100px" class="fix_img" itemprop="image" src="<?php echo BASE_URL ?>/public/img/logo-cmg.png" alt="Cai Mep Global Logistics">
+  </div>
+    <div class="navbar navbar-fixed-top" style="height:41px">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          
+          <a class="brand" href="<?php echo $this->url('') ?>"><b>
+
+            <span itemscope itemtype="http://schema.org/LocalBusiness" itemref="_url2">
+            <span itemprop="name">CAI MEP <font style="color:#ffc153;"><?php echo $_SERVER["SERVER_NAME"]=='caimeptrading.com'?'TRADING':($_SERVER["SERVER_NAME"]=='www.caimeptrading.com'?'TRADING':'GLOBAL LOGISTICS') ?></font></span>
+            
+            <meta id="_email16" itemprop="email" content="biz@caimeptrading.com">
+            <span id="_address3" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+            <meta itemprop="streetAddress" content="29, QL 51">
+            <meta itemprop="addressLocality" content="Phước Tân, tp.Biên Hòa">
+            <meta itemprop="addressRegion" content="Đồng Nai">
+            <meta itemprop="addressCountry" content="Việt Nam">
+            <meta itemprop="postalCode" content="71000"></span>
+            <meta id="_telephone5" itemprop="telephone" content="0613 937 677">
+            <span id="_review6" itemprop="review" itemscope itemtype="http://schema.org/Review">
+            <span itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+            <meta itemprop="ratingValue" content="5"></span>
+            <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+              <span itemprop="name" style="display:none">CMG</span>
+            </span>
+            </span>
+            <span id="_aggregateRating10" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+            <meta itemprop="ratingValue" content="5">
+            <meta itemprop="bestRating" content="5">
+            <meta itemprop="worstRating" content="1">
+            <meta itemprop="ratingCount" content="2200"></span></span>
+            </b>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a  data="index" href="<?php echo $this->url('') ?>">Trang chủ</a></li>
+              <li><a class="home" data="#" href="#">Tổng quan</a>
+                  <ul>
+                    <li><a class="home" data="gioi-thieu" href="<?php echo $this->url('gioi-thieu') ?>">Giới thiệu</a></li>
+                    <li><a class="home" data="tam-nhin-va-huong-phat-trien" href="<?php echo $this->url('tam-nhin-va-huong-phat-trien') ?>">Tầm nhìn và hướng phát triển</a></li>
+                    <!-- <li><a class="home" data="#" href="<?php echo $this->url('') ?>">Cơ cấu tổ chức</a></li>
+                    <li><a class="home" data="#" href="<?php echo $this->url('') ?>">Brochure công ty</a></li> -->
+                    <li><a class="home" data="video-clip" href="<?php echo $this->url('video-clip') ?>">Video clip</a></li>
+                    <li><a class="home" data="thong-tin-lien-lac" href="<?php echo $this->url('thong-tin-lien-lac') ?>">Thông tin liên lạc</a></li>
+                  </ul>
+              </li>
+              <li><a class="home" data="#" href="#">Nội lực</a>
+                  <ul>
+                    <li><a class="home" data="trang-thiet-bi" href="<?php echo $this->url('trang-thiet-bi') ?>">Trang thiết bị</a></li>
+                    <li><a class="home" data="phan-mem-quan-ly" href="<?php echo $this->url('phan-mem-quan-ly') ?>">Phần mềm quản lý</a></li>
+                    <li><a class="home" data="trinh-do-chuyen-mon" href="<?php echo $this->url('trinh-do-chuyen-mon') ?>">Trình độ chuyên môn</a></li>
+                    <li><a class="home" data="mang-luoi-ket-noi" href="<?php echo $this->url('mang-luoi-ket-noi') ?>">Mạng lưới kết nối</a></li>
+                  </ul>
+              </li>
+              <li><a class="home" data="#" href="#">Dịch vụ</a>
+                  <ul>
+                    <li><a class="home" data="#" href="#">Giao nhận hàng hóa</a>
+                      <ul>
+                        <li><a class="home" data="hang-le-hang-nguyen-container" href="<?php echo $this->url('hang-le-hang-nguyen-container') ?>">Hàng lẻ/hàng nguyên container</a></li>
+                        <li><a class="home" data="hang-giao-chuyen-cang" href="<?php echo $this->url('hang-giao-chuyen-cang') ?>">Hàng giao/chuyển cảng (CY-CY)</a></li>
+                        <li><a class="home" data="hang-giao-chuyen-nha-may" href="<?php echo $this->url('hang-giao-chuyen-nha-may') ?>">Hàng giao/chuyển nhà máy (Ex-work)</a></li>
+                        <li><a class="home" data="hang-giao-chuyen-door" href="<?php echo $this->url('hang-giao-chuyen-door') ?>">Hàng giao/chuyển door (Door to Door)</a></li>
+                      </ul>
+                    </li>
+                    <li><a class="home" data="#" href="#">Hải quan</a>
+                      <ul>
+                        <li><a class="home" data="chinh-sua-manifest" href="<?php echo $this->url('chinh-sua-manifest') ?>">Chỉnh sửa Manifest</a></li>
+                        <li><a class="home" data="khai-thue-hai-quan" href="<?php echo $this->url('khai-thue-hai-quan') ?>">Khai thuế hải quan</a></li>
+                        
+                      </ul>
+                    </li>
+                    <li><a class="home" data="#" href="#">Vận tải đa phương thức</a>
+                      <ul>
+                        <li><a class="home" data="van-tai-duong-thuy-noi-dia" href="<?php echo $this->url('van-tai-duong-thuy-noi-dia') ?>">Vận tải đường thủy nội địa</a></li>
+                        <li><a class="home" data="van-tai-duong-bo" href="<?php echo $this->url('van-tai-duong-bo') ?>">Vận tải đường bộ</a></li>
+                        <li><a class="home" data="van-tai-duong-bien" href="<?php echo $this->url('van-tai-duong-bien') ?>">Vận tải đường biển</a></li>
+                        <li><a class="home" data="van-tai-hang-khong" href="<?php echo $this->url('van-tai-hang-khong') ?>">Vận tải hàng không</a></li>
+                        <li><a class="home" data="van-tai-duong-sat" href="<?php echo $this->url('van-tai-duong-sat') ?>">Vận tải đường sắt</a></li>
+                      </ul>
+                    </li>
+                    <li><a data="#" href="#">Kho bãi</a>
+                      <ul>
+                        <li><a class="home" data="dong-rut" href="<?php echo $this->url('dong-rut') ?>">Đóng rút</a></li>
+                        <li><a class="home" data="kiem-dem-dong-goi-hang-hoa" href="<?php echo $this->url('kiem-dem-dong-goi-hang-hoa') ?>">Kiểm đếm, đóng gói hàng hóa</a></li>
+                        <li><a class="home" data="luu-kho-va-bao-quan-hang-hoa" href="<?php echo $this->url('luu-kho-va-bao-quan-hang-hoa') ?>">Lưu kho và bảo quản hàng hóa</a></li>
+                        <li><a class="home" data="depot-dich-vu-depot" href="<?php echo $this->url('depot-dich-vu-depot') ?>">Depot - Dịch vụ depot</a></li>
+                      </ul>
+                    </li>
+                    <li><a data="#" href="#">Đại lý</a>
+                      <ul>
+                        <li><a class="home" data="dai-ly-tau" href="<?php echo $this->url('dai-ly-tau') ?>">Đại lý tàu</a></li>
+                        <li><a class="home" data="moi-gioi-tau" href="<?php echo $this->url('moi-gioi-tau') ?>">Môi giới tàu</a></li>
+                        <li><a class="home" data="dai-ly-hang-tau" href="<?php echo $this->url('dai-ly-hang-tau') ?>">Đại lý hãng tàu</a></li>
+                      </ul>
+                    </li>
+                    <li><a data="#" href="#">Dịch vụ container</a>
+                      <ul>
+                        <li><a class="home" data="mua-ban-cho-thue-container" href="<?php echo $this->url('mua-ban-cho-thue-container') ?>">Mua bán, cho thuê container</a></li>
+                        <li><a class="home" data="giam-dinh-sua-chua-container" href="<?php echo $this->url('giam-dinh-sua-chua-container') ?>">Giám định - Sửa chữa container</a></li>
+                      </ul>
+                    </li>
+                    <li><a data="#" href="#">Dịch vụ giám định và bảo hiểm</a>
+                      <ul>
+                        <li><a class="home" data="giam-dinh-bao-hiem-tau" href="<?php echo $this->url('giam-dinh-bao-hiem-tau') ?>">Giám định - Bảo hiểm tàu</a></li>
+                        <li><a class="home" data="giam-dinh-bao-hiem-hang-hoa" href="<?php echo $this->url('giam-dinh-bao-hiem-hang-hoa') ?>">Giám định - Bảo hiểm hàng hóa</a></li>
+                        
+                      </ul>
+                    </li>
+                    <li><a data="#" href="#">Dịch vụ cung ứng - Sửa chữa tàu biển</a>
+                      <ul>
+                        <li><a class="home" data="cung-ung-thuc-pham" href="<?php echo $this->url('cung-ung-thuc-pham') ?>">Cung ứng thực phẩm</a></li>
+                        <li><a class="home" data="cung-ung-dau" href="<?php echo $this->url('cung-ung-dau') ?>">Cung ứng dầu</a></li>
+                        <li><a class="home" data="ho-tro-thuyen-vien" href="<?php echo $this->url('ho-tro-thuyen-vien') ?>">Hỗ trợ thuyền viên</a></li>
+                        <li><a class="home" data="#" href="<?php echo $this->url('') ?>">Dọn rửa tàu</a></li>
+                        <li><a class="home" data="sua-chua-tau-bien" href="<?php echo $this->url('sua-chua-tau-bien') ?>">Sửa chữa tàu biển</a></li>
+                        
+                      </ul>
+                    </li>
+                    
+                    
+                  </ul>
+              </li>
+              <li><a  data="#" href="#">Import - Export</a>
+                <ul>
+                  <li><a class="home" data="tapioca-chips" href="<?php echo $this->url('tapioca-chips') ?>">Tapioca Chips</a></li>
+                  <li><a class="home" data="chili-powder" href="<?php echo $this->url('chili-powder') ?>">Chili Powder</a></li>
+                  <li><a class="home" data="incense-powder" href="<?php echo $this->url('incense-powder') ?>">Incense Powder</a></li>
+                  <li><a class="home" data="sugar" href="<?php echo $this->url('sugar') ?>">Sugar</a></li>
+                  <li><a class="home" data="wood-pellets" href="<?php echo $this->url('wood-pellets') ?>">Wood Pellets</a></li>
+                </ul>
+              </li>
+              <li><a data="#" href="#">Hỗ trợ khách hàng</a>
+                <ul>
+                  <li><a class="home" data="#" href="<?php echo $this->url('quotation') ?>">Đặt lệnh trực tuyến</a></li>
+                  <li><a class="home" data="#" href="<?php echo $this->url('quotation') ?>">Tra cứu thông tin đơn hàng</a></li>
+                  <li><a class="home" data="huong-dan-nhanh" href="<?php echo $this->url('huong-dan-nhanh') ?>">Hướng dẫn nhanh</a></li>
+                  <li><a class="home" data="faq" href="<?php echo $this->url('faq') ?>">FAQ</a></li>
+                  <li><a class="home" data="#" href="<?php echo $this->url('') ?>">Đóng góp ý kiến</a></li>
+                  <li><a class="home" data="thong-tin-khac" href="<?php echo $this->url('thong-tin-khac') ?>">Thông tin khác</a></li>
+                  
+                </ul>
+              </li>
+              
+              <li><a data="quotation" href="<?php echo $this->url('quotation') ?>">Bảng giá dịch vụ</a></li>
+              <?php if (isset($_SESSION['user_logined'])) { ?>
+              <li><a data="admin" href="<?php echo $this->url('admin') ?>">Quản trị</a></li>
+              <?php } ?>
+                
+            </ul>
+          </div><!--/.nav-collapse -->
+
+          <!-- Kiem tra dang nhap -->
+          <?php 
+          if ($_SESSION) {
+            ?>
+            <a class="logined" href="<?php echo $this->url('user/logout') ?>">&nbsp; | Logout</a><a class="logined" href="<?php echo BASE_URL.'/user/info/'.$_SESSION['userid_logined'] ?>"><b><i><?php echo $_SESSION['user_logined']; ?> </i></b></a>
+            <?php
+          }
+          else{
+            ?>
+            <a class="logined" href="<?php echo $this->url('user/login') ?>">Login</a>
+            <?php
+          }
+          ?>
+          <!-- end -->
+        </div>
+      </div>
+    </div>
+
+    
+    <div id="container">
+    	
+			<?php echo $content; ?>
+      
+            
+        
+    </div> <!-- /container -->
+        <div id="support">
+      <div class="close" title="Close">x</div>
+           <h3 class="png"><span>Hỗ trợ trực tuyến</span></h3>
+           <div  class="sp_yahoo">
+            
+            
+            <div class="sp_yh">
+              <div class="nv">Hotline </div>
+              
+              <div class="sp_sk">
+                <a href="skype:cmg.hotline?chat">
+                    <img alt='Skype' title="Hotline - Skype" src='http://mystatus.skype.com/smallclassic/cmg.hotline' border='0' >
+                  </a>
+                
+              </div>
+              
+            </div>
+            <div class="sp_dotted"></div>
+            <div class="sp_yh">
+              <div class="nv">Marketing </div>
+              
+              <div class="sp_sk">
+                <a href="skype:cmg.marketing?chat">
+                    <img alt='Skype' title="Marketing - Skype" src='http://mystatus.skype.com/smallclassic/cmg.marketing' border='0' >
+                  </a>
+                
+              </div>
+              
+            </div>
+            <div class="sp_dotted"></div>
+            <div class="sp_yh">
+              <div class="nv">Technical support </div>
+              
+              <div class="sp_sk">
+                <a href="skype:ngoton.it?chat">
+                    <img alt='Skype' title="Technical support - Skype" src='http://mystatus.skype.com/smallclassic/ngoton.it' border='0' >
+                  </a>
+                
+              </div>
+              
+            </div>
+            <div class="sp_dotted"></div>
+            <div class="sp_yh">
+              <div class="nv">. </div>
+              
+              <div class="sp_sk">
+                <a href="skype:href88?chat">
+                    <img alt='Skype' title="Technical - Skype" src='http://mystatus.skype.com/smallclassic/href88' border='0' >
+                  </a>
+                
+              </div>
+              
+            </div>
+
+             
+          </div>
+          <div style="clear:both"></div>
+          <div class="sp_info">
+            <div class="sp_address">29 - Quốc lộ 51 - Ấp Đồng - Phước Tân - Biên Hòa - Đồng Nai</div>
+            <div class="sp_tel">Điện thoại: <br> <span style="color: rgb(20, 50, 166); font-weight:bold">0613.937.677 - 0613.937.607 - 0613.937.747</span></div>
+            <div class="sp_email">Email: <br><span style="color: rgb(20, 50, 166); font-weight:bold">marketing@cmglogistics.com.vn <br> sale@cmglogistics.com.vn</span></div>
+            <div class="sp_hotline">Hotline: <span style="color: rgb(20, 50, 166); font-weight:bold">096.881.3456 - 083.500.9000</span></div>
+          </div>
+   
+    </div>
+<div class="footer-nav">
+      <div class="col">
+        <p style="color:#fff">HO CHI MINH :
+
+        <p>39/5/1A1, 22 Street, Linh Dong Ward, Thu Duc District, HCM City.
+
+        <p>Email: <a href="mailto:marketing@cmglogistics.com.vn">marketing@cmglogistics.com.vn</a> <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="mailto:sale@cmglogistics.com.vn">sale@cmglogistics.com.vn</a> 
+        <p>Website: <a href="http://www.cmglogistics.com.vn">www.cmglogistics.com.vn</a> <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.caimeptrading.com">www.caimeptrading.com</a>
+
+      </div>
+      <div class="col">
+        <p style="color:#fff">DONG NAI : 
+
+        <p>No.29, 51 Highway, Phuoc Tan Ward, Bien Hoa City.
+
+        <p>Điện thoại: <font style="color: #fff">0613.937.607 - 0613.937.677 - 0613.937.747</font>
+
+        <p>Fax: <font style="color: #fff">0613.937.677</font>
+
+        <p>Hotline : <font style="color: #fff">096.881.3456 - 083.500.9000</font>
+      </div>
+      <div class="col">
+        <p style="color:#fff">BA RIA VUNG TAU :
+
+        <p>Cai Mep Port Gate, Tan Phuoc Ward, Tan Thanh District, Ba Ria Vung Tau City.
+
+
+      </div>
+  
+    <div style="clear:both"></div>
+    <footer>
+            <p style="float: left">Copyright &copy; <?php echo date('Y') ?> by <a style="color:#fff" href="<?php echo BASE_URL ?>">CMG</a>. All rights reserved.
+            </p>
+            <div class="social-icon">                 
+                    <a href="https://www.facebook.com/cmglogistics"  target="_blank"><img src="<?php echo BASE_URL ?>/public/img/icon_fb.png"></a>
+                    <a href="https://twitter.com/cmg_logistics"  target="_blank"><img src="<?php echo BASE_URL ?>/public/img/icon_tt.png"></a>
+                    <a href="https://plus.google.com/111952529763008010249?rel=author"  target="_blank"><img src="<?php echo BASE_URL ?>/public/img/icon_gp.png"></a>
+                    <a href="https://www.youtube.com/watch?v=O1w4Ggzpwdo"  target="_blank"><img src="<?php echo BASE_URL ?>/public/img/icon_yt.png"></a>
+                </div>
+            <span style="font-size:5px">Powered by <a style="color:#fff" target="_blank" href="http://www.tinhoctainha.com">Dịch vụ Tin Học Tại Nhà</a></span>
+    </footer>
+  </span>
+  </body>
+</html>

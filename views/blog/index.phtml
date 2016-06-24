@@ -1,0 +1,34 @@
+<h1><?php echo $blog_heading; ?></h1>
+
+<ul>
+<?php foreach($blogs as $blog) : ?>
+<li>Blog id <?php echo $blog->id; ?>: 
+    <a href="blog/view/<?php echo $blog->id; ?>"><?php echo $blog->name; ?></a></li> 
+<?php endforeach; ?>
+</ul> 
+
+
+
+
+
+<table border=1 align=center>
+<caption>Statistics</caption>
+<th>Year</th>
+<th>Team</th>
+<tr  onClick="HighLightTR(this,'#c9cc99','cc3333');" >
+<td align=right>1930</td>
+<td align=right>Detroit</td>
+</tr>
+<tr  onClick="HighLightTR(this,'#c9cc99','cc3333');" >
+<td align=right>1933</td>
+<td align=right>Detroit</td>
+</tr>
+<tr  onClick="HighLightTR(this,'#c9cc99','cc3333');" >
+<td align=right>1934</td>
+<td align=right>Detroit</td>
+</tr>
+<tr  onClick="HighLightTR(this,'#c9cc99','cc3333');" >
+<td align=right>1935</td>
+<td align=right>Detroit</td>
+</tr>
+</table>

@@ -1,0 +1,28 @@
+<div class="login_form">
+        <h1>ĐĂNG NHẬP</h1>
+        <div class="login_body">
+            <form method="post" action="">
+                <table>
+                    <tr>
+                        <td >Username<br> <input type="text" id="username" name="username" tabindex="1" autofocus required="required"></td>
+                        
+                    </tr>
+                    <tr>
+                        <td >Password<br> <input type="password" id="password" name="password" tabindex="2" required="required"></td>
+                    </tr>
+                    <tr>
+                    <td>
+                        <center><input type="submit" name="submit" value="Đăng nhập" tabindex="3"></center>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="ghinho" value="1" tabindex="4" checked /> Ghi nhớ
+                        <span class="rm"><a href="<?php echo $this->url('user/fogot') ?>">Quên mật khẩu</a></span></td>
+                        
+                    </tr>
+                    
+                </table>
+            </form>
+            </div>
+            <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+</div>

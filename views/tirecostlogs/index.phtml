@@ -1,0 +1,563 @@
+<?php
+$url_order = 'ASC';
+if ($order_by == 'tire_cost_logs_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'custom')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'lift')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'shipping')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'trucking')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'stevedore')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'transfer')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'deviation')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> CHI PHÍ LOGISTICS</h1></center>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Nhập giá mới</a>
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Search">
+        <input type="button" name="" id="search-submit" class="button-search" value="Search" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+       
+    </div>
+    <div class="tablenav top">
+
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Select</option>
+                
+                <option value="delete">Delete</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Apply" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">All</option>
+			<option value="15">15 items</option>
+            <option value="20">20 items</option>
+            <option value="50">50 items</option>
+            <option selected="selected" value="100">100 items</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Apply" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+        
+      </div>
+
+</div>
+
+<table class="table_data" id="tblExport">
+<thead>
+    <tr>
+        <th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_cost_logs_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'tire_cost_logs_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','custom','<?php echo $url_order ?>')">Hải quan <?php if ($order_by == 'custom'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lift','<?php echo $url_order ?>')">Nâng hạ <?php if ($order_by == 'lift'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','shipping','<?php echo $url_order ?>')">Cước tàu <?php if ($order_by == 'shipping'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','trucking','<?php echo $url_order ?>')">Vận chuyển <?php if ($order_by == 'trucking'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','stevedore','<?php echo $url_order ?>')">Nhân công, bốc xếp <?php if ($order_by == 'stevedore'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','transfer','<?php echo $url_order ?>')">Phí chuyển tiền <?php if ($order_by == 'transfer'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','deviation','<?php echo $url_order ?>')">Tiền chênh lệch <?php if ($order_by == 'deviation'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">Tổng cộng</th>
+        <th class="fix"></th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($tire_cost_logss as $tire_cost_logs) : ?>
+    
+        
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_cost_logs->tire_cost_logs_id ?>" class="edit_tr">
+            
+            <td>
+                <input name="check[]" type="checkbox" class="checkbox" value="<?php echo $tire_cost_logs->tire_cost_logs_id ?>">
+            </td>
+            
+            <td  class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="custom_<?php echo $tire_cost_logs->tire_cost_logs_id; ?>"><?php echo $lib->formatMoney($tire_cost_logs->custom); ?></td>
+            <td class="fix" id="lift_<?php echo $tire_cost_logs->tire_cost_logs_id; ?>"><?php echo $lib->formatMoney($tire_cost_logs->lift); ?></td>
+            <td class="fix" id="shipping_<?php echo $tire_cost_logs->tire_cost_logs_id; ?>"><?php echo $lib->formatMoney($tire_cost_logs->shipping); ?></td>
+            <td class="fix" id="trucking_<?php echo $tire_cost_logs->tire_cost_logs_id; ?>"><?php echo $lib->formatMoney($tire_cost_logs->trucking); ?></td>
+            <td class="fix" id="stevedore_<?php echo $tire_cost_logs->tire_cost_logs_id; ?>"><?php echo $lib->formatMoney($tire_cost_logs->stevedore); ?></td>
+            <td class="fix" id="transfer_<?php echo $tire_cost_logs->tire_cost_logs_id; ?>"><?php echo $lib->formatMoney($tire_cost_logs->transfer); ?></td>
+            <td class="fix" id="deviation_<?php echo $tire_cost_logs->tire_cost_logs_id; ?>"><?php echo $lib->formatMoney($tire_cost_logs->deviation); ?></td>
+            <td class="fix" id="total_<?php echo $tire_cost_logs->tire_cost_logs_id; ?>"><?php echo $lib->formatMoney($tire_cost_logs->custom+$tire_cost_logs->lift+$tire_cost_logs->shipping+$tire_cost_logs->trucking+$tire_cost_logs->stevedore+$tire_cost_logs->transfer+$tire_cost_logs->deviation); ?></td>
+            <td>
+                <button class="error" onclick="del(<?php echo $tire_cost_logs->tire_cost_logs_id ?>)" >Xóa</button>
+                
+               
+            </td>
+        </tr>
+
+
+    <?php endforeach; ?>
+     
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div style="display:none" id="lasted"></div>
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Chi phí logistics </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_tire" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            
+                            <td>Hải quan</td>
+                            <td>
+                                <input style="width:120px" class="numbers"  type="text" id="custom"  name="custom" tabindex="1"  required="required" >
+                                
+                            </td>
+                            <td>Nâng hạ</td>
+                            <td>
+                                <input style="width:120px" class="numbers"  type="text" id="lift"  name="lift" tabindex="2"  required="required" >
+                                
+                            </td>
+                            <td>Cước tàu</td>
+                            <td>
+                                <input style="width:120px" class="numbers"  type="text" id="shipping"  name="shipping" tabindex="3"  required="required" >
+                                
+                            </td>
+                            <td>Vận chuyển</td>
+                            <td>
+                                <input style="width:120px" class="numbers"  type="text" id="trucking"  name="trucking" tabindex="4"  required="required" >
+                                
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            
+                            <td>Nhân công, bốc xếp</td>
+                            <td>
+                                <input style="width:120px" class="numbers"  type="text" id="stevedore"  name="stevedore" tabindex="5"  required="required" >
+                                
+                            </td>
+                            <td>Phí chuyển tiền</td>
+                            <td>
+                                <input style="width:120px" class="numbers"  type="text" id="transfer"  name="transfer" tabindex="6"  required="required" >
+                                
+                            </td>
+                            <td>Tiền chênh lệch</td>
+                            <td>
+                                <input style="width:120px" class="numbers"  type="text" id="deviation"  name="deviation" tabindex="7"  required="required" >
+                                
+                            </td>
+                            
+                        </tr>
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>
+                                <input type="submit" name="submit" value="Submit" tabindex="3">
+                                
+                            </td>
+                            <td>
+                                <input type="reset" name="reset" value="Reset" tabindex="4">
+                            </td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+
+
+<script type="text/javascript">
+
+
+  
+$('.add-field').hide();  
+
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);   
+         
+    }
+    
+});
+
+
+
+    $('.edit_tr').click(function(e){
+        if(e.target != '[object HTMLButtonElement]' && e.target != '[object HTMLSpanElement]' && !$('.checkbox').is(':focus')) { 
+            if(!$('.checkbox').is(':focus')){
+                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+            }
+            
+            
+            var custom = $(this).find("#custom_"+$(this).attr('id')).text();
+            var lift = $(this).find("#lift_"+$(this).attr('id')).text();
+            var shipping = $(this).find("#shipping_"+$(this).attr('id')).text();
+            var trucking = $(this).find("#trucking_"+$(this).attr('id')).text();
+            var stevedore = $(this).find("#stevedore_"+$(this).attr('id')).text();
+            var transfer = $(this).find("#transfer_"+$(this).attr('id')).text();
+            var deviation = $(this).find("#deviation_"+$(this).attr('id')).text();
+            //alert(cost_code);
+            $('#yes').val($(this).attr('id'));
+            
+            
+            $('#custom').val(custom);
+            $('#lift').val(lift);
+            $('#shipping').val(shipping);
+            $('#trucking').val(trucking);
+            $('#stevedore').val(stevedore);
+            $('#transfer').val(transfer);
+            $('#deviation').val(deviation);
+            
+
+            $( ".add-field" ).dialog( "open" );
+        }
+
+        
+        
+    });
+
+
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+     $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
+     
+        $('#custom').val("");
+        $('#lift').val("");
+        $('#shipping').val("");
+        $('#trucking').val("");
+        $('#stevedore').val("");
+        $('#transfer').val("");
+        $('#deviation').val("");
+                
+        $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+    $( ".add-field" ).dialog( "open" );
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_tire").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var custom = $('#custom').attr('value');
+                    var lift = $('#lift').attr('value');
+                    var shipping = $('#shipping').attr('value');
+                    var trucking = $('#trucking').attr('value');
+                    var stevedore = $('#stevedore').attr('value');
+                    var transfer = $('#transfer').attr('value');
+                    var deviation = $('#deviation').attr('value');
+
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/tirecostlogs/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            
+                            custom: custom,
+                            lift: lift,
+                            shipping: shipping,
+                            trucking: trucking,
+                            stevedore: stevedore,
+                            transfer: transfer,
+                            deviation: deviation,
+                            yes: yes,
+
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (yes != "") {
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                                    $('#expect_date_'+yes).text(expect_date);
+                                    $('#comment_'+yes).text(comment);
+                                    $('#money_'+yes).text(money);
+                                    $('#source_'+yes).text($("#source option:selected").text());
+                                    $('#source_in_'+yes).text($("#source_in option:selected").text());
+                            }
+                            else{
+                                setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="vendor_'+parseInt(lastID+1)+'">'+vendor+'</td><td class="fix" id="money_'+parseInt(lastID+1)+'">'+money+'</td><td class="fix" id="expect_date_'+parseInt(lastID+1)+'">'+expect_date+'</td><td class="fix" id="week_'+parseInt(lastID+1)+'"></td><td class="fix" id="code_'+parseInt(lastID+1)+'">'+code+'</td><td class="fix" id="source_'+parseInt(lastID+1)+'">'+$("#source option:selected").text()+'</td><td class="fix" id="comment_'+parseInt(lastID+1)+'">'+comment+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+
+
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+
+    $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-]/g, "")
+        ;
+      });
+    });
+    
+
+});
+
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+function set_item(item,name) {
+    // change input value
+    $('#work_code').val(item);
+    $("#work_code").attr("data",name);
+    
+    $('#code_list_id').hide();
+    $('#work_code').focus();
+}
+
+function set_item_tire(item,name) {
+    // change input value
+    $('.tire_pattern').val(item);
+    $(".tire_pattern").attr("data",name);
+    
+    $('.tire_list_id').hide();
+    $('.tire_pattern').focus();
+}
+
+function set_item_supplier(item,name) {
+    // change input value
+    $('.tire_supplier').val(item);
+    $(".tire_supplier").attr("data",name);
+    
+    $('.brand_list_id').hide();
+    $('.tire_supplier').focus();
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+
+ 
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+
+</script>
+</div>
+
+<script type="text/javascript">
+
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Bảng giá",
+    hide: 'fold',
+    show: 'blind'
+});
+
+var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+5",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onSelect: function(dateStr) {
+            var d = $.datepicker.parseDate('dd-mm-yy', dateStr);
+            var years = parseInt(3, 10);
+
+            d.setFullYear(d.getFullYear() + years);
+
+            $('#price_end_time').datepicker('setDate', d);
+            
+        },
+        onClose: function(selectedDate) {
+                
+                $( "#price_end_time" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+    }; 
+    $("#price_start_time").datepicker(pickerOpts);
+
+    var pickerOpts2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+5",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#price_start_time" ).datepicker( "option", "maxDate", selectedDate );
+
+         },
+    }; 
+    $("#price_end_time").datepicker(pickerOpts2);
+
+$(".show").click(function(){
+    $("#winpopup").dialog({
+        draggable:true,
+        modal: true,
+        autoOpen: false,
+        width: "90%",
+        resizable: false,
+        position: "top",
+        title:'Chi tiết',
+        buttons: {
+            OK: function() {
+                $( this ).dialog( "close" );
+            },
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        }
+    });
+    $("#winpopup").load($(this).attr('href'));
+    $("#winpopup").dialog("open");
+    return false;
+});
+
+</script>
+

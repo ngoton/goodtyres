@@ -1,0 +1,239 @@
+<?php
+    $today = strtotime($ngay);
+    $max = $max < strtotime(date('d-m-Y')) ? strtotime(date('d-m-Y')) : $max;
+    $total = $total;
+    $now = $total;
+
+    $k=1;
+?>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;"><h1> TỒN KHO</h1></center>
+
+</div>
+<div style="width:30%;float:left">
+    <table class="table_data">
+        <thead>
+            <tr>
+                <th>Ngày</th>
+                <th>Nhập</th>
+                <th>Bán</th>
+                <th>Đặt hàng</th>
+                <th>Tồn kho</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php for ( $i = $today; $i <= ($max+86400); $i = $i + 86400 ) { 
+                $buy = isset($tire[date('d-m-Y',$i)]['buy'])?$tire[date('d-m-Y',$i)]['buy']:null;
+                $sale = isset($tire[date('d-m-Y',$i)]['sale'])?$tire[date('d-m-Y',$i)]['sale']:null;
+                $order = isset($tire[date('d-m-Y',$i)]['order'])?$tire[date('d-m-Y',$i)]['order']:null;
+                $now += ($buy-$sale-$order); 
+            ?>
+            <tr>
+                  <td class="fix"><?php echo date('d/m/Y',$i) ?></td>
+                  <td class="fix"><a target="_blank" href="<?php echo BASE_URL ?>/tiresale/index/<?php echo strtotime(date('d-m-Y',$i)) ?>"><?php echo $buy ?></a></td>
+                  <td class="fix"><a target="_blank" href="<?php echo BASE_URL ?>/tiresale/sale/<?php echo strtotime(date('d-m-Y',$i)) ?>"><?php echo $sale ?></a></td>
+                  <td class="fix"><a target="_blank" href="<?php echo BASE_URL ?>/tireorder/view/<?php echo strtotime(date('d-m-Y',$i)) ?>"><?php echo $order ?></a></td>
+                  <td class="fix <?php echo $total != $now?'error':null; ?>"><?php echo $total += ($buy-$sale-$order) ?></td>
+            </tr>
+            <?php  }  ?>
+        </tbody>
+            
+    </table>
+</div>
+<div style="width:65%;float:right">
+    <table id="tblExport" class="table_data">
+<thead>
+    <tr>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'tire_buy_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" >
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_brand_name','<?php echo $url_order ?>')">Thương hiệu <?php if ($order_by == 'tire_brand_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_size_number','<?php echo $url_order ?>')">Size <?php if ($order_by == 'tire_size_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_pattern','<?php echo $url_order ?>')">Mã gai <?php if ($order_by == 'tire_buy_pattern'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_volume','<?php echo $url_order ?>')">Tồn kho <?php if ($order_by == 'tire_buy_volume'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $doanhthu=0; $chiphi=0; $loinhuan=0; $soluong = 0; $daban=0; $tonkho=0; ?>
+    <?php foreach ($tire_buys as $tire_buy) : ?>
+    
+    <?php 
+        $doanhthu += (isset($tire_buy_data[$tire_buy->tire_buy_id]['revenue'])?$tire_buy_data[$tire_buy->tire_buy_id]['revenue']:0);
+        $chiphi += (isset($tire_buy_data[$tire_buy->tire_buy_id]['cost'])?$tire_buy_data[$tire_buy->tire_buy_id]['cost']:0);
+        $soluong += $tire_buy->soluong;
+        $daban += (isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']:0);
+
+        $ton = $tire_buy->soluong - (isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']:0);
+
+        if($ton > 0){
+    ?>
+        
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_buy->tire_buy_id ?>" class="edit_tr">
+            
+            
+            <td  class="fix"><?php echo $k++; ?></td>
+            <td  class="fix"><img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $link_picture[$tire_buy->tire_buy_id]['image']; ?>" width="50" height="50" /></td>
+            <td class="fix" id="tire_buy_brand_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_brand_name; ?></td>
+            <td class="fix" id="tire_buy_size_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_size_number; ?></td>
+            <td class="fix" data="<?php echo $tire_buy->tire_buy_pattern; ?>" id="tire_buy_pattern_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_pattern_name; ?></td>
+            
+            <td class="fix" id="conlai_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney($ton ); ?></td>
+            
+        </tr>
+
+    <?php } ?>
+    <?php endforeach; ?>
+
+    <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="5" >Tổng cộng</td>
+        <td class="fix"><?php echo $soluong-$daban; ?></td>
+    </tr>
+     
+   </tbody>
+</table>
+</div>
+<div style="clear:both"></div>
+
+<div style="width:90%;">
+    <div style="text-align:left">
+        <form id="inven" method="post" action="">
+            Ngày: <input style="width:90px" type="text"  id="date" name="date" value="<?php echo $ngay ?>"><input type="submit" id="check" value="Kiểm tra">
+        </form>
+        
+    </div>
+    <div id="chart"></div>
+    <div id="chart2"></div>  
+    <div id="chart3"></div>  
+</div>
+<div style="clear:both"></div>
+
+<script type="text/javascript">
+    
+var ngay = "<?php echo $ngay ?>";
+
+        //load the Google Visualization API and the chart
+    google.load('visualization', '1', {'packages':['corechart']});
+ 
+    //set callback
+    google.setOnLoadCallback (createChart);
+    google.setOnLoadCallback (createChart2);
+    google.setOnLoadCallback (createChart3);
+ 
+    //callback function
+    function createChart() {
+     var jsonData = null;
+
+        var json = $.ajax({
+          url: "<?php echo BASE_URL ?>/inventory/brand/0/0/"+ngay, // make this url point to the data file
+          dataType: "json",
+          async: false,
+          success: (
+        function(data) {
+            jsonData = data;
+        // Create and populate the data table.
+        var data = new google.visualization.DataTable(jsonData);
+        // Create and draw the visualization.
+      var chart= new google.visualization.PieChart(document.getElementById('chart')).
+            draw(data, {
+                        is3D: true,
+                        title: 'Tồn kho tính đến ' + ngay,
+                    }
+                );
+
+        })
+        }).responseText;
+    }
+
+    function createChart2() {
+     var jsonData = null;
+
+        var json = $.ajax({
+          url: "<?php echo BASE_URL ?>/inventory/size/0/0/"+ngay, // make this url point to the data file
+          dataType: "json",
+          async: false,
+          success: (
+        function(data) {
+            jsonData = data;
+
+        // Create and populate the data table.
+        var data = new google.visualization.DataTable(jsonData);
+
+        // Create and draw the visualization.
+      var chart= new google.visualization.ColumnChart(document.getElementById('chart2')).
+            draw(data, {curveType: "function",
+                        is3D: true,
+                        isStacked: true,
+                        legend: { position: 'top', maxLines: 3 },
+                    }
+                );
+
+        })
+        }).responseText;
+    }
+
+    function createChart3() {
+     var jsonData = null;
+
+        var json = $.ajax({
+          url: "<?php echo BASE_URL ?>/inventory/pattern/0/0/"+ngay, // make this url point to the data file
+          dataType: "json",
+          async: false,
+          success: (
+        function(data) {
+            jsonData = data;
+
+        // Create and populate the data table.
+        var data = new google.visualization.DataTable(jsonData);
+
+        // Create and draw the visualization.
+      var chart= new google.visualization.ColumnChart(document.getElementById('chart3')).
+            draw(data, {curveType: "function",
+                        is3D: true,
+                        isStacked: true,
+                        legend: { position: 'top', maxLines: 3 },
+                    }
+                );
+
+        })
+        }).responseText;
+    }
+
+
+var pickerOpay2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $("#date").datepicker(pickerOpay2);
+
+</script> 

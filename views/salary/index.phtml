@@ -1,0 +1,1047 @@
+<style type="text/css">
+    .ui-datepicker-calendar {
+        display: none;
+    }​
+</style>
+<script type="text/javascript">
+    $(function() {
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'MM yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytao").change();
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts);
+              
+            
+    $("#chonngaytao").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        if (month<9) {
+            var ngay = "0"+(month+1)+"/"+year;
+        }
+        else
+            var ngay = (month+1)+"/"+year;
+
+        var page = "<?php echo $page; ?>";
+        var cot = "<?php echo $order_by; ?>";
+        var sapxep = "<?php echo $order; ?>";
+        var keyword = "<?php echo $keyword; ?>";
+        var loc =    $('#chonloc').val();
+        
+        
+        var dataString = 'keyword='+ keyword+"&limit="+loc+"&ngaytao="+ngay+"&page="+ page +"&order_by="+ cot +"&order="+ sapxep;  
+        
+        $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+        
+            $.ajax({
+                type: "POST",                            // Phương thức gọi là GET
+                url: "#",                 // File xử lý
+                data: dataString,                       // Dữ liệu truyền vào
+                beforeSend:  function() {               // add class "loading" cho khung nhập
+                    $('input#search-input').addClass('loading');
+                },
+                success: function(server_response)      // Khi xử lý thành công sẽ chạy hàm này
+                {
+                    $('body').html(server_response);    // Hiển thị dữ liệu vào thẻ div #searchresultdata
+                    
+                     
+                    if ($('input#search-input').hasClass("loading")) {      // Kiểm tra class "loading"
+                        $("input#search-input").removeClass("loading");     // Remove class "loading"
+                    }
+                    $('#loading').fadeOut(500); 
+                }
+            });
+        
+        
+    });
+});
+</script>
+<?php
+$url_order = 'ASC';
+if ($order_by == 'salary_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'basic_salary')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'work_day')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'overtime')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'total_salary')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'mileage_allowance')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'phone_allowance')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'bh_allowance')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tn_allowance')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'graded')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'bonus')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'eating_allowance')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'total_allowance')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'phone_detruct')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'bh_detruct')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tu_detruct')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'eating_detruct')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'total_detruct')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'total')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+$tongngaycong = 0;
+$tongtangca = 0;
+$tongluong = 0;
+$tongphucapxang = 0;
+$tongphucapdienthoai = 0;
+$tongphucapbh = 0;
+$tongphucaptn = 0;
+$tongphucapxeploai = 0;
+$tongphucapthuong = 0;
+$tongphucapcom = 0;
+$tongphucap = 0;
+$tongkhautrudienthoai = 0;
+$tongkhautrubh = 0;
+$tongkhautrutu = 0;
+$tongkhautrucom = 0;
+$tongkhautru = 0;
+$tongcong = 0;
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BẢNG LƯƠNG NHÂN VIÊN </h1></center>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm bảng lương</a>
+    
+    <a class="add_button" id="import_excel" href="<?= $this->url('salary/import')?>">Import Excel</a>
+    <a class="add_button" id="export_excel" href="<?php echo BASE_URL.'/salary/export/'.$ngaytao ?>">Export Excel</a>  
+
+</div>
+
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+        <div class="add-box">
+        	<input type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn ngày" <?php if(isset($ngaytao)) echo "value='$ngaytao'"; ?>>  
+                                        
+        </div>
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="2">Hiển thị 2 giá trị</option>
+            <option value="5">Hiển thị 5 giá trị</option>
+            <option value="8">Hiển thị 8 giá trị</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+
+        </div>
+        
+      </div>
+
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','salary_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'salary_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_name','<?php echo $url_order ?>')">Họ tên <?php if ($order_by == 'staff_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','basic_salary','<?php echo $url_order ?>')">Lương cơ bản <?php if ($order_by == 'basic_salary'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','work_day','<?php echo $url_order ?>')">Ngày công <?php if ($order_by == 'work_day'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','overtime','<?php echo $url_order ?>')">Tăng ca <br> <i>1h=1.5</i> <?php if ($order_by == 'overtime'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','total_salary','<?php echo $url_order ?>')">Tổng lương <?php if ($order_by == 'total_salary'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="8" class="fix">Phụ cấp</th>
+        <th colspan="5" class="fix">Khấu trừ</th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','total','<?php echo $url_order ?>')">Thành tiền <?php if ($order_by == 'total'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+            
+           
+        <th rowspan="2" class="fix">&nbsp;</th>
+    </tr>
+    <tr>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','mileage_allowance','<?php echo $url_order ?>')">Xăng xe <?php if ($order_by == 'mileage_allowance'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','phone_allowance','<?php echo $url_order ?>')">Điện thoại <?php if ($order_by == 'phone_allowance'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','bh_allowance','<?php echo $url_order ?>')">BH <?php if ($order_by == 'bh_allowance'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tn_allowance','<?php echo $url_order ?>')">TN <?php if ($order_by == 'tn_allowance'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','graded','<?php echo $url_order ?>')">Xếp loại <?php if ($order_by == 'graded'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','bonus','<?php echo $url_order ?>')">Thưởng <?php if ($order_by == 'bonus'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','eating_allowance','<?php echo $url_order ?>')">Cơm <?php if ($order_by == 'eating_allowance'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','total_allowance','<?php echo $url_order ?>')">Tổng PC <?php if ($order_by == 'total_allowance'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+    
+
+        
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','phone_detruct','<?php echo $url_order ?>')">Điện thoại <?php if ($order_by == 'phone_detruct'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','bh_detruct','<?php echo $url_order ?>')">BH <?php if ($order_by == 'bh_detruct'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tu_detruct','<?php echo $url_order ?>')">Tạm ứng <?php if ($order_by == 'tu_detruct'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','eating_detruct','<?php echo $url_order ?>')">Cơm <?php if ($order_by == 'eating_detruct'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','total_detruct','<?php echo $url_order ?>')">Tổng KT <?php if ($order_by == 'total_detruct'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+    </tr>
+   </thead>
+   <tbody>
+    <?php foreach ($salarys as $salary) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $salary->salary_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $salary->salary_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="staff_name_<?php echo $salary->salary_id; ?>"><?php echo $salary->staff_name; ?></td>
+            <td class="fix" id="basic_salary_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->basic_salary); ?></td>
+            <td class="fix" id="work_day_<?php echo $salary->salary_id; ?>"><?php echo $salary->work_day; ?></td>
+            <td class="fix" id="overtime_<?php echo $salary->salary_id; ?>"><?php echo $salary->overtime; ?></td>
+            <td class="fix" id="total_salary_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->total_salary); ?></td>
+            <td class="fix" id="mileage_allowance_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->mileage_allowance); ?></td>
+            <td class="fix" id="phone_allowance_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->phone_allowance); ?></td>
+            <td class="fix" id="bh_allowance_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->bh_allowance); ?></td>
+            <td class="fix" id="tn_allowance_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->tn_allowance); ?></td>
+            <td class="fix" id="graded_<?php echo $salary->salary_id; ?>"><?php echo $salary->graded; ?></td>
+            <td class="fix" id="bonus_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->bonus); ?></td>
+            <td class="fix" id="eating_allowance_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->eating_allowance); ?></td>
+            <td class="fix" id="total_allowance_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->total_allowance); ?></td>
+            <td class="fix" id="phone_detruct_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->phone_detruct); ?></td>
+            <td class="fix" id="bh_detruct_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->bh_detruct); ?></td>
+            <td class="fix" id="tu_detruct_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->tu_detruct); ?></td>
+            <td class="fix" id="eating_detruct_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->eating_detruct); ?></td>
+            <td class="fix" id="total_detruct_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->total_detruct); ?></td>
+            <td class="fix" id="total_<?php echo $salary->salary_id; ?>"><?php echo $lib->formatMoney($salary->total); ?></td>
+            <td style="display:none;"  id="staff_code_<?php echo $salary->salary_id; ?>"><?php echo $salary->staff_code; ?></td>
+            <td style="display:none;"  id="staff_birth_<?php echo $salary->salary_id; ?>"><?php echo $salary->staff_birth; ?></td>
+            <td style="display:none;"  id="staff_gender_<?php echo $salary->salary_id; ?>"><?php echo $salary->staff_gender; ?></td>
+            <td style="display:none;"  id="salary_create_time_<?php echo $salary->salary_id; ?>"><?php echo $salary->salary_create_time; ?></td>
+            <td>
+                <button onclick="del(<?php echo $salary->salary_id ?>)" >Xóa</button>
+            </td>
+        </tr>
+        <?php 
+        $tongngaycong += $salary->work_day;
+        $tongtangca += $salary->overtime;
+        $tongluong += $salary->total_salary;
+        $tongphucapxang += $salary->mileage_allowance;
+        $tongphucapdienthoai += $salary->phone_allowance;
+        $tongphucapbh += $salary->bh_allowance;
+        $tongphucaptn += $salary->tn_allowance;
+        
+        $tongphucapthuong += $salary->bonus;
+        $tongphucapcom += $salary->eating_allowance;
+        $tongphucap += $salary->total_allowance;
+        $tongkhautrudienthoai += $salary->phone_detruct;
+        $tongkhautrubh += $salary->bh_detruct;
+        $tongkhautrutu += $salary->tu_detruct;
+        $tongkhautrucom += $salary->eating_detruct;
+        $tongkhautru += $salary->total_detruct;
+        $tongcong += $salary->total;
+        ?>
+    <?php endforeach; ?>
+   </tbody>
+   <tfoot>
+       <tr>    
+           <td></td>
+           <td></td>
+           <td></td>
+           <td><b>Tổng cộng</b></td>
+           <td class="total error" id="total_work_day" ><?php echo $tongngaycong ?></td>
+           <td class="total error" id="total_overtime" ><?php echo $tongtangca ?></td>
+           <td class="total error" id="total_all_salary" ><?php echo $lib->formatMoney($tongluong) ?></td>
+           <td class="total error" id="total_mileage_allowance" ><?php echo $lib->formatMoney($tongphucapxang) ?></td>
+           <td class="total error" id="total_phone_allowance" ><?php echo $lib->formatMoney($tongphucapdienthoai) ?></td>
+           <td class="total error" id="total_bh_allowance" ><?php echo $lib->formatMoney($tongphucapbh) ?></td>
+           <td class="total error" id="total_tn_allowance" ><?php echo $lib->formatMoney($tongphucaptn) ?></td>
+           <td class="total error" id="total_graded" >-</td>
+           <td class="total error" id="total_bonus" ><?php echo $lib->formatMoney($tongphucapthuong) ?></td>
+           <td class="total error" id="total_eating_allowance" ><?php echo $lib->formatMoney($tongphucapcom) ?></td>
+           <td class="total error" id="total_all_allowance" ><?php echo $lib->formatMoney($tongphucap) ?></td>
+           <td class="total error" id="total_phone_detruct" ><?php echo $lib->formatMoney($tongkhautrudienthoai) ?></td>
+           <td class="total error" id="total_bh_detruct" ><?php echo $lib->formatMoney($tongkhautrubh) ?></td>
+           <td class="total error" id="total_tu_detruct" ><?php echo $lib->formatMoney($tongkhautrutu) ?></td>
+           <td class="total error" id="total_eating_detruct" ><?php echo $lib->formatMoney($tongkhautrucom) ?></td>
+           <td class="total error" id="total_all_detruct" ><?php echo $lib->formatMoney($tongkhautru) ?></td>
+           <td class="total error" id="total_all" ><?php echo $lib->formatMoney($tongcong) ?></td>
+           <td></td>
+       </tr>
+       
+   </tfoot>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Thông tin nhân viên</h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_salary" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td style="float:right;padding:10px">Tháng</td>
+                            <td><input readonly type="text" id="salary_create_time" name="salary_create_time" tabindex="22" required="required"></td>
+                            
+                        </tr>
+                        <tr>
+                            <td>Họ tên </td>
+                            <td><input type="text" readonly id="staff_name" name="staff_name" tabindex="1" autofocus autocomplete="off" required="required" placeholder="Nhập tên hoặc * để chọn" >
+                                <ul id="staff_list_id"></ul>
+                            </td>
+                            <td>Lương cơ bản </td>
+                            <td><input type="text" id="basic_salary" class="number" name="basic_salary" tabindex="2"  required="required"></td>
+                            <td rowspan="8">
+                                <fieldset class="groupbox">
+                                    <legend>
+                                        <span><h4>Phụ cấp</h4></span>
+                                    </legend>
+                                    <table>
+                                        <tr>
+                                            <td>Xăng xe </td>
+                                            <td><input type="text" class="number" id="mileage_allowance" name="mileage_allowance" tabindex="6"></td> 
+                                        </tr>
+                                        <tr>
+                                            <td>Điện thoại </td>
+                                            <td><input type="text" class="number" id="phone_allowance" name="phone_allowance" tabindex="7"></td> 
+                                        </tr>
+                                        <tr>
+                                            <td>BH </td>
+                                            <td><input type="text" class="number" id="bh_allowance" name="bh_allowance" tabindex="8"></td> 
+                                        </tr>
+                                        <tr>
+                                            <td>TN </td>
+                                            <td><input type="text" class="number" id="tn_allowance" name="tn_allowance" tabindex="9"></td> 
+                                        </tr>
+                                        <tr>
+                                            <td>Xếp loại </td>
+                                            <td><input type="text"  id="graded" name="graded" tabindex="10" maxlength="1" placeholder="Nhập A hoặc a hoặc b hoặc B"></td> 
+                                        </tr>
+                                        <tr>
+                                            <td>Thưởng </td>
+                                            <td><input type="text" class="number" id="bonus" name="bonus" tabindex="11"></td> 
+                                        </tr>
+                                        <tr>
+                                            <td>Cơm </td>
+                                            <td><input type="text" class="number" id="eating_allowance" name="eating_allowance" tabindex="12"></td> 
+                                        </tr>
+                                        <tr>
+                                            <th>Tổng phụ cấp</th>
+                                            <td><input readonly type="text" class="number" id="total_allowance" name="total_allowance" tabindex="13"></td> 
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </td>
+                            <td rowspan="8">
+                                <fieldset class="groupbox">
+                                    <legend>
+                                        <span><h4>Khấu trừ</h4></span>
+                                    </legend>
+                                    <table>
+                                        <tr>
+                                            <td>Điện thoại </td>
+                                            <td><input type="text" class="number" id="phone_detruct" name="phone_detruct" tabindex="14"></td> 
+                                        </tr>
+                                        <tr>
+                                            <td>BH </td>
+                                            <td><input type="text" class="number" id="bh_detruct" name="bh_detruct" tabindex="15"></td> 
+                                        </tr>
+                                        <tr>
+                                            <td>Tạm ứng </td>
+                                            <td><input type="text" class="number" id="tu_detruct" name="tu_detruct" tabindex="16"></td> 
+                                        </tr>
+                                        <tr>
+                                            <td>Cơm </td>
+                                            <td><input type="text" class="number" id="eating_detruct" name="eating_detruct" tabindex="17"></td> 
+                                        </tr>
+                                        <tr>
+                                            <th>Tổng khấu trừ</th>
+                                            <td><input readonly type="text" class="number" id="total_detruct" name="total_detruct" tabindex="18"></td> 
+                                        </tr>
+                                        <tr><td>&nbsp;</td></tr>
+                                        <tr><td>&nbsp;</td></tr>
+                                        <tr><td>&nbsp;</td></tr>
+                                        <tr><td>&nbsp;</td></tr>
+                                        <tr><td>&nbsp;</td></tr>
+                                    </table>
+                                </fieldset>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>Mã nhân viên </td>
+                            <td><input readonly type="text" id="staff_code" name="staff_code" tabindex="23" ></td>
+                            <td>Ngày công </td>
+                            <td><input type="text" class="number" id="work_day" name="work_day" tabindex="3"  required="required"></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>Ngày sinh </td>
+                            <td><input readonly type="text" id="staff_birth" name="staff_birth" tabindex="24" ></td>
+                            <td>Tăng ca </td>
+                            <td><input type="text" class="number" id="overtime" name="overtime" tabindex="4" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>Giới tính </td>
+                            <td>
+                              <input disabled type="radio" checked name="gender" value="0" tabindex="25" required="required" > Nam
+                              <input disabled type="radio" name="gender" value="1" tabindex="4" required="required"> Nữ
+                            </td>
+                            <th>Tổng lương </th>
+                            <td><input readonly type="text" class="number" id="total_salary" name="total_salary" tabindex="5" required="required"></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</th>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        <tr rowspan="2">
+                            <th>Thành tiền</th>
+                            <td><input readonly type="text" id="total" name="total" tabindex="19" required="required"></td>
+                        </tr>
+                        
+                         <tr>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="20"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="21"></td>
+                            
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+   $('#staff_list_id').slideUp(200);
+});
+    $('.edit_tr').click(function(e){
+        if(e.target != '[object HTMLButtonElement]' && !$('.checkbox').is(':focus')){
+            if(!$('.checkbox').is(':checked')){
+                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+            }
+            var staff_name = $(this).find("#staff_name_"+$(this).attr('id')).text();
+            var staff_code = $(this).find("#staff_code_"+$(this).attr('id')).text();
+            var staff_birth = $(this).find("#staff_birth_"+$(this).attr('id')).text();
+            var staff_gender = $(this).find("#staff_gender_"+$(this).attr('id')).text();
+            var basic_salary = $(this).find("#basic_salary_"+$(this).attr('id')).text();
+            var work_day = $(this).find("#work_day_"+$(this).attr('id')).text();
+            var overtime = $(this).find("#overtime_"+$(this).attr('id')).text();
+            var total_salary = $(this).find("#total_salary_"+$(this).attr('id')).text();
+            var mileage_allowance = $(this).find("#mileage_allowance_"+$(this).attr('id')).text();
+            var phone_allowance = $(this).find("#phone_allowance_"+$(this).attr('id')).text();
+            var bh_allowance = $(this).find("#bh_allowance_"+$(this).attr('id')).text();
+            var tn_allowance = $(this).find("#tn_allowance_"+$(this).attr('id')).text();
+            var graded = $(this).find("#graded_"+$(this).attr('id')).text();
+            var bonus = $(this).find("#bonus_"+$(this).attr('id')).text();
+            var eating_allowance = $(this).find("#eating_allowance_"+$(this).attr('id')).text();
+            var total_allowance = $(this).find("#total_allowance_"+$(this).attr('id')).text();
+            var phone_detruct = $(this).find("#phone_detruct_"+$(this).attr('id')).text();
+            var bh_detruct = $(this).find("#bh_detruct_"+$(this).attr('id')).text();
+            var tu_detruct = $(this).find("#tu_detruct_"+$(this).attr('id')).text();
+            var eating_detruct = $(this).find("#eating_detruct_"+$(this).attr('id')).text();
+            var total_detruct = $(this).find("#total_detruct_"+$(this).attr('id')).text();
+            var total = $(this).find("#total_"+$(this).attr('id')).text();
+            var salary_create_time = $(this).find("#salary_create_time_"+$(this).attr('id')).text();
+            //alert(staff_name);
+            $('#yes').val($(this).attr('id'));
+            $('#staff_name').val(staff_name);
+            $('#staff_code').val(staff_code);
+            $('#staff_birth').val(staff_birth);
+            $('#basic_salary').val(basic_salary);
+            $('#work_day').val(work_day);
+            $('#overtime').val(overtime);
+            $('#total_salary').val(total_salary);
+            $('#mileage_allowance').val(mileage_allowance);
+            $('#phone_allowance').val(phone_allowance);
+            $('#bh_allowance').val(bh_allowance);
+            $('#tn_allowance').val(tn_allowance);
+            $('#graded').val(graded);
+            $('#bonus').val(bonus);
+            $('#eating_allowance').val(eating_allowance);
+            $('#total_allowance').val(total_allowance);
+            $('#phone_detruct').val(phone_detruct);
+            $('#bh_detruct').val(bh_detruct);
+            $('#tu_detruct').val(tu_detruct);
+            $('#eating_detruct').val(eating_detruct);
+            $('#total_detruct').val(total_detruct);
+            $('#total').val(total);
+            $('#salary_create_time').val(salary_create_time);
+            
+            var radioLength = $("input[name='gender']").length;
+            for(var i = 0; i < radioLength; i++) {
+                $("input[name='gender']")[i].checked = false;
+                if($("input[name='gender']")[i].value == staff_gender) {
+                    $("input[name='gender']")[i].checked = true;
+                }
+            }
+            $('#staff_name').attr('data',"");
+            $("#staff_name").prop('readonly', true);
+            $("#staff_name").prop('disabled', true);
+            $('#staff_name').attr('code','true');
+
+            $( ".add-field" ).dialog( "open" );
+        }
+
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+    $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+    
+     $("#staff_name").prop('readonly', false);
+     $("#staff_name").prop('disabled', false);
+     $('#staff_name').val("");
+     $('#staff_name').attr('code','false');
+        $('#staff_code').val("");
+        $('#staff_birth').val("");
+        $('#basic_salary').val(0);
+        $('#work_day').val(0);
+        $('#overtime').val(0);
+        $('#total_salary').val(0);
+        $('#mileage_allowance').val(0);
+        $('#phone_allowance').val(0);
+        $('#bh_allowance').val(0);
+        $('#tn_allowance').val(0);
+        $('#graded').val("");
+        $('#bonus').val(0);
+        $('#eating_allowance').val(0);
+        $('#total_allowance').val(0);
+        $('#phone_detruct').val(0);
+        $('#bh_detruct').val(0);
+        $('#tu_detruct').val(0);
+        $('#eating_detruct').val(0);
+        $('#total_detruct').val(0);
+        $('#total').val(0);
+        $('#salary_create_time').prop('readonly',false);
+        $('#salary_create_time').val("<?php echo date('m/Y') ?>");
+
+        $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+        var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'MM yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+            var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+            var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+            if (month<9) {
+                var ngay = "0"+(month+1)+"/"+year;
+            }
+            else
+                var ngay = (month+1)+"/"+year;
+               $("#salary_create_time").val(ngay);
+         },
+         
+    };  
+    $("#salary_create_time").datepicker(pickerOpts);
+
+    $( ".add-field" ).dialog( "open" );
+
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_salary").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                    if ($('#staff_name').attr('code') == 'false') {
+                        $('#staff_name').val("");
+                        $('#staff_name').focus();
+                        return false;
+                    };
+                
+                    var staff = $('#staff_name').attr('data');
+                    var basic_salary = $('#basic_salary').attr('value');
+                    var work_day = $('#work_day').attr('value');
+                    var overtime = $('#overtime').attr('value');
+                    var total_salary = $('#total_salary').attr('value');
+                    var mileage_allowance = $('#mileage_allowance').attr('value');
+                    var phone_allowance = $('#phone_allowance').attr('value');
+                    var bh_allowance = $('#bh_allowance').attr('value');
+                    var tn_allowance = $('#tn_allowance').attr('value');
+                    var graded = $('#graded').attr('value');
+                    var bonus = $('#bonus').attr('value');
+                    var eating_allowance = $('#eating_allowance').attr('value');
+                    var total_allowance = $('#total_allowance').attr('value');
+                    var phone_detruct = $('#phone_detruct').attr('value');
+                    var bh_detruct = $('#bh_detruct').attr('value');
+                    var tu_detruct = $('#tu_detruct').attr('value');
+                    var eating_detruct = $('#eating_detruct').attr('value');
+                    var total_detruct = $('#total_detruct').attr('value');
+                    var salary_create_time = $('#salary_create_time').attr('value');
+                    var total = $('#total').attr('value');
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/salary/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            staff: staff,
+                            basic_salary: basic_salary,
+                            work_day: work_day,
+                            overtime: overtime,
+                            total_salary: total_salary,
+                            mileage_allowance: mileage_allowance,
+                            phone_allowance: phone_allowance,
+                            bh_allowance: bh_allowance,
+                            tn_allowance: tn_allowance,
+                            graded: graded,
+                            bonus: bonus,
+                            eating_allowance: eating_allowance,
+                            total_allowance: total_allowance,
+                            phone_detruct: phone_detruct,
+                            bh_detruct: bh_detruct,
+                            tu_detruct: tu_detruct,
+                            eating_detruct: eating_detruct,
+                            total_detruct: total_detruct,
+                            total: total,
+                            salary_create_time: salary_create_time,
+                            yes: yes,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (staff == "") {
+
+                                var total_work_day = ( parseFloat($('#total_work_day').html().replace(/\,/g,'')) - parseFloat($('#work_day_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#work_day'));
+                                var total_overtime = ( parseFloat($('#total_overtime').html().replace(/\,/g,'')) - parseFloat($('#overtime_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#overtime'));
+                                var total_all_salary = ( parseFloat($('#total_all_salary').html().replace(/\,/g,'')) - parseFloat($('#total_salary_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#total_salary'));
+                                var total_phone_allowance = ( parseFloat($('#total_phone_allowance').html().replace(/\,/g,'')) - parseFloat($('#phone_allowance_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#phone_allowance'));
+                                var total_mileage_allowance = ( parseFloat($('#total_mileage_allowance').html().replace(/\,/g,'')) - parseFloat($('#mileage_allowance_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#mileage_allowance'));
+                                var total_bh_allowance = ( parseFloat($('#total_bh_allowance').html().replace(/\,/g,'')) - parseFloat($('#bh_allowance_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#bh_allowance'));
+                                var total_tn_allowance = ( parseFloat($('#total_tn_allowance').html().replace(/\,/g,'')) - parseFloat($('#tn_allowance_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#tn_allowance'));
+                                
+                                var total_bonus = ( parseFloat($('#total_bonus').html().replace(/\,/g,'')) - parseFloat($('#bonus_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#bonus'));
+                                var total_eating_allowance = ( parseFloat($('#total_eating_allowance').html().replace(/\,/g,'')) - parseFloat($('#eating_allowance_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#eating_allowance'));
+                                var total_all_allowance = ( parseFloat($('#total_all_allowance').html().replace(/\,/g,'')) - parseFloat($('#total_allowance_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#total_allowance'));
+                                var total_phone_detruct = ( parseFloat($('#total_phone_detruct').html().replace(/\,/g,'')) - parseFloat($('#phone_detruct_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#phone_detruct'));
+                                var total_bh_detruct = ( parseFloat($('#total_bh_detruct').html().replace(/\,/g,'')) - parseFloat($('#bh_detruct_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#bh_detruct'));
+                                var total_tu_detruct = ( parseFloat($('#total_tu_detruct').html().replace(/\,/g,'')) - parseFloat($('#tu_detruct_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#tu_detruct'));
+                                var total_eating_detruct = ( parseFloat($('#total_eating_detruct').html().replace(/\,/g,'')) - parseFloat($('#eating_detruct_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#eating_detruct'));
+                                var total_all_detruct = ( parseFloat($('#total_all_detruct').html().replace(/\,/g,'')) - parseFloat($('#total_detruct_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#total_detruct'));
+                                var total_all = ( parseFloat($('#total_all').html().replace(/\,/g,'')) - parseFloat($('#total_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#total'));
+
+                                $('#total_work_day').text(total_work_day);
+                                $('#total_overtime').text(total_overtime);
+                                $('#total_all_salary').text(total_all_salary);
+                                $('#total_phone_allowance').text(total_phone_allowance);
+                                $('#total_mileage_allowance').text(total_mileage_allowance);
+                                $('#total_bh_allowance').text(total_bh_allowance);
+                                $('#total_tn_allowance').text(total_tn_allowance);
+                                
+                                $('#total_bonus').text(total_bonus);
+                                $('#total_eating_allowance').text(total_eating_allowance);
+                                $('#total_all_allowance').text(total_all_allowance);
+                                $('#total_phone_detruct').text(total_phone_detruct);
+                                $('#total_bh_detruct').text(total_bh_detruct);
+                                $('#total_tu_detruct').text(total_tu_detruct);
+                                $('#total_eating_detruct').text(total_eating_detruct);
+                                $('#total_all_detruct').text(total_all_detruct);
+                                $('#total_all').text(total_all);
+
+                                $('.total').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+
+                                
+                                $('#basic_salary_'+yes).text(basic_salary);
+                                $('#work_day_'+yes).text(work_day);
+                                $('#overtime_'+yes).text(overtime);
+                                $('#total_salary_'+yes).text(total_salary);
+                                $('#mileage_allowance_'+yes).text(mileage_allowance);
+                                $('#phone_allowance_'+yes).text(phone_allowance);
+                                $('#bh_allowance_'+yes).text(bh_allowance);
+                                $('#tn_allowance_'+yes).text(tn_allowance);
+                                $('#graded_'+yes).text(graded);
+                                $('#bonus_'+yes).text(bonus);
+                                $('#eating_allowance_'+yes).text(eating_allowance);
+                                $('#total_allowance_'+yes).text(total_allowance);
+                                $('#phone_detruct_'+yes).text(phone_detruct);
+                                $('#bh_detruct_'+yes).text(bh_detruct);
+                                $('#tu_detruct_'+yes).text(tu_detruct);
+                                $('#eating_detruct_'+yes).text(eating_detruct);
+                                $('#total_detruct_'+yes).text(total_detruct);
+                                $('#total_'+yes).text(total);
+                            }
+                            else{
+                                if (answer.trim() != "Bảng lương này đã tồn tại") {
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="staff_name_'+parseInt(lastID+1)+'">'+$("#staff_name").attr("value")+'</td><td class="fix" id="basic_salary_'+parseInt(lastID+1)+'">'+basic_salary+'</td><td class="fix" id="work_day_'+parseInt(lastID+1)+'">'+work_day+'</td><td class="fix" id="overtime_'+parseInt(lastID+1)+'">'+overtime+'</td><td class="fix" id="total_salary_'+parseInt(lastID+1)+'">'+total_salary+'</td><td class="fix" id="mileage_allowance_'+parseInt(lastID+1)+'">'+mileage_allowance+'</td><td class="fix" id="phone_allowance_'+parseInt(lastID+1)+'">'+phone_allowance+'</td><td class="fix" id="bh_allowance_'+parseInt(lastID+1)+'">'+bh_allowance+'</td><td class="fix" id="tn_allowance_'+parseInt(lastID+1)+'">'+tn_allowance+'</td><td class="fix" id="graded_'+parseInt(lastID+1)+'">'+graded+'</td><td class="fix" id="bonus_'+parseInt(lastID+1)+'">'+bonus+'</td><td class="fix" id="eating_allowance_'+parseInt(lastID+1)+'">'+eating_allowance+'</td><td class="fix" id="total_allowance_'+parseInt(lastID+1)+'">'+total_allowance+'</td><td class="fix" id="phone_detruct_'+parseInt(lastID+1)+'">'+phone_detruct+'</td><td class="fix" id="bh_detruct_'+parseInt(lastID+1)+'">'+bh_detruct+'</td><td class="fix" id="tu_detruct_'+parseInt(lastID+1)+'">'+tu_detruct+'</td><td class="fix" id="eating_detruct_'+parseInt(lastID+1)+'">'+eating_detruct+'</td><td class="fix" id="total_detruct_'+parseInt(lastID+1)+'">'+total_detruct+'</td><td class="fix" id="total_'+parseInt(lastID+1)+'">'+total+'</td><td style="display:none;" id="staff_code_'+parseInt(lastID+1)+'">'+$("#staff_code").attr("value")+'</td><td style="display:none;" id="staff_birth_'+parseInt(lastID+1)+'">'+$("#staff_birth").attr("value")+'</td><td style="display:none;" id="staff_gender_'+parseInt(lastID+1)+'">'+$("input[name=gender]:checked").val()+'</td><td style="display:none;" id="salary_create_time_'+parseInt(lastID+1)+'">'+$("#salary_create_time").attr("value")+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+
+                                    $('#total_work_day').html(parseFloat($('#total_work_day').html().replace(/\,/g,'')) + parseFloat(get_number('#work_day')));
+                                    $('#total_overtime').html(parseFloat($('#total_overtime').html().replace(/\,/g,'')) + parseFloat(get_number('#overtime')));
+                                    $('#total_all_salary').html(parseFloat($('#total_all_salary').html().replace(/\,/g,'')) + parseFloat(get_number('#total_salary')));
+                                    $('#total_mileage_allowance').html(parseFloat($('#total_mileage_allowance').html().replace(/\,/g,'')) + parseFloat(get_number('#mileage_allowance')));
+                                    $('#total_phone_allowance').html(parseFloat($('#total_phone_allowance').html().replace(/\,/g,'')) + parseFloat(get_number('#phone_allowance')));
+                                    $('#total_bh_allowance').html(parseFloat($('#total_bh_allowance').html().replace(/\,/g,'')) + parseFloat(get_number('#bh_allowance')));
+                                    $('#total_tn_allowance').html(parseFloat($('#total_tn_allowance').html().replace(/\,/g,'')) + parseFloat(get_number('#tn_allowance')));
+                                    
+                                    
+                                    $('#total_bonus').html(parseFloat($('#total_bonus').html().replace(/\,/g,'')) + parseFloat(get_number('#bonus')));
+                                    $('#total_eating_allowance').html(parseFloat($('#total_eating_allowance').html().replace(/\,/g,'')) + parseFloat(get_number('#eating_allowance')));
+                                    $('#total_all_allowance').html(parseFloat($('#total_all_allowance').html().replace(/\,/g,'')) + parseFloat(get_number('#total_allowance')));
+                                    $('#total_phone_detruct').html(parseFloat($('#total_phone_detruct').html().replace(/\,/g,'')) + parseFloat(get_number('#phone_detruct')));
+                                    $('#total_bh_detruct').html(parseFloat($('#total_bh_detruct').html().replace(/\,/g,'')) + parseFloat(get_number('#bh_detruct')));
+                                    $('#total_tu_detruct').html(parseFloat($('#total_tu_detruct').html().replace(/\,/g,'')) + parseFloat(get_number('#tu_detruct')));
+                                    $('#total_eating_detruct').html(parseFloat($('#total_eating_detruct').html().replace(/\,/g,'')) + parseFloat(get_number('#eating_detruct')));
+                                    $('#total_all_detruct').html(parseFloat($('#total_all_detruct').html().replace(/\,/g,'')) + parseFloat(get_number('#total_detruct')));
+                                    $('#total_all').html(parseFloat($('#total_all').html().replace(/\,/g,'')) + parseFloat(get_number('#total')));
+
+                                    $('.total').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   $('#staff_name').keyup(function(){
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/salary/getstaff',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#staff_list_id').slideDown(200);
+                $('#staff_list_id').html(data);
+            }
+        });
+        if ($('#staff_name').val() == "" || $('#staff_name').attr('data') == "") {
+            $('#staff_code').val("");
+            $('#staff_birth').val("");
+            $('#staff_name').attr('data',"");
+            $('#staff_name').attr('code',false);
+        };
+   });
+   $('#staff_name').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#staff_name').attr('data',"");
+            $('#staff_name').attr('code',false);
+        }
+            
+      });
+   
+
+   $('#graded').keyup(function(){
+        var keyword = $(this).val();
+        if (keyword == "A") {
+            $('#bonus').val(parseFloat(get_number('#basic_salary'))*10/100);
+        }
+        else if (keyword == "a") {
+            $('#bonus').val(parseFloat(get_number('#basic_salary'))*5/100);
+        }
+        else if (keyword == "b") {
+            $('#bonus').val(parseFloat(get_number('#basic_salary'))*(-5/100));
+        }
+        else if (keyword == "B") {
+            $('#bonus').val(parseFloat(get_number('#basic_salary'))*(-10/100));
+        }
+
+        $('#bonus').val(function(index, value) {
+            return value
+              .replace(/[^0-9\.-]/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        $('#total_allowance').val(
+            Math.round(
+            parseFloat(get_number('#mileage_allowance'))+parseFloat(get_number('#phone_allowance'))+parseFloat(get_number('#bh_allowance'))+parseFloat(get_number('#tn_allowance'))+parseFloat(get_number('#bonus'))+parseFloat(get_number('#eating_allowance'))
+            )
+        );
+        $('#total').val(
+            Math.round(
+            parseFloat(get_number('#total_salary'))+parseFloat(get_number('#total_allowance'))-parseFloat(get_number('#total_detruct'))
+            )
+        );
+
+        $('#total_allowance').val(function(index, value) {
+            return value
+              .replace(/[^0-9\.-]/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        $('#total').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+   });
+   
+   $('.number').keyup(function(event) {
+
+    $('#total_salary').val(
+        Math.round(
+        parseFloat(get_number('#basic_salary'))/26 * (parseFloat(get_number('#work_day')) + parseFloat(get_number('#overtime')))
+            
+        )
+        );
+    $('#total_allowance').val(
+        Math.round(
+        parseFloat(get_number('#mileage_allowance'))+parseFloat(get_number('#phone_allowance'))+parseFloat(get_number('#bh_allowance'))+parseFloat(get_number('#tn_allowance'))+parseFloat(get_number('#bonus'))+parseFloat(get_number('#eating_allowance'))
+        )
+        );
+    $('#total_detruct').val(
+        Math.round(
+        parseFloat(get_number('#phone_detruct'))+parseFloat(get_number('#bh_detruct'))+parseFloat(get_number('#tu_detruct'))+parseFloat(get_number('#eating_detruct'))
+        )
+        );
+    $('#total').val(
+        Math.round(
+        parseFloat(get_number('#total_salary'))+parseFloat(get_number('#total_allowance'))-parseFloat(get_number('#total_detruct'))
+        )
+        );
+    $('#total_salary').val(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    $('#total_allowance').val(function(index, value) {
+        return value
+          .replace(/[^0-9\.-]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    $('#total_detruct').val(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    $('#total').val(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+
+      // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+    
+
+});
+function get_number(id){
+    return $(id).val().replace(/[^0-9\.-]+/g,"");
+}
+function set_item(item,value,code,birth,gender) {
+    // change input value
+    $('#staff_name').val(item);
+    $("#staff_name").attr("data",value);
+    $('#staff_code').val(code);
+    $('#staff_birth').val(birth);
+    $('#staff_gender').val(gender);
+    var radioLength = $("input[name='gender']").length;
+        for(var i = 0; i < radioLength; i++) {
+            $("input[name='gender']")[i].checked = false;
+            if($("input[name='gender']")[i].value == gender) {
+                $("input[name='gender']")[i].checked = true;
+            }
+        }
+    // hide proposition list
+    $('#staff_list_id').hide();
+    $('#staff_name').focus();
+    $('#staff_name').attr('code','true');
+}
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+</script>
+</div>
+
+
+<script type="text/javascript">
+
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Bảng lương",
+    hide: 'fold',
+    show: 'blind'
+});
+</script>

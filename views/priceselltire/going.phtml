@@ -1,0 +1,444 @@
+
+<div>
+  <a class="add_button" id="import_excel" href="<?= $this->url('stock/goingimport')?>">Import Excel</a>
+  <div class="add-box"><a class="add_button" onClick="add_click();">Thêm</a></div>
+</div>
+<?php $l=1 ; $tong=0;?>
+<table class="table_data">
+<thead>
+    <tr>
+        <th class="fix">
+            <a class="sort">STT</a>
+        </th>
+        <th class="fix">
+            <a class="sort" >Ngày </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Thương hiệu </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Size </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Mã gai </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Số lượng</a>
+        </th>
+        
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($tire_goings as $tire_going) : 
+        $tong += $tire_going->tire_number;
+    ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_going->tire_going_id ?>" class="edit_tr" >
+            <td class="fix"><?php echo $l++; ?></td>
+            <td class="fix"  id="tire_going_date_<?php echo $tire_going->tire_going_id; ?>"><?php echo $lib->hien_thi_ngay_thang($tire_going->tire_going_date) ?></td>
+            <td class="fix" data="<?php echo $tire_going->tire_brand; ?>"  id="tire_brand_<?php echo $tire_going->tire_going_id; ?>"><?php echo $tire_going->tire_brand_name; ?></td>
+            <td class="fix" data="<?php echo $tire_going->tire_size; ?>" id="tire_size_<?php echo $tire_going->tire_going_id; ?>"><?php echo $tire_going->tire_size_number; ?></td>
+            <td class="fix" data="<?php echo $tire_going->tire_pattern; ?>" id="tire_pattern_<?php echo $tire_going->tire_going_id; ?>">
+                <?php echo $tire_going->tire_pattern_name; ?>
+            </td>
+            <td class="fix"  id="tire_number_<?php echo $tire_going->tire_going_id; ?>"><?php echo $tire_going->tire_number; ?></td>
+            
+            <td>
+                <button class="del" data="<?php echo $tire_going->tire_going_id ?>" style="display:block">Xóa</button>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="5" >Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
+        <td class="fix" ></td>
+    </tr>
+   </tbody>
+</table>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Thông tin đặt hàng </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_customer" method="post" action="">
+                      <table style="margin:0 auto;width:100%">
+                        <tr>
+                            <td>
+                              <span class="add-on"><i class="icon-company" ></i></span>
+                              <span>Thương hiệu: </span>
+                            </td>
+                            <td><input type="text" id="tire_brand" class="tire_brand" name="tire_brand" value="" disabled required="required" />
+                              <ul class="brand_list_id"></ul>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <span class="add-on"><i class="icon-resize-full" ></i></span>
+                              <span>Kích cỡ: </span>
+                            </td>
+                            <td><input type="text" id="tire_size" class="tire_size" name="tire_size" value="" disabled required="required" />
+                              <ul class="size_list_id"></ul>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <span class="add-on"><i class="icon-barcode" ></i></span>
+                              <span>Mã gai: </span>
+                            </td>
+                            <td><input type="text" id="tire_pattern" class="tire_pattern" name="tire_pattern" value="" disabled required="required" />
+                              <ul class="tire_list_id"></ul>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <span class="add-on"><i class="icon-th-list" ></i></span>
+                              <span>Số lượng: </span>
+                            </td>
+                            <td><input type="text" id="tire_number" name="tire_number" value="" class="numbers" required="required" /></td>
+                          </tr>
+                        
+                        
+                        <tr>
+                            <td><input type="hidden" readonly id="code_going" name="code_going" required="required" value="<?php echo $code ?>" ></td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td><input type="hidden" readonly id="tire_going_date" name="tire_going_date" required="required" value="<?php echo $tire_going_date ?>" ></td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="1"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="2"></td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+
+    $('.brand_list_id').slideUp(200);
+    $('.size_list_id').slideUp(200);
+    $('.tire_list_id').slideUp(200); 
+   
+});
+    $('.edit_tr').click(function(e){
+            if(!$('.checkbox').is(':checked') && e.target == '[object HTMLButtonElement]'){
+                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+            }
+            var tire_brand_name = $(this).find("#tire_brand_"+$(this).attr('id')).text();
+            var tire_brand = $(this).find("#tire_brand_"+$(this).attr('id')).attr('data');
+            var tire_size_name = $(this).find("#tire_size_"+$(this).attr('id')).text();
+            var tire_size = $(this).find("#tire_size_"+$(this).attr('id')).attr('data');
+            var tire_pattern_name = $(this).find("#tire_pattern_"+$(this).attr('id')).text();
+            var tire_pattern = $(this).find("#tire_pattern_"+$(this).attr('id')).attr('data');
+            var tire_number = $(this).find("#tire_number_"+$(this).attr('id')).text();
+
+            var tire_going_date = $(this).find("#tire_going_date_"+$(this).attr('id')).text();
+            
+            //alert(customer_code);
+            $('#yes').val($(this).attr('id'));
+            
+            $('#code_going').val(<?php echo $code ?>);
+            $('#tire_going_date').val(tire_going_date.replace(/\//g,"-"));
+            
+            $('#tire_brand').val(tire_brand_name);
+            $('#tire_brand').attr('data',tire_brand);
+            $('#tire_size').val(tire_size_name);
+            $('#tire_size').attr('data',tire_size);
+            $('#tire_pattern').val(tire_pattern_name);
+            $('#tire_pattern').attr('data',tire_pattern);
+            $('#tire_number').val(tire_number);
+            
+            $('#tire_brand').attr('disabled',true);
+            $('#tire_size').attr('disabled',true);
+            $('#tire_pattern').attr('disabled',true);
+
+    });
+function add_click(){
+  $('#yes').val("");
+  $('.add-field').slideDown(500);
+  $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);  
+
+  $('#tire_brand').val("");
+  $('#tire_brand').attr('data',"");
+  $('#tire_size').val("");
+  $('#tire_size').attr('data',"");
+  $('#tire_pattern').val("");
+  $('#tire_pattern').attr('data',"");
+  $('#tire_number').val("");
+
+  $('#tire_brand').attr('disabled',false);
+  $('#tire_size').attr('disabled',false);
+  $('#tire_pattern').attr('disabled',false);
+
+  $('#code_going').val("<?php echo $code ?>");
+  $('#tire_going_date').val("<?php echo $tire_going_date ?>");
+
+}
+</script>
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_customer").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var tire_brand = $('#tire_brand').attr('data');
+                    var tire_size = $('#tire_size').attr('data');
+                    var tire_pattern = $('#tire_pattern').attr('data');
+                    var tire_number = $('#tire_number').attr('value');
+
+                    var code = $('#code_going').attr('value');
+                    var tire_going_date = $('#tire_going_date').attr('value');
+
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/importtire/editgoing", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            tire_brand: tire_brand,
+                            tire_size: tire_size,
+                            tire_pattern: tire_pattern,
+                            tire_number: tire_number,
+                            code: code,
+                            tire_going_date: tire_going_date,
+                            yes: yes,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (yes != "") {
+                                $('#tire_number_'+yes).text(tire_number);
+                            }
+                            else{
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   
+   
+   
+
+   $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+        ;
+      });
+    });
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+          .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+        ;
+      });
+    });
+    
+
+});
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+
+</script>
+</div>
+
+<script type="text/javascript">
+$('.del').click(function(){
+    var id = $(this).attr('data');
+    var r = confirm("Bạn có chắc chắn muốn xóa không?");
+      if (r == true){
+        $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/importtire/deletegoing", {data: id},
+           function(data){
+            //alert(data);
+            if (data.trim() != 'Bạn không có quyền thực hiện thao tác này') {
+              $('tr#'+id).remove(); 
+              $('#loading').fadeOut(500); 
+            };
+            $('#loading').fadeOut(500);
+           
+           }); 
+      }
+});
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+$('.tire_brand').keyup(function(){
+                var rowIndex = 1;
+
+                var keyword = $(this).val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/customertire/getbrand',
+                    type: 'POST',
+                    data: {keyword:keyword, offset:rowIndex},
+                    success:function(data){
+                        $('.brand_list_id').slideDown(200);
+                        $('.brand_list_id').html(data);
+                    }
+                });
+                if ($('.tire_brand').val() == "" || $('.tire_brand').attr('data') == "") {
+                    
+                    $('.tire_brand').attr('data',"");
+                }
+
+                
+            });
+
+        $('.tire_brand').on('keydown', function() {
+                var rowIndex = 1;
+
+                var key = event.keyCode || event.charCode;
+
+                if( key == 8 || key == 46 ){
+                    $('.tire_brand').attr('data',"");
+                }
+                    
+              });  
+
+        $('.tire_size').keyup(function(){
+                var rowIndex = 1;
+
+                var keyword = $(this).val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/customertire/getsize',
+                    type: 'POST',
+                    data: {keyword:keyword, offset:rowIndex},
+                    success:function(data){
+                        $('.size_list_id').slideDown(200);
+                        $('.size_list_id').html(data);
+                    }
+                });
+                if ($('.tire_size').val() == "" || $('.tire_size').attr('data') == "") {
+                    
+                    $('.tire_size').attr('data',"");
+                }
+
+                
+            });
+
+        $('.tire_size').on('keydown', function() {
+                var rowIndex = 1;
+
+                var key = event.keyCode || event.charCode;
+
+                if( key == 8 || key == 46 ){
+                    $('.tire_size').attr('data',"");
+                }
+                    
+              });  
+
+        $('.tire_pattern').keyup(function(){
+          var rowIndex = 1;
+
+          var keyword = $(this).val();
+          $.ajax({
+              url: '<?php echo BASE_URL ?>/customertire/getpattern',
+              type: 'POST',
+              data: {keyword:keyword, offset:rowIndex},
+              success:function(data){
+                  $('.tire_list_id').slideDown(200);
+                  $('.tire_list_id').html(data);
+              }
+          });
+          if ($('.tire_pattern').val() == "" || $('.tire_pattern').attr('data') == "") {
+              
+              $('.tire_pattern').attr('data',"");
+          }
+
+          
+      });
+
+        $('.tire_pattern').on('keydown', function() {
+                var rowIndex = 1;
+
+                var key = event.keyCode || event.charCode;
+
+                if( key == 8 || key == 46 ){
+                    $('.tire_pattern').attr('data',"");
+                }
+                    
+              });  
+
+        function set_item_brand(item,value,vitri) {
+            // change input value
+            $('.tire_brand').val(item);
+            $('.tire_brand').attr("data",value);
+            // hide proposition list
+            $('.brand_list_id').hide();
+            $('.tire_brand').focus();
+
+        }
+        function set_item_size(item,value,vitri) {
+            // change input value
+            $('.tire_size').val(item);
+            $('.tire_size').attr("data",value);
+            // hide proposition list
+            $('.size_list_id').hide();
+            $('.tire_size').focus();
+
+        }
+        function set_item_tire(item,value,vitri) {
+            // change input value
+            $('.tire_pattern').val(item);
+            $('.tire_pattern').attr("data",value);
+            // hide proposition list
+            $('.tire_list_id').hide();
+            $('.tire_pattern').focus();
+
+        }
+</script>

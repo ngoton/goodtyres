@@ -1,0 +1,638 @@
+<style type="text/css" id="hideDay">
+    
+</style>
+<script type="text/javascript">
+    $(function() {
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'MM yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        beforeShow: function() { $('#hideDay').html('.ui-datepicker-calendar{display:none;}'); },
+        onClose: function() {
+                $('#hideDay').html('');
+                $("#chonngaytao").change();
+                
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts);
+              
+            
+    $("#chonngaytao").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        if (month<9) {
+            var ngay = "0"+(month+1)+"/"+year;
+        }
+        else
+            var ngay = (month+1)+"/"+year;
+
+        var page = "<?php echo $page; ?>";
+        var cot = "<?php echo $order_by; ?>";
+        var sapxep = "<?php echo $order; ?>";
+        var keyword = "<?php echo $keyword; ?>";
+        var loc =    $('#chonloc').val();
+        
+        
+        var dataString = 'keyword='+ keyword+"&limit="+loc+"&ngaytao="+ngay+"&page="+ page +"&order_by="+ cot +"&order="+ sapxep;  
+        
+        $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+        
+            $.ajax({
+                type: "POST",                            // Phương thức gọi là GET
+                url: "#",                 // File xử lý
+                data: dataString,                       // Dữ liệu truyền vào
+                beforeSend:  function() {               // add class "loading" cho khung nhập
+                    $('input#search-input').addClass('loading');
+                },
+                success: function(server_response)      // Khi xử lý thành công sẽ chạy hàm này
+                {
+                    $('body').html(server_response);    // Hiển thị dữ liệu vào thẻ div #searchresultdata
+                    
+                     
+                    if ($('input#search-input').hasClass("loading")) {      // Kiểm tra class "loading"
+                        $("input#search-input").removeClass("loading");     // Remove class "loading"
+                    }
+                    $('#loading').fadeOut(500); 
+                }
+            });
+        
+        
+    });
+});
+</script>
+<?php
+$url_order = 'ASC';
+if ($order_by == 'accounting_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'accounting_code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'accounting_comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'accounting_payment_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'accounting_bank')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'accounting_amount')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'accounting_cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+$tongthu = 0;
+$tongchiphi = 0;
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> ĐƠN HÀNG </h1></center>
+<div class="add-box"><a class="add_button" onClick="add_click();">Thêm bảng đơn hàng</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+        <div class="add-box">
+        	<input type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn ngày" <?php if(isset($ngaytao)) echo "value='$ngaytao'"; ?>>  
+                                        
+        </div>
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option selected="selected" value="18446744073709">Hiển thị tất cả</option>
+			<option value="2">Hiển thị 2 giá trị</option>
+            <option value="5">Hiển thị 5 giá trị</option>
+            <option value="8">Hiển thị 8 giá trị</option>
+            <option  value="10">Hiển thị 10 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table class="table_data scrollTable">
+<thead>
+    <tr>
+    	<th  class="fix" ><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','accounting_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'accounting_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','accounting_code','<?php echo $url_order ?>')">CODE <?php if ($order_by == 'accounting_code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','accounting_comment','<?php echo $url_order ?>')">Diễn giải <?php if ($order_by == 'accounting_comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','accounting_payment_date','<?php echo $url_order ?>')">Ngày thanh toán <?php if ($order_by == 'accounting_payment_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','accounting_bank','<?php echo $url_order ?>')">Ngân hàng <?php if ($order_by == 'accounting_bank'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','accounting_amount','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'accounting_amount'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','accounting_cost','<?php echo $url_order ?>')">Tổng chi phí <?php if ($order_by == 'accounting_cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        <th class="fix"  >&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    
+    <?php foreach ($accounting as $accounting) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $accounting->accounting_id ?>" class="edit_tr">
+        	<td ><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $accounting->accounting_id ?>"></td>
+            <td  class="fix"><?php echo $i++; ?></td>
+            <td  class="fix" id="accounting_code_<?php echo $accounting->accounting_id; ?>"><?php echo $accounting->accounting_code; ?></td>
+            <td  class="fix" id="accounting_comment_<?php echo $accounting->accounting_id; ?>"><?php echo $accounting->accounting_comment; ?></td>
+            <td  class="fix" id="accounting_payment_date_<?php echo $accounting->accounting_id; ?>"><?php echo $accounting->accounting_payment_date; ?></td>
+            
+            <td  class="fix" id="accounting_bank_<?php echo $accounting->accounting_id; ?>"><?php echo $accounting->accounting_bank; ?></td>
+            
+            <td  class="fix" id="accounting_amount_<?php echo $accounting->accounting_id; ?>"><?php echo $lib->formatMoney($accounting->accounting_amount); ?></td>
+            <td  class="fix" id="accounting_cost_<?php echo $accounting->accounting_id; ?>"><?php echo $lib->formatMoney($accounting->accounting_cost); ?></td>
+            
+            <td style="display:none"  id="accounting_create_time_<?php echo $accounting->accounting_id; ?>"><?php echo $accounting->accounting_create_time; ?></td>
+            
+            
+            <td >
+                <a class="error" href="#">Sửa</a>
+                | 
+                <a class="error" onclick="del(<?php echo $accounting->accounting_id ?>)" >Xóa</a>
+            </td>
+        </tr>
+        <?php
+        $tongthu += $accounting->accounting_amount;
+        $tongchiphi += $accounting->accounting_cost;
+        ?>
+    <?php endforeach; 
+    
+
+    ?>
+    
+   </tbody>
+   <tfoot>
+       <tr>
+           <td></td>
+           <td></td>           
+           <td></td>
+           <td></td>
+           <td></td>
+           <td><b>Tổng cộng</b></td>
+           <td id="total_accounting_amount" class="error"><?php echo $lib->formatMoney($tongthu) ?></td>
+           <td id="total_accounting_cost" class="error"><?php echo $lib->formatMoney($tongchiphi) ?></td>
+           <td></td>
+           
+       </tr>
+       
+   </tfoot>
+</table>
+
+<?php
+$this->helper('slidePaginator');
+?>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Thông tin</h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_accounting" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>&nbsp;</td>
+                            <td style="float:right;padding:10px">Tháng</td>
+                            <td><input readonly type="text" id="accounting_create_time" name="accounting_create_time" tabindex="22" required="required"></td>
+                            <td>&nbsp;</td>
+                            <td><div class="add-box"><a class="add_button" onClick="add_click();">Thêm bảng đơn hàng</a></div></td>
+   
+                        </tr>
+                        <tr>
+                            <td>CODE </td>
+                            <td><input type="text" autofocus autocomplete="off"  id="accounting_code" name="accounting_code" tabindex="1" required="required" placeholder="Nhập code hoặc * để chọn" >
+                              <ul id="code_list_id"></ul>
+                            </td> 
+                            <td>Ngày thanh toán </td>
+                            <td><input type="text"   id="accounting_payment_date" name="accounting_payment_date" tabindex="3" required="required">
+                            </td> 
+                            <td>Số tiền </td>
+                            <td><input type="text" class="number" id="accounting_amount" name="accounting_amount" tabindex="5" required="required"></td> 
+                          
+                        </tr>
+                        <tr>
+                            <td>Diễn giải</td>
+                            <td><textarea style="height:90%" id="accounting_comment" name="accounting_comment" tabindex="2"></textarea></td>
+
+                            <td>Ngân hàng </td>
+                            <td rowspan="2"><input type="text" id="accounting_bank"  name="accounting_bank" tabindex="4" required="required"></td>
+                            <td>Tổng chi phí </td>
+                            <td><input type="text" class="number" id="accounting_cost" name="accounting_cost" tabindex="6" required="required"></td> 
+                        </tr>
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</th>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="7"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="8"></td>
+                            
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+    $('#code_list_id').slideUp(200);
+   
+});
+    $('.edit_tr').click(function(){
+        if(!$('.checkbox').is(':checked')){
+            $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        }
+        var accounting_code = $(this).find("#accounting_code_"+$(this).attr('id')).text();
+        var accounting_comment = $(this).find("#accounting_comment_"+$(this).attr('id')).text();
+        var accounting_payment_date = $(this).find("#accounting_payment_date_"+$(this).attr('id')).text();
+        var accounting_bank = $(this).find("#accounting_bank_"+$(this).attr('id')).text();
+        var accounting_amount = $(this).find("#accounting_amount_"+$(this).attr('id')).text();
+        var accounting_cost = $(this).find("#accounting_cost_"+$(this).attr('id')).text();
+        
+        var accounting_create_time = $(this).find("#accounting_create_time_"+$(this).attr('id')).text();
+        //alert(customer_name);
+        $('#yes').val($(this).attr('id'));
+        
+        $('#accounting_code').val(accounting_code);
+        $('#accounting_comment').val(accounting_comment);
+        $('#accounting_payment_date').val(accounting_payment_date);
+        $('#accounting_bank').val(accounting_bank);
+        $('#accounting_amount').val(accounting_amount);
+        $('#accounting_cost').val(accounting_cost);
+        
+        $('#accounting_create_time').val(accounting_create_time);
+        
+        
+        $('#accounting_code').attr('data',"");
+        $("#accounting_code").prop('readonly', true);
+        $("#accounting_code").prop('disabled', true);
+        $("#accounting_code").attr("code",'true');
+        $("#accounting_comment").prop('disabled', true);
+
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+    $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+     $("#accounting_code").prop('readonly', false);
+     $("#accounting_code").prop('disabled', false);
+     $("#accounting_code").attr("code",'false');
+     $("#accounting_comment").prop('disabled', true);
+        $('#accounting_code').val("");
+        $('#accounting_comment').val("");
+        $('#accounting_payment_date').val("");
+        $('#accounting_bank').val("");
+        $('#accounting_amount').val(0);
+        $('#accounting_cost').val(0);
+        
+        $('#accounting_create_time').prop('readonly',false);
+        $('#accounting_create_time').val("<?php echo date('m/Y') ?>");
+
+        $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+        var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'MM yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        beforeShow: function() { $('#hideDay').html('.ui-datepicker-calendar{display:none;}'); },
+        onClose: function() {
+            $('#hideDay').html('');
+            var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+            var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+            if (month<9) {
+                var ngay = "0"+(month+1)+"/"+year;
+            }
+            else
+                var ngay = (month+1)+"/"+year;
+
+               $("#accounting_create_time").val(ngay);
+               
+         },
+         
+    };  
+    $("#accounting_create_time").datepicker(pickerOpts);
+
+    
+
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_accounting").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                    if ($('#accounting_code').attr('code') == 'false') {
+                        $('#accounting_code').val("");
+                        $('#accounting_code').focus();
+                        return false;
+                    };
+             
+                    var accounting_code = $('#accounting_code').attr('data');
+                    var accounting_comment = $('#accounting_comment').attr('value');
+                    var accounting_payment_date = $('#accounting_payment_date').attr('value');
+                    var accounting_bank = $('#accounting_bank').attr('value');
+                    var accounting_amount = $('#accounting_amount').attr('value');
+                    var accounting_cost = $('#accounting_cost').attr('value');
+                    
+                    var accounting_create_time = $('#accounting_create_time').attr('value');
+                    
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "them";
+
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/accounting/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            accounting_code: accounting_code,
+                            accounting_payment_date: accounting_payment_date,
+                            accounting_bank: accounting_bank,
+                            accounting_amount: accounting_amount,
+                            accounting_cost: accounting_cost,
+                            accounting_comment: accounting_comment,
+                            accounting_create_time: accounting_create_time,
+                            yes: yes,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if(accounting_code == ""){
+                                if (answer.trim() != "Bảng này đã tồn tại") {
+                                    var amount = 0;
+                                    var cost = 0;
+                                    
+                                    amount = ( parseFloat($('#total_accounting_amount').html().replace(/\,/g,'')) - parseFloat($('#accounting_amount_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#accounting_amount'));
+
+                                    cost = ( parseFloat($('#total_accounting_cost').html().replace(/\,/g,'')) - parseFloat($('#accounting_cost_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#accounting_cost'));
+
+                                    $('#total_accounting_amount').text(amount);
+                                    $('#total_accounting_cost').text(cost);
+
+                                    $('#total_accounting_amount').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+                                    $('#total_accounting_cost').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+
+                                    $('#accounting_payment_date_'+yes).text(accounting_payment_date);
+                                    $('#accounting_bank_'+yes).text(accounting_bank);
+                                    $('#accounting_amount_'+yes).text(accounting_amount);
+                                    $('#accounting_cost_'+yes).text(accounting_cost);
+                                    $('#accounting_comment_'+yes).text(accounting_comment);
+                                    
+                                }
+                                
+                            }
+                            else{
+                                if (answer.trim() != "Bảng này đã tồn tại") {
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input  name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td  class="fix">'+parseInt(rowCount+1)+'</td><td  class="fix" id="accounting_code_'+parseInt(lastID+1)+'">'+$("#accounting_code").attr("value")+'</td><td  class="fix" id="accounting_comment_'+parseInt(lastID+1)+'">'+accounting_comment+'</td><td  class="fix" id="accounting_payment_date_'+parseInt(lastID+1)+'">'+$("#accounting_payment_date").attr("value")+'</td><td  class="fix" id="accounting_bank_'+parseInt(lastID+1)+'">'+accounting_bank+'</td><td  class="fix" id="accounting_amount_'+parseInt(lastID+1)+'">'+accounting_amount+'</td><td class="fix" id="accounting_cost_'+parseInt(lastID+1)+'">'+accounting_cost+'</td><td style="display:none;" id="accounting_create_time_'+parseInt(lastID+1)+'">'+$("#accounting_create_time").attr("value")+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+                                    $('#lasted').html(parseInt(lastID+2));
+
+                                    $('#total_accounting_amount').html(parseFloat($('#total_accounting_amount').html().replace(/\,/g,'')) + parseFloat(get_number('#accounting_amount')));
+                                    $('#total_accounting_cost').html(parseFloat($('#total_accounting_cost').html().replace(/\,/g,'')) + parseFloat(get_number('#accounting_cost')));
+                                    $('#total_accounting_amount').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+                                    $('#total_accounting_cost').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   $('#accounting_code').keyup(function(){
+      
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/accounting/getcode',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#code_list_id').slideDown(200);
+                $('#code_list_id').html(data);
+            }
+        });
+        if ($('#accounting_code').val() == "" || $('#accounting_code').attr('data') == "") {
+            //$('#accounting_code').val("");
+            $('#accounting_code').attr('data',"");
+            $('#accounting_code').attr('code',false);
+        }
+      
+   });
+   $('#accounting_code').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#accounting_code').attr('data',"");
+            $('#accounting_code').attr('code',false);
+        }
+            
+      });
+
+    
+
+
+   
+   $('.number').keyup(function(event) {
+
+    
+
+      // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+    
+
+
+var pickerOpts2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $("#accounting_payment_date").datepicker(pickerOpts2);
+
+
+});
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+function set_item(value,comment) {
+    // change input value
+    $('#accounting_code').val(value);
+    $("#accounting_code").attr("data",value);
+    $("#accounting_code").attr("code",'true');
+    $('#accounting_comment').val(comment);
+    // hide proposition list
+    $('#code_list_id').hide();
+    $('#accounting_code').focus();
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+/*(function($) {
+    $.fn.hasScrollBar = function() {
+        return this.get(0).scrollHeight > this.height();
+    }
+})(jQuery);
+
+if ($('#scrollDiv').hasScrollBar()) {
+  $('.table_data > thead > tr > th:nth-last-child(7)').css({width: "55px"});
+  $('.table_data > thead > tr > th:nth-last-child(6)').css({width: "72px"});
+  $('.table_data > thead > tr > th:nth-last-child(5)').css({width: "182px"});
+  $('.table_data > thead > tr > th:nth-last-child(4)').css({width: "302px"});
+  $('.table_data > thead > tr > th:nth-last-child(3)').css({width: "107px"});
+  $('.table_data > thead > tr > th:nth-last-child(2)').css({width: "107px"});
+  $('.table_data > thead > tr > th:nth-last-child(1)').css({width: "80px"});
+}*/
+</script>
+</div>

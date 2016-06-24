@@ -1,0 +1,1404 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'sales_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'customer_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'm')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 's')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'c')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'revenue')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'cost')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'profit')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+$tongdoanhthu = 0;
+$tongchiphi = 0;
+$tongloinhuan = 0;
+
+
+
+/*$loinhuan = array();
+
+$m_salary = array();
+$s_salary = array();
+$c_salary = array();
+
+
+/* arr xem M S C nhân viên xuất hiện mấy lần*/
+$arr_msc = array();
+$total_bonus = array();
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> DOANH SỐ BÁN HÀNG </h1></center>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm doanh số</a>
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+        <div class="add-box">
+        	Từ tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn tháng" <?php if(isset($ngaytao)) echo "value='$ngaytao'"; ?> >    
+            Đến tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytaobatdau" id="chonngaytaobatdau" placeholder="Chọn tháng" <?php if(isset($ngaytaobatdau)) echo "value='$ngaytaobatdau'"; ?> >  
+
+            <input type="button" name="chon" id="chon" class="button" value="Chọn" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">        
+                                        
+        </div>
+        <div class="add-box">
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >    
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="button" name="xem" id="xem" class="button" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">     
+           
+            
+        </div>
+        <div class="add-box">
+            <select style="width:200px" name="sl_status" id="sl_status">
+                <option value="0">Nhân viên</option>
+                <?php foreach ($staffs as $st) { ?>
+                <option value="<?php echo $st->staff_id ?>"><?php echo $st->staff_name ?></option>
+                <?php } ?>
+            </select>
+            <input type="button" name="" id="xem" class="button" value="Chọn" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">       
+        </div>
+
+    	<div class="alignleft actions">
+
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option selected="selected" value="18446744073709">Hiển thị tất cả</option>
+			<option value="2">Hiển thị 2 giá trị</option>
+            <option value="5">Hiển thị 5 giá trị</option>
+            <option value="8">Hiển thị 8 giá trị</option>
+            <option  value="10">Hiển thị 10 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table id="tblExport" class="table_data scrollTable">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix" ><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sales_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'sales_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','code','<?php echo $url_order ?>')">CODE <?php if ($order_by == 'code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_name','<?php echo $url_order ?>')">Khách hàng <?php if ($order_by == 'customer_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','comment','<?php echo $url_order ?>')">Diễn giải <?php if ($order_by == 'comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="3" class="fix">MSC</th>
+        
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','revenue','<?php echo $url_order ?>')">Tổng doanh thu <?php if ($order_by == 'revenue'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','cost','<?php echo $url_order ?>')">Tổng chi phí <?php if ($order_by == 'cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','profit','<?php echo $url_order ?>')">Lợi nhuận<?php if ($order_by == 'profit'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix"  >&nbsp;</th>
+    </tr>
+    <tr>
+        <th id="m_fix" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','m','<?php echo $url_order ?>')">M <?php if ($order_by == 'm'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th id="s_fix" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','s','<?php echo $url_order ?>')">S <?php if ($order_by == 's'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th id="c_fix" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','c','<?php echo $url_order ?>')">C <?php if ($order_by == 'c'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>    
+    </tr>
+   </thead>
+   <tbody>
+    
+    <?php foreach ($sales as $sale) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $sale->sales_id ?>" class="edit_tr">
+        	<td ><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $sale->sales_id ?>"></td>
+            <td  class="fix"><?php echo $i++; ?></td>
+            <td  class="fix" id="code_<?php echo $sale->sales_id; ?>"><?php echo $sale->code; ?></td>
+            <td  class="fix" id="customer_name_<?php echo $sale->sales_id; ?>"><?php echo $sale->customer_name; ?></td>
+            
+            <td  class="fix" id="comment_<?php echo $sale->sales_id; ?>"><?php echo $sale->comment; ?></td>
+            
+            <td m="<?php echo $sale->m ?>" data="<?php echo isset($staff['basic_salary'][date('m-Y',$sale->sales_create_time)][$sale->m])?$staff['basic_salary'][date('m-Y',$sale->sales_create_time)][$sale->m]:( (isset($staff['basic_salary'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->m])?$staff['basic_salary'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->m]:(isset($last_staffs['basic_salary'][$sale->m])?$last_staffs['basic_salary'][$sale->m]:null) ) ) ?>" class="fix"  id="m_<?php echo $sale->sales_id; ?>">
+                <?php echo (isset($staff['staff_id'][date('m-Y',$sale->sales_create_time)][$sale->m]) && $sale->m==$staff['staff_id'][date('m-Y',$sale->sales_create_time)][$sale->m])?$staff['staff_name'][date('m-Y',$sale->sales_create_time)][$sale->m]:((isset($staff['staff_id'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->m]) && $sale->m==$staff['staff_id'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->m])?$staff['staff_name'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->m]:(isset($last_staffs['staff_name'][$sale->m])?$last_staffs['staff_name'][$sale->m]:null)) ?>
+            </td>
+            <td s="<?php echo $sale->s ?>" data="<?php echo isset($staff['basic_salary'][date('m-Y',$sale->sales_create_time)][$sale->s])?$staff['basic_salary'][date('m-Y',$sale->sales_create_time)][$sale->s]:( (isset($staff['basic_salary'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->s])?$staff['basic_salary'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->s]:(isset($last_staffs['basic_salary'][$sale->s])?$last_staffs['basic_salary'][$sale->s]:null) ) ) ?>" class="fix"  id="s_<?php echo $sale->sales_id; ?>">
+                <?php echo (isset($staff['staff_id'][date('m-Y',$sale->sales_create_time)][$sale->s]) && $sale->s==$staff['staff_id'][date('m-Y',$sale->sales_create_time)][$sale->s])?$staff['staff_name'][date('m-Y',$sale->sales_create_time)][$sale->s]:((isset($staff['staff_id'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->s]) && $sale->s==$staff['staff_id'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->s])?$staff['staff_name'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->s]:(isset($last_staffs['staff_name'][$sale->s])?$last_staffs['staff_name'][$sale->s]:null)) ?>
+            </td>
+            <td c="<?php echo $sale->c ?>" data="<?php echo isset($staff['basic_salary'][date('m-Y',$sale->sales_create_time)][$sale->c])?$staff['basic_salary'][date('m-Y',$sale->sales_create_time)][$sale->c]:( (isset($staff['basic_salary'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->c])?$staff['basic_salary'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->c]:(isset($last_staffs['basic_salary'][$sale->c])?$last_staffs['basic_salary'][$sale->c]:null) ) ) ?>" class="fix"  id="c_<?php echo $sale->sales_id; ?>">
+                <?php echo (isset($staff['staff_id'][date('m-Y',$sale->sales_create_time)][$sale->c]) && $sale->c==$staff['staff_id'][date('m-Y',$sale->sales_create_time)][$sale->c])?$staff['staff_name'][date('m-Y',$sale->sales_create_time)][$sale->c]:((isset($staff['staff_id'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->c]) && $sale->c==$staff['staff_id'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->c])?$staff['staff_name'][date('m-Y',strtotime("-1 month", $sale->sales_create_time))][$sale->c]:(isset($last_staffs['staff_name'][$sale->c])?$last_staffs['staff_name'][$sale->c]:null)) ?>
+            </td>
+            <td  class="fix" id="revenue_<?php echo $sale->sales_id; ?>"><?php echo $lib->formatMoney($sale->revenue); ?></td>
+            <td  class="fix" id="cost_<?php echo $sale->sales_id; ?>"><?php echo $lib->formatMoney($sale->cost); ?></td>
+            <td  class="fix" id="profit_<?php echo $sale->sales_id; ?>"><?php echo $lib->formatMoney($sale->profit); ?></td>
+            <td style="display:none;"  id="customer_phone_<?php echo $sale->sales_id; ?>"><?php echo $sale->customer_phone; ?></td>
+            <td style="display:none;"  id="customer_address_<?php echo $sale->sales_id; ?>"><?php echo $sale->customer_address; ?></td>
+            <td style="display:none;"  id="customer_email_<?php echo $sale->sales_id; ?>"><?php echo $sale->customer_email; ?></td>
+            <td style="display:none;"  id="sales_create_time_<?php echo $sale->sales_id; ?>"><?php echo date('m-Y',$sale->sales_create_time); ?></td>
+            
+            
+            <td >
+                <a class="error" href="#">Sửa</a>
+                | 
+                <a class="error" onclick="del(<?php echo $sale->sales_id ?>)" >Xóa</a>
+            </td>
+        </tr>
+        <?php
+        $tongdoanhthu += $sale->revenue;
+        $tongchiphi += $sale->cost;
+        $tongloinhuan += $sale->profit;
+
+
+        /*******/
+        $arr_msc[date('m-Y',$sale->sales_create_time)][$sale->m]['m'][$sale->sales_id][] = $sale->profit;
+        $arr_msc[date('m-Y',$sale->sales_create_time)][$sale->s]['s'][$sale->sales_id][] = $sale->profit;
+        $arr_msc[date('m-Y',$sale->sales_create_time)][$sale->c]['c'][$sale->sales_id][] = $sale->profit;
+        /*******/
+        $staff_msc[date('m-Y',$sale->sales_create_time)][$sale->m]['m'][$sale->sales_id] = $sale->profit;
+        $staff_msc[date('m-Y',$sale->sales_create_time)][$sale->s]['s'][$sale->sales_id] = $sale->profit;
+        $staff_msc[date('m-Y',$sale->sales_create_time)][$sale->c]['c'][$sale->sales_id] = $sale->profit;
+
+         ?>
+    <?php endforeach; 
+
+    $array_sum = 0;
+    $total_bonus = array();
+
+        $m_sum = array();
+        $s_sum = array();
+        $c_sum = array();
+        $salary_arr = array();
+
+        $thuong_m = 0;
+        $thuong_s = 0;
+        $thuong_c = 0;
+
+        $arr_thuong_m = array();
+        $arr_thuong_s = array();
+        $arr_thuong_c = array();
+
+    foreach ($arr_msc as $thang => $mang) {
+        
+        
+        foreach ($mang as $key => $value) {
+          //var_dump($value['m']);die();
+            $m_sum[$thang][$key] = 0;
+            $s_sum[$thang][$key] = 0;
+            $c_sum[$thang][$key] = 0;
+            //$total_bonus[$thang][$key] = 0;
+
+            $arr_thuong_m[$key][$thang] = 0;
+            $arr_thuong_s[$key][$thang] = 0;
+            $arr_thuong_c[$key][$thang] = 0;
+
+          if (isset($value['m'])) {
+            foreach ($value['m'] as $key1 => $value1) {
+                $m_sum[$thang][$key] += array_sum($value1);
+                
+            }
+          }
+          if (isset($value['s'])) {
+            foreach ($value['s'] as $key2 => $value2) {
+                $s_sum[$thang][$key] += array_sum($value2);
+                
+            }
+          }
+          if (isset($value['c'])) {
+            foreach ($value['c'] as $key3 => $value3) {
+                $c_sum[$thang][$key] += array_sum($value3);
+                
+            }
+          }
+          
+          //$total_bonus[$key] = (isset($m_bonus[$key])?(array_sum($m_bonus[$key])>0?array_sum($m_bonus[$key]):0):0)+(isset($s_bonus[$key])?(array_sum($s_bonus[$key])>0?array_sum($s_bonus[$key]):0):0)+(isset($c_bonus[$key])?(array_sum($c_bonus[$key])>0?array_sum($c_bonus[$key]):0):0);
+          //$array_sum[] = $total_bonus[$key];
+
+          $thuong_m = isset($staff['basic_salary'][$thang][$key]) ? (($m_sum[$thang][$key]-(3*$staff['basic_salary'][$thang][$key]))*10/100) : (isset($last_staffs['basic_salary'][$key]) ? (($m_sum[$thang][$key]-(3*$last_staffs['basic_salary'][$key]))*10/100):0);
+          $thuong_s = isset($staff['basic_salary'][$thang][$key]) ? (($s_sum[$thang][$key]-(3*$staff['basic_salary'][$thang][$key]))*10/100) : (isset($last_staffs['basic_salary'][$key]) ? (($s_sum[$thang][$key]-(3*$last_staffs['basic_salary'][$key]))*10/100):0);
+          $thuong_c = isset($staff['basic_salary'][$thang][$key]) ? (($c_sum[$thang][$key]-(3*$staff['basic_salary'][$thang][$key]))*10/100) : (isset($last_staffs['basic_salary'][$key]) ? (($c_sum[$thang][$key]-(3*$last_staffs['basic_salary'][$key]))*10/100):0);
+
+
+          $arr_thuong_m[$key][$thang] += ($thuong_m > 0 ? $thuong_m : 0);
+          $arr_thuong_s[$key][$thang] += ($thuong_s > 0 ? $thuong_s : 0);
+          $arr_thuong_c[$key][$thang] += ($thuong_c > 0 ? $thuong_c : 0);
+
+
+          $total_bonus[$thang][$key] = isset($total_bonus[$thang][$key]) ? ($total_bonus[$thang][$key] + ($thuong_m > 0 ? $thuong_m : 0) + ($thuong_s > 0 ? $thuong_s : 0) + ($thuong_c > 0 ? $thuong_c : 0)) : ($thuong_m > 0 ? $thuong_m : 0) + ($thuong_s > 0 ? $thuong_s : 0) + ($thuong_c > 0 ? $thuong_c : 0);
+          
+        }
+        //$array_sum[] = array_sum($total_bonus);
+        //var_dump($total_bonus);
+        $array_sum += array_sum($total_bonus[$thang]);
+    }
+    //var_dump($total_bonus);die();
+    //echo json_encode($arr_msc);die();
+    /*$tong_m = 0;
+    $tong_s = 0;
+    $tong_c = 0;
+
+    $sum_loinhuan = array();
+
+    for ($j=0; $j < count($m_salary); $j++) { 
+
+      $bonus_m +=  3*$m_salary[$j];
+      $bonus_s +=  3*$s_salary[$j];
+      $bonus_c +=  3*$c_salary[$j];
+
+      
+    }
+    for ($k=0; $k < count($loinhuan); $k++) { 
+          $bonus_m = ($loinhuan[$k]-$bonus_m)*10/100;
+          $bonus_s = ($loinhuan[$k]-$bonus_s)*10/100;
+          $bonus_c = ($loinhuan[$k]-$bonus_c)*10/100;
+    }*/
+    /*
+    foreach ($staff['staff_id'] as $arr) {
+      
+      if (array_key_exists($arr,$arr_msc['m'])){
+        $m = $arr_msc['m'][$arr];
+        foreach ($m as $m) {
+          $sum_loinhuan[$arr]['m'] = $m;
+        }
+      }
+      if (array_key_exists($arr,$arr_msc['s'])){
+        $s = $arr_msc['s'][$arr];
+        foreach ($s as $s) {
+          $sum_loinhuan[$arr]['s'] = $s;
+        }
+      }
+      if (array_key_exists($arr,$arr_msc['c'])){
+        $c = $arr_msc['c'][$arr];
+        foreach ($c as $c) {
+          $sum_loinhuan[$arr]['c'] = $c;
+        }
+      }
+      //var_dump($m[0]);
+      
+      
+
+    }
+    
+
+    var_dump($sum_loinhuan);*/
+
+    ?>
+    
+   </tbody>
+   <tfoot>
+       <tr>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           
+           <td colspan="2"><b>Tổng cộng</b></td>
+           <td id="total_revenue" class="error"><?php echo $lib->formatMoney($tongdoanhthu) ?></td>
+           <td id="total_cost" class="error"><?php echo $lib->formatMoney($tongchiphi) ?></td>
+           <td id="total_profit" class="error"><?php echo $lib->formatMoney($tongloinhuan) ?></td>
+           <td></td>
+       </tr>
+       
+       <tr>
+            <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td colspan="2"><b>Thưởng tháng</b></td>
+           <td></td>
+           <td><b class="error" id="total_month_bonus"><?php echo $lib->formatMoney($array_sum) ?></b></td>
+           <td></td>
+           <td></td>
+           
+       </tr>
+   </tfoot>
+</table>
+
+<?php
+$this->helper('slidePaginator');
+?>
+
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div style="margin-top:20px" class="tabs">
+    <ul class="tab-links">
+        
+        <?php $dem = 1; $count = 1; ?>
+        <?php foreach ($staff_all as $info_name) { ?>
+            <li><a href="#tab<?php echo $dem++ ?>"><?php echo $info_name->staff_name ?></a></li>
+        <?php } ?>
+    </ul>
+ 
+    <div class="tab-content">
+        
+        <?php foreach ($staff_all as $info) { ?>
+        <div id="tab<?php echo $count++ ?>" class="tab" style="width:50%">
+            
+            <table class="table_data">
+                <thead>
+                    <tr>
+                        <th class="fix">STT</th>
+                        <th class="fix">Tháng</th>
+                        <th class="fix">CODE</th>
+                        <th class="fix">M</th>
+                        <th class="fix">S</th>
+                        <th class="fix">C</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    $stt = 1;
+                    foreach ($sales as $sale) { 
+                        if($info->staff_id==$sale->m || $info->staff_id==$sale->s || $info->staff_id==$sale->c){
+                    ?>
+                    <tr>
+                        <td class="fix"><?php echo $stt++ ?></td>
+                        <td class="fix"><?php echo date('d-m-Y',$sale->sales_create_time) ?></td>
+                        <td class="fix"><?php echo $sale->code ?></td>
+                        <td class="fix">
+                            <?php
+                            
+                            if (isset($staff_msc[date('m-Y',$sale->sales_create_time)][$info->staff_id]['m'][$sale->sales_id])) {
+                                echo $lib->formatMoney($staff_msc[date('m-Y',$sale->sales_create_time)][$info->staff_id]['m'][$sale->sales_id]);
+                            }
+                            ?>
+                        </td>
+                        <td class="fix">
+                            <?php
+                            if (isset($staff_msc[date('m-Y',$sale->sales_create_time)][$info->staff_id]['s'][$sale->sales_id])) {
+                                echo $lib->formatMoney($staff_msc[date('m-Y',$sale->sales_create_time)][$info->staff_id]['s'][$sale->sales_id]);
+                            }
+                            ?>
+                        </td>
+                        <td class="fix">
+                            <?php
+                            if (isset($staff_msc[date('m-Y',$sale->sales_create_time)][$info->staff_id]['c'][$sale->sales_id])) {
+                                echo $lib->formatMoney($staff_msc[date('m-Y',$sale->sales_create_time)][$info->staff_id]['c'][$sale->sales_id]);
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                    
+                    
+                    <?php } } ?>
+                    <?php $mm = isset($arr_thuong_m[$info->staff_id])?array_sum($arr_thuong_m[$info->staff_id]):0;
+                        $ss = isset($arr_thuong_s[$info->staff_id])?array_sum($arr_thuong_s[$info->staff_id]):0;
+                        $cc = isset($arr_thuong_c[$info->staff_id])?array_sum($arr_thuong_c[$info->staff_id]):0;
+                     ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th><?php echo $lib->formatMoney($mm) ?></th>
+                        <th><?php echo $lib->formatMoney($ss) ?></th>
+                        <th><?php echo $lib->formatMoney($cc) ?></th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td ><b>Thưởng tháng</b></td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align:center; color:red; font-weight:bold"><?php echo $lib->formatMoney($tongthuong = $mm+$ss+$cc ) ?></td>
+                        <td></td>
+                        
+                    </tr>
+                </tfoot>
+            </table>
+            <div style="clear:both;margin-top:8px"></div>
+            <div class="add-box">
+                <a class="add_button" id="export_excel" href="<?php echo BASE_URL.'/sales/export/'.strtotime($batdau).'/'.strtotime($ketthuc).'/'.$info->staff_id ?>">Export Excel</a>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <?php } ?>
+    </div>
+</div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Thông tin</h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_sales" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            <td><input type="checkbox" name="customer_type" value="new">Khách hàng mới</td>
+                            <td><input type="checkbox" name="customer_type" value="old">Khách hàng cũ</td>
+                            <td>&nbsp;</td>
+                            <td style="float:right;padding:10px">Tháng</td>
+                            <td><input readonly type="text" id="sales_create_time" name="sales_create_time" tabindex="22" required="required"></td>
+                            <td>&nbsp;</td>
+                            <td><div class="add-box"><a class="add_button" onClick="add_click();">Thêm doanh số</a></div></td>
+   
+                        </tr>
+                        <tr>
+                            <td>Khách hàng </td>
+                            <td><input type="text" readonly id="customer_name" name="customer_name" tabindex="1" autofocus autocomplete="off" required="required" placeholder="Nhập tên hoặc * để chọn" >
+                                <ul id="customer_list_id"></ul>
+                            </td>
+                            <td>Code </td>
+                            <td><input type="text"  id="code" name="code" tabindex="2" required="required"></td> 
+                            
+                            <td rowspan="3">
+                                <fieldset class="groupbox">
+                                    <legend>
+                                        <span><h4>MSC</h4></span>
+                                    </legend>
+                                    <table>
+                                        <tr>
+                                            <td>M </td>
+                                            <td><input autocomplete="off" type="text" id="m" name="m" tabindex="5"  placeholder="Nhập tên hoặc * để chọn" >
+                                                <ul id="staff_list_id_m"></ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>S </td>
+                                            <td><input autocomplete="off" type="text" id="s" name="s" tabindex="6"  placeholder="Nhập tên hoặc * để chọn">
+                                            <ul id="staff_list_id_s"></ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>C </td>
+                                            <td><input autocomplete="off" type="text"  id="c" name="c" tabindex="7"  placeholder="Nhập tên hoặc * để chọn" >
+                                            <ul id="staff_list_id_c"></ul>
+                                            </td> 
+                                        </tr>
+                                        
+                                        
+                                    </table>
+                                </fieldset>
+                            </td>
+                            <td>Tổng doanh thu </td>
+                            <td><input type="text" class="number" id="revenue" name="revenue" tabindex="8" required="required"></td> 
+                          
+                        </tr>
+                        <tr>
+                            <td>SĐT Khách hàng </td>
+                            <td><input readonly type="text" class="numbers" id="customer_phone" name="customer_phone" tabindex="13" ></td>
+
+                            <td>Diễn giải </td>
+                            <td rowspan="2"><textarea style="height:90%" id="comment"  name="comment" tabindex="4"></textarea></td>
+                            <td>Tổng chi phí </td>
+                            <td><input type="text" class="number" id="cost" name="cost" tabindex="9" required="required"></td> 
+                        </tr>
+                        <tr>
+                            <td>Địa chỉ khách hàng </td>
+                            <td><input readonly type="text" id="customer_address" name="customer_address" tabindex="14" ></td>
+                            <td></td>
+                            <td>Lợi nhuận </td>
+                            <td><input type="text" class="number" id="profit" name="profit" tabindex="10" required="required"></td>
+                        </tr>
+                        <tr>
+                            <td>Email khách hàng </td>
+                            <td>
+                              <input readonly type="email" id="customer_email" name="customer_email" tabindex="15"  >
+                              
+                            </td>
+                            
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</th>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="11"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="12"></td>
+                            
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+$(':checkbox').bind('click',function(){
+     var th = $(this), name = th.prop('name'); 
+     if(th.is(':checked')){
+       $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
+       if ($(this).val() == "new") { 
+            $('#customer_name').attr('data',"");
+            $("#customer_name").prop('readonly', false);
+            $("#customer_phone").prop('readonly', false);
+            $("#customer_address").prop('readonly', false);
+            $("#customer_email").prop('readonly', false);
+            $('#customer_name').attr('value',"");
+            $('#customer_phone').attr('value',"");
+            $('#customer_address').attr('value',"");
+            $('#customer_email').attr('value',"");
+        }
+        else if ($(this).val() == "old") { 
+            $('#customer_name').attr('data',"");
+            $("#customer_name").prop('readonly', false);
+            $("#customer_phone").prop('readonly', true);
+            $("#customer_address").prop('readonly', true);
+            $("#customer_email").prop('readonly', true);
+            $('#customer_name').attr('value',"");
+            $('#customer_phone').attr('value',"");
+            $('#customer_address').attr('value',"");
+            $('#customer_email').attr('value',"");
+        }
+
+        $('#customer_name').focus();
+     }
+});
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+    $('#customer_list_id').slideUp(200);
+    $('#staff_list_id_m').slideUp(200);
+    $('#staff_list_id_s').slideUp(200);
+    $('#staff_list_id_c').slideUp(200);
+   
+});
+    $('.edit_tr').click(function(){
+      if(!$('.checkbox').is(':checked')){
+            $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        }
+        var customer_name = $(this).find("#customer_name_"+$(this).attr('id')).text();
+        var customer_phone = $(this).find("#customer_phone_"+$(this).attr('id')).text();
+        var customer_address = $(this).find("#customer_address_"+$(this).attr('id')).text();
+        var customer_email = $(this).find("#customer_email_"+$(this).attr('id')).text();
+        var code = $(this).find("#code_"+$(this).attr('id')).text();
+        var comment = $(this).find("#comment_"+$(this).attr('id')).text();
+        var m = $(this).find("#m_"+$(this).attr('id')).text();
+        var s = $(this).find("#s_"+$(this).attr('id')).text();
+        var c = $(this).find("#c_"+$(this).attr('id')).text();
+        var revenue = $(this).find("#revenue_"+$(this).attr('id')).text();
+        var cost = $(this).find("#cost_"+$(this).attr('id')).text();
+        var profit = $(this).find("#profit_"+$(this).attr('id')).text();
+        
+        var sales_create_time = $(this).find("#sales_create_time_"+$(this).attr('id')).text();
+        //alert(customer_name);
+        $('#yes').val($(this).attr('id'));
+        $('#customer_name').val(customer_name);
+        $('#customer_phone').val(customer_phone);
+        $('#customer_address').val(customer_address);
+        $('#customer_email').val(customer_email);
+        $('#code').val(code);
+        $('#comment').val(comment);
+        $('#m').val(m);
+        $('#s').val(s);
+        $('#c').val(c);
+        $('#revenue').val(revenue);
+        $('#cost').val(cost);
+        $('#profit').val(profit);
+        
+        $('#sales_create_time').val(sales_create_time);
+        
+        
+        $('#customer_name').attr('data',"");
+        $("#customer_name").prop('readonly', true);
+        $("#customer_phone").prop('readonly', true);
+         $("#customer_address").prop('readonly', true);
+         $("#customer_email").prop('readonly', true);
+         $(':checkbox[name="customer_type"]').attr("disabled", "disabled");
+         $(':checkbox[name="customer_type"]').prop("checked", false);
+
+        $('#m').attr('data',$(this).find("#m_"+$(this).attr('id')).attr('m'));
+        $('#s').attr('data',$(this).find("#s_"+$(this).attr('id')).attr('s'));
+        $('#c').attr('data',$(this).find("#c_"+$(this).attr('id')).attr('c'));
+
+        $('#m').attr('salary',$(this).find("#m_"+$(this).attr('id')).attr('data'));
+        $('#s').attr('salary',$(this).find("#s_"+$(this).attr('id')).attr('data'));
+        $('#c').attr('salary',$(this).find("#c_"+$(this).attr('id')).attr('data'));
+
+        $("#customer_name").attr("code",'true');
+        $("#m").attr("code",'true');
+        $("#s").attr("code",'true');
+        $("#c").attr("code",'true');
+
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+  $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+  $(':checkbox[name="customer_type"]').attr("disabled", false);
+  $(':checkbox[name="customer_type"][value="old"]').prop("checked", true);
+    
+     $("#customer_name").prop('readonly', false);
+        $("#customer_name").attr("code",'false');
+        $("#m").attr("code",'false');
+        $("#s").attr("code",'false');
+        $("#c").attr("code",'false');
+        $("#m").attr("data",'');
+        $("#s").attr("data",'');
+        $("#c").attr("data",'');
+     $('#customer_name').val("");
+        $('#customer_phone').val("");
+        $('#customer_address').val("");
+        $('#customer_email').val("");
+        $('#code').val(0);
+        $('#comment').val("");
+        $('#m').val("");
+        $('#s').val("");
+        $('#c').val("");
+        $('#revenue').val(0);
+        $('#cost').val(0);
+        $('#profit').val(0);
+        
+        $('#sales_create_time').prop('readonly',false);
+        $('#sales_create_time').val("<?php echo date('m/Y') ?>");
+
+        $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+        var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'MM yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+            var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+            var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+            if (month<9) {
+                var ngay = "0"+(month+1)+"/"+year;
+            }
+            else
+                var ngay = (month+1)+"/"+year;
+               $("#sales_create_time").val(ngay);
+         },
+         
+    };  
+    $("#sales_create_time").datepicker(pickerOpts);
+
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_sales").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                    if ($('#m').attr('value') != "" && $('#m').attr('code') == 'false') {
+                        $('#m').val("");
+                        $('#m').focus();
+                        return false;
+                    };
+                    if ($('#s').attr('value') != "" && $('#s').attr('code') == 'false') {
+                        $('#s').val("");
+                        $('#s').focus();
+                        return false;
+                    };
+                    if ($('#c').attr('value') != "" && $('#c').attr('code') == 'false') {
+                        $('#c').val("");
+                        $('#c').focus();
+                        return false;
+                    };
+                    if ($('#m').attr('value') == "" && $('#c').attr('value') == "" && $('#s').attr('value') == "") {
+                        $('#m').focus();
+                        return false;
+                    };
+                    if ($('#customer_name').attr('code') == 'false' && $(':checkbox[name="customer_type"]:checked').val()=="old") {
+                        $('#customer_name').val("");
+                        $('#customer_name').focus();
+                        return false;
+                    };
+
+                    var customer = $('#customer_name').attr('data');
+                    var customer_phone = "";
+                    var customer_address = "";
+                    var customer_email = "";
+                    var code = $('#code').attr('value');
+                    var comment = $('#comment').attr('value');
+                    var m = $('#m').attr('data');
+                    var s = $('#s').attr('data');
+                    var c = $('#c').attr('data');
+                    var revenue = $('#revenue').attr('value');
+                    var cost = $('#cost').attr('value');
+                    var profit = $('#profit').attr('value');
+                    
+                    var sales_create_time = $('#sales_create_time').attr('value');
+                    
+                    var yes = $('#yes').attr('value');
+                    
+                    var action      = "";
+
+                    if($(':checkbox[name="customer_type"]:checked').val()=="new"){
+                        customer = $('#customer_name').val();
+                        customer_phone = $('#customer_phone').val();
+                        customer_address = $('#customer_address').val();
+                        customer_email = $('#customer_email').val();
+                    
+                    }
+                    if($(':checkbox[name="customer_type"]').is(':checked')){
+                      action = "them";
+                    }
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/sales/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            action: action,
+                            customer: customer,
+                            customer_phone: customer_phone,
+                            customer_address: customer_address,
+                            customer_email: customer_email,
+                            code: code,
+                            comment: comment,
+                            m: m,
+                            s: s,
+                            c: c,
+                            revenue: revenue,
+                            cost: cost,
+                            profit: profit,
+                            
+                            sales_create_time: sales_create_time,
+                            yes: yes,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if(!$(':checkbox[name="customer_type"]').is(':checked')){
+                                if (answer.trim() != "Bảng này đã tồn tại") {
+                                    if (answer.trim() != "Bạn không có quyền thực hiện thao tác này") {
+                                        var revenue_new = 0;
+                                        var cost_new = 0;
+                                        
+                                        revenue_new = ( parseFloat($('#total_revenue').html().replace(/\,/g,'')) - parseFloat($('#revenue_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#revenue'));
+
+                                        cost_new = ( parseFloat($('#total_cost').html().replace(/\,/g,'')) - parseFloat($('#cost_'+yes).html().replace(/\,/g,'')) ) + parseFloat(get_number('#cost'));
+
+                                        $('#total_revenue').text(revenue_new);
+                                        $('#total_cost').text(cost_new);
+                                        $('#total_profit').text(revenue_new - cost_new);
+
+                                        $('#total_revenue').html(function(index, value) {
+                                          return value
+                                            .replace(/[^0-9-.]/g, "")
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                          ;
+                                        });
+                                        $('#total_cost').html(function(index, value) {
+                                          return value
+                                            .replace(/[^0-9-.]/g, "")
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                          ;
+                                        });
+                                        $('#total_profit').html(function(index, value) {
+                                          return value
+                                            .replace(/[^0-9-.]/g, "")
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                          ;
+                                        });
+
+                                        var bonus_m_old = ( parseFloat($('#profit_'+yes).text().replace(/\,/g,'')) - ( 3 * parseFloat($('#m_'+yes).attr('data')) ) ) * 10/100 ;
+                                        var bonus_s_old = ( parseFloat($('#profit_'+yes).text().replace(/\,/g,'')) - ( 3 * parseFloat($('#s_'+yes).attr('data')) ) ) * 10/100 ;
+                                        var bonus_c_old = ( parseFloat($('#profit_'+yes).text().replace(/\,/g,'')) - ( 3 * parseFloat($('#c_'+yes).attr('data')) ) ) * 10/100 ;
+
+                                        var bonus_m_new = ( parseFloat(get_number('#profit')) - ( 3 * parseFloat($('#m').attr('salary')) ) ) * 10/100 ;
+                                        var bonus_s_new = ( parseFloat(get_number('#profit')) - ( 3 * parseFloat($('#s').attr('salary')) ) ) * 10/100 ;
+                                        var bonus_c_new = ( parseFloat(get_number('#profit')) - ( 3 * parseFloat($('#c').attr('salary')) ) ) * 10/100 ;
+
+                                        bonus_m_old = bonus_m_old > 0 ? bonus_m_old : 0;
+                                        bonus_s_old = bonus_s_old > 0 ? bonus_s_old : 0;
+                                        bonus_c_old = bonus_c_old > 0 ? bonus_c_old : 0;
+
+                                        bonus_m_new = bonus_m_new > 0 ? bonus_m_new: 0;
+                                        bonus_s_new = bonus_s_new > 0 ? bonus_s_new: 0;
+                                        bonus_c_new = bonus_c_new > 0 ? bonus_c_new: 0;
+
+                                        $('#month_bonus_m').text( ( $('#month_bonus_m').text().replace(/\,/g,'') - bonus_m_old ) + bonus_m_new );
+                                        $('#month_bonus_s').text( ( $('#month_bonus_s').text().replace(/\,/g,'') - bonus_s_old ) + bonus_s_new );
+                                        $('#month_bonus_c').text( ( $('#month_bonus_c').text().replace(/\,/g,'') - bonus_c_old ) + bonus_c_new );
+                                        $('#total_month_bonus').text(parseFloat($('#month_bonus_m').text()) + parseFloat($('#month_bonus_s').text()) + parseFloat($('#month_bonus_c').text()) );
+
+                                        $('#month_bonus_m').html(function(index, value) {
+                                          return value
+                                            .replace(/[^0-9-.]/g, "")
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                          ;
+                                        });
+                                        $('#month_bonus_s').html(function(index, value) {
+                                          return value
+                                            .replace(/[^0-9-.]/g, "")
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                          ;
+                                        });
+                                        $('#month_bonus_c').html(function(index, value) {
+                                          return value
+                                            .replace(/[^0-9-.]/g, "")
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                          ;
+                                        });
+                                        $('#total_month_bonus').html(function(index, value) {
+                                          return value
+                                            .replace(/[^0-9-.]/g, "")
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                          ;
+                                        });
+
+
+                                        $('#code_'+yes).text(code);
+                                        $('#comment_'+yes).text(comment);
+                                        $('#m_'+yes).text($('#m').val());
+                                        $('#s_'+yes).text($('#s').val());
+                                        $('#c_'+yes).text($('#c').val());
+                                        $('#revenue_'+yes).text(revenue);
+                                        $('#cost_'+yes).text(cost);
+                                        $('#profit_'+yes).text(profit);
+                                    }
+                                }
+                                
+                            }
+                            else{
+                                if (answer.trim() != "Bảng này đã tồn tại") {
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input  name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td  class="fix">'+parseInt(rowCount+1)+'</td><td  class="fix" id="code_'+parseInt(lastID+1)+'">'+$("#code").attr("value")+'</td><td  class="fix" id="customer_name_'+parseInt(lastID+1)+'">'+$("#customer_name").attr("value")+'</td><td  class="fix" id="comment_'+parseInt(lastID+1)+'">'+comment+'</td><td  class="fix" id="m_'+parseInt(lastID+1)+'">'+$("#m").attr("value")+'</td><td  class="fix" id="s_'+parseInt(lastID+1)+'">'+$("#s").attr("value")+'</td><td  class="fix" id="c_'+parseInt(lastID+1)+'">'+$("#c").attr("value")+'</td><td class="fix" id="revenue_'+parseInt(lastID+1)+'">'+revenue+'</td><td  class="fix" id="cost_'+parseInt(lastID+1)+'">'+cost+'</td><td  class="fix" id="profit_'+parseInt(lastID+1)+'">'+profit+'</td><td style="display:none;" id="customer_phone_'+parseInt(lastID+1)+'">'+$("#customer_phone").attr("value")+'</td><td style="display:none;" id="customer_address_'+parseInt(lastID+1)+'">'+$("#customer_address").attr("value")+'</td><td style="display:none;" id="customer_email_'+parseInt(lastID+1)+'">'+$("#customer_email").val()+'</td><td style="display:none;" id="sales_create_time_'+parseInt(lastID+1)+'">'+$("#sales_create_time").attr("value")+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+                                    $('#lasted').html(parseInt(lastID+2));
+                                    $('#total_revenue').html(parseFloat($('#total_revenue').html().replace(/\,/g,'')) + parseFloat(get_number('#revenue')));
+                                    $('#total_cost').html(parseFloat($('#total_cost').html().replace(/\,/g,'')) + parseFloat(get_number('#cost')));
+                                    $('#total_profit').html(parseFloat($('#total_profit').html().replace(/\,/g,'')) + parseFloat(get_number('#profit')));
+
+                                    $('#total_revenue').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+                                    $('#total_cost').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+                                    $('#total_profit').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+
+
+                                    var bonus_m = ( parseFloat(get_number('#profit')) - ( 3 * parseFloat($('#m').attr('salary')) ) ) * 10/100 ;
+                                    var bonus_s = ( parseFloat(get_number('#profit')) - ( 3 * parseFloat($('#s').attr('salary')) ) ) * 10/100 ;
+                                    var bonus_c = ( parseFloat(get_number('#profit')) - ( 3 * parseFloat($('#c').attr('salary')) ) ) * 10/100 ;
+
+                                    $('#month_bonus_m').html(parseFloat($('#month_bonus_m').html().replace(/\,/g,'')) + (bonus_m > 0 ? bonus_m : 0) );
+                                    $('#month_bonus_s').html(parseFloat($('#month_bonus_s').html().replace(/\,/g,'')) + (bonus_s > 0 ? bonus_s : 0) );
+                                    $('#month_bonus_c').html(parseFloat($('#month_bonus_c').html().replace(/\,/g,'')) + (bonus_c > 0 ? bonus_c : 0) );
+
+                                    $('#total_month_bonus').html(parseFloat($('#month_bonus_m').html()) + parseFloat($('#month_bonus_s').html()) + parseFloat($('#month_bonus_c').html()));
+
+                                    $('#month_bonus_m').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+                                    $('#month_bonus_s').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+                                    $('#month_bonus_c').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+                                    $('#total_month_bonus').html(function(index, value) {
+                                      return value
+                                        .replace(/[^0-9-.]/g, "")
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      ;
+                                    });
+                                }
+
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   $('#customer_name').keyup(function(){
+      if($(':checkbox[name="customer_type"]:checked').val()=="old"){
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/sales/getcustomer',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#customer_list_id').slideDown(200);
+                $('#customer_list_id').html(data);
+            }
+        });
+        if ($('#customer_name').val() == "" || $('#customer_name').attr('data') == "") {
+            $('#customer_phone').val("");
+            $('#customer_address').val("");
+            $('#customer_email').val("");
+            $('#customer_name').attr('data',"");
+            $('#customer_name').attr('code',false);
+        }
+      }
+   });
+   $('#customer_name').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#customer_name').attr('data',"");
+            $('#customer_name').attr('code',false);
+        }
+            
+      });
+   $('#m').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#m').attr('data',"");
+            $('#m').attr('code',false);
+        }
+            
+      });
+   $('#s').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#s').attr('data',"");
+            $('#s').attr('code',false);
+        }
+            
+      });
+   $('#c').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#c').attr('data',"");
+            $('#c').attr('code',false);
+        }
+            
+      });
+
+    $('#m').keyup(function(){
+        var keyword = $(this).val();
+        var create_time = $('#sales_create_time').val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/sales/getstaff',
+            type: 'POST',
+            data: {keyword:keyword,text_id:"m",create_time:create_time},
+            success:function(data){
+                $('#staff_list_id_m').slideDown(200);
+                $('#staff_list_id_m').html(data);
+            }
+        });
+        if ($('#m').val() == "" || $('#m').attr('data') == "") {
+            
+            $('#m').attr('data',"");
+            $('#m').attr('code',false);
+        };
+   });
+
+   $('#s').keyup(function(){
+        var keyword = $(this).val();
+        var create_time = $('#sales_create_time').val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/sales/getstaff',
+            type: 'POST',
+            data: {keyword:keyword,text_id:"s",create_time:create_time},
+            success:function(data){
+                $('#staff_list_id_s').slideDown(200);
+                $('#staff_list_id_s').html(data);
+            }
+        });
+        if ($('#s').val() == "" || $('#s').attr('data') == "") {
+            
+            $('#s').attr('data',"");
+            $('#s').attr('code',false);
+        };
+   });
+
+   $('#c').keyup(function(){
+        var keyword = $(this).val();
+        var create_time = $('#sales_create_time').val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/sales/getstaff',
+            type: 'POST',
+            data: {keyword:keyword,text_id:"c",create_time:create_time},
+            success:function(data){
+                $('#staff_list_id_c').slideDown(200);
+                $('#staff_list_id_c').html(data);
+            }
+        });
+        if ($('#c').val() == "" || $('#c').attr('data') == "") {
+            
+            $('#c').attr('data',"");
+            $('#c').attr('code',false);
+        };
+   });
+
+
+   
+   $('.number').keyup(function(event) {
+
+    
+    $('#profit').val(
+        Math.round(
+        parseFloat(get_number('#revenue'))-parseFloat(get_number('#cost'))
+        )
+        );
+    $('#profit').val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+
+      // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+    
+
+});
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+function set_item(item,value,phone,address,email) {
+    // change input value
+    $('#customer_name').val(item);
+    $("#customer_name").attr("data",value);
+    $('#customer_phone').val(phone);
+    $('#customer_address').val(address);
+    $('#customer_email').val(email);
+    $("#customer_name").attr("code",'true');
+    // hide proposition list
+    $('#customer_list_id').hide();
+    $('#customer_name').focus();
+}
+function set_item_m(item,value,salary) {
+    // change input value
+    $('#m').val(item);
+    $("#m").attr("data",value);
+    $('#m').attr('salary',salary);
+    $("#m").attr("code",'true');
+    // hide proposition list
+    $('#staff_list_id_m').hide();
+    $('#m').focus();
+}
+function set_item_s(item,value,salary) {
+    // change input value
+    $('#s').val(item);
+    $("#s").attr("data",value);
+    $('#s').attr('salary',salary);
+    $("#s").attr("code",'true');
+    // hide proposition list
+    $('#staff_list_id_s').hide();
+    $('#s').focus();
+}
+function set_item_c(item,value,salary) {
+    // change input value
+    $('#c').val(item);
+    $("#c").attr("data",value);
+    $('#c').attr('salary',salary);
+    $("#c").attr("code",'true');
+    // hide proposition list
+    $('#staff_list_id_c').hide();
+    $('#c').focus();
+}
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+  /*(function($) {
+    $.fn.hasScrollBar = function() {
+        return this.get(0).scrollHeight > this.height();
+    }
+})(jQuery);
+
+if ($('#scrollDiv').hasScrollBar()) {
+  $('.table_data > thead > tr > th:nth-last-child(9)').css({width: "45px"});
+  $('.table_data > thead > tr > th:nth-last-child(8)').css({width: "65px"});
+  $('.table_data > thead > tr > th:nth-last-child(7)').css({width: "162px"});
+  $('.table_data > thead > tr > th:nth-last-child(6)').css({width: "272px"});
+  $('.table_data > thead > tr > th:nth-last-child(5)').css({width: "295px"});
+  $('.table_data > thead > tr > th:nth-last-child(4)').css({width: "100px"});
+  $('.table_data > thead > tr > th:nth-last-child(3)').css({width: "100px"});
+  $('.table_data > thead > tr > th:nth-last-child(2)').css({width: "100px"});
+  $('.table_data > thead > tr > th:nth-last-child(1)').css({width: "83px"});
+  $('#m_fix').css({width: "100px"});
+  $('#s_fix').css({width: "100px"});
+  $('#c_fix').css({width: "95px"});
+  $('.table_data > thead > tr > th:last').css({width: "100px"});
+  
+}*/
+ var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytao").change();
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts);
+
+    $("#chonngaytao").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var firstDay = new Date(year, month, 1);
+
+        $('#batdau').datepicker("setDate", firstDay );
+    });
+
+    var pickerOpts5 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytaobatdau").change();
+         },
+         
+    };  
+    $("#chonngaytaobatdau").datepicker(pickerOpts5);
+
+    $("#chonngaytaobatdau").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var lastDay = new Date(year, month+1, 0);
+        $('#ketthuc').datepicker("setDate", lastDay );
+    });
+
+    $(".monthPicker").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+
+
+var x = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+x+']').attr('selected','selected');
+
+jQuery(document).ready(function() {
+    jQuery('.tabs .tab-links a').on('click', function(e)  {
+        $("html, body").animate({ scrollTop: $(document).height() }, 300);
+
+        var currentAttrValue = jQuery(this).attr('href');
+ 
+        // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).slideDown(300).siblings().slideUp(300);
+ 
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+ 
+        e.preventDefault();
+    });
+});
+
+</script>
+</div>

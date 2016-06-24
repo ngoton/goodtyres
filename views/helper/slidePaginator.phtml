@@ -1,0 +1,104 @@
+
+<?php 
+if ($tongsotrang > 1):
+echo '<div class="pagination pagination-centered">';
+echo        '<ul>';
+                    $self = $_SERVER['PHP_SELF'];
+                    if($page > 1){
+                                    $pages = $page - 1;
+                     ?>               
+                                     <li><a onclick="sapxep('1','<?php echo $order_by ?>','<?php echo $order ?>')">Trang đầu</a> </li>
+                                     <li><a onclick="sapxep('<?php echo $pages ?>','<?php echo $order_by ?>','<?php echo $order ?>')"> << </a> </li>
+                    <?php
+                    }
+                    else{
+                                    $prev  = '<li> << </li>';
+                                    $first = '<li> Trang đầu </li>';
+                                    
+                    }
+                    
+                    if ($tongsotrang < 7 + ($pagination_stages * 2)){   
+                        for ($i = 1;$i<=$tongsotrang;$i++){
+                            if($i==$page){
+                             ?>
+                                    <li class='active'><a  ><?php echo $i  ?></a></li>
+                             <?php
+                                }
+                                else{
+                                ?>
+                                    <li><a  onclick="sapxep('<?php echo $i ?>','<?php echo $order_by ?>','<?php echo $order ?>')"><?php echo $i  ?></a></li>
+                            <?php
+                                }
+                        }
+                    }
+                    else if($tongsotrang > 5 + ($pagination_stages * 2)){
+                        if($page < 1 + ($pagination_stages * 2)){
+                            for ($i = 1;$i<4 + ($pagination_stages * 2);$i++){
+                                if($i==$page){
+                                 ?>
+                                    <li class='active'><a  ><?php echo $i  ?></a></li>
+                                <?php
+                                }
+                                else{
+                                ?>
+                                    <li><a  onclick="sapxep('<?php echo $i ?>','<?php echo $order_by ?>','<?php echo $order ?>')"><?php echo $i  ?></a></li>
+                                <?php
+                                }
+                            }
+                        }
+                        elseif($tongsotrang-($pagination_stages*2) > $page && $page > ($pagination_stages*2)){
+                        ?>
+                            <li><a onclick="sapxep('1','<?php echo $order_by ?>','<?php echo $order ?>')" >1</a></li>
+                            <li><a onclick="sapxep('2','<?php echo $order_by ?>','<?php echo $order ?>')" >2</a></li>
+                            <li><a  >...</a></li>
+                        <?php
+                            for ($i = ($page-$pagination_stages);$i<=($page+$pagination_stages);$i++){
+                                if($i==$page){
+                                 ?>
+                                    <li class='active'><a  ><?php echo $i  ?></a></li>
+                                <?php
+                                }
+                                else{
+                                ?>
+                                    <li><a  onclick="sapxep('<?php echo $i ?>','<?php echo $order_by ?>','<?php echo $order ?>')"><?php echo $i  ?></a></li>
+                                <?php
+                                }
+                            echo "<li><a  >...</a></li>";
+                            }
+                        }
+                        else{
+                        ?>
+                            <li><a onclick="sapxep('1','<?php echo $order_by ?>','<?php echo $order ?>')" >1</a></li>
+                            <li><a onclick="sapxep('2','<?php echo $order_by ?>','<?php echo $order ?>')" >2</a></li>
+                            <li><a  >...</a></li>
+                        <?php
+                            for ($i = $tongsotrang - (2+($pagination_stages*2));$i<=$tongsotrang;$i++){
+                                if($i==$page){
+                                ?>
+                                    <li class='active'><a  ><?php echo $i  ?></a></li>
+                                <?php
+                                }
+                                else{
+                                ?>
+                                    <li><a  onclick="sapxep('<?php echo $i ?>','<?php echo $order_by ?>','<?php echo $order ?>')"><?php echo $i  ?></a></li>
+                                <?php
+                                }
+                            }
+                        }
+                    }
+                     if ($page < $tongsotrang && $page>=1){
+                                    $pages = $page + 1;
+                        ?>
+                                    <li><a onclick="sapxep('<?php echo $pages ?>','<?php echo $order_by ?>','<?php echo $order ?>')"> >> </a> </li> 
+                                    <li><a onclick="sapxep('<?php echo $tongsotrang ?>','<?php echo $order_by ?>','<?php echo $order ?>')">Trang cuối</a></li>
+                    <?php
+                    } 
+                    else{
+                                    $next = '<li> >> </li>';
+                                    $last = '<li> Trang cuối </li>';
+                    }  
+echo        '</ul>';
+echo    '</div>';
+
+endif;
+?>

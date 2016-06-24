@@ -1,0 +1,311 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'surcharge_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'port')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'surcharge_20_feet')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'surcharge_40_feet')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BẢNG PHỤ PHÍ </h1></center>
+<div class="add-box"><a class="add_button" onClick="add_click();">Thêm bảng phụ phí</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="2">Hiển thị 2 giá trị</option>
+            <option value="5">Hiển thị 5 giá trị</option>
+            <option value="8">Hiển thị 8 giá trị</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','surcharge_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'surcharge_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','surcharge_20_feet','<?php echo $url_order ?>')">20 feet <?php if ($order_by == 'surcharge_20_feet'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','surcharge_40_feet','<?php echo $url_order ?>')">40 feet<?php if ($order_by == 'surcharge_40_feet'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','port','<?php echo $url_order ?>')">Cảng <?php if ($order_by == 'port'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($surcharges as $surcharge) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $surcharge->surcharge_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $surcharge->surcharge_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            
+            <td class="fix" id="surcharge_20_feet_<?php echo $surcharge->surcharge_id; ?>"><?php echo $lib->formatMoney($surcharge->surcharge_20_feet); ?></td>
+            <td class="fix" id="surcharge_40_feet_<?php echo $surcharge->surcharge_id; ?>"><?php echo $lib->formatMoney($surcharge->surcharge_40_feet); ?></td>
+            <td class="fix" data="<?php echo $surcharge->port; ?>" id="port_<?php echo $surcharge->surcharge_id; ?>"><?php echo $surcharge->port_name ?></td>
+            
+            
+            <td>
+                <a class="error" href="#">Sửa</a>
+                | 
+                <a class="error" onclick="del(<?php echo $surcharge->surcharge_id ?>)" >Xóa</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Bảng giá phụ phí </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_surcharge" method="post" action="">
+                      <table style="margin-top:0px;width:100%">
+                        <tr>
+                            
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td></td>
+                            <td>&nbsp;</td>
+                            <td></td>
+                            <td><div class="add-box"><a class="add_button" onClick="add_click();">Thêm bảng phụ phí</a></div></td>
+                            
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Cảng </td>
+                            <td>
+                                <select style="width:200px" id="port" name="port"  required="required" tabindex="2">
+                                    <?php foreach ($port as $port) { ?>
+                                    <option value="<?php echo $port->port_id ?>"><?php echo $port->port_name ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                            <td>20 feet </td>
+                            <td><input type="text" id="surcharge_20_feet" class="number" name="surcharge_20_feet" tabindex="3" ></td>
+                            <td>40 feet </td>
+                            <td><input type="text" class="number" id="surcharge_40_feet" name="surcharge_40_feet" tabindex="4" ></td>
+                            
+
+                        </tr>
+                        
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="8"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="9"></td>
+                            <td></td>
+                            <td></td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+   
+});
+    $('.edit_tr').click(function(){
+        if(!$('.checkbox').is(':checked')){
+            $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        }
+        var port = $(this).find("#port_"+$(this).attr('id')).attr('data');
+        var surcharge_20_feet = $(this).find("#surcharge_20_feet_"+$(this).attr('id')).text();
+        var surcharge_40_feet = $(this).find("#surcharge_40_feet_"+$(this).attr('id')).text();
+        
+        //alert(loc_from);
+        $('#yes').val($(this).attr('id'));
+        
+        $('#port option[value='+port+']').attr('selected','selected');
+        
+        
+        $('#surcharge_20_feet').val(surcharge_20_feet);
+        $('#surcharge_40_feet').val(surcharge_40_feet);
+        $('#port').attr('data',port);
+        
+        
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+    $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        $('#surcharge_20_feet').val(0);
+        $('#surcharge_40_feet').val(0);
+        $('#port').attr('data',"");
+        
+        $('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_surcharge").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var port = $('#port').attr('value');
+                    var surcharge_20_feet = $('#surcharge_20_feet').attr('value');
+                    var surcharge_40_feet = $('#surcharge_40_feet').attr('value');
+                    
+                    var yes = $('#yes').attr('value');
+                    var check = $('#port').attr('data');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/surcharge/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            port: port,
+                            surcharge_20_feet: surcharge_20_feet,
+                            surcharge_40_feet: surcharge_40_feet,
+                            
+                            yes: yes,
+                            check: check,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (check != "") {
+                                
+                                $('#surcharge_20_feet_'+yes).text(surcharge_20_feet);
+                                $('#surcharge_40_feet_'+yes).text(surcharge_40_feet);
+                                $('#port_'+yes).text($("#port option:selected").text());
+                                
+                            }
+                            else{
+                                if (answer.trim() != "Nội dung này đã tồn tại") {
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="surcharge_20_feet_'+parseInt(lastID+1)+'">'+surcharge_20_feet+'</td><td class="fix" id="surcharge_40_feet_'+parseInt(lastID+1)+'">'+surcharge_40_feet+'</td><td class="fix" id="port_'+parseInt(lastID+1)+'">'+$("#port option:selected").text()+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   
+   
+   
+
+   
+   $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+    
+
+});
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+</script>
+</div>

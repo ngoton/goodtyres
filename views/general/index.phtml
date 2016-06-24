@@ -1,0 +1,831 @@
+<style type="text/css">
+    .table_data tr:nth-child(even) {background: rgba(255, 240, 250, 0.59)}
+    .table_data tr:nth-child(odd) {background: #FFF}
+    .table_data tr:hover {cursor: pointer;}
+    .table_data td.approve {color: green}
+    .table_data td.error {color: red}
+    #show {max-height: 500px; z-index: 99999;}
+</style>
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> PHÁT SINH </h1></center>
+
+	<div class="search-box">
+        <form id="report" name="report" action method="post">
+        <div class="add-box">
+                  
+            Tuần <input style="width:30px" type="search" name="tuan" id="tuan" placeholder="Chọn tuần" <?php if(isset($tuan)) echo "value='$tuan'"; ?> >
+            Năm <input style="width:50px" type="search" name="nam" id="nam" placeholder="Chọn năm" <?php if(isset($nam)) echo "value='$nam'"; ?> >
+            
+            
+        </div>
+        <div class="add-box">
+                  
+             <input type="submit" name="submit" id="xem" value="Xem"> 
+            
+        </div>
+        </form>
+    </div>
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+    	<th class="fix" colspan="2" rowspan="2" >STT</th>
+        <th class="fix" colspan="5">
+            <a >Phát sinh tuần <?php echo $tuan ?> </a>
+        </th> 
+    </tr>
+    <tr>
+        <th  class="fix" style="width:70px">
+            <a >Lô hàng </a>
+        </th>
+        <th  class="fix" style="width:350px">
+            <a >Nội dung </a>
+        </th>
+        <th  class="fix">
+            <a >Có </a>
+        </th>
+        <th  class="fix">
+            <a >Nợ </a>
+        </th>
+        <th  class="fix" style="width:350px">
+            <a >Nội dung </a>
+        </th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $stt=1; ?>
+    <?php $code = 0; $customer = 0; $c_money = 0; $vendor = 0; $v_money = 0; $tongco = 0; $tongno = 0; ?>
+        <?php foreach ($sales as $sale) { ?>
+        <tr class="<?php echo $stt ?>" >
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php if($sale->code != $code || $sale->customer != $customer) { ?>
+                <?php echo $sale->customer_name ?>
+                <?php } ?>
+            </td>
+            <td class="fix">
+                <?php if($sale->code != $code || $sale->customer != $customer || $sale->customer_money != $c_money) { ?>
+                <?php echo $lib->formatMoney($sale->customer_money) ?>
+                <?php } ?>
+            </td>
+            <td class="fix">
+                <?php if($sale->code != $code || $sale->customer != $customer || $sale->vendor_money != $v_money) { ?>
+                <?php echo $lib->formatMoney($sale->vendor_money) ?>
+                <?php } ?>
+            </td>
+            <td class="fix">
+                <?php if($sale->code != $code || $sale->vendor != $vendor) { ?>
+                <?php echo $sale->shipment_vendor_name ?>
+                <?php } ?>
+            </td>
+        </tr>
+
+        <?php
+            if($sale->code != $code || $sale->customer != $customer || $sale->customer_money != $c_money){
+                $tongco += $sale->customer_money;
+            }
+            if($sale->code != $code || $sale->vendor != $vendor || $sale->vendor_money != $v_money){
+                $tongno += $sale->vendor_money;
+            }
+
+            $code = $sale->code;
+            $customer = $sale->customer;   
+            $c_money = $sale->customer_money;  
+            $vendor = $sale->vendor;   
+            $v_money = $sale->vendor_money;    
+                  
+        ?>
+        <?php } ?>
+        <?php foreach ($tradings as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php if($sale->code != $code || $sale->customer != $customer) { ?>
+                <?php echo $sale->customer_name ?>
+                <?php } ?>
+            </td>
+            <td class="fix">
+                <?php if($sale->code != $code || $sale->customer != $customer) { ?>
+                <?php echo $lib->formatMoney($sale->customer_money) ?>
+                <?php } ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->vendor_money) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->shipment_vendor_name ?>
+            </td>
+        </tr>
+        <?php
+            if($sale->code != $code || $sale->customer != $customer){
+                $tongco += $sale->customer_money;
+            }
+            $tongno += $sale->vendor_money;
+
+            $code = $sale->code;
+            $customer = $sale->customer;
+        ?>
+        <?php } ?>
+        <?php foreach ($agents as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php if($sale->code != $code || $sale->customer != $customer) { ?>
+                <?php echo $sale->customer_name ?>
+                <?php } ?>
+            </td>
+            <td class="fix">
+                <?php if($sale->code != $code || $sale->customer != $customer) { ?>
+                <?php echo $lib->formatMoney($sale->customer_money) ?>
+                <?php } ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->vendor_money) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->shipment_vendor_name ?>
+            </td>
+        </tr>
+        <?php
+            if($sale->code != $code || $sale->customer != $customer){
+                $tongco += $sale->customer_money;
+            }
+            $tongno += $sale->vendor_money;
+
+            $code = $sale->code;
+            $customer = $sale->customer;
+        ?>
+        <?php } ?>
+        <?php foreach ($agent_manifests as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php if($sale->code != $code || $sale->customer != $customer) { ?>
+                <?php echo $sale->customer_name ?>
+                <?php } ?>
+            </td>
+            <td class="fix">
+                <?php if($sale->code != $code || $sale->customer != $customer) { ?>
+                <?php echo $lib->formatMoney($sale->customer_money) ?>
+                <?php } ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->vendor_money) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->shipment_vendor_name ?>
+            </td>
+        </tr>
+        <?php
+            if($sale->code != $code || $sale->customer != $customer){
+                $tongco += $sale->customer_money;
+            }
+            $tongno += $sale->vendor_money;
+
+            $code = $sale->code;
+            $customer = $sale->customer;
+        ?>
+        <?php } ?>
+        <?php foreach ($invoices as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->invoice_number ?>
+            </td>
+            <td class="fix">
+                <?php if($sale->invoice_number != $code || $sale->customer != $customer) { ?>
+                <?php echo $sale->customer_name ?>
+                <?php } ?>
+            </td>
+            <td class="fix">
+                <?php if($sale->invoice_number != $code || $sale->customer != $customer) { ?>
+                <?php echo $lib->formatMoney($sale->customer_money) ?>
+                <?php } ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->vendor_money) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->shipment_vendor_name ?>
+            </td>
+        </tr>
+        <?php
+            if($sale->invoice_number != $code || $sale->customer != $customer){
+                $tongco += $sale->customer_money;
+            }
+            $tongno += $sale->vendor_money;
+
+            $code = $sale->invoice_number;
+            $customer = $sale->customer;
+        ?>
+        <?php } ?>
+        
+        <?php foreach ($receivables as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->bank_name ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->total) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->total) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->customer_name ?>
+            </td>
+        </tr>
+        <?php
+            $tongco += $sale->total;
+            $tongno += $sale->total;
+        ?>
+        <?php } ?>
+
+        <?php $receive_vendor = array(); ?>
+        <?php foreach ($receivables_vendor as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                
+                <?php echo $sale->bank_name ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(str_replace('-', "", $sale->total)) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(str_replace('-', "", $sale->total)) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->shipment_vendor_name ?>
+            </td>
+        </tr>
+        <?php
+            $tongco += str_replace('-', "", $sale->total);
+            $tongno += str_replace('-', "", $sale->total);
+
+            $receive_vendor[$sale->vendor] = isset($receive_vendor[$sale->vendor])?($receive_vendor[$sale->vendor] + str_replace('-', "", $sale->total)):(0+str_replace('-', "", $sale->total));
+        ?>
+        <?php } ?>
+
+        <?php foreach ($receivables_staff as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->bank_name ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->total) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->total) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->staff_name ?>
+            </td>
+        </tr>
+        <?php
+            $tongco += $sale->total;
+            $tongno += $sale->total;
+        ?>
+        <?php } ?>
+        
+        <?php foreach ($payables as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->shipment_vendor_name ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(str_replace('-', "", $sale->total)) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(str_replace('-', "", $sale->total)) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->bank_name ?>
+            </td>
+        </tr>
+        <?php
+            $tongco += str_replace('-', "", $sale->total);
+            $tongno += str_replace('-', "", $sale->total);
+        ?>
+        <?php } ?>
+
+        <?php $pay_customer = array(); ?>
+        <?php foreach ($payables_customer as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->customer_name ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(str_replace('-', "", $sale->total)) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(str_replace('-', "", $sale->total)) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->bank_name ?>
+            </td>
+        </tr>
+        <?php
+            $tongco += str_replace('-', "", $sale->total);
+            $tongno += str_replace('-', "", $sale->total);
+
+            $pay_customer[$sale->customer] = isset($pay_customer[$sale->customer])?($pay_customer[$sale->customer] + str_replace('-', "", $sale->total)):(0+str_replace('-', "", $sale->total));
+        ?>
+        <?php } ?>
+
+        <?php foreach ($advances as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                <?php echo $sale->staff_name ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(str_replace('-', "", $sale->total)) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(str_replace('-', "", $sale->total)) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->bank_name ?>
+            </td>
+        </tr>
+        <?php
+            $tongco += str_replace('-', "", $sale->total);
+            $tongno += str_replace('-', "", $sale->total);
+        ?>
+        <?php } ?>
+        <?php foreach ($costs_staff as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                <?php echo $sale->staff_name ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(str_replace('-', "", $sale->total)) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(str_replace('-', "", $sale->total)) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->bank_name ?>
+            </td>
+        </tr>
+        <?php
+            $tongco += str_replace('-', "", $sale->total);
+            $tongno += str_replace('-', "", $sale->total);
+        ?>
+        <?php } ?>
+
+        <?php foreach ($transfers as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            
+            <td class="fix">
+                <?php echo $sale->total>0?$sale->bank_name:$sale->comment; ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->total>0?$sale->total:null) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->total<0?str_replace('-', "", $sale->total):null) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->total<0?$sale->bank_name:$sale->comment ?>
+            </td>
+            
+        </tr>
+        <?php
+            $tongco += $sale->total>0?$sale->total:0;
+            $tongno += $sale->total<0?str_replace('-', "", $sale->total):0;
+        ?>
+        <?php } ?>
+
+        <?php foreach ($costs as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->comment ?>
+            </td>
+            <td class="fix">
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(str_replace('-', "", $sale->total)) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->bank_name ?>
+            </td>
+        </tr>
+        <?php
+            $tongno += str_replace('-', "", $sale->total);
+        ?>
+        <?php } ?>
+        <?php foreach ($costs_in as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->code ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->bank_name ?>
+                
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->total) ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                <?php echo $sale->comment ?>
+            </td>
+        </tr>
+        <?php
+            $tongco += $sale->total;
+        ?>
+        <?php } ?>
+        
+        
+        
+        <?php if($luong != null){ ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix"></td>
+            <td class="fix">
+                <?php echo 'Lương tháng' ?>
+            </td>
+            <td class="fix">
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($luong) ?>
+            </td>
+            <td class="fix">
+                <?php echo 'Tiền mặt' ?>
+            </td>
+        </tr>
+        <?php 
+            $tongno += $luong;
+        ?>
+        <?php } ?>
+        <?php foreach ($assets_in as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                <?php echo $sale->bank_name ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->total) ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+        </tr>
+        <?php
+            $tongco += $sale->total;
+        ?>
+        <?php } ?>
+        <?php foreach ($assets_out as $sale) { ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney(str_replace('-', "", $sale->total)) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->bank_name ?>
+            </td>
+        </tr>
+        <?php
+            $tongno += str_replace('-', "", $sale->total);
+        ?>
+        <?php } ?>
+        <?php foreach ($receivables_in as $sale) { ?>
+        <?php if(!isset($pay_customer[$sale->customer])){ ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                <?php echo $sale->customer_name ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->money) ?>
+            </td>
+            <td class="fix">
+               
+            </td>
+            <td class="fix">
+                
+            </td>
+        </tr>
+        <?php
+            $tongco += $sale->money;
+        ?>
+        <?php } ?>
+        <?php } ?>
+        
+        <?php foreach ($payables_in as $sale) { ?>
+        <?php if(!isset($receive_vendor[$sale->vendor])){ ?>
+        <tr class="<?php echo $stt ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $stt ?>"></td>
+            <td style="text-align:center" class="fix">
+                <?php echo $stt++ ?>
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+                
+            </td>
+            <td class="fix">
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($sale->money) ?>
+            </td>
+            <td class="fix">
+                <?php echo $sale->shipment_vendor_name ?>
+            </td>
+        </tr>
+        <?php
+            
+            $tongno += $sale->money;
+        ?>
+        <?php } ?>
+        <?php } ?>
+        
+        
+        <tr style="font-weight:bold; background-color:rgba(203, 226, 249, 0.71); color:red">
+            <td class="fix" colspan="3"></td>
+            <td class="fix">Tổng cộng</td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($tongco) ?>
+            </td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($tongno) ?>
+            </td>
+            <td class="fix"></td>
+        </tr>
+        <tr style="font-weight:bold; background-color:rgba(203, 226, 249, 0.71); color:rgb(0, 71, 255);">
+            <td class="fix" colspan="4"></td>
+            <td class="fix">
+                <?php echo $lib->formatMoney($tongco-$tongno) ?>
+            </td>
+            <td class="fix"></td>
+            <td class="fix"></td>
+        </tr>
+        
+   </tbody>
+</table>
+
+<div id="show" style="position:absolute; box-shadow: 0px 0px 5px rgb(145, 217, 244);"></div>
+
+<script type="text/javascript">
+    $('.vendor').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/general/getVendor',
+            type: 'POST',
+            data: {vendor:val, tuantruoc: tuantruoc, tuan: tuan},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.customer').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/general/getCustomer',
+            type: 'POST',
+            data: {customer:val, tuantruoc: tuantruoc, tuan: tuan},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.staff').toggle(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/general/getStaff',
+            type: 'POST',
+            data: {staff:val, tuantruoc: tuantruoc, tuan: tuan},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+    $('.bank').click(function(){
+        var val = $(this).attr('data');
+        var tuantruoc = $(this).attr('alt');
+        var tuan = $(this).attr('tabindex');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/general/getBank',
+            type: 'POST',
+            data: {bank:val, tuantruoc: tuantruoc, tuan: tuan},
+            success:function(data){
+                
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.checkbox').toggle(function(){
+        var val = $(this).val();
+        
+        $('.'+val).css({
+            backgroundColor: 'rgba(169, 242, 172, 0.6)',
+        });
+        
+
+    },function(){
+        var val = $(this).val();
+        
+        $('.'+val).css({
+            backgroundColor: 'rgba(255, 255, 255, 0)',
+        });
+        
+
+    });
+$('.table_data tbody tr').toggle(function(){
+        var val = $(this).val();
+        
+        $('.'+val).css({
+            backgroundColor: 'rgba(169, 242, 172, 0.6)',
+        });
+        
+
+    },function(){
+        var val = $(this).val();
+        
+        $('.'+val).css({
+            backgroundColor: 'rgba(255, 255, 255, 0)',
+        });
+        
+
+    });
+
+$(document).on('mousemove', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-30
+    });
+});
+
+$(document).keyup(function(e) {
+  
+  if (e.keyCode == 27){   // esc
+    $('#show').html("");
+  }
+});
+
+var w = $(".table_data").width();
+
+      $(".container").width(w);
+      $(".navbar-inner").width(w);
+      $(".navbar").width(w);
+      $("#container").width(w);
+
+</script>

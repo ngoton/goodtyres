@@ -1,0 +1,134 @@
+
+
+<div class="mainbox-body">
+<div class="checkout-steps clear cm-save-fields" id="checkout_steps">
+<div style="border: 1px solid #DDDDDD; float:left; width: 100%" class="bg_step_row_first " id="step_one">                                            
+<div class="per_step_row2 float-left">
+<h2 class="step-title">
+<span>ĐỀ NGHỊ GIÁ VẬN TẢI ĐƯỜNG BỘ</span>
+</h2>
+<div class="">
+<div class="clear">
+<div class="order_product float-left">
+<div>
+<div class="cart_product_item">
+    <div class="order_product_shortname float-left">
+CMG trân trọng cảm ơn quý khách đã tin dùng dịch vụ của chúng tôi. Hãy đề xuất giá phù hợp của bạn với chúng tôi.          
+</div>
+<div class="order_product_shortname float-left">
+Chúng tôi luôn sẵn sàng tiếp nhận những ý kiến từ phía khách hàng, thông tin của bạn sẽ được xử lý trong thời giam sớm nhất.                
+</div>
+
+</div>
+</div>
+<div class="float-left">
+    <div class="cart_info_order_field">
+    <div class="order_product_price">
+    <label>Điểm đi : </label>
+    <span class="float-right"><?php echo $from ?></span>
+    </div>
+    </div>
+    <div class="cart_info_order_field">
+    <div class="order_product_price">
+    <label>Điểm đến : </label>
+    <span class="float-right"><?php echo $to ?></span>
+    </div>
+    </div>
+    <div class="cart_info_order_field">
+    <div class="order_product_price">
+    <label>Số lượng container : </label>
+    <span class="float-right"><?php echo $sl ?></span>
+    </div>
+    </div>
+    <div class="cart_info_order_field">
+    <div class="order_product_price">
+    <label>Loại container : </label>
+    <span class="float-right"><?php echo $size.' '.$type ?></span>
+    </div>
+    </div>
+    <div class="cart_info_order_field">
+    <div class="order_product_price">
+    <label>Trọng tải/container : </label>
+    <span class="float-right"><?php echo $ton ?></span>
+    </div>
+    </div>
+
+    <div class="cart_info_order_field">
+    <div class="order_product_quantity">
+    <label>Thành tiền:</label>
+    <span class="float-right"><strong><?php echo $total ?></strong></span>
+    </div>
+    </div>
+</div>
+<div id="step_one_register" class="width50 hidden">
+
+<form style="margin:0;" name="step_one_register_form" action="#" method="post">
+
+<div class="form-field">
+<label for="price" class="cm-required cm-price">Giá đề nghị:</label>
+<div class="input-prepend">
+<span class="add-on"><i class="icon-road"></i></span>
+<input type="text" id="price" name="price"  value="<?php echo $price ?>" class="input-text cm-autocomplete-off number" autocomplete="off">
+</div>
+</div>
+
+<div style="text-align:center">
+<span class="button-submit"><input type="button" id="ok" name="ok" value="Tiếp tục"></span>
+&nbsp; 
+<span class="button-submit"><input type="button" onClick="window.location.href='<?php echo $this->url('quotation') ?>'" name="cancel" value="Hủy bỏ"></span>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+</div>
+</form>
+</div>
+<div style="margin-bottom: 20px;display: inline-block;"></div>
+<div class="clear"></div>       
+</div>                  
+</div>
+</div>  
+
+</div>
+
+
+
+<!--checkout_steps--></div>
+
+</div>
+
+<div style="clear: both"></div>
+<script type="text/javascript">
+    $('#ok').click(function(){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+            var price = $('#price').val();
+            
+                    $.ajax({
+                        url: '#',
+                        type: 'POST',
+                        data: {
+                            price: price,
+                        },
+                        success:function(data){
+                           $('#loading').fadeOut(500);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+data+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+                        }
+                    });
+    });
+
+
+    $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+</script>

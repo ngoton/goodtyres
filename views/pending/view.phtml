@@ -1,0 +1,79 @@
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;"><h1> LÔ HÀNG </h1></center>
+
+</div>
+<div>
+<table class="table_data">
+    <thead>
+    <tr>
+        <th  class="fix" >
+            <a >Số tiền chi </a>
+        </th>  
+        <td  class="fix" id="money_<?php echo $cost->costs_id; ?>"><?php echo $lib->formatMoney($cost->money); ?></td>
+    </tr>
+    <tr>
+        <th class="fix" >
+            <a>Ngày dự kiến </a>
+        </th> 
+        <td class="fix"  id="expect_date_<?php echo $cost->costs_id; ?>"><?php echo $lib->hien_thi_ngay_thang($cost->expect_date) ?></td>
+    </tr>
+    <tr>
+        <th  class="fix" >
+            <a >Đã chi</a>
+        </th> 
+        <td  class="fix" id="pay_money_<?php echo $cost->costs_id; ?>"><?php echo $lib->formatMoney($cost->pay_money); ?></td> 
+    </tr>
+    <tr>
+        <th class="fix" >
+            <a >Ngày thanh toán </a>
+        </th> 
+        <td class="fix"  id="pay_date_<?php echo $cost->costs_id; ?>"><?php echo ($cost->pay_date!=null && $cost->pay_date!=0) ?$lib->hien_thi_ngay_thang($cost->pay_date):null; ?></td>
+    </tr>
+    <tr>
+        <th class="fix" >
+            <a >Tài khoản chi </a>
+        </th> 
+        <td class="fix" id="source_<?php echo $cost->costs_id; ?>"><?php echo isset($bank_data['name'][$cost->source])?$bank_data['name'][$cost->source]:null; ?></td>
+    </tr>
+    <tr>
+        <th class="fix" >
+            <a >Số tiền thu </a>
+        </th>
+        <td class="fix" id="money_in_<?php echo $cost->costs_id; ?>"><?php echo $lib->formatMoney($cost->money_in); ?></td>
+    </tr>
+    <tr>
+        
+        <th class="fix" >
+            <a >Tài khoản thu </a>
+        </th> 
+        <td class="fix" id="source_in_<?php echo $cost->costs_id; ?>"><?php echo isset($bank_data['name'][$cost->source_in])?$bank_data['name'][$cost->source_in]:null; ?></td>
+    </tr>
+    <tr>
+          
+        <th  class="fix">
+            <a >Nội dung</a>
+        </th>
+        <td  class="fix" id="comment_<?php echo $cost->costs_id; ?>"><?php echo $cost->comment; ?></td> 
+    </tr>
+    <tr>
+        <th class="fix" >
+            <a >Duyệt bởi </a>
+        </th> 
+        <td class="fix" id="approve_<?php echo $cost->costs_id; ?>"><?php echo isset($users['name'][$cost->approve])?$users['name'][$cost->approve]:null; ?></td>   
+    </tr>  
+    <tr>
+        <th class="fix" >
+            <a >Người chịu phí</a>
+        </th> 
+        <td class="fix" id="staff_<?php echo $cost->costs_id; ?>"><?php echo isset($staff_data['name'][$cost->staff])?$staff_data['name'][$cost->staff]:null; ?></td>   
+    </tr>  
+    
+   </thead>
+    
+    </table>
+
+</div>

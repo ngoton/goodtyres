@@ -1,0 +1,514 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'shipment_vendor_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'shipment_vendor_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'shipment_vendor_address')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'shipment_vendor_phone')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'shipment_vendor_address')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'company_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'mst')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'shipment_vendor_email')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'vendor_type')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> DANH SÁCH VENDOR </h1></center>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm vendor mới</a>
+    <a class="add_button" id="import_excel" href="<?= $this->url('shipmentvendor/import')?>">Import Excel</a>
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+			<option value="20">Hiển thị 20 giá trị</option>
+            <option value="30">Hiển thị 30 giá trị</option>
+            <option value="50">Hiển thị 50 giá trị</option>
+            
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','shipment_vendor_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'shipment_vendor_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','shipment_vendor_name','<?php echo $url_order ?>')">Tên vendor <?php if ($order_by == 'shipment_vendor_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','company_name','<?php echo $url_order ?>')">Công ty <?php if ($order_by == 'company_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','mst','<?php echo $url_order ?>')">MST <?php if ($order_by == 'mst'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','shipment_vendor_address','<?php echo $url_order ?>')">Địa chỉ <?php if ($order_by == 'shipment_vendor_address'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','shipment_vendor_phone','<?php echo $url_order ?>')">Số điện thoại <?php if ($order_by == 'shipment_vendor_phone'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','shipment_vendor_email','<?php echo $url_order ?>')">Email <?php if ($order_by == 'shipment_vendor_email'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','vendor_type','<?php echo $url_order ?>')">Loại hình <?php if ($order_by == 'vendor_type'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
+        
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($vendors as $shipment_vendor) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $shipment_vendor->shipment_vendor_id ?>" class="edit_tr">
+        	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $shipment_vendor->shipment_vendor_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix"  id="shipment_vendor_name_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->shipment_vendor_name ?></td>
+            <td class="fix"  id="company_name_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->company_name; ?></td>
+            
+            <td class="fix"  id="mst_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->mst; ?></td>
+            <td class="fix" id="shipment_vendor_address_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->shipment_vendor_address; ?></td>
+            <td class="fix" id="shipment_vendor_phone_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->shipment_vendor_phone; ?></td>
+            <td class="fix" id="shipment_vendor_email_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->shipment_vendor_email; ?></td>
+            <td class="fix"  id="vendor_type_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->vendor_type==1?'OPS':($shipment_vendor->vendor_type==2?'Trucking':($shipment_vendor->vendor_type==3?'Barging':($shipment_vendor->vendor_type==4?'Feeder':($shipment_vendor->vendor_type==5?'Commission':($shipment_vendor->vendor_type==6?'Handling':($shipment_vendor->vendor_type==7?'Other':($shipment_vendor->vendor_type==8?'Trading':Null))))))); ?></td>
+            
+            <td class="fix" style="display:none" id="co_name_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->co_name; ?></td>
+            <td class="fix" style="display:none" id="director_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->director; ?></td>
+            <td class="fix" style="display:none" id="vendor_bank_name_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->vendor_bank_name; ?></td>
+            <td class="fix" style="display:none" id="account_number_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->account_number; ?></td>
+            <td class="fix" style="display:none" id="cmg_bank_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->cmg_bank; ?></td>
+            <td class="fix" style="display:none" id="loc_from_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->loc_from; ?></td>
+            <td class="fix" style="display:none" id="loc_to_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->loc_to; ?></td>
+            <td class="fix" style="display:none" id="shipment_vendor_contact_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->shipment_vendor_contact; ?></td>
+            <td class="fix" style="display:none" id="vendor_expect_date_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->vendor_expect_date; ?></td>
+            <td class="fix" style="display:none" id="vendor_after_date_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->vendor_after_date; ?></td>
+            
+            <td>
+                <a class="error" href="#">Sửa</a>
+                | 
+                <a class="error" onclick="del(<?php echo $shipment_vendor->shipment_vendor_id ?>)" >Xóa</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('shipmentvendor') ?>">&larr;</a></div>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div class="add-field">
+        <fieldset class="groupbox">
+            <legend>
+                <span><h3>Thông tin vendor </h3></span>
+            </legend>
+            <div class="login_body">
+                  <form id="add_shipment_vendor" method="post" action="">
+                      <table style="margin:0 auto;width:100%">
+                        <tr>
+                            
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><div class="add-box"><a class="add_button" onClick="add_click();">Thêm vendor mới</a></div></td>
+                            
+                        </tr>
+                        <tr>
+                            
+                            <td>Tên vendor</td>
+                            <td>
+                                <input type="text" id="shipment_vendor_name"  name="shipment_vendor_name" tabindex="1" required="required" >
+                            </td>
+                            <td>Tên công ty</td>
+                            <td>
+                                <input type="text" id="company_name"  name="company_name" tabindex="2" required="required" >
+                            </td>
+                            <td>Mã số thuế </td>
+                            <td><input type="text" id="mst"  name="mst" tabindex="3" ></td>
+                            <td>Tên rút gọn </td>
+                            <td><input type="text" id="co_name"  name="co_name" tabindex="4" ></td>
+
+                        </tr>
+                        <tr>
+                            
+                            <td>Địa chỉ </td>
+                            <td><textarea id="shipment_vendor_address"  name="shipment_vendor_address" tabindex="5" ></textarea></td>
+                            <td>Email </td>
+                            <td><input type="email"  id="shipment_vendor_email" name="shipment_vendor_email" tabindex="6" ></td>
+                            <td>Số diện thoại </td>
+                            <td>
+                                <input type="text" class="numbers" id="shipment_vendor_phone" name="shipment_vendor_phone" tabindex="7" >
+                            </td>
+                            <td>Người liên hệ </td>
+                            <td><input type="text" id="shipment_vendor_contact"  name="shipment_vendor_contact" tabindex="8" ></td>
+                        </tr>
+                        <tr>
+                            
+                            <td>Giám đốc </td>
+                            <td><input type="text" id="director"  name="director" tabindex="9" ></td>
+                            <td>Tài khoản ngân hàng </td>
+                            <td>
+                                <input type="text" style="width:90px" id="vendor_bank_name"  name="vendor_bank_name" tabindex="10" >
+                                <input type="text" style="width:150px" id="account_number"  name="account_number" tabindex="11" >
+                            </td>
+                            <td>Tài khoản ngân hàng CMG </td>
+                            <td>
+                                
+                                <select  style="width:100px" class="source" id="cmg_bank"  name="cmg_bank">
+                                    <option value="null">Tài khoản</option>
+                                    <?php foreach($banks as $bank){ ?>
+                                    <option value="<?php echo $bank->bank_id ?>"><?php echo $bank->bank_name ?></option>
+                                    <?php } ?>
+                                </select> 
+                            </td>
+                            <td>Công nợ </td>
+                            <td>
+                                
+                                <input type="text" style="width:30px" class="number" id="shipment_vendor_expect_date" name="shipment_vendor_expect_date" tabindex="12" placeholder="Ngày" > hàng tháng <br>
+                                <input type="text" style="width:30px" class="number" id="shipment_vendor_after_date" name="shipment_vendor_after_date" tabindex="13" placeholder="Số" > ngày sau xuất HĐ
+                            </td>
+                        </tr>
+                        <tr>
+                            
+                            <td>Tuyến đường đi </td>
+                            <td><input type="text"  id="loc_from" name="loc_from" tabindex="14" ></td>
+                            <td>Tuyến đường đến </td>
+                            <td><input type="text"  id="loc_to" name="loc_to" tabindex="15" ></td>
+                            <td>Loại hình </td>
+                            <td>
+                                <select  style="width:100px"  id="vendor_type"  name="vendor_type">
+                                    <option value="1">OPS</option>
+                                    <option selected value="2">Trucking</option>
+                                    <option value="3">Barging</option>
+                                    <option value="4">Feeder</option>
+                                    <option value="5">Commission</option>
+                                    <option value="6">Handling</option>
+                                    <option value="8">Trading</option>
+                                    <option value="7">Other</option>
+                                </select> 
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        
+                        
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        
+                        
+                         <tr>
+                            
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="16"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="17"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                             
+                        </tr>
+                    </table> 
+                </form>
+            </div>
+        </fieldset>
+    </div>
+<script type="text/javascript">
+
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        $('.add-field').slideUp(500);    
+    }
+   
+});
+    $('.edit_tr').click(function(){
+        if(!$('.checkbox').is(':checked')){
+            $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+        }
+        var shipment_vendor_name = $(this).find("#shipment_vendor_name_"+$(this).attr('id')).text();
+        
+        var shipment_vendor_address = $(this).find("#shipment_vendor_address_"+$(this).attr('id')).text();
+        var shipment_vendor_phone = $(this).find("#shipment_vendor_phone_"+$(this).attr('id')).text();
+        var shipment_vendor_email = $(this).find("#shipment_vendor_email_"+$(this).attr('id')).text();
+        var shipment_vendor_contact = $(this).find("#shipment_vendor_contact_"+$(this).attr('id')).text();
+        var company_name = $(this).find("#company_name_"+$(this).attr('id')).text();
+        var co_name = $(this).find("#co_name_"+$(this).attr('id')).text();
+        var director = $(this).find("#director_"+$(this).attr('id')).text();
+        var mst = $(this).find("#mst_"+$(this).attr('id')).text();
+        var vendor_bank_name = $(this).find("#vendor_bank_name_"+$(this).attr('id')).text();
+        var account_number = $(this).find("#account_number_"+$(this).attr('id')).text();
+        var cmg_bank = $(this).find("#cmg_bank_"+$(this).attr('id')).text();
+        var vendor_expect_date = $(this).find("#vendor_expect_date_"+$(this).attr('id')).text();
+        var vendor_after_date = $(this).find("#vendor_after_date_"+$(this).attr('id')).text();
+        var vendor_type = $(this).find("#vendor_type_"+$(this).attr('id')).text();
+        var loc_from = $(this).find("#loc_from_"+$(this).attr('id')).text();
+        var loc_to = $(this).find("#loc_to_"+$(this).attr('id')).text();
+        
+        //alert(shipment_vendor_code);
+        $('#yes').val($(this).attr('id'));
+        
+        
+        
+        $('#shipment_vendor_name').val(shipment_vendor_name);
+        $('#shipment_vendor_address').val(shipment_vendor_address);
+        $('#shipment_vendor_phone').val(shipment_vendor_phone);
+        $('#shipment_vendor_email').val(shipment_vendor_email);
+        $('#shipment_vendor_contact').val(shipment_vendor_contact);
+       
+       $('#company_name').val(company_name);
+       $('#co_name').val(co_name);
+       $('#director').val(director);
+       $('#mst').val(mst);
+       $('#vendor_bank_name').val(vendor_bank_name);
+       $('#account_number').val(account_number);
+       $('#vendor_expect_date').val(shipment_vendor_expect_date);
+       $('#vendor_after_date').val(shipment_vendor_after_date);
+       $("#cmg_bank option[value=" + cmg_bank + "]").attr('selected', 'selected');
+       $("#vendor_type option:contains(" + vendor_type + ")").attr('selected', 'selected');
+       $('#loc_from').val(loc_from);
+       $('#loc_to').val(loc_to);
+       
+
+        $('#shipment_vendor_name').focus();
+        $('#shipment_vendor_name').attr('data',"true");
+    });
+</script>
+<script type="text/javascript">
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+    $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+    
+        
+        $('#shipment_vendor_name').val("");
+        $('#shipment_vendor_address').val("");
+        $('#shipment_vendor_phone').val("");
+        $('#shipment_vendor_email').val("");
+        $('#shipment_vendor_contact').val("");
+        
+        $('#company_name').val("");
+       $('#co_name').val("");
+       $('#director').val("");
+       $('#mst').val("");
+       $('#vendor_bank_name').val("");
+       $('#account_number').val("");
+       $('#vendor_expect_date').val("");
+       $('#vendor_after_date').val("");
+       $("#cmg_bank option[value=null]").attr('selected', 'selected');
+       $("#vendor_type option[value=2]").attr('selected', 'selected');
+       $('#loc_from').val("");
+       $('#loc_to').val("");
+
+   $('#shipment_vendor_name').focus();
+   $('#shipment_vendor_name').attr('data',"false");
+
+}
+
+
+$(document).ready(function(){
+            // Validate form
+            $("#add_shipment_vendor").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                
+                    var shipment_vendor_name = $('#shipment_vendor_name').attr('value');
+                    var shipment_vendor_address = $('#shipment_vendor_address').attr('value');
+                    var shipment_vendor_phone = $('#shipment_vendor_phone').attr('value');
+                    var shipment_vendor_email = $('#shipment_vendor_email').attr('value');
+                    var shipment_vendor_contact = $('#shipment_vendor_contact').attr('value');
+                    var company_name = $('#company_name').attr('value');
+                    var co_name = $('#co_name').attr('value');
+                    var director = $('#director').attr('value');
+                    var mst = $('#mst').attr('value');
+                    var vendor_bank_name = $('#vendor_bank_name').attr('value');
+                    var account_number = $('#account_number').attr('value');
+                    var cmg_bank = $('#cmg_bank').attr('value');
+                    var vendor_expect_date = $('#vendor_expect_date').attr('value');
+                    var vendor_after_date = $('#vendor_after_date').attr('value');
+                    var loc_to = $('#loc_to').attr('value');
+                    var loc_from = $('#loc_from').attr('value');
+                    var vendor_type = $('#vendor_type').attr('value');
+                    
+
+                    var yes = $('#yes').attr('value');
+                    var check = $('#shipment_vendor_name').attr('data');
+                    
+                    var action      = "them";
+                 
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/shipmentvendor/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            shipment_vendor_name: shipment_vendor_name,
+                            shipment_vendor_address: shipment_vendor_address,
+                            shipment_vendor_phone: shipment_vendor_phone,
+                            shipment_vendor_email: shipment_vendor_email,
+                            shipment_vendor_contact: shipment_vendor_contact,
+                            company_name: company_name,
+                            co_name: co_name,
+                            director: director,
+                            mst: mst,
+                            vendor_bank_name: vendor_bank_name,
+                            account_number: account_number,
+                            cmg_bank: cmg_bank,
+                            vendor_expect_date: vendor_expect_date,
+                            vendor_after_date: vendor_after_date,
+                            loc_from: loc_from,
+                            loc_to: loc_to,
+                            vendor_type: vendor_type,
+                            yes: yes,
+                            check: check,
+                            }, // giá trị post
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            if (check == "true") {
+                                if (answer.trim() != "Thông tin khách hàng đã tồn tại") {
+                                    $('#shipment_vendor_name_'+yes).text(shipment_vendor_name);
+                                    $('#shipment_vendor_address_'+yes).text(shipment_vendor_address);
+                                    $('#shipment_vendor_phone_'+yes).text(shipment_vendor_phone);
+                                    $('#shipment_vendor_email_'+yes).text(shipment_vendor_email);
+                                    $('#company_name_'+yes).text(company_name);
+                                    $('#mst_'+yes).text(mst);
+                                }
+                            }
+                            else{
+                                if (answer.trim() != "Thông tin khách hàng đã tồn tại") {
+                                    var lastID = parseInt($('#lasted').html());
+                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
+                                    $('.table_data > tbody:last')
+                                    .append(
+                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="shipment_vendor_name_'+parseInt(lastID+1)+'">'+shipment_vendor_name+'</td><td class="fix" id="company_name_'+parseInt(lastID+1)+'">'+company_name+'</td><td class="fix" id="mst_'+parseInt(lastID+1)+'">'+mst+'</td><td class="fix" id="shipment_vendor_address_'+parseInt(lastID+1)+'">'+shipment_vendor_address+'</td><td class="fix" id="shipment_vendor_phone_'+parseInt(lastID+1)+'">'+shipment_vendor_phone+'</td><td class="fix" id="shipment_vendor_email_'+parseInt(lastID+1)+'">'+shipment_vendor_email+'</td><td class="fix" id="vendor_type_'+parseInt(lastID+1)+'"></td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
+                                    );
+
+                                    $('#lasted').html(parseInt(lastID+2));
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+   
+   
+   
+
+   $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+        ;
+      });
+    });
+
+   $('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+          .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+        ;
+      });
+    });
+    
+
+});
+function get_number(id){
+    return $(id).val().replace(/\,/g,'');
+}
+
+</script>
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+</script>
+</div>
