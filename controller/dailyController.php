@@ -240,11 +240,49 @@ Class dailyController Extends baseController {
                             'code' => $data['code'],
                             'daily' => trim($_POST['yes']),
                         );
+
+                    $data_debit = array(
+                        'account_balance_date' => $data_add['additional_date'],
+                        'account' => $data_add['debit'],
+                        'money' => $data_add['money'],
+                        'week' => (int)date('W', $data_add['additional_date']),
+                        'year' => (int)date('Y', $data_add['additional_date']),
+                    );
+                    $data_credit = array(
+                        'account_balance_date' => $data_add['additional_date'],
+                        'account' => $data_add['credit'],
+                        'money' => (0-$data_add['money']),
+                        'week' => (int)date('W', $data_add['additional_date']),
+                        'year' => (int)date('Y', $data_add['additional_date']),
+                    );
+
+                    if($data_debit['week'] == 53){
+                        $data_debit['week'] = 1;
+                        $data_debit['year'] = $data_debit['year']+1;
+
+                        $data_credit['week'] = 1;
+                        $data_credit['year'] = $data_credit['year']+1;
+                    }
+                    if (((int)date('W', $data_add['additional_date']) == 1) && ((int)date('m', $data_add['additional_date']) == 12) ) {
+                        $data_debit['year'] = (int)date('Y', $data_add['additional_date'])+1;
+                        $data_credit['year'] = (int)date('Y', $data_add['additional_date'])+1;
+                    }
+
                     if ($add) {
                         $additional_model->updateAdditional($data_add,array('additional_id'=>$add->additional_id));
+
+                        $account_balance_model->updateAccount($data_debit,array('additional'=>$add->additional_id,'account'=>$add->debit));
+                        $account_balance_model->updateAccount($data_credit,array('additional'=>$add->additional_id,'account'=>$add->credit));
                     }
                     else{
                         $additional_model->createAdditional($data_add);
+
+                        $id_additional = $additional_model->getLastAdditional()->additional_id;
+                        $data_debit['additional'] = $id_additional;
+                        $data_credit['additional'] = $id_additional;
+
+                        $account_balance_model->createAccount($data_debit);
+                        $account_balance_model->createAccount($data_credit);
                     }
                 }
                 
@@ -278,6 +316,40 @@ Class dailyController Extends baseController {
                         );
                     
                     $additional_model->createAdditional($data_add);
+
+                    $data_debit = array(
+                        'account_balance_date' => $data_add['additional_date'],
+                        'account' => $data_add['debit'],
+                        'money' => $data_add['money'],
+                        'week' => (int)date('W', $data_add['additional_date']),
+                        'year' => (int)date('Y', $data_add['additional_date']),
+                    );
+                    $data_credit = array(
+                        'account_balance_date' => $data_add['additional_date'],
+                        'account' => $data_add['credit'],
+                        'money' => (0-$data_add['money']),
+                        'week' => (int)date('W', $data_add['additional_date']),
+                        'year' => (int)date('Y', $data_add['additional_date']),
+                    );
+
+                    if($data_debit['week'] == 53){
+                        $data_debit['week'] = 1;
+                        $data_debit['year'] = $data_debit['year']+1;
+
+                        $data_credit['week'] = 1;
+                        $data_credit['year'] = $data_credit['year']+1;
+                    }
+                    if (((int)date('W', $data_add['additional_date']) == 1) && ((int)date('m', $data_add['additional_date']) == 12) ) {
+                        $data_debit['year'] = (int)date('Y', $data_add['additional_date'])+1;
+                        $data_credit['year'] = (int)date('Y', $data_add['additional_date'])+1;
+                    }
+
+                    $id_additional = $additional_model->getLastAdditional()->additional_id;
+                    $data_debit['additional'] = $id_additional;
+                    $data_credit['additional'] = $id_additional;
+
+                    $account_balance_model->createAccount($data_debit);
+                    $account_balance_model->createAccount($data_credit);
                     
                 }
 
@@ -302,11 +374,19 @@ Class dailyController Extends baseController {
         }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $daily_model = $this->model->get('dailyModel');
+            $additional_model = $this->model->get('additionalModel');
+            $account_balance_model = $this->model->get('accountbalanceModel');
            
             if (isset($_POST['xoa'])) {
                 $data = explode(',', $_POST['xoa']);
                 foreach ($data as $data) {
                        $daily_model->deleteDaily($data);
+                       $additionals = $additional_model->getAllAdditional(array('where'=>'daily = '.$data));
+                       foreach ($additionals as $add) {
+                           $additional_model->deleteAdditional($add->additional_id);
+                           $account_balance_model->queryAccount("DELETE FROM account_balance WHERE additional = ".$add->additional_id);
+                       }
+                       
                         echo "Xóa thành công";
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
@@ -322,6 +402,12 @@ Class dailyController Extends baseController {
             }
             else{
                         $daily_model->deleteDaily($_POST['data']);
+                        $additionals = $additional_model->getAllAdditional(array('where'=>'daily = '.$_POST['data']));
+                       foreach ($additionals as $add) {
+                           $additional_model->deleteAdditional($add->additional_id);
+                           $account_balance_model->queryAccount("DELETE FROM account_balance WHERE additional = ".$add->additional_id);
+                       }
+
                         echo "Xóa thành công";
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
