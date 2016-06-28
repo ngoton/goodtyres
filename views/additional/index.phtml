@@ -148,6 +148,7 @@ elseif ($order_by == 'money')
 <?php
 $this->helper('slidePaginator');
 ?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('additional') ?>">&larr;</a></div>
 <div style="display:none" id="lasted"></div>
 <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
 
