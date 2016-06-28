@@ -464,7 +464,7 @@ Class additionalController Extends baseController {
                             $data_credit['year'] = (int)date('Y', $additional_data['additional_date'])+1;
                         }
 
-                        $id_additional = $additional_model->getLastAdditional()->additional_id;
+                        $id_additional = $additional->getLastAdditional()->additional_id;
                         $data_debit['additional'] = $id_additional;
                         $data_credit['additional'] = $id_additional;
 
