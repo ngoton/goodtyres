@@ -31,7 +31,8 @@ Class additionalController Extends baseController {
             $ngaytaobatdau = date('m-Y');
         }
 
-        
+        $id = $this->registry->router->param_id;
+
         $additional_model = $this->model->get('additionalModel');
 
         $account_model = $this->model->get('accountModel');
@@ -51,6 +52,10 @@ Class additionalController Extends baseController {
         $data = array(
             'where' => 'additional_date >= '.strtotime($batdau).' AND additional_date <= '.strtotime($ketthuc),
         );
+
+        if ($id>0) {
+            $data['where'] = 'additional_id = '.$id;
+        }
         
         
         $tongsodong = count($additional_model->getAllAdditional($data));
@@ -77,6 +82,9 @@ Class additionalController Extends baseController {
             'where' => 'additional_date >= '.strtotime($batdau).' AND additional_date <= '.strtotime($ketthuc),
             );
         
+        if ($id>0) {
+            $data['where'] = 'additional_id = '.$id;
+        }
       
         if ($keyword != '') {
             $search = '( document_number LIKE "%'.$keyword.'%" 
