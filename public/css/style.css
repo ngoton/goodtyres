@@ -1047,7 +1047,7 @@ padding:3px;
     	overflow-x: hidden;
 }
 .table_data tbody tr td.fix {
-	border-right: 1px solid rgb(236, 235, 235);
+	border-right: 1px dotted #21759b;
 }
 
 ul.nav>li {
