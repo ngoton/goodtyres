@@ -1010,6 +1010,67 @@ Class ordertireController Extends baseController {
 
         $this->view->show('ordertire/listcost');
     }
+    public function listdiscount($id){
+        $this->view->disableLayout();
+        $this->view->data['lib'] = $this->lib;
+        $order_tire_model = $this->model->get('ordertireModel');
+        $order_tires = $order_tire_model->getTire($id);
+        $this->view->data['order_tires'] = $order_tires;
+
+        $this->view->show('ordertire/listdiscount');
+    }
+    public function discountedit(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_tire_model = $this->model->get('ordertireModel');
+
+            $id = trim($_POST['order_tire']);
+            $discount = trim(str_replace(',','',$_POST['discount']));
+            $reduce = trim(str_replace(',','',$_POST['reduce']));
+            $ck_ttn = trim($_POST['ck_ttn']);
+            $ck_kho = trim($_POST['ck_kho']);
+            $ck_sl = trim($_POST['ck_sl']);
+
+            $order = $order_tire_model->getTire($id);
+            $total = $order->total+$order->discount+$order->reduce-$discount-$reduce;
+
+            $data = array(
+                'discount'=>$discount,
+                'reduce'=>$reduce,
+                'ck_ttn'=>$ck_ttn,
+                'ck_kho'=>$ck_kho,
+                'ck_sl'=>$ck_sl,
+                'total'=>$total,
+            );
+
+            $order_tire_model->updateTire($data,array('order_tire_id'=>$id));
+
+            $receivable_model = $this->model->get('receivableModel');
+            $obtain_model = $this->model->get('obtainModel');
+            
+            $receivable_data = array(
+                'money' => $total,
+            );
+
+            $receivable_model->updateCosts($receivable_data,array('order_tire'=>$id));
+
+            $obtain_data = array(
+                'money' => $total,
+            );
+
+            $obtain_model->updateObtain($obtain_data,array('order_tire'=>$id,'money'=>$order->total));
+
+            echo "Cập nhật thành công";
+
+                        date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                        $filename = "action_logs.txt";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['order_tire']."|order_tire|"."\n"."\r\n";
+                        
+                        $fh = fopen($filename, "a") or die("Could not open log file.");
+                        fwrite($fh, $text) or die("Could not write file!");
+                        fclose($fh);
+
+        }
+    }
     public function editorder(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $order_tire_list_model = $this->model->get('ordertirelistModel');
@@ -1098,6 +1159,9 @@ Class ordertireController Extends baseController {
 
                     $tire_sale = $tire_sale_model->getTireByWhere(array('tire_brand'=>$order_tire_list->tire_brand,'tire_size'=>$order_tire_list->tire_size,'tire_pattern'=>$order_tire_list->tire_pattern,'order_tire'=>$order_tire_list->order_tire));
                     $data_sale = array(
+                        'tire_brand'=>$order_tire_list_old->tire_brand,
+                        'tire_size'=>$order_tire_list_old->tire_size,
+                        'tire_pattern'=>$order_tire_list_old->tire_pattern,
                         'volume' => $order_tire_list_old->tire_number,
                         'sell_price' => $order_tire_list_old->tire_price,
                     );
