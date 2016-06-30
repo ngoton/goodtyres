@@ -1,0 +1,351 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<style type="text/css">
+    .table_data tr:hover{cursor: pointer; background: rgba(37, 162, 226, 0.2)}
+    #show {max-height: 500px; z-index: 99999; overflow:auto;}
+</style>
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BẢNG CÂN ĐỐI TÀI SẢN </h1></center>
+	<div class="search-box">
+        <form id="report" name="report" action="<?php echo $this->url('financial/week') ?>" method="post">
+        <div class="add-box">
+                  
+            Từ  <input style="width:90px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            đến  <input style="width:90px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >
+            <input type="submit" name="submit" id="xem" value="Xem"> 
+        </div>
+        </form>
+        <div class="add-box">
+            <a class="add_button" id="btnExport" >Export Excel</a>
+        </div>
+        <div class="alignleft" style="padding: 0 5px 5px 0" >
+            <button onClick="javascript:window.location.href='<?php echo $this->url('financial/index/'.strtotime($batdau).'/'.strtotime($ketthuc).'') ?>'" ><i class="fa fa-calendar"></i> Ngày</button>
+            <button style="background-color:#5bc0de; color:white"><i class="fa fa-calendar-minus-o"></i> Tuần</button>
+            <button onClick="javascript:window.location.href='<?php echo $this->url('financial/month/'.strtotime($batdau).'/'.strtotime($ketthuc).'') ?>'"><i class="fa fa-calendar-o"></i> Tháng</button>
+        </div>
+    </div>
+    
+
+</div>
+<div id="printarea">
+    <table class="table_data" id="tblExport">
+        <thead>
+            <tr>
+                
+                <th class="fix" rowspan="2">
+                    <a>Số TK </a>
+                </th> 
+                  
+                <th class="fix" rowspan="2">
+                    <a >Tài khoản phụ </a>
+                </th> 
+
+                <th class="fix" rowspan="2">
+                    <a>Tên TK </a>
+                </th> 
+                  
+                <th class="fix" rowspan="2">
+                    <a >Nợ ĐK </a>
+                </th>
+                
+                <th class="fix" rowspan="2">
+                    <a>Có ĐK </a>
+                </th> 
+                  
+                <?php for ($i=0; $i <= $number; $i++) { 
+                $t = ($tuan+$i)>52?($tuan+$i-52):$tuan+$i;
+                ?>
+                <th class="fix" colspan="2">
+                    <a >Tuần <?php echo $t ?> </a>
+                </th> 
+                <?php } ?>
+
+                <th class="fix" rowspan="2">
+                    <a >Nợ CK </a>
+                </th>
+               <th class="fix" rowspan="2">
+                    <a >Có CK </a>
+                </th>
+            </tr>
+            <tr>
+                <?php for ($i=0; $i <= $number; $i++) { ?>
+                <th class="fix">
+                    <a >Nợ PS </a>
+                </th>
+                <th class="fix">
+                    <a >Có PS </a>
+                </th>
+                <?php } ?>
+            </tr>
+            
+        </thead>
+        <tbody>
+            <?php
+            $tong_no_dk = 0;
+            $tong_co_dk = 0;
+            $tong_no_ps = array();
+            $tong_co_ps = array();
+            $tong_no_ck = 0;
+            $tong_co_ck = 0;
+
+            
+            foreach ($accounts as $account) {
+                $no_ps_parent = 0;
+                $co_ps_parent = 0;
+
+                //if(isset($account_before[$account->account_id]) || isset($account_add[$account->account_id]) ){
+                $no_dk_parent = (isset($account_parent_before[$account->account_id]) && $account_parent_before[$account->account_id]>0 )?$account_parent_before[$account->account_id]:null;
+                $co_dk_parent = (isset($account_parent_before[$account->account_id]) && $account_parent_before[$account->account_id]<0 )?str_replace('-', '', $account_parent_before[$account->account_id]):null;
+
+                for ($i=0; $i <= $number; $i++) { 
+                    $t = ($tuan+$i)>52?($tuan+$i-52):$tuan+$i;
+                    $n = ($tuan+$i)>52?($nam+1):$nam;
+
+                    $no_ps_pr[$t][$n] = isset($account_parent_add[$t][$n][$account->account_id]['no'])?$account_parent_add[$t][$n][$account->account_id]['no']:null;
+                    $co_ps_pr[$t][$n] = isset($account_parent_add[$t][$n][$account->account_id]['co'])?str_replace('-', '', $account_parent_add[$t][$n][$account->account_id]['co']):null;
+
+                    $no_ps_parent += $no_ps_pr[$t][$n];
+                    $co_ps_parent += $co_ps_pr[$t][$n];
+
+                    $tong_no_ps[$t][$n] = isset($tong_no_ps[$t][$n])?$tong_no_ps[$t][$n]+$no_ps_pr[$t][$n]:$no_ps_pr[$t][$n];
+                    $tong_co_ps[$t][$n] = isset($tong_co_ps[$t][$n])?$tong_co_ps[$t][$n]+$co_ps_pr[$t][$n]:$co_ps_pr[$t][$n];
+                }
+
+                $no_ck_parent = $no_dk_parent+$no_ps_parent;
+                $co_ck_parent = $co_dk_parent+$co_ps_parent;
+                $tong_parent = $no_ck_parent-$co_ck_parent;
+
+                $tong_no_dk += $no_dk_parent;
+                $tong_co_dk += $co_dk_parent;
+                
+                $tong_no_ck += $no_ck_parent;
+                $tong_co_ck += $co_ck_parent;
+
+                ?>
+                <tr class="bank" data="<?php echo $account->account_id ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>" style="background-color:rgba(50, 121, 171, 0.32)" >
+                    
+                    <td class="fix"><?php echo $account->account_number ?></td>
+                    <td class="fix" colspan="2"><?php echo $account->account_name ?></td>
+
+                    <td class="fix"><?php echo $lib->formatMoney($no_dk_parent) ?></td>
+                    <td class="fix"><?php echo $lib->formatMoney($co_dk_parent) ?></td>
+
+                    <?php
+                    for ($i=0; $i <= $number; $i++) { 
+                    $t = ($tuan+$i)>52?($tuan+$i-52):$tuan+$i;
+                    $n = ($tuan+$i)>52?($nam+1):$nam;
+                    ?>
+                    <td class="fix"><?php echo $lib->formatMoney($no_ps_pr[$t][$n]) ?></td>
+                    <td class="fix"><?php echo $lib->formatMoney($co_ps_pr[$t][$n]) ?></td>
+                    <?php } ?>
+
+                    <td class="fix"><?php echo $lib->formatMoney($tong_parent>0?$tong_parent:null) ?></td>
+                    <td class="fix"><?php echo $lib->formatMoney($tong_parent<0?str_replace('-', '', $tong_parent):null) ?></td>
+                </tr>
+                <?php 
+               // }
+                if (!$account_parents[$account->account_id]) { ?>
+                    <tr class="bank" data="<?php echo $account->account_id ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                        <td class="fix"></td>
+                        <td class="fix"><?php echo $account->account_number ?></td>
+                        <td class="fix"><?php echo $account->account_name ?></td>
+
+                        <td class="fix"><?php echo $lib->formatMoney($no_dk_parent) ?></td>
+                        <td class="fix"><?php echo $lib->formatMoney($co_dk_parent) ?></td>
+
+                        <?php
+                        for ($i=0; $i <= $number; $i++) { 
+                        $t = ($tuan+$i)>52?($tuan+$i-52):$tuan+$i;
+                        $n = ($tuan+$i)>52?($nam+1):$nam;
+                        ?>
+                        <td class="fix"><?php echo $lib->formatMoney($no_ps_pr[$t][$n]) ?></td>
+                        <td class="fix"><?php echo $lib->formatMoney($co_ps_pr[$t][$n]) ?></td>
+                        <?php } ?>
+                        
+                        <td class="fix"><?php echo $lib->formatMoney($tong_parent>0?$tong_parent:null) ?></td>
+                        <td class="fix"><?php echo $lib->formatMoney($tong_parent<0?str_replace('-', '', $tong_parent):null) ?></td>
+                    </tr>
+                <?php
+                }
+                foreach ($account_parents[$account->account_id] as $acc) { 
+                    $no_ps = 0;
+                    $co_ps = 0;
+
+                    $no_dk = (isset($account_before[$acc->account_id]) && $account_before[$acc->account_id]>0 )?$account_before[$acc->account_id]:null;
+                    $co_dk = (isset($account_before[$acc->account_id]) && $account_before[$acc->account_id]<0 )?str_replace('-', '', $account_before[$acc->account_id]):null;
+
+                    for ($i=0; $i <= $number; $i++) { 
+                        $t = ($tuan+$i)>52?($tuan+$i-52):$tuan+$i;
+                        $n = ($tuan+$i)>52?($nam+1):$nam;
+
+                        $no_psi[$t][$n] = isset($account_add[$t][$n][$acc->account_id]['no'])?$account_add[$t][$n][$acc->account_id]['no']:null;
+                        $co_psi[$t][$n] = isset($account_add[$t][$n][$acc->account_id]['co'])?str_replace('-', '', $account_add[$t][$n][$acc->account_id]['co']):null;
+
+                        $no_ps += $no_psi[$t][$n];
+                        $co_ps += $co_psi[$t][$n];
+                    }
+
+                    $no_ck = $no_dk+$no_ps;
+                    $co_ck = $co_dk+$co_ps;
+                    $tong = $no_ck-$co_ck;
+                ?>
+                 <tr class="bank" data="<?php echo $acc->account_id ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                    
+                    <td class="fix"></td>
+                    <td class="fix"><?php echo $acc->account_number ?></td>
+                    <td class="fix"><?php echo $acc->account_name ?></td>
+
+                    <td class="fix"><?php echo $lib->formatMoney($no_dk) ?></td>
+                    <td class="fix"><?php echo $lib->formatMoney($co_dk) ?></td>
+
+                    <?php
+                    for ($i=0; $i <= $number; $i++) { 
+                    $t = ($tuan+$i)>52?($tuan+$i-52):$tuan+$i;
+                    $n = ($tuan+$i)>52?($nam+1):$nam;
+                    ?>
+                    <td class="fix"><?php echo $lib->formatMoney($no_psi[$t][$n]) ?></td>
+                    <td class="fix"><?php echo $lib->formatMoney($co_psi[$t][$n]) ?></td>
+                    <?php } ?>
+                    
+                    <td class="fix"><?php echo $lib->formatMoney($tong>0?$tong:null) ?></td>
+                    <td class="fix"><?php echo $lib->formatMoney($tong<0?str_replace('-', '', $tong):null) ?></td>
+                </tr>   
+         <?php }
+            } ?>
+            <tr style="background-color:rgba(50, 121, 171, 0.32); font-weight:bold" >
+                <td class="fix"></td>
+                <td class="fix" colspan="2">Tổng cộng</td>
+                <td class="fix"><?php echo $lib->formatMoney($tong_no_dk) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($tong_co_dk) ?></td>
+                <?php
+                for ($i=0; $i <= $number; $i++) { 
+                $t = ($tuan+$i)>52?($tuan+$i-52):$tuan+$i;
+                $n = ($tuan+$i)>52?($nam+1):$nam;
+                ?>
+                <td class="fix"><?php echo $lib->formatMoney($tong_no_ps[$t][$n]) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($tong_co_ps[$t][$n]) ?></td>
+                <?php } ?>
+                <td class="fix"><?php echo $lib->formatMoney($tong_no_ck) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($tong_co_ck) ?></td>
+            </tr>
+            <tr style="font-weight:bold; color:red" >
+                <td class="fix"></td>
+                <td class="fix" colspan="2">Total</td>
+                <td class="fix" colspan="2"><?php echo $lib->formatMoney($tong_co_dk-$tong_no_dk) ?></td>
+                <?php
+                for ($i=0; $i <= $number; $i++) { 
+                $t = ($tuan+$i)>52?($tuan+$i-52):$tuan+$i;
+                $n = ($tuan+$i)>52?($nam+1):$nam;
+                ?>
+                <td class="fix" colspan="2"><?php echo $lib->formatMoney($tong_co_ps[$t][$n]-$tong_no_ps[$t][$n]) ?></td>
+                <?php } ?>
+                <td class="fix" colspan="2"><?php echo $lib->formatMoney($tong_co_ck-$tong_no_ck) ?></td>
+            </tr>
+        </tbody>
+   </table>
+</div>
+<div id="show" style="position:absolute; box-shadow: 0px 0px 5px rgb(145, 217, 244);"></div>
+
+<script type="text/javascript">
+   var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        selectWeek:true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        selectWeek:true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+    $('.bank').toggle(function(){
+        var val = $(this).attr('data');
+        var batdau = $(this).attr('alt');
+        var ketthuc = $(this).attr('name');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/financial/getAdditional',
+            type: 'POST',
+            data: {account:val, batdau:batdau, ketthuc:ketthuc},
+            success:function(data){
+                //alert(data);
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+$('.table_data').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-30
+    });
+});
+
+
+$(document).keyup(function(e) {
+  
+  if (e.keyCode == 27){   // esc
+    $('#show').html("");
+  }
+});
+</script>

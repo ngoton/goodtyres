@@ -1,0 +1,235 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<style type="text/css">
+    .table_data tr:hover{cursor: pointer; background: rgba(37, 162, 226, 0.2)}
+    #show {max-height: 500px; z-index: 99999; overflow:auto;}
+</style>
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BÁO CÁO TÀI SẢN </h1></center>
+	<div class="search-box">
+        <form id="report" name="report" action="<?php echo $this->url('financial/asset') ?>" method="post">
+        <div class="add-box">
+            <select id="sl_tha" name="sl_tha" style="width:90px; margin-left:5px;">
+             <?php 
+                for ($i=1; $i < 13; $i++) { 
+                    echo '<option value="'.$i.'">Tháng '.$i.'</option>';
+                }
+             ?>
+            </select>
+            <select id="sl_na" name="sl_na" style="width:100px">
+             <?php 
+                $nam = date('Y');
+                for ($i=($nam-5); $i < ($nam+5); $i++) { 
+                    echo '<option value="'.$i.'">Năm '.$i.'</option>';
+                }
+             ?>
+            </select> 
+            <input type="submit" name="submit" id="chon" value="Chọn"> 
+        </div>
+        <div class="add-box">
+                  
+            Từ  <input style="width:90px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            đến  <input style="width:90px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >
+            <input type="submit" name="submit" id="xem" value="Xem"> 
+        </div>
+        </form>
+        <div class="add-box">
+            <a class="add_button" id="btnExport" >Export Excel</a>
+        </div>
+    </div>
+    
+
+</div>
+<div style="width:50%; margin:0 auto" id="printarea">
+    <table class="table_data" id="tblExport">
+        <thead>
+            <tr>
+                
+                <th class="fix">
+                    <a>Số TK </a>
+                </th> 
+                  
+                <th class="fix">
+                    <a >Tài khoản phụ </a>
+                </th> 
+                  
+                <th class="fix">
+                    <a >Nợ CK </a>
+                </th>
+               <th class="fix">
+                    <a >Có CK </a>
+                </th>
+            </tr>
+            
+        </thead>
+        <tbody>
+            <?php
+            $tong_no_ck = 0;
+            $tong_co_ck = 0;
+
+            foreach ($accounts as $account) {
+                
+                //if(isset($account_after[$account->account_id]) || isset($account_add[$account->account_id]) ){
+                $no_ck_parent = (isset($account_parent_after[$account->account_id]) && $account_parent_after[$account->account_id]>0 )?$account_parent_after[$account->account_id]:null;
+                $co_ck_parent = (isset($account_parent_after[$account->account_id]) && $account_parent_after[$account->account_id]<0 )?str_replace('-', '', $account_parent_after[$account->account_id]):null;
+                
+                $tong_no_ck += $no_ck_parent;
+                $tong_co_ck += $co_ck_parent;
+
+                ?>
+                <tr class="bank" data="<?php echo $account->account_id ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>" >
+                    
+                    <td class="fix"><?php echo $account->account_number ?></td>
+                    <td class="fix"><?php echo $account->account_name ?></td>
+                    
+                    <td class="fix"><?php echo $lib->formatMoney($no_ck_parent) ?></td>
+                    <td class="fix"><?php echo $lib->formatMoney($co_ck_parent) ?></td>
+                </tr> 
+         <?php } ?>
+            <tr style="background-color:rgba(50, 121, 171, 0.32); font-weight:bold" >
+                <td class="fix"></td>
+                <td class="fix">Tổng cộng</td>
+                <td class="fix"><?php echo $lib->formatMoney($tong_no_ck) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($tong_co_ck) ?></td>
+            </tr>
+            <tr style="font-weight:bold; color:red" >
+                <td class="fix"></td>
+                <td class="fix">Vốn chủ sở hữu</td>
+                <td class="fix" colspan="2"><?php echo $lib->formatMoney($tong_no_ck-$tong_co_ck) ?></td>
+            </tr>
+        </tbody>
+   </table>
+</div>
+<div id="show" style="position:absolute; box-shadow: 0px 0px 5px rgb(145, 217, 244);"></div>
+
+<script type="text/javascript">
+
+var tha = "<?php echo $tha ?>";
+$('#sl_tha option[value='+tha+']').attr('selected','selected');
+var na = "<?php echo $na ?>";
+$('#sl_na option[value='+na+']').attr('selected','selected');
+
+$('#sl_tha').change(function(){
+        var m = $(this).val();
+        var y = $('#sl_na').val();
+        var firstDay = new Date(y, m-1, 1);
+        var lastDay = new Date(y, m, 0);
+
+        $('#batdau').datepicker("setDate", firstDay );
+        $('#ketthuc').datepicker("setDate", lastDay );
+        
+
+    });
+
+    $('#sl_na').change(function(){
+        var y = $(this).val();
+        var m = $('#sl_tha').val();
+        var firstDay = new Date(y, m-1, 1);
+        var lastDay = new Date(y, m, 0);
+
+        $('#batdau').datepicker("setDate", firstDay );
+        $('#ketthuc').datepicker("setDate", lastDay );
+
+    });
+
+   var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+    $('.bank').toggle(function(){
+        var val = $(this).attr('data');
+        var batdau = $(this).attr('alt');
+        var ketthuc = $(this).attr('name');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/financial/getAdditional',
+            type: 'POST',
+            data: {account:val, batdau:batdau, ketthuc:ketthuc},
+            success:function(data){
+               
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.table_data').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX+10,
+       top:   e.pageY-30
+    });
+});
+
+
+$(document).keyup(function(e) {
+  
+  if (e.keyCode == 27){   // esc
+    $('#show').html("");
+  }
+});
+</script>
