@@ -1,0 +1,191 @@
+<form id="msform" method="post" action="">
+<input type="checkbox" name="dis" value="1" id="ck_ttn" <?php echo $order_tires->ck_ttn>0?'checked':null ?> > Thanh toán ngay 
+<input type="checkbox" name="dis" value="2" id="ck_kho" <?php echo $order_tires->ck_kho>0?'checked':null ?> > Lấy hàng tại kho 
+<input type="checkbox" name="dis" value="3" id="ck_sl" <?php echo $order_tires->ck_sl>0?'checked':null ?> > Chiết khấu sản lượng <br>
+<input class="iform number" type="text" name="discount" id="discount" placeholder="Chiết khấu" value="<?php echo $lib->formatMoney($order_tires->discount) ?>" /> <br>
+<input class="iform number" type="text" name="reduce" id="reduce"  placeholder="Giảm giá khác" value="<?php echo $lib->formatMoney($order_tires->reduce) ?>" /> <br>
+<input type="hidden" id="max_discount" value="0">
+<input type="hidden" id="order_tire" value="<?php echo $order_tires->order_tire_id ?>">
+<input type="hidden" id="soluong" value="<?php echo $order_tires->order_tire_number ?>">
+<input type="hidden" id="thanhtien" value="<?php echo $order_tires->total-$order_tires->vat+$order_tires->discount+$order_tires->reduce ?>">
+<input type="submit" name="submit" value="Hoàn tất">
+</form>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+  var soluong =  $('#soluong').val();
+  var thanhtien =  $('#thanhtien').val();
+
+  var max_discount = 0;
+    max_discount = (thanhtien*0.02)+(soluong*100000);
+    if (soluong >= 20 && soluong < 50) {
+        max_discount += thanhtien*0.01;
+    }
+    else if (soluong >= 50 && soluong < 100) {
+        max_discount += thanhtien*0.02;
+    }
+    else if (soluong >= 100) {
+        max_discount += thanhtien*0.03;
+    }
+
+    $('#max_discount').val(max_discount);
+});
+
+$("#msform").validate({
+                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+                rules: {
+                    
+                },
+                submitHandler: function(form) {
+                    var ck_ttn = 0;
+                    var ck_kho = 0;
+                    var ck_sl = 0;
+
+                    if($("#ck_ttn").is(':checked')){
+                        var ck_ttn = 1;
+                    }
+                    if($("#ck_kho").is(':checked')){
+                        var ck_kho = 1;
+                    }
+                    if($("#ck_sl").is(':checked')){
+                        var ck_sl = 1;
+                    }
+
+                    var discount = $('#discount').attr('value');
+                    var reduce = $('#reduce').attr('value');
+                    var order_tire = $('#order_tire').attr('value');
+
+                    $.ajax({
+                        type: "POST", // phương thức gởi đi
+                        url: "<?php echo BASE_URL ?>/ordertire/discountedit", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                        data: {
+                            ck_ttn: ck_ttn,
+                            ck_kho: ck_kho,
+                            ck_sl: ck_sl,
+                            discount: discount,
+                            reduce: reduce,
+                            order_tire,
+                            }, // giá trị post
+                        error: function (xhr, ajaxOptions, thrownError) {
+                           console.log(xhr.status);
+                           console.log(xhr.responseText);
+                           console.log(thrownError);
+                       },
+                        success: function(answer){ // if everything goes well
+                            //alert(answer);
+                            $('#error').hide();
+                            $('#error').slideToggle(100); // hiển thị thẻ div success
+                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                            $('#error').fadeOut(10000);
+
+                            window.location.href = "<?php echo $this->url('ordertire/orderlist') ?>";
+                        }
+                    });
+                    return false;
+                     
+                 }
+            });
+
+
+
+$('#discount').keyup(function(){
+    var val = $(this).val().replace(/[^0-9\.-]+/g,""); 
+    var max_discount = parseInt($('#max_discount').val()) || 0;
+    
+    if (val > max_discount) {
+        $(this).val(max_discount);
+    }
+    
+    $('#discount').val(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+});
+$(':checkbox[name=dis]').bind('click',function(){
+    var val = $(this).val(); 
+    var thanhtien = parseInt($('#thanhtien').val().replace(/[^0-9\.-]+/g,"")) || 0;
+    var discount = parseInt($('#discount').val().replace(/[^0-9\.-]+/g,"")) || 0;
+    var soluong = parseInt($('#soluong').val());
+    /*$('.tire_number').each(function() {
+        soluong += parseInt($(this).val()) || 0;
+    });*/
+
+    if($(this).is(':checked')){
+        if (val == 1) {
+            discount += thanhtien*0.02;
+        }
+        else if (val == 2) {
+            discount += soluong*100000;
+        }
+        else if (val == 3) {
+            if (soluong >= 20 && soluong < 50) {
+                discount += thanhtien*0.01;
+            }
+            else if (soluong >= 50 && soluong < 100) {
+                discount += thanhtien*0.02;
+            }
+            else if (soluong >= 100) {
+                discount += thanhtien*0.03;
+            }
+        }
+    }
+    else{
+        if (val == 1) {
+            discount -= thanhtien*0.02;
+        }
+        else if (val == 2) {
+            discount -= soluong*100000;
+        }
+        else if (val == 3) {
+            if (soluong >= 20 && soluong < 50) {
+                discount -= thanhtien*0.01;
+            }
+            else if (soluong >= 50 && soluong < 100) {
+                discount -= thanhtien*0.02;
+            }
+            else if (soluong >= 100) {
+                discount -= thanhtien*0.03;
+            }
+        }
+    }
+
+    $('#discount').val(discount);
+    
+    $('#discount').val(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+});
+
+$('.number').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.number').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+         $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
+</script>

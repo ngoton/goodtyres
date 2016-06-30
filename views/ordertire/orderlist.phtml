@@ -185,7 +185,9 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix"  id="vat_<?php echo $order_tire->order_tire_id; ?>">
                 <a class="order_vat" tabindex="<?php echo $lib->formatMoney($order_tire->vat_percent); ?>" alt="<?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?>" data="<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></a>
             </td>
-            <td class="fix"  id="discount_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></td>
+            <td class="fix"  id="discount_<?php echo $order_tire->order_tire_id; ?>">
+                <a class="order_discount" href="<?php echo $this->url('ordertire/listdiscount/'.$order_tire->order_tire_id); ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></a>
+            </td>
             <td class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?></td>
             <td class="fix"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
                 <?php if($order_tire->order_cost != ""){ ?>
@@ -670,6 +672,23 @@ $(".order_list").click(function(){
             modal: true,
             autoOpen: false,
             height:500,
+            width:600,
+            resizable: false,
+            title:'Thông tin',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+$(".order_discount").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
             width:600,
             resizable: false,
             title:'Thông tin',
