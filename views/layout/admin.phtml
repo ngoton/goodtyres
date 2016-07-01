@@ -540,6 +540,7 @@ $(document).ready(function () {
                 <?php } ?>
               </ul>
             </li>
+            <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 7 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 10){ ?>
             <li><a href="#">Chi phí nhân sự</a>
               <ul>
                 <li><a  data="totalsalary" href="<?php echo $this->url('totalsalary') ?>">Bảng lương</a></li>
@@ -549,6 +550,20 @@ $(document).ready(function () {
                 <li><a  data="insurrance" href="<?php echo $this->url('insurrance') ?>">Bảo hiểm</a></li>
               </ul>
             </li>
+            <li><a href="#">Tài chính - Kế toán</a>
+              <ul>
+                <li><a  data="daily" href="<?php echo $this->url('daily') ?>">Báo cáo thu chi</a></li>
+                <li><a  data="additional" href="<?php echo $this->url('additional') ?>">Phát sinh</a></li>
+                <li><a  data="financial/office" href="<?php echo $this->url('financial/office') ?>">Chi phí hành chính</a></li>
+                <li><a  data="financial" href="<?php echo $this->url('financial') ?>">Bảng cân đối</a></li>
+                <li><a  data="financial/balance" href="<?php echo $this->url('financial/balance') ?>">Bảng cân đối tài sản</a></li>
+
+                <li><a  data="financial/result" href="<?php echo $this->url('financial/result') ?>">Kết quả hoạt động kinh doanh</a></li>
+                <li><a  data="financial/asset" href="<?php echo $this->url('financial/asset') ?>">Tài sản</a></li>
+                <li><a  data="account" href="<?php echo $this->url('account') ?>">Định khoản</a></li>
+              </ul>
+            </li>
+            <?php } ?>
             <?php } ?>
             <?php if ($_SESSION) { ?>
             <li><a  data="work" href="<?php echo $this->url('planning') ?>">Planning</a></li>
