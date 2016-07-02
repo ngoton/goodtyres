@@ -45,30 +45,12 @@ Class financialController Extends baseController {
         $account_parent_before = array();
 
         foreach ($account_balance_befores as $account) {
-            if ($account->money > 0) {
-                $account_before[$account->account]['no'] = isset($account_before[$account->account]['no'])?$account_before[$account->account]['no']+$account->money:$account->money;
-            }
-            else{
-                $account_before[$account->account]['co'] = isset($account_before[$account->account]['co'])?$account_before[$account->account]['co']+$account->money:$account->money;
-            }
-            
+            $account_before[$account->account] = isset($account_before[$account->account])?$account_before[$account->account]+$account->money:$account->money;
             if ($account->account_parent > 0) {
-                if ($account->money > 0) {
-                    $account_parent_before[$account->account_parent]['no'] = isset($account_parent_before[$account->account_parent]['no'])?$account_parent_before[$account->account_parent]['no']+$account->money:$account->money;
-                }
-                else{
-                    $account_parent_before[$account->account_parent]['co'] = isset($account_parent_before[$account->account_parent]['co'])?$account_parent_before[$account->account_parent]['co']+$account->money:$account->money;
-                }
-                
+                $account_parent_before[$account->account_parent] = isset($account_parent_before[$account->account_parent])?$account_parent_before[$account->account_parent]+$account->money:$account->money;
             }
             else{
-                if ($account->money > 0) {
-                    $account_parent_before[$account->account]['no'] = isset($account_parent_before[$account->account]['no'])?$account_parent_before[$account->account]['no']+$account->money:$account->money;
-                }
-                else{
-                    $account_parent_before[$account->account]['co'] = isset($account_parent_before[$account->account]['co'])?$account_parent_before[$account->account]['co']+$account->money:$account->money;
-                }
-                
+                $account_parent_before[$account->account] = isset($account_parent_before[$account->account])?$account_parent_before[$account->account]+$account->money:$account->money;
             }
         }
 
@@ -157,30 +139,12 @@ Class financialController Extends baseController {
         $account_parent_before = array();
 
         foreach ($account_balance_befores as $account) {
-            if ($account->money > 0) {
-                $account_before[$account->account]['no'] = isset($account_before[$account->account]['no'])?$account_before[$account->account]['no']+$account->money:$account->money;
-            }
-            else{
-                $account_before[$account->account]['co'] = isset($account_before[$account->account]['co'])?$account_before[$account->account]['co']+$account->money:$account->money;
-            }
-            
+            $account_before[$account->account] = isset($account_before[$account->account])?$account_before[$account->account]+$account->money:$account->money;
             if ($account->account_parent > 0) {
-                if ($account->money > 0) {
-                    $account_parent_before[$account->account_parent]['no'] = isset($account_parent_before[$account->account_parent]['no'])?$account_parent_before[$account->account_parent]['no']+$account->money:$account->money;
-                }
-                else{
-                    $account_parent_before[$account->account_parent]['co'] = isset($account_parent_before[$account->account_parent]['co'])?$account_parent_before[$account->account_parent]['co']+$account->money:$account->money;
-                }
-                
+                $account_parent_before[$account->account_parent] = isset($account_parent_before[$account->account_parent])?$account_parent_before[$account->account_parent]+$account->money:$account->money;
             }
             else{
-                if ($account->money > 0) {
-                    $account_parent_before[$account->account]['no'] = isset($account_parent_before[$account->account]['no'])?$account_parent_before[$account->account]['no']+$account->money:$account->money;
-                }
-                else{
-                    $account_parent_before[$account->account]['co'] = isset($account_parent_before[$account->account]['co'])?$account_parent_before[$account->account]['co']+$account->money:$account->money;
-                }
-                
+                $account_parent_before[$account->account] = isset($account_parent_before[$account->account])?$account_parent_before[$account->account]+$account->money:$account->money;
             }
         }
 
@@ -288,30 +252,12 @@ Class financialController Extends baseController {
         $account_parent_before = array();
 
         foreach ($account_balance_befores as $account) {
-            if ($account->money > 0) {
-                $account_before[$account->account]['no'] = isset($account_before[$account->account]['no'])?$account_before[$account->account]['no']+$account->money:$account->money;
-            }
-            else{
-                $account_before[$account->account]['co'] = isset($account_before[$account->account]['co'])?$account_before[$account->account]['co']+$account->money:$account->money;
-            }
-            
+            $account_before[$account->account] = isset($account_before[$account->account])?$account_before[$account->account]+$account->money:$account->money;
             if ($account->account_parent > 0) {
-                if ($account->money > 0) {
-                    $account_parent_before[$account->account_parent]['no'] = isset($account_parent_before[$account->account_parent]['no'])?$account_parent_before[$account->account_parent]['no']+$account->money:$account->money;
-                }
-                else{
-                    $account_parent_before[$account->account_parent]['co'] = isset($account_parent_before[$account->account_parent]['co'])?$account_parent_before[$account->account_parent]['co']+$account->money:$account->money;
-                }
-                
+                $account_parent_before[$account->account_parent] = isset($account_parent_before[$account->account_parent])?$account_parent_before[$account->account_parent]+$account->money:$account->money;
             }
             else{
-                if ($account->money > 0) {
-                    $account_parent_before[$account->account]['no'] = isset($account_parent_before[$account->account]['no'])?$account_parent_before[$account->account]['no']+$account->money:$account->money;
-                }
-                else{
-                    $account_parent_before[$account->account]['co'] = isset($account_parent_before[$account->account]['co'])?$account_parent_before[$account->account]['co']+$account->money:$account->money;
-                }
-                
+                $account_parent_before[$account->account] = isset($account_parent_before[$account->account])?$account_parent_before[$account->account]+$account->money:$account->money;
             }
         }
 
@@ -453,15 +399,12 @@ Class financialController Extends baseController {
         $account_parent_before = array();
 
         foreach ($account_balance_befores as $account) {
-            $account_before[$account->account] = isset($account_before[$account->account])?$account_before[$account->account]+$account->money:$account->money;
-            
+            $account_before[$account->account_number] = isset($account_before[$account->account_number])?$account_before[$account->account_number]+$account->money:$account->money;
             if ($account->account_parent > 0) {
-                $account_parent_before[$account->account_parent] = isset($account_parent_before[$account->account_parent])?$account_parent_before[$account->account_parent]+$account->money:$account->money;
-                
+                $account_parent_before[$account_parents[$account->account_parent]] = isset($account_parent_before[$account_parents[$account->account_parent]])?$account_parent_before[$account_parents[$account->account_parent]]+$account->money:$account->money;
             }
             else{
-                $account_parent_before[$account->account] = isset($account_parent_before[$account->account])?$account_parent_before[$account->account]+$account->money:$account->money;
-                
+                $account_parent_before[$account->account_number] = isset($account_parent_before[$account->account_number])?$account_parent_before[$account->account_number]+$account->money:$account->money;
             }
         }
 
@@ -560,33 +503,13 @@ Class financialController Extends baseController {
         $account_parent_after = array();
 
         foreach ($account_balance_afters as $account) {
-            if ($account->money > 0) {
-                $account_after[$account->account]['no'] = isset($account_after[$account->account]['no'])?$account_after[$account->account]['no']+$account->money:$account->money;
-            }
-            else{
-                $account_after[$account->account]['co'] = isset($account_after[$account->account]['co'])?$account_after[$account->account]['co']+$account->money:$account->money;
-            }
-            
+            $account_after[$account->account] = isset($account_after[$account->account])?$account_after[$account->account]+$account->money:$account->money;
             if ($account->account_parent > 0) {
-                if ($account->money > 0) {
-                    $account_parent_after[$account->account_parent]['no'] = isset($account_parent_after[$account->account_parent]['no'])?$account_parent_after[$account->account_parent]['no']+$account->money:$account->money;
-                }
-                else{
-                    $account_parent_after[$account->account_parent]['co'] = isset($account_parent_after[$account->account_parent]['co'])?$account_parent_after[$account->account_parent]['co']+$account->money:$account->money;
-                }
-                
+                $account_parent_after[$account->account_parent] = isset($account_parent_after[$account->account_parent])?$account_parent_after[$account->account_parent]+$account->money:$account->money;
             }
             else{
-                if ($account->money > 0) {
-                    $account_parent_after[$account->account]['no'] = isset($account_parent_after[$account->account]['no'])?$account_parent_after[$account->account]['no']+$account->money:$account->money;
-                }
-                else{
-                    $account_parent_after[$account->account]['co'] = isset($account_parent_after[$account->account]['co'])?$account_parent_after[$account->account]['co']+$account->money:$account->money;
-                }
-                
+                $account_parent_after[$account->account] = isset($account_parent_after[$account->account])?$account_parent_after[$account->account]+$account->money:$account->money;
             }
-
-            
         }
 
 
@@ -654,30 +577,12 @@ Class financialController Extends baseController {
         $account_parent_after = array();
 
         foreach ($account_balance_afters as $account) {
-            if ($account->money > 0) {
-                $account_after[$account->account]['no'] = isset($account_after[$account->account]['no'])?$account_after[$account->account]['no']+$account->money:$account->money;
-            }
-            else{
-                $account_after[$account->account]['co'] = isset($account_after[$account->account]['co'])?$account_after[$account->account]['co']+$account->money:$account->money;
-            }
-            
+            $account_after[$account->account] = isset($account_after[$account->account])?$account_after[$account->account]+$account->money:$account->money;
             if ($account->account_parent > 0) {
-                if ($account->money > 0) {
-                    $account_parent_after[$account->account_parent]['no'] = isset($account_parent_after[$account->account_parent]['no'])?$account_parent_after[$account->account_parent]['no']+$account->money:$account->money;
-                }
-                else{
-                    $account_parent_after[$account->account_parent]['co'] = isset($account_parent_after[$account->account_parent]['co'])?$account_parent_after[$account->account_parent]['co']+$account->money:$account->money;
-                }
-                
+                $account_parent_after[$account->account_parent] = isset($account_parent_after[$account->account_parent])?$account_parent_after[$account->account_parent]+$account->money:$account->money;
             }
             else{
-                if ($account->money > 0) {
-                    $account_parent_after[$account->account]['no'] = isset($account_parent_after[$account->account]['no'])?$account_parent_after[$account->account]['no']+$account->money:$account->money;
-                }
-                else{
-                    $account_parent_after[$account->account]['co'] = isset($account_parent_after[$account->account]['co'])?$account_parent_after[$account->account]['co']+$account->money:$account->money;
-                }
-                
+                $account_parent_after[$account->account] = isset($account_parent_after[$account->account])?$account_parent_after[$account->account]+$account->money:$account->money;
             }
         }
 

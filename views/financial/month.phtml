@@ -100,8 +100,8 @@
                 $co_ps_parent = 0;
 
                 //if(isset($account_before[$account->account_id]) || isset($account_add[$account->account_id]) ){
-                $no_dk_parent = isset($account_parent_before[$account->account_id]['no'])?$account_parent_before[$account->account_id]['no']:null;
-                $co_dk_parent = isset($account_parent_before[$account->account_id]['co'])?str_replace('-', '', $account_parent_before[$account->account_id]['co']):null;
+                $no_dk_parent = (isset($account_parent_before[$account->account_id]) && $account_parent_before[$account->account_id]>0 )?$account_parent_before[$account->account_id]:null;
+                $co_dk_parent = (isset($account_parent_before[$account->account_id]) && $account_parent_before[$account->account_id]<0 )?str_replace('-', '', $account_parent_before[$account->account_id]):null;
 
                 for ($i=0; $i <= $number; $i++) { 
                     $t = ($thang+$i)>12?($thang+$i-12):$thang+$i;
@@ -124,8 +124,8 @@
                 $tong_no_dk += $no_dk_parent;
                 $tong_co_dk += $co_dk_parent;
                 
-                $tong_no_ck += $no_ck_parent;
-                $tong_co_ck += $co_ck_parent;
+                $tong_no_ck += $tong_parent>0?$tong_parent:null;
+                $tong_co_ck += $tong_parent<0?str_replace('-', '', $tong_parent):null;
 
                 ?>
                 <tr class="bank" data="<?php echo $account->account_id ?>" alt="<?php echo '01-'.$batdau ?>" name="<?php echo date('t-m-Y',strtotime('01-'.$ketthuc)) ?>" style="background-color:rgba(50, 121, 171, 0.32)" >
@@ -145,8 +145,8 @@
                     <td class="fix"><?php echo $lib->formatMoney($co_ps_pr[$t][$n]) ?></td>
                     <?php } ?>
 
-                    <td class="fix"><?php echo $lib->formatMoney($no_ck_parent) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($co_ck_parent) ?></td>
+                    <td class="fix"><?php echo $lib->formatMoney($tong_parent>0?$tong_parent:null) ?></td>
+                    <td class="fix"><?php echo $lib->formatMoney($tong_parent<0?str_replace('-', '', $tong_parent):null) ?></td>
                 </tr>
                 <?php 
                // }
@@ -168,8 +168,8 @@
                         <td class="fix"><?php echo $lib->formatMoney($co_ps_pr[$t][$n]) ?></td>
                         <?php } ?>
                         
-                        <td class="fix"><?php echo $lib->formatMoney($no_ck_parent) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($co_ck_parent) ?></td>
+                        <td class="fix"><?php echo $lib->formatMoney($tong_parent>0?$tong_parent:null) ?></td>
+                        <td class="fix"><?php echo $lib->formatMoney($tong_parent<0?str_replace('-', '', $tong_parent):null) ?></td>
                     </tr>
                 <?php
                 }
@@ -177,8 +177,8 @@
                     $no_ps = 0;
                     $co_ps = 0;
 
-                    $no_dk = isset($account_before[$acc->account_id]['no'])?$account_before[$acc->account_id]['no']:null;
-                    $co_dk = isset($account_before[$acc->account_id]['co'])?str_replace('-', '', $account_before[$acc->account_id]['co']):null;
+                    $no_dk = (isset($account_before[$acc->account_id]) && $account_before[$acc->account_id]>0 )?$account_before[$acc->account_id]:null;
+                    $co_dk = (isset($account_before[$acc->account_id]) && $account_before[$acc->account_id]<0 )?str_replace('-', '', $account_before[$acc->account_id]):null;
 
                     for ($i=0; $i <= $number; $i++) { 
                         $t = ($thang+$i)>12?($thang+$i-12):$thang+$i;
@@ -194,6 +194,7 @@
                     $no_ck = $no_dk+$no_ps;
                     $co_ck = $co_dk+$co_ps;
                     $tong = $no_ck-$co_ck;
+
                 ?>
                  <tr class="bank" data="<?php echo $acc->account_id ?>" alt="<?php echo '01-'.$batdau ?>" name="<?php echo date('t-m-Y',strtotime('01-'.$ketthuc)) ?>">
                     
@@ -213,8 +214,8 @@
                     <td class="fix"><?php echo $lib->formatMoney($co_psi[$t][$n]) ?></td>
                     <?php } ?>
                     
-                    <td class="fix"><?php echo $lib->formatMoney($no_ck) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($co_ck) ?></td>
+                    <td class="fix"><?php echo $lib->formatMoney($tong>0?$tong:null) ?></td>
+                    <td class="fix"><?php echo $lib->formatMoney($tong<0?str_replace('-', '', $tong):null) ?></td>
                 </tr>   
          <?php }
             } ?>
