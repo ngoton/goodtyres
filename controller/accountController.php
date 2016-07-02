@@ -299,6 +299,158 @@ Class accountController Extends baseController {
 
     }
 
+    public function importasset(){
+        $this->view->disableLayout();
+        header('Content-Type: text/html; charset=utf-8');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SESSION['role_logined'] > 2 && $_SESSION['role_logined'] != 8) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_FILES['import']['name'] != null) {
+
+            require("lib/Classes/PHPExcel/IOFactory.php");
+            require("lib/Classes/PHPExcel.php");
+
+            $account = $this->model->get('accountModel');
+            $account_balance = $this->model->get('accountbalanceModel');
+
+            $objPHPExcel = new PHPExcel();
+            // Set properties
+            if (pathinfo($_FILES['import']['name'], PATHINFO_EXTENSION) == "xls") {
+                $objReader = PHPExcel_IOFactory::createReader('Excel5');
+            }
+            else if (pathinfo($_FILES['import']['name'], PATHINFO_EXTENSION) == "xlsx") {
+                $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+            }
+            
+            $objReader->setReadDataOnly(false);
+
+            $objPHPExcel = $objReader->load($_FILES['import']['tmp_name']);
+            $objWorksheet = $objPHPExcel->getActiveSheet();
+
+            $nameWorksheet = trim($objWorksheet->getTitle());
+
+
+            $highestRow = $objWorksheet->getHighestRow(); // e.g. 10
+            $highestColumn = $objWorksheet->getHighestColumn(); // e.g 'F'
+
+            $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn); // e.g. 5
+
+            
+
+            for ($row = 2; $row <= $highestRow; ++ $row) {
+                $val = array();
+                for ($col = 0; $col < $highestColumnIndex; ++ $col) {
+                    $cell = $objWorksheet->getCellByColumnAndRow($col, $row);
+                    // Check if cell is merged
+                    foreach ($objWorksheet->getMergeCells() as $cells) {
+                        if ($cell->isInRange($cells)) {
+                            $currMergedCellsArray = PHPExcel_Cell::splitRange($cells);
+                            $cell = $objWorksheet->getCell($currMergedCellsArray[0][0]);
+                            if ($col == 1) {
+                                $y++;
+                            }
+                            
+                            break;
+                            
+                        }
+                    }
+
+                    $val[] = $cell->getCalculatedValue();
+                    //here's my prob..
+                    //echo $val;
+                }
+
+
+                if ($val[1] != null) {
+                    
+                    $a = trim($val[1]);
+                    if (!$account->getAccountByWhere(array('account_number'=>$a))) {
+                        if (is_numeric($a)) {
+                            $acc = array(
+                                'account_number'=>$a,
+                                'account_parent'=>0,
+                            );
+                            $account->createAccount($acc);
+                            $id_account = $account->getLastAccount()->account_id;
+                        }
+                        else{
+                            $ac = substr($a, 0, strpos($a, '_'));
+                            $acc_parent = $account->getAccountByWhere(array('account_number'=>$ac));
+                            $acc = array(
+                                'account_number'=>$a,
+                                'account_parent'=>$acc_parent->account_id,
+                            );
+                            $account->createAccount($acc);
+                            $id_account = $account->getLastAccount()->account_id;
+                        }
+
+                    }
+                    else{
+                        $id_account = $account->getAccountByWhere(array('account_number'=>$a))->account_id;
+                    }
+
+                    if ($val[3] != null) {
+                        $account_data = array(
+                            'account_balance_date' => strtotime($nameWorksheet),
+                            'account' => $id_account,
+                            'money' => trim($val[3]),
+                            'week' => (int)date('W', strtotime($nameWorksheet)),
+                            'year' => (int)date('Y', strtotime($nameWorksheet)),
+                            );
+
+                        if($account_data['week'] == 53){
+                            $account_data['week'] = 1;
+                            $account_data['year'] = $account_data['year']+1;
+
+                            $account_data['week'] = 1;
+                            $account_data['year'] = $account_data['year']+1;
+                        }
+                        if (((int)date('W', strtotime($nameWorksheet)) == 1) && ((int)date('m', strtotime($nameWorksheet)) == 12) ) {
+                            $account_data['year'] = (int)date('Y', strtotime($nameWorksheet))+1;
+                            $account_data['year'] = (int)date('Y', strtotime($nameWorksheet))+1;
+                        }
+
+                        $account_balance->createAccount($account_data);
+                    }
+                    if ($val[4] != null) {
+                        $account_data = array(
+                            'account_balance_date' => strtotime($nameWorksheet),
+                            'account' => $id_account,
+                            'money' => 0-trim($val[4]),
+                            'week' => (int)date('W', strtotime($nameWorksheet)),
+                            'year' => (int)date('Y', strtotime($nameWorksheet)),
+                            );
+
+                        if($account_data['week'] == 53){
+                            $account_data['week'] = 1;
+                            $account_data['year'] = $account_data['year']+1;
+
+                            $account_data['week'] = 1;
+                            $account_data['year'] = $account_data['year']+1;
+                        }
+                        if (((int)date('W', strtotime($nameWorksheet)) == 1) && ((int)date('m', strtotime($nameWorksheet)) == 12) ) {
+                            $account_data['year'] = (int)date('Y', strtotime($nameWorksheet))+1;
+                            $account_data['year'] = (int)date('Y', strtotime($nameWorksheet))+1;
+                        }
+
+                        $account_balance->createAccount($account_data);
+                    }
+                    
+                    
+                }
+                
+
+
+            }
+            return $this->view->redirect('account');
+        }
+        $this->view->show('account/importasset');
+
+    }
+
     
 
 }

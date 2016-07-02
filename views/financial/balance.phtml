@@ -76,8 +76,8 @@
             foreach ($accounts as $account) {
                 
                 //if(isset($account_after[$account->account_id]) || isset($account_add[$account->account_id]) ){
-                $no_ck_parent = (isset($account_parent_after[$account->account_id]) && $account_parent_after[$account->account_id]>0 )?$account_parent_after[$account->account_id]:null;
-                $co_ck_parent = (isset($account_parent_after[$account->account_id]) && $account_parent_after[$account->account_id]<0 )?str_replace('-', '', $account_parent_after[$account->account_id]):null;
+                $no_ck_parent = isset($account_parent_after[$account->account_id]['no'])?$account_parent_after[$account->account_id]['no']:null;
+                $co_ck_parent = isset($account_parent_after[$account->account_id]['co'])?str_replace('-', '', $account_parent_after[$account->account_id]['co']):null;
                 
                 $tong_no_ck += $no_ck_parent;
                 $tong_co_ck += $co_ck_parent;
@@ -105,8 +105,8 @@
                 <?php
                 }
                 foreach ($account_parents[$account->account_id] as $acc) { 
-                    $no_ck = (isset($account_after[$acc->account_id]) && $account_after[$acc->account_id]>0 )?$account_after[$acc->account_id]:null;
-                    $co_ck = (isset($account_after[$acc->account_id]) && $account_after[$acc->account_id]<0 )?str_replace('-', '', $account_after[$acc->account_id]):null;
+                    $no_ck = isset($account_after[$acc->account_id]['no'])?$account_after[$acc->account_id]['no']:null;
+                    $co_ck = isset($account_after[$acc->account_id]['co'])?str_replace('-', '', $account_after[$acc->account_id]['co']):null;
                     
                 ?>
                  <tr class="bank" data="<?php echo $acc->account_id ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">

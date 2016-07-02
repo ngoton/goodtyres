@@ -448,7 +448,8 @@ Class additionalController Extends baseController {
                         if ($parents) {
                             $co_id = $parents->account_id;
                         }
-                        else{if (is_numeric(trim($val[5]))) {
+                        else{
+                            if (is_numeric(trim($val[5]))) {
                                 $acc = array(
                                     'account_number'=>trim($val[5]),
                                     'account_parent'=>0,

@@ -8,7 +8,7 @@ elseif ($order_by == 'document_date')
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
 elseif ($order_by == 'daily_date')
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
-elseif ($order_by == 'daily_comment')
+elseif ($order_by == 'comment')
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
 elseif ($order_by == 'debit')
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
@@ -134,7 +134,7 @@ elseif ($order_by == 'money')
             <td class="fix" id="comment_<?php echo $daily->daily_id; ?>"><?php echo $daily->comment; ?></td>
             <td class="fix" id="money_in_<?php echo $daily->daily_id; ?>"><?php echo $lib->formatMoney($daily->money_in); ?></td>
             <td class="fix" id="money_out_<?php echo $daily->daily_id; ?>"><?php echo $lib->formatMoney($daily->money_out); ?></td>
-            <td class="fix" id="service_<?php echo $daily->daily_id; ?>"><?php echo $daily->service; ?></td>
+            <td class="fix" id="service_<?php echo $daily->daily_id; ?>"><?php echo $daily->service==1?"Hành chính":($daily->service==2?"Lốp xe":"Logistics"); ?></td>
             <td class="fix" id="owner_<?php echo $daily->daily_id; ?>"><?php echo $daily->owner; ?></td>
             <td class="fix" id="note_<?php echo $daily->daily_id; ?>"><?php echo $daily->note; ?></td>
             <td class="fix" id="account_<?php echo $daily->daily_id; ?>"><?php echo $daily->account; ?></td>
@@ -323,7 +323,7 @@ $('html').click(function(e) {
             $("#credit option[value=" + credit + "]").attr('selected', 'selected');
             
             $('#daily_date').val(daily_date.replace(/\//g,"-"));
-            $('#comment').val(daily_comment);
+            $('#comment').val(comment);
             $('#code').val(code);
             $('#money_in').val(money_in);
             $('#money_out').val(money_out);
