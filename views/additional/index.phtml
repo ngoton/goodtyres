@@ -115,7 +115,11 @@ elseif ($order_by == 'money')
     
    </thead>
    <tbody>
-    <?php foreach ($additionals as $additional) : ?>
+    <?php 
+    $tong = 0;
+    foreach ($additionals as $additional) : 
+        $tong += $additional->money;
+    ?>
     
         
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $additional->additional_id ?>" class="edit_tr">
@@ -142,6 +146,16 @@ elseif ($order_by == 'money')
 
 
     <?php endforeach; ?>
+        <tr style="font-weight:bold; color:red" >
+                <td class="fix" colspan="3">Tổng cộng</td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+                <td class="fix" colspan="2"><?php echo $lib->formatMoney($tong) ?></td>
+                <td class="fix"></td>
+            </tr>
      
    </tbody>
 </table>
