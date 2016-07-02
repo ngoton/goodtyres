@@ -450,69 +450,94 @@ Class dailyController Extends baseController {
             $objReader->setReadDataOnly(false);
 
             $objPHPExcel = $objReader->load($_FILES['import']['tmp_name']);
-            $objWorksheet = $objPHPExcel->getActiveSheet();
 
-            $nameWorksheet = trim($objWorksheet->getTitle()); // tên sheet là tháng lương (8.2014 => 08/2014)
-            $day = explode(".", $nameWorksheet); 
-            $ngaythang = $day[0]."-".(strlen($day[1]) < 2 ? "0".$day[1] : $day[1] )."-".$day[2] ;
-            
-            $ngay = strtotime($ngaythang);
+            $active_sheet = 0;
+            while ($objPHPExcel->setActiveSheetIndex($active_sheet)){
 
-            $highestRow = $objWorksheet->getHighestRow(); // e.g. 10
-            $highestColumn = $objWorksheet->getHighestColumn(); // e.g 'F'
+                $objWorksheet = $objPHPExcel->getActiveSheet();
 
-            $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn); // e.g. 5
+                $nameWorksheet = trim($objWorksheet->getTitle()); // tên sheet là tháng lương (8.2014 => 08/2014)
+                $day = explode(".", $nameWorksheet); 
 
-            
-
-            for ($row = 4; $row <= $highestRow; ++ $row) {
-                $val = array();
-                for ($col = 0; $col < $highestColumnIndex; ++ $col) {
-                    $cell = $objWorksheet->getCellByColumnAndRow($col, $row);
-                    // Check if cell is merged
-                    foreach ($objWorksheet->getMergeCells() as $cells) {
-                        if ($cell->isInRange($cells)) {
-                            $currMergedCellsArray = PHPExcel_Cell::splitRange($cells);
-                            $cell = $objWorksheet->getCell($currMergedCellsArray[0][0]);
-                            if ($col == 1) {
-                                $y++;
-                            }
-                            
-                            break;
-                            
-                        }
-                    }
-
-                    $val[] = $cell->getCalculatedValue();
-                    //here's my prob..
-                    //echo $val;
+                if (strpos($day[0], '-') !== false) {
+                    $ngay1 = substr($day[0], 0, strpos($day[0], '-'));
+                    $ngay2 = substr($day[0], strpos($day[0], "-") + 1);
+                }
+                else{
+                    $ngay2 = $day[0];
                 }
 
-
-                if ($val[2] != null && $val[8] != null ) {
-                    
-                    $service = trim($val[5]);
-                    $service = $service=="Hành chính"?1:($service=="Lốp xe"?2:($service=="Logistics"?3:null));
-
-                    $daily_data = array(
-                        'daily_date' => $ngay,
-                        'code'=> trim($val[1]),
-                        'comment' => trim($val[2]),
-                        'money_in' => trim($val[3]),
-                        'money_out' => trim($val[4]),
-                        'service' => $service,
-                        'owner' => trim($val[6]),
-                        'note' => trim($val[7]),
-                        'account' => trim($val[8]),
-                        );
-
-                    $daily->createDaily($daily_data);
-                    
-                    
-                }
+                $ngaythang = "-".(strlen($day[1]) < 2 ? "0".$day[1] : $day[1] )."-".$day[2] ;
+                
                 
 
+                $highestRow = $objWorksheet->getHighestRow(); // e.g. 10
+                $highestColumn = $objWorksheet->getHighestColumn(); // e.g 'F'
 
+                $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn); // e.g. 5
+
+                
+
+                for ($row = 4; $row <= $highestRow; ++ $row) {
+                    $val = array();
+                    for ($col = 0; $col < $highestColumnIndex; ++ $col) {
+                        $cell = $objWorksheet->getCellByColumnAndRow($col, $row);
+                        // Check if cell is merged
+                        foreach ($objWorksheet->getMergeCells() as $cells) {
+                            if ($cell->isInRange($cells)) {
+                                $currMergedCellsArray = PHPExcel_Cell::splitRange($cells);
+                                $cell = $objWorksheet->getCell($currMergedCellsArray[0][0]);
+                                if ($col == 1) {
+                                    $y++;
+                                }
+                                
+                                break;
+                                
+                            }
+                        }
+
+                        $val[] = $cell->getCalculatedValue();
+                        //here's my prob..
+                        //echo $val;
+                    }
+
+
+                    if ($val[2] != null && $val[5] != null && $val[8] != null ) {
+
+                        if ($val[9] != null) {
+                            $ngaythang = $ngay1.$ngaythang;
+                        }
+                        else{
+                            $ngaythang = $ngay2.$ngaythang;
+                        }
+
+                        $ngay = strtotime($ngaythang);
+                        
+                        $service = trim($val[5]);
+                        $service = $service=="Hành chính"?1:($service=="Lốp xe"?2:($service=="Logistics"?3:null));
+
+                        $daily_data = array(
+                            'daily_date' => $ngay,
+                            'code'=> trim($val[1]),
+                            'comment' => trim($val[2]),
+                            'money_in' => trim($val[3]),
+                            'money_out' => trim($val[4]),
+                            'service' => $service,
+                            'owner' => trim($val[6]),
+                            'note' => trim($val[7]),
+                            'account' => trim($val[8]),
+                            );
+
+                        $daily->createDaily($daily_data);
+                        
+                        
+                    }
+                    
+
+
+                }
+
+                $active_sheet++;
             }
             return $this->view->redirect('daily');
         }

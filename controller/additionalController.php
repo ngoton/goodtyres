@@ -422,11 +422,50 @@ Class additionalController Extends baseController {
                         if ($parents) {
                             $no_id = $parents->account_id;
                         }
+                        else{
+                            if (is_numeric(trim($val[4]))) {
+                                $acc = array(
+                                    'account_number'=>trim($val[4]),
+                                    'account_parent'=>0,
+                                );
+                                $account->createAccount($acc);
+                                $no_id = $account->getLastAccount()->account_id;
+                            }
+                            else{
+                                $ac = substr(trim($val[4]), 0, strpos(trim($val[4]), '_'));
+                                $acc_parent = $account->getAccountByWhere(array('account_number'=>$ac));
+                                $acc = array(
+                                    'account_number'=>trim($val[4]),
+                                    'account_parent'=>$acc_parent->account_id,
+                                );
+                                $account->createAccount($acc);
+                                $no_id = $account->getLastAccount()->account_id;
+                            }
+                        }
                     }
                     if (trim($val[5]) != null) {
                         $parents = $account->getAccountByWhere(array('account_number'=>trim($val[5])));
                         if ($parents) {
                             $co_id = $parents->account_id;
+                        }
+                        else{if (is_numeric(trim($val[5]))) {
+                                $acc = array(
+                                    'account_number'=>trim($val[5]),
+                                    'account_parent'=>0,
+                                );
+                                $account->createAccount($acc);
+                                $co_id = $account->getLastAccount()->account_id;
+                            }
+                            else{
+                                $ac = substr(trim($val[5]), 0, strpos(trim($val[5]), '_'));
+                                $acc_parent = $account->getAccountByWhere(array('account_number'=>$ac));
+                                $acc = array(
+                                    'account_number'=>trim($val[5]),
+                                    'account_parent'=>$acc_parent->account_id,
+                                );
+                                $account->createAccount($acc);
+                                $co_id = $account->getLastAccount()->account_id;
+                            }
                         }
                     }
 
