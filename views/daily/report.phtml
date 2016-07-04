@@ -29,8 +29,6 @@ elseif ($order_by == 'money')
 <div id="content" style="padding:5px;">
     <center style="clear:both;margin-bottom: -30px;"><h1> BÁO CÁO THU CHI</h1></center>
 <div class="add-box">
-    <a class="add_button" onClick="add_click();">Nhập phát sinh mới</a>
-    <a class="add_button" id="import_excel" href="<?= $this->url('daily/import')?>">Import Excel</a>
     <a class="add_button" id="btnExport" >Export excel</a>
 </div>
 	<div class="search-box">
@@ -54,6 +52,15 @@ elseif ($order_by == 'money')
              <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">  
             
         </div>
+        <div class="add-box">
+             
+        
+            <select style="width: 150px;" name="sl_status" id="sl_status">
+                <option selected="selected" value="0">Chưa duyệt</option>
+                <option  value="1">Đã duyệt</option>
+            </select>
+
+        </div>
 
     	<div class="alignleft actions">
 			<select name="action" id="action">
@@ -69,12 +76,15 @@ elseif ($order_by == 'money')
 			<option value="15">15 items</option>
             <option value="20">20 items</option>
             <option value="50">50 items</option>
-            <option selected="selected" value="100">100 items</option>
+            <option value="100">100 items</option>
 		</select>
 		<input type="button" name="" id="post-query-submit" class="button" value="Apply" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
         </div>
 
-        
+        <div class="add-box">
+            <a class="add_button" id="approve_all" >Duyệt tất cả</a>
+        </div>
+
       </div>
 
 </div>
@@ -114,7 +124,7 @@ elseif ($order_by == 'money')
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','account','<?php echo $url_order ?>')">Tài khoản <?php if ($order_by == 'account'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         
-        <th class="fix"></th>
+        <th class="fix">Duyệt</th>
     </tr>
     
    </thead>
@@ -146,12 +156,8 @@ elseif ($order_by == 'money')
             <td class="fix" style="display:none" data="<?php echo $daily->debit ?>" id="debit_<?php echo $daily->daily_id; ?>"><?php echo isset($account_data[$daily->debit])?$account_data[$daily->debit]:null; ?></td>
             <td class="fix" style="display:none" data="<?php echo $daily->credit ?>" id="credit_<?php echo $daily->daily_id; ?>"><?php echo isset($account_data[$daily->credit])?$account_data[$daily->credit]:null; ?></td>
             
+            <td class="fix" id="approve_<?php echo $daily->daily_id; ?>"><?php echo isset($users['name'][$daily->approve])?$users['name'][$daily->approve]:(($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9)?'<button data="'.$daily->daily_id.'" class="approve">Duyệt</button>':null); ?></td> 
             
-            <td>
-                <button class="error" onclick="del(<?php echo $daily->daily_id ?>)" >Xóa</button>
-                
-               
-            </td>
         </tr>
 
 
@@ -177,368 +183,7 @@ $this->helper('slidePaginator');
 <div style="display:none" id="lasted"></div>
 <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
 
-<div class="add-field">
-        <fieldset class="groupbox">
-            <legend>
-                <span><h3>Thu chi </h3></span>
-            </legend>
-            <div class="login_body">
-                  <form id="add_daily" method="post" action="">
-                      <table style="margin-top:0px;width:100%">
-                        <tr>
-                            
-                            <td>Ngày</td>
-                            <td>
-                                <input style="width:80px" class="ngay" type="text" id="daily_date"  name="daily_date" tabindex="1"  required="required" >
-                                
-                            </td>
-                            <td>Code</td>
-                            <td>
-                                <input style="width:120px"  type="text" id="code"  name="code" tabindex="2" autocomplete="off" placeholder="Nhập code hoặc * để chọn" >
-                                <ul id="code_list_id"></ul>
-                            </td>
-                            <td>Thu</td>
-                            <td>
-                                <input  type="text" id="money_in" class="numbers"  name="money_in" tabindex="3"  required="required" >
-                                
-                            </td>
-                            <td>Chi</td>
-                            <td>
-                                <input  type="text" id="money_out" class="numbers"  name="money_out" tabindex="4"  required="required" >
-                                
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Nội dung</td>
-                            <td colspan="7">
-                                <textarea style="width:100%" name="comment" id="comment" tabindex="5" required="required" ></textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Tên dịch vụ</td>
-                            <td>
-                                <select style="width:200px" name="service" id="service" tabindex="6" required="required">
-                                    <option value="1">Hành chính</option>
-                                    <option value="2">Lốp xe</option>
-                                    <option value="3">Logistics</option>
-                                </select>
-                                
-                            </td>
-                            <td>Tài khoản</td>
-                            <td>
-                                <input  type="text" id="account"  name="account" tabindex="9" >
-                                
-                            </td>
-                            
-                            
-                            <td></td>
-                            <td></td>
-                            <td>Nợ</td>
-                            <td>
-                                <select style="width:200px" name="debit" id="debit" tabindex="10" >
-                                    <option value="">Tài khoản</option>
-                                    <?php foreach ($account_parents as $account_parent) { ?>
-                                        <option value="<?php echo $account_parent->account_id ?>"><?php echo $account_parent->account_number.' - '.$account_parent->account_name ?></option>
-                                    <?php } ?>
-                                </select>
-                                
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Người nhận</td>
-                            <td>
-                                <input  type="text" id="owner"  name="owner" tabindex="7" >
-                                
-                            </td>
-                            <td>Ghi chú</td>
-                            <td>
-                                <input  type="text" id="note"  name="note" tabindex="8" >
-                                
-                            </td>
 
-                            <td></td>
-                            <td></td>
-                            <td>Có</td>
-                            <td>
-                                <select style="width:200px" name="credit" id="credit" tabindex="11" >
-                                    <option value="">Tài khoản</option>
-                                    <?php foreach ($account_parents as $account_parent) { ?>
-                                        <option value="<?php echo $account_parent->account_id ?>"><?php echo $account_parent->account_number.' - '.$account_parent->account_name ?></option>
-                                    <?php } ?>
-                                </select>
-                                
-                            </td>
-                            
-                        </tr>
-                        
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        
-                        
-                         <tr>
-                            <td></td>
-                            <td></td>
-
-                            <td>
-                                <input type="submit" name="submit" value="Submit" tabindex="12">
-                                
-                            </td>
-                            <td></td>
-                            <td>
-                                <input type="reset" name="reset" value="Reset" tabindex="13">
-                            </td>
-                             
-                        </tr>
-                    </table> 
-                </form>
-            </div>
-        </fieldset>
-    </div>
-
-
-<script type="text/javascript">
-
-
-  
-$('.add-field').hide();  
-
-
-$('html').click(function(e) {
-    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
-        $('.add-field').slideUp(500);      
-    }
-    $('#code_list_id').slideUp(200);
-});
-
-
-
-    $('.edit_tr').click(function(e){
-        if(e.target != '[object HTMLButtonElement]' && e.target != '[object HTMLSpanElement]' && !$('.checkbox').is(':focus')) { 
-            if(!$('.checkbox').is(':focus')){
-                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
-            }
-            
-            var daily_date = $(this).find("#daily_date_"+$(this).attr('id')).text();
-            var comment = $(this).find("#comment_"+$(this).attr('id')).text();
-            var debit = $(this).find("#debit_"+$(this).attr('id')).attr('data');
-            var credit = $(this).find("#credit_"+$(this).attr('id')).attr('data');
-            var code = $(this).find("#code_"+$(this).attr('id')).text();
-            var money_in = $(this).find("#money_in_"+$(this).attr('id')).text();
-            var money_out = $(this).find("#money_out_"+$(this).attr('id')).text();
-            var service = $(this).find("#service_"+$(this).attr('id')).text();
-            var account = $(this).find("#account_"+$(this).attr('id')).text();
-            var owner = $(this).find("#owner_"+$(this).attr('id')).text();
-            var note = $(this).find("#note_"+$(this).attr('id')).text();
-
-            //alert(cost_code);
-            $('#yes').val($(this).attr('id'));
-            
-            $("#debit option[value=" + debit + "]").attr('selected', 'selected');
-            $("#credit option[value=" + credit + "]").attr('selected', 'selected');
-            
-            $('#daily_date').val(daily_date.replace(/\//g,"-"));
-            $('#comment').val(comment);
-            $('#code').val(code);
-            $('#money_in').val(money_in);
-            $('#money_out').val(money_out);
-            $('#account').val(account);
-            $('#owner').val(owner);
-            $('#note').val(note);
-            $("#service option:contains(" + service + ")").attr('selected', 'selected');
-
-            $( ".add-field" ).dialog( "open" );
-        }
-
-        
-        
-    });
-
-
-</script>
-<script type="text/javascript">
-
-function add_click(){
-    $('#yes').val("");
-    $('.add-field').slideDown(500);
-     $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
-     
-            $("#debit option[value='']").attr('selected', 'selected');
-            $("#credit option[value='']").attr('selected', 'selected');
-            
-            $('#daily_date').val("<?php echo date('d-m-Y') ?>");
-            $('#comment').val("");
-            $('#code').val("");
-            $('#money_in').val(0);
-            $('#money_out').val(0);
-            $('#account').val("");
-            $('#owner').val("");
-            $('#note').val("");
-                
-        $('.numbers').focus(function(){
-            if ( $(this).val() == '0') {
-               $(this).val(""); 
-            };
-            
-        });
-        $('.numbers').blur(function(){
-            if ( $(this).val() == "") {
-                $(this).val(0);
-            };
-            
-        });
-
-    $( ".add-field" ).dialog( "open" );
-}
-
-
-$(document).ready(function(){
-            // Validate form
-            $("#add_daily").validate({
-                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
-                rules: {
-                    
-                },
-                submitHandler: function(form) {
-                
-                    var daily_date = $('#daily_date').attr('value');
-                    var comment = $('#comment').attr('value');
-                    var debit = $('#debit').attr('value');
-                    var credit = $('#credit').attr('value');
-                    var code = $('#code').attr('value');
-                    var money_in = $('#money_in').attr('value');
-                    var money_out = $('#money_out').attr('value');
-                    var note = $('#note').attr('value');
-                    var owner = $('#owner').attr('value');
-                    var account = $('#account').attr('value');
-                    var service = $('#service').attr('value');
-                    
-                    var yes = $('#yes').attr('value');
-                    
-                    var action      = "them";
-                 
-                    $.ajax({
-                        type: "POST", // phương thức gởi đi
-                        url: "<?php echo BASE_URL ?>/daily/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
-                        data: {
-                            
-                            daily_date: daily_date,
-                            comment: comment,
-                            debit: debit,
-                            credit: credit,
-                            code: code,
-                            money_in: money_in,
-                            money_out: money_out,
-                            note: note,
-                            owner: owner,
-                            account: account,
-                            service: service,
-
-                            yes: yes,
-
-                            }, // giá trị post
-                        success: function(answer){ // if everything goes well
-                            //alert(answer);
-                            $('#error').hide();
-                            $('#error').slideToggle(100); // hiển thị thẻ div success
-                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
-                            $('#error').fadeOut(10000);
-
-                            if (yes != "") {
-                                if (answer.trim() != "Tài khoản đã tồn tại") {
-                                    setTimeout(function() {
-                                            sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
-                                          }, 200);
-                                }
-                            }
-                            else{
-                                if (answer.trim() != "Tài khoản đã tồn tại") {
-                                    setTimeout(function() {
-                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
-                                      }, 200);
-                                }
-                                
-                            }
-                        }
-                    });
-                    return false;
-                     
-                 }
-            });
-
-
-    $('#code').keyup(function(){
-        var keyword = $(this).val();
-        $.ajax({
-            url: '<?php echo BASE_URL ?>/daily/getcode',
-            type: 'POST',
-            data: {keyword:keyword},
-            success:function(data){
-                $('#code_list_id').slideDown(200);
-                $('#code_list_id').html(data);
-            }
-        });
-        if ($('#code').val() == "" || $('#code').attr('data') == "") {
-            
-            $('#code').attr('data',"");
-        };
-
-   });
-    $('#code').on('keydown', function() {
-            var key = event.keyCode || event.charCode;
-
-            if( key == 8 || key == 46 ){
-                $('#code').attr('data',"");
-            }
-                
-          }); 
-
-
-   $('.numbers').keyup(function(event) {
-
-          // skip for arrow keys
-      if(event.which >= 37 && event.which <= 40) return;
-
-      // format number
-      $(this).val(function(index, value) {
-        return value
-          .replace(/[^0-9-.]/g, "")
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        ;
-      });
-    });
-
-    $('.number').keyup(function(event) {
-
-          // skip for arrow keys
-      if(event.which >= 37 && event.which <= 40) return;
-
-      // format number
-      $(this).val(function(index, value) {
-        return value
-          .replace(/[^0-9-]/g, "")
-        ;
-      });
-    });
-    
-
-});
-
-function get_number(id){
-    return $(id).val().replace(/\,/g,'');
-}
-function set_item(item,name) {
-    // change input value
-    $('#code').val(item);
-    $("#code").attr("data",name);
-    
-    $('#code_list_id').hide();
-    $('#code').focus();
-}
-
-</script>
 <div style="display:none" id="lasted"></div>
 <script type="text/javascript">
     var count = parseInt(<?php echo $lastID ?>);
@@ -565,6 +210,9 @@ $("#import_excel").click(function(){
  
 var x = "<?php echo $limit ?>";
 $('#chonloc option[value='+x+']').attr('selected','selected');
+
+var t = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+t+']').attr('selected','selected');
 
 
 </script>
@@ -776,5 +424,41 @@ var pickerOpts3 = {
             of: $(this)
         });    
     });
+
+$('.approve').click(function(){
+    var id = $(this).attr("data");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/daily/approve", {data: id},
+           function(data){
+            
+            $("#approve_"+id).text("<?php echo $_SESSION['user_logined'] ?>");
+
+            $('#loading').fadeOut(200);
+           
+           }); 
+      }
+
+});
+$('#approve_all').click(function(){
+    var id = 1;
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/daily/approveall", {data: id},
+           function(data){
+            
+            searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+            $('#loading').fadeOut(200);
+           
+           }); 
+      }
+
+});
+
+$('#sl_status').change(function(){
+    searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+});
 </script>
 

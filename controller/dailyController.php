@@ -102,6 +102,190 @@ Class dailyController Extends baseController {
         $this->view->show('daily/index');
     }
 
+    public function report() {
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Báo cáo Thu chi ';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_by = isset($_POST['order_by']) ? $_POST['order_by'] : null;
+            $order = isset($_POST['order']) ? $_POST['order'] : null;
+            $page = isset($_POST['page']) ? $_POST['page'] : null;
+            $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+            $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
+            $batdau = isset($_POST['batdau']) ? $_POST['batdau'] : null;
+            $ketthuc = isset($_POST['ketthuc']) ? $_POST['ketthuc'] : null;
+            $ngaytao = isset($_POST['ngaytao']) ? $_POST['ngaytao'] : null;
+            $ngaytaobatdau = isset($_POST['ngaytaobatdau']) ? $_POST['ngaytaobatdau'] : null;
+            $trangthai = isset($_POST['trangthai']) ? $_POST['trangthai'] : null;
+        }
+        else{
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'daily_date';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'DESC, approve DESC';
+            $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
+            $keyword = "";
+            $limit = 18446744073709;
+            $batdau = '01-'.date('m-Y');
+            $ketthuc = date('t-m-Y');
+            $ngaytao = date('m-Y');
+            $ngaytaobatdau = date('m-Y');
+            $trangthai = 0;
+        }
+
+        $user_model = $this->model->get('userModel');
+        $users = $user_model->getAllUser();
+        $user_data = array();
+        foreach ($users as $user) {
+            $user_data['name'][$user->user_id] = $user->username;
+            $user_data['id'][$user->user_id] = $user->user_id;
+        }
+        $this->view->data['users'] = $user_data;
+
+        $daily_model = $this->model->get('dailyModel');
+
+        $account_model = $this->model->get('accountModel');
+
+        $account_parents = $account_model->getAllAccount(array('order_by'=>'account_number ASC'));
+        $account_data = array();
+        foreach ($account_parents as $account_parent) {
+            $account_data[$account_parent->account_id] = $account_parent->account_number;
+        }
+        $this->view->data['account_parents'] = $account_parents;
+        $this->view->data['account_data'] = $account_data;
+
+        $sonews = $limit;
+        $x = ($page-1) * $sonews;
+        $pagination_stages = 2;
+        
+        $data = array(
+            'where' => 'daily_date >= '.strtotime($batdau).' AND daily_date <= '.strtotime($ketthuc),
+        );
+        
+        if ($trangthai>0) {
+            $data['where'] .= ' AND approve > 0';
+        }
+        else{
+            $data['where'] = '(approve IS NULL OR approve = 0)';
+        }
+
+        $tongsodong = count($daily_model->getAllDaily($data));
+        $tongsotrang = ceil($tongsodong / $sonews);
+        
+
+        $this->view->data['page'] = $page;
+        $this->view->data['order_by'] = $order_by;
+        $this->view->data['order'] = $order;
+        $this->view->data['keyword'] = $keyword;
+        $this->view->data['pagination_stages'] = $pagination_stages;
+        $this->view->data['tongsotrang'] = $tongsotrang;
+        $this->view->data['limit'] = $limit;
+        $this->view->data['sonews'] = $sonews;
+        $this->view->data['batdau'] = $batdau;
+        $this->view->data['ketthuc'] = $ketthuc;
+        $this->view->data['ngaytao'] = $ngaytao;
+        $this->view->data['ngaytaobatdau'] = $ngaytaobatdau;
+        $this->view->data['trangthai'] = $trangthai;
+
+        $data = array(
+            'order_by'=>$order_by,
+            'order'=>$order,
+            'limit'=>$x.','.$sonews,
+            'where' => 'daily_date >= '.strtotime($batdau).' AND daily_date <= '.strtotime($ketthuc),
+            );
+        
+        if ($trangthai>0) {
+            $data['where'] .= ' AND approve > 0';
+        }
+        else{
+            $data['where'] = '(approve IS NULL OR approve = 0)';
+        }
+      
+        if ($keyword != '') {
+            $search = '( note LIKE "%'.$keyword.'%" 
+                    OR comment LIKE "%'.$keyword.'%" 
+                    OR code LIKE "%'.$keyword.'%" 
+                    OR money_in LIKE "%'.$keyword.'%" 
+                    OR money_out LIKE "%'.$keyword.'%" 
+                    OR account LIKE "%'.$keyword.'%" 
+                )';
+            
+                $data['where'] = $data['where'].' AND '.$search;
+        }
+
+        
+
+        
+        $this->view->data['dailys'] = $daily_model->getAllDaily($data);
+        $this->view->data['lastID'] = isset($daily_model->getLastDaily()->daily_id)?$daily_model->getLastDaily()->daily_id:0;
+
+        /* Lấy tổng doanh thu*/
+        
+        /*************/
+        $this->view->show('daily/report');
+    }
+
+    public function approve(){
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if (isset($_POST['data'])) {
+
+            $dailys = $this->model->get('dailyModel');
+            //$costs_data = $costs->getCosts($_POST['data']);
+
+            $data = array(
+                        
+                        'approve' => $_SESSION['userid_logined'],
+                        );
+          
+            $dailys->updateDaily($data,array('daily_id' => $_POST['data']));
+
+            date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                        $filename = "action_logs.txt";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."approve"."|".$_POST['data']."|daily|"."\n"."\r\n";
+                        
+                        $fh = fopen($filename, "a") or die("Could not open log file.");
+                        fwrite($fh, $text) or die("Could not write file!");
+                        fclose($fh);
+
+            return true;
+                    
+        }
+    }
+    public function approveall(){
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if (isset($_POST['data'])) {
+
+            $dailys = $this->model->get('dailyModel');
+            //$costs_data = $costs->getCosts($_POST['data']);
+            $dailys->queryDaily('UPDATE daily SET approve = '.$_SESSION['userid_logined'].' WHERE (approve IS NULL OR approve = 0)');
+            $data = array(
+                        
+                        'approve' => $_SESSION['userid_logined'],
+                        );
+          
+            $dailys->updateDaily($data,array('daily_id' => $_POST['data']));
+
+            date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                        $filename = "action_logs.txt";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."approve|all|daily|"."\n"."\r\n";
+                        
+                        $fh = fopen($filename, "a") or die("Could not open log file.");
+                        fwrite($fh, $text) or die("Could not write file!");
+                        fclose($fh);
+
+            return true;
+                    
+        }
+    }
+
     public function getcode(){
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
@@ -451,20 +635,18 @@ Class dailyController Extends baseController {
 
             $objPHPExcel = $objReader->load($_FILES['import']['tmp_name']);
 
-            $active_sheet = 0;
-            while ($objPHPExcel->setActiveSheetIndex($active_sheet)){
-
+            $i = 0;
+            while ($objPHPExcel->setActiveSheetIndex($i)){
                 $objWorksheet = $objPHPExcel->getActiveSheet();
 
                 $nameWorksheet = trim($objWorksheet->getTitle()); // tên sheet là tháng lương (8.2014 => 08/2014)
                 $day = explode(".", $nameWorksheet); 
 
-                if (strpos($day[0], '-') !== false) {
+                $ngay1 = $day[0];
+                $ngay2 = $day[0];
+                if (strpos($day[0], '-') > 0) {
                     $ngay1 = substr($day[0], 0, strpos($day[0], '-'));
                     $ngay2 = substr($day[0], strpos($day[0], "-") + 1);
-                }
-                else{
-                    $ngay2 = $day[0];
                 }
 
                 $ngaythang = "-".(strlen($day[1]) < 2 ? "0".$day[1] : $day[1] )."-".$day[2] ;
@@ -487,10 +669,6 @@ Class dailyController Extends baseController {
                             if ($cell->isInRange($cells)) {
                                 $currMergedCellsArray = PHPExcel_Cell::splitRange($cells);
                                 $cell = $objWorksheet->getCell($currMergedCellsArray[0][0]);
-                                if ($col == 1) {
-                                    $y++;
-                                }
-                                
                                 break;
                                 
                             }
@@ -505,14 +683,14 @@ Class dailyController Extends baseController {
                     if ($val[2] != null && $val[5] != null && $val[8] != null ) {
 
                         if ($val[9] != null) {
-                            $ngaythang = $ngay1.$ngaythang;
+                            $ngay = $ngay1.$ngaythang;
                         }
                         else{
-                            $ngaythang = $ngay2.$ngaythang;
+                            $ngay = $ngay2.$ngaythang;
                         }
 
-                        $ngay = strtotime($ngaythang);
-                        
+                        $ngay = strtotime($ngay);
+                 
                         $service = trim($val[5]);
                         $service = $service=="Hành chính"?1:($service=="Lốp xe"?2:($service=="Logistics"?3:null));
 
@@ -536,8 +714,7 @@ Class dailyController Extends baseController {
 
 
                 }
-
-                $active_sheet++;
+                $i++;
             }
             return $this->view->redirect('daily');
         }
