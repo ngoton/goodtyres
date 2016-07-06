@@ -146,7 +146,9 @@ elseif ($order_by == 'money')
             <td class="fix" style="display:none" data="<?php echo $daily->debit ?>" id="debit_<?php echo $daily->daily_id; ?>"><?php echo isset($account_data[$daily->debit])?$account_data[$daily->debit]:null; ?></td>
             <td class="fix" style="display:none" data="<?php echo $daily->credit ?>" id="credit_<?php echo $daily->daily_id; ?>"><?php echo isset($account_data[$daily->credit])?$account_data[$daily->credit]:null; ?></td>
             
-            
+            <td class="fix" style="display:none" id="receivable_<?php echo $daily->daily_id; ?>"><?php echo $daily->receivable; ?></td>
+            <td class="fix" style="display:none" id="payable_<?php echo $daily->daily_id; ?>"><?php echo $daily->payable; ?></td>
+
             <td>
                 <button class="error" onclick="del(<?php echo $daily->daily_id ?>)" >Xóa</button>
                 
@@ -206,6 +208,23 @@ $this->helper('slidePaginator');
                             <td>
                                 <input  type="text" id="money_out" class="numbers"  name="money_out" tabindex="4"  required="required" >
                                 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <input type="text" id="receivable"  name="receivable" tabindex="2" autocomplete="off" placeholder="Nhập code hoặc * để chọn" >
+                                <ul id="staff_list_id"></ul>
+                                
+                            </td>
+                            <td></td>
+                            <td>
+                                <input type="text" id="payable"  name="payable" tabindex="2" autocomplete="off" placeholder="Nhập code hoặc * để chọn" >
+                                <ul id="customer_list_id"></ul>
                             </td>
                         </tr>
                         <tr>
@@ -311,6 +330,8 @@ $('html').click(function(e) {
         $('.add-field').slideUp(500);      
     }
     $('#code_list_id').slideUp(200);
+    $('#staff_list_id').slideUp(200);
+    $('#customer_list_id').slideUp(200);
 });
 
 
@@ -332,6 +353,8 @@ $('html').click(function(e) {
             var account = $(this).find("#account_"+$(this).attr('id')).text();
             var owner = $(this).find("#owner_"+$(this).attr('id')).text();
             var note = $(this).find("#note_"+$(this).attr('id')).text();
+            var receivable = $(this).find("#receivable_"+$(this).attr('id')).text();
+            var payable = $(this).find("#payable_"+$(this).attr('id')).text();
 
             //alert(cost_code);
             $('#yes').val($(this).attr('id'));
@@ -348,6 +371,22 @@ $('html').click(function(e) {
             $('#owner').val(owner);
             $('#note').val(note);
             $("#service option:contains(" + service + ")").attr('selected', 'selected');
+
+            $('#receivable').val("");
+            $('#receivable').attr('data',"");
+            $('#payable').val("");
+            $('#payable').attr('data',"");
+
+            if (receivable > 0) {
+                $('#receivable').val(code);
+                $('#receivable').attr('data',receivable);
+            }
+            if (payable > 0) {
+                $('#payable').val(code);
+                $('#payable').attr('data',payable);
+            }
+            
+            
 
             $( ".add-field" ).dialog( "open" );
         }
@@ -376,6 +415,11 @@ function add_click(){
             $('#account').val("");
             $('#owner').val("");
             $('#note').val("");
+            $('#receivable').val("");
+            $('#receivable').attr('data',"");
+        
+            $('#payable').val("");
+            $('#payable').attr('data',"");
                 
         $('.numbers').focus(function(){
             if ( $(this).val() == '0') {
@@ -414,6 +458,8 @@ $(document).ready(function(){
                     var owner = $('#owner').attr('value');
                     var account = $('#account').attr('value');
                     var service = $('#service').attr('value');
+                    var receivable = $('#receivable').attr('data');
+                    var payable = $('#payable').attr('data');
                     
                     var yes = $('#yes').attr('value');
                     
@@ -435,6 +481,8 @@ $(document).ready(function(){
                             owner: owner,
                             account: account,
                             service: service,
+                            receivable:receivable,
+                            payable:payable,
 
                             yes: yes,
 
@@ -495,6 +543,58 @@ $(document).ready(function(){
                 
           }); 
 
+    $('#receivable').keyup(function(){
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/daily/getreceivable',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#staff_list_id').slideDown(200);
+                $('#staff_list_id').html(data);
+            }
+        });
+        if ($('#receivable').val() == "" || $('#receivable').attr('data') == "") {
+            
+            $('#receivable').attr('data',"");
+        };
+
+   });
+    $('#receivable').on('keydown', function() {
+            var key = event.keyCode || event.charCode;
+
+            if( key == 8 || key == 46 ){
+                $('#receivable').attr('data',"");
+            }
+                
+          }); 
+
+    $('#payable').keyup(function(){
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/daily/getpayable',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#customer_list_id').slideDown(200);
+                $('#customer_list_id').html(data);
+            }
+        });
+        if ($('#payable').val() == "" || $('#payable').attr('data') == "") {
+            
+            $('#payable').attr('data',"");
+        };
+
+   });
+    $('#payable').on('keydown', function() {
+            var key = event.keyCode || event.charCode;
+
+            if( key == 8 || key == 46 ){
+                $('#payable').attr('data',"");
+            }
+                
+          }); 
+
 
    $('.numbers').keyup(function(event) {
 
@@ -536,6 +636,24 @@ function set_item(item,name) {
     
     $('#code_list_id').hide();
     $('#code').focus();
+}
+
+function set_item_receivable(item,name) {
+    // change input value
+    $('#receivable').val(item);
+    $("#receivable").attr("data",name);
+    
+    $('#staff_list_id').hide();
+    $('#receivable').focus();
+}
+
+function set_item_payable(item,name) {
+    // change input value
+    $('#payable').val(item);
+    $("#payable").attr("data",name);
+    
+    $('#customer_list_id').hide();
+    $('#payable').focus();
 }
 
 </script>

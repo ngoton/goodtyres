@@ -2200,3 +2200,33 @@ Time|User|Action|Id|Table|Fields
 
 04/07/2016 09:38:40|admincmg|approve|all|daily|
 
+04/07/2016 13:28:58|admincmg|edit|1177|daily|1-Nghị-pc2133-tm-1467237600-Chi tiền 10 hộp cơm chuyển kho tối ngày 11/5/2016----0-300000
+
+04/07/2016 13:29:05|admincmg|edit|1177|daily|1-Nghị-pc213-tm-1467237600-Chi tiền 10 hộp cơm chuyển kho tối ngày 11/5/2016----0-300000
+
+04/07/2016 13:33:40|admincmg|edit|1177|daily|1-Nghị-pc213-tm-1467237600-Chi tiền 10 hộp cơm chuyển kho tối ngày 11/5/2016-1-2--0-300000
+
+04/07/2016 13:34:17|admincmg|edit|1178|daily|1-Mr Đồng-pc218-tm-1467237600-Ứng tiền xây trụ cổng-10-13--0-2500000
+
+05/07/2016 16:54:26|admincmg|add|1488|additional|-1469311200-1469311200-vận chuyển 5x40 cát lái - Nha Trang---160604-84112500
+
+05/07/2016 16:59:38|admincmg|add|1489|additional|-1469311200-1469311200-tiền vận chuyển 5x40 cát lái- nha trang 57,500,000 và tiền hạ rỗng 2,325,000-12-14-160604-2325000
+
+06/07/2016 08:02:06|admincmg|add|1490|additional|-1467151200-1467151200-Lx_0623-13 x 6k
+6 x 7k-3-1-lx-0623-120000
+
+06/07/2016 08:06:01|admincmg|add|1491|additional|-1467151200-1467151200--v/c : 1400k 
+bxep: 6x14 = 84k-5-4--1484000
+
+06/07/2016 08:10:22|admincmg|add|1492|additional|-1469311200-1469311200-vận chuyển 5x40 cát lái - Nha Trang-3-4-160604-84112500
+
+06/07/2016 08:10:59|admincmg|add|1493|additional|-1469311200-1469311200-tiền vận chuyển 5x40 cát lái- nha trang 57,500,000 và tiền hạ rỗng 2,325,000-3-4-160604-57500000
+
+06/07/2016 08:12:15|admincmg|add|1494|additional|-1467151200-1467151200-Vận chuyển 26 tấn Sodiumbicarbonat Thủ Đức đi gia lai-7-13-160407-13596000
+
+06/07/2016 11:42:29|admincmg|edit|1177|daily|1-Nghị-pc213-tm-1467237600-Chi tiền 10 hộp cơm chuyển kho tối ngày 11/5/2016-1-2--0-300000-1252-2096
+
+06/07/2016 11:45:20|admincmg|edit|1177|daily|1-Nghị-pc213-tm-1467237600-Chi tiền 10 hộp cơm chuyển kho tối ngày 11/5/2016-1-2--0-300000-1261-2096
+
+06/07/2016 11:47:04|admincmg|edit|1177|daily|1-Nghị-pc213-tm-1467237600-Chi tiền 10 hộp cơm chuyển kho tối ngày 11/5/2016-1-2--0-300000-1261-2096
+

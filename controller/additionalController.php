@@ -18,6 +18,7 @@ Class additionalController Extends baseController {
             $ketthuc = isset($_POST['ketthuc']) ? $_POST['ketthuc'] : null;
             $ngaytao = isset($_POST['ngaytao']) ? $_POST['ngaytao'] : null;
             $ngaytaobatdau = isset($_POST['ngaytaobatdau']) ? $_POST['ngaytaobatdau'] : null;
+            $trangthai = isset($_POST['trangthai']) ? $_POST['trangthai'] : null;
         }
         else{
             $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'additional_date';
@@ -29,6 +30,7 @@ Class additionalController Extends baseController {
             $ketthuc = date('t-m-Y');
             $ngaytao = date('m-Y');
             $ngaytaobatdau = date('m-Y');
+            $trangthai = "";
         }
 
         $id = $this->registry->router->param_id;
@@ -45,6 +47,7 @@ Class additionalController Extends baseController {
         $this->view->data['account_parents'] = $account_parents;
         $this->view->data['account_data'] = $account_data;
 
+
         $sonews = $limit;
         $x = ($page-1) * $sonews;
         $pagination_stages = 2;
@@ -55,6 +58,16 @@ Class additionalController Extends baseController {
 
         if ($id>0) {
             $data['where'] = 'additional_id = '.$id;
+        }
+
+        if ($trangthai > 0) {
+            $account_choose = $account_model->getAccount($trangthai);
+            if ($account_choose->account_parent > 0) {
+                $data['where'] .= ' AND (debit = '.$trangthai.' OR credit = '.$trangthai.')';
+            }
+            else{
+                $data['where'] .= ' AND (debit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') )';
+            }
         }
         
         
@@ -74,6 +87,7 @@ Class additionalController Extends baseController {
         $this->view->data['ketthuc'] = $ketthuc;
         $this->view->data['ngaytao'] = $ngaytao;
         $this->view->data['ngaytaobatdau'] = $ngaytaobatdau;
+        $this->view->data['trangthai'] = $trangthai;
 
         $data = array(
             'order_by'=>$order_by,
@@ -84,6 +98,16 @@ Class additionalController Extends baseController {
         
         if ($id>0) {
             $data['where'] = 'additional_id = '.$id;
+        }
+
+        if ($trangthai > 0) {
+            $account_choose = $account_model->getAccount($trangthai);
+            if ($account_choose->account_parent > 0) {
+                $data['where'] .= ' AND (debit = '.$trangthai.' OR credit = '.$trangthai.')';
+            }
+            else{
+                $data['where'] .= ' AND (debit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') )';
+            }
         }
       
         if ($keyword != '') {

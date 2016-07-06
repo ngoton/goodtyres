@@ -73,6 +73,23 @@ elseif ($order_by == 'money')
 		<input type="button" name="" id="post-query-submit" class="button" value="Apply" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
         </div>
 
+        <div class="add-box">
+             
+        
+            <select style="width: 150px;" name="sl_status" id="sl_status">
+                <option value="">Tài khoản</option>
+                <?php foreach ($account_parents as $account_parent) { ?>
+                    <option value="<?php echo $account_parent->account_id ?>">
+                        <?php
+                         echo ($account_parent->account_parent > 0?'--':null) . " ".$account_parent->account_number.' - '.$account_parent->account_name 
+                         ?>
+                    </option>
+                <?php } ?>
+            </select>
+
+            <input type="button" name="chon" id="chon" value="Chọn" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');"> 
+            
+        </div>
         
       </div>
 
@@ -512,6 +529,8 @@ $("#import_excel").click(function(){
  
 var x = "<?php echo $limit ?>";
 $('#chonloc option[value='+x+']').attr('selected','selected');
+var s = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+s+']').attr('selected','selected');
 
 
 </script>
