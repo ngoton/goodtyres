@@ -33,6 +33,38 @@ Class dailyController Extends baseController {
 
         
         $daily_model = $this->model->get('dailyModel');
+        $daily_bank_model = $this->model->get('dailybankModel');
+        $bank_model = $this->model->get('bankModel');
+
+        $banks = $bank_model->getAllBank(array('where'=>'symbol IS NOT NULL'));
+        $this->view->data['banks'] = $banks;
+
+        $data_bank = array(
+            'where' => 'daily_bank_date < '.strtotime($batdau),
+        );
+        $bank_dau = $daily_bank_model->getAllDaily($data_bank);
+        $tondau = array();
+        foreach ($bank_dau as $ba) {
+            $tondau[$ba->bank] = isset($tondau[$ba->bank])?$tondau[$ba->bank]+$ba->money:$ba->money;
+        }
+
+        $data_bank = array(
+            'where' => 'daily_bank_date >= '.strtotime($batdau).' AND daily_bank_date <= '.strtotime($ketthuc),
+        );
+        $bank_ps = $daily_bank_model->getAllDaily($data_bank);
+        $thu = array(); $chi = array();
+        foreach ($bank_ps as $ba) {
+            if ($ba->money > 0) {
+                $thu[$ba->bank] = isset($thu[$ba->bank])?$thu[$ba->bank]+$ba->money:$ba->money;
+            }
+            else{
+                $chi[$ba->bank] = isset($chi[$ba->bank])?$chi[$ba->bank]+$ba->money:$ba->money;
+            }
+        }
+
+        $this->view->data['tondau'] = $tondau;
+        $this->view->data['thu'] = $thu;
+        $this->view->data['chi'] = $chi;
 
         $account_model = $this->model->get('accountModel');
 
@@ -819,6 +851,8 @@ Class dailyController Extends baseController {
             $owe_model = $this->model->get('oweModel');
             $obtain_model = $this->model->get('obtainModel');
 
+            $daily_bank_model = $this->model->get('dailybankModel');
+
             $data = array(
                         
                         'service' => trim($_POST['service']),
@@ -1115,6 +1149,13 @@ Class dailyController Extends baseController {
                     $daily_model->updateDaily($data,array('daily_id' => trim($_POST['yes'])));
                     echo "Cập nhật thành công";
 
+                    $data_daily_bank = array(
+                        'daily_bank_date' => $data['daily_date'],
+                        'money' => $data['money_in'] > 0 ? $data['money_in'] : ($data['money_out'] > 0 ? 0-$data['money_out']:null),
+                        'bank' => $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id,
+                    );
+                    $daily_bank_model->updateDaily($data_daily_bank,array('daily' => trim($_POST['yes'])));
+
                     date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
                         $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['yes']."|daily|".implode("-",$data)."\n"."\r\n";
@@ -1129,6 +1170,14 @@ Class dailyController Extends baseController {
                 
                     $daily_model->createDaily($data);
                     echo "Thêm thành công";
+
+                    $data_daily_bank = array(
+                        'daily_bank_date' => $data['daily_date'],
+                        'money' => $data['money_in'] > 0 ? $data['money_in'] : ($data['money_out'] > 0 ? 0-$data['money_out']:null),
+                        'bank' => $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id,
+                        'daily' => $daily_model->getLastDaily()->daily_id,
+                    );
+                    $daily_bank_model->createDaily($data_daily_bank);
 
                 if ($data['debit'] > 0 || $data['credit'] > 0) {
                     $data_add = array(
@@ -1367,6 +1416,8 @@ Class dailyController Extends baseController {
             require("lib/Classes/PHPExcel.php");
 
             $daily = $this->model->get('dailyModel');
+            $daily_bank_model = $this->model->get('dailybankModel');
+            $bank_model = $this->model->get('bankModel');
 
             $objPHPExcel = new PHPExcel();
             // Set properties
@@ -1455,6 +1506,14 @@ Class dailyController Extends baseController {
                                     );
 
                                 $daily->createDaily($daily_data);
+
+                                $data_daily_bank = array(
+                                    'daily_bank_date' => $daily_data['daily_date'],
+                                    'money' => $daily_data['money_in'] > 0 ? $daily_data['money_in'] : ($daily_data['money_out'] > 0 ? 0-$daily_data['money_out']:null),
+                                    'bank' => $bank_model->getBankByWhere(array('symbol'=>$daily_data['account']))->bank_id,
+                                    'daily' => $daily->getLastDaily()->daily_id,
+                                );
+                                $daily_bank_model->createDaily($data_daily_bank);
                             }
                             else{
                                 $daily_data = array(
@@ -1470,6 +1529,14 @@ Class dailyController Extends baseController {
                                     );
 
                                 $daily->createDaily3($daily_data);
+
+                                $data_daily_bank = array(
+                                    'daily_bank_date' => $daily_data['daily_date'],
+                                    'money' => $daily_data['money_in'] > 0 ? $daily_data['money_in'] : ($daily_data['money_out'] > 0 ? 0-$daily_data['money_out']:null),
+                                    'bank' => $bank_model->getBankByWhere(array('symbol'=>$daily_data['account']))->bank_id,
+                                    'daily' => $daily->getLastDaily3()->daily_id,
+                                );
+                                $daily_bank_model->createDaily3($data_daily_bank);
                             }
                         }
                         else if (BASE_URL == "http://cmglogs.com" || BASE_URL == "http://www.cmglogs.com") {
@@ -1487,6 +1554,14 @@ Class dailyController Extends baseController {
                                     );
 
                                 $daily->createDaily3($daily_data);
+
+                                $data_daily_bank = array(
+                                    'daily_bank_date' => $daily_data['daily_date'],
+                                    'money' => $daily_data['money_in'] > 0 ? $daily_data['money_in'] : ($daily_data['money_out'] > 0 ? 0-$daily_data['money_out']:null),
+                                    'bank' => $bank_model->getBankByWhere(array('symbol'=>$daily_data['account']))->bank_id,
+                                    'daily' => $daily->getLastDaily3()->daily_id,
+                                );
+                                $daily_bank_model->createDaily3($data_daily_bank);
                             }
                             else{
                                 $daily_data = array(
@@ -1502,6 +1577,14 @@ Class dailyController Extends baseController {
                                     );
 
                                 $daily->createDaily($daily_data);
+
+                                $data_daily_bank = array(
+                                    'daily_bank_date' => $daily_data['daily_date'],
+                                    'money' => $daily_data['money_in'] > 0 ? $daily_data['money_in'] : ($daily_data['money_out'] > 0 ? 0-$daily_data['money_out']:null),
+                                    'bank' => $bank_model->getBankByWhere(array('symbol'=>$daily_data['account']))->bank_id,
+                                    'daily' => $daily->getLastDaily()->daily_id,
+                                );
+                                $daily_bank_model->createDaily($data_daily_bank);
                             }
                         }
                         else{
@@ -1518,6 +1601,14 @@ Class dailyController Extends baseController {
                                     );
 
                                 $daily->createDaily($daily_data);
+
+                                $data_daily_bank = array(
+                                    'daily_bank_date' => $daily_data['daily_date'],
+                                    'money' => $daily_data['money_in'] > 0 ? $daily_data['money_in'] : ($daily_data['money_out'] > 0 ? 0-$daily_data['money_out']:null),
+                                    'bank' => $bank_model->getBankByWhere(array('symbol'=>$daily_data['account']))->bank_id,
+                                    'daily' => $daily->getLastDaily()->daily_id,
+                                );
+                                $daily_bank_model->createDaily($data_daily_bank);
                         }
                         
                         

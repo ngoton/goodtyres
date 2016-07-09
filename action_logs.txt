@@ -2230,3 +2230,7 @@ bxep: 6x14 = 84k-5-4--1484000
 
 06/07/2016 11:47:04|admincmg|edit|1177|daily|1-Nghị-pc213-tm-1467237600-Chi tiền 10 hộp cơm chuyển kho tối ngày 11/5/2016-1-2--0-300000-1261-2096
 
+09/07/2016 16:49:26|admincmg|add|1|tire_import_detail|2-1-1-232323-2323
+
+09/07/2016 16:49:33|admincmg|edit|1|tire_import_detail|2-1-1-2323243-23234
+

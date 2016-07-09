@@ -74,7 +74,9 @@ elseif ($order_by == 'money')
 		<input type="button" name="" id="post-query-submit" class="button" value="Apply" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
         </div>
 
-        
+        <div class="add-box">
+            <a class="add_button" onClick="check_click();">Kiểm tra tài khoản</a>
+        </div>
       </div>
 
 </div>
@@ -176,6 +178,46 @@ elseif ($order_by == 'money')
 <?php
 $this->helper('slidePaginator');
 ?>
+
+<div class="add-box thongtin" style="text-align:center;width:30%" >
+    <table class="table_data">
+        <tr style="font-weight:bold;">
+            <td class="fix">Mã</td>
+            <td class="fix">Tồn đầu</td>
+            <td class="fix">Thu</td>
+            <td class="fix">Chi</td>
+            <td class="fix">Tồn cuối</td>
+        </tr>
+        <?php
+        $tongtondau=0; $tongth=0; $tongch=0;
+
+        foreach ($banks as $bank) { 
+            $ton = isset($tondau[$bank->bank_id])?$tondau[$bank->bank_id]:0;
+            $th = isset($thu[$bank->bank_id])?$thu[$bank->bank_id]:0;
+            $ch = isset($chi[$bank->bank_id])?$chi[$bank->bank_id]:0;
+
+            $tongtondau += $ton;
+            $tongth += $th;
+            $tongch += $ch;
+        ?>
+        <tr>
+            <td class="fix"><?php echo $bank->symbol ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($ton); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($th); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', '', $ch)); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($ton+$th+$ch); ?></td>
+        </tr>
+        <?php } ?>
+        <tr style="font-weight:bold; color:red">
+            <td class="fix">Tổng cộng</td>
+            <td class="fix"><?php echo $lib->formatMoney($tongtondau); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongth); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongch); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongtondau+$tongth+$tongch); ?></td>
+        </tr>
+    </table>
+</div>
+
 <div style="display:none" id="lasted"></div>
 <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
 
@@ -398,6 +440,10 @@ $('html').click(function(e) {
 
 </script>
 <script type="text/javascript">
+
+function check_click(){
+    $("html, body").animate({ scrollTop: $('.thongtin').offset().top }, 300);   
+}
 
 function add_click(){
     $('#yes').val("");
