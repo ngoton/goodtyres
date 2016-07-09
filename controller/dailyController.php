@@ -1438,21 +1438,88 @@ Class dailyController Extends baseController {
                         $ngay = strtotime($ngay);
                  
                         $service = trim($val[5]);
-                        $service = $service=="Hành chính"?1:($service=="Lốp xe"?2:($service=="Logistics"?3:null));
+                        $service = ($service=="Hành chính" || $service=="hành chính")?1:(($service=="Lốp xe" || $service=="lốp xe")?2:(($service=="Logistics" || $service=="logistics")?3:null));
 
-                        $daily_data = array(
-                            'daily_date' => $ngay,
-                            'code'=> trim($val[1]),
-                            'comment' => trim($val[2]),
-                            'money_in' => trim($val[3]),
-                            'money_out' => trim($val[4]),
-                            'service' => $service,
-                            'owner' => trim($val[6]),
-                            'note' => trim($val[7]),
-                            'account' => trim($val[8]),
-                            );
+                        if (BASE_URL == "http://viet-trade.org" || BASE_URL == "http://www.viet-trade.org") {
+                            if ($service < 3) {
+                                $daily_data = array(
+                                    'daily_date' => $ngay,
+                                    'code'=> trim($val[1]),
+                                    'comment' => trim($val[2]),
+                                    'money_in' => trim($val[3]),
+                                    'money_out' => trim($val[4]),
+                                    'service' => $service,
+                                    'owner' => trim($val[6]),
+                                    'note' => trim($val[7]),
+                                    'account' => trim($val[8]),
+                                    );
 
-                        $daily->createDaily($daily_data);
+                                $daily->createDaily($daily_data);
+                            }
+                            else{
+                                $daily_data = array(
+                                    'daily_date' => $ngay,
+                                    'code'=> trim($val[1]),
+                                    'comment' => trim($val[2]),
+                                    'money_in' => trim($val[3]),
+                                    'money_out' => trim($val[4]),
+                                    'service' => $service,
+                                    'owner' => trim($val[6]),
+                                    'note' => trim($val[7]),
+                                    'account' => trim($val[8]),
+                                    );
+
+                                $daily->createDaily3($daily_data);
+                            }
+                        }
+                        else if (BASE_URL == "http://cmglogs.com" || BASE_URL == "http://www.cmglogs.com") {
+                            if ($service < 3) {
+                                $daily_data = array(
+                                    'daily_date' => $ngay,
+                                    'code'=> trim($val[1]),
+                                    'comment' => trim($val[2]),
+                                    'money_in' => trim($val[3]),
+                                    'money_out' => trim($val[4]),
+                                    'service' => $service,
+                                    'owner' => trim($val[6]),
+                                    'note' => trim($val[7]),
+                                    'account' => trim($val[8]),
+                                    );
+
+                                $daily->createDaily3($daily_data);
+                            }
+                            else{
+                                $daily_data = array(
+                                    'daily_date' => $ngay,
+                                    'code'=> trim($val[1]),
+                                    'comment' => trim($val[2]),
+                                    'money_in' => trim($val[3]),
+                                    'money_out' => trim($val[4]),
+                                    'service' => $service,
+                                    'owner' => trim($val[6]),
+                                    'note' => trim($val[7]),
+                                    'account' => trim($val[8]),
+                                    );
+
+                                $daily->createDaily($daily_data);
+                            }
+                        }
+                        else{
+                            $daily_data = array(
+                                    'daily_date' => $ngay,
+                                    'code'=> trim($val[1]),
+                                    'comment' => trim($val[2]),
+                                    'money_in' => trim($val[3]),
+                                    'money_out' => trim($val[4]),
+                                    'service' => $service,
+                                    'owner' => trim($val[6]),
+                                    'note' => trim($val[7]),
+                                    'account' => trim($val[8]),
+                                    );
+
+                                $daily->createDaily($daily_data);
+                        }
+                        
                         
                         
                     }

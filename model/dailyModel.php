@@ -13,6 +13,11 @@ Class dailyModel Extends baseModel {
         
         return $this->insert($this->table,$data);
     }
+    public function createDaily3($data) 
+    {    
+        
+        return $this->insert3($this->table,$data);
+    }
     public function updateDaily($data,$id) 
     {    
         if ($this->getDailyByWhere($id)) {
