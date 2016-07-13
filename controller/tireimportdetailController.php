@@ -103,6 +103,7 @@ Class tireimportdetailController Extends baseController {
                         'tire_pattern' => trim($_POST['tire_pattern']),
                         'tire_price' => trim(str_replace(',','',$_POST['tire_price'])),
                         'code' => trim($_POST['code']),
+                        'tire_number' => trim($_POST['tire_number']),
                         );
             if ($_POST['yes'] != "") {
                 
@@ -200,6 +201,7 @@ Class tireimportdetailController Extends baseController {
             $tirebrand = $this->model->get('tirebrandModel');
             $tiresize = $this->model->get('tiresizeModel');
             $tirepattern = $this->model->get('tirepatternModel');
+            $tireimport = $this->model->get('tireimportModel');
 
             $objPHPExcel = new PHPExcel();
             // Set properties
@@ -287,18 +289,41 @@ Class tireimportdetailController Extends baseController {
 
                             if ($id_brand != null && $id_size != null && $id_pattern != null) {
                                 
-                                if($tireimportdetail->getTireByWhere(array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern,'code'=>$code))) {
-                                    $id_tire_import_detail = $tireimportdetail->getTireByWhere(array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern,'code'=>$code))->tire_import_detail_id;
+                                if($tireimportdetail->getTireByWhere(array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern))) {
+                                    
+                                    $data = array(
+                                        'where' => 'status=1 AND tire_brand = '.$id_brand.' AND tire_size = '.$id_size.' AND tire_pattern = '.$id_pattern,
+                                    );
+                                    $tire_imports = $tireimport->getAllTire($data);
+                                    $soluong = 0; $gia = 0;
+                                    foreach ($tire_imports as $tire) {
+                                        $soluong += $tire->tire_number;
+                                        $gia += $tire->tire_number*$tire->tire_price;
+                                    }
+                                    $soluong += trim($val[5]);
+                                    $gia += trim($val[4])*trim($val[5]);
+
+                                    $tireimportdetail->updateTire(array('status'=>0),array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern,'status'=>1));
 
                                     $tire_import_detail_data = array(
                                     'tire_brand' => $id_brand,
                                     'tire_size' => $id_size,
                                     'tire_pattern' => $id_pattern,
-                                    'tire_price' => trim($val[4]),
+                                    'tire_price' => $gia/$soluong,
+                                    'tire_number' => $soluong,
                                     'code' => $code,
-                                    
+                                    'status' => 1,
                                     );
-                                    $tireimportdetail->updateTire($tire_import_detail_data,array('tire_import_detail_id' => $id_tire_import_detail));
+                                    $tireimportdetail->createTire($tire_import_detail_data);
+
+                                    $tire_import_data = array(
+                                    'tire_brand' => $id_brand,
+                                    'tire_size' => $id_size,
+                                    'tire_pattern' => $id_pattern,
+                                    'tire_price' => $tire_import_detail_data['tire_price'],
+                                    'code' => $code,
+                                    );
+                                    $tireimport->updateTire($tire_import_data,array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern));
                                 }
                                 else{
                                     $tire_import_detail_data = array(
@@ -306,10 +331,20 @@ Class tireimportdetailController Extends baseController {
                                     'tire_size' => $id_size,
                                     'tire_pattern' => $id_pattern,
                                     'tire_price' => trim($val[4]),
+                                    'tire_number' => trim($val[5]),
                                     'code' => $code,
-                                    
+                                    'status' => 1,
                                     );
                                     $tireimportdetail->createTire($tire_import_detail_data);
+
+                                    $tire_import_data = array(
+                                    'tire_brand' => $id_brand,
+                                    'tire_size' => $id_size,
+                                    'tire_pattern' => $id_pattern,
+                                    'tire_price' => trim($val[4]),
+                                    'code' => $code,
+                                    );
+                                    $tireimport->createTire($tire_import_data);
                                 }
                             }
                         

@@ -40,6 +40,9 @@ Class dailyModel Extends baseModel {
     public function getLastDaily(){
         return $this->getLast($this->table);
     }
+    public function getLastDaily3(){
+        return $this->getLast3($this->table);
+    }
     public function queryDaily($sql){
         return $this->query($sql);
     }

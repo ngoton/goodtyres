@@ -78,6 +78,9 @@ elseif ($order_by == 'code')
         <th  class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_number','<?php echo $url_order ?>')">Số lượng <?php if ($order_by == 'tire_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
         
         <th class="fix"></th>
     </tr>
@@ -99,6 +102,7 @@ elseif ($order_by == 'code')
             <td class="fix" id="tire_pattern_<?php echo $tire_import->tire_import_detail_id; ?>"><?php echo $tire_import->tire_pattern_name; ?></td>
             <td class="fix" id="tire_price_<?php echo $tire_import->tire_import_detail_id; ?>"><?php echo $lib->formatMoney($tire_import->tire_price); ?></td>
             <td class="fix" id="code_<?php echo $tire_import->tire_import_detail_id; ?>"><?php echo $tire_import->code; ?></td>
+            <td class="fix" id="tire_number_<?php echo $tire_import->tire_import_detail_id; ?>"><?php echo $tire_import->tire_number; ?></td>
             <td>
                 <button class="error" onclick="del(<?php echo $tire_import->tire_import_detail_id ?>)" >Xóa</button>
                 
@@ -171,6 +175,11 @@ $this->helper('slidePaginator');
                                 <input style="width:80px"  type="text" id="code"  name="code" tabindex="5"  required="required" >
                                 
                             </td>
+                            <td>Số lượng</td>
+                            <td>
+                                <input style="width:80px"  type="text" id="tire_number"  name="tire_number" tabindex="6"  required="required" >
+                                
+                            </td>
                             
                             
                         </tr>
@@ -230,6 +239,7 @@ $('html').click(function(e) {
             var tire_price = $(this).find("#tire_price_"+$(this).attr('id')).text();
             var code = $(this).find("#code_"+$(this).attr('id')).text();
             var tire_pattern = $(this).find("#tire_pattern_"+$(this).attr('id')).text();
+            var tire_number = $(this).find("#tire_number_"+$(this).attr('id')).text();
 
             //alert(cost_code);
             $('#yes').val($(this).attr('id'));
@@ -239,6 +249,7 @@ $('html').click(function(e) {
             $("#tire_pattern option:contains(" + tire_pattern + ")").attr('selected', 'selected');
             $('#tire_price').val(tire_price);
             $('#code').val(code);
+            $('#tire_number').val(tire_number);
            
             $('#tire_pattern').attr('disabled',true);
 
@@ -263,6 +274,7 @@ function add_click(){
      
         $('#tire_price').val("");
         $('#code').val("");
+        $('#tire_number').val("");
         
         $('#tire_brand').attr('disabled',false);
         $('#tire_size').attr('disabled',false);
@@ -299,6 +311,7 @@ $(document).ready(function(){
                     var tire_price = $('#tire_price').attr('value');
                     var code = $('#code').attr('value');
                     var tire_pattern = $('#tire_pattern').attr('value');
+                    var tire_number = $('#tire_number').attr('value');
                     
                     var yes = $('#yes').attr('value');
                     
@@ -313,7 +326,7 @@ $(document).ready(function(){
                             tire_size: tire_size,
                             tire_price: tire_price,
                             code: code,
-                            
+                            tire_number: tire_number,
                             tire_pattern: tire_pattern,
 
                             yes: yes,

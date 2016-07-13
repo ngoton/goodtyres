@@ -2234,3 +2234,29 @@ bxep: 6x14 = 84k-5-4--1484000
 
 09/07/2016 16:49:33|admincmg|edit|1|tire_import_detail|2-1-1-2323243-23234
 
+13/07/2016 16:38:46|admincmg|edit|1439|daily|2-Nghị--phuong-1466632800-Thu tiền Phước Lợi 6 lốp lx-0625---lx-0625-26077800-0-1332-
+
+13/07/2016 16:40:28|admincmg|edit|1439|daily|2-Nghị--phuong-1466632800-Thu tiền Phước Lợi 6 lốp lx-0625---lx-0625-26077800-0-1332-
+
+13/07/2016 16:44:02|admincmg|edit|1440|daily|2-Nghị--phuong-1466632800-Thu tiền Ms Tuyết 8 lốp lx-0626---lx-0626-37436000-0-1336-
+
+13/07/2016 16:45:27|admincmg|edit|1440|daily|2-Nghị--phuong-1466632800-Thu tiền Ms Tuyết 8 lốp lx-0626---lx-0626-37436000-0-1336-
+
+13/07/2016 16:46:09|admincmg|edit|1440|daily|2-Nghị--phuong-1466632800-Thu tiền Ms Tuyết 8 lốp lx-0626---lx-0626-37436000-0-1336-
+
+13/07/2016 16:46:45|admincmg|edit|1440|daily|2-Nghị--phuong-1466632800-Thu tiền Ms Tuyết 8 lốp lx-0626---lx-0626-37436000-0--
+
+13/07/2016 16:46:56|admincmg|edit|1440|daily|2-Nghị--phuong-1466632800-Thu tiền Ms Tuyết 8 lốp lx-0626---lx-0626-37436000-0-1336-
+
+13/07/2016 16:47:30|admincmg|edit|1440|daily|2-Nghị--phuong-1466632800-Thu tiền Ms Tuyết 8 lốp lx-0626---lx-0626-37436000-0--
+
+13/07/2016 16:51:47|admincmg|edit|1419|daily|2-Nghị--phuong-1466373600-Thu tiền Anh Đức 20 lốp lx-0617---lx-0617-85935000-0-1325-
+
+13/07/2016 16:53:53|admincmg|edit|1419|daily|2-Nghị--phuong-1466373600-Thu tiền Anh Đức 20 lốp lx-0617---lx-0617-85935000-0--
+
+13/07/2016 16:54:04|admincmg|edit|1419|daily|2-Nghị--phuong-1466373600-Thu tiền Anh Đức 20 lốp lx-0617---lx-0617-85935000-0-1325-
+
+13/07/2016 16:54:45|admincmg|edit|1419|daily|2-Nghị--phuong-1466373600-Thu tiền Anh Đức 20 lốp lx-0617---lx-0617-85935000-0--
+
+13/07/2016 16:55:33|admincmg|edit|1419|daily|2-Nghị--phuong-1466373600-Thu tiền Anh Đức 20 lốp lx-0617---lx-0617-85935000-0-1325-
+

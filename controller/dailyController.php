@@ -919,116 +919,7 @@ Class dailyController Extends baseController {
                         $account_balance_model->updateAccount($data_debit,array('additional'=>$add->additional_id,'account'=>$add->debit));
                         $account_balance_model->updateAccount($data_credit,array('additional'=>$add->additional_id,'account'=>$add->credit));
 
-                        $bank = $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id;
-
-                        if ($data['receivable'] > 0) {
-                            $receivable = $receivable_model->getCosts($data['receivable']);
-                            $data_receivable = array(
-                                'pay_date' => $data_add['additional_date'],
-                                'pay_money' => $receivable->pay_money - $add->money + $data_add['money'],
-                            );
-                            $receivable_model->updateCosts($data_receivable,array('receivable_id'=>$data['receivable']));
-
-                            $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$add->additional_id);
-                            $receive_model->queryCosts('DELETE FROM receive WHERE additional = '.$add->additional_id);
-                            $obtain_model->queryCosts('DELETE FROM obtain WHERE additional = '.$add->additional_id);
-
-                            $data_asset = array(
-                                        'bank' => $bank,
-                                        'total' => $data_add['money'],
-                                        'assets_date' => $data_add['additional_date'],
-                                        'receivable' => $data['receivable'],
-                                        'week' => $data_debit['week'],
-                                        'year' => $data_debit['year'],
-                                        'additional' => $add->additional_id,
-                                    );
-                            $assets_model->createAssets($data_asset);
-
-                            
-                            $data_receive = array(
-                                        'source' => $bank,
-                                        'money' => $data_add['money'],
-                                        'receive_date' => $data_add['additional_date'],
-                                        'receivable' => $data['receivable'],
-                                        'week' => $data_debit['week'],
-                                        'year' => $data_debit['year'],
-                                        'receive_comment' => $data['comment'],
-                                        'additional' => $add->additional_id,
-                                    );
-                            
-                            $receive_model->createCosts($data_receive);
-
-                            $data_obtain = array(
-                                'customer' => $receivable->customer,
-                                'money' => 0 - $data_add['money'],
-                                'obtain_date' => $data_add['additional_date'],
-                                'week' => $data_debit['week'],
-                                'year' => $data_debit['year'],
-                                'sale_report' => $receivable->sale_report,
-                                'trading' => $receivable->trading,
-                                'agent' => $receivable->agent,
-                                'agent_manifest' => $receivable->agent_manifest,
-                                'invoice' => $receivable->invoice,
-                                'import_tire' => $receivable->import_tire,
-                                'order_tire' => $receivable->order_tire,
-                                'additional' => $add->additional_id,
-                            );
-                            $obtain_model->createObtain($data_obtain);
-                        }
-                        if ($data['payable'] > 0) {
-                            $payable = $payable_model->getCosts($data['payable']);
-                            $data_payable = array(
-                                'pay_date' => $data_add['additional_date'],
-                                'pay_money' => $payable->pay_money - $add->money + $data_add['money'],
-                            );
-                            $payable_model->updateCosts($data_payable,array('payable_id'=>$data['payable']));
-
-                            $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$add->additional_id);
-                            $pay_model->queryCosts('DELETE FROM pay WHERE additional = '.$add->additional_id);
-                            $owe_model->queryCosts('DELETE FROM owe WHERE additional = '.$add->additional_id);
-
-                            $data_asset = array(
-                                        'bank' => $bank,
-                                        'total' => 0 - $data_add['money'],
-                                        'assets_date' => $data_add['additional_date'],
-                                        'payable' => $data['payable'],
-                                        'week' => $data_debit['week'],
-                                        'year' => $data_debit['year'],
-                                        'additional' => $add->additional_id,
-                                    );
-                            $assets_model->createAssets($data_asset);
-
-                            
-                            $data_pay = array(
-                                        'source' => $bank,
-                                        'money' => $data_add['money'],
-                                        'pay_date' => $data_add['additional_date'],
-                                        'payable' => $data['payable'],
-                                        'week' => $data_debit['week'],
-                                        'year' => $data_debit['year'],
-                                        'pay_comment' => $data['comment'],
-                                        'additional' => $add->additional_id,
-                                    );
-
-                            $pay_model->createCosts($data_pay);
-
-                            $data_owe = array(
-                                'vendor' => $payable->vendor,
-                                'money' => 0 - $data_add['money'],
-                                'owe_date' => $data_add['additional_date'],
-                                'week' => $data_debit['week'],
-                                'year' => $data_debit['year'],
-                                'sale_report' => $payable->sale_report,
-                                'trading' => $payable->trading,
-                                'agent' => $payable->agent,
-                                'agent_manifest' => $payable->agent_manifest,
-                                'invoice' => $payable->invoice,
-                                'import_tire' => $payable->import_tire,
-                                'order_tire' => $payable->order_tire,
-                                'additional' => $add->additional_id,
-                            );
-                            $owe_model->createOwe($data_owe);
-                        }
+            
                     }
                     else{
                         $additional_model->createAdditional($data_add);
@@ -1040,48 +931,75 @@ Class dailyController Extends baseController {
                         $account_balance_model->createAccount($data_debit);
                         $account_balance_model->createAccount($data_credit);
 
-                        $bank = $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id;
+                    }
+                }
+                
+                    $daily = $daily_model->getDaily(trim($_POST['yes']));
 
+                    $daily_model->updateDaily($data,array('daily_id' => trim($_POST['yes'])));
+                    echo "Cập nhật thành công";
+
+                    $bank = $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id;
+
+                    $data_daily_bank = array(
+                        'daily_bank_date' => $data['daily_date'],
+                        'money' => $data['money_in'] > 0 ? $data['money_in'] : ($data['money_out'] > 0 ? 0-$data['money_out']:null),
+                        'bank' => $bank,
+                    );
+                    $daily_bank_model->updateDaily($data_daily_bank,array('daily' => trim($_POST['yes'])));
+
+                    
+                    $week = (int)date('W', $data['daily_date']);
+                    $year = (int)date('Y', $data['daily_date']);
+
+                    if($week == 53){
+                        $week = 1;
+                        $year = $year+1;
+                    }
+                    if ($week == 1 && $year == 12 ) {
+                        $year = $year+1;
+                    }
+
+                    if ($daily->receivable == "" || $daily->receivable == 0) {
                         if ($data['receivable'] > 0) {
                             $receivable = $receivable_model->getCosts($data['receivable']);
                             $data_receivable = array(
-                                'pay_date' => $data_add['additional_date'],
-                                'pay_money' => $receivable->pay_money + $data_add['money'],
+                                'pay_date' => $data['daily_date'],
+                                'pay_money' => $receivable->pay_money + $data['money_in'],
                             );
                             $receivable_model->updateCosts($data_receivable,array('receivable_id'=>$data['receivable']));
 
-
                             $data_asset = array(
                                         'bank' => $bank,
-                                        'total' => $data_add['money'],
-                                        'assets_date' => $data_add['additional_date'],
+                                        'total' => $data['money_in'],
+                                        'assets_date' => $data['daily_date'],
                                         'receivable' => $data['receivable'],
-                                        'week' => $data_debit['week'],
-                                        'year' => $data_debit['year'],
-                                        'additional' => $id_additional,
+                                        'week' => $week,
+                                        'year' => $year,
+                                        'additional' => $_POST['yes'],
                                     );
                             $assets_model->createAssets($data_asset);
 
                             
                             $data_receive = array(
                                         'source' => $bank,
-                                        'money' => $data_add['money'],
-                                        'receive_date' => $data_add['additional_date'],
+                                        'money' => $data['money_in'],
+                                        'receive_date' => $data['daily_date'],
                                         'receivable' => $data['receivable'],
-                                        'week' => $data_debit['week'],
-                                        'year' => $data_debit['year'],
+                                        'week' => $week,
+                                        'year' => $year,
                                         'receive_comment' => $data['comment'],
-                                        'additional' => $id_additional,
+                                        'additional' => $_POST['yes'],
                                     );
                             
                             $receive_model->createCosts($data_receive);
 
                             $data_obtain = array(
                                 'customer' => $receivable->customer,
-                                'money' => 0 - $data_add['money'],
-                                'obtain_date' => $data_add['additional_date'],
-                                'week' => $data_debit['week'],
-                                'year' => $data_debit['year'],
+                                'money' => 0 - $data['money_in'],
+                                'obtain_date' => $data['daily_date'],
+                                'week' => $week,
+                                'year' => $year,
                                 'sale_report' => $receivable->sale_report,
                                 'trading' => $receivable->trading,
                                 'agent' => $receivable->agent,
@@ -1089,49 +1007,167 @@ Class dailyController Extends baseController {
                                 'invoice' => $receivable->invoice,
                                 'import_tire' => $receivable->import_tire,
                                 'order_tire' => $receivable->order_tire,
-                                'additional' => $id_additional,
+                                'additional' => $_POST['yes'],
                             );
                             $obtain_model->createObtain($data_obtain);
                         }
+                    }
+                    elseif ($daily->receivable > 0) {
+                        if ($data['receivable'] == "" || $data['receivable'] == 0) {
+                            $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$_POST['yes']);
+                            $receive_model->queryCosts('DELETE FROM receive WHERE additional = '.$_POST['yes']);
+                            $obtain_model->queryCosts('DELETE FROM obtain WHERE additional = '.$_POST['yes']);
+                        }
+                        else{
+                            if ($daily->receivable == $data['receivable']) {
+                                $receivable = $receivable_model->getCosts($data['receivable']);
+                                $data_receivable = array(
+                                    'pay_date' => $data['daily_date'],
+                                    'pay_money' => $receivable->pay_money - $daily->money_in + $data['money_in'],
+                                );
+                                $receivable_model->updateCosts($data_receivable,array('receivable_id'=>$data['receivable']));
+
+                                $data_asset = array(
+                                            'bank' => $bank,
+                                            'total' => $data['money_in'] - $daily->money_in,
+                                            'assets_date' => $data['daily_date'],
+                                            'receivable' => $data['receivable'],
+                                            'week' => $week,
+                                            'year' => $year,
+                                            'additional' => $_POST['yes'],
+                                        );
+                                $assets_model->updateAssets($data_asset,array('additional' => $_POST['yes']));
+
+                                
+                                $data_receive = array(
+                                            'source' => $bank,
+                                            'money' => $data['money_in'] - $daily->money_in,
+                                            'receive_date' => $data['daily_date'],
+                                            'receivable' => $data['receivable'],
+                                            'week' => $week,
+                                            'year' => $year,
+                                            'receive_comment' => $data['comment'],
+                                            'additional' => $_POST['yes'],
+                                        );
+                                
+                                $receive_model->updateCosts($data_receive,array('additional' => $_POST['yes']));
+
+                                $data_obtain = array(
+                                    'customer' => $receivable->customer,
+                                    'money' => 0 - $data['money_in'] + $daily->money_in,
+                                    'obtain_date' => $data['daily_date'],
+                                    'week' => $week,
+                                    'year' => $year,
+                                    'sale_report' => $receivable->sale_report,
+                                    'trading' => $receivable->trading,
+                                    'agent' => $receivable->agent,
+                                    'agent_manifest' => $receivable->agent_manifest,
+                                    'invoice' => $receivable->invoice,
+                                    'import_tire' => $receivable->import_tire,
+                                    'order_tire' => $receivable->order_tire,
+                                    'additional' => $_POST['yes'],
+                                );
+                                $obtain_model->updateObtain($data_obtain,array('additional' => $_POST['yes']));
+                            }
+                            else{
+                                $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$_POST['yes']);
+                                $receive_model->queryCosts('DELETE FROM receive WHERE additional = '.$_POST['yes']);
+                                $obtain_model->queryCosts('DELETE FROM obtain WHERE additional = '.$_POST['yes']);
+
+                                $receivable = $receivable_model->getCosts($data['receivable']);
+                                $data_receivable = array(
+                                    'pay_date' => $data['daily_date'],
+                                    'pay_money' => $receivable->pay_money + $data['money_in'],
+                                );
+                                $receivable_model->updateCosts($data_receivable,array('receivable_id'=>$data['receivable']));
+
+                                $data_asset = array(
+                                            'bank' => $bank,
+                                            'total' => $data['money_in'],
+                                            'assets_date' => $data['daily_date'],
+                                            'receivable' => $data['receivable'],
+                                            'week' => $week,
+                                            'year' => $year,
+                                            'additional' => $_POST['yes'],
+                                        );
+                                $assets_model->createAssets($data_asset);
+
+                                
+                                $data_receive = array(
+                                            'source' => $bank,
+                                            'money' => $data['money_in'],
+                                            'receive_date' => $data['daily_date'],
+                                            'receivable' => $data['receivable'],
+                                            'week' => $week,
+                                            'year' => $year,
+                                            'receive_comment' => $data['comment'],
+                                            'additional' => $_POST['yes'],
+                                        );
+                                
+                                $receive_model->createCosts($data_receive);
+
+                                $data_obtain = array(
+                                    'customer' => $receivable->customer,
+                                    'money' => 0 - $data['money_in'],
+                                    'obtain_date' => $data['daily_date'],
+                                    'week' => $week,
+                                    'year' => $year,
+                                    'sale_report' => $receivable->sale_report,
+                                    'trading' => $receivable->trading,
+                                    'agent' => $receivable->agent,
+                                    'agent_manifest' => $receivable->agent_manifest,
+                                    'invoice' => $receivable->invoice,
+                                    'import_tire' => $receivable->import_tire,
+                                    'order_tire' => $receivable->order_tire,
+                                    'additional' => $_POST['yes'],
+                                );
+                                $obtain_model->createObtain($data_obtain);
+                            }
+                            
+                        }
+                    }
+
+                    if ($daily->payable == "" || $daily->payable == 0) {
                         if ($data['payable'] > 0) {
                             $payable = $payable_model->getCosts($data['payable']);
                             $data_payable = array(
-                                'pay_date' => $data_add['additional_date'],
-                                'pay_money' => $payable->pay_money + $data_add['money'],
+                                'pay_date' => $data['daily_date'],
+                                'pay_money' => $payable->pay_money + $data['money_out'],
                             );
                             $payable_model->updateCosts($data_payable,array('payable_id'=>$data['payable']));
 
+
                             $data_asset = array(
                                         'bank' => $bank,
-                                        'total' => 0 - $data_add['money'],
-                                        'assets_date' => $data_add['additional_date'],
+                                        'total' => 0 - $data['money_out'],
+                                        'assets_date' => $data['daily_date'],
                                         'payable' => $data['payable'],
-                                        'week' => $data_debit['week'],
-                                        'year' => $data_debit['year'],
-                                        'additional' => $id_additional,
+                                        'week' => $week,
+                                        'year' => $year,
+                                        'additional' => $_POST['yes'],
                                     );
                             $assets_model->createAssets($data_asset);
 
                             
                             $data_pay = array(
                                         'source' => $bank,
-                                        'money' => $data_add['money'],
-                                        'pay_date' => $data_add['additional_date'],
+                                        'money' => $data['money_out'],
+                                        'pay_date' => $data['daily_date'],
                                         'payable' => $data['payable'],
-                                        'week' => $data_debit['week'],
-                                        'year' => $data_debit['year'],
+                                        'week' => $week,
+                                        'year' => $year,
                                         'pay_comment' => $data['comment'],
-                                        'additional' => $id_additional,
+                                        'additional' => $_POST['yes'],
                                     );
 
                             $pay_model->createCosts($data_pay);
 
                             $data_owe = array(
                                 'vendor' => $payable->vendor,
-                                'money' => 0 - $data_add['money'],
-                                'owe_date' => $data_add['additional_date'],
-                                'week' => $data_debit['week'],
-                                'year' => $data_debit['year'],
+                                'money' => 0 - $data['money_out'],
+                                'owe_date' => $data['daily_date'],
+                                'week' => $week,
+                                'year' => $year,
                                 'sale_report' => $payable->sale_report,
                                 'trading' => $payable->trading,
                                 'agent' => $payable->agent,
@@ -1139,22 +1175,127 @@ Class dailyController Extends baseController {
                                 'invoice' => $payable->invoice,
                                 'import_tire' => $payable->import_tire,
                                 'order_tire' => $payable->order_tire,
-                                'additional' => $id_additional,
+                                'additional' => $_POST['yes'],
                             );
                             $owe_model->createOwe($data_owe);
                         }
                     }
-                }
-                
-                    $daily_model->updateDaily($data,array('daily_id' => trim($_POST['yes'])));
-                    echo "Cập nhật thành công";
+                    elseif ($daily->payable > 0) {
+                        if ($data['payable'] == "" || $data['payable'] == 0) {
+                            $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$_POST['yes']);
+                            $pay_model->queryCosts('DELETE FROM pay WHERE additional = '.$_POST['yes']);
+                            $owe_model->queryCosts('DELETE FROM owe WHERE additional = '.$_POST['yes']);
+                        }
+                        else{
+                            if ($daily->payable == $data['payable']) {
+                                $payable = $payable_model->getCosts($data['payable']);
+                                $data_payable = array(
+                                    'pay_date' => $data['daily_date'],
+                                    'pay_money' => $payable->pay_money - $daily->money_out + $data['money_out'],
+                                );
+                                $payable_model->updateCosts($data_payable,array('payable_id'=>$data['payable']));
 
-                    $data_daily_bank = array(
-                        'daily_bank_date' => $data['daily_date'],
-                        'money' => $data['money_in'] > 0 ? $data['money_in'] : ($data['money_out'] > 0 ? 0-$data['money_out']:null),
-                        'bank' => $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id,
-                    );
-                    $daily_bank_model->updateDaily($data_daily_bank,array('daily' => trim($_POST['yes'])));
+
+                                $data_asset = array(
+                                            'bank' => $bank,
+                                            'total' => 0 - $data['money_out'] + $daily->money_out,
+                                            'assets_date' => $data['daily_date'],
+                                            'payable' => $data['payable'],
+                                            'week' => $week,
+                                            'year' => $year,
+                                            'additional' => $_POST['yes'],
+                                        );
+                                $assets_model->updateAssets($data_asset,array('additional' => $_POST['yes']));
+
+                                
+                                $data_pay = array(
+                                            'source' => $bank,
+                                            'money' => $data['money_out'] - $daily->money_out,
+                                            'pay_date' => $data['daily_date'],
+                                            'payable' => $data['payable'],
+                                            'week' => $week,
+                                            'year' => $year,
+                                            'pay_comment' => $data['comment'],
+                                            'additional' => $_POST['yes'],
+                                        );
+
+                                $pay_model->updateCosts($data_pay,array('additional' => $_POST['yes']));
+
+                                $data_owe = array(
+                                    'vendor' => $payable->vendor,
+                                    'money' => 0 - $data['money_out'] + $daily->money_out,
+                                    'owe_date' => $data['daily_date'],
+                                    'week' => $week,
+                                    'year' => $year,
+                                    'sale_report' => $payable->sale_report,
+                                    'trading' => $payable->trading,
+                                    'agent' => $payable->agent,
+                                    'agent_manifest' => $payable->agent_manifest,
+                                    'invoice' => $payable->invoice,
+                                    'import_tire' => $payable->import_tire,
+                                    'order_tire' => $payable->order_tire,
+                                    'additional' => $_POST['yes'],
+                                );
+                                $owe_model->updateOwe($data_owe,array('additional' => $_POST['yes']));
+                            }
+                            else{
+                                $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$_POST['yes']);
+                                $pay_model->queryCosts('DELETE FROM pay WHERE additional = '.$_POST['yes']);
+                                $owe_model->queryCosts('DELETE FROM owe WHERE additional = '.$_POST['yes']);
+
+                                $payable = $payable_model->getCosts($data['payable']);
+                                $data_payable = array(
+                                    'pay_date' => $data['daily_date'],
+                                    'pay_money' => $payable->pay_money + $data['money_out'],
+                                );
+                                $payable_model->updateCosts($data_payable,array('payable_id'=>$data['payable']));
+
+
+                                $data_asset = array(
+                                            'bank' => $bank,
+                                            'total' => 0 - $data['money_out'],
+                                            'assets_date' => $data['daily_date'],
+                                            'payable' => $data['payable'],
+                                            'week' => $week,
+                                            'year' => $year,
+                                            'additional' => $_POST['yes'],
+                                        );
+                                $assets_model->createAssets($data_asset);
+
+                                
+                                $data_pay = array(
+                                            'source' => $bank,
+                                            'money' => $data['money_out'],
+                                            'pay_date' => $data['daily_date'],
+                                            'payable' => $data['payable'],
+                                            'week' => $week,
+                                            'year' => $year,
+                                            'pay_comment' => $data['comment'],
+                                            'additional' => $_POST['yes'],
+                                        );
+
+                                $pay_model->createCosts($data_pay);
+
+                                $data_owe = array(
+                                    'vendor' => $payable->vendor,
+                                    'money' => 0 - $data['money_out'],
+                                    'owe_date' => $data['daily_date'],
+                                    'week' => $week,
+                                    'year' => $year,
+                                    'sale_report' => $payable->sale_report,
+                                    'trading' => $payable->trading,
+                                    'agent' => $payable->agent,
+                                    'agent_manifest' => $payable->agent_manifest,
+                                    'invoice' => $payable->invoice,
+                                    'import_tire' => $payable->import_tire,
+                                    'order_tire' => $payable->order_tire,
+                                    'additional' => $_POST['yes'],
+                                );
+                                $owe_model->createOwe($data_owe);
+                            }
+                            
+                        }
+                    }
 
                     date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
@@ -1171,13 +1312,130 @@ Class dailyController Extends baseController {
                     $daily_model->createDaily($data);
                     echo "Thêm thành công";
 
+                    $bank = $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id;
+
                     $data_daily_bank = array(
                         'daily_bank_date' => $data['daily_date'],
                         'money' => $data['money_in'] > 0 ? $data['money_in'] : ($data['money_out'] > 0 ? 0-$data['money_out']:null),
-                        'bank' => $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id,
+                        'bank' => $bank,
                         'daily' => $daily_model->getLastDaily()->daily_id,
                     );
                     $daily_bank_model->createDaily($data_daily_bank);
+
+                    
+                    
+                    $week = (int)date('W', $data['daily_date']);
+                    $year = (int)date('Y', $data['daily_date']);
+
+                    if($week == 53){
+                        $week = 1;
+                        $year = $year+1;
+                    }
+                    if ($week == 1 && $year == 12 ) {
+                        $year = $year+1;
+                    }
+
+                    if ($data['receivable'] > 0) {
+                        $receivable = $receivable_model->getCosts($data['receivable']);
+                        $data_receivable = array(
+                            'pay_date' => $data['daily_date'],
+                            'pay_money' => $receivable->pay_money + $data['money_in'],
+                        );
+                        $receivable_model->updateCosts($data_receivable,array('receivable_id'=>$data['receivable']));
+
+                        $data_asset = array(
+                                    'bank' => $bank,
+                                    'total' => $data['money_in'],
+                                    'assets_date' => $data['daily_date'],
+                                    'receivable' => $data['receivable'],
+                                    'week' => $week,
+                                    'year' => $year,
+                                    'additional' => $daily_model->getLastDaily()->daily_id,
+                                );
+                        $assets_model->createAssets($data_asset);
+
+                        
+                        $data_receive = array(
+                                    'source' => $bank,
+                                    'money' => $data['money_in'],
+                                    'receive_date' => $data['daily_date'],
+                                    'receivable' => $data['receivable'],
+                                    'week' => $week,
+                                    'year' => $year,
+                                    'receive_comment' => $data['comment'],
+                                    'additional' => $daily_model->getLastDaily()->daily_id,
+                                );
+                        
+                        $receive_model->createCosts($data_receive);
+
+                        $data_obtain = array(
+                            'customer' => $receivable->customer,
+                            'money' => 0 - $data['money_in'],
+                            'obtain_date' => $data['daily_date'],
+                            'week' => $week,
+                            'year' => $year,
+                            'sale_report' => $receivable->sale_report,
+                            'trading' => $receivable->trading,
+                            'agent' => $receivable->agent,
+                            'agent_manifest' => $receivable->agent_manifest,
+                            'invoice' => $receivable->invoice,
+                            'import_tire' => $receivable->import_tire,
+                            'order_tire' => $receivable->order_tire,
+                            'additional' => $daily_model->getLastDaily()->daily_id,
+                        );
+                        $obtain_model->createObtain($data_obtain);
+                    }
+                    if ($data['payable'] > 0) {
+                        $payable = $payable_model->getCosts($data['payable']);
+                        $data_payable = array(
+                            'pay_date' => $data['daily_date'],
+                            'pay_money' => $payable->pay_money + $data['money_out'],
+                        );
+                        $payable_model->updateCosts($data_payable,array('payable_id'=>$data['payable']));
+
+
+                        $data_asset = array(
+                                    'bank' => $bank,
+                                    'total' => 0 - $data['money_out'],
+                                    'assets_date' => $data['daily_date'],
+                                    'payable' => $data['payable'],
+                                    'week' => $week,
+                                    'year' => $year,
+                                    'additional' => $daily_model->getLastDaily()->daily_id,
+                                );
+                        $assets_model->createAssets($data_asset);
+
+                        
+                        $data_pay = array(
+                                    'source' => $bank,
+                                    'money' => $data['money_out'],
+                                    'pay_date' => $data['daily_date'],
+                                    'payable' => $data['payable'],
+                                    'week' => $week,
+                                    'year' => $year,
+                                    'pay_comment' => $data['comment'],
+                                    'additional' => $daily_model->getLastDaily()->daily_id,
+                                );
+
+                        $pay_model->createCosts($data_pay);
+
+                        $data_owe = array(
+                            'vendor' => $payable->vendor,
+                            'money' => 0 - $data['money_out'],
+                            'owe_date' => $data['daily_date'],
+                            'week' => $week,
+                            'year' => $year,
+                            'sale_report' => $payable->sale_report,
+                            'trading' => $payable->trading,
+                            'agent' => $payable->agent,
+                            'agent_manifest' => $payable->agent_manifest,
+                            'invoice' => $payable->invoice,
+                            'import_tire' => $payable->import_tire,
+                            'order_tire' => $payable->order_tire,
+                            'additional' => $daily_model->getLastDaily()->daily_id,
+                        );
+                        $owe_model->createOwe($data_owe);
+                    }
 
                 if ($data['debit'] > 0 || $data['credit'] > 0) {
                     $data_add = array(
@@ -1226,109 +1484,7 @@ Class dailyController Extends baseController {
                     $account_balance_model->createAccount($data_debit);
                     $account_balance_model->createAccount($data_credit);
 
-                    $bank = $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id;
-
-                    if ($data['receivable'] > 0) {
-                        $receivable = $receivable_model->getCosts($data['receivable']);
-                        $data_receivable = array(
-                            'pay_date' => $data_add['additional_date'],
-                            'pay_money' => $receivable->pay_money + $data_add['money'],
-                        );
-                        $receivable_model->updateCosts($data_receivable,array('receivable_id'=>$data['receivable']));
-
-                        $data_asset = array(
-                                    'bank' => $bank,
-                                    'total' => $data_add['money'],
-                                    'assets_date' => $data_add['additional_date'],
-                                    'receivable' => $data['receivable'],
-                                    'week' => $data_debit['week'],
-                                    'year' => $data_debit['year'],
-                                    'additional' => $id_additional,
-                                );
-                        $assets_model->createAssets($data_asset);
-
-                        
-                        $data_receive = array(
-                                    'source' => $bank,
-                                    'money' => $data_add['money'],
-                                    'receive_date' => $data_add['additional_date'],
-                                    'receivable' => $data['receivable'],
-                                    'week' => $data_debit['week'],
-                                    'year' => $data_debit['year'],
-                                    'receive_comment' => $data['comment'],
-                                    'additional' => $id_additional,
-                                );
-                        
-                        $receive_model->createCosts($data_receive);
-
-                        $data_obtain = array(
-                            'customer' => $receivable->customer,
-                            'money' => 0 - $data_add['money'],
-                            'obtain_date' => $data_add['additional_date'],
-                            'week' => $data_debit['week'],
-                            'year' => $data_debit['year'],
-                            'sale_report' => $receivable->sale_report,
-                            'trading' => $receivable->trading,
-                            'agent' => $receivable->agent,
-                            'agent_manifest' => $receivable->agent_manifest,
-                            'invoice' => $receivable->invoice,
-                            'import_tire' => $receivable->import_tire,
-                            'order_tire' => $receivable->order_tire,
-                            'additional' => $id_additional,
-                        );
-                        $obtain_model->createObtain($data_obtain);
-                    }
-                    if ($data['payable'] > 0) {
-                        $payable = $payable_model->getCosts($data['payable']);
-                        $data_payable = array(
-                            'pay_date' => $data_add['additional_date'],
-                            'pay_money' => $payable->pay_money + $data_add['money'],
-                        );
-                        $payable_model->updateCosts($data_payable,array('payable_id'=>$data['payable']));
-
-
-                        $data_asset = array(
-                                    'bank' => $bank,
-                                    'total' => 0 - $data_add['money'],
-                                    'assets_date' => $data_add['additional_date'],
-                                    'payable' => $data['payable'],
-                                    'week' => $data_debit['week'],
-                                    'year' => $data_debit['year'],
-                                    'additional' => $id_additional,
-                                );
-                        $assets_model->createAssets($data_asset);
-
-                        
-                        $data_pay = array(
-                                    'source' => $bank,
-                                    'money' => $data_add['money'],
-                                    'pay_date' => $data_add['additional_date'],
-                                    'payable' => $data['payable'],
-                                    'week' => $data_debit['week'],
-                                    'year' => $data_debit['year'],
-                                    'pay_comment' => $data['comment'],
-                                    'additional' => $id_additional,
-                                );
-
-                        $pay_model->createCosts($data_pay);
-
-                        $data_owe = array(
-                            'vendor' => $payable->vendor,
-                            'money' => 0 - $data_add['money'],
-                            'owe_date' => $data_add['additional_date'],
-                            'week' => $data_debit['week'],
-                            'year' => $data_debit['year'],
-                            'sale_report' => $payable->sale_report,
-                            'trading' => $payable->trading,
-                            'agent' => $payable->agent,
-                            'agent_manifest' => $payable->agent_manifest,
-                            'invoice' => $payable->invoice,
-                            'import_tire' => $payable->import_tire,
-                            'order_tire' => $payable->order_tire,
-                            'additional' => $id_additional,
-                        );
-                        $owe_model->createOwe($data_owe);
-                    }
+                    
                     
                 }
 

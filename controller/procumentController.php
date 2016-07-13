@@ -766,7 +766,7 @@ Class procumentController Extends baseController {
                                         }
                                     }
                                     elseif ($old_cost>0 && $old_cost_vat>0) {
-                                        if ($sale_vendor_data['cost'] == 0) {
+                                        if ($old_cost>0) {
                                             $payable_data = array(
                                                 'vendor' => $sale_vendor_data['vendor'],
                                                 'money' => $sale_vendor_data['cost'],
@@ -794,7 +794,7 @@ Class procumentController Extends baseController {
                                             }
                                             $payable->updateCosts($payable_data,array('money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'sale_report'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
                                         }
-                                        if ($sale_vendor_data['cost_vat'] == 0) {
+                                        if ($old_cost_vat>0) {
                                             $payable_data = array(
                                                 'vendor' => $sale_vendor_data['vendor'],
                                                 'money' => $sale_vendor_data['cost_vat'],

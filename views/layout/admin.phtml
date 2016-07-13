@@ -567,9 +567,10 @@ $(document).ready(function () {
             <?php } ?>
             <?php } ?>
             <?php if ($_SESSION) { ?>
-            <li><a  data="work" href="<?php echo $this->url('planning') ?>">Planning</a></li>
+            <li><a  data="checkin" href="<?php echo $this->url('checkin') ?>">Điểm danh</a></li>
+            <!-- <li><a  data="work" href="<?php echo $this->url('planning') ?>">Planning</a></li>
             <li><a  data="working" href="<?php echo $this->url('working') ?>">Công việc</a></li>
-            <li><a  data="absence" href="<?php echo $this->url('absence') ?>">Xin nghỉ phép</a></li>
+            <li><a  data="absence" href="<?php echo $this->url('absence') ?>">Xin nghỉ phép</a></li> -->
             <?php } ?>
             <?php if ($_SESSION && ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 3)) { ?>
             <li><a href="#">Chờ duyệt <span id="nfc_count"></span></a>
