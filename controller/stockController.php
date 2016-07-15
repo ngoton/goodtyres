@@ -536,6 +536,20 @@ Class stockController Extends baseController {
 
         $this->view->show('stock/desired');
     }
+    public function deleteorderdesired(){
+        if (isset($_POST['data'])) {
+            $tire_desired_model = $this->model->get('tiredesiredModel');
+            $tire_desired_model->updateTire(array('tire_desired_status'=>1),array('tire_brand'=>$_POST['data']));
+        }
+
+    }
+    public function deleteorderdesiredall(){
+        if (isset($_POST['data'])) {
+            $tire_desired_model = $this->model->get('tiredesiredModel');
+            $tire_desired_model->queryTire('UPDATE tire_desired SET tire_desired_status = 1');
+        }
+
+    }
     public function deletedesired(){
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');

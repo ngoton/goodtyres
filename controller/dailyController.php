@@ -795,7 +795,7 @@ Class dailyController Extends baseController {
                 }
                 
                 // add new option
-                echo '<li onclick="set_item_receivable(\''.$rs->code.'\',\''.$rs->receivable_id.'\')">'.$code." (".$rs->comment.")".'</li>';
+                echo '<li onclick="set_item_receivable(\''.$rs->code.'\',\''.$rs->receivable_id.'\')">'.$code." (".$rs->comment.") - ".$this->lib->formatMoney($rs->money).'</li>';
             }
             
         }
@@ -826,7 +826,7 @@ Class dailyController Extends baseController {
                 }
                 
                 // add new option
-                echo '<li onclick="set_item_payable(\''.$rs->code.'\',\''.$rs->payable_id.'\')">'.$code." (".$rs->comment.")".'</li>';
+                echo '<li onclick="set_item_payable(\''.$rs->code.'\',\''.$rs->payable_id.'\')">'.$code." (".$rs->comment.") - ".$this->lib->formatMoney($rs->money).'</li>';
             }
             
         }
@@ -1511,16 +1511,32 @@ Class dailyController Extends baseController {
             $daily_model = $this->model->get('dailyModel');
             $additional_model = $this->model->get('additionalModel');
             $account_balance_model = $this->model->get('accountbalanceModel');
+            $receivable_model = $this->model->get('receivableModel');
+            $payable_model = $this->model->get('payableModel');
+            $assets_model = $this->model->get('assetsModel');
+            $receive_model = $this->model->get('receiveModel');
+            $pay_model = $this->model->get('payModel');
+            $owe_model = $this->model->get('oweModel');
+            $obtain_model = $this->model->get('obtainModel');
+            $daily_bank_model = $this->model->get('dailybankModel');
            
             if (isset($_POST['xoa'])) {
                 $data = explode(',', $_POST['xoa']);
                 foreach ($data as $data) {
                        $daily_model->deleteDaily($data);
+                       $daily_bank_model->queryDaily('DELETE FROM daily_bank WHERE daily = '.$data);
+
                        $additionals = $additional_model->getAllAdditional(array('where'=>'daily = '.$data));
                        foreach ($additionals as $add) {
                            $additional_model->deleteAdditional($add->additional_id);
                            $account_balance_model->queryAccount("DELETE FROM account_balance WHERE additional = ".$add->additional_id);
                        }
+
+                       $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$data);
+                        $receive_model->queryCosts('DELETE FROM receive WHERE additional = '.$data);
+                        $obtain_model->queryCosts('DELETE FROM obtain WHERE additional = '.$data);
+                        $pay_model->queryCosts('DELETE FROM pay WHERE additional = '.$data);
+                        $owe_model->queryCosts('DELETE FROM owe WHERE additional = '.$data);
                        
                         echo "Xóa thành công";
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
@@ -1537,11 +1553,19 @@ Class dailyController Extends baseController {
             }
             else{
                         $daily_model->deleteDaily($_POST['data']);
+                        $daily_bank_model->queryDaily('DELETE FROM daily_bank WHERE daily = '.$_POST['data']);
+
                         $additionals = $additional_model->getAllAdditional(array('where'=>'daily = '.$_POST['data']));
                        foreach ($additionals as $add) {
                            $additional_model->deleteAdditional($add->additional_id);
                            $account_balance_model->queryAccount("DELETE FROM account_balance WHERE additional = ".$add->additional_id);
                        }
+
+                       $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$_POST['data']);
+                        $receive_model->queryCosts('DELETE FROM receive WHERE additional = '.$_POST['data']);
+                        $obtain_model->queryCosts('DELETE FROM obtain WHERE additional = '.$_POST['data']);
+                        $pay_model->queryCosts('DELETE FROM pay WHERE additional = '.$_POST['data']);
+                        $owe_model->queryCosts('DELETE FROM owe WHERE additional = '.$_POST['data']);
 
                         echo "Xóa thành công";
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 

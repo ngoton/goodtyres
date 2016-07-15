@@ -61,6 +61,23 @@ Class totalsalaryController Extends baseController {
         $curricular_model = $this->model->get('curricularModel');
         $position_salary_model = $this->model->get('positionsalaryModel');
         $insurrance_model = $this->model->get('insurranceModel');
+        $lift_model = $this->model->get('liftModel');
+
+        $data = array(
+            'where' => 'lift_date >= '.strtotime($batdau).' AND lift_date <= '.strtotime($ketthuc),
+        );
+        $join = array('table'=>'order_tire','where'=>'order_tire=order_tire_id');
+        $lifts = $lift_model->getAllLift($data, $join);
+        $arr_lift = array();
+        foreach ($lifts as $lift) {
+            $gia = $tu*$lift->order_tire_number;
+            $support = explode(',', $lift->staff);
+            $total = round($gia/count($support));
+            foreach ($support as $staff) {
+                $arr_lift[$staff] = isset($arr_lift[$staff])?$arr_lift[$staff]+$total:$total;
+            }
+        }
+        $this->view->data['arr_lift'] = $arr_lift;
 
         $data = array(
             'where' => 'create_time >= '.strtotime($batdau).' AND create_time <= '.strtotime($ketthuc),

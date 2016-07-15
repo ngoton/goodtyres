@@ -9180,6 +9180,17 @@
                         <td class="fix"><?php echo $tongcongdat2 ?></td>
 
                   </tr>
+                  <tr>
+                        <td class="fix"></td>
+                        <td class="fix"></td>
+                        <td class="fix"></td>
+                        <td class="fix"></td>
+
+                      <?php foreach ($brand_dathangs as $dathang) { ?>
+                          <td class="fix"><button class="delete_order" style="display:block" data="<?php echo $dathang['id'] ?>">Xóa</button></td>
+                      <?php } ?>
+                      <td class="fix"><button class="delete_order_all" style="display:block" data="all">Xóa tất cả</button></td>
+                  </tr>
               </tbody>
                   
           </table>
@@ -9890,6 +9901,37 @@ $('.del_order').click(function(){
               $('#loading').fadeOut(500); 
             };
             $('#loading').fadeOut(500);
+           
+           }); 
+      }
+});
+
+$('.delete_order').click(function(){
+    var id = $(this).attr('data');
+    var r = confirm("Bạn có chắc chắn muốn xóa không?");
+      if (r == true){
+        $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/stock/deleteorderdesired", {data: id},
+           function(data){
+            //alert(data);
+            setTimeout(function() {
+                sapxep('','','');
+              }, 200);
+           
+           }); 
+      }
+});
+$('.delete_order_all').click(function(){
+    var id = $(this).attr('data');
+    var r = confirm("Bạn có chắc chắn muốn xóa không?");
+      if (r == true){
+        $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/stock/deleteorderdesiredall", {data: id},
+           function(data){
+            //alert(data);
+            setTimeout(function() {
+                sapxep('','','');
+              }, 200);
            
            }); 
       }

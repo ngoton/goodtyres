@@ -1,4 +1,6 @@
-
+<link href="<?php echo BASE_URL ?>/public/css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo BASE_URL ?>/public/css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+<script src="<?php echo BASE_URL ?>/public/js/tag-it.js" type="text/javascript" charset="utf-8"></script>
 <?php
 $url_order = 'ASC';
 if ($order_by == 'order_tire_id')
@@ -203,7 +205,11 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix" id="order_tire_status_<?php echo $order_tire->order_tire_id; ?>" data="<?php echo $order_tire->order_tire_status ?>">
                 <?php
                 if ($order_tire->order_tire_status==1) {
-                    echo "Đã giao";
+                ?>
+                    <a style="font-weight:bold;text-decoration:underline" class="ex_stock_edit" alt="<?php echo date('d-m-Y',$order_tire->delivery_date); ?>" name="<?php echo isset($lift[$order_tire->order_tire_id])?$lift[$order_tire->order_tire_id]:null; ?>" data="<?php echo $order_tire->order_tire_id; ?>">
+                        Đã giao
+                    </a>
+                <?php
                 }
                 else{
                  if (isset($users['name'][$order_tire->approve])){ ?>
@@ -289,6 +295,34 @@ $this->helper('slidePaginator');
             <span>Ngày giao hàng: </span>
             <input type="text" id="i_delivery_date" name="i_delivery_date" class="ngay" value="" required="required" />
             <input type="hidden" id="i_order3" name="i_order3" value="" required="required" />
+        </label>
+        <label>
+            <span class="add-on"><i class="icon-user" ></i></span>
+            <span>NV bốc xếp: </span>
+            <input type="text" id="i_lift" name="i_lift"  />
+            <ul id="mytags"></ul>
+        </label>
+        
+    </form>
+</div>
+
+<div id="dialogContent6" title="Xuất kho">
+    
+    
+    <form action="#" method="post" id="editForm6">
+        
+        
+        <label>
+            <span class="add-on"><i class="icon-calendar" ></i></span>
+            <span>Ngày giao hàng: </span>
+            <input type="text" id="i_delivery_date6" name="i_delivery_date6" class="ngay" required="required" />
+            <input type="hidden" id="i_order6" name="i_order6"  required="required" />
+        </label>
+        <label>
+            <span class="add-on"><i class="icon-user" ></i></span>
+            <span>NV bốc xếp: </span>
+            <input type="text" id="i_lift6" name="i_lift6"  />
+            <ul id="mytags"></ul>
         </label>
         
     </form>
@@ -739,6 +773,17 @@ $('.ex_stock')
     .click(function() {
         
         $('#i_order3').val($(this).attr('data'));
+        $("#i_lift").tagit({
+          tagSource: function(search, showChoices) {
+            $.ajax({
+              url: "<?php echo BASE_URL ?>/working/getContributor",
+              data: {search: search.term},
+              success: function(choices) {
+                showChoices(choices);
+              }
+            });
+          }
+        });
 
         $( "#dialogContent3" ).dialog( "open" )
     });
@@ -751,9 +796,61 @@ $( "#dialogContent3" ).dialog({
     buttons: {
         OK: function() {
             var id = $('#i_order3').val();
+            var lift = $('#i_lift').val().trim();
             var delivery_date = $('#i_delivery_date').val();
                 
-                $.post("<?php echo BASE_URL ?>/ordertire/exstock", {data: id, delivery_date: delivery_date},
+                $.post("<?php echo BASE_URL ?>/ordertire/exstock", {data: id, delivery_date: delivery_date, lift: lift},
+                   function(data){
+                    $("html, body").animate({ scrollTop: 0 }, 100);
+                    setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                   
+                   }); 
+              
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
+
+$('.ex_stock_edit')
+    //.button({ icons: { primary: "ui-icon-document" }})
+    .click(function() {
+        
+        $('#i_order6').val($(this).attr('data'));
+        $('#i_delivery_date6').val($(this).attr('alt'));
+        $('#i_lift6').val($(this).attr('name').trim());
+
+        $("#i_lift6").tagit({
+          tagSource: function(search, showChoices) {
+            $.ajax({
+              url: "<?php echo BASE_URL ?>/working/getContributor",
+              data: {search: search.term},
+              success: function(choices) {
+                showChoices(choices);
+              }
+            });
+          }
+        });
+
+        $( "#dialogContent6" ).dialog( "open" )
+    });
+
+
+//set up the dialog box.
+$( "#dialogContent6" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var id = $('#i_order6').val();
+            var lift = $('#i_lift6').val().trim();
+            var delivery_date = $('#i_delivery_date6').val();
+                
+                $.post("<?php echo BASE_URL ?>/ordertire/exstockedit", {data: id, delivery_date: delivery_date, lift: lift},
                    function(data){
                     $("html, body").animate({ scrollTop: 0 }, 100);
                     setTimeout(function() {

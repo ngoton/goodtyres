@@ -242,8 +242,11 @@ elseif ($order_by == 'staff_name')
 
             $chucvu = isset($arr_position_salary[$salary->staff_id])?$arr_position_salary[$salary->staff_id]:0;
             $tongchucvu += $chucvu;
+
+            $giaonhan = isset($arr_lift[$salary->staff_id])?$arr_lift[$salary->staff_id]:0;
+            $tongluonggiaonhan += $giaonhan;
             
-            $congluong = $kpi+$luongsp+$luongvuotgia+$ngoaikhoa+$luongchuyencan+$chucvu+0+$phone;
+            $congluong = $kpi+$luongsp+$luongvuotgia+$giaonhan+$ngoaikhoa+$luongchuyencan+$chucvu+0+$phone;
             $tongluong += $congluong;
 
             $ngayan = isset($arr_eating[$salary->staff_id]['ngay'])?$arr_eating[$salary->staff_id]['ngay']:0;
@@ -270,7 +273,7 @@ elseif ($order_by == 'staff_name')
             <td class="fix" id="position_<?php echo $salary->staff_id; ?>"><?php echo $salary->position; ?></td>
             <td class="fix" id="kpi_<?php echo $salary->staff_id; ?>"><a href="tiresalary/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($kpi); ?></a></td>
             <td class="fix" id="luongsp_<?php echo $salary->staff_id; ?>"><a href="tiresalary/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($luongsp+$luongvuotgia); ?></a></td>
-            <td class="fix" id="luonggiaonhan_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney(0); ?></td>
+            <td class="fix" id="luonggiaonhan_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($giaonhan); ?></td>
             <td class="fix" id="luongchuyencan_<?php echo $salary->staff_id; ?>"><a href="attendance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($luongchuyencan); ?></a></td>
             <td class="fix editable" data="<?php echo $salary->staff_id; ?>" id="ngoaikhoa_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($ngoaikhoa); ?></td>
             <td class="fix editable2" data="<?php echo $salary->staff_id; ?>" id="chucvu_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($chucvu); ?></td>

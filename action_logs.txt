@@ -2260,3 +2260,15 @@ bxep: 6x14 = 84k-5-4--1484000
 
 13/07/2016 16:55:33|admincmg|edit|1419|daily|2-Nghị--phuong-1466373600-Thu tiền Anh Đức 20 lốp lx-0617---lx-0617-85935000-0-1325-
 
+14/07/2016 14:29:18|admincmg|add|76|order_tire|2-1468447200-1-6-1-1----------0-0-0------4000000-1-0
+
+14/07/2016 14:29:28|admincmg|edit|76|order_tire|
+
+15/07/2016 08:20:23|admincmg|edit|76|order_tire|
+
+15/07/2016 09:51:47|admincmg|edit|76|order_tire|
+
+15/07/2016 14:31:42|admincmg|position_salary|Array|position_salary|
+
+15/07/2016 14:31:43|admincmg|curricular|Array|curricular|
+

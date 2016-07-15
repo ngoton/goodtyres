@@ -281,6 +281,32 @@ Class ordertireController Extends baseController {
 
         $order_tires = $order_tire_model->getAllTire($data,$join);
         
+        $staff_model = $this->model->get('staffModel');
+        $staffs = $staff_model->getAllStaff();
+        $staff = array();
+        foreach ($staffs as $st) {
+            $staff[$st->staff_id] = $st->staff_name;
+        }
+
+        $lift_model = $this->model->get('liftModel');
+        $lift = array();
+        foreach ($order_tires as $tire) {
+            $lifts = $lift_model->getLiftByWhere(array('order_tire'=>$tire->order_tire_id));
+            if ($lifts) {
+                $sts = explode(',', $lifts->staff);
+                foreach ($sts as $key) {
+                    if (!isset($lift[$tire->order_tire_id])) {
+                        $lift[$tire->order_tire_id] = $staff[$key];
+                    }
+                    else{
+                        $lift[$tire->order_tire_id] .= ','.$staff[$key];
+                    }
+                }
+            }        
+            
+        }
+        $this->view->data['lift'] = $lift;
+
         $this->view->data['order_tires'] = $order_tires;
 
         $this->view->data['lastID'] = isset($order_tire_model->getLastTire()->order_tire_id)?$order_tire_model->getLastTire()->order_tire_id:0;
@@ -814,6 +840,7 @@ Class ordertireController Extends baseController {
             $assets = $this->model->get('assetsModel');
             $receive = $this->model->get('receiveModel');
             $pay = $this->model->get('payModel');
+            $lift = $this->model->get('liftModel');
             if (isset($_POST['xoa'])) {
                 $data = explode(',', $_POST['xoa']);
                 foreach ($data as $data) {
@@ -837,6 +864,7 @@ Class ordertireController Extends baseController {
                         $order_tire_list_model->queryTire('DELETE FROM order_tire_list WHERE order_tire = '.$data);
                         $order_tire_cost_model->queryTire('DELETE FROM order_tire_cost WHERE order_tire = '.$data);
                         $tire_sale_model->queryTire('DELETE FROM tire_sale WHERE order_tire = '.$data);
+                        $lift->queryLift('DELETE FROM lift WHERE order_tire = '.$data);
                         $order_tire_model->deleteTire($data);
                         echo "Xóa thành công";
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
@@ -872,6 +900,7 @@ Class ordertireController Extends baseController {
                         $order_tire_list_model->queryTire('DELETE FROM order_tire_list WHERE order_tire = '.$_POST['data']);
                         $order_tire_cost_model->queryTire('DELETE FROM order_tire_cost WHERE order_tire = '.$_POST['data']);
                         $tire_sale_model->queryTire('DELETE FROM tire_sale WHERE order_tire = '.$_POST['data']);
+                        $lift->queryLift('DELETE FROM lift WHERE order_tire = '.$_POST['data']);
                         $order_tire_model->deleteTire($_POST['data']);
                         echo "Xóa thành công";
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
@@ -1590,6 +1619,30 @@ Class ordertireController Extends baseController {
             $receivable_model->createCosts($receivable_data);
 
 
+            $lift_model = $this->model->get('liftModel');
+
+            $contributor = "";
+            if(trim($_POST['lift']) != ""){
+                $support = explode(',', trim($_POST['lift']));
+
+                if ($support) {
+                    foreach ($support as $key) {
+                        $name = $staff_model->getStaffByWhere(array('staff_name'=>trim($key)))->staff_id;
+                        if ($contributor == "")
+                            $contributor .= $name;
+                        else
+                            $contributor .= ','.$name;
+                    }
+                }
+
+                $data_lift = array(
+                    'lift_date' => $order_tire->delivery_date,
+                    'staff' => $contributor,
+                    'order_tire' => $id,
+                );
+                $lift_model->createLift($data_lift);
+            }
+
             echo "Cập nhật thành công";
 
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
@@ -1602,6 +1655,92 @@ Class ordertireController Extends baseController {
 
         }
     }
+    public function exstockedit(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_tire_model = $this->model->get('ordertireModel');
+            $order_tire_list_model = $this->model->get('ordertirelistModel');
+            $receivable_model = $this->model->get('receivableModel');
+            $obtain_model = $this->model->get('obtainModel');
+            $tire_sale_model = $this->model->get('tiresaleModel');
+            $staff_model = $this->model->get('staffModel');
+            $owe_model = $this->model->get('oweModel');
+            $payable_model = $this->model->get('payableModel');
+            $lift_model = $this->model->get('liftModel');
+
+            $id = trim($_POST['data']);
+
+            $data = array(
+                'order_tire_status'=>1,
+                'delivery_date'=>strtotime($_POST['delivery_date']),
+            );
+
+            $order_tire_model->updateTire($data,array('order_tire_id'=>$id));
+
+            $week = (int)date('W',$data['delivery_date']);
+            $year = (int)date('Y',$data['delivery_date']);
+
+            if($week == 53){
+                $week = 1;
+                $year = $year+1;
+            }
+            if (((int)date('W',$data['delivery_date']) == 1) && ((int)date('m',$data['delivery_date']) == 12) ) {
+                $year = (int)date('Y',$data['delivery_date'])+1;
+            }
+
+            $owe_model->updateOwe(array('owe_date'=>$data['delivery_date'],'week'=>$week,'year'=>$year),array('order_tire'=>$id));
+            $payable_model->updateCosts(array('payable_date'=>$data['delivery_date'],'week'=>$week,'year'=>$year),array('order_tire'=>$id));
+            $tire_sale_model->updateTire(array('tire_sale_date' => $data['delivery_date']),array('order_tire'=>$id));
+            $obtain_model->updateObtain(array('obtain_date'=>$data['delivery_date'],'week'=>$week,'year'=>$year),array('order_tire'=>$id));
+            $receivable_model->updateCosts(array('receivable_date'=>$data['delivery_date'],'expect_date' => $data['delivery_date'],'week'=>$week,'year'=>$year),array('order_tire'=>$id));
+
+
+
+            $contributor = "";
+            if(trim($_POST['lift']) != ""){
+                $support = explode(',', trim($_POST['lift']));
+
+                if ($support) {
+                    foreach ($support as $key) {
+                        $name = $staff_model->getStaffByWhere(array('staff_name'=>trim($key)))->staff_id;
+                        if ($contributor == "")
+                            $contributor .= $name;
+                        else
+                            $contributor .= ','.$name;
+                    }
+                }
+
+                $data_lift = array(
+                    'lift_date' => $data['delivery_date'],
+                    'staff' => $contributor,
+                    'order_tire' => $id,
+                );
+
+                if ($lift_model->getLiftByWhere(array('order_tire'=>$id))) {
+                    $lift_model->updateLift($data_lift,array('order_tire'=>$id));
+                }
+                else{
+                    $lift_model->createLift($data_lift);
+                }
+                
+            }
+            else{
+                $lift_model->queryLift('DELETE FROM lift WHERE order_tire = '.$id);
+            }
+            
+
+            echo "Cập nhật thành công";
+
+                        date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                        $filename = "action_logs.txt";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['data']."|order_tire|"."\n"."\r\n";
+                        
+                        $fh = fopen($filename, "a") or die("Could not open log file.");
+                        fwrite($fh, $text) or die("Could not write file!");
+                        fclose($fh);
+
+        }
+    }
+
     public function deleteorder(){
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
