@@ -35,11 +35,11 @@ Class insurranceController Extends baseController {
         
         $join = array('table'=>'staff','where'=>'insurrance.staff = staff.staff_id');
         $data = array(
-            'where' => 'create_time >='.strtotime('01-'.$ngaytao).' AND create_time <= '.strtotime('28-'.$ngaytao),
+            'where' => 'create_time <= '.strtotime('28-'.$ngaytao),
         );
 
         if (isset($id) && $id > 0) {
-            $data['where'] = 'create_time >= '.$id.' AND create_time <= '.strtotime('28-'.date('m-Y',$id));
+            $data['where'] = 'create_time <= '.strtotime('28-'.date('m-Y',$id));
 
             $ngaytao = date('m-Y',$id);
 
@@ -72,11 +72,11 @@ Class insurranceController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => 'create_time >='.strtotime('01-'.$ngaytao).' AND create_time <= '.strtotime('28-'.$ngaytao),
+            'where' => 'create_time <= '.strtotime('28-'.$ngaytao),
             );
 
         if (isset($id) && $id > 0) {
-            $data['where'] = 'create_time >= '.$id.' AND create_time <= '.strtotime('28-'.date('m-Y',$id));
+            $data['where'] = 'create_time <= '.strtotime('28-'.date('m-Y',$id));
             if (isset($st) && $st > 0) {
                 $data['where'] .= ' AND staff = '.$st;
             }

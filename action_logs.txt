@@ -2272,3 +2272,41 @@ bxep: 6x14 = 84k-5-4--1484000
 
 15/07/2016 14:31:43|admincmg|curricular|Array|curricular|
 
+16/07/2016 09:04:26|admincmg|add|1|phone_allowance|200000-1459461600-2
+
+16/07/2016 09:05:14|admincmg|add|1|insurrance|975000-315000-3000000-1459461600-2
+
+16/07/2016 09:06:57|admincmg|add|2|phone_allowance|300000-1464732000-2
+
+16/07/2016 09:13:48|admincmg|position_salary|Array|position_salary|
+
+16/07/2016 14:44:40|admincmg|delete|1497|daily|
+
+16/07/2016 14:44:40|admincmg|delete|1498|daily|
+
+16/07/2016 14:44:40|admincmg|delete|1499|daily|
+
+16/07/2016 14:44:41|admincmg|delete|1500|daily|
+
+16/07/2016 14:44:41|admincmg|delete|1501|daily|
+
+16/07/2016 14:44:41|admincmg|delete|1488|daily|
+
+16/07/2016 14:44:42|admincmg|delete|1489|daily|
+
+16/07/2016 14:44:42|admincmg|delete|1490|daily|
+
+16/07/2016 14:44:42|admincmg|delete|1491|daily|
+
+16/07/2016 14:44:43|admincmg|delete|1492|daily|
+
+16/07/2016 14:44:43|admincmg|delete|1493|daily|
+
+16/07/2016 14:44:46|admincmg|delete|1494|daily|
+
+16/07/2016 14:44:47|admincmg|delete|1485|daily|
+
+16/07/2016 14:44:47|admincmg|delete|1486|daily|
+
+16/07/2016 14:44:48|admincmg|delete|1487|daily|
+

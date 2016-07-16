@@ -13,9 +13,16 @@ Class dailyModel Extends baseModel {
         
         return $this->insert($this->table,$data);
     }
-    public function createDaily3($data) 
+    public function createDaily2($data) 
     {    
         
+        return $this->insert2($this->table,$data);
+    }
+    public function createDaily3($data) 
+    {    
+        $this->createDaily2($data);
+        $id_last = $this->getLastDaily2()->daily_id;
+        $data['daily_id'] = $id_last;
         return $this->insert3($this->table,$data);
     }
     public function updateDaily($data,$id) 
@@ -39,6 +46,9 @@ Class dailyModel Extends baseModel {
     }
     public function getLastDaily(){
         return $this->getLast($this->table);
+    }
+    public function getLastDaily2(){
+        return $this->getLast2($this->table);
     }
     public function getLastDaily3(){
         return $this->getLast3($this->table);

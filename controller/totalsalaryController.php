@@ -40,6 +40,13 @@ Class totalsalaryController Extends baseController {
             $den = "4000";
         }
 
+        $trangthai = str_replace(',','',$trangthai);
+        $nv = str_replace(',','',$nv);
+        $tha = str_replace(',','',$tha);
+        $na = str_replace(',','',$na);
+        $tu = str_replace(',','',$tu);
+        $den = str_replace(',','',$den);
+        
         $this->view->data['trangthai'] = str_replace(',','',$trangthai);
         $this->view->data['nv'] = str_replace(',','',$nv);
         $this->view->data['tha'] = str_replace(',','',$tha);
@@ -47,7 +54,6 @@ Class totalsalaryController Extends baseController {
         $this->view->data['tu'] = str_replace(',','',$tu);
         $this->view->data['den'] = str_replace(',','',$den);
 
-        
 
         $batdau = '01-'.$ngaytao;
         $ketthuc = date('t-m-Y',strtotime($batdau));
@@ -80,7 +86,10 @@ Class totalsalaryController Extends baseController {
         $this->view->data['arr_lift'] = $arr_lift;
 
         $data = array(
-            'where' => 'create_time >= '.strtotime($batdau).' AND create_time <= '.strtotime($ketthuc),
+            'where' => 'create_time <= '.strtotime($ketthuc),
+            'order_by' => 'create_time',
+            'order' => 'DESC',
+            'limit' => 1,
         );
         $phones = $phoneallowance_model->getAllAllowance($data);
         $arr_phone = array();
@@ -89,6 +98,19 @@ Class totalsalaryController Extends baseController {
         }
 
         $this->view->data['arr_phone'] = $arr_phone;
+
+        $insurrances = $insurrance_model->getAllSalary($data);
+        $arr_insurrance = array();
+        foreach ($insurrances as $insurrance) {
+            $arr_insurrance[$insurrance->staff]['congty'] = isset($arr_insurrance[$insurrance->staff]['congty'])?$arr_insurrance[$insurrance->staff]['congty']+$insurrance->insurrance:$insurrance->insurrance;
+            $arr_insurrance[$insurrance->staff]['nhanvien'] = isset($arr_insurrance[$insurrance->staff]['nhanvien'])?$arr_insurrance[$insurrance->staff]['nhanvien']+$insurrance->insurrance_staff:$insurrance->insurrance_staff;
+        }
+
+        $this->view->data['arr_insurrance'] = $arr_insurrance;
+
+        $data = array(
+            'where' => 'create_time >= '.strtotime($batdau).' AND create_time <= '.strtotime($ketthuc),
+        );
 
         $eatings = $eating_model->getAllEating($data);
         $arr_eating = array();
@@ -116,16 +138,7 @@ Class totalsalaryController Extends baseController {
 
         $this->view->data['arr_position_salary'] = $arr_position_salary;
 
-        $insurrances = $insurrance_model->getAllSalary($data);
-        $arr_insurrance = array();
-        foreach ($insurrances as $insurrance) {
-            $arr_insurrance[$insurrance->staff]['congty'] = isset($arr_insurrance[$insurrance->staff]['congty'])?$arr_insurrance[$insurrance->staff]['congty']+$insurrance->insurrance:$insurrance->insurrance;
-            $arr_insurrance[$insurrance->staff]['nhanvien'] = isset($arr_insurrance[$insurrance->staff]['nhanvien'])?$arr_insurrance[$insurrance->staff]['nhanvien']+$insurrance->insurrance_staff:$insurrance->insurrance_staff;
-        }
-
-        $this->view->data['arr_insurrance'] = $arr_insurrance;
-
-
+        
         $data = array(
             'where' => 'attendance_date >= '.strtotime($batdau).' AND attendance_date <= '.strtotime($ketthuc),
         );
