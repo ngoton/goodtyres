@@ -9,6 +9,10 @@ Class adminController Extends baseController {
             $this->view->data['title'] = 'Dịch vụ vận tải, xuất nhập khẩu, thủ tục hải quan, chỉnh sửa manifest';
             $this->view->show('admin/index');
     }
+    public function queryscript(){
+        $costs_model = $this->model->get('costsModel');
+        $costs_model->queryCosts('ALTER TABLE `costs` ADD `additional` INT NULL');
+    }
     public function autoscript(){
     	$costs_model = $this->model->get('costsModel');
     	$payable_model = $this->model->get('payableModel');

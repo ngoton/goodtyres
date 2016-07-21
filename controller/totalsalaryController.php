@@ -36,7 +36,7 @@ Class totalsalaryController Extends baseController {
             $nv = "200000";
             $tha = "7000";
             $na = "4000";
-            $tu = "4000";
+            $tu = "2000";
             $den = "4000";
         }
 
@@ -86,10 +86,9 @@ Class totalsalaryController Extends baseController {
         $this->view->data['arr_lift'] = $arr_lift;
 
         $data = array(
-            'where' => 'create_time <= '.strtotime($ketthuc),
+            'where' => 'create_time <= '.strtotime($ketthuc).' GROUP BY staff',
             'order_by' => 'create_time',
             'order' => 'DESC',
-            'limit' => 1,
         );
         $phones = $phoneallowance_model->getAllAllowance($data);
         $arr_phone = array();
@@ -107,6 +106,14 @@ Class totalsalaryController Extends baseController {
         }
 
         $this->view->data['arr_insurrance'] = $arr_insurrance;
+
+        $position_salarys = $position_salary_model->getAllSalary($data);
+        $arr_position_salary = array();
+        foreach ($position_salarys as $position_salary) {
+            $arr_position_salary[$position_salary->staff] = isset($arr_position_salary[$position_salary->staff])?$arr_position_salary[$position_salary->staff]+$position_salary->position_salary:$position_salary->position_salary;
+        }
+
+        $this->view->data['arr_position_salary'] = $arr_position_salary;
 
         $data = array(
             'where' => 'create_time >= '.strtotime($batdau).' AND create_time <= '.strtotime($ketthuc),
@@ -129,14 +136,6 @@ Class totalsalaryController Extends baseController {
         }
 
         $this->view->data['arr_curricular'] = $arr_curricular;
-
-        $position_salarys = $position_salary_model->getAllSalary($data);
-        $arr_position_salary = array();
-        foreach ($position_salarys as $position_salary) {
-            $arr_position_salary[$position_salary->staff] = isset($arr_position_salary[$position_salary->staff])?$arr_position_salary[$position_salary->staff]+$position_salary->position_salary:$position_salary->position_salary;
-        }
-
-        $this->view->data['arr_position_salary'] = $arr_position_salary;
 
         
         $data = array(
@@ -164,12 +163,14 @@ Class totalsalaryController Extends baseController {
         $arr_cost = array();
         $arr_customer = array();
         $arr_discount = array();
+        $arr_number = array();
         
         foreach ($orders as $tire) {
             $arr_cost[$tire->order_tire_id] = $tire->order_cost/$tire->order_tire_number;
             $doanhthu[$tire->staff_id] = isset($doanhthu[$tire->staff_id])?$doanhthu[$tire->staff_id]+$tire->total:$tire->total;
             $arr_customer[$tire->customer][date('d-m-Y',$tire->delivery_date)] = isset($arr_customer[$tire->customer][date('d-m-Y',$tire->delivery_date)])?$arr_customer[$tire->customer][date('d-m-Y',$tire->delivery_date)]+$tire->order_tire_number:$tire->order_tire_number;
             $arr_discount[$tire->order_tire_id] = ($tire->discount+$tire->reduce)/$tire->order_tire_number;
+            $arr_number[$tire->order_tire_id] = $tire->order_tire_number;
         }
 
         $data = array(
@@ -288,28 +289,38 @@ Class totalsalaryController Extends baseController {
 
             if ($sale->customer_type == 1) {
                 $sl_daily[$sale->sale] = isset($sl_daily[$sale->sale])?$sl_daily[$sale->sale]+$sale->volume:$sale->volume;
-                if(!isset($cus_arr[$sale->sale]) || !in_array($sale->customer,$cus_arr[$sale->sale])){
+                if(!isset($cus_arr[$sale->sale]) || !in_array($sale->order_tire,$cus_arr[$sale->sale])){
                     if (in_array($sale->customer,$old)) {
                         $daily_cu[$sale->sale] = isset($daily_cu[$sale->sale])?$daily_cu[$sale->sale]+1:1;
                     }
                     else{
-                        $daily_moi[$sale->sale] = isset($daily_moi[$sale->sale])?$daily_moi[$sale->sale]+1:1;
+                        if ($arr_number[$sale->order_tire] > 2) {
+                            $daily_moi[$sale->sale] = isset($daily_moi[$sale->sale])?$daily_moi[$sale->sale]+1:1;
+                        }
+                        else{
+                            $daily_cu[$sale->sale] = isset($daily_cu[$sale->sale])?$daily_cu[$sale->sale]+1:1;
+                        }
                     }
                 }
             }
             else{
                 $sl_tt[$sale->sale] = isset($sl_tt[$sale->sale])?$sl_tt[$sale->sale]+$sale->volume:$sale->volume;
-                if(!isset($cus_arr[$sale->sale]) || !in_array($sale->customer,$cus_arr[$sale->sale])){
+                if(!isset($cus_arr[$sale->sale]) || !in_array($sale->order_tire,$cus_arr[$sale->sale])){
                     if (in_array($sale->customer,$old)) {
                         $tt_cu[$sale->sale] = isset($tt_cu[$sale->sale])?$tt_cu[$sale->sale]+1:1;
                     }
                     else{
-                        $tt_moi[$sale->sale] = isset($tt_moi[$sale->sale])?$tt_moi[$sale->sale]+1:1;
+                        if ($arr_number[$sale->order_tire] > 2) {
+                            $tt_moi[$sale->sale] = isset($tt_moi[$sale->sale])?$tt_moi[$sale->sale]+1:1;
+                        }
+                        else{
+                            $tt_cu[$sale->sale] = isset($tt_cu[$sale->sale])?$tt_cu[$sale->sale]+1:1;
+                        }
                     }
                 }
             }
 
-            $cus_arr[$sale->sale][] = $sale->customer;
+            $cus_arr[$sale->sale][] = $sale->order_tire;
         }
 
         $this->view->data['sl_daily'] = $sl_daily;

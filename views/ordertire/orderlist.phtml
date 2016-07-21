@@ -85,7 +85,7 @@ elseif ($order_by == 'order_tire_number')
                 
                 <option value="delete">Xóa</option>
             </select>
-            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action2();">
 		</div>
 		<div class="alignleft actions">
 		<select name="m" id="chonloc">
@@ -1314,4 +1314,85 @@ $( "#dialogContent4" ).dialog({
            }); 
     }
 });
+
+function action2(){
+  
+    var action       = $('#action').attr('value');
+    if(action != -1)
+    {
+      if($('.add-field') !== null)
+        {
+          $('.add-field').fadeOut();
+        }
+      var del = [];
+      ids = $('input:checkbox.checkbox:checked').map(function() { return del.push(this.value); });
+      
+       if(action=='delete'){
+         var r = confirm("Bạn có chắc chắn muốn xóa không?");
+        if (r == true){
+          $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+           $.ajax({
+            url: "<?php echo $this->url('ordertire/delete') ?>",   
+            type: 'POST',   
+            data: "xoa="+del,   
+            success:function(answer){ 
+              for(var i=0; i<del.length; i++)
+                 $('tr#'+del[i]).remove();
+              $('#loading').fadeOut(500); 
+              $("html, body").animate({ scrollTop: 0 }, 100);
+            }
+          });
+        }
+       }
+       else if(action=='phathanh'){
+         $.ajax({
+          url: window.location.href+"/update", 
+          type: 'POST',   
+          data: "phathanh="+del,   
+          success:function(answer){ 
+            for(var i=0; i<del.length; i++)
+               $('#trangthai_'+del[i]).html('Hiá»ƒn thá»‹');
+            $('#loading').fadeOut(500); 
+          }
+        });
+       }
+       else if(action=='an'){
+         $.ajax({
+          url: window.location.href+"/update",   
+          type: 'POST',   
+          data: "an="+del,   
+          success:function(answer){ 
+            for(var i=0; i<del.length; i++)
+               $('#trangthai_'+del[i]).html('áº¨n');
+            $('#loading').fadeOut(500); 
+          }
+        });
+       }
+       else if(action=='noibat'){
+         $.ajax({
+          url: window.location.href+"/update",  
+          type: 'POST',   
+          data: "noibat="+del,   
+          success:function(answer){ 
+            for(var i=0; i<del.length; i++)
+               $('#tinnoibat_'+del[i]).html('Ná»•i báº­t');
+            $('#loading').fadeOut(500); 
+          }
+        });
+       }
+       else if(action=='binhthuong'){
+         $.ajax({
+          url: window.location.href+"/update",   
+          type: 'POST',   
+          data: "binhthuong="+del,   
+          success:function(answer){ 
+            for(var i=0; i<del.length; i++)
+               $('#tinnoibat_'+del[i]).html('BĂ¬nh thÆ°á»ng');
+            $('#loading').fadeOut(500); 
+          }
+        });
+       }
+    }
+  
+}
 </script>

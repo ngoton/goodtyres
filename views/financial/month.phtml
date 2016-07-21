@@ -195,6 +195,7 @@
                     $co_ck = $co_dk+$co_ps;
                     $tong = $no_ck-$co_ck;
 
+                    if($no_dk != null || $no_ck != null || $co_dk != null || $co_ck != null){
                 ?>
                  <tr class="bank" data="<?php echo $acc->account_id ?>" alt="<?php echo '01-'.$batdau ?>" name="<?php echo date('t-m-Y',strtotime('01-'.$ketthuc)) ?>">
                     
@@ -217,7 +218,7 @@
                     <td class="fix"><?php echo $lib->formatMoney($tong>0?$tong:null) ?></td>
                     <td class="fix"><?php echo $lib->formatMoney($tong<0?str_replace('-', '', $tong):null) ?></td>
                 </tr>   
-         <?php }
+         <?php } }
             } ?>
             <tr style="background-color:rgba(50, 121, 171, 0.32); font-weight:bold" >
                 <td class="fix"></td>

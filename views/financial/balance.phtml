@@ -108,7 +108,7 @@
                     $no_ck = (isset($account_after[$acc->account_id]) && $account_after[$acc->account_id]>0 )?$account_after[$acc->account_id]:null;
                     $co_ck = (isset($account_after[$acc->account_id]) && $account_after[$acc->account_id]<0 )?str_replace('-', '', $account_after[$acc->account_id]):null;
                     
-                    
+                    if($no_ck != null || $co_ck != null){
                 ?>
                  <tr class="bank" data="<?php echo $acc->account_id ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                     
@@ -119,7 +119,7 @@
                     <td class="fix"><?php echo $lib->formatMoney($no_ck) ?></td>
                     <td class="fix"><?php echo $lib->formatMoney($co_ck) ?></td>
                 </tr>   
-         <?php }
+         <?php } }
             } ?>
             <tr style="background-color:rgba(50, 121, 171, 0.32); font-weight:bold" >
                 <td class="fix"></td>

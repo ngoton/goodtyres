@@ -2310,3 +2310,37 @@ bxep: 6x14 = 84k-5-4--1484000
 
 16/07/2016 14:44:48|admincmg|delete|1487|daily|
 
+18/07/2016 09:39:11|admincmg|edit|1|position_salary|5000000-1462053600
+
+18/07/2016 09:40:41|admincmg|position_salary|Array|position_salary|
+
+18/07/2016 10:34:24|admincmg|add|4|position_salary|15000000-1459461600-47
+
+19/07/2016 16:51:17|admincmg|edit|1512|daily|2-Mấn-pt77-tm-1468533600-Thu tiền Hi con 2 lốp lx-0716---lx-0716-6458000-0---1252
+
+19/07/2016 16:53:19|admincmg|edit|1512|daily|2-Mấn-pt77-tm-1468533600-Thu tiền Hi con 2 lốp lx-0716---lx-0716-6458000-0---1252,1255
+
+19/07/2016 16:54:30|admincmg|edit|1512|daily|2-Mấn-pt77-tm-1468533600-Thu tiền Hi con 2 lốp lx-0716---lx-0716-6458000-0--
+
+19/07/2016 16:55:33|admincmg|edit|1512|daily|2-Mấn-pt77-tm-1468533600-Thu tiền Hi con 2 lốp lx-0716---lx-0716-6458000-0---1252
+
+19/07/2016 16:55:49|admincmg|edit|1512|daily|2-Mấn-pt77-tm-1468533600-Thu tiền Hi con 2 lốp lx-0716---lx-0716-6458000-0---
+
+19/07/2016 16:56:50|admincmg|edit|1512|daily|2-Mấn-pt77-tm-1468533600-Thu tiền Hi con 2 lốp lx-0716---lx-0716-6458000-0---1252
+
+21/07/2016 14:59:34|admincmg|edit|1507|daily|2-Nghị-pt76-tm-1468447200-Thu tiền An Hưng Vượng 3 lốp lx-0720---lx-0720-14520000-0-609--
+
+21/07/2016 15:04:21|admincmg|edit|1507|daily|2-Nghị-pt76-tm-1468447200-Thu tiền An Hưng Vượng 3 lốp lx-0720---lx-0720-14520000-0-609--
+
+21/07/2016 15:08:12|admincmg|edit|1507|daily|2-Nghị-pt76-tm-1468447200-Thu tiền An Hưng Vượng 3 lốp lx-0720---lx-0720-14520000-0-609--
+
+21/07/2016 15:09:27|admincmg|edit|1507|daily|2-Nghị-pt76-tm-1468447200-Thu tiền An Hưng Vượng 3 lốp lx-0720---lx-0720-14520000-0-609--50109:1x40\' QuingDao - ??ng Nai-(12,00,263,50628:Chuyển cảng Cát Lái - Vietsopetro,Vũng Tàu-(1,00,580
+
+21/07/2016 15:31:39|admincmg|edit|1506|daily|2-Mấn-pt75-tm-1468447200-Thu tiền Vá vỏ Lượng 24 lốp lx-0717---lx-0717-59712000-0---573,609
+
+21/07/2016 15:35:14|admincmg|edit|1506|daily|2-Mấn-pt75-tm-1468447200-Thu tiền Vá vỏ Lượng 24 lốp lx-0717---lx-0717-59712000-0---573
+
+21/07/2016 16:12:15|admincmg|edit|1506|daily|2-Mấn-pt75-tm-1468447200-Thu tiền Vá vỏ Lượng 24 lốp lx-0717---lx-0717-59712000-0---
+
+21/07/2016 16:26:20|admincmg|edit|1516|daily|1-Chú Tám-pc258-tm-1468533600-Chi tiền công lu bãi----0-3700000---
+
