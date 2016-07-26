@@ -1,107 +1,110 @@
 <?php
-Class checkinController Extends baseController {
+Class checkeatController Extends baseController {
     public function index() {
         $this->view->setLayout('admin');
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
         }
         $this->view->data['lib'] = $this->lib;
-        $this->view->data['title'] = 'Điểm danh';
+        $this->view->data['title'] = 'Bảng cơm';
 
-        $mon = date( 'd-m-Y', strtotime( 'monday this week' ) );
-        $sun = date( 'd-m-Y', strtotime( 'sunday this week' ) );
+        $batdau = '01-'.date( 'm-Y');
+        $ketthuc = date( 't-m-Y');
 
         $staff_model = $this->model->get('staffModel');
         $staff = $staff_model->getStaffByWhere(array('account'=>$_SESSION['userid_logined']));
 
-        $checkin_model = $this->model->get('checkinModel');
+        $checkeat_model = $this->model->get('checkeatModel');
         
         $data = array(
-            'where' => 'staff = '.$staff->staff_id.' AND checkin_date >= '.strtotime($mon).' AND checkin_date <= '.strtotime($sun),
+            'where' => 'staff = '.$staff->staff_id.' AND checkeat_date >= '.strtotime($batdau).' AND checkeat_date <= '.strtotime($ketthuc),
         );
 
-        $checkins = $checkin_model->getAllCheckin($data);
+        $checkeats = $checkeat_model->getAllCheckeat($data);
 
-        $checkin = array();
-
-        foreach ($checkins as $check) {
-            if ($check->checkin_1 != "") {
-                $checkin['in_1'][date('d-m-Y',$check->checkin_1)][(int)date('H',$check->checkin_1)] = $check->checkin_1;
-                if (date('H',$check->checkin_1) >= 21) {
-                    $checkin['in_1'][date('d-m-Y',$check->checkin_1)][21] = $check->checkin_1;
-                }
-                if (date('H',$check->checkin_1) < 7) {
-                    $checkin['in_1'][date('d-m-Y',$check->checkin_1)][6] = $check->checkin_1;
-                }
+        $checkeat = array();
+        $tongngay = 0;
+        foreach ($checkeats as $check) {
+            $checkeat[(int)date('dmY',$check->checkeat_date)] = $check->number;
+            if ($check->number > 0) {
+                $tongngay++;
             }
-            if ($check->checkout_1 != "") {
-                $checkin['out_1'][date('d-m-Y',$check->checkout_1)][(int)date('H',$check->checkout_1)] = $check->checkout_1;
-                if (date('H',$check->checkout_1) >= 21) {
-                    $checkin['out_1'][date('d-m-Y',$check->checkout_1)][21] = $check->checkout_1;
-                }
-                if (date('H',$check->checkout_1) < 7) {
-                    $checkin['out_1'][date('d-m-Y',$check->checkout_1)][6] = $check->checkout_1;
-                }
-            }
-            if ($check->checkin_2 != "") {
-                $checkin['in_2'][date('d-m-Y',$check->checkin_2)][(int)date('H',$check->checkin_2)] = $check->checkin_2;
-                if (date('H',$check->checkin_2) >= 21) {
-                    $checkin['in_2'][date('d-m-Y',$check->checkin_2)][21] = $check->checkin_2;
-                }
-                if (date('H',$check->checkin_2) < 7) {
-                    $checkin['in_2'][date('d-m-Y',$check->checkin_2)][6] = $check->checkin_2;
-                }
-            }
-            if ($check->checkout_2 != "") {
-                $checkin['out_2'][date('d-m-Y',$check->checkout_2)][(int)date('H',$check->checkout_2)] = $check->checkout_2;
-                if (date('H',$check->checkout_2) >= 21) {
-                    $checkin['out_2'][date('d-m-Y',$check->checkout_2)][21] = $check->checkout_2;
-                }
-                if (date('H',$check->checkout_2) < 7) {
-                    $checkin['out_2'][date('d-m-Y',$check->checkout_2)][6] = $check->checkout_2;
-                }
-            }
-            
         }
-        $this->view->data['checkin'] = $checkin;
+        $this->view->data['checkeat'] = $checkeat;
+        $this->view->data['tongngay'] = $tongngay;
 
         /* Lấy tổng doanh thu*/
         
         /*************/
-        $this->view->show('checkin/index');
+        $this->view->show('checkeat/index');
     }
 
     public function add(){
-        if (isset($_POST['time'])) {
-            $checkin_model = $this->model->get('checkinModel');
+        if (isset($_POST['number'])) {
+            $checkeat_model = $this->model->get('checkeatModel');
             $staff_model = $this->model->get('staffModel');
+            $eating_model = $this->model->get('eatingModel');
 
             $staff = $staff_model->getStaffByWhere(array('account'=>$_SESSION['userid_logined']));
 
             $data = array(
                 'staff' => $staff->staff_id,
-                'checkin_date' => strtotime(date('d-m-Y')),
+                'checkeat_date' => strtotime($_POST['date']),
+                'number' => $_POST['number'],
             );
-            if ($_POST['data'] == 'in_1') {
-                $data['checkin_1'] = strtotime(date('d-m-Y H:i:s'));
-            }
-            if ($_POST['data'] == 'out_1') {
-                $data['checkout_1'] = strtotime(date('d-m-Y H:i:s'));
-            }
-            if ($_POST['data'] == 'in_2') {
-                $data['checkin_2'] = strtotime(date('d-m-Y H:i:s'));
-            }
-            if ($_POST['data'] == 'out_2') {
-                $data['checkout_2'] = strtotime(date('d-m-Y h:i:s'));
-            }
-
-            $check = $checkin_model->queryCheckin('SELECT * FROM checkin WHERE checkin_date >= '.$data['checkin_date'].' AND checkin_date <= '.$data['checkin_date'].' AND staff = '.$data['staff']);
+            $yesterday = date('d-m-Y', strtotime('-1 day', $data['checkeat_date']));
+            $tomorow = date('d-m-Y', strtotime('+1 day', $data['checkeat_date']));
+            $check = $checkeat_model->queryCheckeat('SELECT * FROM checkeat WHERE checkeat_date > '.strtotime($yesterday).' AND checkeat_date < '.strtotime($tomorow).' AND staff = '.$data['staff']);
             if (!$check) {
-                $checkin_model->createCheckin($data);
+                $checkeat_model->createCheckeat($data);
+
+                $check = $eating_model->queryEating('SELECT * FROM eating WHERE create_time >= '.strtotime('01-'.date('m-Y',$data['checkeat_date'])).' AND create_time <= '.strtotime(date('t-m-Y',$data['checkeat_date'])).' AND staff = '.$data['staff']);
+                if (!$check) {
+                    $price = 20000;
+                    $data = array(
+                        'staff' => $staff->staff_id,
+                        'eating_day' => 1,
+                        'eating_number' => $data['number'],
+                        'eating_price' => $price,
+                        'eating_total' => $data['number']*$price,
+                        'eating_staff_total' => ($data['number']*$price)/2,
+                        'create_time' => strtotime('01-'.date('m-Y',$data['checkeat_date'])),
+                    );
+                    $eating_model->createEating($data);
+                }
+                else{
+                    foreach ($check as $c) {
+                        $data = array(
+                            'eating_day' => $c->eating_day+1,
+                            'eating_number' => $c->eating_number+$data['number'],
+                            'eating_total' => $c->eating_total+($data['number']*$c->eating_price),
+                            'eating_staff_total' => $c->eating_staff_total+($data['number']*$c->eating_price)/2,
+                        );
+                        $eating_model->updateEating($data,array('eating_id'=>$c->eating_id));
+                    }
+                    
+                }
             }
             else{
                 foreach ($check as $c) {
-                    $checkin_model->updateCheckin($data,array('checkin_id'=>$c->checkin_id));
+                    $checkeat_model->updateCheckeat($data,array('checkeat_id'=>$c->checkeat_id));
+
+                    $check2 = $eating_model->queryEating('SELECT * FROM eating WHERE create_time >= '.strtotime('01-'.date('m-Y',$data['checkeat_date'])).' AND create_time <= '.strtotime(date('t-m-Y',$data['checkeat_date'])).' AND staff = '.$data['staff']);
+                    
+                    foreach ($check2 as $c2) {
+                        $data2 = array(
+                            'eating_number' => $c2->eating_number-$c->number+$data['number'],
+                            'eating_total' => $c2->eating_total-($c->number*$c2->eating_price)+($data['number']*$c2->eating_price),
+                            'eating_staff_total' => $c2->eating_staff_total-(($c->number*$c2->eating_price)/2)+($data['number']*$c2->eating_price)/2,
+                        );
+                        if ($data['number'] == 0) {
+                            $data2['eating_day'] = $c2->eating_day-1;
+                        }
+                        else if ($data['number'] > 0 && $c->number == 0) {
+                            $data2['eating_day'] = $c2->eating_day+1;
+                        }
+                        $eating_model->updateEating($data2,array('eating_id'=>$c2->eating_id));
+                    }
                 }
                 
             }

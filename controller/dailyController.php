@@ -180,7 +180,7 @@ Class dailyController Extends baseController {
         if ($in != "" && $in != 0) {
             $receivable_model = $this->model->get('receivableModel');
             $data = array(
-                'where' => 'code LIKE "%'.$q.'%"',
+                'where' => 'code LIKE "%'.$q.'%" OR comment LIKE "%'.$q.'%"',
             );
             $receivables = $receivable_model->getAllCosts($data);
             $arr = array();
@@ -194,7 +194,7 @@ Class dailyController Extends baseController {
         if ($out != "" && $out != 0) {
             $payable_model = $this->model->get('payableModel');
             $data = array(
-                'where' => 'code LIKE "%'.$q.'%"',
+                'where' => 'code LIKE "%'.$q.'%" OR comment LIKE "%'.$q.'%"',
             );
             $payables = $payable_model->getAllCosts($data);
             $arr = array();
@@ -1641,7 +1641,7 @@ Class dailyController Extends baseController {
                                                 'receivable' => $key,
                                                 'week' => $week,
                                                 'year' => $year,
-                                                'receive_comment' => $data['comment'],
+                                                'receive_comment' => $data['comment'].' ('.$receivable->comment.')',
                                                 'additional' => $id_daily_last,
                                             );
                                     
@@ -1690,7 +1690,7 @@ Class dailyController Extends baseController {
                                                 'receivable' => $key,
                                                 'week' => $week,
                                                 'year' => $year,
-                                                'receive_comment' => $data['comment'],
+                                                'receive_comment' => $data['comment'].' ('.$receivable->comment.')',
                                                 'additional' => $id_daily_last,
                                             );
                                     
@@ -1772,7 +1772,7 @@ Class dailyController Extends baseController {
                                                 'payable' => $key,
                                                 'week' => $week,
                                                 'year' => $year,
-                                                'pay_comment' => $data['comment'],
+                                                'pay_comment' => $data['comment'].' ('.$payable->comment.')',
                                                 'additional' => $id_daily_last,
                                             );
 
@@ -1822,7 +1822,7 @@ Class dailyController Extends baseController {
                                                 'payable' => $key,
                                                 'week' => $week,
                                                 'year' => $year,
-                                                'pay_comment' => $data['comment'],
+                                                'pay_comment' => $data['comment'].' ('.$payable->comment.')',
                                                 'additional' => $id_daily_last,
                                             );
 
@@ -2182,7 +2182,7 @@ Class dailyController Extends baseController {
                                             'receivable' => $key,
                                             'week' => $week,
                                             'year' => $year,
-                                            'receive_comment' => $data['comment'],
+                                            'receive_comment' => $data['comment'].' ('.$receivable->comment.')',
                                             'additional' => $id_daily_last,
                                         );
                                 
@@ -2231,7 +2231,7 @@ Class dailyController Extends baseController {
                                             'receivable' => $key,
                                             'week' => $week,
                                             'year' => $year,
-                                            'receive_comment' => $data['comment'],
+                                            'receive_comment' => $data['comment'].' ('.$receivable->comment.')',
                                             'additional' => $id_daily_last,
                                         );
                                 
@@ -2313,7 +2313,7 @@ Class dailyController Extends baseController {
                                             'payable' => $key,
                                             'week' => $week,
                                             'year' => $year,
-                                            'pay_comment' => $data['comment'],
+                                            'pay_comment' => $data['comment'].' ('.$payable->comment.')',
                                             'additional' => $id_daily_last,
                                         );
 
@@ -2363,7 +2363,7 @@ Class dailyController Extends baseController {
                                             'payable' => $key,
                                             'week' => $week,
                                             'year' => $year,
-                                            'pay_comment' => $data['comment'],
+                                            'pay_comment' => $data['comment'].' ('.$payable->comment.')',
                                             'additional' => $id_daily_last,
                                         );
 

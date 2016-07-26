@@ -2344,3 +2344,5 @@ bxep: 6x14 = 84k-5-4--1484000
 
 21/07/2016 16:26:20|admincmg|edit|1516|daily|1-Chú Tám-pc258-tm-1468533600-Chi tiền công lu bãi----0-3700000---
 
+23/07/2016 09:16:09|admincmg|curricular|Array|curricular|
+

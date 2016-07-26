@@ -57,7 +57,7 @@ Class additionalController Extends baseController {
         );
 
         if ($id>0) {
-            $data['where'] = 'additional_id = '.$id;
+            $trangthai = $id;
         }
 
         if ($trangthai > 0) {
@@ -97,7 +97,7 @@ Class additionalController Extends baseController {
             );
         
         if ($id>0) {
-            $data['where'] = 'additional_id = '.$id;
+            $trangthai = $id;
         }
 
         if ($trangthai > 0) {

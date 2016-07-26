@@ -568,7 +568,12 @@ $(document).ready(function () {
             <?php } ?>
             <?php } ?>
             <?php if ($_SESSION) { ?>
-            <li><a  data="checkin" href="<?php echo $this->url('checkin') ?>">Điểm danh</a></li>
+            <li><a  data="checkin" href="<?php echo $this->url('checkin') ?>">Điểm danh</a>
+                <ul>
+                  <li><a  data="checkin" href="<?php echo $this->url('checkin') ?>">Chấm công</a></li>
+                  <li><a  data="checkeat" href="<?php echo $this->url('checkeat') ?>">Đăng ký cơm</a></li>
+                </ul>
+            </li>
             <!-- <li><a  data="work" href="<?php echo $this->url('planning') ?>">Planning</a></li>
             <li><a  data="working" href="<?php echo $this->url('working') ?>">Công việc</a></li>
             <li><a  data="absence" href="<?php echo $this->url('absence') ?>">Xin nghỉ phép</a></li> -->

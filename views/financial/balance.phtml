@@ -110,7 +110,7 @@
                     
                     if($no_ck != null || $co_ck != null){
                 ?>
-                 <tr class="bank" data="<?php echo $acc->account_id ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                 <tr class="additional" data="<?php echo $acc->account_id ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                     
                     <td class="fix"></td>
                     <td class="fix"><?php echo $acc->account_number ?></td>
@@ -249,6 +249,11 @@ $('#sl_tha').change(function(){
         });
     },function(){
         $('#show').html("");
+    });
+
+$('.additional').click(function(){
+        var val = $(this).attr('data');
+        window.open("<?php echo $this->url('additional/index') ?>/"+val);
     });
 
 $('.table_data').on('mousedown', function(e){

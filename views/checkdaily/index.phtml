@@ -1,0 +1,279 @@
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;"><h1> KIỂM TRA TÀI KHOẢN</h1></center>
+
+<div class="tablenav top">
+        <div class="add-box">
+            Từ tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn tháng" <?php if(isset($ngaytao)) echo "value='$ngaytao'"; ?> >    
+            Đến tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytaobatdau" id="chonngaytaobatdau" placeholder="Chọn tháng" <?php if(isset($ngaytaobatdau)) echo "value='$ngaytaobatdau'"; ?> >  
+
+            <input type="button" name="chon" id="chon" class="button" value="Chọn" onclick="searchall(1,1,1);">        
+                                        
+        </div>
+        <div class="add-box">
+                  
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="button" name="xem" id="xem" value="Xem" onclick="searchall(1,1,1);">  
+            
+        </div>
+
+        <div class="add-box">
+            <a class="add_button" id="btnExport" >Export excel</a>
+        </div>
+    </div>
+	
+</div>
+
+<table class="table_data" id="tblExport">
+    <thead>
+        <tr>
+            <th class="fix" rowspan="2">STT</th>
+            <th class="fix" colspan="5">Báo cáo thu chi</th>
+            <th class="fix" colspan="7">Báo cáo tài sản</th>
+            <th class="fix" rowspan="2">Status</th>
+        </tr>
+        <tr>
+            
+            <th class="fix">Mã</th>
+            <th class="fix">Tồn đầu</th>
+            <th class="fix">Thu</th>
+            <th class="fix">Chi</th>
+            <th class="fix">Tồn cuối</th>
+
+            <th class="fix">Tài khoản</th>
+            <th class="fix">Nợ ĐK</th>
+            <th class="fix">Có ĐK</th>
+            <th class="fix">Nợ PS</th>
+            <th class="fix">Có PS</th>
+            <th class="fix">Nợ CK</th>
+            <th class="fix">Có CK</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $tongtondau=0; $tongth=0; $tongch=0; $i=0;
+        $tong_no_dk = 0;
+        $tong_co_dk = 0;
+        $tong_no_ps = 0;
+        $tong_co_ps = 0;
+        $tong_no_ck = 0;
+        $tong_co_ck = 0;
+
+        foreach ($banks as $bank) { 
+            $ton = isset($tondau[$bank->symbol])?$tondau[$bank->symbol]:0;
+            $th = isset($thu[$bank->symbol])?$thu[$bank->symbol]:0;
+            $ch = isset($chi[$bank->symbol])?$chi[$bank->symbol]:0;
+
+            $tongtondau += $ton;
+            $tongth += $th;
+            $tongch += $ch;
+
+            $no_dk = (isset($account_before[$bank->symbol]) && $account_before[$bank->symbol]>0 )?$account_before[$bank->symbol]:null;
+            $co_dk = (isset($account_before[$bank->symbol]) && $account_before[$bank->symbol]<0 )?str_replace('-', '', $account_before[$bank->symbol]):null;
+            $no_ps = isset($account_add[$bank->symbol]['no'])?$account_add[$bank->symbol]['no']:null;
+            $co_ps = isset($account_add[$bank->symbol]['co'])?str_replace('-', '', $account_add[$bank->symbol]['co']):null;
+            $no_ck = $no_dk+$no_ps;
+            $co_ck = $co_dk+$co_ps;
+            $tong = $no_ck-$co_ck;
+
+            $tong_no_dk += $no_dk;
+            $tong_co_dk += $co_dk;
+            $tong_no_ps += $no_ps;
+            $tong_co_ps += $co_ps;
+            $tong_no_ck += $tong>0?$tong:null;
+            $tong_co_ck += $tong<0?str_replace('-', '', $tong):null;
+        ?>
+        <tr>
+            <td class="fix"><?php echo ++$i ?></td>
+            <td class="fix"><?php echo $bank->symbol ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($ton); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($th); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney(str_replace('-', '', $ch)); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($dl = $ton+$th+$ch); ?></td>
+
+            <td class="fix"><?php echo isset($accounts[$bank->symbol])?$accounts[$bank->symbol]:null ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($no_dk) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($co_dk) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($no_ps) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($co_ps) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tong>0?$tong:null) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tong<0?str_replace('-', '', $tong):null) ?></td>
+
+            <td class="fix"><?php echo $dl == $tong ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">Not OK</span>'; ?></td>
+        </tr>
+        <?php } ?>
+        <tr style="font-weight:bold; color:red">
+            <td class="fix" colspan="2">Tổng cộng</td>
+            <td class="fix"><?php echo $lib->formatMoney($tongtondau); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongth); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongch); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongdl = $tongtondau+$tongth+$tongch); ?></td>
+            <td class="fix">Tổng cộng</td>
+            <td class="fix"><?php echo $lib->formatMoney($tong_no_dk) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tong_co_dk) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tong_no_ps) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tong_co_ps) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tong_no_ck) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tong_co_ck) ?></td>
+
+            <td class="fix"><?php echo ( $tongdl == ($tong_no_ck-$tong_co_ck) )? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">Not OK</span>'; ?></td>
+        </tr>
+    </tbody>
+    
+</table>
+
+<script type="text/javascript">
+var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytao").change();
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts);
+
+    $("#chonngaytao").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var firstDay = new Date(year, month, 1);
+
+        $('#batdau').datepicker("setDate", firstDay );
+    });
+
+    var pickerOpts5 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytaobatdau").change();
+         },
+         
+    };  
+    $("#chonngaytaobatdau").datepicker(pickerOpts5);
+
+    $("#chonngaytaobatdau").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        $(this).datepicker('setDate', new Date(year, month, 1));
+
+        var lastDay = new Date(year, month+1, 0);
+        $('#ketthuc').datepicker("setDate", lastDay );
+    });
+
+    $(".monthPicker").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+</script>

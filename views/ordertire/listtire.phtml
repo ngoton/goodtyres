@@ -171,7 +171,8 @@ $('html').click(function(e) {
                 data: {brand:tire_brand, size:tire_size, pattern:tire_pattern, customer:customer},
                 success:function(data){
                     var data = jQuery.parseJSON(data);
-                    $('#max_number').val(data.max);
+                    var ton = parseInt(tire_number)+parseInt(data.max);
+                    $('#max_number').val(ton);
                     
                 }
             });
