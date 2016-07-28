@@ -26,7 +26,7 @@ Class totalsalaryController Extends baseController {
             $den = isset($_POST['den']) ? $_POST['den'] : null;
         }
         else{
-            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'staff_name';
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'position';
             $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
@@ -68,6 +68,19 @@ Class totalsalaryController Extends baseController {
         $position_salary_model = $this->model->get('positionsalaryModel');
         $insurrance_model = $this->model->get('insurranceModel');
         $lift_model = $this->model->get('liftModel');
+        $sale_model = $this->model->get('salereportModel');
+
+        $data = array(
+            'where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc),
+        );
+        $join = array('table'=>'staff, user','where'=>'user_id = account AND user_id = sale');
+
+        $sales = $sale_model->getAllSale($data,$join);
+        $arr_logs = array();
+        foreach ($sales as $sale) {
+            $arr_logs[$sale->staff_id] = isset($arr_logs[$sale->staff_id])?$arr_logs[$sale->staff_id]+(($sale->revenue_vat+$sale->revenue-$sale->cost_vat-$sale->cost-$sale->estimate_cost)*0.5):($sale->revenue_vat+$sale->revenue-$sale->cost_vat-$sale->cost-$sale->estimate_cost)*0.5;
+        }
+        $this->view->data['arr_logs'] = $arr_logs;
 
         $data = array(
             'where' => 'lift_date >= '.strtotime($batdau).' AND lift_date <= '.strtotime($ketthuc),
@@ -143,8 +156,39 @@ Class totalsalaryController Extends baseController {
         );
         $attendances = $attendance_model->getAllAttendance($data);
         $arr_attend = array();
+        $sophut = 0;
+        $diemtru = 0;
+        $kpi = 300;
         foreach ($attendances as $attendance) {
-            $arr_attend[$attendance->staff] = isset($arr_attend[$attendance->staff])?$arr_attend[$attendance->staff]+$attendance->attendance_total:$attendance->attendance_total;
+            if (8 >= $attendance->attendance_total) {
+                $sophut = (8 - $attendance->attendance_total)*60;
+            }
+
+            switch ($sophut) {
+                case $sophut <= 3:
+                    $diemtru = 0;
+                    break;
+                case $sophut <= 15:
+                    $diemtru = 1;
+                    break;
+                case $sophut <= 30:
+                    $diemtru = 1.5;
+                    break; 
+                case $sophut <= 60:
+                    $diemtru = 3;
+                    break; 
+                case $sophut <= 240:
+                    $diemtru = 8;
+                    break;     
+                case $sophut <= 360:
+                    $diemtru = 10;
+                    break;
+                default:
+                    $diemtru = 12;
+                    break;
+            }
+            
+            $arr_attend[$attendance->staff] = isset($arr_attend[$attendance->staff])?$arr_attend[$attendance->staff]-$diemtru:$kpi-$diemtru;
         }
 
         $this->view->data['arr_attend'] = $arr_attend;

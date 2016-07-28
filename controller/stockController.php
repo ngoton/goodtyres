@@ -496,6 +496,50 @@ Class stockController Extends baseController {
 
         $this->view->show('stock/order');
     }
+    public function stock(){
+        $this->view->disableLayout();
+        $this->view->data['lib'] = $this->lib;
+        $tire_size_model = $this->model->get('tiresizeModel');
+        $tire_size = $tire_size_model->getTireByWhere(array('tire_size_number'=>str_replace('~', '/', $this->registry->router->order_by)));
+        
+        $tire_sale_model = $this->model->get('tiresaleModel');
+        $tire_buy_model = $this->model->get('tirebuyModel');
+
+        $query = "SELECT *,SUM(tire_buy_volume) AS soluong FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_brand_group=".$this->registry->router->param_id." AND tire_buy_size = ".$tire_size->tire_size_id." AND tire_pattern_type=".$this->registry->router->order." AND tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern GROUP BY tire_buy_brand,tire_buy_size,tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC";
+        $tire_buys = $tire_buy_model->queryTire($query);
+        $this->view->data['tire_buys'] = $tire_buys;
+
+        $tire_product_model = $this->model->get('tireproductModel');
+        $link_picture = array();
+
+        $sell = array();
+        foreach ($tire_buys as $tire_buy) {
+            $tire_products = $tire_product_model->queryTire('SELECT tire_product_thumb FROM tire_product, tire_product_pattern WHERE tire_pattern = tire_product_pattern_id AND tire_product_pattern_name LIKE "%'.$tire_buy->tire_pattern_name.'%"');
+
+            foreach ($tire_products as $tire_product) {
+                $link_picture[$tire_buy->tire_buy_id]['image'] = $tire_product->tire_product_thumb;
+            }
+
+            $data_sale = array(
+                'where'=>'tire_brand='.$tire_buy->tire_buy_brand.' AND tire_size='.$tire_buy->tire_buy_size.' AND tire_pattern='.$tire_buy->tire_buy_pattern,
+            );
+            $tire_sales = $tire_sale_model->getAllTire($data_sale);
+
+            foreach ($tire_sales as $tire_sale) {
+                
+                if ($tire_sale->customer != 119) {
+                    $sell[$tire_buy->tire_buy_id]['number'] = isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']+$tire_sale->volume:$tire_sale->volume;
+                }
+                
+            }
+        }
+
+        $this->view->data['tire_buys'] = $tire_buys;
+        $this->view->data['sell'] = $sell;
+        $this->view->data['link_picture'] = $link_picture;
+
+        $this->view->show('stock/stock');
+    }
 
     public function going(){
         $this->view->disableLayout();

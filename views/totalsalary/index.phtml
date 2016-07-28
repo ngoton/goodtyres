@@ -220,6 +220,9 @@ elseif ($order_by == 'staff_name')
             $tongttcu += $ttcu;
 
             $luongsp = isset($luong_sp[$salary->staff_id])?$luong_sp[$salary->staff_id]:0;
+            if (isset($arr_logs[$salary->staff_id])) {
+                $luongsp += $arr_logs[$salary->staff_id];
+            }
             $luongvuotgia = isset($luong_vuotgia[$salary->staff_id])?$luong_vuotgia[$salary->staff_id]:0;
             $tongluongsp += $luongsp;
             $tongluongvuotgia += $luongvuotgia;
@@ -231,7 +234,7 @@ elseif ($order_by == 'staff_name')
             $tongdoanhthu += $dt;
 
             $chuyencan = isset($arr_attend[$salary->staff_id])?$arr_attend[$salary->staff_id]:0;
-            $luongchuyencan = $chuyencan*$diem_gio*$den;
+            $luongchuyencan = $chuyencan*$den;
             $tongchuyencan += $luongchuyencan;
 
             $phone = isset($arr_phone[$salary->staff_id])?$arr_phone[$salary->staff_id]:0;

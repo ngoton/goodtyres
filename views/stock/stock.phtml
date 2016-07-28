@@ -1,0 +1,62 @@
+<?php $l=1 ; $tong=0;?>
+<table class="table_data">
+<thead>
+    <tr>
+        <th class="fix">
+            <a class="sort">STT</a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Hình ảnh </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Thương hiệu </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Size </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Mã gai </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Số lượng</a>
+        </th>
+        
+           
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $doanhthu=0; $chiphi=0; $loinhuan=0; $soluong = 0; $daban=0; $tonkho=0; ?>
+    <?php foreach ($tire_buys as $tire_buy) : ?>
+    
+    <?php 
+        $soluong += $tire_buy->soluong;
+        $daban += (isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']:0);
+
+        $ton = $tire_buy->soluong - (isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']:0);
+
+        if($ton > 0){
+    ?>
+        
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_buy->tire_buy_id ?>" class="edit_tr">
+            
+            
+            <td  class="fix"><?php echo $l++; ?></td>
+            <td  class="fix"><img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $link_picture[$tire_buy->tire_buy_id]['image']; ?>" width="50" height="50" /></td>
+            <td class="fix" id="tire_buy_brand_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_brand_name; ?></td>
+            <td class="fix" id="tire_buy_size_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_size_number; ?></td>
+            <td class="fix" data="<?php echo $tire_buy->tire_buy_pattern; ?>" id="tire_buy_pattern_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_pattern_name; ?></td>
+            
+            <td class="fix" id="conlai_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney($ton ); ?></td>
+            
+        </tr>
+
+    <?php } ?>
+    <?php endforeach; ?>
+
+    <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="5" >Tổng cộng</td>
+        <td class="fix"><?php echo $soluong-$daban; ?></td>
+    </tr>
+   </tbody>
+</table>
