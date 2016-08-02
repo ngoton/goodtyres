@@ -2372,3 +2372,45 @@ bxep: 6x14 = 84k-5-4--1484000
 
 27/07/2016 11:53:28|admincmg|add|3|attendance|1467496800-CN-08:00-12:00-13:00-14:00----5-14
 
+02/08/2016 09:08:44|admincmg|edit|72|order_tire|
+
+02/08/2016 09:08:56|admincmg|edit|29|order_tire|
+
+02/08/2016 09:09:47|admincmg|edit|29|order_tire|
+
+02/08/2016 09:10:40|admincmg|edit|72|order_tire|
+
+02/08/2016 09:11:03|admincmg|edit|29|order_tire|
+
+02/08/2016 09:11:21|admincmg|edit|72|order_tire|
+
+02/08/2016 09:11:53|admincmg|pay|1342|receivable|
+
+02/08/2016 09:12:13|admincmg|pay|1343|receivable|
+
+02/08/2016 09:13:11|admincmg|pay|1342|receivable|
+
+02/08/2016 09:30:06|admincmg|edit|74|order_tire|
+
+02/08/2016 09:30:13|admincmg|edit|74|order_tire|
+
+02/08/2016 09:30:18|admincmg|edit|74|order_tire|
+
+02/08/2016 09:30:41|admincmg|pay|1344|receivable|
+
+02/08/2016 09:30:53|admincmg|pay|1344|receivable|
+
+02/08/2016 09:33:36|admincmg|delete|1064|receive|
+
+02/08/2016 09:38:12|admincmg|pay|1344|receivable|
+
+02/08/2016 09:38:42|admincmg|delete|1065|receive|
+
+02/08/2016 09:38:45|admincmg|delete|1066|receive|
+
+02/08/2016 09:38:54|admincmg|pay|1344|receivable|
+
+02/08/2016 09:39:15|admincmg|delete|1067|receive|
+
+02/08/2016 09:39:22|admincmg|pay|1344|receivable|
+

@@ -509,16 +509,12 @@ Class stockController Extends baseController {
         $tire_buys = $tire_buy_model->queryTire($query);
         $this->view->data['tire_buys'] = $tire_buys;
 
-        $tire_product_model = $this->model->get('tireproductModel');
         $link_picture = array();
 
         $sell = array();
         foreach ($tire_buys as $tire_buy) {
-            $tire_products = $tire_product_model->queryTire('SELECT tire_product_thumb FROM tire_product, tire_product_pattern WHERE tire_pattern = tire_product_pattern_id AND tire_product_pattern_name LIKE "%'.$tire_buy->tire_pattern_name.'%"');
-
-            foreach ($tire_products as $tire_product) {
-                $link_picture[$tire_buy->tire_buy_id]['image'] = $tire_product->tire_product_thumb;
-            }
+            $link_picture[$tire_buy->tire_buy_id]['image'] = $tire_buy->tire_pattern_name.'.jpg';
+            
 
             $data_sale = array(
                 'where'=>'tire_brand='.$tire_buy->tire_buy_brand.' AND tire_size='.$tire_buy->tire_buy_size.' AND tire_pattern='.$tire_buy->tire_buy_pattern,

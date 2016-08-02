@@ -198,7 +198,7 @@ Class ordertireController Extends baseController {
         $pagination_stages = 2;
         
         $data = array(
-            'where' => 'order_tire_date >= '.strtotime($batdau).' AND order_tire_date <= '.strtotime($ketthuc),
+            'where' => ' ( (order_tire_status IS NULL OR order_tire_status = 0) OR (order_tire_status = 1 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc).') )',
         );
         if ($nv == 1) {
             $data = array(
@@ -246,7 +246,7 @@ Class ordertireController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => 'order_tire_date >= '.strtotime($batdau).' AND order_tire_date <= '.strtotime($ketthuc),
+            'where' => ' ( (order_tire_status IS NULL OR order_tire_status = 0) OR (order_tire_status = 1 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc).') )',
             );
 
         if ($nv == 1) {

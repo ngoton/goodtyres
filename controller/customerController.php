@@ -78,7 +78,10 @@ Class customerController Extends baseController {
         }
         
         if ($keyword != '') {
-            $search = ' AND ( customer_name LIKE "%'.$keyword.'%" )';
+            $search = ' AND ( customer_name LIKE "%'.$keyword.'%" 
+                            OR mst LIKE "%'.$keyword.'%" 
+                            OR customer_address LIKE "%'.$keyword.'%" 
+                            )';
             $data['where'] .= $search;
         }
         
