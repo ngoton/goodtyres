@@ -29,7 +29,7 @@ $(document).ready(function(){
         max_discount += thanhtien*0.03;
     }
 
-    $('#max_discount').val(max_discount);
+    $('#max_discount').val(Math.round(max_discount/1000)*1000);
 });
 
 $("#msform").validate({

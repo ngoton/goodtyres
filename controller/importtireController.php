@@ -2134,7 +2134,7 @@ Class importtireController Extends baseController {
                     }
 
 
-
+                    $data['sale'] = $_SESSION['userid_logined'];
                     $data['cost'] = 0;
                     $data['cost_vat'] = 0;
 

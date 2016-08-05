@@ -83,9 +83,9 @@ Class customertireController Extends baseController {
         $customer_model = $this->model->get('customertireModel');
 
         $list_customers = $customer_model->queryCustomer('SELECT customer_tire_company FROM customer_tire ORDER BY customer_tire_company ASC');
-        /*if ($_SESSION['role_logined'] == 4) {
+        if ($_SESSION['role_logined'] != 1) {
             $list_customers = $customer_model->queryCustomer('SELECT customer_tire_company FROM customer_tire WHERE customer_tire_sale = '.$_SESSION['userid_logined'].' ORDER BY customer_tire_company ASC');
-        }*/
+        }
         $this->view->data['list_customers'] = $list_customers;
 
         $sonews = $limit;
@@ -104,9 +104,9 @@ Class customertireController Extends baseController {
             $data['where'] .= ' AND customer_tire_id = '.$id;
         }
 
-        /*if ($_SESSION['role_logined'] == 4) {
+        if ($_SESSION['role_logined'] != 1) {
             $data['where'] .= ' AND ( customer_tire_sale IN (SELECT user_id FROM user WHERE user_group = '.$user_info->user_group.') OR customer_tire_sale = '.$_SESSION['userid_logined'].')';
-        }*/
+        }
 
         
 
@@ -144,9 +144,9 @@ Class customertireController Extends baseController {
             $data['where'] .= ' AND customer_tire_id = '.$id;
         }
 
-        /*if ($_SESSION['role_logined'] == 4) {
+        if ($_SESSION['role_logined'] != 1) {
             $data['where'] .= ' AND ( customer_tire_sale IN (SELECT user_id FROM user WHERE user_group = '.$user_info->user_group.') OR customer_tire_sale = '.$_SESSION['userid_logined'].')';
-        }*/
+        }
         
         if ($keyword != '') {
             $search = ' AND ( customer_tire_company LIKE "%'.$keyword.'%" 

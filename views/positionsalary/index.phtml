@@ -100,7 +100,7 @@ $tongthanhtien = 0;
     <center style="clear:both;margin-bottom: -30px;"><h1> LƯƠNG CHỨC VỤ </h1></center>
     <?php if($_SESSION['role_logined'] != 10){ ?>
 <div class="add-box">
-    <a class="add_button" onClick="add_click();">Thêm bảng điện thoại</a>
+    <a class="add_button" onClick="add_click();">Thêm bảng lương</a>
     
     <a class="add_button" id="import_excel" href="<?= $this->url('positionsalary/import')?>">Import Excel</a>
     <a class="add_button" id="btnExport"> Export Excel</a>
@@ -509,7 +509,7 @@ $( ".add-field" ).dialog({
     autoOpen: false,
     modal: true,
     width: "auto",
-    title: "Bảng phụ cấp điện thoại",
+    title: "Bảng lương chức vụ",
     hide: 'fold',
     show: 'blind'
 });

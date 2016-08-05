@@ -2414,3 +2414,39 @@ bxep: 6x14 = 84k-5-4--1484000
 
 02/08/2016 09:39:22|admincmg|pay|1344|receivable|
 
+05/08/2016 10:09:05|admincmg|delete|1|attendance|
+
+05/08/2016 10:09:08|admincmg|delete|2|attendance|
+
+05/08/2016 10:09:11|admincmg|delete|3|attendance|
+
+05/08/2016 11:01:32|admincmg|add|211|sale_report|1470348000---2---12345-0-1-0--1-hih-6-1469916000-100000-300000-0--0-0--0-0--0--0--0--0----0-0-0-1-1-1-1-1-1-1-1-1-1-0-0--------0-0-1
+
+05/08/2016 11:09:06|admincmg|pay|1345|receivable|
+
+05/08/2016 11:09:20|admincmg|pay|1346|receivable|
+
+05/08/2016 11:09:52|admincmg|pay|1346|receivable|
+
+05/08/2016 11:10:49|admincmg|add|212|sale_report|1467324000---2---1242-0-1-0--1-jfgjf-7-1469916000-500000-500000-0--0-0--0-0--0--0--0--0----0-0-0-1-1-1-1-1-1-1-1-1-1-0-0--------0-0-1
+
+05/08/2016 11:11:10|admincmg|pay|1347|receivable|
+
+05/08/2016 11:11:18|admincmg|pay|1348|receivable|
+
+05/08/2016 11:11:29|admincmg|pay|1348|receivable|
+
+05/08/2016 11:19:40|admincmg|delete|1|eating|
+
+05/08/2016 11:20:50|admincmg|edit|55|staff|PS-Phát sinh khác-05/08/2016-0------0-1--1-1470370850
+
+05/08/2016 11:21:28|admincmg|edit|55|staff|PS-Phát sinh khác-05/08/2016-0------0-1-_-1-1470370887
+
+05/08/2016 11:41:01|admincmg|edit|1|position_salary|4000000-1462053600
+
+05/08/2016 14:08:51|admincmg|edit|6|attendance|1467583200-Hai-07:47-11:30-13:04-17:03-291-270-Nhà bếp bệnh-8
+
+05/08/2016 14:10:34|admincmg|edit|6|attendance|1467583200-Hai-07:47-11:30-13:04-17:03-291-270-Nhà bếp bệnh-7.6
+
+05/08/2016 14:15:03|admincmg|edit|6|attendance|1467583200-Hai-07:47-11:30-13:04-17:03-291-270-Nhà bếp bệnh-8
+

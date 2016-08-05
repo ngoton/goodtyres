@@ -69,17 +69,35 @@ Class totalsalaryController Extends baseController {
         $insurrance_model = $this->model->get('insurranceModel');
         $lift_model = $this->model->get('liftModel');
         $sale_model = $this->model->get('salereportModel');
+        $receivable_model = $this->model->get('receivableModel');
+        $importtire_model = $this->model->get('importtireModel');
 
-        $data = array(
-            'where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc),
+        $x = array(
+            'where'=>'pay_money >= money AND pay_date >= '.strtotime($batdau).' AND pay_date <= '.strtotime($ketthuc),
         );
-        $join = array('table'=>'staff, user','where'=>'user_id = account AND user_id = sale');
+        $receivables = $receivable_model->getAllCosts($x);
 
-        $sales = $sale_model->getAllSale($data,$join);
         $arr_logs = array();
-        foreach ($sales as $sale) {
-            $arr_logs[$sale->staff_id] = isset($arr_logs[$sale->staff_id])?$arr_logs[$sale->staff_id]+(($sale->revenue_vat+$sale->revenue-$sale->cost_vat-$sale->cost-$sale->estimate_cost)*0.5):($sale->revenue_vat+$sale->revenue-$sale->cost_vat-$sale->cost-$sale->estimate_cost)*0.5;
+        $arr_sales = array();
+        foreach ($receivables as $re) {
+            $arr_sales[$re->sale_report] = isset($arr_sales[$re->sale_report])?$arr_sales[$re->sale_report]+$re->pay_money:$re->pay_money;
+
+            $data = array(
+                'where' => 'sale_type = 1 AND sale_report_id = '.$re->sale_report,
+            );
+            $join = array('table'=>'staff, user','where'=>'user_id = account AND user_id = sale');
+
+            $sales = $sale_model->getAllSale($data,$join);
+            
+            foreach ($sales as $sale) {
+                if (($sale->revenue_vat+$sale->revenue)==$arr_sales[$sale->sale_report_id] ) {
+                    $arr_logs[$sale->staff_id] = isset($arr_logs[$sale->staff_id])?$arr_logs[$sale->staff_id]+(($sale->revenue_vat+$sale->revenue-$sale->cost_vat-$sale->cost-$sale->estimate_cost)*0.5):($sale->revenue_vat+$sale->revenue-$sale->cost_vat-$sale->cost-$sale->estimate_cost)*0.5;
+                }
+                
+            }
         }
+
+        
         $this->view->data['arr_logs'] = $arr_logs;
 
         $data = array(
@@ -96,14 +114,22 @@ Class totalsalaryController Extends baseController {
                 $arr_lift[$staff] = isset($arr_lift[$staff])?$arr_lift[$staff]+$total:$total;
             }
         }
-        $this->view->data['arr_lift'] = $arr_lift;
 
         $data = array(
-            'where' => 'create_time <= '.strtotime($ketthuc).' GROUP BY staff',
-            'order_by' => 'create_time',
-            'order' => 'DESC',
+            'where' => 'import_tire_date >= '.strtotime($batdau).' AND import_tire_date <= '.strtotime($ketthuc),
         );
-        $phones = $phoneallowance_model->getAllAllowance($data);
+        $join = array('table'=>'staff, user','where'=>'user_id = account AND user_id = sale');
+
+        $imports = $importtire_model->getAllSale($data,$join);
+        
+        foreach ($imports as $sale) {
+            $arr_lift[$sale->staff_id] = isset($arr_lift[$sale->staff_id])?$arr_lift[$sale->staff_id]+1500000:1500000;
+        }
+
+        $this->view->data['arr_lift'] = $arr_lift;
+
+        $qr = 'SELECT * FROM (SELECT * FROM phone_allowance WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
+        $phones = $phoneallowance_model->queryAllowance($qr);
         $arr_phone = array();
         foreach ($phones as $phone) {
             $arr_phone[$phone->staff] = isset($arr_phone[$phone->staff])?$arr_phone[$phone->staff]+$phone->phone_allowance:$phone->phone_allowance;
@@ -111,7 +137,8 @@ Class totalsalaryController Extends baseController {
 
         $this->view->data['arr_phone'] = $arr_phone;
 
-        $insurrances = $insurrance_model->getAllSalary($data);
+        $qr = 'SELECT * FROM (SELECT * FROM insurrance WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
+        $insurrances = $insurrance_model->querySalary($qr);
         $arr_insurrance = array();
         foreach ($insurrances as $insurrance) {
             $arr_insurrance[$insurrance->staff]['congty'] = isset($arr_insurrance[$insurrance->staff]['congty'])?$arr_insurrance[$insurrance->staff]['congty']+$insurrance->insurrance:$insurrance->insurrance;
@@ -120,7 +147,8 @@ Class totalsalaryController Extends baseController {
 
         $this->view->data['arr_insurrance'] = $arr_insurrance;
 
-        $position_salarys = $position_salary_model->getAllSalary($data);
+        $qr = 'SELECT * FROM (SELECT * FROM position_salary WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
+        $position_salarys = $position_salary_model->querySalary($qr);
         $arr_position_salary = array();
         foreach ($position_salarys as $position_salary) {
             $arr_position_salary[$position_salary->staff] = isset($arr_position_salary[$position_salary->staff])?$arr_position_salary[$position_salary->staff]+$position_salary->position_salary:$position_salary->position_salary;
@@ -160,34 +188,32 @@ Class totalsalaryController Extends baseController {
         $diemtru = 0;
         $kpi = 300;
         foreach ($attendances as $attendance) {
-            if (8 >= $attendance->attendance_total) {
-                $sophut = (8 - $attendance->attendance_total)*60;
+            if (8.00 > $attendance->attendance_total) {
+                $sophut = (8.00 - $attendance->attendance_total)*60;
             }
 
-            switch ($sophut) {
-                case $sophut <= 3:
-                    $diemtru = 0;
-                    break;
-                case $sophut <= 15:
-                    $diemtru = 1;
-                    break;
-                case $sophut <= 30:
-                    $diemtru = 1.5;
-                    break; 
-                case $sophut <= 60:
-                    $diemtru = 3;
-                    break; 
-                case $sophut <= 240:
-                    $diemtru = 8;
-                    break;     
-                case $sophut <= 360:
-                    $diemtru = 10;
-                    break;
-                default:
-                    $diemtru = 12;
-                    break;
+            if ($sophut <= 3) {
+                $diemtru = 0;
             }
-            
+            elseif ($sophut > 3 && $sophut <= 15) {
+                $diemtru = 1;
+            }
+            elseif ($sophut > 15 && $sophut <= 30) {
+                $diemtru = 1.5;
+            }
+            elseif ($sophut > 30 && $sophut <= 60) {
+                $diemtru = 3;
+            }
+            elseif ($sophut > 60 && $sophut <= 240) {
+                $diemtru = 8;
+            }
+            elseif ($sophut > 240 && $sophut <= 360) {
+                $diemtru = 10;
+            }
+            else{
+                $diemtru = 12;
+            }
+
             $arr_attend[$attendance->staff] = isset($arr_attend[$attendance->staff])?$arr_attend[$attendance->staff]-$diemtru:$kpi-$diemtru;
         }
 
