@@ -184,36 +184,37 @@ Class totalsalaryController Extends baseController {
         );
         $attendances = $attendance_model->getAllAttendance($data);
         $arr_attend = array();
-        $sophut = 0;
-        $diemtru = 0;
         $kpi = 300;
         foreach ($attendances as $attendance) {
-            if (8.00 > $attendance->attendance_total) {
-                $sophut = (8.00 - $attendance->attendance_total)*60;
+            $sophut = 0;
+            $diemtru = 0;
+            if (8 >= $attendance->attendance_total) {
+                $sophut = (8 - $attendance->attendance_total)*60;
             }
 
             if ($sophut <= 3) {
                 $diemtru = 0;
             }
-            elseif ($sophut > 3 && $sophut <= 15) {
+            else if ($sophut > 3 && $sophut <= 15) {
                 $diemtru = 1;
             }
-            elseif ($sophut > 15 && $sophut <= 30) {
+            else if ($sophut > 15 && $sophut <= 30) {
                 $diemtru = 1.5;
             }
-            elseif ($sophut > 30 && $sophut <= 60) {
+            else if ($sophut > 30 && $sophut <= 60) {
                 $diemtru = 3;
             }
-            elseif ($sophut > 60 && $sophut <= 240) {
+            else if ($sophut > 60 && $sophut <= 240) {
                 $diemtru = 8;
             }
-            elseif ($sophut > 240 && $sophut <= 360) {
+            else if ($sophut > 240 && $sophut <= 360) {
                 $diemtru = 10;
             }
-            else{
+            else if ($sophut > 360) {
                 $diemtru = 12;
             }
-
+            
+            
             $arr_attend[$attendance->staff] = isset($arr_attend[$attendance->staff])?$arr_attend[$attendance->staff]-$diemtru:$kpi-$diemtru;
         }
 
