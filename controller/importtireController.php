@@ -236,6 +236,7 @@ Class importtireController Extends baseController {
         $this->view->data['lib'] = $this->lib;
         $code = $this->registry->router->param_id;
 
+        $tire_price_model = $this->model->get('tirepriceModel');
         $tire_going_model = $this->model->get('tiregoingModel');
         $join = array('table'=>'tire_pattern,tire_brand,tire_size','where'=>'tire_pattern = tire_pattern_id AND tire_brand = tire_brand_id AND tire_size = tire_size_id');
 
@@ -245,6 +246,17 @@ Class importtireController Extends baseController {
 
         $goings = $tire_going_model->getAllTire($data,$join);
         $this->view->data['tire_goings'] = $goings;
+
+        $price = array();
+        foreach ($goings as $going) {
+            $qr = $tire_price_model->queryTire('SELECT * FROM tire_price WHERE tire_brand = '.$going->tire_brand.' AND tire_size = '.$going->tire_size.' AND tire_pattern = '.$going->tire_pattern.' AND price_end_time >= '.$going->tire_going_date.' ORDER BY price_end_time DESC');
+            foreach ($qr as $key) {
+                if (!isset($price[$going->tire_going_id])) {
+                    $price[$going->tire_going_id] = $key->supply_price;
+                }
+            }
+        }
+        $this->view->data['price'] = $price;
 
         $this->view->data['code'] = $code;
         $this->view->data['tire_going_date'] = $this->registry->router->order_by;

@@ -571,7 +571,7 @@ $sun = date( 'd-m-Y', strtotime( 'sunday this week' ) );
     $('td').hover(function(){
         var dt = new Date();
         var time = dt.getHours() + ":" + dt.getMinutes();
-        var day = dt.getDate() + "-" + ( (dt.getMonth()+1)<10?("0"+(dt.getMonth()+1)):(dt.getMonth()+1) ) + "-" + dt.getFullYear();
+        var day = (dt.getDate()<10?"0"+dt.getDate():dt.getDate()) + "-" + ( (dt.getMonth()+1)<10?("0"+(dt.getMonth()+1)):(dt.getMonth()+1) ) + "-" + dt.getFullYear();
 
         var min = $(this).parent().attr('min');
         var max = $(this).parent().attr('max');
@@ -588,7 +588,6 @@ $sun = date( 'd-m-Y', strtotime( 'sunday this week' ) );
             value = true;
           }
       });
-        
 
         if ($(this).html() == "" && (min <= dt.getHours() && dt.getHours() < max) && day == today && value == false) {
             $(this).html('<button>x</button>');

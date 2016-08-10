@@ -75,6 +75,7 @@ Class checkinController Extends baseController {
         if (isset($_POST['time'])) {
             $checkin_model = $this->model->get('checkinModel');
             $staff_model = $this->model->get('staffModel');
+            $attendance_model = $this->model->get('attendanceModel');
 
             $staff = $staff_model->getStaffByWhere(array('account'=>$_SESSION['userid_logined']));
 
@@ -82,32 +83,77 @@ Class checkinController Extends baseController {
                 'staff' => $staff->staff_id,
                 'checkin_date' => strtotime(date('d-m-Y')),
             );
+            $data_attend = array(
+                'attendance_date' => $data['checkin_date'],
+                'attendance_day' => $this->sw_get_current_weekday(date('d-m-Y')),
+                'staff' => $data['staff'],
+            );
+
             if ($_POST['data'] == 'in_1') {
                 $data['checkin_1'] = strtotime(date('d-m-Y H:i:s'));
+                $data_attend['check_in_1'] = $_POST['time'];
             }
             if ($_POST['data'] == 'out_1') {
                 $data['checkout_1'] = strtotime(date('d-m-Y H:i:s'));
+                $data_attend['check_out_1'] = $_POST['time'];
             }
             if ($_POST['data'] == 'in_2') {
                 $data['checkin_2'] = strtotime(date('d-m-Y H:i:s'));
+                $data_attend['check_in_2'] = $_POST['time'];
             }
             if ($_POST['data'] == 'out_2') {
                 $data['checkout_2'] = strtotime(date('d-m-Y h:i:s'));
+                $data_attend['check_out_2'] = $_POST['time'];
             }
+
+            //$hourdiff = round((strtotime($time1) - strtotime($time2))/3600, 1);
 
             $check = $checkin_model->queryCheckin('SELECT * FROM checkin WHERE checkin_date >= '.$data['checkin_date'].' AND checkin_date <= '.$data['checkin_date'].' AND staff = '.$data['staff']);
             if (!$check) {
                 $checkin_model->createCheckin($data);
+
+                $data_attend['attendance_total'] = 0;
+                $attendance_model->createAttendance($data_attend);
             }
             else{
                 foreach ($check as $c) {
                     $checkin_model->updateCheckin($data,array('checkin_id'=>$c->checkin_id));
+
+                    $attendance_model->updateAttendance($data_attend,array('staff'=>$c->staff,'attendance_date'=>$c->checkin_date));
                 }
                 
             }
             
         }
         return true;
+    }
+    function sw_get_current_weekday($date) {
+        $weekday = date("l",strtotime($date));
+        $weekday = strtolower($weekday);
+        switch($weekday) {
+            case 'monday':
+                $weekday = 'Hai';
+                break;
+            case 'tuesday':
+                $weekday = 'Ba';
+                break;
+            case 'wednesday':
+                $weekday = 'Tư';
+                break;
+            case 'thursday':
+                $weekday = 'Năm';
+                break;
+            case 'friday':
+                $weekday = 'Sáu';
+                break;
+            case 'saturday':
+                $weekday = 'Bảy';
+                break;
+            default:
+                $weekday = 'CN';
+                break;
+        }
+        return $weekday;
     }
     
 }

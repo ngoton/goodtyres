@@ -25,6 +25,9 @@
         <th  class="fix">
             <a class="sort " >Số lượng</a>
         </th>
+        <th  class="fix">
+            <a class="sort " >Giá</a>
+        </th>
         
            
         <th  class="fix">&nbsp;</th>
@@ -44,7 +47,7 @@
                 <?php echo $tire_going->tire_pattern_name; ?>
             </td>
             <td class="fix"  id="tire_number_<?php echo $tire_going->tire_going_id; ?>"><?php echo $tire_going->tire_number; ?></td>
-            
+            <td class="fix" id="price_<?php echo $tire_going->tire_going_id; ?>"><a href="<?php echo $this->url('tireprice/view/'.$tire_going->tire_brand.'/'.$tire_going->tire_size.'/'.$tire_going->tire_pattern) ?>"> <?php echo isset($price[$tire_going->tire_going_id])?$price[$tire_going->tire_going_id]:0; ?></a></td>
             <td>
                 <button class="del" data="<?php echo $tire_going->tire_going_id ?>" style="display:block">Xóa</button>
             </td>
@@ -53,6 +56,7 @@
     <tr style="text-align:center; font-weight: bold; color: red;">
         <td class="fix" colspan="5" >Tổng cộng</td>
         <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
+        <td class="fix" ></td>
         <td class="fix" ></td>
     </tr>
    </tbody>

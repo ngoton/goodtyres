@@ -85,6 +85,79 @@ Class tirepriceController Extends baseController {
         $this->view->show('tireprice/index');
     }
 
+    public function view() {
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Bảng giá lốp xe';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+            $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
+        }
+        else{
+            $keyword = "";
+            $limit = 20;
+        }
+
+        
+        $tire_brand_model = $this->model->get('tirebrandModel');
+        $tire_size_model = $this->model->get('tiresizeModel');
+
+        $tire_brands = $tire_brand_model->getAllTire();
+        $tire_sizes = $tire_size_model->getAllTire();
+
+        $this->view->data['tire_brands'] = $tire_brands;
+        $this->view->data['tire_sizes'] = $tire_sizes;
+
+        $join = array('table'=>'tire_brand, tire_size, tire_pattern','where'=>'tire_brand.tire_brand_id = tire_price.tire_brand AND tire_size.tire_size_id = tire_price.tire_size AND tire_pattern.tire_pattern_id = tire_price.tire_pattern');
+
+        $tire_price_model = $this->model->get('tirepriceModel');
+        $sonews = $limit;
+        $x = 1 * $sonews;
+        $pagination_stages = 2;
+        
+        $data = array(
+            'where' => 'tire_brand = '.$this->registry->router->param_id.' AND tire_size = '.$this->registry->router->page.' AND tire_pattern = '.$this->registry->router->order_by,
+        );
+        
+        
+        $tongsodong = count($tire_price_model->getAllTire($data,$join));
+        $tongsotrang = ceil($tongsodong / $sonews);
+        
+
+        $this->view->data['keyword'] = $keyword;
+        $this->view->data['pagination_stages'] = $pagination_stages;
+        $this->view->data['tongsotrang'] = $tongsotrang;
+        $this->view->data['limit'] = $limit;
+        $this->view->data['sonews'] = $sonews;
+
+        $data = array(
+            'where' => 'tire_brand = '.$this->registry->router->param_id.' AND tire_size = '.$this->registry->router->page.' AND tire_pattern = '.$this->registry->router->order_by,
+            );
+        
+      
+        if ($keyword != '') {
+            $search = '( tire_brand_name LIKE "%'.$keyword.'%" 
+                OR tire_size_number LIKE "%'.$keyword.'%" )';
+            
+                $data['where'] = $data['where'].' AND '.$search;
+        }
+
+        
+
+        
+        $this->view->data['tire_prices'] = $tire_price_model->getAllTire($data,$join);
+        $this->view->data['lastID'] = isset($tire_price_model->getLastTire()->tire_price_id)?$tire_price_model->getLastTire()->tire_price_id:0;
+
+        /* Lấy tổng doanh thu*/
+        
+        /*************/
+        $this->view->show('tireprice/view');
+    }
+
    public function getpattern(){
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
