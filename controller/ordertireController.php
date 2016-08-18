@@ -1020,6 +1020,40 @@ Class ordertireController Extends baseController {
         $order_tire_lists = $order_tire_list_model->getAllTire($data,$join);
         $this->view->data['order_tire_lists'] = $order_tire_lists;
 
+        $tire_brand_model = $this->model->get('tirebrandModel');
+        $tire_size_model = $this->model->get('tiresizeModel');
+        $tire_pattern_model = $this->model->get('tirepatternModel');
+        $tire_quotation_model = $this->model->get('tirequotationModel');
+        $tire_quotation_brand_model = $this->model->get('tirequotationbrandModel');
+        $tire_quotation_size_model = $this->model->get('tirequotationsizeModel');
+        $price = array();
+        foreach ($order_tire_lists as $order) {
+            $tire_brand = $tire_brand_model->getTire($order->tire_brand);
+            if ($tire_brand->tire_brand_name == "Aoteli" || $tire_brand->tire_brand_name == "Yatai" || $tire_brand->tire_brand_name == "Yatone" || $tire_brand->tire_brand_name == "Three-A") {
+                $tire_brand_name = "Shengtai";
+            }
+            else{
+                $tire_brand_name = $tire_brand->tire_brand_name;
+            }
+
+            $tire_size_number = $tire_size_model->getTire($order->tire_size)->tire_size_number;
+            $pattern_type = $tire_pattern_model->getTire($order->tire_pattern)->tire_pattern_type;
+
+            $brand = $tire_quotation_brand_model->getTireByWhere(array('tire_quotation_brand_name'=>$tire_brand_name));
+            $brand = $brand?$brand->tire_quotation_brand_id:null;
+            $size = $tire_quotation_size_model->getTireByWhere(array('tire_quotation_size_number'=>$tire_size_number));
+            $size = $size?$size->tire_quotation_size_id:null;
+
+            $data_q = array(
+                'where' => 'tire_quotation_brand ='.$brand.' AND tire_quotation_size ='.$size.' AND tire_quotation_pattern='.$pattern_type.' AND start_date <= '.strtotime(date('d-m-Y')).' AND (end_date IS NULL OR end_date > '.strtotime(date('d-m-Y')).')',
+            );
+            $prices = $tire_quotation_model->getAllTire($data_q);
+            foreach ($prices as $p) {
+                $price[$order->order_tire_list_id] = $p->tire_quotation_price;
+            }
+        }
+
+        $this->view->data['price'] = $price;
         $this->view->data['order'] = $id;
 
         $this->view->show('ordertire/listtire');

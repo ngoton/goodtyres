@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title><?php echo isset($title) ? $title : null ?> - <?php echo $_SERVER["SERVER_NAME"]=='caimeptrading.com'?'Cai Mep Trading':($_SERVER["SERVER_NAME"]=='www.caimeptrading.com'?'Cai Mep Trading':'Cai Mep Global Logistics') ?></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title><?php echo isset($title) ? $title : null ?> - <?php echo ($_SERVER["SERVER_NAME"]=='caimeptrading.com'|| $_SERVER["SERVER_NAME"]=='www.caimeptrading.com')?'Cai Mep Trading':(($_SERVER["SERVER_NAME"]=='viet-trade.org' || $_SERVER["SERVER_NAME"]=='www.viet-trade.org')?'Việt Trade':'Cai Mep Global Logistics' ) ?></title>
   <meta name="keywords" content="Logistics, Xuất Khẩu, Nhập Khẩu, Xuất Nhập Khẩu, Vận Chuyển Hàng Hóa, Vận Chuyển, Hàng Siêu Trọng, Salan, Xà Lan, Sà Lan, Vận Chuyển Sà Lan, Thủ Tục Hải Quan, Hải Quan, Thông Quan, Mở Tờ Khai, Hun Trùng, Đóng Cont, Đóng Hàng, Forwarder, Stufffing, Unstuffing, Export, Import, Terminal, Port, Sea Port, Transhit, Transhipment, OOG, Over Weight, Over Hight, Over Length, Barge, Barging, Barge team, Barge Fleet, Inland Water Way, IWW, Ship, Vessel, Canoe, River, Channal, Pilot, Boarding Agent, Đại lý tàu, Husbanding Agent, Cambudia, Barging Service, Customs, Customs transhipment, Customs Clearance, EDI, Manifest, E-Manifest, chỉnh sửa Manifest, Adjust Manifest, Inbound, Outbound, Cargo, container, 20', 40', Reefer container, Flatrach, Tank, Hàng Quá Khổ, Cấm Tải, Chất lượng,">
   <meta property="og:description" itemprop="description" name="description" content="<?php echo isset($title) ? $title.' - ' : null ?>Logistics - Vận chuyển - Thủ tục hải quan - Manifest - Container">
   <meta name="generator" content="Cai Mep Trading">
@@ -16,61 +16,175 @@
   <link rel="alternate" href="<?php echo BASE_URL ?>" hreflang="vi-vn" />
   <link rel="publisher" href="https://plus.google.com/111952529763008010249" title="Cai Mep Global Logistics"/>
   <link href="<?php BASE_URL ?>/public/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
-	<link rel="stylesheet" type="text/css" href="<?php BASE_URL ?>/public/css/style.css">
-	<link rel="stylesheet" type="text/css" href="<?php BASE_URL ?>/public/css/bootstrap.min.css">
-	<!-- <link rel="stylesheet" type="text/css" href="<?php BASE_URL ?>/public/css/bootstrap-responsive.min.css"> -->
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="<?php BASE_URL ?>/public/js/adminbar/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Morris chart -->
+  <link rel="stylesheet" href="<?php BASE_URL ?>/public/js/adminbar/plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="<?php BASE_URL ?>/public/js/adminbar/dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="<?php BASE_URL ?>/public/js/adminbar/dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" type="text/css" href="<?php BASE_URL ?>/public/css/style.css">
   <link rel="stylesheet" type="text/css" href="<?php BASE_URL ?>/public/js/ui/jquery-ui.css">
   <script type="text/javascript" src="<?php BASE_URL ?>/public/js/jquery-1.7.2.min.js"></script>
   <script type="text/javascript" src="<?php BASE_URL ?>/public/js/ui/jquery-ui.js"></script>
-	<script type="text/javascript" src="<?php BASE_URL ?>/public/js/html5.js"></script>
-	<script type="text/javascript" src="<?php BASE_URL ?>/public/js/jquery.form.js"></script>
-	<script type="text/javascript" src="<?php BASE_URL ?>/public/js/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="<?php BASE_URL ?>/public/js/custom.js"></script>
+  <script type="text/javascript" src="<?php BASE_URL ?>/public/js/html5.js"></script>
+  <script type="text/javascript" src="<?php BASE_URL ?>/public/js/jquery.form.js"></script>
+  <script type="text/javascript" src="<?php BASE_URL ?>/public/js/jquery.validate.min.js"></script>
+  <script type="text/javascript" src="<?php BASE_URL ?>/public/js/custom.js"></script>
   <script type="text/javascript" src="<?php BASE_URL ?>/public/js/localization/messages_vi.js"></script>
-  <script type="text/javascript" src="<?php BASE_URL ?>/public/js/bootstrap.js"></script>
-  <script type="text/javascript" src="<?php BASE_URL ?>/public/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="<?php BASE_URL ?>/public/js/colResizable-1.5.min.js"></script>
   <script type="text/javascript" src="<?php BASE_URL ?>/public/js/jquery.stickyheader.js"></script>
   <script type="text/javascript" src="<?php BASE_URL ?>/public/js/jquery.ba-throttle-debounce.min.js"></script>
   <script type="text/javascript" src="<?php echo BASE_URL ?>/public/js/jquery.battatech.excelexport.js"></script>
   <link rel="stylesheet" type="text/css" href="<?php BASE_URL ?>/public/css/component.css" />
-  <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <script src="<?php BASE_URL ?>/public/js/pace.min.js"></script>
+  <style type="text/css">
+    .pace {
+    -webkit-pointer-events: none;
+    pointer-events: none;
 
-  ga('create', 'UA-56488212-1', 'auto');
-  ga('send', 'pageview');
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
 
-</script>
-<!-- Go to www.addthis.com/dashboard to customize your tools -->
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-507e26a03bf7f1f7" async="async"></script>
-<script src="<?php BASE_URL ?>/public/js/pace.min.js"></script>
-<style type="text/css">
-  .pace {
-  -webkit-pointer-events: none;
-  pointer-events: none;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.69);
+    box-shadow: 0 2px 10px 2px rgba(0, 0, 0, 0.6);
+  }
+  .pagination{height:36px;margin:18px 0;}
+  .pagination ul{display:inline-block;*display:inline;*zoom:1;margin-left:0;margin-bottom:0;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 2px rgba(0, 0, 0, 0.05);-moz-box-shadow:0 1px 2px rgba(0, 0, 0, 0.05);box-shadow:0 1px 2px rgba(0, 0, 0, 0.05);}
+  .pagination li{display:inline;white-space: nowrap;}
+  .pagination a{float:left;padding:0 14px;line-height:34px;text-decoration:none;border:1px solid #ddd;border-left-width:0;}
+  .pagination a:hover,.pagination .active a{background-color:#f5f5f5;}
+  .pagination .active a{color:#999999;cursor:default;}
+  .pagination .disabled a,.pagination .disabled a:hover{color:#999999;background-color:transparent;cursor:default;}
+  .pagination li:first-child a{border-left-width:1px;-webkit-border-radius:3px 0 0 3px;-moz-border-radius:3px 0 0 3px;border-radius:3px 0 0 3px;}
+  .pagination li:last-child a{-webkit-border-radius:0 3px 3px 0;-moz-border-radius:0 3px 3px 0;border-radius:0 3px 3px 0;}
+  .pagination-centered{text-align:center;}
+  .pagination-right{text-align:right;}
+  a:hover{color:#07ACFF; cursor:pointer}
 
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+  button,input,select,textarea{margin:0;font-size:100%;vertical-align:middle;}
+  button,input{*overflow:visible;line-height:normal;}
+  button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0;}
+  button,input[type="button"],input[type="reset"],input[type="submit"]{cursor:pointer;-webkit-appearance:button;}
+  input[type="search"],input[type="text"],input[type="email"],input[type="password"]{-webkit-appearance:textfield;-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;}
 
-  overflow: hidden;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 2000;
-  width: 100%;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.69);
-  box-shadow: 0 2px 10px 2px rgba(0, 0, 0, 0.6);
-}
+  legend{display:block;line-height:36px;}
+  label,input,button,select,textarea{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:12px;font-weight:normal;}
+  label{display:block;margin-bottom:5px;color:#333333;}
+  input,textarea,select,.uneditable-input{display:inline-block;width:190px;height:18px;padding:5px;margin-bottom:9px;font-size:13px;line-height:18px;color:#555555;border:1px solid #ccc;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
+  .uneditable-textarea{width:auto;height:auto;}
+  /* label input,label textarea,label select{display:block;} */
+  input[type="image"],input[type="checkbox"],input[type="radio"]{width:auto;height:auto;padding:0;margin:3px 0;*margin-top:0;line-height:normal;border:0;cursor:pointer;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;}
+  input[type="file"]{padding:initial;line-height:initial;border:initial;background-color:#ffffff;background-color:initial;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;}
+  input[type="button"],input[type="reset"],input[type="submit"]{width:auto;height:auto;}
+  select,input[type="file"]{height:28px;*margin-top:4px;line-height:28px;}
+  select{width:100%;background-color:#ffffff;}
+  select[multiple],select[size]{height:auto;}
+  input[type="image"]{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;}
+  textarea{height:auto;}
+  input[type="hidden"]{display:none;}
+  .radio,.checkbox{padding-left:18px;}
+  .radio input[type="radio"],.checkbox input[type="checkbox"]{float:left;margin-left:-18px;}
+  .controls>.radio:first-child,.controls>.checkbox:first-child{padding-top:5px;}
+  .radio.inline,.checkbox.inline{display:inline-block;margin-bottom:0;vertical-align:middle;}
+  .radio.inline+.radio.inline,.checkbox.inline+.checkbox.inline{margin-left:10px;}
+  .controls>.radio.inline:first-child,.controls>.checkbox.inline:first-child{padding-top:0;}
+  input,textarea{-webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.075);-moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.075);box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.075);-webkit-transition:border linear 0.2s,box-shadow linear 0.2s;-moz-transition:border linear 0.2s,box-shadow linear 0.2s;-ms-transition:border linear 0.2s,box-shadow linear 0.2s;-o-transition:border linear 0.2s,box-shadow linear 0.2s;transition:border linear 0.2s,box-shadow linear 0.2s;}
+  input:focus,textarea:focus{border-color:rgba(82, 168, 236, 0.8);-webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 8px rgba(82, 168, 236, 0.6);-moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 8px rgba(82, 168, 236, 0.6);box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 8px rgba(82, 168, 236, 0.6);outline:0;outline:thin dotted \9;}
+  input[type="file"]:focus,input[type="checkbox"]:focus,select:focus{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;outline:thin dotted;outline:5px auto -webkit-focus-ring-color;outline-offset:-2px;}
+  .input-mini{width:60px;}
+  .input-small{width:90px;}
+  .input-medium{width:150px;}
+  .input-large{width:210px;}
+  .input-xlarge{width:270px;}
+  .input-xxlarge{width:530px;}
+  input[class*="span"],select[class*="span"],textarea[class*="span"],.uneditable-input{float:none;margin-left:0;}
+  input.span1,textarea.span1,.uneditable-input.span1{width:50px;}
+  input.span2,textarea.span2,.uneditable-input.span2{width:130px;}
+  input.span3,textarea.span3,.uneditable-input.span3{width:210px;}
+  input.span4,textarea.span4,.uneditable-input.span4{width:290px;}
+  input.span5,textarea.span5,.uneditable-input.span5{width:370px;}
+  input.span6,textarea.span6,.uneditable-input.span6{width:450px;}
+  input.span7,textarea.span7,.uneditable-input.span7{width:530px;}
+  input.span8,textarea.span8,.uneditable-input.span8{width:610px;}
+  input.span9,textarea.span9,.uneditable-input.span9{width:690px;}
+  input.span10,textarea.span10,.uneditable-input.span10{width:770px;}
+  input.span11,textarea.span11,.uneditable-input.span11{width:850px;}
+  input.span12,textarea.span12,.uneditable-input.span12{width:930px;}
+  input[disabled],select[disabled],textarea[disabled],input[readonly],select[readonly],textarea[readonly]{background-color:#f5f5f5;border-color:#ddd;cursor:not-allowed;}
+  .control-group.warning>label,.control-group.warning .help-block,.control-group.warning .help-inline{color:#c09853;}
+  .control-group.warning input,.control-group.warning select,.control-group.warning textarea{color:#c09853;border-color:#c09853;}.control-group.warning input:focus,.control-group.warning select:focus,.control-group.warning textarea:focus{border-color:#a47e3c;-webkit-box-shadow:0 0 6px #dbc59e;-moz-box-shadow:0 0 6px #dbc59e;box-shadow:0 0 6px #dbc59e;}
+  .control-group.warning .input-prepend .add-on,.control-group.warning .input-append .add-on{color:#c09853;background-color:#fcf8e3;border-color:#c09853;}
+  .control-group.error>label,.control-group.error .help-block,.control-group.error .help-inline{color:#b94a48;}
+  .control-group.error input,.control-group.error select,.control-group.error textarea{color:#b94a48;border-color:#b94a48;}.control-group.error input:focus,.control-group.error select:focus,.control-group.error textarea:focus{border-color:#953b39;-webkit-box-shadow:0 0 6px #d59392;-moz-box-shadow:0 0 6px #d59392;box-shadow:0 0 6px #d59392;}
+  .control-group.error .input-prepend .add-on,.control-group.error .input-append .add-on{color:#b94a48;background-color:#f2dede;border-color:#b94a48;}
+  .control-group.success>label,.control-group.success .help-block,.control-group.success .help-inline{color:#468847;}
+  .control-group.success input,.control-group.success select,.control-group.success textarea{color:#468847;border-color:#468847;}.control-group.success input:focus,.control-group.success select:focus,.control-group.success textarea:focus{border-color:#356635;-webkit-box-shadow:0 0 6px #7aba7b;-moz-box-shadow:0 0 6px #7aba7b;box-shadow:0 0 6px #7aba7b;}
+  .control-group.success .input-prepend .add-on,.control-group.success .input-append .add-on{color:#468847;background-color:#dff0d8;border-color:#468847;}
+  input:focus:required:invalid,textarea:focus:required:invalid,select:focus:required:invalid{color:#b94a48;border-color:#ee5f5b;}input:focus:required:invalid:focus,textarea:focus:required:invalid:focus,select:focus:required:invalid:focus{border-color:#e9322d;-webkit-box-shadow:0 0 6px #f8b9b7;-moz-box-shadow:0 0 6px #f8b9b7;box-shadow:0 0 6px #f8b9b7;}
+  .form-actions{padding:17px 20px 18px;margin-top:18px;margin-bottom:18px;background-color:#f5f5f5;border-top:1px solid #ddd;}
+  .uneditable-input{display:block;background-color:#ffffff;border-color:#eee;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.025);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.025);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.025);cursor:not-allowed;}
+  :-moz-placeholder{color:#999999;}
+  ::-webkit-input-placeholder{color:#999999;}
+  .help-block{margin-top:5px;margin-bottom:0;color:#999999;}
+  .help-inline{display:inline-block;*display:inline;*zoom:1;margin-bottom:9px;vertical-align:middle;padding-left:5px;}
+  .input-prepend,.input-append{margin-bottom:5px;*zoom:1;}.input-prepend:before,.input-append:before,.input-prepend:after,.input-append:after{display:table;content:"";}
+  .input-prepend:after,.input-append:after{clear:both;}
+  .input-prepend input,.input-append input,.input-prepend .uneditable-input,.input-append .uneditable-input{-webkit-border-radius:0 3px 3px 0;-moz-border-radius:0 3px 3px 0;border-radius:0 3px 3px 0;}.input-prepend input:focus,.input-append input:focus,.input-prepend .uneditable-input:focus,.input-append .uneditable-input:focus{position:relative;z-index:2;}
+  .input-prepend .uneditable-input,.input-append .uneditable-input{border-left-color:#ccc;}
+  .input-prepend .add-on,.input-append .add-on{float:left;display:block;width:auto;min-width:16px;height:18px;margin-right:-1px;padding:5px;font-weight:normal;line-height:18px;color:#999999;text-align:center;text-shadow:0 1px 0 #ffffff;background-color:#f5f5f5;border:1px solid #ccc;-webkit-border-radius:3px 0 0 3px;-moz-border-radius:3px 0 0 3px;border-radius:3px 0 0 3px;}
+  .input-prepend .active,.input-append .active{background-color:#a9dba9;border-color:#46a546;}
+  .input-prepend .add-on{*margin-top:1px;}
+  .input-append input,.input-append .uneditable-input{float:left;-webkit-border-radius:3px 0 0 3px;-moz-border-radius:3px 0 0 3px;border-radius:3px 0 0 3px;}
+  .input-append .uneditable-input{border-right-color:#ccc;}
+  .input-append .add-on{margin-right:0;margin-left:-1px;-webkit-border-radius:0 3px 3px 0;-moz-border-radius:0 3px 3px 0;border-radius:0 3px 3px 0;}
+  .input-append input:first-child{*margin-left:-160px;}.input-append input:first-child+.add-on{*margin-left:-21px;}
+  .search-query{padding-left:14px;padding-right:14px;margin-bottom:0;-webkit-border-radius:14px;-moz-border-radius:14px;border-radius:14px;}
+  .form-search input,.form-inline input,.form-horizontal input,.form-search textarea,.form-inline textarea,.form-horizontal textarea,.form-search select,.form-inline select,.form-horizontal select,.form-search .help-inline,.form-inline .help-inline,.form-horizontal .help-inline,.form-search .uneditable-input,.form-inline .uneditable-input,.form-horizontal .uneditable-input{display:inline-block;margin-bottom:0;}
+  .form-search label,.form-inline label,.form-search .input-append,.form-inline .input-append,.form-search .input-prepend,.form-inline .input-prepend{display:inline-block;}
+  .form-search .input-append .add-on,.form-inline .input-prepend .add-on,.form-search .input-append .add-on,.form-inline .input-prepend .add-on{vertical-align:middle;}
+  .control-group{margin-bottom:9px;}
+  .form-horizontal legend+.control-group{margin-top:18px;-webkit-margin-top-collapse:separate;}
+  .form-horizontal .control-group{margin-bottom:18px;*zoom:1;}.form-horizontal .control-group:before,.form-horizontal .control-group:after{display:table;content:"";}
+  .form-horizontal .control-group:after{clear:both;}
+  .form-horizontal .control-group>label{float:left;width:140px;padding-top:5px;text-align:right;}
+  .form-horizontal .controls{margin-left:160px;}
+  .form-horizontal .form-actions{padding-left:160px;}
 
-</style>
-</head>
-
-<body>
+  ul {
+    list-style: disc;
+  }
+  ul {
+      padding: 0;
+      margin: 0px;
+  }
+  .ui-dialog{
+    z-index: 999999;
+  }
+  </style>
   <script type="text/javascript">
     $(function () {
       var w = $("#container").width();
@@ -163,6 +277,30 @@
             
         });
 
+        $(".sidebar-menu a").each(function () {
+            var href = "/"+$(this).attr('data');
+
+            if (path === href) {
+                $(this).closest('li').addClass('active');
+                $(this).closest('li').parents('li').addClass('active');
+
+            }
+            if (window.location.hash == $(this).attr("data")) {
+              var hrefval = $(this).attr("data");
+          
+              if(hrefval != "#") {
+                closeSidepage('.slide-content');
+                openSidepage(hrefval);
+
+                $(this).closest('li').addClass('active');
+                $(this).closest('li').parents('li').addClass('active');
+
+                $("html, body").animate({ scrollTop: 0 }, 1);
+              }
+            }
+            
+        });
+
         if (path == "" && window.location.hash == "") {
             closeSidepage('.slide-content');
             openSidepage('#index');
@@ -181,23 +319,23 @@
       });
     });*/
 
-  var refreshId = setInterval(function(){  
+    /*var refreshId = setInterval(function(){  
     $.ajax({
       type: "POST",
       url: "<?php echo BASE_URL ?>/admin/notification",
       data: 'data=1', // or any data you want to send
       cache: false,
       success: function(html){
-        if (html != parseInt(html, 10)) {
+       if (html != parseInt(html, 10)) {
           html = 0;
         }
       $('#nfc_count').text(html).fadeIn('fast'); // response from server side process
       }
     });
-    },10000);
+    },10000);*/
 
-  var check_lock_user = 0;
-  $.ajax({
+   var check_lock_user = 0;
+    $.ajax({
       type: "POST",
       url: "<?php echo BASE_URL ?>/admin/checklockuser",
       data: "data=<?php echo isset($_SESSION['userid_logined'])?$_SESSION['userid_logined']:0 ?>", // or any data you want to send
@@ -218,522 +356,737 @@
       }
     });
 
-
-$(document).ready(function () {
-        $("#btnExport").click(function () {
-            $("#tblExport").battatech_excelexport({
-                containerid: "tblExport"
-               , datatype: 'table'
+    $(document).ready(function () {
+            $("#btnExport").click(function () {
+                $("#tblExport").battatech_excelexport({
+                    containerid: "tblExport"
+                   , datatype: 'table'
+                });
             });
         });
-    });
-  </script>
-  <script language="javascript" type="text/javascript">
-    function flashtext(ele, col) {
-        var tmpColCheck = document.getElementById(ele).style.color;
 
-        if (tmpColCheck === 'white') {
-            document.getElementById(ele).style.color = col;
-        } else {
-            document.getElementById(ele).style.color = 'white';
+    /*function flashtext(ele, col) {
+            var tmpColCheck = document.getElementById(ele).style.color;
+
+            if (tmpColCheck === 'white') {
+                document.getElementById(ele).style.color = col;
+            } else {
+                document.getElementById(ele).style.color = 'white';
+            }
         }
-    }
 
-    setInterval(function () {
-        flashtext('nfc_count', 'red');
-    }, 500); //set an interval timer up to repeat the function
+        setInterval(function () {
+            flashtext('nfc_count', 'red');
+        }, 500); //set an interval timer up to repeat the function
 
+    $(document).ready(function(){
+          $(':input').live('focus',function(){
+              $(this).attr('autocomplete', 'off');
+          });
+      });*/
+      </script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
 
+  <header class="main-header">
+    <!-- Logo -->
+    <a href="<?php echo BASE_URL ?>" class="logo">
+      <?php if($_SERVER["SERVER_NAME"]=='viet-trade.org' || $_SERVER["SERVER_NAME"]=='www.viet-trade.org'){ ?>
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>VT</b></span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>VIỆT TRADE</b></span>
+      <?php }else{ ?>
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>CMG</b></span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>CMG</b></span>
+      <?php } ?>
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
 
-  $(document).ready(function(){
-      $(':input').live('focus',function(){
-          $(this).attr('autocomplete', 'off');
-      });
-  });
-    </script>
-
-  <span itemscope itemtype="http://schema.org/LocalBusiness">
-    
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
+      <div class="navbar-custom-menu">
+        
+          <!-- Messages: style can be found in dropdown.less-->
           
-          <a class="brand" href="<?php echo $this->url('') ?>"><b>
-
-            <span itemscope itemtype="http://schema.org/LocalBusiness" itemref="_url2">
-            <span itemprop="name"><font style="color:#ffc153;">CMG</font></span>
-            
-            <meta id="_email16" itemprop="email" content="biz@caimeptrading.com">
-            <span id="_address3" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-            <meta itemprop="streetAddress" content="29, QL 51">
-            <meta itemprop="addressLocality" content="Phước Tân, tp.Biên Hòa">
-            <meta itemprop="addressRegion" content="Đồng Nai">
-            <meta itemprop="addressCountry" content="Việt Nam">
-            <meta itemprop="postalCode" content="71000"></span>
-            <meta id="_telephone5" itemprop="telephone" content="0613 937 677">
-            <span id="_review6" itemprop="review" itemscope itemtype="http://schema.org/Review">
-            <span itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
-            <meta itemprop="ratingValue" content="5"></span></span>
-            <span id="_aggregateRating10" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-            <meta itemprop="ratingValue" content="5">
-            <meta itemprop="bestRating" content="5">
-            <meta itemprop="worstRating" content="1">
-            <meta itemprop="ratingCount" content="2200"></span></span>
-            </b>
+          <!-- Notifications: style can be found in dropdown.less -->
+          
+          <!-- Tasks: style can be found in dropdown.less -->
+          
+          <!-- User Account: style can be found in dropdown.less -->
+          <ul class="nav navbar-nav">
+          <!-- Messages: style can be found in dropdown.less-->
+          <li class="dropdown messages-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-envelope-o"></i>
+              <span class="label label-success">4</span>
+            </a>
+          </li>
+          <!-- Notifications: style can be found in dropdown.less -->
+          <li class="dropdown notifications-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-warning">10</span>
+            </a>
+          </li>
+          <!-- Tasks: style can be found in dropdown.less -->
+          <li class="dropdown tasks-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-flag-o"></i>
+              <span class="label label-danger">9</span>
+            </a>
+          </li>
+          <!-- User Account: style can be found in dropdown.less -->
+          <li class="dropdown user user-menu">
+            <!-- Kiem tra dang nhap -->
+            <?php 
+            if ($_SESSION) {
+              ?>
+              <a class="logined" href="<?php echo $this->url('user/logout') ?>">&nbsp; | Logout</a><a class="logined" href="<?php echo BASE_URL.'/user/info/'.$_SESSION['userid_logined'] ?>"><b><i><?php echo $_SESSION['user_logined']; ?> </i></b></a>
+              <?php
+            }
+            else{
+              ?>
+              <a class="logined" href="<?php echo $this->url('user/login') ?>">Login</a>
+              <?php
+            }
+            ?>
+            <!-- end -->
+          </li>
+          <!-- Control Sidebar Toggle Button -->
+        </ul>
+          
+          <!-- Control Sidebar Toggle Button -->
+          
+      </div>
+    </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <div class="user-panel">
+          <button type="button" class="btn btn-block btn-primary" onClick="javascript:window.location.href='<?php echo $this->url('ordertire') ?>'">
+            <i class="fa  fa-pencil-square-o"></i> Đặt hàng
+          </button>
+      </div>
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu">
+        <li class="header">QUẢN TRỊ</li>
+        <li class="treeview">
+          <a data="admin" href="<?php echo $this->url('admin') ?>">
+            <i class="fa fa-home"></i> <span>Trang chủ</span>
           </a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <?php if ($_SESSION && ($_SESSION['role_logined'] != 10)) { ?>
-              <li><a   data="index" href="<?php echo $this->url('') ?>">Trang chủ</a></li>
-                            
-              <li><a  data="quotation" href="<?php echo $this->url('quotation') ?>">Bảng giá dịch vụ</a></li>
-              <li><a href="#">Danh mục</a>
-              <ul>
-                  <?php if ($_SESSION && ($_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 8)) { ?>
-                  <li><a  data="customer" href="<?php echo $this->url('customer') ?>">Khách hàng</a></li>
-                  <li><a  data="shipmentvendor" href="<?php echo $this->url('shipmentvendor') ?>">Vendor</a></li>
-                  <li><a  data="accounting" href="<?php echo $this->url('accounting') ?>">Hóa đơn thanh toán</a></li>
-                <?php }else if ($_SESSION && $_SESSION['role_logined'] == 3 || $_SESSION && $_SESSION['role_logined'] == 4) { ?>
-                  <li><a  data="salereport" href="<?php echo $this->url('salereport') ?>">Báo cáo</a></li>
-                  <li><a  data="shipment" href="<?php echo $this->url('shipment') ?>">Lô hàng</a></li>
-                  <li><a  data="sales" href="<?php echo $this->url('sales') ?>">Doanh số bán hàng</a></li>
-                <?php }else if($_SESSION && $_SESSION['role_logined'] == 1){ ?>
-                <li><a  data="revenue" href="<?php echo $this->url('revenue') ?>">Doanh số bán hàng</a>
-                  <ul >
-                    
-                    <li><a  data="sales" href="<?php echo $this->url('sales') ?>">Doanh số bán hàng</a></li>
-                    <li><a  data="accounting" href="<?php echo $this->url('accounting') ?>">Báo cáo Kế toán</a></li>
-                  </ul>
-                </li>
-                <?php } ?>
-                <?php if ($_SESSION && ($_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 5)) { ?>
-                  <li><a href="#">Giá cước</a>
-                    <ul >
-                      <li><a  data="newtransport" href="<?php echo $this->url('newtransport') ?>">Vận tải đường bộ (Mẫu mới)</a></li>
-                      <li><a  data="transport" href="<?php echo $this->url('transport') ?>">Vận tải đường bộ</a></li>
-                      <li><a  data="shipping" href="<?php echo $this->url('shipping') ?>">Vận tải đường thủy</a></li>
-                      <li><a  data="manifest" href="<?php echo $this->url('manifest') ?>">Manifest</a></li>
-                      <li><a  data="handling" href="<?php echo $this->url('handling') ?>">Nâng hạ</a></li>
-                    </ul>
-                  </li>
-                  <li><a href="#">Phụ phí</a>
-                    <ul >
-                      <li><a  data="surcharge" href="<?php echo $this->url('surcharge') ?>">Phụ phí</a></li>
-                      <li><a  data="shipcharge" href="<?php echo $this->url('shipcharge') ?>">Phí tàu</a></li>
-                    </ul>
-                  </li>
-                  <li><a  data="location" href="<?php echo $this->url('location') ?>">Địa điểm</a></li>
-                  <li><a  data="port" href="<?php echo $this->url('port') ?>">Cảng</a></li>
-                   <?php if ($_SESSION) { ?>
-                  <li><a href="#">Khách hàng</a>
-                    <ul>
-                      <li><a  data="customer" href="<?php echo $this->url('customer') ?>">Khách hàng</a></li>
-                      <li><a  data="ecustomer" href="<?php echo $this->url('ecustomer') ?>">Khách hàng (Internet)</a></li>
-                      
-                    </ul>
-                  </li>
-                  <li><a  data="shipmentvendor" href="<?php echo $this->url('shipmentvendor') ?>">Vendor</a></li>
-                  <li><a  data="fixedasset" href="<?php echo $this->url('fixedasset') ?>">Tài sản cố định</a></li>
-                  <li><a  data="tireproduct" href="<?php echo $this->url('tireproduct') ?>">Bảng giá lốp xe</a></li>
-                <?php } ?>
-                <?php if ($_SESSION && $_SESSION['role_logined'] == 1) { ?>
-                  <li><a  data="user" href="<?php echo $this->url('user') ?>">Tài khoản</a></li>
-                <?php } ?>
-                
-                
-                <?php } ?>
-              </ul>
-            </li>
-              <?php if (isset($_SESSION['user_logined'])) { ?>
-                <li>
-                  <a href="#">Nghiệp vụ</a>
-                  <ul>
-                
-               
-                
-                
-              <li><a  data="advance" href="<?php echo $this->url('advance') ?>">Tạm ứng</a></li>
-              <li><a href="#">Kế toán</a>
-              <ul>
-                <li><a  data="receivable" href="<?php echo $this->url('receivable') ?>">Dự thu</a></li>
-                <li><a  data="payable" href="<?php echo $this->url('payable') ?>">Dự chi</a></li>
-                <li><a  data="costs" href="<?php echo $this->url('costs') ?>">Thu - Chi</a></li>
-                <li><a  data="secs/lists" href="<?php echo $this->url('secs/lists') ?>">Rút sec</a></li>
-                <li><a  data="receive" href="<?php echo $this->url('receive') ?>">Đã thu</a></li>
-                <li><a  data="pay" href="<?php echo $this->url('pay') ?>">Đã chi</a></li>
-                <li><a  data="lendercost" href="<?php echo $this->url('lendercost') ?>">Vay vốn</a></li>
-                <li><a  data="lenderpay" href="<?php echo $this->url('lenderpay') ?>">Phải chi vay vốn</a></li>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-th-list"></i>
+            <span>Danh mục</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <?php if ($_SESSION && ($_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 8)) { ?>
+              <li><a  data="customer" href="<?php echo $this->url('customer') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Khách hàng</a></li>
+              <li><a  data="shipmentvendor" href="<?php echo $this->url('shipmentvendor') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Vendor</a></li>
+              <li><a  data="accounting" href="<?php echo $this->url('accounting') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Hóa đơn thanh toán</a></li>
+            <?php }else if ($_SESSION && $_SESSION['role_logined'] == 3 || $_SESSION && $_SESSION['role_logined'] == 4) { ?>
+              <li><a  data="salereport" href="<?php echo $this->url('salereport') ?>"><i class="fa fa-circle-o text-aqua"></i>Báo cáo</a></li>
+              <li><a  data="shipment" href="<?php echo $this->url('shipment') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Lô hàng</a></li>
+              <li><a  data="sales" href="<?php echo $this->url('sales') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Doanh số bán hàng</a></li>
+            <?php }else if($_SESSION && $_SESSION['role_logined'] == 1){ ?>
+              <li><a  data="revenue" href="<?php echo $this->url('revenue') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Doanh số bán hàng</a>
+                <ul class="treeview-menu">
+                  
+                  <li><a  data="sales" href="<?php echo $this->url('sales') ?>"><i class="fa fa-circle-o text-aqua"></i>Doanh số bán hàng</a></li>
+                  <li><a  data="accounting" href="<?php echo $this->url('accounting') ?>"><i class="fa fa-circle-o text-aqua"></i>Báo cáo Kế toán</a></li>
+                </ul>
+              </li>
+            <?php } ?>
+            <?php if ($_SESSION && ($_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 5)) { ?>
+              <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Giá cước</a>
+                <ul class="treeview-menu">
+                  <li><a  data="newtransport" href="<?php echo $this->url('newtransport') ?>"><i class="fa fa-circle-o text-aqua"></i>Vận tải đường bộ (Mẫu mới)</a></li>
+                  <li><a  data="transport" href="<?php echo $this->url('transport') ?>"><i class="fa fa-circle-o text-aqua"></i>Vận tải đường bộ</a></li>
+                  <li><a  data="shipping" href="<?php echo $this->url('shipping') ?>"><i class="fa fa-circle-o text-aqua"></i>Vận tải đường thủy</a></li>
+                  <li><a  data="manifest" href="<?php echo $this->url('manifest') ?>"><i class="fa fa-circle-o text-aqua"></i>Manifest</a></li>
+                  <li><a  data="handling" href="<?php echo $this->url('handling') ?>"><i class="fa fa-circle-o text-aqua"></i>Nâng hạ</a></li>
+                </ul>
+              </li>
+              <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Phụ phí</a>
+                <ul class="treeview-menu">
+                  <li><a  data="surcharge" href="<?php echo $this->url('surcharge') ?>"><i class="fa fa-circle-o text-aqua"></i>Phụ phí</a></li>
+                  <li><a  data="shipcharge" href="<?php echo $this->url('shipcharge') ?>"><i class="fa fa-circle-o text-aqua"></i>Phí tàu</a></li>
+                </ul>
+              </li>
+              <li><a  data="location" href="<?php echo $this->url('location') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Địa điểm</a></li>
+              <li><a  data="port" href="<?php echo $this->url('port') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Cảng</a></li>
+               <?php if ($_SESSION) { ?>
+              <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Khách hàng</a>
+                <ul class="treeview-menu">
+                  <li><a  data="customer" href="<?php echo $this->url('customer') ?>"><i class="fa fa-circle-o text-aqua"></i>Khách hàng</a></li>
+                  <li><a  data="ecustomer" href="<?php echo $this->url('ecustomer') ?>"><i class="fa fa-circle-o text-aqua"></i>Khách hàng (Internet)</a></li>
+                  
+                </ul>
+              </li>
+              <li><a  data="shipmentvendor" href="<?php echo $this->url('shipmentvendor') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Vendor</a></li>
+              <li><a  data="fixedasset" href="<?php echo $this->url('fixedasset') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tài sản cố định</a></li>
+            <?php } ?>
+            <?php if ($_SESSION && $_SESSION['role_logined'] == 1) { ?>
+              <li><a  data="user" href="<?php echo $this->url('user') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tài khoản</a></li>
+            <?php } ?>
+            
+            
+            <?php } ?>
+          </ul>
+        </li>
+        <?php if (isset($_SESSION['user_logined'])) { ?>
+        <li>
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>Nghiệp vụ</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a  data="advance" href="<?php echo $this->url('advance') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tạm ứng</a></li>
+            <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Kế toán</a>
+              <ul class="treeview-menu">
+                <li><a  data="receivable" href="<?php echo $this->url('receivable') ?>"><i class="fa fa-circle-o text-aqua"></i>Dự thu</a></li>
+                <li><a  data="payable" href="<?php echo $this->url('payable') ?>"><i class="fa fa-circle-o text-aqua"></i>Dự chi</a></li>
+                <li><a  data="costs" href="<?php echo $this->url('costs') ?>"><i class="fa fa-circle-o text-aqua"></i>Thu - Chi</a></li>
+                <li><a  data="secs/lists" href="<?php echo $this->url('secs/lists') ?>"><i class="fa fa-circle-o text-aqua"></i>Rút sec</a></li>
+                <li><a  data="receive" href="<?php echo $this->url('receive') ?>"><i class="fa fa-circle-o text-aqua"></i>Đã thu</a></li>
+                <li><a  data="pay" href="<?php echo $this->url('pay') ?>"><i class="fa fa-circle-o text-aqua"></i>Đã chi</a></li>
+                <li><a  data="lendercost" href="<?php echo $this->url('lendercost') ?>"><i class="fa fa-circle-o text-aqua"></i>Vay vốn</a></li>
+                <li><a  data="lenderpay" href="<?php echo $this->url('lenderpay') ?>"><i class="fa fa-circle-o text-aqua"></i>Phải chi vay vốn</a></li>
     
-                  <li><a  data="staff" href="<?php echo $this->url('staff') ?>">Nhân viên</a></li>
-                  <li><a  data="newsalary" href="<?php echo $this->url('newsalary') ?>">Bảng lương (Mẫu mới)</a></li>
+                <li><a  data="staff" href="<?php echo $this->url('staff') ?>"><i class="fa fa-circle-o text-aqua"></i>Nhân viên</a></li>
+                <li><a  data="newsalary" href="<?php echo $this->url('newsalary') ?>"><i class="fa fa-circle-o text-aqua"></i>Bảng lương (Mẫu mới)</a></li>
                   
               </ul>
-            </li>
+            </li>               
             <?php if ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 5 || $_SESSION['role_logined'] == 3) { ?>
-            <li><a  data="procument" href="<?php echo $this->url('procument') ?>">Procument</a></li>
+            <li><a  data="procument" href="<?php echo $this->url('procument') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Procument</a></li>
             <?php } ?>
-            </li>
-            <li>
-              <a  data="salereport" href="<?php echo $this->url('salereport') ?>">Sale</a>
-              <ul>
-                <li><a  data="salereport" href="<?php echo $this->url('salereport') ?>">Lô hàng</a></li>
-                <li><a  data="receivablesale" href="<?php echo $this->url('receivablesale') ?>">Dự thu</a></li>
-                <li><a  data="payablesale" href="<?php echo $this->url('payablesale') ?>">Dự chi</a></li>
-                <li><a  data="receivesale" href="<?php echo $this->url('receivesale') ?>">Đã thu</a></li>
-                <li><a  data="paysale" href="<?php echo $this->url('paysale') ?>">Đã chi</a></li>
-              </ul>
-            </li>
-              
-            <li><a href="#">Agent</a>
-              <ul>
-                  <li><a  data="agent" href="<?php echo $this->url('agent') ?>">Đại lý</a></li>
-                  <li><a  data="agentmanifest" href="<?php echo $this->url('agentmanifest') ?>">Chỉnh manifest</a></li>
-                  <li><a  data="receivablesale" href="<?php echo $this->url('receivablesale') ?>">Dự thu</a></li>
-                  <li><a  data="payablesale" href="<?php echo $this->url('payablesale') ?>">Dự chi</a></li>
-                  <li><a  data="receivesale" href="<?php echo $this->url('receivesale') ?>">Đã thu</a></li>
-                  <li><a  data="paysale" href="<?php echo $this->url('paysale') ?>">Đã chi</a></li>
-                
-              </ul>
-            </li>
+          </li>
+          <li>
+            <a  data="salereport" href="<?php echo $this->url('salereport') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Sale</a>
+            <ul class="treeview-menu">
+              <li><a  data="salereport" href="<?php echo $this->url('salereport') ?>"><i class="fa fa-circle-o text-aqua"></i>Lô hàng</a></li>
+              <li><a  data="receivablesale" href="<?php echo $this->url('receivablesale') ?>"><i class="fa fa-circle-o text-aqua"></i>Dự thu</a></li>
+              <li><a  data="payablesale" href="<?php echo $this->url('payablesale') ?>"><i class="fa fa-circle-o text-aqua"></i>Dự chi</a></li>
+              <li><a  data="receivesale" href="<?php echo $this->url('receivesale') ?>"><i class="fa fa-circle-o text-aqua"></i>Đã thu</a></li>
+              <li><a  data="paysale" href="<?php echo $this->url('paysale') ?>"><i class="fa fa-circle-o text-aqua"></i>Đã chi</a></li>
+            </ul>
+          </li>
             
-            <li>
-              <a  data="trading" href="<?php echo $this->url('trading') ?>">Trading</a>
-              <ul>
-                <li><a  data="trading" href="<?php echo $this->url('trading') ?>">Lô hàng</a></li>
-                <li><a  data="receivablesale" href="<?php echo $this->url('receivablesale') ?>">Dự thu</a></li>
-                <li><a  data="payablesale" href="<?php echo $this->url('payablesale') ?>">Dự chi</a></li>
-                <li><a  data="receivesale" href="<?php echo $this->url('receivesale') ?>">Đã thu</a></li>
-                <li><a  data="paysale" href="<?php echo $this->url('paysale') ?>">Đã chi</a></li>
-              </ul>
-            </li>
-            <li><a  data="importtire" href="<?php echo $this->url('importtire') ?>">Lô hàng lốp xe</a></li>
+          <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Agent</a>
+            <ul class="treeview-menu">
+                <li><a  data="agent" href="<?php echo $this->url('agent') ?>"><i class="fa fa-circle-o text-aqua"></i>Đại lý</a></li>
+                <li><a  data="agentmanifest" href="<?php echo $this->url('agentmanifest') ?>"><i class="fa fa-circle-o text-aqua"></i>Chỉnh manifest</a></li>
+                <li><a  data="receivablesale" href="<?php echo $this->url('receivablesale') ?>"><i class="fa fa-circle-o text-aqua"></i>Dự thu</a></li>
+                <li><a  data="payablesale" href="<?php echo $this->url('payablesale') ?>"><i class="fa fa-circle-o text-aqua"></i>Dự chi</a></li>
+                <li><a  data="receivesale" href="<?php echo $this->url('receivesale') ?>"><i class="fa fa-circle-o text-aqua"></i>Đã thu</a></li>
+                <li><a  data="paysale" href="<?php echo $this->url('paysale') ?>"><i class="fa fa-circle-o text-aqua"></i>Đã chi</a></li>
               
-            <?php if ($_SESSION && ($_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 7 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 1)) { ?>
+            </ul>
+          </li>
+          
+          <li>
+            <a  data="trading" href="<?php echo $this->url('trading') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Trading</a>
+            <ul class="treeview-menu">
+              <li><a  data="trading" href="<?php echo $this->url('trading') ?>"><i class="fa fa-circle-o text-aqua"></i>Lô hàng</a></li>
+              <li><a  data="receivablesale" href="<?php echo $this->url('receivablesale') ?>"><i class="fa fa-circle-o text-aqua"></i>Dự thu</a></li>
+              <li><a  data="payablesale" href="<?php echo $this->url('payablesale') ?>"><i class="fa fa-circle-o text-aqua"></i>Dự chi</a></li>
+              <li><a  data="receivesale" href="<?php echo $this->url('receivesale') ?>"><i class="fa fa-circle-o text-aqua"></i>Đã thu</a></li>
+              <li><a  data="paysale" href="<?php echo $this->url('paysale') ?>"><i class="fa fa-circle-o text-aqua"></i>Đã chi</a></li>
+            </ul>
+          </li>
+          <li><a  data="importtire" href="<?php echo $this->url('importtire') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Lô hàng lốp xe</a></li>
             
-                <li><a  data="invoice" href="<?php echo $this->url('invoice') ?>">TCMT</a></li>
-                
-              <?php } ?>
+          <?php if ($_SESSION && ($_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 7 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 1)) { ?>
+          
+          <li><a  data="invoice" href="<?php echo $this->url('invoice') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>TCMT</a></li>
+              
+          <?php } ?>
+
+          </ul>
+        </li>
+        
+        
+      <?php } ?>
+      <?php if ($_SESSION) { ?>
+        <li><a href="#">
+            <i class="fa fa-fw fa-support"></i>
+            <span>Lốp xe</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a data="ordertire" href="<?php echo $this->url('ordertire') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Đặt hàng</a>
+              <ul class="treeview-menu">
+                <li><a  data="ordertire" href="<?php echo $this->url('ordertire') ?>">
+                    <i class="fa fa-circle-o text-aqua"></i>Đặt hàng
+                    <span class="pull-right-container">
+                      <small class="label pull-right bg-green">new</small>
+                    </span>
+                  </a>
+                </li>
+                <li><a  data="ordertire/orderlist" href="<?php echo $this->url('ordertire/orderlist') ?>"><i class="fa fa-circle-o text-aqua"></i>Đơn hàng</a></li>
+                <li><a  data="ordertirewaiting" href="<?php echo $this->url('ordertirewaiting') ?>"><i class="fa fa-circle-o text-aqua"></i>Đơn hàng đang chờ</a></li>
+                <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3){ ?>
+                <li><a  data="ordertire/report" href="<?php echo $this->url('ordertire/report') ?>"><i class="fa fa-circle-o text-aqua"></i>Tổng hợp đơn hàng</a></li>
+                <?php } ?>
 
               </ul>
             </li>
-            
-            <?php if ($_SESSION && ($_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 4 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 7)) { ?>
-            <li><a href="#">Báo cáo - Thống kê</a>
-              <ul>
-                <li><a   data="profit" href="<?php echo $this->url('profit') ?>">Lợi nhuận</a>
-                  <ul>
-                    <li><a  data="profit/sale" href="<?php echo $this->url('profit/sale') ?>">Sale</a></li>
-                    <li><a  data="profit/trading" href="<?php echo $this->url('profit/trading') ?>">Trading</a></li>
-                    <li><a  data="profit/agent" href="<?php echo $this->url('profit/agent') ?>">Agent</a></li>
-                    <li><a  data="profit/tcmt" href="<?php echo $this->url('profit/tcmt') ?>">TCMT</a></li>
-                    <li><a  data="profit/financial" href="<?php echo $this->url('profit/financial') ?>">Tài chính</a></li>
-                  </ul>
-                </li>
-                <li><a  data="adcosts" href="<?php echo $this->url('adcosts') ?>">Chi phí hành chính</a>
-                  <ul>
-                    <li><a  data="adcosts/office" href="<?php echo $this->url('adcosts/office') ?>">Văn phòng</a></li>
-                    <li><a  data="adcosts/team" href="<?php echo $this->url('adcosts/team') ?>">Team Building</a></li>
-                    <li><a  data="adcosts/other" href="<?php echo $this->url('adcosts/other') ?>">Phát sinh</a></li>
-                  </ul>
-                </li>
-                <li><a href="#">Tài sản</a>
-                  <ul>
-                    <li><a  data="asset" href="<?php echo $this->url('asset') ?>">Tài sản cố định</a></li>
-                    <li><a  data="report/report" href="<?php echo $this->url('report/report') ?>">Tài sản biến đổi</a></li>
-                    <li><a  data="redebts" href="<?php echo $this->url('redebts') ?>">Nợ phải thu</a></li>
-                    <li><a  data="paydebts" href="<?php echo $this->url('paydebts') ?>">Nợ phải trả</a></li>
-                    <li><a  data="opsdebts" href="<?php echo $this->url('opsdebts') ?>">OPS</a></li>
-                    <li><a  data="report" href="<?php echo $this->url('report') ?>">Báo cáo tài sản</a></li>
-                  </ul>
-                </li>
-                <li><a href="#">Công nợ</a>
-                  <ul>
-                    <li><a  data="liability" href="<?php echo $this->url('liability') ?>">Công nợ lô hàng</a></li>
-                    <li><a  data="cusdebts" href="<?php echo $this->url('cusdebts') ?>">Công nợ khách hàng</a></li>
-                    <li><a  data="staffdebts" href="<?php echo $this->url('staffdebts') ?>">Công nợ nhân viên</a></li>
-                    <li><a  data="debts" href="<?php echo $this->url('debts') ?>">Nợ xấu</a></li>
-                  </ul>
-                </li>
-                <li><a  data="bill" href="<?php echo $this->url('bill') ?>">Hóa đơn</a>
-                    <ul>
-                      <li><a  data="bill" href="<?php echo $this->url('bill') ?>">Bảng kê hóa đơn</a></li>
-                      <li><a  data="bill/costs" href="<?php echo $this->url('bill/costs') ?>">Chi phí cân đối hóa đơn</a></li>
-                    </ul>
-                </li>
-                <li><a  href="#">Nhân sự</a>
-                  <ul>
-                    <li><a   data="newsalary" href="<?php echo $this->url('newsalary') ?>">Chi phí nhân sự</a>
-                      <li><a  data="adcosts/salary" href="<?php echo $this->url('adcosts/salary') ?>">Lương</a></li>
-                      <li><a  data="adcosts/allowance" href="<?php echo $this->url('adcosts/allowance') ?>">Phụ cấp</a></li>
-                      <li><a   data="sales" href="<?php echo $this->url('sales') ?>">Lương doanh số</a>
-                      <li><a   data="found" href="<?php echo $this->url('found') ?>">Quỹ trích lũy</a>
-                  </ul>
-                </li>
-                <li><a href="#">Tài khoản</a>
-                  <ul>
-                    <li><a  data="bank" href="<?php echo $this->url('bank') ?>">Thống kê tài khoản</a></li>
-                    <li><a  data="secs/lists" href="<?php echo $this->url('secs/lists') ?>">Rút sec - Chuyển tiền</a></li>
-                  </ul>
-                </li>
-                <li><a href="#">Tổng hợp</a>
-                  <ul>
-                      <li><a  data="flow" href="<?php echo $this->url('flow') ?>">Dự báo dòng tiền</a></li>
-                      <li><a  data="money" href="<?php echo $this->url('money') ?>">Dòng tiền</a></li>
-                      <li><a  data="statement" href="<?php echo $this->url('statement') ?>">Thực chi - Thực thu</a></li>
-                      <li><a  data="stats" href="<?php echo $this->url('stats') ?>">Thống kê lô hàng</a></li>
-                      <li><a  data="general" href="<?php echo $this->url('general') ?>">Phát sinh trong tuần</a></li>
-                      <li><a  data="total" href="<?php echo $this->url('total') ?>">Lợi nhuận - Chi phí</a></li>
-                  </ul>
-                </li>
+            <li><a  data="tiresale/sale" href="<?php echo $this->url('tiresale/sale') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Sản lượng bán</a>
+              <ul class="treeview-menu">
+                <li><a  data="tiresale/sale" href="<?php echo $this->url('tiresale/sale') ?>"><i class="fa fa-circle-o text-aqua"></i>Sản lượng</a></li>
+                <li><a  data="customertire/total" href="<?php echo $this->url('customertire/total') ?>"><i class="fa fa-circle-o text-aqua"></i>Tổng hợp</a></li>
+                <li><a  data="tiresale/analytics" href="<?php echo $this->url('tiresale/analytics') ?>"><i class="fa fa-circle-o text-aqua"></i>Thống kê</a></li>
               </ul>
             </li>
-            
-            <?php } ?>
-            <?php } ?>
-            <?php if ($_SESSION) { ?>
-            <li><a href="#">Lốp xe</a>
-              <ul>
-                <li><a href="#">Đặt hàng</a>
-                  <ul>
-                    <li><a  data="ordertire/orderlist" href="<?php echo $this->url('ordertire/orderlist') ?>">Đơn hàng</a></li>
-                    <li><a  data="ordertire" href="<?php echo $this->url('ordertire') ?>">Đặt hàng</a></li>
-                  </ul>
-                </li>
-                <li><a  data="customertire" href="<?php echo $this->url('customertire') ?>">Liên lạc hàng ngày</a></li>
-                <li><a  data="tiresale" href="<?php echo $this->url('tiresale') ?>">Lô hàng</a></li>
-                
-                <li><a  data="tiresale/sale" href="<?php echo $this->url('tiresale/sale') ?>">Sản lượng bán</a>
-                  <ul>
-                    <li><a  data="tiresale/sale" href="<?php echo $this->url('tiresale/sale') ?>">Sản lượng</a></li>
-                    <li><a  data="tiresale/analytics" href="<?php echo $this->url('tiresale/analytics') ?>">Thống kê</a></li>
-                  </ul>
-                </li>
-                <li><a  data="tiresale/profit" href="<?php echo $this->url('tiresale/profit') ?>">Lợi nhuận</a></li>
-                <li><a  data="stock" href="<?php echo $this->url('stock') ?>">Tồn kho</a>
-                  <ul>
-                    <li><a  data="stock" href="<?php echo $this->url('stock') ?>">Tồn kho - Dự kiến nhập</a></li>
-                    <li><a  data="inventory" href="<?php echo $this->url('inventory') ?>">Tồn kho chi tiết</a></li>
-                  </ul>
-                </li>
-                <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 3){ ?>
-                <li><a  data="tireprice" href="<?php echo $this->url('tireprice') ?>">Bảng giá nhập</a></li>
-                <li><a  data="tireoceanfreight" href="<?php echo $this->url('tireoceanfreight') ?>">Ocean Freight</a></li>
-                <?php } ?>
-                <?php if($_SESSION['role_logined'] == 1){ ?>
-                <li><a  data="#" href="#">Thông tin</a>
-                  <ul>
-                    <li><a  data="tirequotation/quotation" href="<?php echo $this->url('tirequotation/quotation') ?>">Bảng giá</a></li>
-                    <li><a  data="tirebuyprice" href="<?php echo $this->url('tirebuyprice') ?>">Bảng giá nhập</a></li>
-                    <li><a  data="tirecostlogs" href="<?php echo $this->url('tirecostlogs') ?>">Chi phí logistics</a></li>
-                    <li><a  data="tiretax" href="<?php echo $this->url('tiretax') ?>">Thuế</a></li>
-                    <li><a  data="tirestuff" href="<?php echo $this->url('tirestuff') ?>">Hệ số xếp dỡ</a></li>
-                    <li><a  data="tiresupplier" href="<?php echo $this->url('tiresupplier') ?>">Supplier</a></li>
-                    <li><a  data="tireprofit" href="<?php echo $this->url('tireprofit') ?>">Tỷ suất lợi nhuận</a></li>
-                  </ul>
-                </li>
+            <li><a  data="stock" href="<?php echo $this->url('stock') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tồn kho</a>
+              <ul class="treeview-menu">
+                <li><a  data="stock" href="<?php echo $this->url('stock') ?>"><i class="fa fa-circle-o text-aqua"></i>Tồn kho - Dự kiến nhập</a></li>
+                <li><a  data="inventory" href="<?php echo $this->url('inventory') ?>"><i class="fa fa-circle-o text-aqua"></i>Tồn kho chi tiết</a></li>
+                <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3){ ?>
+                <li><a  data="stock/report" href="<?php echo $this->url('stock/report') ?>"><i class="fa fa-circle-o text-aqua"></i>Giá trị tồn</a></li>
                 <?php } ?>
               </ul>
             </li>
-            <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 7 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 10){ ?>
-            <li><a href="#">Chi phí nhân sự</a>
-              <ul>
-                <li><a  data="totalsalary" href="<?php echo $this->url('totalsalary') ?>">Bảng lương</a></li>
-                <li><a  data="attendance" href="<?php echo $this->url('attendance') ?>">Bảng chấm công</a></li>
-                <li><a  data="eating" href="<?php echo $this->url('eating') ?>">Bảng cơm</a></li>
-                <li><a  data="phoneallowance" href="<?php echo $this->url('phoneallowance') ?>">Phụ cấp điện thoại</a></li>
-                <li><a  data="insurrance" href="<?php echo $this->url('insurrance') ?>">Bảo hiểm</a></li>
-                <li><a  data="positionsalary" href="<?php echo $this->url('positionsalary') ?>">Lương chức vụ</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Tài chính - Kế toán</a>
-              <ul>
-                <li><a  data="daily" href="<?php echo $this->url('daily') ?>">Báo cáo thu chi</a></li>
-                <li><a  data="daily/account" href="<?php echo $this->url('daily/account') ?>">Định khoản</a></li>
-                <li><a  data="additional" href="<?php echo $this->url('additional') ?>">Phát sinh</a></li>
-                <li><a  data="financial/office" href="<?php echo $this->url('financial/office') ?>">Chi phí hành chính</a></li>
-                <li><a  data="financial" href="<?php echo $this->url('financial') ?>">Bảng cân đối</a></li>
-                <li><a  data="financial/balance" href="<?php echo $this->url('financial/balance') ?>">Bảng cân đối tài sản</a></li>
-
-                <li><a  data="financial/result" href="<?php echo $this->url('financial/result') ?>">Kết quả hoạt động kinh doanh</a></li>
-                <li><a  data="financial/asset" href="<?php echo $this->url('financial/asset') ?>">Tài sản</a></li>
-                <li><a  data="account" href="<?php echo $this->url('account') ?>">Tài khoản</a></li>
+            <li><a  data="tiresalary" href="<?php echo $this->url('tiresalary') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Doanh số bán hàng</a></li>
+            <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3){ ?>
+            <li><a  data="tireimport" href="<?php echo $this->url('tireimport') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Giá vốn</a>
+              <ul class="treeview-menu">
+                <li><a  data="tireimport" href="<?php echo $this->url('tireimport') ?>"><i class="fa fa-circle-o text-aqua"></i>Giá vốn</a></li>
+                <li><a  data="tireimportdetail" href="<?php echo $this->url('tireimportdetail') ?>"><i class="fa fa-circle-o text-aqua"></i>Giá theo lô hàng</a></li>
               </ul>
             </li>
             <?php } ?>
-            <?php } ?>
-            <?php if ($_SESSION) { ?>
-            <li><a  data="checkin" href="<?php echo $this->url('checkin') ?>">Điểm danh</a>
-                <ul>
-                  <li><a  data="checkin" href="<?php echo $this->url('checkin') ?>">Chấm công</a></li>
-                  <li><a  data="checkeat" href="<?php echo $this->url('checkeat') ?>">Đăng ký cơm</a></li>
+            <li><a  data="tirequotation" href="<?php echo $this->url('tirequotation') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Gửi báo giá</a></li>
+            <li><a  data="customertire" href="<?php echo $this->url('customertire') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Liên lạc hàng ngày</a>
+                <ul class="treeview-menu">
+                    <li><a  data="customertire" href="<?php echo $this->url('customertire') ?>"><i class="fa fa-circle-o text-aqua"></i>Liên lạc hàng ngày</a></li>
+                    <li><a  data="customertire/statistic" href="<?php echo $this->url('customertire/statistic') ?>"><i class="fa fa-circle-o text-aqua"></i>Thống kê</a></li>
                 </ul>
             </li>
-            <!-- <li><a  data="work" href="<?php echo $this->url('planning') ?>">Planning</a></li>
-            <li><a  data="working" href="<?php echo $this->url('working') ?>">Công việc</a></li>
-            <li><a  data="absence" href="<?php echo $this->url('absence') ?>">Xin nghỉ phép</a></li> -->
+
+
+            <li><a  data="tiresale" href="<?php echo $this->url('tiresale') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Lô hàng</a></li>
+              
+            <li><a  data="tiresale/profit" href="<?php echo $this->url('tiresale/profit') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Lợi nhuận</a></li>
+
+            <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 3){ ?>
+            <li><a  data="tireprice" href="<?php echo $this->url('tireprice') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảng giá nhập</a></li>
+            <li><a  data="tireoceanfreight" href="<?php echo $this->url('tireoceanfreight') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Ocean Freight</a></li>
             <?php } ?>
-            <?php if ($_SESSION && ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 3)) { ?>
-            <li><a href="#">Chờ duyệt <span id="nfc_count"></span></a>
-              <ul>
-                  <li><a  data="pending/costs" href="<?php echo $this->url('pending/costs') ?>">Thu chi</a></li>
-                  <li><a  data="pending/office" href="<?php echo $this->url('pending/office') ?>">Chi phí nhân sự</a></li>
-                  <li><a  data="pending/sale" href="<?php echo $this->url('pending/sale') ?>">Chi phí lô hàng</a></li>
-                  <li><a  data="pending/payable" href="<?php echo $this->url('pending/payable') ?>">Chi vendor</a></li>
-                  <li><a  data="pending/tire" href="<?php echo $this->url('pending/tire') ?>">Đơn hàng</a></li>
-              </ul>
-            </li>
-            <?php } ?>
-            <?php if ($_SESSION && ($_SESSION['role_logined'] == 2)) { ?>
-            <li><a href="#">Chờ duyệt <span id="nfc_count"></span></a>
-              <ul>
-                  <li><a  data="pending/costs" href="<?php echo $this->url('pending/costs') ?>">Thu chi</a></li>
-                  <li><a  data="pending/office" href="<?php echo $this->url('pending/office') ?>">Chi phí nhân sự</a></li>
-              </ul>
-            </li>
-            <?php } ?>
-            <?php if ($_SESSION && ($_SESSION['role_logined'] == 4)) { ?>
-            <li><a href="#">Chờ duyệt <span id="nfc_count"></span></a>
-              <ul>
-                  <li><a  data="pending/sale" href="<?php echo $this->url('pending/sale') ?>">Chi phí lô hàng</a></li>
-                  <li><a  data="pending/payable" href="<?php echo $this->url('pending/payable') ?>">Chi vendor</a></li>
+            <?php if($_SESSION['role_logined'] == 1){ ?>
+            <li><a  data="#" href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Thông tin</a>
+              <ul class="treeview-menu">
+                <li><a  data="tirequotation/quotation" href="<?php echo $this->url('tirequotation/quotation') ?>"><i class="fa fa-circle-o text-aqua"></i>Bảng giá</a></li>
+                <li><a  data="tirebuyprice" href="<?php echo $this->url('tirebuyprice') ?>"><i class="fa fa-circle-o text-aqua"></i>Bảng giá nhập</a></li>
+                <li><a  data="tirecostlogs" href="<?php echo $this->url('tirecostlogs') ?>"><i class="fa fa-circle-o text-aqua"></i>Chi phí logistics</a></li>
+                <li><a  data="tiretax" href="<?php echo $this->url('tiretax') ?>"><i class="fa fa-circle-o text-aqua"></i>Thuế</a></li>
+                <li><a  data="tirestuff" href="<?php echo $this->url('tirestuff') ?>"><i class="fa fa-circle-o text-aqua"></i>Hệ số xếp dỡ</a></li>
+                <li><a  data="tiresupplier" href="<?php echo $this->url('tiresupplier') ?>"><i class="fa fa-circle-o text-aqua"></i>Supplier</a></li>
+                <li><a  data="tireprofit" href="<?php echo $this->url('tireprofit') ?>"><i class="fa fa-circle-o text-aqua"></i>Tỷ suất lợi nhuận</a></li>
               </ul>
             </li>
             <?php } ?>
-            
-            <?php if ($_SESSION && ($_SESSION['role_logined'] == 9)) { ?>
-            <li><a  data="secs/lists" href="<?php echo $this->url('secs/lists') ?>">Rút sec - Chuyển tiền</a></li>
-            <li><a  data="bill" href="<?php echo $this->url('bill') ?>">Hóa đơn</a>
-                    <ul>
-                      <li><a  data="bill" href="<?php echo $this->url('bill') ?>">Bảng kê hóa đơn</a></li>
-                      <li><a  data="bill/costs" href="<?php echo $this->url('bill/costs') ?>">Chi phí cân đối hóa đơn</a></li>
-                    </ul>
-                </li>
-            <li><a href="#">Đã duyệt</a>
-              <ul>
-                  <li><a  data="approved/costs" href="<?php echo $this->url('approved/costs') ?>">Thu chi</a></li>
-                  <li><a  data="approved/sale" href="<?php echo $this->url('approved/sale') ?>">Chi phí lô hàng</a></li>
-                  <li><a  data="approved/payable" href="<?php echo $this->url('approved/payable') ?>">Chi vendor</a></li>
+          </ul>
+        </li>
+        <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 7 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 10){ ?>
+        <li><a href="#">
+            <i class="fa fa-fw fa-group"></i>
+            <span>Chi phí nhân sự</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a  data="totalsalary" href="<?php echo $this->url('totalsalary') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảng lương</a></li>
+            <li><a  data="attendance" href="<?php echo $this->url('attendance') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảng chấm công</a></li>
+            <li><a  data="eating" href="<?php echo $this->url('eating') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảng cơm</a></li>
+            <li><a  data="phoneallowance" href="<?php echo $this->url('phoneallowance') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Phụ cấp điện thoại</a></li>
+            <li><a  data="insurrance" href="<?php echo $this->url('insurrance') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảo hiểm</a></li>
+            <li><a  data="positionsalary" href="<?php echo $this->url('positionsalary') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Lương chức vụ</a></li>
+          </ul>
+        </li>
+        <li><a href="#">
+            <i class="fa fa-fw fa-dollar"></i>
+            <span>Tài chính - Kế toán</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a  data="daily" href="<?php echo $this->url('daily') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Báo cáo thu chi</a></li>
+            <li><a  data="daily/account" href="<?php echo $this->url('daily/account') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Định khoản</a></li>
+            <li><a  data="additional" href="<?php echo $this->url('additional') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Phát sinh</a></li>
+            <li><a  data="financial/office" href="<?php echo $this->url('financial/office') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí hành chính</a></li>
+            <li><a  data="financial" href="<?php echo $this->url('financial') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảng cân đối</a></li>
+            <li><a  data="financial/balance" href="<?php echo $this->url('financial/balance') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảng cân đối tài sản</a></li>
+
+            <li><a  data="financial/result" href="<?php echo $this->url('financial/result') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Kết quả hoạt động kinh doanh</a></li>
+            <li><a  data="financial/asset" href="<?php echo $this->url('financial/asset') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tài sản</a></li>
+            <li><a  data="account" href="<?php echo $this->url('account') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tài khoản</a></li>
+          </ul>
+        </li>
+        <?php } ?>
+
+        <?php if ($_SESSION && ($_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 4 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 7 || $_SESSION['role_logined'] == 9)) { ?>
+        <li>
+          <a href="#">
+            <i class="fa fa-line-chart"></i>
+            <span>Báo cáo - Thống kê</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a   data="profit" href="<?php echo $this->url('profit') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Lợi nhuận</a>
+              <ul class="treeview-menu">
+                <li><a  data="profit/sale" href="<?php echo $this->url('profit/sale') ?>"><i class="fa fa-circle-o text-aqua"></i>Sale</a></li>
+                <li><a  data="profit/trading" href="<?php echo $this->url('profit/trading') ?>"><i class="fa fa-circle-o text-aqua"></i>Trading</a></li>
+                <li><a  data="profit/agent" href="<?php echo $this->url('profit/agent') ?>"><i class="fa fa-circle-o text-aqua"></i>Agent</a></li>
+                <li><a  data="profit/tcmt" href="<?php echo $this->url('profit/tcmt') ?>"><i class="fa fa-circle-o text-aqua"></i>TCMT</a></li>
+                <li><a  data="profit/financial" href="<?php echo $this->url('profit/financial') ?>"><i class="fa fa-circle-o text-aqua"></i>Tài chính</a></li>
               </ul>
             </li>
-            <li><a  data="allshipment" href="<?php echo $this->url('allshipment') ?>">Tổng hợp lô hàng</a></li>
-            <li><a href="#">Tổng hợp</a>
-              <ul>
-                <li><a  data="expectrevenue" href="<?php echo $this->url('expectrevenue') ?>">Dự thu</a></li>
-                <li><a  data="expectpay" href="<?php echo $this->url('expectpay') ?>">Dự chi</a></li>
-                <li><a  data="expectrevenued" href="<?php echo $this->url('expectrevenued') ?>">Thực thu</a></li>
-                <li><a  data="expectpayed" href="<?php echo $this->url('expectpayed') ?>">Thực chi</a></li>
+            <li><a  data="adcosts" href="<?php echo $this->url('adcosts') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí hành chính</a>
+              <ul class="treeview-menu">
+                <li><a  data="adcosts/office" href="<?php echo $this->url('adcosts/office') ?>"><i class="fa fa-circle-o text-aqua"></i>Văn phòng</a></li>
+                <li><a  data="adcosts/team" href="<?php echo $this->url('adcosts/team') ?>"><i class="fa fa-circle-o text-aqua"></i>Team Building</a></li>
+                <li><a  data="adcosts/other" href="<?php echo $this->url('adcosts/other') ?>"><i class="fa fa-circle-o text-aqua"></i>Phát sinh</a></li>
               </ul>
             </li>
-            <?php } ?>
-          <?php } ?>
-          <?php if ($_SESSION && ($_SESSION['role_logined'] == 10)) { ?>
-            <li><a href="#">Kế toán</a>
-              <ul>
-                <li><a  data="receivable" href="<?php echo $this->url('receivable') ?>">Dự thu</a></li>
-                <li><a  data="payable" href="<?php echo $this->url('payable') ?>">Dự chi</a></li>
-                <li><a  data="costs" href="<?php echo $this->url('costs') ?>">Thu - Chi</a></li>
-                <li><a  data="secs/lists" href="<?php echo $this->url('secs/lists') ?>">Rút sec</a></li>
-                <li><a  data="staff" href="<?php echo $this->url('staff') ?>">Nhân viên</a></li>
-                <li><a  data="newsalary" href="<?php echo $this->url('newsalary') ?>">Bảng lương (Mẫu mới)</a></li>
-                  
+            <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tài sản</a>
+              <ul class="treeview-menu">
+                <li><a  data="asset" href="<?php echo $this->url('asset') ?>"><i class="fa fa-circle-o text-aqua"></i>Tài sản cố định</a></li>
+                <li><a  data="report/report" href="<?php echo $this->url('report/report') ?>"><i class="fa fa-circle-o text-aqua"></i>Tài sản biến đổi</a></li>
+                <li><a  data="redebts" href="<?php echo $this->url('redebts') ?>"><i class="fa fa-circle-o text-aqua"></i>Nợ phải thu</a></li>
+                <li><a  data="paydebts" href="<?php echo $this->url('paydebts') ?>"><i class="fa fa-circle-o text-aqua"></i>Nợ phải trả</a></li>
+                <li><a  data="opsdebts" href="<?php echo $this->url('opsdebts') ?>"><i class="fa fa-circle-o text-aqua"></i>OPS</a></li>
+                <li><a  data="report" href="<?php echo $this->url('report') ?>"><i class="fa fa-circle-o text-aqua"></i>Báo cáo tài sản</a></li>
               </ul>
             </li>
-            <li><a  data="trading" href="<?php echo $this->url('trading') ?>">Trading</a></li>
-            <li><a  data="importtire" href="<?php echo $this->url('importtire') ?>">Lô hàng lốp xe</a></li>
-            <li><a href="#">Báo cáo - Thống kê</a>
-              <ul>
-                <li><a   data="profit" href="<?php echo $this->url('profit') ?>">Lợi nhuận</a>
-                  <ul>
-                    <li><a  data="profit/trading" href="<?php echo $this->url('profit/trading') ?>">Trading</a></li>
-                    <li><a  data="profit/financial" href="<?php echo $this->url('profit/financial') ?>">Tài chính</a></li>
-                  </ul>
-                </li>
-                <li><a  data="adcosts" href="<?php echo $this->url('adcosts') ?>">Chi phí hành chính</a>
-                  <ul>
-                    <li><a  data="adcosts/office" href="<?php echo $this->url('adcosts/office') ?>">Văn phòng</a></li>
-                    <li><a  data="adcosts/team" href="<?php echo $this->url('adcosts/team') ?>">Team Building</a></li>
-                    <li><a  data="adcosts/other" href="<?php echo $this->url('adcosts/other') ?>">Phát sinh</a></li>
-                  </ul>
-                </li>
-                <li><a href="#">Tài sản</a>
-                  <ul>
-                    <li><a  data="asset" href="<?php echo $this->url('asset') ?>">Tài sản cố định</a></li>
-                    <li><a  data="report/report" href="<?php echo $this->url('report/report') ?>">Tài sản biến đổi</a></li>
-                    <li><a  data="redebts" href="<?php echo $this->url('redebts') ?>">Nợ phải thu</a></li>
-                    <li><a  data="paydebts" href="<?php echo $this->url('paydebts') ?>">Nợ phải trả</a></li>
-                    <li><a  data="opsdebts" href="<?php echo $this->url('opsdebts') ?>">OPS</a></li>
-                    <li><a  data="report" href="<?php echo $this->url('report') ?>">Báo cáo tài sản</a></li>
-                  </ul>
-                </li>
-                <li><a href="#">Công nợ</a>
-                  <ul>
-                    <li><a  data="liability" href="<?php echo $this->url('liability') ?>">Công nợ lô hàng</a></li>
-                    <li><a  data="staffdebts" href="<?php echo $this->url('staffdebts') ?>">Công nợ nhân viên</a></li>
-                    <li><a  data="debts" href="<?php echo $this->url('debts') ?>">Nợ xấu</a></li>
-                  </ul>
-                </li>
-                <li><a  data="bill" href="<?php echo $this->url('bill') ?>">Hóa đơn</a>
-                    <ul>
-                      <li><a  data="bill" href="<?php echo $this->url('bill') ?>">Bảng kê hóa đơn</a></li>
-                      <li><a  data="bill/costs" href="<?php echo $this->url('bill/costs') ?>">Chi phí cân đối hóa đơn</a></li>
-                    </ul>
-                </li>
-                
-                <li><a href="#">Tài khoản</a>
-                  <ul>
-                    <li><a  data="bank" href="<?php echo $this->url('bank') ?>">Thống kê tài khoản</a></li>
-                    <li><a  data="secs/lists" href="<?php echo $this->url('secs/lists') ?>">Rút sec - Chuyển tiền</a></li>
-                  </ul>
-                </li>
-                <li><a href="#">Tổng hợp</a>
-                  <ul>
-                      <li><a  data="flow" href="<?php echo $this->url('flow') ?>">Dự báo dòng tiền</a></li>
-                      <li><a  data="money" href="<?php echo $this->url('money') ?>">Dòng tiền</a></li>
-                      <li><a  data="statement" href="<?php echo $this->url('statement') ?>">Thực chi - Thực thu</a></li>
-                  </ul>
-                </li>
+            <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Công nợ</a>
+              <ul class="treeview-menu">
+                <li><a  data="liability" href="<?php echo $this->url('liability') ?>"><i class="fa fa-circle-o text-aqua"></i>Công nợ lô hàng</a></li>
+                <li><a  data="cusdebts" href="<?php echo $this->url('cusdebts') ?>"><i class="fa fa-circle-o text-aqua"></i>Công nợ khách hàng</a></li>
+                <li><a  data="staffdebts" href="<?php echo $this->url('staffdebts') ?>"><i class="fa fa-circle-o text-aqua"></i>Công nợ nhân viên</a></li>
+                <li><a  data="debts" href="<?php echo $this->url('debts') ?>"><i class="fa fa-circle-o text-aqua"></i>Nợ xấu</a></li>
               </ul>
             </li>
-          <?php } ?>
+            <li><a  data="bill" href="<?php echo $this->url('bill') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Hóa đơn</a>
+                <ul class="treeview-menu">
+                  <li><a  data="bill" href="<?php echo $this->url('bill') ?>"><i class="fa fa-circle-o text-aqua"></i>Bảng kê hóa đơn</a></li>
+                  <li><a  data="bill/costs" href="<?php echo $this->url('bill/costs') ?>"><i class="fa fa-circle-o text-aqua"></i>Chi phí cân đối hóa đơn</a></li>
+                </ul>
+            </li>
+            <li><a  href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Nhân sự</a>
+              <ul class="treeview-menu">
+                  <li><a   data="newsalary" href="<?php echo $this->url('newsalary') ?>"><i class="fa fa-circle-o text-aqua"></i>Chi phí nhân sự</a>
+                  <li><a  data="adcosts/salary" href="<?php echo $this->url('adcosts/salary') ?>"><i class="fa fa-circle-o text-aqua"></i>Lương</a></li>
+                  <li><a  data="adcosts/allowance" href="<?php echo $this->url('adcosts/allowance') ?>"><i class="fa fa-circle-o text-aqua"></i>Phụ cấp</a></li>
+                  <li><a   data="sales" href="<?php echo $this->url('sales') ?>"><i class="fa fa-circle-o text-aqua"></i>Lương doanh số</a>
+                  <li><a   data="found" href="<?php echo $this->url('found') ?>"><i class="fa fa-circle-o text-aqua"></i>Quỹ trích lũy</a>
+              </ul>
+            </li>
+            <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tài khoản</a>
+              <ul class="treeview-menu">
+                <li><a  data="bank" href="<?php echo $this->url('bank') ?>"><i class="fa fa-circle-o text-aqua"></i>Thống kê tài khoản</a></li>
+                <li><a  data="secs/lists" href="<?php echo $this->url('secs/lists') ?>"><i class="fa fa-circle-o text-aqua"></i>Rút sec - Chuyển tiền</a></li>
+              </ul>
+            </li>
+            <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tổng hợp</a>
+              <ul class="treeview-menu">
+                  <li><a  data="expectrevenue" href="<?php echo $this->url('expectrevenue') ?>"><i class="fa fa-circle-o text-aqua"></i>Dự thu</a></li>
+                  <li><a  data="expectpay" href="<?php echo $this->url('expectpay') ?>"><i class="fa fa-circle-o text-aqua"></i>Dự chi</a></li>
+                  <li><a  data="expectrevenued" href="<?php echo $this->url('expectrevenued') ?>"><i class="fa fa-circle-o text-aqua"></i>Thực thu</a></li>
+                  <li><a  data="expectpayed" href="<?php echo $this->url('expectpayed') ?>"><i class="fa fa-circle-o text-aqua"></i>Thực chi</a></li>
+                  <li><a  data="flow" href="<?php echo $this->url('flow') ?>"><i class="fa fa-circle-o text-aqua"></i>Dự báo dòng tiền</a></li>
+                  <li><a  data="money" href="<?php echo $this->url('money') ?>"><i class="fa fa-circle-o text-aqua"></i>Dòng tiền</a></li>
+                  <li><a  data="statement" href="<?php echo $this->url('statement') ?>"><i class="fa fa-circle-o text-aqua"></i>Thực chi - Thực thu</a></li>
+                  <li><a  data="stats" href="<?php echo $this->url('stats') ?>"><i class="fa fa-circle-o text-aqua"></i>Thống kê lô hàng</a></li>
+                  <li><a  data="general" href="<?php echo $this->url('general') ?>"><i class="fa fa-circle-o text-aqua"></i>Phát sinh trong tuần</a></li>
+                  <li><a  data="total" href="<?php echo $this->url('total') ?>"><i class="fa fa-circle-o text-aqua"></i>Lợi nhuận - Chi phí</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#">
+            <i class="fa fa-fw fa-exclamation-triangle"></i>
+            <span>Kiểm tra</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a  data="checkdaily" href="<?php echo $this->url('checkdaily') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tài khoản</a></li>
+            <li><a  data="checking" href="<?php echo $this->url('checking') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Doanh thu</a></li>
+            <li><a  data="checking/invoice" href="<?php echo $this->url('checking/invoice') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Thuế GTGT</a></li>
+          </ul>
+        </li>
+        <?php } ?>
+
+        <li><a  data="checkin" href="<?php echo $this->url('checkin') ?>">
+            <i class="fa fa-fw fa-calendar-check-o"></i>
+            <span>Điểm danh</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a  data="checkin" href="<?php echo $this->url('checkin') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chấm công</a></li>
+            <li><a  data="checkeat" href="<?php echo $this->url('checkeat') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Đăng ký cơm</a></li>
+          </ul>
+        </li>
+
+        <?php if ($_SESSION && ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 3)) { ?>
+        <li><a href="#">
+            <i class="fa fa-fw fa-check-square-o"></i>
+            <span>Chờ duyệt</span> <span id="nfc_count"></span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+              <li><a  data="expectpay" href="<?php echo $this->url('expectpay') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Thu chi</a></li>
+              <li><a  data="pending/office" href="<?php echo $this->url('pending/office') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí nhân sự</a></li>
+              <li><a  data="pending/sale" href="<?php echo $this->url('pending/sale') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí lô hàng</a></li>
+          </ul>
+        </li>
+        <?php } ?>
+        <?php if ($_SESSION && ($_SESSION['role_logined'] == 2)) { ?>
+        <li><a href="#">
+            <i class="fa fa-fw fa-check-square-o"></i>
+            <span>Chờ duyệt</span> <span id="nfc_count"></span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+              <li><a  data="expectpay" href="<?php echo $this->url('expectpay') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Thu chi</a></li>
+              <li><a  data="pending/office" href="<?php echo $this->url('pending/office') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí nhân sự</a></li>
+          </ul>
+        </li>
+        <?php } ?>
+        <?php if ($_SESSION && ($_SESSION['role_logined'] == 4)) { ?>
+        <li><a href="#">
+            <i class="fa fa-fw fa-check-square-o"></i>
+            <span>Chờ duyệt</span> <span id="nfc_count"></span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+              <li><a  data="pending/sale" href="<?php echo $this->url('pending/sale') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí lô hàng</a></li>
+              <li><a  data="pending/payable" href="<?php echo $this->url('pending/payable') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi vendor</a></li>
+          </ul>
+        </li>
+        <?php } ?>
+
+        <?php if ($_SESSION && ($_SESSION['role_logined'] == 9)) { ?>
+        <li><a  data="secs/lists" href="<?php echo $this->url('secs/lists') ?>"><i class="fa fa-fw fa-money"></i>Rút sec - Chuyển tiền</a></li>
+        <li><a  data="bill" href="<?php echo $this->url('bill') ?>">
+              <i class="fa fa-fw fa-clipboard"></i>
+              <span>Hóa đơn</span> <span id="nfc_count"></span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a  data="bill" href="<?php echo $this->url('bill') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảng kê hóa đơn</a></li>
+              <li><a  data="bill/costs" href="<?php echo $this->url('bill/costs') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí cân đối hóa đơn</a></li>
             </ul>
-          </div><!--/.nav-collapse -->
-
-          <!-- Kiem tra dang nhap -->
-          <?php 
-          if ($_SESSION) {
-            ?>
-            <a class="logined" href="<?php echo $this->url('user/logout') ?>">&nbsp; | Logout</a><a class="logined" href="<?php echo BASE_URL.'/user/info/'.$_SESSION['userid_logined'] ?>"><b><i><?php echo $_SESSION['user_logined']; ?> </i></b></a>
-            <?php
-          }
-          else{
-            ?>
-            <a class="logined" href="<?php echo $this->url('user/login') ?>">Login</a>
-            <?php
-          }
-          ?>
-          <!-- end -->
-        </div>
-      </div>
-    </div>
-
-    
-    <div id="container">
-    	
-			<?php echo $content; ?>
-      
+        </li>
+        <li><a href="#">
+            <i class="fa fa-fw fa-check-square"></i>
+            <span>Đã duyệt</span> <span id="nfc_count"></span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+              <li><a  data="approved/costs" href="<?php echo $this->url('approved/costs') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Thu chi</a></li>
+              <li><a  data="approved/sale" href="<?php echo $this->url('approved/sale') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí lô hàng</a></li>
+              <li><a  data="approved/payable" href="<?php echo $this->url('approved/payable') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi vendor</a></li>
+              <li><a  data="approved/office" href="<?php echo $this->url('approved/office') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí nhân sự</a></li>
+          </ul>
+        </li>
+        <li><a  data="allshipment" href="<?php echo $this->url('allshipment') ?>"><i class="fa fa-fw fa-cart-plus"></i>Tổng hợp lô hàng</a></li>
+        <li><a href="#">
+            <i class="fa fa-fw fa-area-chart"></i>
+            <span>Tổng hợp</span> <span id="nfc_count"></span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a  data="expectrevenue" href="<?php echo $this->url('expectrevenue') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Dự thu</a></li>
+            <li><a  data="expectpay" href="<?php echo $this->url('expectpay') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Dự chi</a></li>
+            <li><a  data="expectrevenued" href="<?php echo $this->url('expectrevenued') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Thực thu</a></li>
+            <li><a  data="expectpayed" href="<?php echo $this->url('expectpayed') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Thực chi</a></li>
+          </ul>
+        </li>
+        <?php } ?>
+        <?php if ($_SESSION && ($_SESSION['role_logined'] == 10)) { ?>
+        <li><a href="#">
+            <i class="fa fa-fw fa-dollar"></i>
+            <span>Kế toán</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a  data="receivable" href="<?php echo $this->url('receivable') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Dự thu</a></li>
+            <li><a  data="payable" href="<?php echo $this->url('payable') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Dự chi</a></li>
+            <li><a  data="costs" href="<?php echo $this->url('costs') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Thu - Chi</a></li>
+            <li><a  data="secs/lists" href="<?php echo $this->url('secs/lists') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Rút sec</a></li>
+            <li><a  data="staff" href="<?php echo $this->url('staff') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Nhân viên</a></li>
+            <li><a  data="newsalary" href="<?php echo $this->url('newsalary') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảng lương (Mẫu mới)</a></li>
+              
+          </ul>
+        </li>
+        <li><a  data="trading" href="<?php echo $this->url('trading') ?>"><i class="fa fa-globe"></i>Trading</a></li>
+        <li><a  data="importtire" href="<?php echo $this->url('importtire') ?>"><i class="fa fa-support"></i>Lô hàng lốp xe</a></li>
+        <li><a href="#">Báo cáo - Thống kê</a>
+          <ul class="treeview-menu">
+            <li><a   data="profit" href="<?php echo $this->url('profit') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Lợi nhuận</a>
+              <ul class="treeview-menu">
+                <li><a  data="profit/trading" href="<?php echo $this->url('profit/trading') ?>"><i class="fa fa-circle-o text-aqua"></i>Trading</a></li>
+                <li><a  data="profit/financial" href="<?php echo $this->url('profit/financial') ?>"><i class="fa fa-circle-o text-aqua"></i>Tài chính</a></li>
+              </ul>
+            </li>
+            <li><a  data="adcosts" href="<?php echo $this->url('adcosts') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí hành chính</a>
+              <ul class="treeview-menu">
+                <li><a  data="adcosts/office" href="<?php echo $this->url('adcosts/office') ?>"><i class="fa fa-circle-o text-aqua"></i>Văn phòng</a></li>
+                <li><a  data="adcosts/team" href="<?php echo $this->url('adcosts/team') ?>"><i class="fa fa-circle-o text-aqua"></i>Team Building</a></li>
+                <li><a  data="adcosts/other" href="<?php echo $this->url('adcosts/other') ?>"><i class="fa fa-circle-o text-aqua"></i>Phát sinh</a></li>
+              </ul>
+            </li>
+            <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tài sản</a>
+              <ul class="treeview-menu">
+                <li><a  data="asset" href="<?php echo $this->url('asset') ?>"><i class="fa fa-circle-o text-aqua"></i>Tài sản cố định</a></li>
+                <li><a  data="report/report" href="<?php echo $this->url('report/report') ?>"><i class="fa fa-circle-o text-aqua"></i>Tài sản biến đổi</a></li>
+                <li><a  data="redebts" href="<?php echo $this->url('redebts') ?>"><i class="fa fa-circle-o text-aqua"></i>Nợ phải thu</a></li>
+                <li><a  data="paydebts" href="<?php echo $this->url('paydebts') ?>"><i class="fa fa-circle-o text-aqua"></i>Nợ phải trả</a></li>
+                <li><a  data="opsdebts" href="<?php echo $this->url('opsdebts') ?>"><i class="fa fa-circle-o text-aqua"></i>OPS</a></li>
+                <li><a  data="report" href="<?php echo $this->url('report') ?>"><i class="fa fa-circle-o text-aqua"></i>Báo cáo tài sản</a></li>
+              </ul>
+            </li>
+            <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Công nợ</a>
+              <ul class="treeview-menu">
+                <li><a  data="liability" href="<?php echo $this->url('liability') ?>"><i class="fa fa-circle-o text-aqua"></i>Công nợ lô hàng</a></li>
+                <li><a  data="staffdebts" href="<?php echo $this->url('staffdebts') ?>"><i class="fa fa-circle-o text-aqua"></i>Công nợ nhân viên</a></li>
+                <li><a  data="debts" href="<?php echo $this->url('debts') ?>"><i class="fa fa-circle-o text-aqua"></i>Nợ xấu</a></li>
+              </ul>
+            </li>
+            <li><a  data="bill" href="<?php echo $this->url('bill') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Hóa đơn</a>
+                <ul class="treeview-menu">
+                  <li><a  data="bill" href="<?php echo $this->url('bill') ?>"><i class="fa fa-circle-o text-aqua"></i>Bảng kê hóa đơn</a></li>
+                  <li><a  data="bill/costs" href="<?php echo $this->url('bill/costs') ?>"><i class="fa fa-circle-o text-aqua"></i>Chi phí cân đối hóa đơn</a></li>
+                </ul>
+            </li>
             
-        
-    </div> <!-- /container -->
-  </span>
+            <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tài khoản</a>
+              <ul class="treeview-menu">
+                <li><a  data="bank" href="<?php echo $this->url('bank') ?>"><i class="fa fa-circle-o text-aqua"></i>Thống kê tài khoản</a></li>
+                <li><a  data="secs/lists" href="<?php echo $this->url('secs/lists') ?>"><i class="fa fa-circle-o text-aqua"></i>Rút sec - Chuyển tiền</a></li>
+              </ul>
+            </li>
+            <li><a href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tổng hợp</a>
+              <ul class="treeview-menu">
+                  <li><a  data="flow" href="<?php echo $this->url('flow') ?>"><i class="fa fa-circle-o text-aqua"></i>Dự báo dòng tiền</a></li>
+                  <li><a  data="money" href="<?php echo $this->url('money') ?>"><i class="fa fa-circle-o text-aqua"></i>Dòng tiền</a></li>
+                  <li><a  data="statement" href="<?php echo $this->url('statement') ?>"><i class="fa fa-circle-o text-aqua"></i>Thực chi - Thực thu</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <?php } ?>
 
-  <div>
-    <span style="font-size:5px">Powered by <a target="_blank" style="color:#fff" href="http://www.tinhoctainha.com">Dịch vụ Tin Học Tại Nhà</a></span>
+        <?php } ?>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <ol class="breadcrumb">
+        <li><a href="<?php echo $this->url('admin') ?>"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+        <div class="col-md-12">
+          <?php echo $content; ?>
+        </div>
+        <!-- ./col --> 
+      </div>
+      <!-- /.row -->
+
+    </section>
+    <!-- /.content -->
   </div>
-  </body>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 2.0
+    </div>
+    <span style="font-size:5px">Powered by <a target="_blank" style="color:#fff" href="http://www.tinhoctainha.com">Dịch vụ Tin Học Tại Nhà</a></span>
+  </footer>
+
+  <!-- Control Sidebar -->
+  
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.6 -->
+<script src="<?php BASE_URL ?>/public/js/adminbar/bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="<?php BASE_URL ?>/public/js/adminbar/plugins/morris/morris.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="<?php BASE_URL ?>/public/js/adminbar/plugins/knob/jquery.knob.js"></script>
+<!-- daterangepicker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+<script src="<?php BASE_URL ?>/public/js/adminbar/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="<?php BASE_URL ?>/public/js/adminbar/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<!-- AdminLTE App -->
+<script src="<?php BASE_URL ?>/public/js/adminbar/dist/js/app.min.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<!-- AdminLTE for demo purposes -->
+<script src="<?php BASE_URL ?>/public/js/adminbar/dist/js/demo.js"></script>
+</body>
 </html>

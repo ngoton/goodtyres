@@ -569,3 +569,7 @@ Time|User|Action
 
 27/06/2016 09:22:46|admincmg|login
 
+15/08/2016 13:34:21|admincmg|logout
+
+15/08/2016 13:34:32|admincmg|login
+

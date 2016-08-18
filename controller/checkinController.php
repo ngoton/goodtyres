@@ -119,7 +119,56 @@ Class checkinController Extends baseController {
                 foreach ($check as $c) {
                     $checkin_model->updateCheckin($data,array('checkin_id'=>$c->checkin_id));
 
-                    $attendance_model->updateAttendance($data_attend,array('staff'=>$c->staff,'attendance_date'=>$c->checkin_date));
+                    $attendance = $attendance_model->getAttendanceByWhere(array('staff'=>$c->staff,'attendance_date'=>$c->checkin_date));
+                    
+                    if ($_POST['data'] == 'out_1') {
+                        if ($attendance->check_in_1 != "") {
+                            $time2 = $attendance->check_in_1;
+                            $hourdiff = round((strtotime($_POST['time']) - strtotime($time2))/3600, 1);
+                        }
+                    }
+                    if ($_POST['data'] == 'in_2') {
+                        if ($attendance->check_in_1 != "" && $attendance->check_out_1 != "") {
+                            $hourdiff = round((strtotime($attendance->check_out_1) - strtotime($attendance->check_in_1))/3600, 1);
+                        }
+                        else if ($attendance->check_in_1 != "" && $attendance->check_out_1 == "") {
+                            $time2 = $attendance->check_in_1;
+                            $hourdiff = round((strtotime('12:00') - strtotime($time2))/3600, 1);
+                        }
+                    }
+                    if ($_POST['data'] == 'out_2') {
+                        if ($attendance->check_in_2 != "") {
+                            $time2 = $attendance->check_in_2;
+                            $hourdiff = round((strtotime($_POST['time']) - strtotime($time2))/3600, 1);
+                            if ($attendance->check_in_1 != "" && $attendance->check_out_1 != "") {
+                                $hourdiff = $hourdiff + round((strtotime($attendance->check_out_1) - strtotime($attendance->check_in_1))/3600, 1);
+                            }
+                            else if ($attendance->check_in_1 != "" && $attendance->check_out_1 == "") {
+                                $hourdiff = $hourdiff + round((strtotime("12:00") - strtotime($attendance->check_in_1))/3600, 1);
+                            }
+                        }
+                        else{
+                            if ($attendance->check_out_1 != "") {
+                                $hourdiff = round((strtotime($_POST['time']) - strtotime("13:00"))/3600, 1);
+                                if ($attendance->check_in_1 != "") {
+                                    $hourdiff = $hourdiff + round((strtotime($attendance->check_out_1) - strtotime($attendance->check_in_1))/3600, 1);
+                                }
+                            }
+                            else{
+                                if ($attendance->check_in_1 != "") {
+                                    $time2 = $attendance->check_in_1;
+                                    $hourdiff1 = round((strtotime("12:00") - strtotime($time2))/3600, 1);
+                                    $hourdiff2 = round((strtotime($_POST['time']) - strtotime("13:00"))/3600, 1);
+                                    $hourdiff = $hourdiff1+$hourdiff2;
+                                }
+                            }
+                        }
+                    }
+
+
+                    $data_attend['attendance_total'] = $hourdiff;
+
+                    $attendance_model->updateAttendance($data_attend,array('attendance_id'=>$attendance->attendance_id));
                 }
                 
             }

@@ -1,13 +1,192 @@
 <?php
 Class adminController Extends baseController {
-    public function index() {
-    	$this->view->setLayout('admin');
+    public function index(){
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Dashboard';
 
-        /*** set a template variable ***/
-            //$this->view->data['welcome'] = 'Welcome to CAI MEP TRADING !';
-        /*** load the index template ***/
-            $this->view->data['title'] = 'Dịch vụ vận tải, xuất nhập khẩu, thủ tục hải quan, chỉnh sửa manifest';
-            $this->view->show('admin/index');
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_by = isset($_POST['order_by']) ? $_POST['order_by'] : null;
+            $order = isset($_POST['order']) ? $_POST['order'] : null;
+            $page = isset($_POST['page']) ? $_POST['page'] : null;
+            $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+            $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
+            $batdau = isset($_POST['batdau']) ? $_POST['batdau'] : null;
+            $ketthuc = isset($_POST['ketthuc']) ? $_POST['ketthuc'] : null;
+            $ngaytao = isset($_POST['ngaytao']) ? $_POST['ngaytao'] : null;
+            $ngaytaobatdau = isset($_POST['ngaytaobatdau']) ? $_POST['ngaytaobatdau'] : null;
+        }
+        else{
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'tire_sale_date';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'DESC';
+            $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
+            $keyword = "";
+            $limit = "";
+            $batdau = '01-'.date('m-Y');
+            $ketthuc = date('t-m-Y');
+            $ngaytao = date('m-Y');
+            $ngaytaobatdau = date('m-Y');
+        }
+
+        $this->view->data['limit'] = $limit;
+        $this->view->data['page'] = $page;
+        $this->view->data['order_by'] = $order_by;
+        $this->view->data['order'] = $order;
+        $this->view->data['batdau'] = $batdau;
+        $this->view->data['ketthuc'] = $ketthuc;
+        $this->view->data['ngaytao'] = $ngaytao;
+        $this->view->data['ngaytaobatdau'] = $ngaytaobatdau;
+
+        $sale_model = $this->model->get('salereportModel');
+        $order_tire_model = $this->model->get('ordertireModel');
+        $tire_sale_model = $this->model->get('tiresaleModel');
+        $staff_model = $this->model->get('staffModel');
+
+        $staffs = $staff_model->getAllStaff(array('order_by'=>'staff_name ASC'));
+        $this->view->data['staffs'] = $staffs;
+
+
+
+        $data = array(
+            'where' => 'tire_sale_date < '.strtotime($batdau),
+        );
+
+        $sale_olds = $tire_sale_model->getAllTire($data);
+
+        $old = array();
+        foreach ($sale_olds as $sale) {
+            if (!in_array($sale->customer,$old)) {
+                $old[] = $sale->customer;
+            }
+        }
+
+        $data = array(
+            'where' => 'sale_date < '.strtotime($batdau),
+        );
+
+        /*$sale_olds = $sale_model->getAllSale($data);
+
+        $old2 = array();
+        foreach ($sale_olds as $sale) {
+            if (!in_array($sale->customer,$old2)) {
+                $old2[] = $sale->customer;
+            }
+        }*/
+
+        if ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9) {
+            if ($limit != "") {
+                $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN (SELECT order_tire FROM tire_sale WHERE sale = '.$limit.' AND tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).')'));
+                //$sales = $sale_model->getAllSale(array('where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc)),array('table'=>'staff','where'=>'sale=account AND staff_id = '.$limit));
+            }
+            else{
+                $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN (SELECT order_tire FROM tire_sale WHERE tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).')'));
+                //$sales = $sale_model->getAllSale(array('where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc)));
+            }
+        }
+        else{
+            $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN (SELECT order_tire FROM tire_sale WHERE sale = '.$_SESSION['userid_logined'].' AND tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).')'));
+            //$sales = $sale_model->getAllSale(array('where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc)),array('table'=>'staff','where'=>'sale=account AND staff_id = '.$_SESSION['userid_logined']));
+        }
+
+        $doanhthu = 0;
+        $sanluong = 0;
+        $khachhang = 0;
+        $donhang = 0;
+        $sl = array();
+
+        /*foreach ($sales as $sale) {
+            $doanhthu += $sale->revenue_vat+$sale->revenue;
+            $donhang++;
+            if (!in_array($sale->customer,$old2)) {
+                $khachhang++;
+            }
+            $sl['ngay'][(int)date('d',$sale->sale_date)] = isset($sl['ngay'][(int)date('d',$sale->sale_date)])?$sl['ngay'][(int)date('d',$sale->sale_date)]+$sale->revenue_vat+$sale->revenue:$sale->revenue_vat+$sale->revenue;
+            $sl['thang'][(int)date('m',$sale->sale_date)] = isset($sl['thang'][(int)date('m',$sale->sale_date)])?$sl['thang'][(int)date('m',$sale->sale_date)]+$sale->revenue_vat+$sale->revenue:$sale->revenue_vat+$sale->revenue;
+          
+        }*/
+
+        foreach ($orders as $tire) {
+            $doanhthu += $tire->total;
+            $sanluong += $tire->order_tire_number;
+            $donhang++;
+            if (!in_array($tire->customer,$old)) {
+                $khachhang++;
+            }
+
+            $sl['ngay'][(int)date('d',$tire->delivery_date)] = isset($sl['ngay'][(int)date('d',$tire->delivery_date)])?$sl['ngay'][(int)date('d',$tire->delivery_date)]+$tire->order_tire_number:$tire->order_tire_number;
+            $sl['thang'][(int)date('m',$tire->delivery_date)] = isset($sl['thang'][(int)date('m',$tire->delivery_date)])?$sl['thang'][(int)date('m',$tire->delivery_date)]+$tire->order_tire_number:$tire->order_tire_number;
+          
+        }
+
+        $start = date('d',strtotime($batdau));
+        $start_month = date('m',strtotime($batdau));
+        $start_year = date('Y',strtotime($batdau));
+        $end = date('d',strtotime($ketthuc));
+        $end_month = date('m',strtotime($ketthuc));
+        $end_year = date('Y',strtotime($ketthuc));
+        $graph = array();
+        if ($start_month == $end_month && $start_year == $end_year) {
+            for ($i=$start; $i <= $end; $i++) { 
+                $graph[]['y'] = $start_year.'-'.$start_month.'-'.$i;
+                $graph[]['item1'] = isset($sl['ngay'][$i])?$sl['ngay'][$i]:0;
+            }
+        }
+        elseif ($start_month != $end_month && $start_year == $end_year) {
+            for ($i=$start_month; $i <= $end_month; $i++) { 
+                $graph[]['y'] = $start_year.'-'.$i;
+                $graph[]['item1'] = isset($sl['thang'][$i])?$sl['thang'][$i]:0;
+            }
+        }
+        
+        $graph = str_replace('"},{"i','","i',json_encode($graph));
+
+        $this->view->data['doanhthu'] = $doanhthu;
+        $this->view->data['sanluong'] = $sanluong;
+        $this->view->data['khachhang'] = $khachhang;
+        $this->view->data['donhang'] = $donhang;
+        $this->view->data['graph'] = $graph;
+        
+
+        $tire_buy_model = $this->model->get('tirebuyModel');
+
+        $query = "SELECT *,SUM(tire_buy_volume) AS soluong FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern GROUP BY tire_buy_brand,tire_buy_size,tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC";
+        $tire_buys = $tire_buy_model->queryTire($query);
+        $this->view->data['tire_buys'] = $tire_buys;
+
+        $link_picture = array();
+
+        $sell = array();
+        $stock = array();
+        foreach ($tire_buys as $tire_buy) {
+            $stock[$tire_buy->tire_brand_group] = isset($stock[$tire_buy->tire_brand_group])?$stock[$tire_buy->tire_brand_group]+$tire_buy->soluong:$tire_buy->soluong;
+            $link_picture[$tire_buy->tire_buy_id]['image'] = $tire_buy->tire_pattern_name.'.jpg';
+
+            $data_sale = array(
+                'where'=>'tire_brand='.$tire_buy->tire_buy_brand.' AND tire_size='.$tire_buy->tire_buy_size.' AND tire_pattern='.$tire_buy->tire_buy_pattern,
+            );
+            $tire_sales = $tire_sale_model->getAllTire($data_sale);
+
+            foreach ($tire_sales as $tire_sale) {
+                
+                if ($tire_sale->customer != 119) {
+                    $sell[$tire_buy->tire_buy_id]['number'] = isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']+$tire_sale->volume:$tire_sale->volume;
+                    $stock[$tire_buy->tire_brand_group] = isset($stock[$tire_buy->tire_brand_group])?$stock[$tire_buy->tire_brand_group]-$tire_sale->volume:(0-$tire_sale->volume);
+                }
+                
+            }
+        }
+
+        $this->view->data['link_picture'] = $link_picture;
+
+        $this->view->data['tire_buys'] = $tire_buys;
+        $this->view->data['sell'] = $sell;
+        $this->view->data['stock'] = $stock;
+
+        $this->view->show('admin/index');
+
     }
     public function queryscript(){
         $costs_model = $this->model->get('costsModel');

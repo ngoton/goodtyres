@@ -247,7 +247,21 @@
     };  
     $("#ketthuc").datepicker(pickerOpts4);
 
-    $('.bank').toggle(function(){
+(function($) {
+    $.fn.clickToggle = function(func1, func2) {
+        var funcs = [func1, func2];
+        this.data('toggleclicked', 0);
+        this.click(function() {
+            var data = $(this).data();
+            var tc = data.toggleclicked;
+            $.proxy(funcs[tc], this)();
+            data.toggleclicked = (tc + 1) % 2;
+        });
+        return this;
+    };
+}(jQuery));
+
+    $('.bank').clickToggle(function(){
         var val = $(this).attr('data');
         var batdau = $(this).attr('alt');
         var ketthuc = $(this).attr('name');
@@ -267,8 +281,8 @@
 
 $('.table_data').on('mousedown', function(e){
     $('#show').css({
-       left:  e.pageX+10,
-       top:   e.pageY-30
+       left:  e.pageX-200,
+       top:   e.pageY-100
     });
 });
 

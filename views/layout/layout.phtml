@@ -42,7 +42,52 @@
 <!-- Go to www.addthis.com/dashboard to customize your tools -->
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-507e26a03bf7f1f7" async="async"></script>
 <script src="<?php BASE_URL ?>/public/js/pace.min.js"></script>
+<!-- /** Custom style **/ -->
+<style type="text/css">
+.content{
+  margin:10px 0px 10px 10px;
+  width:595px;
+  float:left;
+  border: #666666 thin solid;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  box-shadow: 0px 0px 5px rgb(86, 136, 170);
+  padding:5px;
+  min-height: 1053px;
+}
+ul.nav>li {
+position: relative; 
+-webkit-transition: all 0.3s ease-in;
+-moz-transition: all 0.3s ease-in;
+-o-transition: all 0.3s ease-in;
+}
+ul.nav>li>ul{list-style:none;}
+ul.nav>li>ul{ display: none; position: absolute; background: rgba(0, 0, 0, 0.8);top: 39px;width: 200px; left: 0px;}
+ul.nav>li:hover ul{ display: block;}
+ul.nav>li>ul>li{ border-bottom: 1px solid #d1e5ee}
+ul.nav>li>ul>li>a{padding:8px 0 8px 10px;color:white; display: inline-block; width: 100%;}
+ul.nav>li>ul>li:hover, ul.nav>li>ul>li>ul>li:hover{background: #EE1C25;}
 
+ul.nav>li>ul>li {
+position: relative;
+-webkit-transition: all 0.3s ease-in;
+-moz-transition: all 0.3s ease-in;
+-o-transition: all 0.3s ease-in;
+}
+ul.nav>li:hover ul>li>ul{ display: none;}
+ul.nav>li>ul>li:hover ul{ display: block;}
+ul.nav>li>ul>li>ul{list-style:none}
+ul.nav>li>ul>li>ul>li>a{padding:8px 0 8px 10px; color:white; display: inline-block; width: 100%;}
+ul.nav>li>ul>li>ul>li{  
+border-bottom: 1px solid #d1e5ee;border-left: 1px solid #d1e5ee;
+-webkit-transition: all 0.3s ease-in;
+-moz-transition: all 0.3s ease-in;
+-o-transition: all 0.3s ease-in;
+}
+ul.nav>li>ul>li>ul{ display: none; position: absolute; background: rgba(0, 0, 0, 0.8);top: 0px;width: 240px; left: 200px;}
+
+</style>
 </head>
 
 <body>

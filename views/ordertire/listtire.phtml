@@ -24,6 +24,9 @@
         <th  class="fix">
             <a class="sort " >Giá </a>
         </th>
+        <th  class="fix">
+            <a class="sort " >Tỉ lệ % </a>
+        </th>
            
         <th  class="fix">&nbsp;</th>
     </tr>
@@ -40,6 +43,9 @@
             <td class="fix" data="<?php echo $order_tire_list->tire_pattern; ?>" id="tire_pattern_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire_list->tire_pattern_name; ?></td>
             <td class="fix"  id="tire_number_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire_list->tire_number; ?></td>
             <td class="fix"  id="tire_price_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $lib->formatMoney($order_tire_list->tire_price); ?></td>
+            <td class="fix"  id="price_<?php echo $order_tire_list->order_tire_list_id; ?>">
+              <?php echo isset($price[$order_tire_list->order_tire_list_id])?round(($order_tire_list->tire_price*100)/$price[$order_tire_list->order_tire_list_id],1)."%":null; ?>
+            </td>
             <td>
                 <button class="del" data="<?php echo $order_tire_list->order_tire_list_id ?>" style="display:block">Xóa</button>
             </td>
@@ -48,7 +54,7 @@
     <tr style="text-align:center; font-weight: bold; color: red;">
         <td class="fix" colspan="4" >Tổng cộng</td>
         <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
-        <td class="fix" ></td>
+        <td class="fix" colspan="3" ></td>
     </tr>
    </tbody>
 </table>
