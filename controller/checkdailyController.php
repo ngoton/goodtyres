@@ -81,7 +81,7 @@ Class checkdailyController Extends baseController {
         }
 
         $data = array(
-            'where'=>'(account_parent = 1 OR account_parent = 4) AND account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime($ketthuc),
+            'where'=>'(account_parent = 1 OR account_parent = 4) AND account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime(date('d-m-Y',strtotime('+1 day',strtotime($ketthuc)))),
         );
         $account_balances = $account_balance_model->getAllAccount($data,$join);
         $account_add = array();

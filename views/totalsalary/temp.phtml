@@ -1,0 +1,533 @@
+<style type="text/css">
+    .ui-datepicker-calendar {
+        display: none;
+    }​
+</style>
+<script type="text/javascript">
+    $(function() {
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'MM yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytao").change();
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts);
+              
+            
+    $("#chonngaytao").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        if (month<9) {
+            var ngay = "0"+(month+1)+"-"+year;
+        }
+        else
+            var ngay = (month+1)+"-"+year;
+
+        var page = "<?php echo $page; ?>";
+        var cot = "<?php echo $order_by; ?>";
+        var sapxep = "<?php echo $order; ?>";
+        var keyword = "<?php echo $keyword; ?>";
+        var loc =    $('#chonloc').val();
+          if($('#sl_status') != null)
+          {
+            var trangthai = $('#sl_status').val();
+          }
+          if($('#sl_nv') != null)
+          {
+            var nv = $('#sl_nv').val();
+          }
+          if($('#sl_tha') != null)
+          {
+            var tha = $('#sl_tha').val();
+          }
+          if($('#sl_na') != null)
+          {
+            var na = $('#sl_na').val();
+          }
+          if($('#tu') != null)
+          {
+            var tu = $('#tu').val();
+          }
+          if($('#den') != null)
+          {
+            var den = $('#den').val();
+          }
+        
+        
+        var dataString = 'keyword='+ keyword+"&limit="+loc+"&ngaytao="+ngay+"&page="+ page +"&order_by="+ cot +"&order="+ sapxep+"&trangthai="+ trangthai+"&nv="+nv+"&tha="+tha+"&na="+na+"&tu="+tu+"&den="+den;  
+        
+        $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+        
+            $.ajax({
+                type: "POST",                            // Phương thức gọi là GET
+                url: "#",                 // File xử lý
+                data: dataString,                       // Dữ liệu truyền vào
+                beforeSend:  function() {               // add class "loading" cho khung nhập
+                    $('input#search-input').addClass('loading');
+                },
+                success: function(server_response)      // Khi xử lý thành công sẽ chạy hàm này
+                {
+                    $('body').html(server_response);    // Hiển thị dữ liệu vào thẻ div #searchresultdata
+                    
+                     
+                    if ($('input#search-input').hasClass("loading")) {      // Kiểm tra class "loading"
+                        $("input#search-input").removeClass("loading");     // Remove class "loading"
+                    }
+                    $('#loading').fadeOut(500); 
+                }
+            });
+        
+        
+    });
+});
+</script>
+<?php
+$url_order = 'ASC';
+if ($order_by == 'staff_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> LƯƠNG DỰ KIẾN TRONG THÁNG </h1></center>
+    <?php if($_SESSION['role_logined'] != 10){ ?>
+<div class="add-box">
+    <a class="add_button" onClick="add_click();">Thêm bảng lương</a>
+    
+    <a class="add_button" id="btnExport" href="#">Export Excel</a>
+     
+
+</div>
+<?php } ?>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+        <div class="add-box">
+            THÁNG
+        	<input type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn ngày" <?php if(isset($thang)) echo 'value="'.date('m-Y',$thang).'"'; else if(isset($ngaytao)) echo "value='$ngaytao'"; ?>>  
+                                        
+        </div>
+        
+      </div>
+
+
+</div>
+
+<div style="margin-bottom:-3em">
+<table>
+    <tr>
+        <th>KPI</th>
+        <td>KH mới: <br> <input type="text" name="kpi_new" id="sl_status" style="width:50px" class="number" value="<?php echo $lib->formatMoney($trangthai) ?>"> </td>
+        <td>KH cũ: <br> <input type="text" name="kpi_old" id="sl_nv" style="width:50px" class="number" value="<?php echo $lib->formatMoney($nv) ?>"> </td>
+        <td>Sản lượng: <br> <input type="text" name="kpi_sl" id="sl_tha" style="width:50px" class="number" value="<?php echo $lib->formatMoney($tha) ?>"> </td>
+        <td>SEO: <br> <input type="text" name="kpi_seo" id="sl_na" style="width:50px" class="number" value="<?php echo $lib->formatMoney($na) ?>"> </td>
+        <td>Giao nhận: <br> <input type="text" name="kpi_giao" id="tu" style="width:50px" class="number" value="<?php echo $lib->formatMoney($tu) ?>"> </td>
+        <td>Ngày công: <br> <input type="text" name="kpi_ngay" id="den" style="width:50px" class="number" value="<?php echo $lib->formatMoney($den) ?>"> </td>
+        
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <input type="button" name="" id="post-query-submit" class="button" value="Cập nhật" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+        </td>
+    </tr>
+</table> 
+</div>
+<?php if( $_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9){ ?>
+<div class="add-box">
+    <a class="add_button approve" data="<?php echo '01-'.$ngaytao ?>" >Duyệt</a>
+</div>
+<?php } ?>
+
+<table class="table_data" id="tblExport">
+<thead>
+    <tr style="display:none">
+        <th colspan="16"><center>BẢNG LƯƠNG THÁNG <?php echo isset($thang)?date('m/Y',$thang):(isset($ngaytao)?$ngaytao:"") ?></center></th>
+    </tr>
+    <tr style="display:none">
+        <th colspan="16"></th>
+    </tr>
+    <tr>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'staff_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_name','<?php echo $url_order ?>')">Họ và tên <?php if ($order_by == 'staff_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','position','<?php echo $url_order ?>')">Chức vụ <?php if ($order_by == 'position'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">Lương KPI</th>
+        <th class="fix">Lương SP</th>
+        <th class="fix">Lương <br> giao nhận</th>
+        <th class="fix">Lương <br> chuyên cần</th>
+        <th class="fix">Thưởng <br> ngoại khóa</th>
+        <th class="fix">Lương <br> chức vụ</th>
+        <th class="fix">Phụ cấp ĐT</th>
+        <th class="fix">Cộng lương</th>
+        <th class="fix">Ngày ăn</th>
+        <th class="fix">Tiền cơm</th>
+        <th class="fix">Bảo hiểm</th>
+        <th class="fix">Trừ BH + Cơm</th>
+        <th class="fix">Thực lĩnh</th>
+            
+    </tr>
+   </thead>
+   <tbody>
+    <?php $diem_gio = 1.7; $tongdl=0; $tongtt=0; $tongdlmoi=0; $tongdlcu=0; $tongttmoi=0; $tongttcu=0; $tongluongsp=0; $tongluongvuotgia=0; $tongkpi=0; $tongdoanhthu=0; $tongchuyencan=0; $tongphone=0; $tongluong=0; $tongngayan=0; $tongtiencom=0; $tongbh=0; $tongkhautru=0; $tongluonggiaonhan=0; $tongngoaikhoa=0; $tongchucvu=0; ?>
+    <?php foreach ($staffs as $salary) : ?>
+    <?php
+            $dl = isset($sl_daily[$salary->staff_id])?$sl_daily[$salary->staff_id]:0;
+            $tt = isset($sl_tt[$salary->staff_id])?$sl_tt[$salary->staff_id]:0; 
+            $dlmoi = isset($daily_moi[$salary->staff_id])?$daily_moi[$salary->staff_id]:0;
+            $ttmoi = isset($tt_moi[$salary->staff_id])?$tt_moi[$salary->staff_id]:0; 
+            $dlcu = isset($daily_cu[$salary->staff_id])?$daily_cu[$salary->staff_id]:0;
+            $ttcu = isset($tt_cu[$salary->staff_id])?$tt_cu[$salary->staff_id]:0;
+            $tongdl += $dl;
+            $tongtt += $tt;
+            $tongdlmoi += $dlmoi;
+            $tongdlcu += $dlcu;
+            $tongttmoi += $ttmoi;
+            $tongttcu += $ttcu;
+
+            $luongsp = isset($luong_sp[$salary->staff_id])?$luong_sp[$salary->staff_id]:0;
+            if (isset($arr_logs[$salary->staff_id])) {
+                $luongsp += $arr_logs[$salary->staff_id];
+            }
+            $luongvuotgia = isset($luong_vuotgia[$salary->staff_id])?$luong_vuotgia[$salary->staff_id]:0;
+            $tongluongsp += $luongsp;
+            $tongluongvuotgia += $luongvuotgia;
+
+            $kpi = ($dlmoi+$ttmoi)*$trangthai + ($dlcu+$ttcu)*$nv + ($dl+$tt)*$tha;
+            $tongkpi += $kpi;
+
+            $dt = isset($doanhthu[$salary->staff_id])?$doanhthu[$salary->staff_id]:0;
+            $tongdoanhthu += $dt;
+
+            $chuyencan = isset($arr_attend[$salary->staff_id])?$arr_attend[$salary->staff_id]:0;
+            $luongchuyencan = $chuyencan*$den;
+            $tongchuyencan += $luongchuyencan;
+
+            $phone = isset($arr_phone[$salary->staff_id])?$arr_phone[$salary->staff_id]:0;
+            $tongphone += $phone;
+
+            $ngoaikhoa = isset($arr_curricular[$salary->staff_id])?$arr_curricular[$salary->staff_id]:0;
+            $tongngoaikhoa += $ngoaikhoa;
+
+            $chucvu = isset($arr_position_salary[$salary->staff_id])?$arr_position_salary[$salary->staff_id]:0;
+            $tongchucvu += $chucvu;
+
+            $giaonhan = isset($arr_lift[$salary->staff_id])?$arr_lift[$salary->staff_id]:0;
+            $tongluonggiaonhan += $giaonhan;
+            
+            $congluong = $kpi+$luongsp+$luongvuotgia+$giaonhan+$ngoaikhoa+$luongchuyencan+$chucvu+0+$phone;
+            $tongluong += $congluong;
+
+            $ngayan = isset($arr_eating[$salary->staff_id]['ngay'])?$arr_eating[$salary->staff_id]['ngay']:0;
+            $tiencom = isset($arr_eating[$salary->staff_id]['tien'])?$arr_eating[$salary->staff_id]['tien']:0;
+            $tiennv = isset($arr_eating[$salary->staff_id]['tra'])?$arr_eating[$salary->staff_id]['tra']:0;
+
+            $tienbh = isset($arr_insurrance[$salary->staff_id]['congty'])?$arr_insurrance[$salary->staff_id]['congty']:0;
+            $tienbhnv = isset($arr_insurrance[$salary->staff_id]['nhanvien'])?$arr_insurrance[$salary->staff_id]['nhanvien']:0;
+
+            $tongngayan += $ngayan; 
+            $tongtiencom += $tiencom;
+
+            $tongbh += $tienbh; 
+
+            $khautru = $tienbhnv+$tiennv;
+            $tongkhautru += $khautru;
+
+            
+    ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $salary->staff_id ?>"  class="edit_tr">
+        	
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="staff_name_<?php echo $salary->staff_id; ?>"><?php echo $salary->staff_name; ?></td>
+            <td class="fix" id="position_<?php echo $salary->staff_id; ?>"><?php echo $salary->position; ?></td>
+            <td class="fix" id="kpi_<?php echo $salary->staff_id; ?>"><a href="tiresalary/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($kpi); ?></a></td>
+            <td class="fix" id="luongsp_<?php echo $salary->staff_id; ?>"><a href="tiresalary/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($luongsp+$luongvuotgia); ?></a></td>
+            <td class="fix" id="luonggiaonhan_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($giaonhan); ?></td>
+            <td class="fix" id="luongchuyencan_<?php echo $salary->staff_id; ?>"><a href="attendance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($luongchuyencan); ?></a></td>
+            <td class="fix editable" data="<?php echo $salary->staff_id; ?>" id="ngoaikhoa_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($ngoaikhoa); ?></td>
+            <td class="fix" data="<?php echo $salary->staff_id; ?>" id="chucvu_<?php echo $salary->staff_id; ?>"><a href="positionsalary/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($chucvu); ?></a></td>
+            <td class="fix" id="phone_<?php echo $salary->staff_id; ?>"><a href="phoneallowance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($phone); ?></a></td>
+            <td class="fix" id="congluong_<?php echo $salary->staff_id; ?>"><b><?php echo $lib->formatMoney($congluong); ?></b></td>
+            <td class="fix" id="ngayan_<?php echo $salary->staff_id; ?>"><a href="eating/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $ngayan; ?></a></td>
+            <td class="fix" id="tiencom_<?php echo $salary->staff_id; ?>"><a href="eating/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($tiencom); ?></a></td>
+            <td class="fix" data="<?php echo $salary->staff_id; ?>" id="baohiem_<?php echo $salary->staff_id; ?>"><a href="insurrance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($tienbh); ?></a></td>
+            <td class="fix" id="khautru_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($khautru); ?></td>
+            <td class="fix" id="thuclinh_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($congluong-$khautru); ?></td>
+            
+        </tr>
+        <?php 
+        ?>
+    <?php endforeach; ?>
+   </tbody>
+   <tfoot>
+       <tr> 
+           <td colspan="3"><b>Tổng cộng</b></td>
+           <td class="total error" id="total_kpi" ><?php echo $lib->formatMoney($tongkpi)  ?></td>
+           <td class="total error" id="total_luongsp" ><?php echo $lib->formatMoney($tongluongsp+$tongluongvuotgia)  ?></td>
+           <td class="total error" id="total_giaonhan" ><?php echo $lib->formatMoney($tongluonggiaonhan)  ?></td>
+           <td class="total error" id="total_chuyencan" ><?php echo $lib->formatMoney($tongchuyencan)  ?></td>
+           <td class="total error" id="total_ngoaikhoa" ><?php echo $lib->formatMoney($tongngoaikhoa)  ?></td>
+           <td class="total error" id="total_chucvu" ><?php echo $lib->formatMoney($tongchucvu)  ?></td>
+           <td class="total error" id="total_phone" ><?php echo $lib->formatMoney($tongphone)  ?></td>
+           <td class="total error" id="total_luong" ><?php echo $lib->formatMoney($tongluong)  ?></td>
+           <td class="total error" id="total_ngayan" ><?php echo $tongngayan  ?></td>
+           <td class="total error" id="total_com" ><?php echo $lib->formatMoney($tongtiencom)  ?></td>
+           <td class="total error" id="total_bh" ><?php echo $lib->formatMoney($tongbh)  ?></td>
+           <td class="total error" id="total_tru" ><?php echo $lib->formatMoney($tongkhautru)  ?></td>
+           <td class="total error" id="total_thuclinh" ><?php echo $lib->formatMoney($tongluong-$tongkhautru)  ?></td>
+       </tr>
+       
+   </tfoot>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('newsalary') ?>">&larr;</a></div>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<script type="text/javascript">
+
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Bảng lương",
+    hide: 'fold',
+    show: 'blind'
+});
+
+$('.approve').click(function(){
+    var id = $(this).attr("data");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/totalsalary/approveall", {data: id},
+           function(data){
+            
+
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                                        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+            $('#loading').fadeOut(500);
+           
+           }); 
+      }
+
+});
+
+$('.editButton').click(function(){
+    var id = $(this).attr("data");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/newsalary/approve", {data: id},
+           function(data){
+
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                                        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+            $('#loading').fadeOut(500);
+           
+           }); 
+      }
+
+});
+
+$('.number').keyup(function(){
+    // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+});
+
+
+$('.editable').dblclick(function(e){  
+        var i=0;
+        var id=$(this).attr('id');
+        e.stopPropagation();      //<-------stop the bubbling of the event here
+        var value = $('#'+id).html();
+        var data=$(this).attr('data');
+
+        updateVal('#'+id, value, data);
+        
+    });
+    function updateVal(currentEle, value, id) {
+        var id = id;
+        $(currentEle).html('<input class="thVal" style="width:50px"  type="text" value="'+value+'" />');
+        $(".thVal").focus();
+        $(".thVal").keyup(function (event) {
+            if (event.keyCode == 13) {
+                var keyword = $(".thVal").val().trim();
+                var thang = $('#chonngaytao').val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/totalsalary/ngoaikhoa',
+                    type: 'POST',
+                    data: {data:id,keyword:keyword,thang:thang},
+                    success:function(data){
+                        $(currentEle).html(keyword);
+                        setTimeout(function() {
+                                        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 100);
+                    }
+                });
+
+            }
+        });
+        
+        $(".thVal").focusout(function () { // you can use $('html')
+            var keyword = $(".thVal").val().trim();
+            var thang = $('#chonngaytao').val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/totalsalary/ngoaikhoa',
+                    type: 'POST',
+                    data: {data:id,keyword:keyword,thang:thang},
+                    success:function(data){
+                        $(currentEle).html(keyword);
+                        setTimeout(function() {
+                                        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 100);
+                    }
+                });
+        });
+    }
+
+$('.editable2').dblclick(function(e){  
+        var i=0;
+        var id=$(this).attr('id');
+        e.stopPropagation();      //<-------stop the bubbling of the event here
+        var value = $('#'+id).html();
+        var data=$(this).attr('data');
+
+        updateVal2('#'+id, value, data);
+        
+    });
+    function updateVal2(currentEle, value, id) {
+        var id = id;
+        $(currentEle).html('<input class="thVal2" style="width:50px"  type="text" value="'+value+'" />');
+        $(".thVal2").focus();
+        $(".thVal2").keyup(function (event) {
+            if (event.keyCode == 13) {
+                var keyword = $(".thVal2").val().trim();
+                var thang = $('#chonngaytao').val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/totalsalary/chucvu',
+                    type: 'POST',
+                    data: {data:id,keyword:keyword,thang:thang},
+                    success:function(data){
+                        $(currentEle).html(keyword);
+                        setTimeout(function() {
+                                        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 100);
+                    }
+                });
+
+            }
+        });
+        
+        $(".thVal2").focusout(function () { // you can use $('html')
+            var keyword = $(".thVal2").val().trim();
+            var thang = $('#chonngaytao').val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/totalsalary/chucvu',
+                    type: 'POST',
+                    data: {data:id,keyword:keyword,thang:thang},
+                    success:function(data){
+                        $(currentEle).html(keyword);
+                        setTimeout(function() {
+                                        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 100);
+                    }
+                });
+        });
+    }
+
+/*$('.editable3').dblclick(function(e){  
+        var i=0;
+        var id=$(this).attr('id');
+        e.stopPropagation();      //<-------stop the bubbling of the event here
+        var value = $('#'+id).html();
+        var data=$(this).attr('data');
+
+        updateVal3('#'+id, value, data);
+        
+    });
+    function updateVal3(currentEle, value, id) {
+        var id = id;
+        $(currentEle).html('<input class="thVal3" style="width:50px" type="text" value="'+value+'" />');
+        $(".thVal3").focus();
+        $(".thVal3").keyup(function (event) {
+            if (event.keyCode == 13) {
+                var keyword = $(".thVal3").val().trim();
+                var thang = $('#chonngaytao').val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/totalsalary/baohiem',
+                    type: 'POST',
+                    data: {data:id,keyword:keyword,thang:thang},
+                    success:function(data){
+                        $(currentEle).html(keyword);
+                    }
+                });
+
+            }
+        });
+        
+        $(".thVal3").focusout(function () { // you can use $('html')
+            var keyword = $(".thVal3").val().trim();
+            var thang = $('#chonngaytao').val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/totalsalary/baohiem',
+                    type: 'POST',
+                    data: {data:id,keyword:keyword,thang:thang},
+                    success:function(data){
+                        $(currentEle).html(keyword);
+                    }
+                });
+        });
+    }*/
+</script>

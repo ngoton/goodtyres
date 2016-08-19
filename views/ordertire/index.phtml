@@ -155,7 +155,8 @@
             <input class="iform number" type="text" name="discount" id="discount" placeholder="Chiết khấu" />
             <input class="iform number" type="text" name="reduce" id="reduce"  placeholder="Giảm giá khác" />
             <input style="width:100px" type="text" class="numbers" name="vat_percent" id="vat_percent" placeholder="VAT (%)" />
-            <input style="width:450px" type="text" class="number" name="vat" id="vat" placeholder="VAT" />
+            <input style="width:350px" type="text" class="number" name="vat" id="vat" placeholder="VAT" />
+            <input type="checkbox" name="check_price_vat" id="check_price_vat" value="1"> Giá đã có VAT
             <input type="text" class="iform ngay" name="delivery_date" id="delivery_date" placeholder="Ngày giao hàng" />
             <input type="hidden" id="max_discount" value="0">
             <input type="button" name="previous" class="previous action-button" value="Quay lại" />
@@ -649,6 +650,68 @@ $('input[name="payment"]').click(function(){
     }
 });
 
+$('#check_price_vat').click(function(){
+    if($(this).is(':checked')){
+        var val = parseInt($('#vat_percent').val());
+        var gia = 0;
+        $('.tire_price').each(function() { 
+            var p = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
+            var n = Math.round((p/(1+val/100))/100)*100;
+
+            var row = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex = row[0].rowIndex;
+
+            var this_sl = parseInt($(".tire_number:eq("+rowIndex+")").val().replace(/[^0-9\.-]+/g,""));
+            gia = gia + (this_sl*n);
+
+            $(this).val(n);
+            $(this).val(function(index, value) {
+                return value
+                  .replace(/\D/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+            });
+        });
+
+        $('#thanhtien').val(gia);
+        $('#thanhtien2').val(gia);
+        $('#vat').val(Math.round(gia*val/100));
+        
+        $('#vat').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+
+        $('#thanhtien').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+        $('#thanhtien2').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+    }
+    else{
+        var val = $('#vat_percent').val(); 
+        var thanhtien = parseInt($('#thanhtien2').val().replace(/[^0-9\.-]+/g,"")) || 0;
+        
+        $('#vat').val(Math.round(thanhtien*val/100));
+        
+        $('#vat').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+    }
+});
+
 $(':checkbox[name=dis]').bind('click',function(){
     var val = $(this).val(); 
     var thanhtien = parseInt($('#thanhtien2').val().replace(/[^0-9\.-]+/g,"")) || 0;
@@ -1087,7 +1150,7 @@ $('#vat').keyup(function(){
     var val = parseInt($(this).val().replace(/[^0-9\.-]+/g,""));
     var thanhtien = parseInt($("#thanhtien2").val().replace(/[^0-9\.-]+/g,""));
 
-    $('#vat_percent').val(val*100/thanhtien);
+    $('#vat_percent').val(Math.round(val*100/thanhtien));
 });
 
 var pickerOpay2 = {

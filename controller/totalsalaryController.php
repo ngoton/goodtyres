@@ -670,6 +670,478 @@ Class totalsalaryController Extends baseController {
         $this->view->show('totalsalary/index');
     }
 
+    public function temp() {
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SESSION['role_logined'] > 2 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined']!=10 && $_SESSION['role_logined']!=9) {
+            return $this->view->redirect('user/login');
+        }
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Lương dự kiến';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_by = isset($_POST['order_by']) ? $_POST['order_by'] : null;
+            $order = isset($_POST['order']) ? $_POST['order'] : null;
+            $page = isset($_POST['page']) ? $_POST['page'] : null;
+            $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+            $limit = 100;
+            $ngaytao = isset($_POST['ngaytao']) ? $_POST['ngaytao'] : null;
+            $trangthai = isset($_POST['trangthai']) ? $_POST['trangthai'] : null;
+            $nv = isset($_POST['nv']) ? $_POST['nv'] : null;
+            $tha = isset($_POST['tha']) ? $_POST['tha'] : null;
+            $na = isset($_POST['na']) ? $_POST['na'] : null;
+            $tu = isset($_POST['tu']) ? $_POST['tu'] : null;
+            $den = isset($_POST['den']) ? $_POST['den'] : null;
+        }
+        else{
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'position';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC';
+            $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
+            $keyword = "";
+            $limit = 50;
+            $ngaytao = date('m-Y');
+            $trangthai = "600000";
+            $nv = "200000";
+            $tha = "7000";
+            $na = "4000";
+            $tu = "2000";
+            $den = "4000";
+        }
+
+        $trangthai = str_replace(',','',$trangthai);
+        $nv = str_replace(',','',$nv);
+        $tha = str_replace(',','',$tha);
+        $na = str_replace(',','',$na);
+        $tu = str_replace(',','',$tu);
+        $den = str_replace(',','',$den);
+        
+        $this->view->data['trangthai'] = str_replace(',','',$trangthai);
+        $this->view->data['nv'] = str_replace(',','',$nv);
+        $this->view->data['tha'] = str_replace(',','',$tha);
+        $this->view->data['na'] = str_replace(',','',$na);
+        $this->view->data['tu'] = str_replace(',','',$tu);
+        $this->view->data['den'] = str_replace(',','',$den);
+
+
+        $batdau = '01-'.$ngaytao;
+        $ketthuc = date('t-m-Y',strtotime($batdau));
+
+        $tiresale_model = $this->model->get('tiresaleModel');
+        $tire_quotation_model = $this->model->get('tirequotationModel');
+        $order_tire_model = $this->model->get('ordertireModel');
+        $attendance_model = $this->model->get('attendanceModel');
+        $phoneallowance_model = $this->model->get('phoneallowanceModel');
+        $eating_model = $this->model->get('eatingModel');
+        $curricular_model = $this->model->get('curricularModel');
+        $position_salary_model = $this->model->get('positionsalaryModel');
+        $insurrance_model = $this->model->get('insurranceModel');
+        $lift_model = $this->model->get('liftModel');
+        $sale_model = $this->model->get('salereportModel');
+        $receivable_model = $this->model->get('receivableModel');
+        $importtire_model = $this->model->get('importtireModel');
+
+        $arr_logs = array();
+        $data = array(
+            'where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc),
+        );
+        $join = array('table'=>'staff, user','where'=>'user_id = account AND user_id = sale');
+
+        $sales = $sale_model->getAllSale($data,$join);
+        
+        foreach ($sales as $sale) {
+            $arr_logs[$sale->staff_id] = isset($arr_logs[$sale->staff_id])?$arr_logs[$sale->staff_id]+(($sale->revenue_vat+$sale->revenue-$sale->cost_vat-$sale->cost-$sale->estimate_cost)*0.5):($sale->revenue_vat+$sale->revenue-$sale->cost_vat-$sale->cost-$sale->estimate_cost)*0.5;   
+        }
+
+        
+        $this->view->data['arr_logs'] = $arr_logs;
+
+        $data = array(
+            'where' => 'lift_date >= '.strtotime($batdau).' AND lift_date <= '.strtotime($ketthuc),
+        );
+        $join = array('table'=>'order_tire','where'=>'order_tire=order_tire_id');
+        $lifts = $lift_model->getAllLift($data, $join);
+        $arr_lift = array();
+        foreach ($lifts as $lift) {
+            $gia = $tu*$lift->order_tire_number;
+            $support = explode(',', $lift->staff);
+            $total = round($gia/count($support));
+            foreach ($support as $staff) {
+                $arr_lift[$staff] = isset($arr_lift[$staff])?$arr_lift[$staff]+$total:$total;
+            }
+        }
+
+        $data = array(
+            'where' => 'import_tire_date >= '.strtotime($batdau).' AND import_tire_date <= '.strtotime($ketthuc),
+        );
+        $join = array('table'=>'staff, user','where'=>'user_id = account AND user_id = sale');
+
+        $imports = $importtire_model->getAllSale($data,$join);
+        
+        foreach ($imports as $sale) {
+            $arr_lift[$sale->staff_id] = isset($arr_lift[$sale->staff_id])?$arr_lift[$sale->staff_id]+1500000:1500000;
+        }
+
+        $this->view->data['arr_lift'] = $arr_lift;
+
+        $qr = 'SELECT * FROM (SELECT * FROM phone_allowance WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
+        $phones = $phoneallowance_model->queryAllowance($qr);
+        $arr_phone = array();
+        foreach ($phones as $phone) {
+            $arr_phone[$phone->staff] = isset($arr_phone[$phone->staff])?$arr_phone[$phone->staff]+$phone->phone_allowance:$phone->phone_allowance;
+        }
+
+        $this->view->data['arr_phone'] = $arr_phone;
+
+        $qr = 'SELECT * FROM (SELECT * FROM insurrance WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
+        $insurrances = $insurrance_model->querySalary($qr);
+        $arr_insurrance = array();
+        foreach ($insurrances as $insurrance) {
+            $arr_insurrance[$insurrance->staff]['congty'] = isset($arr_insurrance[$insurrance->staff]['congty'])?$arr_insurrance[$insurrance->staff]['congty']+$insurrance->insurrance:$insurrance->insurrance;
+            $arr_insurrance[$insurrance->staff]['nhanvien'] = isset($arr_insurrance[$insurrance->staff]['nhanvien'])?$arr_insurrance[$insurrance->staff]['nhanvien']+$insurrance->insurrance_staff:$insurrance->insurrance_staff;
+        }
+
+        $this->view->data['arr_insurrance'] = $arr_insurrance;
+
+        $qr = 'SELECT * FROM (SELECT * FROM position_salary WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
+        $position_salarys = $position_salary_model->querySalary($qr);
+        $arr_position_salary = array();
+        foreach ($position_salarys as $position_salary) {
+            $arr_position_salary[$position_salary->staff] = isset($arr_position_salary[$position_salary->staff])?$arr_position_salary[$position_salary->staff]+$position_salary->position_salary:$position_salary->position_salary;
+        }
+
+        $this->view->data['arr_position_salary'] = $arr_position_salary;
+
+        $data = array(
+            'where' => 'create_time >= '.strtotime($batdau).' AND create_time <= '.strtotime($ketthuc),
+        );
+
+        $eatings = $eating_model->getAllEating($data);
+        $arr_eating = array();
+        foreach ($eatings as $eating) {
+            $arr_eating[$eating->staff]['ngay'] = isset($arr_eating[$eating->staff]['ngay'])?$arr_eating[$eating->staff]['ngay']+$eating->eating_day:$eating->eating_day;
+            $arr_eating[$eating->staff]['tien'] = isset($arr_eating[$eating->staff]['tien'])?$arr_eating[$eating->staff]['tien']+$eating->eating_total:$eating->eating_total;
+            $arr_eating[$eating->staff]['tra'] = isset($arr_eating[$eating->staff]['tra'])?$arr_eating[$eating->staff]['tra']+$eating->eating_staff_total:$eating->eating_staff_total;
+        }
+
+        $this->view->data['arr_eating'] = $arr_eating;
+
+        $curriculars = $curricular_model->getAllSalary($data);
+        $arr_curricular = array();
+        foreach ($curriculars as $curricular) {
+            $arr_curricular[$curricular->staff] = isset($arr_curricular[$curricular->staff])?$arr_curricular[$curricular->staff]+$curricular->curricular_salary:$curricular->curricular_salary;
+        }
+
+        $this->view->data['arr_curricular'] = $arr_curricular;
+
+        
+        $data = array(
+            'where' => 'attendance_date >= '.strtotime($batdau).' AND attendance_date <= '.strtotime($ketthuc),
+        );
+        $attendances = $attendance_model->getAllAttendance($data);
+        $arr_attend = array();
+        $kpi = 300;
+        foreach ($attendances as $attendance) {
+            $sophut = 0;
+            $diemtru = 0;
+            if ($attendance->attendance_day == "Bảy") {
+                if (4 >= $attendance->attendance_total) {
+                    $sophut = (4 - $attendance->attendance_total)*60;
+                }
+            }
+            else{
+                if (8 >= $attendance->attendance_total) {
+                    $sophut = (8 - $attendance->attendance_total)*60;
+                }
+            }
+            
+
+            if ($sophut <= 3) {
+                $diemtru = 0;
+            }
+            else if ($sophut > 3 && $sophut <= 15) {
+                $diemtru = 1;
+            }
+            else if ($sophut > 15 && $sophut <= 30) {
+                $diemtru = 1.5;
+            }
+            else if ($sophut > 30 && $sophut <= 60) {
+                $diemtru = 3;
+            }
+            else if ($sophut > 60 && $sophut <= 240) {
+                $diemtru = 8;
+            }
+            else if ($sophut > 240 && $sophut <= 360) {
+                $diemtru = 10;
+            }
+            else if ($sophut > 360) {
+                $diemtru = 12;
+            }
+            
+            
+            $arr_attend[$attendance->staff] = isset($arr_attend[$attendance->staff])?$arr_attend[$attendance->staff]-$diemtru:$kpi-$diemtru;
+        }
+
+        $this->view->data['arr_attend'] = $arr_attend;
+
+        ////////
+
+        $doanhthu = array();
+        $arr_cost = array();
+        $arr_customer = array();
+        $arr_discount = array();
+        $arr_vat = array();
+        $arr_number = array();
+
+        $sl_daily = array();
+        $sl_tt = array();
+        $daily_cu = array();
+        $daily_moi = array();
+        $tt_moi = array();
+        $tt_cu = array();
+
+        $cus_arr = array();
+
+        $luong_sp = array();
+        $luong_vuotgia = array();
+
+        $old = array();
+
+        
+
+        ///////// Đơn hàng trong tháng đã thanh toán
+
+        $data = array(
+            'where' => 'tire_sale_date < '.strtotime($batdau),
+        );
+
+        $sale_olds = $tiresale_model->getAllTire($data);
+
+        
+        foreach ($sale_olds as $sale) {
+            if (!in_array($sale->customer,$old)) {
+                $old[] = $sale->customer;
+            }
+        }
+
+
+        $data = array(
+            'where' => 'tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc),
+        );
+        $join = array('table'=>'tire_brand,tire_size,tire_pattern','where'=>'tire_brand=tire_brand_id AND tire_size=tire_size_id AND tire_pattern=tire_pattern_id');
+
+        $sales = $tiresale_model->getAllTire($data,$join);
+
+        $join_order = array('table'=>'staff','where'=>'sale = account');
+        $orders = $order_tire_model->getAllTire(array('where'=>'delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc)),$join_order);
+        
+        foreach ($orders as $tire) {
+            $arr_cost[$tire->order_tire_id] = $tire->order_cost/$tire->order_tire_number;
+            $doanhthu[$tire->staff_id] = isset($doanhthu[$tire->staff_id])?$doanhthu[$tire->staff_id]+$tire->total:$tire->total;
+            $arr_customer[$tire->customer][date('d-m-Y',$tire->delivery_date)] = isset($arr_customer[$tire->customer][date('d-m-Y',$tire->delivery_date)])?$arr_customer[$tire->customer][date('d-m-Y',$tire->delivery_date)]+$tire->order_tire_number:$tire->order_tire_number;
+            $arr_discount[$tire->order_tire_id] = ($tire->discount+$tire->reduce)/$tire->order_tire_number;
+            $arr_vat[$tire->order_tire_id] = $tire->vat/$tire->order_tire_number;
+            $arr_number[$tire->order_tire_id] = $tire->order_tire_number;
+        }
+
+        
+
+        $join_q = array('table'=>'tire_quotation_brand, tire_quotation_size','where'=>'tire_quotation_brand=tire_quotation_brand_id AND tire_quotation_size=tire_quotation_size_id');
+
+        foreach ($sales as $sale) {
+            if ($sale->tire_brand_name == "Aoteli" || $sale->tire_brand_name == "Yatai" || $sale->tire_brand_name == "Yatone" || $sale->tire_brand_name == "Three-A") {
+                $tire_brand_name = "Shengtai";
+            }
+            else{
+                $tire_brand_name = $sale->tire_brand_name;
+            }
+
+            $data_q = array(
+                'where' => 'tire_quotation_brand_name ="'.$tire_brand_name.'" AND tire_quotation_size_number ="'.$sale->tire_size_number.'" AND tire_quotation_pattern iN ('.$sale->tire_pattern_type.') AND start_date <= '.$sale->tire_sale_date.' AND (end_date IS NULL OR end_date > '.$sale->tire_sale_date.')',
+            );
+            $tire_quotations = $tire_quotation_model->getAllTire($data_q,$join_q);
+
+            $tire_prices = array();
+            foreach ($tire_quotations as $tire) {
+                $tire_prices[$tire->tire_quotation_brand_name][$tire->tire_quotation_size_number][$tire->tire_quotation_pattern] = $tire->tire_quotation_price;
+            }
+
+            $pt_type = explode(',', $sale->tire_pattern_type);
+            for ($l=0; $l < count($pt_type); $l++) {
+                if (isset($tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]])) {
+                    if (isset($arr_cost[$sale->order_tire])) {
+                        $phi = $arr_cost[$sale->order_tire];
+                    }
+                    else{
+                        $phi = 0;
+                    }
+
+                    if (isset($arr_discount[$sale->order_tire])) {
+                        $ck = $arr_discount[$sale->order_tire];
+                    }
+                    else{
+                        $ck = 0;
+                    }
+
+                    if (isset($arr_vat[$sale->order_tire])) {
+                        $va = $arr_vat[$sale->order_tire];
+                    }
+                    else{
+                        $va = 0;
+                    }
+
+                    if ($sale->sell_price >= $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]) {
+                        //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*1/100):($sale->volume*$sale->sell_price)*1/100;
+                        $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*1/100):($sale->volume*($sale->sell_price+$va-$ck))*1/100;
+
+                        if ($sale->sell_price > $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]) {
+                            
+
+                            $vuot = ((($sale->sell_price - $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]])-$phi)*$sale->volume)/2;
+                            if($vuot>0){
+                                $luong_vuotgia[$sale->sale] = isset($luong_vuotgia[$sale->sale])?$luong_vuotgia[$sale->sale]+$vuot:$vuot;
+                            }
+                            
+                        }
+                    }
+                    else if($sale->sell_price < $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]){
+                        $a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                        $b = $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]*$sale->volume;
+                        if ($a >= 0.95*$b) {
+                            if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 20) {
+                                //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*1/100):($sale->volume*$sale->sell_price)*1/100;
+                                $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*1/100):($sale->volume*($sale->sell_price+$va-$ck))*1/100;
+                            }
+                        }
+                        else if ($a >= 0.94*$b) {
+                            if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 50) {
+                                //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*0.5/100):($sale->volume*$sale->sell_price)*0.5/100;
+                                $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*0.5/100):($sale->volume*($sale->sell_price+$va-$ck))*0.5/100;
+                            }
+                        }
+                        else if ($a >= 0.93*$b) {
+                            if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 100) {
+                                //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*0.5/100):($sale->volume*$sale->sell_price)*0.5/100;
+                                $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*0.5/100):($sale->volume*($sale->sell_price+$va-$ck))*0.5/100;
+                            }
+                        }
+                        else if ($a >= 0.92*$b) {
+                            if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 150) {
+                                //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*0.5/100):($sale->volume*$sale->sell_price)*0.5/100;
+                                $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*0.5/100):($sale->volume*($sale->sell_price+$va-$ck))*0.5/100;
+                            }
+                        }
+                        else if ($a >= 0.91*$b) {
+                            if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 200) {
+                                //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*0.5/100):($sale->volume*$sale->sell_price)*0.5/100;
+                                $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*0.5/100):($sale->volume*($sale->sell_price+$va-$ck))*0.5/100;
+                            }
+                        }
+                        else{
+                            $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+0:0;
+                        }
+                    }
+                    else{
+                        $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+0:0;
+                    }
+                }
+                
+            }
+
+            if ($sale->customer_type == 1) {
+                $sl_daily[$sale->sale] = isset($sl_daily[$sale->sale])?$sl_daily[$sale->sale]+$sale->volume:$sale->volume;
+                if(!isset($cus_arr[$sale->sale]) || !in_array($sale->order_tire,$cus_arr[$sale->sale])){
+                    if (in_array($sale->customer,$old)) {
+                        $daily_cu[$sale->sale] = isset($daily_cu[$sale->sale])?$daily_cu[$sale->sale]+1:1;
+                    }
+                    else{
+                        if ($arr_number[$sale->order_tire] > 2) {
+                            $daily_moi[$sale->sale] = isset($daily_moi[$sale->sale])?$daily_moi[$sale->sale]+1:1;
+                        }
+                        else{
+                            $daily_cu[$sale->sale] = isset($daily_cu[$sale->sale])?$daily_cu[$sale->sale]+1:1;
+                        }
+                    }
+                }
+            }
+            else{
+                $sl_tt[$sale->sale] = isset($sl_tt[$sale->sale])?$sl_tt[$sale->sale]+$sale->volume:$sale->volume;
+                if(!isset($cus_arr[$sale->sale]) || !in_array($sale->order_tire,$cus_arr[$sale->sale])){
+                    if (in_array($sale->customer,$old)) {
+                        $tt_cu[$sale->sale] = isset($tt_cu[$sale->sale])?$tt_cu[$sale->sale]+1:1;
+                    }
+                    else{
+                        if ($arr_number[$sale->order_tire] > 2) {
+                            $tt_moi[$sale->sale] = isset($tt_moi[$sale->sale])?$tt_moi[$sale->sale]+1:1;
+                        }
+                        else{
+                            $tt_cu[$sale->sale] = isset($tt_cu[$sale->sale])?$tt_cu[$sale->sale]+1:1;
+                        }
+                    }
+                }
+            }
+
+            $cus_arr[$sale->sale][] = $sale->order_tire;
+        }
+
+        $this->view->data['sl_daily'] = $sl_daily;
+        $this->view->data['sl_tt'] = $sl_tt;
+        $this->view->data['daily_cu'] = $daily_cu;
+        $this->view->data['daily_moi'] = $daily_moi;
+        $this->view->data['tt_moi'] = $tt_moi;
+        $this->view->data['tt_cu'] = $tt_cu;
+
+        $this->view->data['luong_sp'] = $luong_sp;
+        $this->view->data['luong_vuotgia'] = $luong_vuotgia;
+
+        $this->view->data['doanhthu'] = $doanhthu;
+
+
+        $staff_model = $this->model->get('staffModel');
+        $sonews = $limit;
+        $x = ($page-1) * $sonews;
+        $pagination_stages = 2;
+        
+        $join = array();
+        $data = array(
+            'where' => 'status=1',
+        );
+
+        
+        $tongsodong = count($staff_model->getAllStaff($data,$join));
+        $tongsotrang = ceil($tongsodong / $sonews);
+        
+
+        $this->view->data['page'] = $page;
+        $this->view->data['order_by'] = $order_by;
+        $this->view->data['order'] = $order;
+        $this->view->data['keyword'] = $keyword;
+        $this->view->data['limit'] = $limit;
+        $this->view->data['pagination_stages'] = $pagination_stages;
+        $this->view->data['tongsotrang'] = $tongsotrang;
+        $this->view->data['ngaytao'] = $ngaytao;
+        $this->view->data['sonews'] = $sonews;
+
+        $data = array(
+            'order_by'=>$order_by,
+            'order'=>$order,
+            'limit'=>$x.','.$sonews,
+            'where' => 'status=1',
+            );
+
+        
+        if ($keyword != '') {
+            $search = ' AND ( staff_name LIKE "%'.$keyword.'%" )';
+            
+                $data['where'] .= $search;
+        }
+        $this->view->data['staffs'] = $staff_model->getAllStaff($data,$join);
+        $this->view->data['lastID'] = isset($staff_model->getLastStaff()->staff_id)?$staff_model->getLastStaff()->staff_id:0;
+
+        $this->view->show('totalsalary/temp');
+    }
+
     public function ngoaikhoa(){
 
         

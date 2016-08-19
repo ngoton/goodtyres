@@ -19,10 +19,11 @@ Class additionalController Extends baseController {
             $ngaytao = isset($_POST['ngaytao']) ? $_POST['ngaytao'] : null;
             $ngaytaobatdau = isset($_POST['ngaytaobatdau']) ? $_POST['ngaytaobatdau'] : null;
             $trangthai = isset($_POST['trangthai']) ? $_POST['trangthai'] : null;
+            $code = "";
         }
         else{
             $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'additional_date';
-            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'DESC';
+            $order = $this->registry->router->order_by ? $this->registry->router->order : 'DESC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
             $limit = 100;
@@ -31,9 +32,10 @@ Class additionalController Extends baseController {
             $ngaytao = date('m-Y');
             $ngaytaobatdau = date('m-Y');
             $trangthai = "";
+            $code = $this->registry->router->addition;
         }
-
         $id = $this->registry->router->param_id;
+
 
         $additional_model = $this->model->get('additionalModel');
 
@@ -70,6 +72,9 @@ Class additionalController Extends baseController {
             }
         }
         
+        if ($code != "") {
+            $data['where'] = 'code = "'.$code.'"';
+        }
         
         $tongsodong = count($additional_model->getAllAdditional($data));
         $tongsotrang = ceil($tongsodong / $sonews);
@@ -108,6 +113,10 @@ Class additionalController Extends baseController {
             else{
                 $data['where'] .= ' AND (debit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') )';
             }
+        }
+
+        if ($code != "") {
+            $data['where'] = 'code = "'.$code.'"';
         }
       
         if ($keyword != '') {

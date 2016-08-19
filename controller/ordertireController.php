@@ -152,7 +152,7 @@ Class ordertireController Extends baseController {
         }
         else{
             $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'order_tire_status ASC, order_number';
-            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'DESC';
+            $order = $this->registry->router->order_by ? $this->registry->router->order : 'DESC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
             $limit = 50;
@@ -166,6 +166,8 @@ Class ordertireController Extends baseController {
         }
 
         $ma = $this->registry->router->param_id;
+
+        $sodonhang = $this->registry->router->addition;
 
         $thang = (int)date('m',strtotime($batdau));
         $nam = date('Y',strtotime($batdau));
@@ -220,6 +222,10 @@ Class ordertireController Extends baseController {
         if ($code != "" && $code != "undefined") {
             $data['where'] .= ' AND order_number = '.$code;
         }
+
+        if ($sodonhang != "") {
+            $data['where'] = 'order_number = "'.$sodonhang.'"';
+        }
         
         $join = array('table'=>'customer, user','where'=>'customer.customer_id = order_tire.customer AND user_id = sale');
         
@@ -266,6 +272,10 @@ Class ordertireController Extends baseController {
 
         if ($code != "" && $code != "undefined") {
             $data['where'] .= ' AND order_number = '.$code;
+        }
+
+        if ($sodonhang != "") {
+            $data['where'] = 'order_number = "'.$sodonhang.'"';
         }
 
         if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9) {

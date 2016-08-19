@@ -103,7 +103,7 @@
             <td class="fix"><?php echo $lib->formatMoney($tong>0?$tong:null) ?></td>
             <td class="fix"><?php echo $lib->formatMoney($tong<0?str_replace('-', '', $tong):null) ?></td>
 
-            <td class="fix"><?php echo $dl == $tong ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">Not OK</span>'; ?></td>
+            <td class="fix"><?php echo $dl == $tong ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($dl - $tong).'</span>'; ?></td>
         </tr>
         <?php } ?>
         <tr style="font-weight:bold; color:red">
@@ -120,7 +120,7 @@
             <td class="fix"><?php echo $lib->formatMoney($tong_no_ck) ?></td>
             <td class="fix"><?php echo $lib->formatMoney($tong_co_ck) ?></td>
 
-            <td class="fix"><?php echo ( $tongdl == ($tong_no_ck-$tong_co_ck) )? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">Not OK</span>'; ?></td>
+            <td class="fix"><?php echo ( $tongdl == ($tong_no_ck-$tong_co_ck) )? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($tongdl - ($tong_no_ck-$tong_co_ck)).'</span>'; ?></td>
         </tr>
     </tbody>
     
