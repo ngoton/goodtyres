@@ -99,6 +99,28 @@ function searchall(page,cot,sapxep){
             {
                 $('body').html(server_response);    // Hiển thị dữ liệu vào thẻ div #searchresultdata
                 
+                //Enable sidebar toggle
+                $(document).on('click', "[data-toggle='offcanvas']", function (e) {
+                  e.preventDefault();
+
+                  //Enable sidebar push menu
+                  if ($(window).width() > (768 - 1)) {
+                    if ($("body").hasClass('sidebar-collapse')) {
+                      $("body").removeClass('sidebar-collapse').trigger('expanded.pushMenu');
+                    } else {
+                      $("body").addClass('sidebar-collapse').trigger('collapsed.pushMenu');
+                    }
+                  }
+                  //Handle sidebar push menu for small screens
+                  else {
+                    if ($("body").hasClass('sidebar-open')) {
+                      $("body").removeClass('sidebar-open').removeClass('sidebar-collapse').trigger('collapsed.pushMenu');
+                    } else {
+                      $("body").addClass('sidebar-open').trigger('expanded.pushMenu');
+                    }
+                  }
+                });
+                
                  
                 if ($('input#search-input').hasClass("loading")) {      // Kiểm tra class "loading"
                     $("input#search-input").removeClass("loading");     // Remove class "loading"
@@ -163,6 +185,29 @@ function sapxep(page,cot,sapxep){
               
               $('body').html(answer); // đặt kết quả trả về từ test.php vào thẻ div success
               $('#loading').fadeOut(500);
+
+              //Enable sidebar toggle
+                $(document).on('click', "[data-toggle='offcanvas']", function (e) {
+                  e.preventDefault();
+
+                  //Enable sidebar push menu
+                  if ($(window).width() > (768 - 1)) {
+                    if ($("body").hasClass('sidebar-collapse')) {
+                      $("body").removeClass('sidebar-collapse').trigger('expanded.pushMenu');
+                    } else {
+                      $("body").addClass('sidebar-collapse').trigger('collapsed.pushMenu');
+                    }
+                  }
+                  //Handle sidebar push menu for small screens
+                  else {
+                    if ($("body").hasClass('sidebar-open')) {
+                      $("body").removeClass('sidebar-open').removeClass('sidebar-collapse').trigger('collapsed.pushMenu');
+                    } else {
+                      $("body").addClass('sidebar-open').trigger('expanded.pushMenu');
+                    }
+                  }
+                });
+                
             }
           });
 }
