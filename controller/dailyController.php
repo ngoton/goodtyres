@@ -2586,7 +2586,7 @@ Class dailyController Extends baseController {
                         $ngay = strtotime($ngay);
                  
                         $service = trim($val[5]);
-                        $service = ($service=="Hành chính" || $service=="hành chính")?1:(($service=="Lốp xe" || $service=="lốp xe")?2:(($service=="Logistics" || $service=="logistics")?3:null));
+                        $service = ($service=="Hành chính" || $service=="hành chính" || substr($service, -1)=="h" )?1:(($service=="Lốp xe" || $service=="lốp xe" || substr($service, -1)=="e")?2:(($service=="Logistics" || $service=="logistics" || substr($service, -1)=="s" || substr($service, -1)=="c")?3:null));
 
                         if (BASE_URL == "http://viet-trade.org" || BASE_URL == "http://www.viet-trade.org") {
                             if ($service < 3) {
