@@ -723,6 +723,7 @@
             <li><a  data="phoneallowance" href="<?php echo $this->url('phoneallowance') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Phụ cấp điện thoại</a></li>
             <li><a  data="insurrance" href="<?php echo $this->url('insurrance') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảo hiểm</a></li>
             <li><a  data="positionsalary" href="<?php echo $this->url('positionsalary') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Lương chức vụ</a></li>
+            <li><a  data="checksalesalary" href="<?php echo $this->url('checksalesalary') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Doanh số tính lương</a></li>
           </ul>
         </li>
         <li><a href="#">
@@ -1067,6 +1068,9 @@
 </div>
 <!-- ./wrapper -->
 
+<div id='ajax_loader' style="position: fixed; left: 50%; top: 50%; display: none; margin-left : -16px; margin-top : -16px;">
+    <img src="<?php echo BASE_URL?>/public/img/loader-gears.gif"></img>
+</div>
 
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
@@ -1089,5 +1093,13 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <!-- AdminLTE for demo purposes -->
 <script src="<?php BASE_URL ?>/public/js/adminbar/dist/js/demo.js"></script>
+<script type="text/javascript">
+$( document ).ajaxStart(function() {
+  $("#ajax_loader").fadeIn(200);
+});
+$( document ).ajaxComplete(function() {
+  $("#ajax_loader").fadeOut(200);
+});
+</script>
 </body>
 </html>

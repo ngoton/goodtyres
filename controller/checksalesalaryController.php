@@ -146,14 +146,10 @@ Class checksalesalaryController Extends baseController {
         $join_q = array('table'=>'tire_quotation_brand, tire_quotation_size','where'=>'tire_quotation_brand=tire_quotation_brand_id AND tire_quotation_size=tire_quotation_size_id');
 
         $old = array();
-        $str = "";
+        $str = 0;
         foreach ($order_tires as $order_tire) {
-            if ($str == "") {
-                $str .= $order_tire->order_tire_id;
-            }
-            else{
-                $str .= ",".$order_tire->order_tire_id;
-            }
+            $str .= ",".$order_tire->order_tire_id;
+            
 
             $check_sale = $check_sale_salary_model->getSalaryByWhere(array('order_tire'=>$order_tire->order_tire_id));
             if ($check_sale) {
@@ -162,6 +158,7 @@ Class checksalesalaryController Extends baseController {
                 $info['vuotgia'][$order_tire->order_tire_id] = $check_sale->bonus_over;
                 $info['ghichu'][$order_tire->order_tire_id] = $check_sale->comment;
                 $info['bonus'][$order_tire->order_tire_id] = $check_sale->bonus;
+                $info['thangluong'][$order_tire->order_tire_id] = $check_sale->salary_date;
             }
             else{
                 $data = array(
@@ -284,7 +281,7 @@ Class checksalesalaryController Extends baseController {
             $data['where'] = 'order_tire_status = 1 AND (check_salary IS NULL OR check_salary = 0)';
         }
         else if ($nv == 1) {
-            $data['where'] = 'check_salary = 1 AND check_salary_date >= '.strtotime($batdau).' AND check_salary_date <= '.strtotime($ketthuc).'AND order_tire_id NOT IN ('.$str.')';
+            $data['where'] = 'check_salary = 1 AND check_salary_date >= '.strtotime($batdau).' AND check_salary_date <= '.strtotime($ketthuc).' AND order_tire_id NOT IN ('.$str.')';
         }
 
         if ($trangthai > 0) {
@@ -321,6 +318,7 @@ Class checksalesalaryController Extends baseController {
                 $info['vuotgia'][$order_tire->order_tire_id] = $check_sale->bonus_over;
                 $info['ghichu'][$order_tire->order_tire_id] = $check_sale->comment;
                 $info['bonus'][$order_tire->order_tire_id] = $check_sale->bonus;
+                $info['thangluong'][$order_tire->order_tire_id] = $check_sale->salary_date;
             }
             else{
 
@@ -445,7 +443,10 @@ Class checksalesalaryController Extends baseController {
             $vuotgia = trim(str_replace(',', '', $_POST['vuotgia']));
             $khmoi = trim($_POST['khmoi']);
             $ghichu = trim($_POST['ghichu']);
+            $thangluong = str_replace("/","-",trim($_POST['thangluong']));
             $staff = trim($_POST['staff']);
+
+            $thangluong = "01-".$thangluong;
 
             $order_tire_model = $this->model->get('ordertireModel');
             $check_sale_salary_model = $this->model->get('checksalesalaryModel');
@@ -460,6 +461,7 @@ Class checksalesalaryController Extends baseController {
                     'bonus_over' => $vuotgia,
                     'new_customer' => $khmoi != ""?1:0,
                     'comment' => $ghichu,
+                    'salary_date' => strtotime($thangluong),
                 );
                 $check_sale_salary_model->updateSalary($data_check,array('order_tire'=>$_POST['data']));
             }
@@ -475,18 +477,18 @@ Class checksalesalaryController Extends baseController {
                 else{
                     $data = array(
                         'check_salary' => 1,
-                        'check_salary_date' => strtotime(date('d-m-Y')),
+                        'check_salary_date' => strtotime($thangluong),
                     );
 
                     $data_check = array(
                         'staff' => $staff,
                         'order_tire' => $_POST['data'],
-                        'salary_date' => strtotime(date('d-m-Y')),
                         'bonus_percent' => $percent,
                         'bonus' => $doanhso,
                         'bonus_over' => $vuotgia,
                         'new_customer' => $khmoi != ""?1:0,
                         'comment' => $ghichu,
+                        'salary_date' => strtotime($thangluong),
                     );
                     $check_sale_salary_model->createSalary($data_check);
                 }

@@ -61,5 +61,8 @@ Class importtirecostModel Extends baseModel {
     public function getLastVendor(){
         return $this->getLast($this->table);
     }
+    public function queryVendor($sql){
+        return $this->query($sql);
+    }
 }
 ?>

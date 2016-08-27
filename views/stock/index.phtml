@@ -6654,6 +6654,7 @@
         </div>
         <div class="tab" id="tab3" >
           <div class="add-box">
+            Code <input type="text" style="width:50px" id="lastcode" value="<?php echo $last_code ?>">
             <a class="add_button import_stock" href="#"  data="<?= $this->url('stock/importstock/'.$last_code)?>">Nhập kho</a>
             <a class="add_button" id="import_excel" href="<?= $this->url('stock/goingimport')?>">Import Excel</a>
               <a class="add_button" id="btnExport3" >Export Excel</a>
@@ -10049,6 +10050,12 @@ $("#import_excel").click(function(){
          
         return false;
     });
+
+$('#lastcode').keyup(function(){
+    var val = $(this).val();
+    var str = "<?php echo BASE_URL ?>/stock/importstock/"+val;
+    $('.import_stock').attr('data',str);
+});
 
 $('.import_stock').click(function(){
     var link = $(this).attr('data');

@@ -152,6 +152,9 @@ elseif ($order_by == 'order_tire_number')
             <a class="sort" >Ghi chú</a>
         </th> 
         <th class="fix">
+            <a class="sort" >Tháng lương</a>
+        </th> 
+        <th class="fix">
             <a class="sort" ></a>
         </th> 
     </tr>
@@ -201,6 +204,7 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix editable" id="vuotgia_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney(isset($info['vuotgia'][$order_tire->order_tire_id])?$info['vuotgia'][$order_tire->order_tire_id]:0); ?></td> 
             <td class="fix editable" id="khmoi_<?php echo $order_tire->order_tire_id; ?>"><?php echo $info['khmoi'][$order_tire->order_tire_id]==1?"x":null; ?></td> 
             <td class="fix editable" id="ghichu_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info['ghichu'][$order_tire->order_tire_id])?$info['ghichu'][$order_tire->order_tire_id]:null; ?></td> 
+            <td class="fix editable" id="thangluong_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info['thangluong'][$order_tire->order_tire_id])?date('m/Y',$info['thangluong'][$order_tire->order_tire_id]):date('m/Y',strtotime($batdau)); ?></td> 
 
             <td class="fix"><input <?php echo $order_tire->check_salary==1?'checked="checked"':null ?> id="check_salary_<?php echo $order_tire->order_tire_id; ?>" type="checkbox" class="checkbox" value="<?php echo $order_tire->order_tire_id ?>" data-toggle="modal" data-target="#confirm"></td>
             <td class="fix" style="display:none" id="staff_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->staff_id ?></td> 
@@ -249,6 +253,7 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix editable" id="vuotgia_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney(isset($info2['vuotgia'][$order_tire->order_tire_id])?$info2['vuotgia'][$order_tire->order_tire_id]:0); ?></td> 
             <td class="fix editable" id="khmoi_<?php echo $order_tire->order_tire_id; ?>"><?php echo $info2['khmoi'][$order_tire->order_tire_id]==1?"x":null; ?></td> 
             <td class="fix editable" id="ghichu_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info2['ghichu'][$order_tire->order_tire_id])?$info2['khmoi'][$order_tire->order_tire_id]:null; ?></td> 
+            <td class="fix editable" id="thangluong_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info['thangluong'][$order_tire->order_tire_id])?date('m/Y',$info['thangluong'][$order_tire->order_tire_id]):date('m/Y',strtotime($batdau)); ?></td> 
 
             <td class="fix"><input <?php echo $order_tire->check_salary==1?'checked="checked"':null ?> id="check_salary_<?php echo $order_tire->order_tire_id; ?>" type="checkbox" class="checkbox" value="<?php echo $order_tire->order_tire_id ?>" data-toggle="modal" data-target="#confirm"></td>
             <td class="fix" style="display:none" id="staff_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->staff_id ?></td> 
@@ -951,9 +956,10 @@ $('#confirm').on('click', '.btn-ok', function(e) {
     var khmoi = $('#khmoi_'+id).text();
     var vuotgia = $('#vuotgia_'+id).text();
     var ghichu = $('#ghichu_'+id).text();
+    var thangluong = $('#thangluong_'+id).text();
     var staff = $('#staff_'+id).text();
     
-    $.post("<?php echo BASE_URL ?>/checksalesalary/check", {data: id, percent: percent, doanhso: doanhso, vuotgia: vuotgia, khmoi: khmoi, ghichu: ghichu, staff: staff},
+    $.post("<?php echo BASE_URL ?>/checksalesalary/check", {data: id, percent: percent, doanhso: doanhso, vuotgia: vuotgia, khmoi: khmoi, ghichu: ghichu, thangluong: thangluong, staff: staff},
        function(data){
         var $check = $('#check_salary_'+id);
         if ($check.is(':checked')) {
@@ -1014,9 +1020,10 @@ function updateVal(currentEle, value, data) {
                 var khmoi = $('#khmoi_'+id).text();
                 var vuotgia = $('#vuotgia_'+id).text();
                 var ghichu = $('#ghichu_'+id).text();
+                var thangluong = $('#thangluong_'+id).text();
                 var staff = $('#staff_'+id).text();
                 var update = 1;
-                $.post("<?php echo BASE_URL ?>/checksalesalary/check", {data: id, percent: percent, doanhso: doanhso, vuotgia: vuotgia, khmoi: khmoi, ghichu: ghichu, staff: staff, update: update},
+                $.post("<?php echo BASE_URL ?>/checksalesalary/check", {data: id, percent: percent, doanhso: doanhso, vuotgia: vuotgia, khmoi: khmoi, ghichu: ghichu, thangluong: thangluong, staff: staff, update: update},
                    function(data){
                    });
             }
@@ -1034,9 +1041,10 @@ function updateVal(currentEle, value, data) {
             var khmoi = $('#khmoi_'+id).text();
             var vuotgia = $('#vuotgia_'+id).text();
             var ghichu = $('#ghichu_'+id).text();
+            var thangluong = $('#thangluong_'+id).text();
             var staff = $('#staff_'+id).text();
             var update = 1;
-            $.post("<?php echo BASE_URL ?>/checksalesalary/check", {data: id, percent: percent, doanhso: doanhso, vuotgia: vuotgia, khmoi: khmoi, ghichu: ghichu, staff: staff, update: update},
+            $.post("<?php echo BASE_URL ?>/checksalesalary/check", {data: id, percent: percent, doanhso: doanhso, vuotgia: vuotgia, khmoi: khmoi, ghichu: ghichu, thangluong: thangluong, staff: staff, update: update},
                function(data){
                });
         }

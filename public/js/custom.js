@@ -87,7 +87,7 @@ function searchall(page,cot,sapxep){
   }
 
     var dataString = 'keyword='+ faq_search_input+"&limit="+loc+"&page="+ page +"&order_by="+ cot +"&order="+ sapxep+"&ngaytao="+ ngaytao+"&ngaytaobatdau="+ ngaytaobatdau+"&batdau="+ batdau+"&ketthuc="+ ketthuc+"&trangthai="+ trangthai+"&nv="+nv+"&tha="+tha+"&na="+na+"&tu="+tu+"&den="+den; 
-    $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+    //$('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
   $.ajax({
             type: "POST",                            // Phương thức gọi là GET
             url: "#",                 // File xử lý
@@ -125,7 +125,7 @@ function searchall(page,cot,sapxep){
                 if ($('input#search-input').hasClass("loading")) {      // Kiểm tra class "loading"
                     $("input#search-input").removeClass("loading");     // Remove class "loading"
                 }
-        $('#loading').fadeOut(500); 
+        //$('#loading').fadeOut(500); 
             }
         });
   
@@ -149,7 +149,7 @@ function sapxep(page,cot,sapxep){
             sapxep = "DESC";
           }
         }
-          $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+          //$('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
           var cot        = cot;
           var keyword = $('#search-input').val();
           var ngaytao = "";
@@ -184,7 +184,7 @@ function sapxep(page,cot,sapxep){
             success: function(answer){ // if everything goes well
               
               $('body').html(answer); // đặt kết quả trả về từ test.php vào thẻ div success
-              $('#loading').fadeOut(500);
+              //$('#loading').fadeOut(500);
 
               //Enable sidebar toggle
                 $(document).on('click', "[data-toggle='offcanvas']", function (e) {
@@ -235,15 +235,15 @@ function del(id)
   }
   var r = confirm("Bạn có chắc chắn muốn xóa không?");
   if (r == true){
-    $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+    //$('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
     $.post(window.location.href+"/delete", {data: id},
        function(data){
         //alert(data);
         if (data.trim() != 'Bạn không có quyền thực hiện thao tác này') {
           $('tr#'+id).remove(); 
-          $('#loading').fadeOut(500); 
+          //$('#loading').fadeOut(500); 
         };
-        $('#loading').fadeOut(500);
+        //$('#loading').fadeOut(500);
         $("html, body").animate({ scrollTop: 0 }, 100);
        
        }); 
@@ -253,11 +253,11 @@ function delPhoto(id)
 {
   var r = confirm("Bạn có chắc chắn muốn xóa không?");
   if (r == true){
-    $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+    //$('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
     $.post("#", {data: id},
        function(data){
        $('tr#'+id).remove(); 
-       $('#loading').fadeOut(500); 
+       //$('#loading').fadeOut(500); 
        }); 
   }
 }
@@ -277,7 +277,7 @@ function action(){
        if(action=='delete'){
          var r = confirm("Bạn có chắc chắn muốn xóa không?");
         if (r == true){
-          $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+          //$('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
            $.ajax({
             url: window.location.href+"/delete",   
             type: 'POST',   
@@ -285,7 +285,7 @@ function action(){
             success:function(answer){ 
               for(var i=0; i<del.length; i++)
                  $('tr#'+del[i]).remove();
-              $('#loading').fadeOut(500); 
+              //$('#loading').fadeOut(500); 
               $("html, body").animate({ scrollTop: 0 }, 100);
             }
           });
@@ -299,7 +299,7 @@ function action(){
           success:function(answer){ 
             for(var i=0; i<del.length; i++)
                $('#trangthai_'+del[i]).html('Hiển thị');
-            $('#loading').fadeOut(500); 
+            //$('#loading').fadeOut(500); 
           }
         });
        }
@@ -311,7 +311,7 @@ function action(){
           success:function(answer){ 
             for(var i=0; i<del.length; i++)
                $('#trangthai_'+del[i]).html('Ẩn');
-            $('#loading').fadeOut(500); 
+            //$('#loading').fadeOut(500); 
           }
         });
        }
@@ -323,7 +323,7 @@ function action(){
           success:function(answer){ 
             for(var i=0; i<del.length; i++)
                $('#tinnoibat_'+del[i]).html('Nổi bật');
-            $('#loading').fadeOut(500); 
+            //$('#loading').fadeOut(500); 
           }
         });
        }
@@ -335,7 +335,7 @@ function action(){
           success:function(answer){ 
             for(var i=0; i<del.length; i++)
                $('#tinnoibat_'+del[i]).html('Bình thường');
-            $('#loading').fadeOut(500); 
+            //$('#loading').fadeOut(500); 
           }
         });
        }
@@ -354,7 +354,7 @@ function actionPhoto(){
        if(action=='delete'){
          var r = confirm("Bạn có chắc chắn muốn xóa không?");
         if (r == true){
-          $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+          //$('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
            $.ajax({
             url: "#",   
             type: 'POST',   
@@ -362,7 +362,7 @@ function actionPhoto(){
             success:function(answer){ 
               for(var i=0; i<del.length; i++)
                  $('tr#'+del[i]).remove();
-              $('#loading').fadeOut(500); 
+              //$('#loading').fadeOut(500); 
             }
           });
         }
