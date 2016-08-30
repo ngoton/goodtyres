@@ -830,7 +830,9 @@ $(".show").click(function(){
     jQuery('.tabs .tab-links a').on('click', function(e)  {
         var currentAttrValue = jQuery(this).attr('href');
         // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).addClass('active').siblings().removeClass('active');
         jQuery('.tabs ' + currentAttrValue).slideDown(300).siblings().slideUp(300);
+
  
         // Change/remove current tab to active
         jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
@@ -842,6 +844,7 @@ $(".show").click(function(){
         var currentAttrValue = jQuery(this).attr('href');
  
         // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).addClass('active').siblings().removeClass('active');
         jQuery('.tabs ' + currentAttrValue).slideDown(300).siblings().slideUp(300);
  
         // Change/remove current tab to active

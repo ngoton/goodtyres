@@ -31,18 +31,15 @@
             
         </div>
         <div style="clear:both"></div>
-        <div class="tablenav top">
         <div class="alignleft actions">
             <b>Thương hiệu : <br> <input type="checkbox" onclick="checkall('checkbox', this)" name="checkall" id="checkall" checked />Tất cả </b> <br>
             <?php foreach ($tire_producers as $tire_producer) { ?>
-                <input name="check[]" type="checkbox" class="checkbox" id="tire_brand_<?php echo $tire_producer->tire_producer_id ?>" value="<?php echo $tire_producer->tire_producer_id ?>" checked><?php echo $tire_producer->tire_producer_name ?>
+                <input name="check[]" type="checkbox" class="checkbox_3" id="tire_brand_<?php echo $tire_producer->tire_producer_id ?>" value="<?php echo $tire_producer->tire_producer_id ?>" checked><?php echo $tire_producer->tire_producer_name ?>
             <?php } ?>
             
         </div>
         
         
-        
-    </div>
 
 </div>
 <table class="table_data" id="tblExport">
@@ -135,7 +132,7 @@ $('#checkall_2').click(function(){
     }
 });
 
-$('.checkbox').click(function(){
+$('.checkbox_3').click(function(){
     if ($(this).is(':checked') == true) {
         $('.brand_'+$(this).val()).show();
     }

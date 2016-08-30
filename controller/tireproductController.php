@@ -347,10 +347,15 @@ Class tireproductController Extends baseController {
 
                             if($tireproductpattern->getTireByWhere(array('tire_product_pattern_name'=>trim($val[6])))) {
                                 $id_product_pattern = $tireproductpattern->getTireByWhere(array('tire_product_pattern_name'=>trim($val[6])))->tire_product_pattern_id;
+                                $tireproductpattern_data = array(
+                                    'tire_product_pattern_type' => trim($val[15]),
+                                    );
+                                $tireproductpattern->updateTire($tireproductpattern_data,array('tire_product_pattern_id'=>$id_product_pattern));
                             }
                             else if(!$tireproductpattern->getTireByWhere(array('tire_product_pattern_name'=>trim($val[6])))){
                                 $tireproductpattern_data = array(
                                     'tire_product_pattern_name' => trim($val[6]),
+                                    'tire_product_pattern_type' => trim($val[15]),
                                     );
                                 $tireproductpattern->createTire($tireproductpattern_data);
 
