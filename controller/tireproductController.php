@@ -287,134 +287,140 @@ Class tireproductController Extends baseController {
             $objReader->setReadDataOnly(false);
 
             $objPHPExcel = $objReader->load($_FILES['import']['tmp_name']);
-            $objWorksheet = $objPHPExcel->getActiveSheet();
 
-            
+            $i = 0;
+            while ($objPHPExcel->setActiveSheetIndex($i)){
 
-            $highestRow = $objWorksheet->getHighestRow(); // e.g. 10
-            $highestColumn = $objWorksheet->getHighestColumn(); // e.g 'F'
+                $objWorksheet = $objPHPExcel->getActiveSheet();
 
-            $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn); // e.g. 5
+                
 
-            //var_dump($objWorksheet->getMergeCells());die();
-            
-             
+                $highestRow = $objWorksheet->getHighestRow(); // e.g. 10
+                $highestColumn = $objWorksheet->getHighestColumn(); // e.g 'F'
 
-                for ($row = 2; $row <= $highestRow; ++ $row) {
-                    $val = array();
-                    for ($col = 0; $col < $highestColumnIndex; ++ $col) {
-                        $cell = $objWorksheet->getCellByColumnAndRow($col, $row);
-                        // Check if cell is merged
-                        foreach ($objWorksheet->getMergeCells() as $cells) {
-                            if ($cell->isInRange($cells)) {
-                                $currMergedCellsArray = PHPExcel_Cell::splitRange($cells);
-                                $cell = $objWorksheet->getCell($currMergedCellsArray[0][0]);
-                                break;
-                                
+                $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn); // e.g. 5
+
+                //var_dump($objWorksheet->getMergeCells());die();
+                
+                 
+
+                    for ($row = 2; $row <= $highestRow; ++ $row) {
+                        $val = array();
+                        for ($col = 0; $col < $highestColumnIndex; ++ $col) {
+                            $cell = $objWorksheet->getCellByColumnAndRow($col, $row);
+                            // Check if cell is merged
+                            foreach ($objWorksheet->getMergeCells() as $cells) {
+                                if ($cell->isInRange($cells)) {
+                                    $currMergedCellsArray = PHPExcel_Cell::splitRange($cells);
+                                    $cell = $objWorksheet->getCell($currMergedCellsArray[0][0]);
+                                    break;
+                                    
+                                }
                             }
+                            //$val[] = $cell->getValue();
+                            //$val[] = is_numeric($cell->getCalculatedValue()) ? round($cell->getCalculatedValue()) : $cell->getCalculatedValue();
+                            $val[] = $cell->getCalculatedValue();
+                            //here's my prob..
+                            //echo $val;
                         }
-                        //$val[] = $cell->getValue();
-                        //$val[] = is_numeric($cell->getCalculatedValue()) ? round($cell->getCalculatedValue()) : $cell->getCalculatedValue();
-                        $val[] = $cell->getCalculatedValue();
-                        //here's my prob..
-                        //echo $val;
-                    }
-                    if ($val[1] != null && $val[4] != null && $val[6] != null) {
+                        if ($val[1] != null && $val[4] != null && $val[6] != null) {
 
-                            if($tireproducer->getTireByWhere(array('tire_producer_name'=>trim($val[1])))) {
-                                $id_producer = $tireproducer->getTireByWhere(array('tire_producer_name'=>trim($val[1])))->tire_producer_id;
-                            }
-                            else if(!$tireproducer->getTireByWhere(array('tire_producer_name'=>trim($val[1])))){
-                                $tireproducer_data = array(
-                                    'tire_producer_name' => trim($val[1]),
-                                    );
-                                $tireproducer->createTire($tireproducer_data);
-
-                                $id_producer = $tireproducer->getLastTire()->tire_producer_id;
-                            }
-
-                            if($tireproductsize->getTireByWhere(array('tire_product_size_number'=>trim($val[4])))) {
-                                $id_product_size = $tireproductsize->getTireByWhere(array('tire_product_size_number'=>trim($val[4])))->tire_product_size_id;
-                            }
-                            else if(!$tireproductsize->getTireByWhere(array('tire_product_size_number'=>trim($val[4])))){
-                                $tireproductsize_data = array(
-                                    'tire_product_size_number' => trim($val[4]),
-                                    );
-                                $tireproductsize->createTire($tireproductsize_data);
-
-                                $id_product_size = $tireproductsize->getLastTire()->tire_product_size_id;
-                            }
-
-                            if($tireproductpattern->getTireByWhere(array('tire_product_pattern_name'=>trim($val[6])))) {
-                                $id_product_pattern = $tireproductpattern->getTireByWhere(array('tire_product_pattern_name'=>trim($val[6])))->tire_product_pattern_id;
-                                $tireproductpattern_data = array(
-                                    'tire_product_pattern_type' => trim($val[15]),
-                                    );
-                                $tireproductpattern->updateTire($tireproductpattern_data,array('tire_product_pattern_id'=>$id_product_pattern));
-                            }
-                            else if(!$tireproductpattern->getTireByWhere(array('tire_product_pattern_name'=>trim($val[6])))){
-                                $tireproductpattern_data = array(
-                                    'tire_product_pattern_name' => trim($val[6]),
-                                    'tire_product_pattern_type' => trim($val[15]),
-                                    );
-                                $tireproductpattern->createTire($tireproductpattern_data);
-
-                                $id_product_pattern = $tireproductpattern->getLastTire()->tire_product_pattern_id;
-                            }
-
-
-                            if ($id_producer != null) {
-                                
-                                if($tireproduct->getTireByWhere(array('tire_producer'=>$id_producer,'tire_size'=>$id_product_size,'tire_pattern'=>$id_product_pattern))) {
-                                    $id_tire_product = $tireproduct->getTireByWhere(array('tire_producer'=>$id_producer,'tire_size'=>$id_product_size,'tire_pattern'=>$id_product_pattern))->tire_product_id;
-
-                                    $tire_product_data = array(
-                                    'tire_producer' => $id_producer,
-                                    'tire_product_name' => trim($val[2]),
-                                    'tire_type' => trim($val[3]),
-                                    'tire_size' => $id_product_size,
-                                    'tire_pattern' => $id_product_pattern,
-                                    'tire_pr' => trim($val[5]),
-                                    'tire_weight' => trim($val[7]),
-                                    'tire_depth' => trim($val[8]),
-                                    'tire_qty' => trim($val[9]),
-                                    'tire_price' => trim($val[10]),
-                                    'tire_agent' => trim($val[11]),
-                                    'tire_retail' => trim($val[12]),
-                                    'tire_product_thumb' => trim($val[13]),
-                                    'tire_product_link' => trim(strtolower($val[14])),
-                                    );
-                                    $tireproduct->updateTire($tire_product_data,array('tire_product_id' => $id_tire_product));
+                                if($tireproducer->getTireByWhere(array('tire_producer_name'=>trim($val[1])))) {
+                                    $id_producer = $tireproducer->getTireByWhere(array('tire_producer_name'=>trim($val[1])))->tire_producer_id;
                                 }
-                                else{
-                                    $tire_product_data = array(
-                                    'tire_producer' => $id_producer,
-                                    'tire_product_name' => trim($val[2]),
-                                    'tire_type' => trim($val[3]),
-                                    'tire_size' => $id_product_size,
-                                    'tire_pattern' => $id_product_pattern,
-                                    'tire_pr' => trim($val[5]),
-                                    'tire_weight' => trim($val[7]),
-                                    'tire_depth' => trim($val[8]),
-                                    'tire_qty' => trim($val[9]),
-                                    'tire_price' => trim($val[10]),
-                                    'tire_agent' => trim($val[11]),
-                                    'tire_retail' => trim($val[12]),
-                                    'tire_product_thumb' => trim($val[13]),
-                                    'tire_product_link' => trim(strtolower($val[14])),
-                                    );
-                                    $tireproduct->createTire($tire_product_data);
+                                else if(!$tireproducer->getTireByWhere(array('tire_producer_name'=>trim($val[1])))){
+                                    $tireproducer_data = array(
+                                        'tire_producer_name' => trim($val[1]),
+                                        );
+                                    $tireproducer->createTire($tireproducer_data);
+
+                                    $id_producer = $tireproducer->getLastTire()->tire_producer_id;
                                 }
-                            }
+
+                                if($tireproductsize->getTireByWhere(array('tire_product_size_number'=>trim($val[4])))) {
+                                    $id_product_size = $tireproductsize->getTireByWhere(array('tire_product_size_number'=>trim($val[4])))->tire_product_size_id;
+                                }
+                                else if(!$tireproductsize->getTireByWhere(array('tire_product_size_number'=>trim($val[4])))){
+                                    $tireproductsize_data = array(
+                                        'tire_product_size_number' => trim($val[4]),
+                                        );
+                                    $tireproductsize->createTire($tireproductsize_data);
+
+                                    $id_product_size = $tireproductsize->getLastTire()->tire_product_size_id;
+                                }
+
+                                if($tireproductpattern->getTireByWhere(array('tire_product_pattern_name'=>trim($val[6])))) {
+                                    $id_product_pattern = $tireproductpattern->getTireByWhere(array('tire_product_pattern_name'=>trim($val[6])))->tire_product_pattern_id;
+                                    $tireproductpattern_data = array(
+                                        'tire_product_pattern_type' => trim($val[15]),
+                                        );
+                                    $tireproductpattern->updateTire($tireproductpattern_data,array('tire_product_pattern_id'=>$id_product_pattern));
+                                }
+                                else if(!$tireproductpattern->getTireByWhere(array('tire_product_pattern_name'=>trim($val[6])))){
+                                    $tireproductpattern_data = array(
+                                        'tire_product_pattern_name' => trim($val[6]),
+                                        'tire_product_pattern_type' => trim($val[15]),
+                                        );
+                                    $tireproductpattern->createTire($tireproductpattern_data);
+
+                                    $id_product_pattern = $tireproductpattern->getLastTire()->tire_product_pattern_id;
+                                }
+
+
+                                if ($id_producer != null) {
+                                    
+                                    if($tireproduct->getTireByWhere(array('tire_producer'=>$id_producer,'tire_size'=>$id_product_size,'tire_pattern'=>$id_product_pattern))) {
+                                        $id_tire_product = $tireproduct->getTireByWhere(array('tire_producer'=>$id_producer,'tire_size'=>$id_product_size,'tire_pattern'=>$id_product_pattern))->tire_product_id;
+
+                                        $tire_product_data = array(
+                                        'tire_producer' => $id_producer,
+                                        'tire_product_name' => trim($val[2]),
+                                        'tire_type' => trim($val[3]),
+                                        'tire_size' => $id_product_size,
+                                        'tire_pattern' => $id_product_pattern,
+                                        'tire_pr' => trim($val[5]),
+                                        'tire_weight' => trim($val[7]),
+                                        'tire_depth' => trim($val[8]),
+                                        'tire_qty' => trim($val[9]),
+                                        'tire_price' => trim($val[10]),
+                                        'tire_agent' => trim($val[11]),
+                                        'tire_retail' => trim($val[12]),
+                                        'tire_product_thumb' => trim($val[13]),
+                                        'tire_product_link' => trim(strtolower($val[14])),
+                                        );
+                                        $tireproduct->updateTire($tire_product_data,array('tire_product_id' => $id_tire_product));
+                                    }
+                                    else{
+                                        $tire_product_data = array(
+                                        'tire_producer' => $id_producer,
+                                        'tire_product_name' => trim($val[2]),
+                                        'tire_type' => trim($val[3]),
+                                        'tire_size' => $id_product_size,
+                                        'tire_pattern' => $id_product_pattern,
+                                        'tire_pr' => trim($val[5]),
+                                        'tire_weight' => trim($val[7]),
+                                        'tire_depth' => trim($val[8]),
+                                        'tire_qty' => trim($val[9]),
+                                        'tire_price' => trim($val[10]),
+                                        'tire_agent' => trim($val[11]),
+                                        'tire_retail' => trim($val[12]),
+                                        'tire_product_thumb' => trim($val[13]),
+                                        'tire_product_link' => trim(strtolower($val[14])),
+                                        );
+                                        $tireproduct->createTire($tire_product_data);
+                                    }
+                                }
+                            
+                        }
                         
+                        //var_dump($this->getNameDistrict($this->lib->stripUnicode($val[1])));
+                        // insert
+
+
                     }
-                    
-                    //var_dump($this->getNameDistrict($this->lib->stripUnicode($val[1])));
-                    // insert
-
-
-                }
                 //return $this->view->redirect('transport');
+                $i++;
+            }
             
             return $this->view->redirect('tireproduct');
         }

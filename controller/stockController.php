@@ -505,7 +505,7 @@ Class stockController Extends baseController {
         $tire_sale_model = $this->model->get('tiresaleModel');
         $tire_buy_model = $this->model->get('tirebuyModel');
 
-        $query = "SELECT *,SUM(tire_buy_volume) AS soluong FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_brand_group=".$this->registry->router->param_id." AND tire_buy_size = ".$tire_size->tire_size_id." AND tire_pattern_type=".$this->registry->router->order." AND tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern GROUP BY tire_buy_brand,tire_buy_size,tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC";
+        $query = "SELECT *,SUM(tire_buy_volume) AS soluong FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_brand_group=".$this->registry->router->param_id." AND tire_buy_size = ".$tire_size->tire_size_id." AND (tire_pattern_type LIKE ".$this->registry->router->order." OR tire_pattern_type LIKE '%,".$this->registry->router->order.",%' OR tire_pattern_type LIKE '".$this->registry->router->order.",%' OR tire_pattern_type LIKE '%,".$this->registry->router->order."') AND tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern GROUP BY tire_buy_brand,tire_buy_size,tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC";
         $tire_buys = $tire_buy_model->queryTire($query);
         $this->view->data['tire_buys'] = $tire_buys;
 

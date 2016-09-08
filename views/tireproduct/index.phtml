@@ -168,7 +168,7 @@ $(function(){
                             <td class="fix" id="tire_product_name_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_product_name; ?></td>
                             <td class="fix" id="tire_size_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_product_size_number; ?></td>
                             <td class="fix" id="tire_pr_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_pr; ?></td>
-                            <td class="fix" id="tire_pattern_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_product_pattern_name; ?></td>
+                            <td class="fix" data="<?php echo $tire_product->tire_pattern; ?>" id="tire_pattern_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_product_pattern_name; ?></td>
                             
                             
                             <td class="fix" id="tire_retail_<?php echo $tire_product->tire_product_id; ?>"><?php echo $lib->formatMoney($tire_product->tire_retail); ?></td>
@@ -441,7 +441,7 @@ $('html').click(function(e) {
             
             var tire_producer = $(this).find("#tire_producer_"+$(this).attr('id')).text();
             var tire_size = $(this).find("#tire_size_"+$(this).attr('id')).text();
-            var tire_pattern = $(this).find("#tire_pattern_"+$(this).attr('id')).text();
+            var tire_pattern = $(this).find("#tire_pattern_"+$(this).attr('id')).attr('data');
             var tire_type = $(this).find("#tire_type_"+$(this).attr('id')).text();
             var tire_product_name = $(this).find("#tire_product_name_"+$(this).attr('id')).text();
             var tire_pr = $(this).find("#tire_pr_"+$(this).attr('id')).text();
@@ -467,7 +467,8 @@ $('html').click(function(e) {
             $('#tire_product_name').val(tire_product_name);
             $('#tire_type').val(tire_type);
             $("#tire_size option:contains(" + tire_size + ")").attr('selected', 'selected');
-            $("#tire_pattern option:contains(" + tire_pattern + ")").attr('selected', 'selected');
+            //$("#tire_pattern option:contains(" + tire_pattern + ")").attr('selected', 'selected');
+            $("#tire_pattern option[value=" + tire_pattern + "]").attr('selected', 'selected');
             $('#tire_weight').val(tire_weight);
             $('#tire_depth').val(tire_depth);
             $('#tire_qty').val(tire_qty);

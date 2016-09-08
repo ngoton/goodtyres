@@ -1193,15 +1193,15 @@ Class ordertireController Extends baseController {
                     $total = $total + ($order_tire_list->tire_number*100000) - ($number*100000);
                 }
                 if ($order_tire->ck_sl==1) {
-                    if ($order_tire_list->tire_number >= 20 && $order_tire_list->tire_number < 50) {
+                    if ($order_tire->order_tire_number >= 20 && $order_tire->order_tire_number < 50) {
                         $discount = $discount - ($total_after*0.01) + (($number*$price)*0.01);
                         $total = $total + ($total_after*0.01) - (($number*$price)*0.01);
                     }
-                    else if ($order_tire_list->tire_number >= 50 && $order_tire_list->tire_number < 100) {
+                    else if ($order_tire->order_tire_number >= 50 && $order_tire->order_tire_number < 100) {
                         $discount = $discount - ($total_after*0.02) + (($number*$price)*0.02);
                         $total = $total + ($total_after*0.02) - (($number*$price)*0.02);
                     }
-                    else if ($order_tire_list->tire_number >= 100) {
+                    else if ($order_tire->order_tire_number >= 100) {
                         $discount = $discount - ($total_after*0.03) + (($number*$price)*0.03);
                         $total = $total + ($total_after*0.03) - (($number*$price)*0.03);
                     }
@@ -1820,15 +1820,15 @@ Class ordertireController Extends baseController {
                             $total = $total + ($order_tire_list->tire_number*100000);
                         }
                         if ($order_tire->ck_sl==1) {
-                            if ($order_tire_list->tire_number >= 20 && $order_tire_list->tire_number < 50) {
+                            if ($order_tire->order_tire_number >= 20 && $order_tire->order_tire_number < 50) {
                                 $discount = $discount - ($total_after*0.01);
                                 $total = $total + ($total_after*0.01);
                             }
-                            else if ($order_tire_list->tire_number >= 50 && $order_tire_list->tire_number < 100) {
+                            else if ($order_tire->order_tire_number >= 50 && $order_tire->order_tire_number < 100) {
                                 $discount = $discount - ($total_after*0.02);
                                 $total = $total + ($total_after*0.02);
                             }
-                            else if ($order_tire_list->tire_number >= 100) {
+                            else if ($order_tire->order_tire_number >= 100) {
                                 $discount = $discount - ($total_after*0.03);
                                 $total = $total + ($total_after*0.03);
                             }
