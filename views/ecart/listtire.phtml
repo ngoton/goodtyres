@@ -1,0 +1,47 @@
+
+<?php $l=1 ; $tong=0; ?>
+<table class="table_data" id="or">
+<thead>
+    <tr>
+        <th class="fix">
+            <a class="sort">STT</a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Thương hiệu </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Kích cỡ </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Mã gai </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Số lượng </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Giá </a>
+        </th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($e_cart_lists as $e_cart_list) : 
+        $tong += $e_cart_list->tire_number;
+    ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $e_cart_list->e_cart_list_id ?>" class="edit_tr" >
+            <td class="fix"><?php echo $l++; ?></td>
+            <td class="fix" data="<?php echo $e_cart_list->tire_producer; ?>"  id="tire_producer_<?php echo $e_cart_list->e_cart_list_id; ?>"><?php echo $e_cart_list->tire_producer_name; ?></td>
+            <td class="fix" data="<?php echo $e_cart_list->tire_size; ?>" id="tire_product_size_<?php echo $e_cart_list->e_cart_list_id; ?>"><?php echo $e_cart_list->tire_product_size_number; ?></td>
+            <td class="fix" data="<?php echo $e_cart_list->tire_pattern; ?>" id="tire_product_pattern_<?php echo $e_cart_list->e_cart_list_id; ?>"><?php echo $e_cart_list->tire_product_pattern_name; ?></td>
+            <td class="fix"  id="tire_number_<?php echo $e_cart_list->e_cart_list_id; ?>"><?php echo $e_cart_list->tire_number; ?></td>
+            <td class="fix"  id="tire_retail_<?php echo $e_cart_list->e_cart_list_id; ?>"><?php echo $lib->formatMoney($e_cart_list->tire_retail); ?></td>
+            
+        </tr>
+    <?php endforeach; ?>
+    <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="4" >Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
+        <td class="fix"></td>
+    </tr>
+   </tbody>
+</table>
