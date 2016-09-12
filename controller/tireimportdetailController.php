@@ -203,6 +203,8 @@ Class tireimportdetailController Extends baseController {
             $tiresize = $this->model->get('tiresizeModel');
             $tirepattern = $this->model->get('tirepatternModel');
             $tireimport = $this->model->get('tireimportModel');
+            $tire_sale_model = $this->model->get('tiresaleModel');
+            $tire_buy_model = $this->model->get('tirebuyModel');
 
             $objPHPExcel = new PHPExcel();
             // Set properties
@@ -229,6 +231,11 @@ Class tireimportdetailController Extends baseController {
             
             $cell_code = $objWorksheet->getCellByColumnAndRow(0, 1);
             $code = $cell_code->getCalculatedValue();
+
+            $cell_date = $objWorksheet->getCellByColumnAndRow(1, 1);
+            $start_date = $cell_date->getCalculatedValue();
+            $date = str_replace('/', '-', $start_date);
+            $start_date = strtotime($date);
 
                 for ($row = 3; $row <= $highestRow; ++ $row) {
                     $val = array();
@@ -291,15 +298,29 @@ Class tireimportdetailController Extends baseController {
                             if ($id_brand != null && $id_size != null && $id_pattern != null) {
                                 
                                 if($tireimportdetail->getTireByWhere(array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern))) {
-                                    
+                                    $ton = 0;
+
+                                    $tire_buys = $tire_buy_model->getAllTire(array('where'=>'tire_buy_date < '.$start_date.' AND tire_buy_brand = '.$id_brand.' AND tire_buy_size = '.$id_size.' AND tire_buy_pattern = '.$id_pattern));
+                                    foreach ($tire_buys as $tire) {
+                                        $ton += $tire->tire_buy_volume;
+                                    }
+
+                                    $tire_sales = $tire_sale_model->getAllTire(array('where'=>'tire_sale_date < '.$start_date.' AND tire_brand = '.$id_brand.' AND tire_size = '.$id_size.' AND tire_pattern = '.$id_pattern));
+                                    foreach ($tire_sales as $tire) {
+                                        $ton -= $tire->volume;
+                                    }
+
                                     $data = array(
                                         'where' => 'tire_brand = '.$id_brand.' AND tire_size = '.$id_size.' AND tire_pattern = '.$id_pattern,
+                                        'order_by' => 'start_date',
+                                        'order' => 'DESC',
+                                        'limit' => 1,
                                     );
                                     $tire_imports = $tireimport->getAllTire($data);
                                     $soluong = 0; $gia = 0;
                                     foreach ($tire_imports as $tire) {
-                                        $soluong += $tire->tire_number;
-                                        $gia += $tire->tire_number*$tire->tire_price;
+                                        $soluong = $ton;
+                                        $gia = $ton*$tire->tire_price;
                                     }
                                     $soluong += trim($val[5]);
                                     $gia += trim($val[4])*trim($val[5]);
@@ -310,8 +331,8 @@ Class tireimportdetailController Extends baseController {
                                     'tire_brand' => $id_brand,
                                     'tire_size' => $id_size,
                                     'tire_pattern' => $id_pattern,
-                                    'tire_price' => $gia/$soluong,
-                                    'tire_number' => $soluong,
+                                    'tire_price' => trim($val[4]),
+                                    'tire_number' => trim($val[5]),
                                     'code' => $code,
                                     'status' => 1,
                                     );
@@ -321,10 +342,11 @@ Class tireimportdetailController Extends baseController {
                                     'tire_brand' => $id_brand,
                                     'tire_size' => $id_size,
                                     'tire_pattern' => $id_pattern,
-                                    'tire_price' => $tire_import_detail_data['tire_price'],
+                                    'tire_price' => $gia/$soluong,
                                     'code' => $code,
+                                    'start_date' => $start_date,
                                     );
-                                    $tireimport->updateTire($tire_import_data,array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern));
+                                    $tireimport->createTire($tire_import_data);
                                 }
                                 else{
                                     $tire_import_detail_data = array(
@@ -344,6 +366,7 @@ Class tireimportdetailController Extends baseController {
                                     'tire_pattern' => $id_pattern,
                                     'tire_price' => trim($val[4]),
                                     'code' => $code,
+                                    'start_date' => $start_date,
                                     );
                                     $tireimport->createTire($tire_import_data);
                                 }

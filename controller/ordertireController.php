@@ -517,27 +517,22 @@ Class ordertireController Extends baseController {
 
         $tire_import_model = $this->model->get('tireimportModel');
 
-        $tire_imports = $tire_import_model->getAllTire();
-        $tire_prices = array();
-        $count = array();
-        foreach ($tire_imports as $tire) {
-            if (isset($tire_prices[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern])) {
-                $count[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern] = $count[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern]+1;
-                $tire_prices[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern] = $tire_prices[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern]+$tire->tire_price;
-            }
-            else{
-                $count[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern] = 1;
-                $tire_prices[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern] = $tire->tire_price;
-            }
-        }
-
         $costs = array();
         foreach ($order_tires as $tire) {
             $order_tire_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$tire->order_tire_id));
             foreach ($order_tire_lists as $l) {
-                $gia = isset($tire_prices[$l->tire_brand][$l->tire_size][$l->tire_pattern])?$tire_prices[$l->tire_brand][$l->tire_size][$l->tire_pattern]:0;
-                $sl = isset($count[$l->tire_brand][$l->tire_size][$l->tire_pattern])?$count[$l->tire_brand][$l->tire_size][$l->tire_pattern]:1;
-                $costs[$tire->order_tire_id] = isset($costs[$tire->order_tire_id])?$costs[$tire->order_tire_id]+$l->tire_number*($gia/$sl):$l->tire_number*($gia/$sl);
+                $data = array(
+                    'where' => 'start_date <= '.$tire->delivery_date.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                    'order_by' => 'start_date',
+                    'order' => 'DESC',
+                    'limit' => 1,
+                );
+                $tire_imports = $tire_import_model->getAllTire($data);
+                foreach ($tire_imports as $tire_import) {
+                    $gia = $tire_import->tire_price;
+                }
+
+                $costs[$tire->order_tire_id] = isset($costs[$tire->order_tire_id])?$costs[$tire->order_tire_id]+$l->tire_number*$gia:$l->tire_number*$gia;
             }
         }
         
