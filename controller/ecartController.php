@@ -44,6 +44,7 @@ Class ecartController Extends baseController {
 
         $customer_model = $this->model->get('ecustomerModel');
         $customers = $customer_model->getAllCustomer(array(
+            'where' => 'e_customer_type=1',
             'order_by'=> 'e_customer_contact',
             'order'=> 'ASC',
             ));

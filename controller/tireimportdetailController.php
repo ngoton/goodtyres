@@ -71,7 +71,8 @@ Class tireimportdetailController Extends baseController {
       
         if ($keyword != '') {
             $search = '( tire_brand_name LIKE "%'.$keyword.'%" 
-                OR tire_size_number LIKE "%'.$keyword.'%" )';
+                OR tire_size_number LIKE "%'.$keyword.'%" 
+                OR code LIKE "%'.$keyword.'%" )';
             
                 $data['where'] = $data['where'].' AND '.$search;
         }
@@ -292,7 +293,7 @@ Class tireimportdetailController Extends baseController {
                                 if($tireimportdetail->getTireByWhere(array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern))) {
                                     
                                     $data = array(
-                                        'where' => 'status=1 AND tire_brand = '.$id_brand.' AND tire_size = '.$id_size.' AND tire_pattern = '.$id_pattern,
+                                        'where' => 'tire_brand = '.$id_brand.' AND tire_size = '.$id_size.' AND tire_pattern = '.$id_pattern,
                                     );
                                     $tire_imports = $tireimport->getAllTire($data);
                                     $soluong = 0; $gia = 0;

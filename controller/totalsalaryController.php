@@ -116,7 +116,7 @@ Class totalsalaryController Extends baseController {
         }
 
         $data = array(
-            'where' => 'import_tire_date >= '.strtotime($batdau).' AND import_tire_date <= '.strtotime($ketthuc),
+            'where' => 'expect_date >= '.strtotime($batdau).' AND expect_date <= '.strtotime($ketthuc),
         );
         $join = array('table'=>'staff, user','where'=>'user_id = account AND user_id = sale');
 
@@ -807,7 +807,7 @@ Class totalsalaryController Extends baseController {
         }
 
         $data = array(
-            'where' => 'import_tire_date >= '.strtotime($batdau).' AND import_tire_date <= '.strtotime($ketthuc),
+            'where' => 'expect_date >= '.strtotime($batdau).' AND expect_date <= '.strtotime($ketthuc),
         );
         $join = array('table'=>'staff, user','where'=>'user_id = account AND user_id = sale');
 
