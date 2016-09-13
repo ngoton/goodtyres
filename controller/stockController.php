@@ -696,17 +696,6 @@ Class stockController Extends baseController {
 
         $tire_imports = $tire_import_model->getAllTire();
         $tire_prices = array();
-        $count = array();
-        foreach ($tire_imports as $tire) {
-            if (isset($tire_prices[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern])) {
-                $count[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern] = $count[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern]+1;
-                $tire_prices[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern] = $tire_prices[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern]+$tire->tire_price;
-            }
-            else{
-                $count[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern] = 1;
-                $tire_prices[$tire->tire_brand][$tire->tire_size][$tire->tire_pattern] = $tire->tire_price;
-            }
-        }
 
         $query = "SELECT *,SUM(tire_buy_volume) AS soluong FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern GROUP BY tire_buy_brand,tire_buy_size,tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC";
         $tire_buys = $tire_buy_model->queryTire($query);
@@ -735,6 +724,16 @@ Class stockController Extends baseController {
                 }
                 
             }
+
+            $data = array(
+                'where' => 'tire_brand = '.$tire_buy->tire_buy_brand.' AND tire_size = '.$tire_buy->tire_buy_size.' AND tire_pattern = '.$tire_buy->tire_buy_pattern,
+                'order_by' => 'start_date',
+                'order' => 'ASC',
+            );
+            $tire_imports = $tire_import_model->getAllTire($data);
+            foreach ($tire_imports as $tire_import) {
+                $tire_prices[$tire_import->tire_brand][$tire_import->tire_size][$tire_import->tire_pattern] = $tire_import->tire_price;
+            }
         }
 
         $this->view->data['link_picture'] = $link_picture;
@@ -742,7 +741,6 @@ Class stockController Extends baseController {
         $this->view->data['tire_buys'] = $tire_buys;
         $this->view->data['sell'] = $sell;
         $this->view->data['tire_prices'] = $tire_prices;
-        $this->view->data['count'] = $count;
         $this->view->data['page'] = NULL;
         $this->view->data['order_by'] = NULL;
         $this->view->data['order'] = NULL;

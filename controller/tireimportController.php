@@ -1,7 +1,6 @@
 <?php
 Class tireimportController Extends baseController {
     public function index() {
-        var_dump(strtotime('01-01-2015'));
         $this->view->setLayout('admin');
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
