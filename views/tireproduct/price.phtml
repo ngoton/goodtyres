@@ -1,0 +1,158 @@
+<?php
+$url_order = 'ASC';
+if ($order_by == 'tire_product_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_producer_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_product_size_number')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_supplier_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BẢNG GIÁ LỐP XE</h1></center>
+<div class="add-box">
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Search">
+        <input type="button" name="" id="search-submit" class="button-search" value="Search" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+       
+    </div>
+    <div class="tablenav top">
+
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Select</option>
+                
+                <option value="delete">Delete</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Apply" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">All</option>
+			<option value="15">15 items</option>
+            <option value="20">20 items</option>
+            <option value="50">50 items</option>
+            <option selected="selected" value="100">100 items</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Apply" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+        
+      </div>
+      <div class="add-box">
+        <select name="sl_status" id="sl_status" style="width:150px">
+            <option>Thương hiệu</option>
+            <?php foreach ($tire_producers as $tire_producer) { ?>
+                <option value="<?php echo $tire_producer->tire_producer_id ?>"><?php echo $tire_producer->tire_producer_name ?></option>
+            <?php } ?>
+        </select>
+        <select name="sl_nv" id="sl_nv" style="width:150px">
+            <option>Size</option>
+            <?php foreach ($tire_sizes as $tire_size) { ?>
+                <option value="<?php echo $tire_size->tire_product_size_id ?>"><?php echo $tire_size->tire_product_size_number ?></option>
+            <?php } ?>
+        </select>
+        <input type="button" name=""  class="button" value="Chọn" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">      
+    </div>
+
+</div>
+
+<table class="table_data" id="tblExport">
+<thead>
+    <tr>
+        <th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_product_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'tire_product_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_producer_name','<?php echo $url_order ?>')">Thương hiệu <?php if ($order_by == 'tire_producer_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_product_size_number','<?php echo $url_order ?>')">Size <?php if ($order_by == 'tire_product_size_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_product_pattern_name','<?php echo $url_order ?>')">Mã gai <?php if ($order_by == 'tire_product_pattern_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Giá <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($tire_products as $tire_product) : ?>
+    
+        
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_product->tire_product_id ?>" class="edit_tr">
+            
+            <td>
+                <input name="check[]" type="checkbox" class="checkbox" value="<?php echo $tire_product->tire_product_id ?>">
+            </td>
+            
+            <td  class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="tire_brand_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_producer_name; ?></td>
+            <td class="fix" id="tire_size_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_product_size_number; ?></td>
+            <td class="fix" id="tire_pattern_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_product_pattern_name; ?></td>
+            <td class="fix" id="tire_price_<?php echo $tire_product->tire_product_id; ?>"><?php echo $lib->formatMoney($tire_product->tire_price); ?></td>
+            
+        </tr>
+
+
+    <?php endforeach; ?>
+     
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div style="display:none" id="lasted"></div>
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+
+ 
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+var t = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+t+']').attr('selected','selected');
+
+var n = "<?php echo $nv ?>";
+$('#sl_nv option[value='+n+']').attr('selected','selected');
+
+</script>
+</div>

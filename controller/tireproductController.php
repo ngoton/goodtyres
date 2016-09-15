@@ -139,6 +139,113 @@ Class tireproductController Extends baseController {
         $this->view->show('tireproduct/index');
     }
 
+    public function price() {
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SESSION['role_logined'] != 1) {
+            return $this->view->redirect('user/login');
+        }
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Bảng giá nhập lốp xe';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_by = isset($_POST['order_by']) ? $_POST['order_by'] : null;
+            $order = isset($_POST['order']) ? $_POST['order'] : null;
+            $page = isset($_POST['page']) ? $_POST['page'] : null;
+            $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+            $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
+
+            $brand = isset($_POST['trangthai']) ? $_POST['trangthai'] : null;
+            $size = isset($_POST['nv']) ? $_POST['nv'] : null;
+        }
+        else{
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'tire_producer_name';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC, tire_product_size_number ASC';
+            $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
+            $keyword = "";
+            $limit = 50;
+            $brand = 0;
+            $size = 0;
+        }
+        $tire_producer_model = $this->model->get('tireproducerModel');
+        $tire_producers = $tire_producer_model->getAllTire(array('order_by'=>'tire_producer_name ASC'));
+        $tire_size_model = $this->model->get('tireproductsizeModel');
+        $tire_sizes = $tire_size_model->getAllTire();
+
+        $this->view->data['tire_producers'] = $tire_producers;
+        $this->view->data['tire_sizes'] = $tire_sizes;
+
+        $join = array('table'=>'tire_producer, tire_product_size, tire_product_pattern','where'=>'tire_producer_id = tire_producer AND tire_product_size_id = tire_size AND tire_product_pattern_id = tire_pattern');
+
+        $tire_product_model = $this->model->get('tireproductModel');
+        $sonews = $limit;
+        $x = ($page-1) * $sonews;
+        $pagination_stages = 2;
+        
+        $data = array(
+            'where' => '1=1',
+        );
+
+        if ($brand > 0) {
+            $data['where'] .= ' AND tire_producer = '.$brand;
+        }
+        if ($size > 0) {
+            $data['where'] .= ' AND tire_size = '.$size;
+        }
+        
+        
+        $tongsodong = count($tire_product_model->getAllTire($data,$join));
+        $tongsotrang = ceil($tongsodong / $sonews);
+        
+
+        $this->view->data['page'] = $page;
+        $this->view->data['order_by'] = $order_by;
+        $this->view->data['order'] = $order;
+        $this->view->data['keyword'] = $keyword;
+        $this->view->data['pagination_stages'] = $pagination_stages;
+        $this->view->data['tongsotrang'] = $tongsotrang;
+        $this->view->data['limit'] = $limit;
+        $this->view->data['sonews'] = $sonews;
+        $this->view->data['trangthai'] = $brand;
+        $this->view->data['nv'] = $size;
+
+        $data = array(
+            'order_by'=>$order_by,
+            'order'=>$order,
+            'limit'=>$x.','.$sonews,
+            'where' => '1=1',
+            );
+
+        if ($brand > 0) {
+            $data['where'] .= ' AND tire_producer = '.$brand;
+        }
+        if ($size > 0) {
+            $data['where'] .= ' AND tire_size = '.$size;
+        }
+        
+      
+        if ($keyword != '') {
+            $search = '( tire_producer_name LIKE "%'.$keyword.'%" 
+                OR tire_product_size_number LIKE "%'.$keyword.'%" 
+                OR tire_product_pattern_name LIKE "%'.$keyword.'%" )';
+            
+                $data['where'] = $data['where'].' AND '.$search;
+        }
+
+        
+
+        
+        $this->view->data['tire_products'] = $tire_product_model->getAllTire($data,$join);
+        $this->view->data['lastID'] = isset($tire_product_model->getLastTire()->tire_product_id)?$tire_product_model->getLastTire()->tire_product_id:0;
+
+        /* Lấy tổng doanh thu*/
+        
+        /*************/
+        $this->view->show('tireproduct/price');
+    }
+
    
     public function add(){
         if (!isset($_SESSION['userid_logined'])) {

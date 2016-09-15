@@ -748,6 +748,7 @@ Class ordertireController Extends baseController {
                 'total' => trim(str_replace(',','',$_POST['total'])),
                 'order_tire_number' => $_POST['order_tire_number'],
                 'order_tire_status' => 0,
+                'check_price_vat' => $_POST['check_price_vat'],
             );
 
             $order_tire_model->createTire($data);
@@ -776,6 +777,7 @@ Class ordertireController Extends baseController {
                     'tire_pattern' => $v['tire_pattern'],
                     'tire_number' => $v['max_number'] >= $v['tire_number'] ? $v['tire_number'] : $v['max_number'],
                     'tire_price' => trim(str_replace(',','',$v['tire_price'])),
+                    'tire_price_vat' => $v['tire_price_vat'],
                     'order_tire' => $id_order_tire,
                 );
 
@@ -1058,8 +1060,12 @@ Class ordertireController Extends baseController {
             }
         }
 
+        $order_tire_model = $this->model->get('ordertireModel');
+        $order_tire = $order_tire_model->getTire($id);
+
         $this->view->data['price'] = $price;
         $this->view->data['order'] = $id;
+        $this->view->data['order_tire'] = $order_tire;
 
         $this->view->show('ordertire/listtire');
     }
