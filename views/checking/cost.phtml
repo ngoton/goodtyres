@@ -32,20 +32,18 @@
     <thead>
         <tr>
             <th class="fix" rowspan="2">STT</th>
-            <th class="fix" colspan="5">Báo cáo sale</th>
-            <th class="fix" colspan="5">Báo cáo tài sản</th>
+            <th class="fix" colspan="4">Báo cáo sale</th>
+            <th class="fix" colspan="4">Báo cáo tài sản</th>
             <th class="fix" rowspan="2">Status</th>
         </tr>
         <tr>
             <th class="fix">Ngày</th>
             <th class="fix">Code</th>
-            <th class="fix">Vendor</th>
             <th class="fix">ND</th>
             <th class="fix">Số tiền</th>
 
             <th class="fix">Ngày</th>
             <th class="fix">Code</th>
-            <th class="fix">TK</th>
             <th class="fix">ND</th>
             <th class="fix">Số tiền</th>
             
@@ -60,7 +58,6 @@
         foreach ($chiphi as $dt) {
             if (isset($sale[$dt['code']])) {
                 $order_number = $dt['code'];
-                $vendor = $sale[$dt['code']]['vendor'];
                 $total = $sale[$dt['code']]['money'];
                 $delivery = $sale[$dt['code']]['date'];
                 $nd1 = $sale[$dt['code']]['nd'];
@@ -69,7 +66,6 @@
 
             if (isset($acc[$dt['code']])) {
                 $code = $dt['code'];
-                $account_number = $acc[$dt['code']]['vendor'];
                 $money = $acc[$dt['code']]['money'];
                 $add = $acc[$dt['code']]['date'];
                 $nd2 = $acc[$dt['code']]['nd'];
@@ -81,13 +77,11 @@
 
             <td class="fix"><?php echo isset($delivery)?$lib->hien_thi_ngay_thang($delivery):null ?></td>
             <td class="fix"><?php echo isset($order_number)?'<a href="'.$this->url('ordertire/orderlist/0/1/order_number/ASC/'.$order_number).'">'.$order_number.'</a>':null; ?></td>
-            <td class="fix"><?php echo isset($vendor)?$vendor:null; ?></td>
             <td class="fix"><?php echo isset($nd1)?$nd1:null; ?></td>
             <td class="fix"><?php echo $lib->formatMoney(isset($total)?$total:0); ?></td>
 
             <td class="fix"><?php echo isset($add)?$lib->hien_thi_ngay_thang($add):null ?></td>
             <td class="fix"><?php echo isset($code)?'<a href="'.$this->url('additional/index/0/1/code/ASC/'.$code).'">'.$code.'</a>':null; ?></td>
-            <td class="fix"><?php echo isset($account_number)?$account_number:null; ?></td>
             <td class="fix"><?php echo isset($nd2)?$nd2:null; ?></td>
             <td class="fix"><?php echo $lib->formatMoney(isset($money)?$money:0); ?></td>
 
@@ -117,9 +111,9 @@
         } 
         ?>
         <tr style="font-weight:bold; color:red">
-            <td class="fix" colspan="5">Tổng cộng</td>
+            <td class="fix" colspan="4">Tổng cộng</td>
             <td class="fix"><?php echo $lib->formatMoney($tongsale); ?></td>
-            <td class="fix" colspan="4"></td>
+            <td class="fix" colspan="3"></td>
             <td class="fix"><?php echo $lib->formatMoney($tongacc); ?></td>
             <td class="fix"><?php echo $tongsale == $tongacc ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($tongsale - $tongacc).'</span>'; ?></td>
         </tr>

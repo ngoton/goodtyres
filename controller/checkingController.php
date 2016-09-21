@@ -273,23 +273,29 @@ Class checkingController Extends baseController {
         $chiphi = array();
         $check = array();
 
-        $payable_model = $this->model->get('payableModel');
+        $order_cost_model = $this->model->get('ordertirecostModel');
         
         $join_order = array('table'=>'order_tire, shipment_vendor','where'=>'vendor = shipment_vendor_id AND order_tire = order_tire_id');
         $data_order = array(
-            'where' => 'money > 0 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc),
+            'where' => 'order_tire_cost > 0 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc),
             'order_by' => 'delivery_date ASC, order_number',
             'order' => 'ASC',
         );
-        $orders = $payable_model->getAllCosts($data_order,$join_order);
+        $orders = $order_cost_model->getAllTire($data_order,$join_order);
         $sale = array();
         foreach ($orders as $order) {
-            $chiphi[]['code'] = $order->order_number;
-            $sale[$order->order_number]['vendor'] = $order->shipment_vendor_name;
-            $sale[$order->order_number]['money'] = isset($sale[$order->order_number]['money'])?$sale[$order->order_number]['money']+$order->money:$order->money;
-            $sale[$order->order_number]['date'] = $order->delivery_date;
-            $sale[$order->order_number]['nd'] = $order->comment;
-            $check[$order->order_number] = $order->order_number;
+            if (!isset($check[$order->order_number])) {
+                $chiphi[]['code'] = $order->order_number;
+                $sale[$order->order_number]['money'] = $order->order_tire_cost;
+                $sale[$order->order_number]['date'] = $order->delivery_date;
+                $sale[$order->order_number]['nd'] = $order->comment.":".$this->lib->formatMoney($order->order_tire_cost);
+                $check[$order->order_number] = $order->order_number;
+            }
+            else{
+                $sale[$order->order_number]['money'] = $sale[$order->order_number]['money']+$order->order_tire_cost;
+                $sale[$order->order_number]['nd'] = $sale[$order->order_number]['nd']." - ".$order->comment.":".$this->lib->formatMoney($order->order_tire_cost);
+            }
+            
         }
         $this->view->data['sale'] = $sale;
 
@@ -316,7 +322,6 @@ Class checkingController Extends baseController {
                 $chiphi[]['code'] = $account->code;
                 $check[$account->code] = $account->code;
             }
-            $acc[$account->code]['vendor'] = $tk[$account->debit];
             $acc[$account->code]['money'] = isset($acc[$account->code]['money'])?$acc[$account->code]['money']+$account->money:$account->money;
             $acc[$account->code]['date'] = $account->additional_date;
             $acc[$account->code]['nd'] = $account->additional_comment;

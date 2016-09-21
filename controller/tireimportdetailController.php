@@ -237,6 +237,8 @@ Class tireimportdetailController Extends baseController {
             $date = str_replace('/', '-', $start_date);
             $start_date = strtotime($date);
 
+            $dauthang = strtotime('01-'.date('m-Y',$start_date));
+
                 for ($row = 3; $row <= $highestRow; ++ $row) {
                     $val = array();
                     for ($col = 0; $col < $highestColumnIndex; ++ $col) {
@@ -300,12 +302,12 @@ Class tireimportdetailController Extends baseController {
                                 if($tireimportdetail->getTireByWhere(array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern))) {
                                     $ton = 0;
 
-                                    $tire_buys = $tire_buy_model->getAllTire(array('where'=>'tire_buy_date < '.$start_date.' AND tire_buy_brand = '.$id_brand.' AND tire_buy_size = '.$id_size.' AND tire_buy_pattern = '.$id_pattern));
+                                    $tire_buys = $tire_buy_model->getAllTire(array('where'=>'tire_buy_date < '.$dauthang.' AND tire_buy_brand = '.$id_brand.' AND tire_buy_size = '.$id_size.' AND tire_buy_pattern = '.$id_pattern));
                                     foreach ($tire_buys as $tire) {
                                         $ton += $tire->tire_buy_volume;
                                     }
 
-                                    $tire_sales = $tire_sale_model->getAllTire(array('where'=>'tire_sale_date < '.$start_date.' AND tire_brand = '.$id_brand.' AND tire_size = '.$id_size.' AND tire_pattern = '.$id_pattern));
+                                    $tire_sales = $tire_sale_model->getAllTire(array('where'=>'tire_sale_date < '.$dauthang.' AND tire_brand = '.$id_brand.' AND tire_size = '.$id_size.' AND tire_pattern = '.$id_pattern));
                                     foreach ($tire_sales as $tire) {
                                         $ton -= $tire->volume;
                                     }

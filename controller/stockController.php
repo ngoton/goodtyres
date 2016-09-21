@@ -552,7 +552,7 @@ Class stockController Extends baseController {
         $goings = $tire_going_model->getAllTire($data,$join);
         $this->view->data['tire_goings'] = $goings;
 
-        $this->view->data['tire_brand'] = $this->registry->router->param_id==1?"GS/DR":($this->registry->router->param_id==2?"Shengtai":"Annaite");
+        $this->view->data['tire_brand'] = $this->registry->router->param_id==1?"DR":($this->registry->router->param_id==2?"Shengtai":($this->registry->router->param_id==3?"Annaite":"GS"));
         $this->view->data['tire_size'] = $this->registry->router->order_by;
         $this->view->data['tire_pattern'] = $this->registry->router->order==1?"DC01":($this->registry->router->order==2?"DC02":($this->registry->router->order==3?"DC03":($this->registry->router->order==4?"NC01":($this->registry->router->order==5?"BC01":($this->registry->router->order==6?"BC02":($this->registry->router->order==7?"DK01":($this->registry->router->order==8?"DK02":($this->registry->router->order==9?"NK01":"NK02"))))))));
 

@@ -48,7 +48,7 @@
             <td class="fix" data="<?php echo $order_tire_list->tire_size; ?>" id="tire_size_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire_list->tire_size_number; ?></td>
             <td class="fix" data="<?php echo $order_tire_list->tire_pattern; ?>" id="tire_pattern_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire_list->tire_pattern_name; ?></td>
             <td class="fix"  id="tire_number_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire_list->tire_number; ?></td>
-            <td class="fix"  id="tire_price_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $lib->formatMoney($order_tire_list->tire_price); ?></td>
+            <td class="fix"  id="tire_price_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire->check_price_vat==1?$lib->formatMoney($order_tire_list->tire_price_vat):$lib->formatMoney($order_tire_list->tire_price); ?></td>
             <td class="fix"  id="price_<?php echo $order_tire_list->order_tire_list_id; ?>">
               <?php echo isset($price[$order_tire_list->order_tire_list_id])?round(($order_tire_list->tire_price*100)/$price[$order_tire_list->order_tire_list_id],1)."%":null; ?>
             </td>
@@ -56,13 +56,10 @@
               <?php echo $order_tire->vat_percent>0?$order_tire->vat_percent.'%':null; ?>
             </td>
             <td class="fix"  id="vat_<?php echo $order_tire_list->order_tire_list_id; ?>">
-              <?php 
-              if ($order_tire->check_price_vat==1) {
-                echo $lib->formatMoney($order_tire_list->tire_price_vat);
-              }
-              ?>
+              <input disabled="disabled" type="checkbox" name="check_price_vat_<?php echo $order_tire_list->order_tire_list_id; ?>" id="check_price_vat_<?php echo $order_tire_list->order_tire_list_id; ?>" <?php echo $order_tire->check_price_vat==1?'checked="checked"':null ?> >
             </td>
             <td>
+                <input type="hidden" id="tire_price_vat_<?php echo $order_tire_list->order_tire_list_id; ?>" value="<?php echo $order_tire_list->tire_price ?>">
                 <button class="del" data="<?php echo $order_tire_list->order_tire_list_id ?>" style="display:block">Xóa</button>
             </td>
         </tr>
@@ -90,7 +87,7 @@
                               <span class="add-on"><i class="icon-company" ></i></span>
                               <span>Thương hiệu: </span>
                             </td>
-                            <td><input type="text" id="tire_brand" class="tire_brand" name="tire_brand" value="" disabled required="required" />
+                            <td><input type="text" id="tire_brand" class="tire_brand" name="tire_brand" value="" disabled required="required" autocomplete="off" />
                               <ul class="brand_list_id"></ul>
                             </td>
                           </tr>
@@ -99,7 +96,7 @@
                               <span class="add-on"><i class="icon-resize-full" ></i></span>
                               <span>Kích cỡ: </span>
                             </td>
-                            <td><input type="text" id="tire_size" class="tire_size" name="tire_size" value="" disabled required="required" />
+                            <td><input type="text" id="tire_size" class="tire_size" name="tire_size" value="" disabled required="required" autocomplete="off" />
                               <ul class="size_list_id"></ul>
                             </td>
                           </tr>
@@ -108,7 +105,7 @@
                               <span class="add-on"><i class="icon-barcode" ></i></span>
                               <span>Mã gai: </span>
                             </td>
-                            <td><input type="text" id="tire_pattern" class="tire_pattern" name="tire_pattern" value="" disabled required="required" />
+                            <td><input type="text" id="tire_pattern" class="tire_pattern" name="tire_pattern" value="" disabled required="required" autocomplete="off" />
                               <ul class="tire_list_id"></ul>
                             </td>
                           </tr>
@@ -128,9 +125,13 @@
                           </tr>
                         
                         <tr>
-                            <td><input type="hidden" readonly id="max_number" name="max_number" required="required" value="0" ></td>
-                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
-                            <td><input type="hidden" readonly id="order" name="order" required="required" value="<?php echo $order ?>" ></td>
+                            <td>
+                              <input type="hidden" readonly id="tire_price_vat" name="tire_price_vat" required="required" value="0" >
+                              <input type="hidden" readonly id="max_number" name="max_number" required="required" value="0" >
+                              <input type="hidden" readonly id="yes" name="yes" required="required" >
+                              <input type="hidden" readonly id="order" name="order" required="required" value="<?php echo $order ?>" >
+                              <input type="hidden" readonly id="check_price_vat" name="check_price_vat" required="required" value="<?php echo $order_tire->check_price_vat ?>" >
+                            </td>
                         </tr>
                         
                         
@@ -185,6 +186,8 @@ $('html').click(function(e) {
             $('#tire_size').attr('disabled',false);
             $('#tire_pattern').attr('disabled',false);
 
+            $('#tire_price_vat').val($("#tire_price_vat_"+$(this).attr('id')).val());
+
           var customer = "";
         
           $.ajax({
@@ -219,6 +222,8 @@ function add_click(){
   $('#tire_size').attr('disabled',false);
   $('#tire_pattern').attr('disabled',false);
 
+  $('#tire_price_vat').val("");
+
 
 }
 
@@ -231,6 +236,24 @@ $('#tire_number').keyup(function(){
       $(this).val(max);
   }
 });
+
+$('#tire_price').keyup(function(){
+  var val = parseInt($(this).val().replace(/[^0-9\.-]+/g,""));
+  var check = $('#check_price_vat').val();
+
+  if (check != 1) {
+      $("#tire_price_vat").val(val);
+  }
+  else{
+    var vat_percent = <?php echo $order_tire->vat_percent; ?>;
+
+    vat_percent = parseInt(vat_percent);
+
+    var n = Math.round((val/(1+vat_percent/100))/100)*100;
+    $("#tire_price_vat").val(n);
+  }
+});
+
 </script>
 <script type="text/javascript">
 
@@ -250,6 +273,8 @@ $(document).ready(function(){
                     var tire_number = $('#tire_number').attr('value');
                     var tire_price = $('#tire_price').attr('value');
                     var order = $('#order').attr('value');
+                    var tire_price_vat = $('#tire_price_vat').attr('value');
+                    var check_price_vat = $('#check_price_vat').attr('value');
 
                     var yes = $('#yes').attr('value');
                     
@@ -265,6 +290,8 @@ $(document).ready(function(){
                             tire_number: tire_number,
                             tire_price: tire_price,
                             order: order,
+                            tire_price_vat: tire_price_vat,
+                            check_price_vat: check_price_vat,
                             yes: yes,
                             }, // giá trị post
                         success: function(answer){ // if everything goes well

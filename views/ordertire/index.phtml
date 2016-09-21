@@ -704,12 +704,46 @@ $('#check_price_vat').click(function(){
         });
     }
     else{
-        var val = $('#vat_percent').val(); 
-        var thanhtien = parseInt($('#thanhtien2').val().replace(/[^0-9\.-]+/g,"")) || 0;
+        var gia = 0;
+
+        $('.tire_price').each(function() { 
+
+            var row = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex = row[0].rowIndex;
+
+            var this_gia = parseInt($(".tire_price_vat:eq("+rowIndex+")").val().replace(/[^0-9\.-]+/g,"")) || 0;
+            var this_sl = parseInt($(".tire_number:eq("+rowIndex+")").val().replace(/[^0-9\.-]+/g,""));
+            gia = gia + (this_sl*this_gia);
+
+            $(this).val(this_gia);
+            $(this).val(function(index, value) {
+                return value
+                  .replace(/\D/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+            });
+        });
+
+        $('#thanhtien').val(gia);
+        $('#thanhtien2').val(gia);
+
+        var val = $('#vat_percent').val();
         
-        $('#vat').val(Math.round(thanhtien*val/100));
+        $('#vat').val(Math.round(gia*val/100));
         
         $('#vat').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+        $('#thanhtien').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+        $('#thanhtien2').val(function(index, value) {
             return value
               .replace(/\D/g, "")
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",")

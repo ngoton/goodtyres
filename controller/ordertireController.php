@@ -626,7 +626,13 @@ Class ordertireController Extends baseController {
             $sales = $tire_sale_model->queryTire('SELECT * FROM tire_sale WHERE customer = '.$customer.' AND tire_brand = '.$brand.' AND tire_size = '.$size.' AND tire_pattern = '.$pattern.' ORDER BY tire_sale_date DESC LIMIT 1');
             if ($sales) {
                 foreach ($sales as $sale) {
-                    $price['price'] = $sale->sell_price;
+                    if ($sale->sell_price_vat > 0) {
+                        $price['price'] = $sale->sell_price_vat;
+                    }
+                    else{
+                        $price['price'] = $sale->sell_price;
+                    }
+                    
                 }
             }
             else{
@@ -1052,7 +1058,7 @@ Class ordertireController Extends baseController {
             $size = $size?$size->tire_quotation_size_id:null;
 
             $data_q = array(
-                'where' => 'tire_quotation_brand ='.$brand.' AND tire_quotation_size ='.$size.' AND tire_quotation_pattern='.$pattern_type.' AND start_date <= '.strtotime(date('d-m-Y')).' AND (end_date IS NULL OR end_date > '.strtotime(date('d-m-Y')).')',
+                'where' => 'tire_quotation_brand ='.$brand.' AND tire_quotation_size ='.$size.' AND tire_quotation_pattern IN ('.$pattern_type.') AND start_date <= '.strtotime(date('d-m-Y')).' AND (end_date IS NULL OR end_date > '.strtotime(date('d-m-Y')).')',
             );
             $prices = $tire_quotation_model->getAllTire($data_q);
             foreach ($prices as $p) {
@@ -1159,14 +1165,17 @@ Class ordertireController Extends baseController {
             $pattern = trim($_POST['tire_pattern']);
             $size = trim($_POST['tire_size']);
             $number = trim($_POST['tire_number']);
-            $price = trim(str_replace(',','',$_POST['tire_price']));
+            $price = trim(str_replace(',','',$_POST['tire_price_vat']));
+            $check_price_vat = trim($_POST['check_price_vat']);
+            $price_vat = $check_price_vat==1?trim(str_replace(',','',$_POST['tire_price'])):null;
 
             $data = array(
                 'tire_brand'=>$brand,
                 'tire_pattern'=>$pattern,
                 'tire_size'=>$size,
                 'tire_number'=>$number,
-                'tire_price'=>$price
+                'tire_price'=>$price,
+                'tire_price_vat'=>$price_vat,
             );
 
             if ($_POST['yes'] != "") {
@@ -1238,6 +1247,7 @@ Class ordertireController Extends baseController {
                         'tire_pattern'=>$order_tire_list_old->tire_pattern,
                         'volume' => $order_tire_list_old->tire_number,
                         'sell_price' => $order_tire_list_old->tire_price,
+                        'sell_price_vat' => $order_tire_list_old->tire_price_vat,
                     );
                     $tire_sale_model->updateTire($data_sale,array('tire_sale_id'=>$tire_sale->tire_sale_id));
 
@@ -1370,6 +1380,7 @@ Class ordertireController Extends baseController {
                         'tire_brand' => $order_tire_list_old->tire_brand,
                         'tire_size' => $order_tire_list_old->tire_size,
                         'sell_price' => $order_tire_list_old->tire_price,
+                        'sell_price_vat' => $order_tire_list_old->tire_price_vat,
                         'customer' => $order_tire_old->customer,
                         'tire_sale_date' => $order_tire_old->delivery_date,
                         //'tire_sale_date_expect' => strtotime($_POST['tire_sale_date_expect']),
@@ -1607,6 +1618,7 @@ Class ordertireController Extends baseController {
                     'tire_brand' => $order->tire_brand,
                     'tire_size' => $order->tire_size,
                     'sell_price' => $order->tire_price,
+                    'sell_price_vat' => $order->tire_price_vat,
                     'customer' => $order_tire->customer,
                     'tire_sale_date' => $order_tire->delivery_date,
                     //'tire_sale_date_expect' => strtotime($_POST['tire_sale_date_expect']),
