@@ -38,9 +38,17 @@ Class checksalesalaryController Extends baseController {
             $nv = "";
         }
 
-        $ma = $this->registry->router->param_id;
+        $nv = $this->registry->router->param_id;
 
-        $sodonhang = $this->registry->router->addition;
+        $ngay = $this->registry->router->addition;
+
+        if ($nv > 0) {
+            $trangthai = $nv;
+        }
+        if ($ngay > 0) {
+            $batdau = '01-'.date('m-Y',$ngay);
+            $ketthuc = date('t-m-Y',$ngay);
+        }
 
         $thang = (int)date('m',strtotime($batdau));
         $nam = date('Y',strtotime($batdau));
@@ -68,7 +76,7 @@ Class checksalesalaryController Extends baseController {
 
         
         $data = array(
-            'where'=>'order_tire_id IN (SELECT order_tire FROM receivable WHERE receivable.money = receivable.pay_money AND receivable.pay_date >= '.strtotime($batdau).' AND receivable.pay_date <= '.strtotime($ketthuc).')',
+            'where'=>'order_tire_id IN (SELECT order_tire FROM receivable WHERE receivable.money <= receivable.pay_money AND receivable.pay_date >= '.strtotime($batdau).' AND receivable.pay_date <= '.strtotime($ketthuc).')',
         );
 
         if ($nv == 0) {
@@ -109,7 +117,7 @@ Class checksalesalaryController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where'=>'order_tire_id IN (SELECT order_tire FROM receivable WHERE receivable.money = receivable.pay_money AND receivable.pay_date >= '.strtotime($batdau).' AND receivable.pay_date <= '.strtotime($ketthuc).')',
+            'where'=>'order_tire_id IN (SELECT order_tire FROM receivable WHERE receivable.money <= receivable.pay_money AND receivable.pay_date >= '.strtotime($batdau).' AND receivable.pay_date <= '.strtotime($ketthuc).')',
             );
 
         if ($nv == 0) {

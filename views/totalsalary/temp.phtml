@@ -274,8 +274,8 @@ elseif ($order_by == 'staff_name')
             <td class="fix"><?php echo $i++; ?></td>
             <td class="fix" id="staff_name_<?php echo $salary->staff_id; ?>"><?php echo $salary->staff_name; ?></td>
             <td class="fix" id="position_<?php echo $salary->staff_id; ?>"><?php echo $salary->position; ?></td>
-            <td class="fix" id="kpi_<?php echo $salary->staff_id; ?>"><a href="tiresalary/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($kpi); ?></a></td>
-            <td class="fix" id="luongsp_<?php echo $salary->staff_id; ?>"><a href="tiresalary/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($luongsp+$luongvuotgia); ?></a></td>
+            <td class="fix" id="kpi_<?php echo $salary->staff_id; ?>"><a href="checksalesalary/index/<?php echo $salary->staff_id ?>/1/order_number/ASC/<?php echo strtotime('01-'.$ngaytao) ?>"><?php echo $lib->formatMoney($kpi); ?></a></td>
+            <td class="fix" id="luongsp_<?php echo $salary->staff_id; ?>"><a href="checksalesalary/index/<?php echo $salary->staff_id ?>/1/order_number/ASC/<?php echo strtotime('01-'.$ngaytao) ?>"><?php echo $lib->formatMoney($luongsp+$luongvuotgia); ?></a></td>
             <td class="fix" id="luonggiaonhan_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($giaonhan); ?></td>
             <td class="fix" id="luongchuyencan_<?php echo $salary->staff_id; ?>"><a href="attendance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($luongchuyencan); ?></a></td>
             <td class="fix editable" data="<?php echo $salary->staff_id; ?>" id="ngoaikhoa_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($ngoaikhoa); ?></td>

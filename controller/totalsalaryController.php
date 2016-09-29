@@ -287,14 +287,14 @@ Class totalsalaryController Extends baseController {
             //////// Đơn hàng tháng trước thanh toán trong tháng
 
             $data = array(
-                'where' => 'tire_sale_date < '.strtotime($batdau).' AND order_tire IN (SELECT order_tire FROM receivable WHERE money = pay_money AND pay_date >= '.strtotime($batdau).' AND pay_date <= '.strtotime($ketthuc).')',
+                'where' => 'tire_sale_date < '.strtotime($batdau).' AND order_tire IN (SELECT order_tire FROM receivable WHERE money <= pay_money AND pay_date >= '.strtotime($batdau).' AND pay_date <= '.strtotime($ketthuc).')',
             );
             $join = array('table'=>'tire_brand,tire_size,tire_pattern','where'=>'tire_brand=tire_brand_id AND tire_size=tire_size_id AND tire_pattern=tire_pattern_id');
 
             $sales = $tiresale_model->getAllTire($data,$join);
 
             $join_order = array('table'=>'staff','where'=>'sale = account');
-            $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN (SELECT tire_sale.order_tire FROM tire_sale,receivable WHERE tire_sale.order_tire=receivable.order_tire AND receivable.money = receivable.pay_money AND tire_sale_date < '.strtotime($batdau).' AND receivable.pay_date >= '.strtotime($batdau).' AND receivable.pay_date <= '.strtotime($ketthuc).')'),$join_order);
+            $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN (SELECT tire_sale.order_tire FROM tire_sale,receivable WHERE tire_sale.order_tire=receivable.order_tire AND receivable.money <= receivable.pay_money AND tire_sale_date < '.strtotime($batdau).' AND receivable.pay_date >= '.strtotime($batdau).' AND receivable.pay_date <= '.strtotime($ketthuc).')'),$join_order);
             
             foreach ($orders as $tire) {
                 $arr_cost[$tire->order_tire_id] = $tire->order_cost/$tire->order_tire_number;
@@ -311,7 +311,7 @@ Class totalsalaryController Extends baseController {
                 'order' => 'ASC',
                 'limit' => 1,
             );
-            $join = array('table'=>'tire_brand,tire_size,tire_pattern,receivable','where'=>'tire_sale.order_tire=receivable.order_tire AND receivable.money = receivable.pay_money AND tire_brand=tire_brand_id AND tire_size=tire_size_id AND tire_pattern=tire_pattern_id');
+            $join = array('table'=>'tire_brand,tire_size,tire_pattern,receivable','where'=>'tire_sale.order_tire=receivable.order_tire AND receivable.money <= receivable.pay_money AND tire_brand=tire_brand_id AND tire_size=tire_size_id AND tire_pattern=tire_pattern_id');
 
             $s = $tiresale_model->getAllTire($data,$join);
             foreach ($s as $k) {
@@ -488,7 +488,7 @@ Class totalsalaryController Extends baseController {
 
 
             $data = array(
-                'where' => 'tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).' AND order_tire IN (SELECT order_tire FROM receivable WHERE money = pay_money AND pay_date >= '.strtotime($batdau).' AND pay_date <= '.strtotime($ketthuc).')',
+                'where' => 'tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).' AND order_tire IN (SELECT order_tire FROM receivable WHERE money <= pay_money AND pay_date >= '.strtotime($batdau).' AND pay_date <= '.strtotime($ketthuc).')',
             );
             $join = array('table'=>'tire_brand,tire_size,tire_pattern','where'=>'tire_brand=tire_brand_id AND tire_size=tire_size_id AND tire_pattern=tire_pattern_id');
 

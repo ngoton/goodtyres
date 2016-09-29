@@ -488,7 +488,7 @@ Class stockController Extends baseController {
         $join = array('table'=>'tire_pattern,tire_brand,tire_size,order_tire,user','where'=>'order_tire.sale = user_id AND tire_pattern = tire_pattern_id AND tire_brand = tire_brand_id AND tire_size = tire_size_id AND order_tire = order_tire_id AND (order_tire_status IS NULL OR order_tire_status = 0)');
 
         $data = array(
-            'where' => 'tire_brand_group='.$this->registry->router->param_id.' AND tire_size='.$tire_size->tire_size_id.' AND tire_pattern_type='.$this->registry->router->order,
+            'where' => 'tire_brand_group='.$this->registry->router->param_id.' AND tire_size='.$tire_size->tire_size_id.' AND (tire_pattern_type LIKE '.$this->registry->router->order.' OR tire_pattern_type LIKE "%,'.$this->registry->router->order.',%" OR tire_pattern_type LIKE "'.$this->registry->router->order.',%" OR tire_pattern_type LIKE "%,'.$this->registry->router->order.'")',
         );
 
         $orders = $tire_order_list_model->getAllTire($data,$join);
@@ -543,10 +543,10 @@ Class stockController Extends baseController {
         $tire_size_model = $this->model->get('tiresizeModel');
         $tire_size = $tire_size_model->getTireByWhere(array('tire_size_number'=>str_replace('~', '/', $this->registry->router->order_by)));
         $tire_going_model = $this->model->get('tiregoingModel');
-        $join = array('table'=>'tire_brand,tire_size','where'=>'tire_brand = tire_brand_id AND tire_size = tire_size_id AND (status IS NULL OR status=0)');
+        $join = array('table'=>'tire_brand,tire_size,tire_pattern','where'=>'tire_brand = tire_brand_id AND tire_size = tire_size_id AND tire_pattern = tire_pattern_id AND (status IS NULL OR status=0)');
 
         $data = array(
-            'where' => 'tire_brand_group='.$this->registry->router->param_id.' AND tire_size='.$tire_size->tire_size_id.' AND tire_pattern IN (SELECT tire_pattern_id FROM tire_pattern WHERE tire_pattern_type LIKE "'.$this->registry->router->order.'" OR tire_pattern_type LIKE "%,'.$this->registry->router->order.',%" OR tire_pattern_type LIKE "'.$this->registry->router->order.',%" OR tire_pattern_type LIKE "%,'.$this->registry->router->order.'")',
+            'where' => 'tire_brand_group='.$this->registry->router->param_id.' AND tire_size='.$tire_size->tire_size_id.' AND (tire_pattern_type LIKE "'.$this->registry->router->order.'" OR tire_pattern_type LIKE "%,'.$this->registry->router->order.',%" OR tire_pattern_type LIKE "'.$this->registry->router->order.',%" OR tire_pattern_type LIKE "%,'.$this->registry->router->order.'")',
         );
 
         $goings = $tire_going_model->getAllTire($data,$join);

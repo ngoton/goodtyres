@@ -23,12 +23,33 @@
           <?php
           foreach ($tire_goings as $tire_going) {
           ?>
-            <tr>
+            <tr style="font-weight:bold">
               <td>
                 <span class="add-on"><i class="icon-info-sign" ></i></span>
                 <span>Code:  </span>
               </td>
               <td><?php echo $tire_going->code." - ".$lib->hien_thi_ngay_thang($tire_going->tire_going_date) ?></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="add-on"><i class="icon-th-list" ></i></span>
+                <span>Brand:  </span>
+              </td>
+              <td><?php echo $tire_going->tire_brand_name ?></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="add-on"><i class="icon-th-list" ></i></span>
+                <span>Size:  </span>
+              </td>
+              <td><?php echo $tire_going->tire_size_number ?></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="add-on"><i class="icon-th-list" ></i></span>
+                <span>Pattern:  </span>
+              </td>
+              <td><?php echo $tire_going->tire_pattern_name ?></td>
             </tr>
             <tr>
               <td>
