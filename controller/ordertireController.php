@@ -550,6 +550,7 @@ Class ordertireController Extends baseController {
         }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $customer_model = $this->model->get('customerModel');
+            $tire_sale_model = $this->model->get('tiresaleModel');
             
             if ($_POST['keyword'] == "*") {
                 $list = $customer_model->getAllCustomer();
@@ -577,8 +578,15 @@ Class ordertireController Extends baseController {
                     $expect_date = date('d-m-Y',strtotime('+'.$rs->customer_after_date.' day', strtotime(date('d-m-Y'))));
                 }
                 
+                $type = $tire_sale_model->getTireByWhere(array('customer'=>$rs->customer_id));
+                if ($type) {
+                    $type = $type->customer_type;
+                }
+                else{
+                    $type = 1;
+                }
                 // add new option
-                echo '<li onclick="set_item(\''.$rs->customer_name.'\',\''.$rs->customer_id.'\',\''.$rs->company_name.'\',\''.$rs->customer_phone.'\',\''.$rs->customer_address.'\',\''.$rs->customer_email.'\',\''.$expect_date.'\',\''.$rs->mst.'\')">'.$customer_name.'</li>';
+                echo '<li onclick="set_item(\''.$rs->customer_name.'\',\''.$rs->customer_id.'\',\''.$rs->company_name.'\',\''.$rs->customer_phone.'\',\''.$rs->customer_address.'\',\''.$rs->customer_email.'\',\''.$expect_date.'\',\''.$rs->mst.'\',\''.$type.'\')">'.$customer_name.'</li>';
             }
         }
     }
