@@ -2470,3 +2470,11 @@ bxep: 6x14 = 84k-5-4--1484000
 
 21/09/2016 14:15:10|admincmg|edit|15-19-3-4-3000000-|order_tire_list|
 
+04/10/2016 10:03:40|admincmg|edit|1518|daily|2-Nghị--phuong-1468533600-Thu tiền Phước Lợi 12 lốp lx-0714---lx-0714-48603000-0-1263--
+
+04/10/2016 10:04:22|admincmg|delete|1518|daily|
+
+04/10/2016 10:05:49|admincmg|edit|1506|daily|2-Mấn-pt75-tm-1468447200-Thu tiền Vá vỏ Lượng 24 lốp lx-0717---lx-0717-59712000-0---1263,1272
+
+04/10/2016 10:06:18|admincmg|delete|1506|daily|
+

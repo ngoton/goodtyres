@@ -153,6 +153,9 @@ Class checksalesalaryController Extends baseController {
         $join = array('table'=>'tire_brand,tire_size,tire_pattern','where'=>'tire_brand=tire_brand_id AND tire_size=tire_size_id AND tire_pattern=tire_pattern_id');
         $join_q = array('table'=>'tire_quotation_brand, tire_quotation_size','where'=>'tire_quotation_brand=tire_quotation_brand_id AND tire_quotation_size=tire_quotation_size_id');
 
+        $total_order = array();
+        
+
         $old = array();
         $str = 0;
         foreach ($order_tires as $order_tire) {
@@ -178,6 +181,13 @@ Class checksalesalaryController Extends baseController {
                         $old[] = $sale->customer;
                     }
                 }
+
+                $sum_order = $tiresale_model->getAllTire(array('where'=>'tire_sale_date >= '.strtotime('01-'.date('m-Y',$order_tire->delivery_date)).' AND tire_sale_date <= '.strtotime(date('t-m-Y',$order_tire->delivery_date))));
+                foreach ($sum_order as $sum) {
+                    $total_order[date('m-Y',$order_tire->delivery_date)][$sum->customer] = isset($total_order[date('m-Y',$order_tire->delivery_date)][$sum->customer])?$total_order[date('m-Y',$order_tire->delivery_date)][$sum->customer]+$sum->volume:$sum->volume;
+                }
+
+
 
                 if (in_array($order_tire->customer,$old)) {
                     $info['khmoi'][$order_tire->order_tire_id] = 0;
@@ -232,27 +242,27 @@ Class checksalesalaryController Extends baseController {
                                 $a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
                                 $b = $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]*$sale->volume;
                                 if ($a >= 0.95*$b) {
-                                    if ($order_tire->order_tire_number >= 20) {
+                                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 20) {
                                         $info['percent'][$sale->order_tire] = 1;
                                     }
                                 }
                                 else if ($a >= 0.94*$b) {
-                                    if ($order_tire->order_tire_number >= 50) {
+                                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 50) {
                                         $info['percent'][$sale->order_tire] = 0.5;
                                     }
                                 }
                                 else if ($a >= 0.93*$b) {
-                                    if ($order_tire->order_tire_number >= 100) {
+                                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 100) {
                                         $info['percent'][$sale->order_tire] = 0.5;
                                     }
                                 }
                                 else if ($a >= 0.92*$b) {
-                                    if ($order_tire->order_tire_number >= 150) {
+                                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 150) {
                                         $info['percent'][$sale->order_tire] = 0.5;
                                     }
                                 }
                                 else if ($a >= 0.91*$b) {
-                                    if ($order_tire->order_tire_number >= 200) {
+                                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 200) {
                                         $info['percent'][$sale->order_tire] = 0.5;
                                     }
                                 }
@@ -314,6 +324,7 @@ Class checksalesalaryController Extends baseController {
         $join = array('table'=>'tire_brand,tire_size,tire_pattern','where'=>'tire_brand=tire_brand_id AND tire_size=tire_size_id AND tire_pattern=tire_pattern_id');
         $join_q = array('table'=>'tire_quotation_brand, tire_quotation_size','where'=>'tire_quotation_brand=tire_quotation_brand_id AND tire_quotation_size=tire_quotation_size_id');
 
+        $total_order = array();
         $old = array();
         foreach ($order_tires as $order_tire) {
             $receivables = $receivable_model->getCostsByWhere(array('order_tire'=>$order_tire->order_tire_id));
@@ -338,6 +349,11 @@ Class checksalesalaryController Extends baseController {
                     if (!in_array($sale->customer,$old)) {
                         $old[] = $sale->customer;
                     }
+                }
+
+                $sum_order = $tiresale_model->getAllTire(array('where'=>'tire_sale_date >= '.strtotime('01-'.date('m-Y',$order_tire->delivery_date)).' AND tire_sale_date <= '.strtotime(date('t-m-Y',$order_tire->delivery_date))));
+                foreach ($sum_order as $sum) {
+                    $total_order[date('m-Y',$order_tire->delivery_date)][$sum->customer] = isset($total_order[date('m-Y',$order_tire->delivery_date)][$sum->customer])?$total_order[date('m-Y',$order_tire->delivery_date)][$sum->customer]+$sum->volume:$sum->volume;
                 }
 
                 if (in_array($order_tire->customer,$old)) {
@@ -392,27 +408,27 @@ Class checksalesalaryController Extends baseController {
                                 $a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
                                 $b = $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]*$sale->volume;
                                 if ($a >= 0.95*$b) {
-                                    if ($order_tire->order_tire_number >= 20) {
+                                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 20) {
                                         $info['percent'][$sale->order_tire] = 1;
                                     }
                                 }
                                 else if ($a >= 0.94*$b) {
-                                    if ($order_tire->order_tire_number >= 50) {
+                                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 50) {
                                         $info['percent'][$sale->order_tire] = 0.5;
                                     }
                                 }
                                 else if ($a >= 0.93*$b) {
-                                    if ($order_tire->order_tire_number >= 100) {
+                                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 100) {
                                         $info['percent'][$sale->order_tire] = 0.5;
                                     }
                                 }
                                 else if ($a >= 0.92*$b) {
-                                    if ($order_tire->order_tire_number >= 150) {
+                                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 150) {
                                         $info['percent'][$sale->order_tire] = 0.5;
                                     }
                                 }
                                 else if ($a >= 0.91*$b) {
-                                    if ($order_tire->order_tire_number >= 200) {
+                                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 200) {
                                         $info['percent'][$sale->order_tire] = 0.5;
                                     }
                                 }

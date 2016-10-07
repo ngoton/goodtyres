@@ -1853,7 +1853,7 @@ Class dailyController Extends baseController {
                                 $cost = $costs_model->getCostsByWhere(array('additional' => $id_daily_last));
                                 $costs_model->updateCosts(array('money'=>$conlai,'pay_money'=>$conlai),array('costs_id'=>$cost->costs_id));
                                 $assets_model->updateAssets(array('total'=>(0-$conlai)),array('costs'=>$cost->costs_id));
-                                $pay_model->updateAssets(array('money'=>$conlai),array('costs'=>$cost->costs_id));
+                                $pay_model->updateCosts(array('money'=>$conlai),array('costs'=>$cost->costs_id));
                             }
                         }
                     }
@@ -2394,7 +2394,7 @@ Class dailyController Extends baseController {
                             $cost = $costs_model->getCostsByWhere(array('additional' => $id_daily_last));
                             $costs_model->updateCosts(array('money'=>$conlai,'pay_money'=>$conlai),array('costs_id'=>$cost->costs_id));
                             $assets_model->updateAssets(array('total'=>(0-$conlai)),array('costs'=>$cost->costs_id));
-                            $pay_model->updateAssets(array('money'=>$conlai),array('costs'=>$cost->costs_id));
+                            $pay_model->updateCosts(array('money'=>$conlai),array('costs'=>$cost->costs_id));
                         }
                     }
                 }
@@ -2444,7 +2444,20 @@ Class dailyController Extends baseController {
                            $account_balance_model->queryAccount("DELETE FROM account_balance WHERE additional = ".$add->additional_id);
                        }
 
-                       $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$data);
+                        $id_receivable = $receive_model->getAllCosts(array('where'=>'receivable > 0 AND additional = '.$data));
+                        foreach ($id_receivable as $re) {
+                            $receivable = $receivable_model->getCostsByWhere(array('receivable_id'=>$re->receivable));
+                            $pay_money = $receivable->pay_money-$re->money;
+                            $receivable_model->updateCosts(array('pay_money'=>$pay_money),array('receivable_id'=>$re->receivable));
+                        }
+                        $id_payable = $pay_model->getAllCosts(array('where'=>'payable > 0 AND additional = '.$data));
+                        foreach ($id_payable as $pay) {
+                            $payable = $payable_model->getCostsByWhere(array('payable_id'=>$pay->payable));
+                            $pay_money = $payable->pay_money-$pay->money;
+                            $payable_model->updateCosts(array('pay_money'=>$pay_money),array('payable_id'=>$pay->payable));
+                        }
+
+                        $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$data);
                         $receive_model->queryCosts('DELETE FROM receive WHERE additional = '.$data);
                         $obtain_model->queryObtain('DELETE FROM obtain WHERE additional = '.$data);
                         $pay_model->queryCosts('DELETE FROM pay WHERE additional = '.$data);
@@ -2474,7 +2487,20 @@ Class dailyController Extends baseController {
                            $account_balance_model->queryAccount("DELETE FROM account_balance WHERE additional = ".$add->additional_id);
                        }
 
-                       $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$_POST['data']);
+                        $id_receivable = $receive_model->getAllCosts(array('where'=>'receivable > 0 AND additional = '.$_POST['data']));
+                        foreach ($id_receivable as $re) {
+                            $receivable = $receivable_model->getCostsByWhere(array('receivable_id'=>$re->receivable));
+                            $pay_money = $receivable->pay_money-$re->money;
+                            $receivable_model->updateCosts(array('pay_money'=>$pay_money),array('receivable_id'=>$re->receivable));
+                        }
+                        $id_payable = $pay_model->getAllCosts(array('where'=>'payable > 0 AND additional = '.$_POST['data']));
+                        foreach ($id_payable as $pay) {
+                            $payable = $payable_model->getCostsByWhere(array('payable_id'=>$pay->payable));
+                            $pay_money = $payable->pay_money-$pay->money;
+                            $payable_model->updateCosts(array('pay_money'=>$pay_money),array('payable_id'=>$pay->payable));
+                        }
+                        
+                        $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$_POST['data']);
                         $receive_model->queryCosts('DELETE FROM receive WHERE additional = '.$_POST['data']);
                         $obtain_model->queryObtain('DELETE FROM obtain WHERE additional = '.$_POST['data']);
                         $pay_model->queryCosts('DELETE FROM pay WHERE additional = '.$_POST['data']);

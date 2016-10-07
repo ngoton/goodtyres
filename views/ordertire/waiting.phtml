@@ -20,6 +20,7 @@
             <input class="iform" type="text" name="company" id="company" placeholder="Công ty" required="required" />
             <input class="iform" type="text" name="mst" id="mst" placeholder="Mã số thuế" />
             <input class="iform" type="text" name="address" id="address" placeholder="Địa chỉ" required="required" />
+            <input class="iform" type="text" name="phone" id="phone" placeholder="Số điện thoại liên hệ" required="required" />
             
             <input type="button" name="next" class="next action-button" value="Tiếp tục" />
         </fieldset>
@@ -71,6 +72,7 @@
                                         </td>
                                         <td >
                                             <input placeholder="Đơn giá" style="width:150px" type="text" tabindex="8" class="tire_price number" name="tire_price[]" value="<?php echo $lib->formatMoney($tire->tire_price) ?>" >
+                                            <input type="hidden" class="tire_price_vat number" name="tire_price_vat[]" value="<?php echo $tire->tire_price ?>" >
                                         </td>
                                         <td>
                                             <span class="error">Tồn kho </span> <input style="width:50px" type="text" disabled name="max_number[]" class="max_number" value="<?php echo $arr_max[$tire->tire_desired_id] ?>"> 
@@ -163,6 +165,7 @@
             <input class="iform number" type="text" name="reduce" id="reduce"  placeholder="Giảm giá khác" />
             <input style="width:100px" type="text" class="numbers" name="vat_percent" id="vat_percent" placeholder="VAT (%)" />
             <input style="width:450px" type="text" class="number" name="vat" id="vat" placeholder="VAT" />
+            <input type="checkbox" name="check_price_vat" id="check_price_vat" value="1"> Giá đã có VAT
             <input type="text" class="iform ngay" name="delivery_date" id="delivery_date" placeholder="Ngày giao hàng" />
             <input type="hidden" id="max_discount" value="0">
             <input type="button" name="previous" class="previous action-button" value="Quay lại" />
@@ -233,40 +236,58 @@ var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
 $(".next").click(function(){
-    if(animating) return false;
-    animating = true;
-    
-    current_fs = $(this).parent();
-    next_fs = $(this).parent().next();
-    
-    //activate next step on progressbar using the index of next_fs
-    $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-    
-    //show the next fieldset
-    next_fs.show(); 
-    //hide the current fieldset with style
-    current_fs.animate({opacity: 0}, {
-        step: function(now, mx) {
-            //as the opacity of current_fs reduces to 0 - stored in "now"
-            //1. scale current_fs down to 80%
-            scale = 1 - (1 - now) * 0.2;
-            //2. bring next_fs from the right(50%)
-            left = (now * 50)+"%";
-            //3. increase opacity of next_fs to 1 as it moves in
-            opacity = 1 - now;
-            current_fs.css({'transform': 'scale('+scale+')'});
-            next_fs.css({'left': left, 'opacity': opacity});
-        }, 
-        duration: 800, 
-        complete: function(){
-            current_fs.hide();
-            animating = false;
-        }, 
-        //this comes from the custom easing plugin
-        easing: 'easeInOutBack'
-    });
+    var customer = $('#customer').val().trim();
+    var phone = $('#phone').val().trim();
+    var address = $('#address').val().trim();
 
-    ///
+    if (customer == "") {
+        alert("Vui lòng nhập vào tên khách hàng!");
+        $('#customer').focus();
+    }
+    else if (phone == "") {
+        alert("Vui lòng nhập vào số điện thoại!");
+        $('#phone').focus();
+    }
+    else if (address == "") {
+        alert("Vui lòng nhập vào địa chỉ!");
+        $('#address').focus();
+    }
+    else{
+        if(animating) return false;
+        animating = true;
+        
+        current_fs = $(this).parent();
+        next_fs = $(this).parent().next();
+        
+        //activate next step on progressbar using the index of next_fs
+        $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+        
+        //show the next fieldset
+        next_fs.show(); 
+        //hide the current fieldset with style
+        current_fs.animate({opacity: 0}, {
+            step: function(now, mx) {
+                //as the opacity of current_fs reduces to 0 - stored in "now"
+                //1. scale current_fs down to 80%
+                scale = 1 - (1 - now) * 0.2;
+                //2. bring next_fs from the right(50%)
+                left = (now * 50)+"%";
+                //3. increase opacity of next_fs to 1 as it moves in
+                opacity = 1 - now;
+                current_fs.css({'transform': 'scale('+scale+')'});
+                next_fs.css({'left': left, 'opacity': opacity});
+            }, 
+            duration: 800, 
+            complete: function(){
+                current_fs.hide();
+                animating = false;
+            }, 
+            //this comes from the custom easing plugin
+            easing: 'easeInOutBack'
+        });
+
+        ///
+    }
 
     
 
@@ -325,13 +346,14 @@ $('#mst').val("<?php echo $customers->mst ?>");
 $('#address').val("<?php echo $customers->customer_address ?>");
 
 
-function set_item(item,value,company,phone,address,email,ngay,mst) {
+function set_item(item,value,company,phone,address,email,ngay,mst,type) {
     // change input value
     $('#customer').val(item);
     $("#customer").attr("data",value);
     $('#mst').val(mst);
     $('#address').val(address);
     $('#company').val(company);
+    $("input[name=customer_type][value=" + type + "]").attr('checked', 'checked');
     $('#customer_list_id').hide();
     $('#customer').focus();
 
@@ -430,6 +452,7 @@ $('.tire_brand').change(function(){
                 var data = jQuery.parseJSON(data);
                 $('.max_number:eq('+rowIndex+')').val(data.max);
                 $('.tire_price:eq('+rowIndex+')').val(data.price);
+                $('.tire_price_vat:eq('+rowIndex+')').val(data.price);
                 $('.tire_price:eq('+rowIndex+')').val(function(index, value) {
                     return value
                       .replace(/\D/g, "")
@@ -492,6 +515,7 @@ $('.tire_size').change(function(){
                 var data = jQuery.parseJSON(data);
                 $('.max_number:eq('+rowIndex+')').val(data.max);
                 $('.tire_price:eq('+rowIndex+')').val(data.price);
+                $('.tire_price_vat:eq('+rowIndex+')').val(data.price);
                 $('.tire_price:eq('+rowIndex+')').val(function(index, value) {
                     return value
                       .replace(/\D/g, "")
@@ -554,6 +578,7 @@ $('.tire_pattern').change(function(){
                 var data = jQuery.parseJSON(data);
                 $('.max_number:eq('+rowIndex+')').val(data.max);
                 $('.tire_price:eq('+rowIndex+')').val(data.price);
+                $('.tire_price_vat:eq('+rowIndex+')').val(data.price);
                 $('.tire_price:eq('+rowIndex+')').val(function(index, value) {
                     return value
                       .replace(/\D/g, "")
@@ -632,6 +657,8 @@ $('.tire_price').keyup(function(){
 
     $(':checkbox[name=dis]').prop('checked',false);
     $('#discount').val("");
+
+    $('.tire_price_vat:eq('+rowIndex+')').val(val);
 });
 
 $('input[name="payment"]').click(function(){
@@ -658,6 +685,102 @@ $('input[name="payment"]').click(function(){
         }
         $('input[name="dis"]:first').hide();
         $('input[name="dis"]:first').prop('checked',false);
+    }
+});
+
+$('#check_price_vat').click(function(){
+    if($(this).is(':checked')){
+        var val = parseInt($('#vat_percent').val());
+        var gia = 0;
+        $('.tire_price').each(function() { 
+            var p = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
+            var n = Math.round((p/(1+val/100))/100)*100;
+
+            var row = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex = row[0].rowIndex;
+
+            var this_sl = parseInt($(".tire_number:eq("+rowIndex+")").val().replace(/[^0-9\.-]+/g,""));
+            gia = gia + (this_sl*n);
+
+            $(this).val(n);
+            $(this).val(function(index, value) {
+                return value
+                  .replace(/\D/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+            });
+        });
+
+        $('#thanhtien').val(gia);
+        $('#thanhtien2').val(gia);
+        $('#vat').val(Math.round(gia*val/100));
+        
+        $('#vat').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+
+        $('#thanhtien').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+        $('#thanhtien2').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+    }
+    else{
+        var gia = 0;
+
+        $('.tire_price').each(function() { 
+
+            var row = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex = row[0].rowIndex;
+
+            var this_gia = parseInt($(".tire_price_vat:eq("+rowIndex+")").val().replace(/[^0-9\.-]+/g,"")) || 0;
+            var this_sl = parseInt($(".tire_number:eq("+rowIndex+")").val().replace(/[^0-9\.-]+/g,""));
+            gia = gia + (this_sl*this_gia);
+
+            $(this).val(this_gia);
+            $(this).val(function(index, value) {
+                return value
+                  .replace(/\D/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+            });
+        });
+
+        $('#thanhtien').val(gia);
+        $('#thanhtien2').val(gia);
+
+        var val = $('#vat_percent').val();
+        
+        $('#vat').val(Math.round(gia*val/100));
+        
+        $('#vat').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+        $('#thanhtien').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+        $('#thanhtien2').val(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
     }
 });
 
@@ -1165,6 +1288,11 @@ $("#msform").validate({
                         var ck_sl = 1;
                     }
 
+                    var check_price_vat = 0;
+                    if($("#check_price_vat").is(':checked')){
+                        var check_price_vat = 1;
+                    }
+
                     var discount = $('#discount').attr('value');
                     var reduce = $('#reduce').attr('value');
                     var vat_percent = $('#vat_percent').attr('value');
@@ -1183,6 +1311,8 @@ $("#msform").validate({
                     var tire_number = [];
                     var tire_price = [];
                     var max_number = [];
+
+                    var tire_price_vat = [];
                     
 
                     $('.tire_brand').each(function() { 
@@ -1205,11 +1335,13 @@ $("#msform").validate({
                     $('.max_number').each(function() { 
                         max_number.push($(this).val());
                     });
-                    
+                    $('.tire_price_vat').each(function() { 
+                        tire_price_vat.push($(this).val());
+                    });
 
                     
                     for (var i = 0; i < tire_number.length; i++) {
-                        order_tire.push({'tire_brand':tire_brand[i], 'tire_size':tire_size[i], 'tire_pattern':tire_pattern[i], 'tire_number':tire_number[i], 'tire_price':tire_price[i], 'max_number':max_number[i]});
+                        order_tire.push({'tire_brand':tire_brand[i], 'tire_size':tire_size[i], 'tire_pattern':tire_pattern[i], 'tire_number':tire_number[i], 'tire_price':tire_price[i], 'max_number':max_number[i], 'tire_price_vat':tire_price_vat[i]});
                         
                         
                     };
@@ -1249,6 +1381,7 @@ $("#msform").validate({
                             check_order: check_order,
                             order_tire_number: order_tire_number,
                             customer_type: customer_type,
+                            check_price_vat: check_price_vat,
                             order_tire_waiting: order_tire_waiting,
                             
                             }, // giá trị post
@@ -1356,6 +1489,7 @@ function addRow(tableID){
 
     $('.tire_number:last').val("");
     $('.tire_price:last').val("");
+    $('.tire_price_vat:last').val("");
     $('.max_number:last').val(0);
     $('.tire_brand:last contains:("")').attr('selected','selected');
     $('.tire_size:last contains:("")').attr('selected','selected');
@@ -1418,6 +1552,7 @@ function addRow(tableID){
                     var data = jQuery.parseJSON(data);
                     $('.max_number:eq('+rowIndex+')').val(data.max);
                     $('.tire_price:eq('+rowIndex+')').val(data.price);
+                    $('.tire_price_vat:eq('+rowIndex+')').val(data.price);
                     $('.tire_price:eq('+rowIndex+')').val(function(index, value) {
                         return value
                           .replace(/\D/g, "")
@@ -1480,6 +1615,7 @@ function addRow(tableID){
                     var data = jQuery.parseJSON(data);
                     $('.max_number:eq('+rowIndex+')').val(data.max);
                     $('.tire_price:eq('+rowIndex+')').val(data.price);
+                    $('.tire_price_vat:eq('+rowIndex+')').val(data.price);
                     $('.tire_price:eq('+rowIndex+')').val(function(index, value) {
                         return value
                           .replace(/\D/g, "")
@@ -1542,6 +1678,7 @@ function addRow(tableID){
                     var data = jQuery.parseJSON(data);
                     $('.max_number:eq('+rowIndex+')').val(data.max);
                     $('.tire_price:eq('+rowIndex+')').val(data.price);
+                    $('.tire_price_vat:eq('+rowIndex+')').val(data.price);
                     $('.tire_price:eq('+rowIndex+')').val(function(index, value) {
                         return value
                           .replace(/\D/g, "")
@@ -1553,17 +1690,17 @@ function addRow(tableID){
         }    
     });
 
-    /*$('.tire_number').keyup(function(){
+    $('.tire_number').keyup(function(){
         var row = $(this).parent().parent().parent().parent().parent().parent();
         var rowIndex = row[0].rowIndex;
 
         var val = parseInt($(this).val());
         var max = parseInt($('.max_number:eq('+rowIndex+')').val());
 
-        if (val > max) {
+        /*if (val > max) {
             alert('Vượt quá số lượng tồn!');
             $(this).val(max);
-        }
+        }*/
 
         var thanhtien = 0;
 
@@ -1588,7 +1725,7 @@ function addRow(tableID){
 
         $(':checkbox[name=dis]').prop('checked',false);
         $('#discount').val("");
-    });*/
+    });
 
     $('.tire_price').keyup(function(){
         var row = $(this).parent().parent().parent().parent().parent().parent();
@@ -1619,6 +1756,8 @@ function addRow(tableID){
 
         $(':checkbox[name=dis]').prop('checked',false);
         $('#discount').val("");
+
+        $('.tire_price_vat:eq('+rowIndex+')').val(val);
     });
 
 

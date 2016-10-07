@@ -74,7 +74,7 @@ Class liabilityController Extends baseController {
             
 
             $data = array(
-                'where' => '1=1',
+                'where' => 'code != ""',
             );
 
             if ($trangthai==1) {
@@ -105,7 +105,7 @@ Class liabilityController Extends baseController {
                 'order_by'=>$order_by,
                 'order'=>$order,
                 'limit'=>$x.','.$sonews,
-                'where' => '1=1',
+                'where' => 'code != ""',
             );
 
             if ($trangthai==1) {
@@ -148,7 +148,7 @@ Class liabilityController Extends baseController {
             $pagination_stages = 2;
             
             $data = array(
-                'where' => '1=1',
+                'where' => 'code != ""',
             );
 
             if ($trangthai==1) {
@@ -177,7 +177,7 @@ Class liabilityController Extends baseController {
                 'order_by'=>$order_by,
                 'order'=>$order,
                 'limit'=>$x.','.$sonews,
-                'where' => '(staff IS NULL OR staff <= 0)',
+                'where' => 'code != "" AND (staff IS NULL OR staff <= 0)',
             );
 
             if ($trangthai==1) {
