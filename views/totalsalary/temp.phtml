@@ -234,7 +234,8 @@ elseif ($order_by == 'staff_name')
             $tongdoanhthu += $dt;
 
             $chuyencan = isset($arr_attend[$salary->staff_id])?$arr_attend[$salary->staff_id]:0;
-            $luongchuyencan = $chuyencan*$den;
+            $luongchuyencan = $salary->staff_id==14?round((($chuyencan*$den)*50/12)/1000)*1000:$chuyencan*$den;
+            $luongchuyencan = $salary->staff_id==1?0:$luongchuyencan;
             $tongchuyencan += $luongchuyencan;
 
             $phone = isset($arr_phone[$salary->staff_id])?$arr_phone[$salary->staff_id]:0;

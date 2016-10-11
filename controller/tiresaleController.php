@@ -717,6 +717,10 @@ Class tiresaleController Extends baseController {
         if ($tu !== "" && $den != "") {
             $data['where'] .= ' AND tire_sale_date >= '.strtotime($tu).' AND tire_sale_date <= '.strtotime($den);
         }
+
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9) {
+            $data['where'] = $data['where'].' AND sale IN (SELECT staff_id FROM staff WHERE account = '.$_SESSION['userid_logined'].')';
+        }
       
         if ($keyword != '') {
             $search = '( code LIKE "%'.$keyword.'%" 

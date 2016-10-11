@@ -121,6 +121,7 @@ Class staffController Extends baseController {
                         'account' => trim($_POST['account']),
                         'status' => trim($_POST['status']),
                         'position' => trim($_POST['position']),
+                        'priority' => trim($_POST['priority']),
                         );
 
 

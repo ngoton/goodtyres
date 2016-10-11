@@ -26,7 +26,7 @@ Class totalsalaryController Extends baseController {
             $den = isset($_POST['den']) ? $_POST['den'] : null;
         }
         else{
-            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'position';
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'priority';
             $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
@@ -730,7 +730,7 @@ Class totalsalaryController Extends baseController {
             $den = isset($_POST['den']) ? $_POST['den'] : null;
         }
         else{
-            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'position';
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'priority';
             $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";

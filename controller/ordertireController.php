@@ -522,7 +522,7 @@ Class ordertireController Extends baseController {
             $order_tire_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$tire->order_tire_id));
             foreach ($order_tire_lists as $l) {
                 $data = array(
-                    'where' => 'start_date <= '.$tire->delivery_date.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                    'where' => 'start_date <= '.strtotime(date('t-m-Y',$tire->delivery_date)).' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
                     'order_by' => 'start_date',
                     'order' => 'DESC',
                     'limit' => 1,
@@ -1151,7 +1151,7 @@ Class ordertireController Extends baseController {
 
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
-                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['order_tire']."|order_tire|"."\n"."\r\n";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|discount|".$_POST['order_tire']."|order_tire|"."\n"."\r\n";
                         
                         $fh = fopen($filename, "a") or die("Could not open log file.");
                         fwrite($fh, $text) or die("Could not write file!");
@@ -1308,7 +1308,7 @@ Class ordertireController Extends baseController {
 
                             date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                             $filename = "action_logs.txt";
-                            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".implode("-",$data)."|order_tire_list|"."\n"."\r\n";
+                            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['yes']."|".implode("-",$data)."|order_tire_list|"."\n"."\r\n";
                             
                             $fh = fopen($filename, "a") or die("Could not open log file.");
                             fwrite($fh, $text) or die("Could not write file!");
@@ -1499,7 +1499,7 @@ Class ordertireController Extends baseController {
 
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
-                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['data']."|order_tire|"."\n"."\r\n";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|vat|".$_POST['data']."|order_tire|"."\n"."\r\n";
                         
                         $fh = fopen($filename, "a") or die("Could not open log file.");
                         fwrite($fh, $text) or die("Could not write file!");
@@ -1546,7 +1546,7 @@ Class ordertireController Extends baseController {
 
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
-                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['data']."|order_tire|"."\n"."\r\n";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|code|".$_POST['data']."|order_tire|"."\n"."\r\n";
                         
                         $fh = fopen($filename, "a") or die("Could not open log file.");
                         fwrite($fh, $text) or die("Could not write file!");
@@ -1570,7 +1570,7 @@ Class ordertireController Extends baseController {
 
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
-                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['data']."|order_tire|"."\n"."\r\n";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|approve|".$_POST['data']."|order_tire|"."\n"."\r\n";
                         
                         $fh = fopen($filename, "a") or die("Could not open log file.");
                         fwrite($fh, $text) or die("Could not write file!");
@@ -1712,7 +1712,7 @@ Class ordertireController Extends baseController {
 
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
-                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['data']."|order_tire|"."\n"."\r\n";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|exstock|".$_POST['data']."|order_tire|"."\n"."\r\n";
                         
                         $fh = fopen($filename, "a") or die("Could not open log file.");
                         fwrite($fh, $text) or die("Could not write file!");
@@ -1797,7 +1797,7 @@ Class ordertireController Extends baseController {
 
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
-                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['data']."|order_tire|"."\n"."\r\n";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|exstock|".$_POST['data']."|order_tire|"."\n"."\r\n";
                         
                         $fh = fopen($filename, "a") or die("Could not open log file.");
                         fwrite($fh, $text) or die("Could not write file!");
@@ -2060,6 +2060,16 @@ Class ordertireController Extends baseController {
             $payable_model->queryCosts('DELETE FROM payable WHERE payable_id='.$p->payable_id);
 
             $order_cost_model->queryTire('DELETE FROM order_tire_cost WHERE order_tire_cost_id = '.$order_tire_cost->order_tire_cost_id);
+
+            echo "Thêm thành công";
+
+            date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+            $filename = "action_logs.txt";
+            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."delete"."|".$order_tire_cost->order_tire_cost_id."|order_tire_cost_|"."\n"."\r\n";
+            
+            $fh = fopen($filename, "a") or die("Could not open log file.");
+            fwrite($fh, $text) or die("Could not write file!");
+            fclose($fh);
         }
     }
     public function getordercost(){

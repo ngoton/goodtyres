@@ -10,6 +10,14 @@ Class inventoryController Extends baseController {
         $this->view->data['lib'] = $this->lib;
         $this->view->data['title'] = 'Tồn kho lốp xe';
 
+        $thuonghieu = isset($_POST['thuonghieu'])?$_POST['thuonghieu']:0;
+        $kichco = isset($_POST['kichco'])?$_POST['kichco']:0;
+        $magai = isset($_POST['magai'])?$_POST['magai']:0;
+
+        $this->view->data['thuonghieu'] = $thuonghieu;
+        $this->view->data['kichco'] = $kichco;
+        $this->view->data['magai'] = $magai;
+
         $ngay = date('d-m-Y');
         if (isset($_POST['date'])) {
             $ngay = $_POST['date'];
@@ -20,7 +28,30 @@ Class inventoryController Extends baseController {
         $tire_sale_model = $this->model->get('tiresaleModel');
         $tire_buy_model = $this->model->get('tirebuyModel');
 
-        $query = "SELECT *,SUM(tire_buy_volume) AS soluong FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_buy_date <= ".strtotime($ngay)." AND tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern GROUP BY tire_buy_brand,tire_buy_size,tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC";
+        $tire_brand_model = $this->model->get('tirebrandModel');
+        $tire_size_model = $this->model->get('tiresizeModel');
+        $tire_pattern_model = $this->model->get('tirepatternModel');
+
+        $tire_brands = $tire_brand_model->getAllTire(array('order_by'=>'tire_brand_name ASC'));
+        $tire_sizes = $tire_size_model->getAllTire(array('order_by'=>'tire_size_number ASC'));
+        $tire_patterns = $tire_pattern_model->getAllTire(array('order_by'=>'tire_pattern_name ASC'));
+
+        $this->view->data['tire_brands'] = $tire_brands;
+        $this->view->data['tire_sizes'] = $tire_sizes;
+        $this->view->data['tire_patterns'] = $tire_patterns;
+
+        $query = "SELECT *,SUM(tire_buy_volume) AS soluong FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_buy_date <= ".strtotime($ngay)." AND tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern";
+        if ($thuonghieu > 0) {
+            $query .= " AND tire_buy_brand = ".$thuonghieu;
+        }
+        if ($kichco > 0) {
+            $query .= " AND tire_buy_size = ".$kichco;
+        }
+        if ($magai > 0) {
+            $query .= " AND tire_buy_pattern = ".$magai;
+        }
+        $query .= " GROUP BY tire_buy_brand,tire_buy_size,tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC";
+
         $tire_buys = $tire_buy_model->queryTire($query);
         $this->view->data['tire_buys'] = $tire_buys;
 
@@ -56,10 +87,32 @@ Class inventoryController Extends baseController {
         $this->view->data['tongsotrang'] = NULL;
         $this->view->data['limit'] = NULL;
         $this->view->data['sonews'] = NULL;
+
+        $qr = "WHERE 1=1";
+        if ($thuonghieu > 0) {
+            $qr .= " AND tire_buy_brand = ".$thuonghieu;
+        }
+        if ($kichco > 0) {
+            $qr .= " AND tire_buy_size = ".$kichco;
+        }
+        if ($magai > 0) {
+            $qr .= " AND tire_buy_pattern = ".$magai;
+        }
         
-        $buy = $tire_buy_model->queryTire('SELECT max(tire_buy_date) AS max FROM tire_buy');  
-        $sale = $tire_sale_model->queryTire('SELECT max(tire_sale_date) AS max FROM tire_sale'); 
-        $order = $tire_order_model->queryTire('SELECT max(tire_receive_date) AS max FROM tire_order');
+        $buy = $tire_buy_model->queryTire('SELECT max(tire_buy_date) AS max FROM tire_buy '.$qr);  
+
+        $qr = "WHERE 1=1";
+        if ($thuonghieu > 0) {
+            $qr .= " AND tire_brand = ".$thuonghieu;
+        }
+        if ($kichco > 0) {
+            $qr .= " AND tire_size = ".$kichco;
+        }
+        if ($magai > 0) {
+            $qr .= " AND tire_pattern = ".$magai;
+        }
+        $sale = $tire_sale_model->queryTire('SELECT max(tire_sale_date) AS max FROM tire_sale '.$qr); 
+        $order = $tire_order_model->queryTire('SELECT max(tire_receive_date) AS max FROM tire_order '.$qr);
 
         $max = 0;
 
@@ -86,9 +139,31 @@ Class inventoryController Extends baseController {
 
         $total = 0;
 
-        $buys = $tire_buy_model->queryTire('SELECT sum(tire_buy_volume) AS total_buy FROM tire_buy WHERE tire_buy_date < '.$today);  
-        $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE customer != 119 AND tire_sale_date < '.$today); 
-        $orders = $tire_order_model->queryTire('SELECT sum(tire_number) AS total_order FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date > 0 AND tire_receive_date < '.$today);
+        $qr = " AND 1=1";
+        if ($thuonghieu > 0) {
+            $qr .= " AND tire_buy_brand = ".$thuonghieu;
+        }
+        if ($kichco > 0) {
+            $qr .= " AND tire_buy_size = ".$kichco;
+        }
+        if ($magai > 0) {
+            $qr .= " AND tire_buy_pattern = ".$magai;
+        }
+
+        $buys = $tire_buy_model->queryTire('SELECT sum(tire_buy_volume) AS total_buy FROM tire_buy WHERE tire_buy_date < '.$today.$qr);  
+
+        $qr = " AND 1=1";
+        if ($thuonghieu > 0) {
+            $qr .= " AND tire_brand = ".$thuonghieu;
+        }
+        if ($kichco > 0) {
+            $qr .= " AND tire_size = ".$kichco;
+        }
+        if ($magai > 0) {
+            $qr .= " AND tire_pattern = ".$magai;
+        }
+        $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE customer != 119 AND tire_sale_date < '.$today.$qr); 
+        $orders = $tire_order_model->queryTire('SELECT sum(tire_number) AS total_order FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date > 0 AND tire_receive_date < '.$today.$qr);
 
         foreach ($buys as $buy) {
             $total += $buy->total_buy;
@@ -104,9 +179,9 @@ Class inventoryController Extends baseController {
 
         $this->view->data['total'] = $total;
 
-        $buys = $tire_buy_model->queryTire('SELECT * FROM tire_buy WHERE tire_buy_date >= '.$today);  
-        $sales = $tire_sale_model->queryTire('SELECT * FROM tire_sale WHERE customer != 119 AND tire_sale_date >= '.$today); 
-        $orders = $tire_order_model->queryTire('SELECT * FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date >= '.$today);
+        $buys = $tire_buy_model->queryTire('SELECT * FROM tire_buy WHERE tire_buy_date >= '.$today.$qr);  
+        $sales = $tire_sale_model->queryTire('SELECT * FROM tire_sale WHERE customer != 119 AND tire_sale_date >= '.$today.$qr); 
+        $orders = $tire_order_model->queryTire('SELECT * FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date >= '.$today.$qr);
 
         $tire = array();
 

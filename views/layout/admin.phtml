@@ -633,7 +633,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a data="ordertire" href="<?php echo $this->url('ordertire') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Đặt hàng</a>
+            <li><a data="ordertire" href="<?php echo $this->url('ordertire') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Đơn đặt hàng</a>
               <ul class="treeview-menu">
                 <li><a  data="ordertire" href="<?php echo $this->url('ordertire') ?>">
                     <i class="fa fa-circle-o text-aqua"></i>Đặt hàng
@@ -650,7 +650,7 @@
 
               </ul>
             </li>
-            <li><a data="ecart" href="<?php echo $this->url('ecart') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Đơn đặt hàng</a></li>
+            <li><a data="ecart" href="<?php echo $this->url('ecart') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Đơn hàng (Web)</a></li>
             <li><a  data="tiresale/sale" href="<?php echo $this->url('tiresale/sale') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Sản lượng bán</a>
               <ul class="treeview-menu">
                 <li><a  data="tiresale/sale" href="<?php echo $this->url('tiresale/sale') ?>"><i class="fa fa-circle-o text-aqua"></i>Sản lượng</a></li>
@@ -668,6 +668,7 @@
               </ul>
             </li>
             <li><a  data="tiresalary" href="<?php echo $this->url('tiresalary') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Doanh số bán hàng</a></li>
+            <li><a  data="tiredebit" href="<?php echo $this->url('tiredebit') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Công nợ</a></li>
             <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3){ ?>
             <li><a  data="tireimport" href="<?php echo $this->url('tireimport') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Giá vốn</a>
               <ul class="treeview-menu">

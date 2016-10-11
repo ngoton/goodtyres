@@ -15,12 +15,32 @@
 
 </div>
 <div style="width:90%;">
+    <form id="inven" method="post" action="">
     <div style="text-align:left">
-        <form id="inven" method="post" action="">
-            Ngày: <input style="width:90px" type="text"  id="date" name="date" value="<?php echo $ngay ?>"><input type="submit" id="check" value="Kiểm tra">
-        </form>
-        
+            Ngày: <input style="width:90px" type="text"  id="date" name="date" value="<?php echo $ngay ?>"><input type="submit" id="check" value="Kiểm tra">     
     </div>
+    <div class="add-box">
+        <select id="thuonghieu" name="thuonghieu" style="width:120px">
+            <option value="0">Thương hiệu</option>
+            <?php foreach ($tire_brands as $tire_brand) { ?>
+                <option value="<?php echo $tire_brand->tire_brand_id ?>"><?php echo $tire_brand->tire_brand_name ?></option>
+            <?php } ?>
+        </select>
+        <select id="kichco" name="kichco" style="width:100px">
+            <option value="0">Kích cỡ</option>
+            <?php foreach ($tire_sizes as $tire_size) { ?>
+                <option value="<?php echo $tire_size->tire_size_id ?>"><?php echo $tire_size->tire_size_number ?></option>
+            <?php } ?>
+        </select>
+        <select id="magai" name="magai" style="width:80px">
+            <option value="0">Mã gai</option>
+            <?php foreach ($tire_patterns as $tire_pattern) { ?>
+                <option value="<?php echo $tire_pattern->tire_pattern_id ?>"><?php echo $tire_pattern->tire_pattern_name ?></option>
+            <?php } ?>
+        </select>
+        <input type="submit" id="check2" value="Chọn">
+    </div>
+    </form>
 </div>
 <div style="clear:both"></div>
 
@@ -129,6 +149,12 @@
 <script type="text/javascript">
     
 var ngay = "<?php echo $ngay ?>";
+var t = "<?php echo $thuonghieu ?>";
+$('#thuonghieu option[value='+t+']').attr('selected','selected');
+var s = "<?php echo $kichco ?>";
+$('#kichco option[value='+s+']').attr('selected','selected');
+var p = "<?php echo $magai ?>";
+$('#magai option[value='+p+']').attr('selected','selected');
 
         //load the Google Visualization API and the chart
     google.load('visualization', '1', {'packages':['corechart']});

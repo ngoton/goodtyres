@@ -133,6 +133,7 @@ elseif ($order_by == 'username')
             <td class="fix" data="<?php echo $staff->account; ?>" id="account_<?php echo $staff->staff_id; ?>"><?php echo $staff->account>0?($staff->account==$user['user_id'][$staff->account]?$user['username'][$staff->account]:null):""; ?></td>
             <td class="fix" id="position_<?php echo $staff->staff_id; ?>"><?php echo $staff->position; ?></td>
             <td style="display:none" class="fix" id="status_<?php echo $staff->staff_id; ?>"><?php echo $staff->status; ?></td>
+            <td style="display:none" class="fix" id="priority_<?php echo $staff->staff_id; ?>"><?php echo $staff->priority; ?></td>
             <td>
                 <?php if($_SESSION['role_logined'] != 10){ ?>
                 <button onclick="del(<?php echo $staff->staff_id ?>)" >Xóa</button>
@@ -224,6 +225,10 @@ $this->helper('slidePaginator');
                                 </select>
                             </td>
                         </tr>
+                        <tr>
+                            <td>Thứ tự vị trí</td>
+                            <td><input type="number"  id="priority" name="priority" tabindex="11" ></td>
+                        </tr>
                         
                         <tr>
                             <td>&nbsp;</td>
@@ -236,8 +241,8 @@ $this->helper('slidePaginator');
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="8"></td>
-                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="9"></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="12"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="13"></td>
                             <td></td>
                             <td></td>
                              
@@ -293,6 +298,7 @@ $('html').click(function(e) {
             var bank = $(this).find("#bank_"+$(this).attr('id')).text();
             var status = $(this).find("#status_"+$(this).attr('id')).text();
             var position = $(this).find("#position_"+$(this).attr('id')).text();
+            var priority = $(this).find("#priority_"+$(this).attr('id')).text();
             //alert(staff_code);
             $('#yes').val($(this).attr('id'));
             
@@ -307,6 +313,7 @@ $('html').click(function(e) {
             $('#cmnd').val(cmnd);
             $('#bank').val(bank);
             $('#position').val(position);
+            $('#priority').val(priority);
             
             var radioLength = $("input[name='staff_gender']").length;
             for(var i = 0; i < radioLength; i++) {
@@ -346,6 +353,7 @@ function add_click(){
         $('#staff_phone').val("");
         $('#staff_email').val("");
         $('#position').val("");
+        $('#priority').val("");
         $("input[name='status'][value='1']").attr('checked',true);
         
         $('.number').focus(function(){
@@ -390,6 +398,7 @@ $(document).ready(function(){
                     var account = $('#account').attr('value');
                     var status = $('input[name=status]:checked').val();
                     var position = $('#position').attr('value');
+                    var priority = $('#priority').attr('value');
 
                     var yes = $('#yes').attr('value');
                     var check = $('#staff_code').attr('data');
@@ -414,6 +423,7 @@ $(document).ready(function(){
                             position:position,
                             yes: yes,
                             check: check,
+                            priority: priority,
                             }, // giá trị post
                         success: function(answer){ // if everything goes well
                             //alert(answer);

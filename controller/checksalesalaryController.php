@@ -38,12 +38,10 @@ Class checksalesalaryController Extends baseController {
             $nv = "";
         }
 
-        $nv = $this->registry->router->param_id;
-
         $ngay = $this->registry->router->addition;
 
-        if ($nv > 0) {
-            $trangthai = $nv;
+        if ($this->registry->router->param_id > 0) {
+            $trangthai = $this->registry->router->param_id;
         }
         if ($ngay > 0) {
             $batdau = '01-'.date('m-Y',$ngay);
@@ -173,7 +171,7 @@ Class checksalesalaryController Extends baseController {
             }
             else{
                 $data = array(
-                    'where' => 'tire_sale_date < '.$order_tire->delivery_date,
+                    'where' => 'customer = '.$order_tire->customer.' AND tire_sale_date < '.$order_tire->delivery_date,
                 );
                 $sale_olds = $tiresale_model->getAllTire($data);
                 foreach ($sale_olds as $sale) {
@@ -342,7 +340,7 @@ Class checksalesalaryController Extends baseController {
             else{
 
                 $data = array(
-                    'where' => 'tire_sale_date < '.$order_tire->delivery_date,
+                    'where' => 'customer = '.$order_tire->customer.' AND tire_sale_date < '.$order_tire->delivery_date,
                 );
                 $sale_olds = $tiresale_model->getAllTire($data);
                 foreach ($sale_olds as $sale) {
