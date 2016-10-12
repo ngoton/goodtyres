@@ -32,23 +32,27 @@ elseif ($order_by == 'order_number')
         <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
     </div>
     <div class="tablenav top">       
-        
-        <div class="add-box">
-            <select id="sl_status" name="sl_status" style="width:200px">
-                <option value="">Khách hàng</option>
-                <?php foreach ($customers as $customer) { ?>
-                    <option value="<?php echo $customer->customer_id ?>"><?php echo $customer->customer_name ?></option>
-                <?php } ?>
-            </select>
-            <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
-        </div>
-
         <div class="add-box">
             <select id="sl_nv" name="sl_nv" style="width:150px">
                 <option value="">Nhân viên</option>
                 <?php foreach ($staffs as $staff) { ?>
                     <option value="<?php echo $staff->staff_id ?>"><?php echo $staff->staff_name ?></option>
                 <?php } ?>
+            </select>
+            <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+        </div>
+        <div class="alignleft actions">
+            <input autocomplete="off" type="text" name="customer" id="customer" placeholder="Tên khách hàng" <?php echo isset($customers)?'value="'.$customers->customer_name.'"':null ?> />
+            <ul id="customer_list_id"></ul>
+            <input type="hidden" name="sl_status" id="sl_status" <?php echo isset($trangthai)?'value="'.$trangthai.'"':null ?> >
+            <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+        </div>
+
+        
+        <div class="alignleft actions">
+            <select id="sl_tha" name="sl_tha" >
+                <option value="0">Còn nợ</option>
+                <option value="1">Đã thanh toán</option>
             </select>
             <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
         </div>
@@ -164,8 +168,8 @@ $this->helper('slidePaginator');
 
 
 <script type="text/javascript">
-var c = "<?php echo $trangthai ?>";
-$('#sl_status option[value='+c+']').attr('selected','selected');
+var c = "<?php echo $tha ?>";
+$('#sl_tha option[value='+c+']').attr('selected','selected');
 var n = "<?php echo $nv ?>";
 $('#sl_nv option[value='+n+']').attr('selected','selected');
 
@@ -220,5 +224,50 @@ $(".pay_money").click(function(){
     });
 
 
+function set_item(item,value,company,phone,address,email,ngay,mst,type) {
+    // change input value
+    $('#customer').val(item);
+    $("#customer").attr("data",value);
+    $('#sl_status').val(value);
+    $('#customer_list_id').hide();
+    $('#customer').focus();
 
+}
+
+$('#customer').keyup(function(){
+      
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/ordertire/getcustomer',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#customer_list_id').slideDown(200);
+                $('#customer_list_id').html(data);
+            }
+        });
+        if ($('#customer').val() == "" || $('#customer').attr('data') == "") {
+            
+            $('#customer').attr('data',"");
+            $('#sl_status').val("");
+        }
+      
+      
+   });  
+$('#customer').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#customer').attr('data',"");
+            $('#sl_status').val("");
+        }
+            
+      });  
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        //$('.add-field').slideUp(500);      
+    }
+    $('#customer_list_id').slideUp(200); 
+    
+});
 </script>

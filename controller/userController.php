@@ -85,6 +85,7 @@ Class userController Extends baseController {
                             setcookie("uu", 'yf'.base64_encode($row->username),time()+30*60*24*100,"/");
                             setcookie("ui", 'kq'.base64_encode($row->user_id),time()+30*60*24*100,"/");
                             setcookie("ro", 'xg'.base64_encode($row->role),time()+30*60*24*100,"/");
+                            setcookie("up", 'oi'.md5($_POST['password']),time()+30*60*24*100,"/");
                          }
 
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
@@ -126,6 +127,7 @@ Class userController Extends baseController {
         setcookie("uu", "",time() - 3600,"/");
         setcookie("ui", "",time() - 3600,"/");
         setcookie("ro", "",time() - 3600,"/");
+        setcookie("up", "",time() - 3600,"/");
         return $this->view->redirect('');
     }
 

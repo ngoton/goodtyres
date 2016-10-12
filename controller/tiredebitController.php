@@ -16,6 +16,7 @@ Class tiredebitController Extends baseController {
             $limit = 18446744073709;
             $trangthai = isset($_POST['trangthai']) ? $_POST['trangthai'] : null;
             $nv = isset($_POST['nv']) ? $_POST['nv'] : null;
+            $tha = isset($_POST['tha']) ? $_POST['tha'] : null;
         }
         else{
             $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'order_number';
@@ -25,15 +26,13 @@ Class tiredebitController Extends baseController {
             $limit = 18446744073709;
             $trangthai = 0;
             $nv = 0;
+            $tha = 0;
         }
 
         $customer_model = $this->model->get('customerModel');
-        $customers = $customer_model->getAllCustomer(array(
-            'order_by'=> 'customer_name',
-            'order'=> 'ASC',
-            ));
+        $customers = $customer_model->getCustomer($trangthai);
 
-        $this->view->data['customers'] = $customers;
+        
 
         $staff_model = $this->model->get('staffModel');
         $staffs = $staff_model->getAllStaff(array(
@@ -50,12 +49,23 @@ Class tiredebitController Extends baseController {
         $x = ($page-1) * $sonews;
         $pagination_stages = 2;
         
-        $data = array(
-            'where'=>'(pay_money IS NULL OR pay_money < money)',
-        );
+        
+
+        if ($tha == 0) {
+            $data = array(
+                'where'=>'(pay_money IS NULL OR pay_money < money)',
+            );
+        }
+        else{
+            $data = array(
+                'where'=>'pay_money = money',
+            );
+        }
 
         if ($trangthai > 0) {
             $data['where'] .= ' AND customer_id = '.$trangthai;
+
+            $this->view->data['customers'] = $customers;
         }
 
         if ($nv > 0) {
@@ -81,6 +91,7 @@ Class tiredebitController Extends baseController {
         $this->view->data['sonews'] = $sonews;
         $this->view->data['trangthai'] = $trangthai;
         $this->view->data['nv'] = $nv;
+        $this->view->data['tha'] = $tha;
 
         $data = array(
             'order_by'=>$order_by,
@@ -88,6 +99,13 @@ Class tiredebitController Extends baseController {
             'limit'=>$x.','.$sonews,
             'where'=>'(pay_money IS NULL OR pay_money < money)',
             );
+
+        if ($tha == 0) {
+            $data['where'] = '(pay_money IS NULL OR pay_money < money)';
+        }
+        else{
+            $data['where'] = 'pay_money = money';
+        }
 
         if ($trangthai > 0) {
             $data['where'] .= ' AND customer_id = '.$trangthai;
