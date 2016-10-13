@@ -1308,6 +1308,13 @@ Class dailyController Extends baseController {
                             $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$_POST['yes'].' AND receivable = '.$daily->receivable);
                             $receive_model->queryCosts('DELETE FROM receive WHERE additional = '.$_POST['yes']);
                             $obtain_model->queryObtain('DELETE FROM obtain WHERE additional = '.$_POST['yes']);
+
+                            $receivable = $receivable_model->getCosts($daily->receivable);
+                            $data_receivable = array(
+                                'pay_date' => $data['daily_date'],
+                                'pay_money' => $receivable->pay_money - $data['money_in'],
+                            );
+                            $receivable_model->updateCosts($data_receivable,array('receivable_id'=>$daily->receivable));
                         }
                         else{
                             if ($daily->receivable == $data['receivable']) {
@@ -1365,10 +1372,18 @@ Class dailyController Extends baseController {
                                 $receive_model->queryCosts('DELETE FROM receive WHERE additional = '.$_POST['yes']);
                                 $obtain_model->queryObtain('DELETE FROM obtain WHERE additional = '.$_POST['yes']);
 
+                                $receivable = $receivable_model->getCosts($daily->receivable);
+                                $data_receivable = array(
+                                    'pay_date' => $data['daily_date'],
+                                    'pay_money' => $receivable->pay_money - $data['money_in'],
+                                );
+                                $receivable_model->updateCosts($data_receivable,array('receivable_id'=>$daily->receivable));
+
+
                                 $receivable = $receivable_model->getCosts($data['receivable']);
                                 $data_receivable = array(
                                     'pay_date' => $data['daily_date'],
-                                    'pay_money' => $receivable->pay_money - $daily->money_in + $data['money_in'],
+                                    'pay_money' => $receivable->pay_money + $data['money_in'],
                                 );
                                 $receivable_model->updateCosts($data_receivable,array('receivable_id'=>$data['receivable']));
 
@@ -1476,6 +1491,13 @@ Class dailyController Extends baseController {
                             $assets_model->queryAssets('DELETE FROM assets WHERE additional = '.$_POST['yes'].' AND payable = '.$daily->payable);
                             $pay_model->queryCosts('DELETE FROM pay WHERE additional = '.$_POST['yes'].' AND payable = '.$daily->payable);
                             $owe_model->queryOwe('DELETE FROM owe WHERE additional = '.$_POST['yes']);
+
+                            $payable = $payable_model->getCosts($daily->payable);
+                            $data_payable = array(
+                                'pay_date' => $data['daily_date'],
+                                'pay_money' => $payable->pay_money - $data['money_out'],
+                            );
+                            $payable_model->updateCosts($data_payable,array('payable_id'=>$daily->payable));
                         }
                         else{
                             if ($daily->payable == $data['payable']) {
@@ -1534,10 +1556,17 @@ Class dailyController Extends baseController {
                                 $pay_model->queryCosts('DELETE FROM pay WHERE additional = '.$_POST['yes'].' AND payable = '.$daily->payable);
                                 $owe_model->queryOwe('DELETE FROM owe WHERE additional = '.$_POST['yes']);
 
+                                $payable = $payable_model->getCosts($daily->payable);
+                                $data_payable = array(
+                                    'pay_date' => $data['daily_date'],
+                                    'pay_money' => $payable->pay_money - $data['money_out'],
+                                );
+                                $payable_model->updateCosts($data_payable,array('payable_id'=>$daily->payable));
+
                                 $payable = $payable_model->getCosts($data['payable']);
                                 $data_payable = array(
                                     'pay_date' => $data['daily_date'],
-                                    'pay_money' => $payable->pay_money - $daily->money_out + $data['money_out'],
+                                    'pay_money' => $payable->pay_money + $data['money_out'],
                                 );
                                 $payable_model->updateCosts($data_payable,array('payable_id'=>$data['payable']));
 
