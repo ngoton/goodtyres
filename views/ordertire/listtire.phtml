@@ -50,7 +50,7 @@
             <td class="fix"  id="tire_number_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire_list->tire_number; ?></td>
             <td class="fix"  id="tire_price_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire->check_price_vat==1?$lib->formatMoney($order_tire_list->tire_price_vat):$lib->formatMoney($order_tire_list->tire_price); ?></td>
             <td class="fix"  id="price_<?php echo $order_tire_list->order_tire_list_id; ?>">
-              <?php echo isset($price[$order_tire_list->order_tire_list_id])?round((($order_tire_list->tire_price_vat>0?$order_tire_list->tire_price_vat:$order_tire_list->tire_price)*100)/$price[$order_tire_list->order_tire_list_id],1)."%":null; ?>
+              <?php echo isset($price[$order_tire_list->order_tire_list_id])?round((($order_tire_list->tire_price_vat>0?$order_tire_list->tire_price_vat-(($order_tire_list->tire_number*($order_tire->discount+$order_tire->reduce))/$order_tire->order_tire_number)/$order_tire_list->tire_number:$order_tire_list->tire_price-(($order_tire_list->tire_number*($order_tire->discount+$order_tire->reduce))/$order_tire->order_tire_number)/$order_tire_list->tire_number)*100)/$price[$order_tire_list->order_tire_list_id],1)."%":null; ?>
             </td>
             <td class="fix"  id="vat_<?php echo $order_tire_list->order_tire_list_id; ?>">
               <?php echo $order_tire->vat_percent>0?$order_tire->vat_percent.'%':null; ?>
@@ -60,7 +60,7 @@
             </td>
             <td>
                 <input type="hidden" id="tire_price_vat_<?php echo $order_tire_list->order_tire_list_id; ?>" value="<?php echo $order_tire_list->tire_price ?>">
-                <button class="del" data="<?php echo $order_tire_list->order_tire_list_id ?>" style="display:block">Xóa</button>
+                <button class="del_list" data="<?php echo $order_tire_list->order_tire_list_id ?>" style="display:block">Xóa</button>
             </td>
         </tr>
     <?php endforeach; ?>
@@ -611,7 +611,7 @@ $('.tire_brand').keyup(function(){
 </div>
 
 <script type="text/javascript">
-$('.del').click(function(){
+$('.del_list').click(function(){
     var id = $(this).attr('data');
     var r = confirm("Bạn có chắc chắn muốn xóa không?");
       if (r == true){
