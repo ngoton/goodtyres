@@ -84,7 +84,7 @@ elseif ($order_by == 'customer_name')
    <tbody>
     <?php $tongsl=0; $tongkhtra=0; $tongdatra=0; $tongcon=0; ?>
     <?php foreach ($customers as $order_tire) : 
-    if (isset($data_customer['pay_money'][$order_tire->customer_id]) && ($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]>0)) {
+    if (isset($data_customer['money'][$order_tire->customer_id]) && ($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]>0)) {
     $tongsl += $data_customer['number'][$order_tire->customer_id];
     $tongkhtra += $data_customer['money'][$order_tire->customer_id];
     $tongdatra += $data_customer['pay_money'][$order_tire->customer_id];

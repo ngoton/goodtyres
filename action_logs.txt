@@ -2494,3 +2494,7 @@ bxep: 6x14 = 84k-5-4--1484000
 
 13/10/2016 16:31:11|admincmg|edit|1117|daily|2-Bidv--gt-1475618400-Phí ck---160902-0-1290430--2565-
 
+21/10/2016 09:03:39|admincmg|edit|1093|daily|1-phuong--phuong-1475445600-Cty Hi-con VN đặt cọc----25000000-0---1509,1514
+
+21/10/2016 09:04:31|admincmg|edit|1093|daily|1-phuong--phuong-1475445600-Cty Hi-con VN đặt cọc----25000000-0---1509,1514,1516
+
