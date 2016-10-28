@@ -14,6 +14,10 @@ Class tireimportdetailController Extends baseController {
             $page = isset($_POST['page']) ? $_POST['page'] : null;
             $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
             $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
+            $code = isset($_POST['batdau']) ? $_POST['batdau'] : null;
+            $thuonghieu = isset($_POST['ngaytao']) ? $_POST['ngaytao'] : null;
+            $size = isset($_POST['ngaytaobatdau']) ? $_POST['ngaytaobatdau'] : null;
+            $magai = isset($_POST['trangthai']) ? $_POST['trangthai'] : null;
         }
         else{
             $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'tire_brand_name';
@@ -21,6 +25,10 @@ Class tireimportdetailController Extends baseController {
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
             $limit = 20;
+            $code = 0;
+            $thuonghieu = 0;
+            $size = 0;
+            $magai = 0;
         }
 
         
@@ -39,6 +47,10 @@ Class tireimportdetailController Extends baseController {
         $join = array('table'=>'tire_brand, tire_size, tire_pattern','where'=>'tire_brand.tire_brand_id = tire_import_detail.tire_brand AND tire_size.tire_size_id = tire_import_detail.tire_size AND tire_pattern.tire_pattern_id = tire_import_detail.tire_pattern');
 
         $tire_import_detail_model = $this->model->get('tireimportdetailModel');
+
+        $list_code = $tire_import_detail_model->queryTire('SELECT code FROM tire_import_detail GROUP BY code ORDER BY code ASC');
+        $this->view->data['list_code'] = $list_code;
+
         $sonews = $limit;
         $x = ($page-1) * $sonews;
         $pagination_stages = 2;
@@ -46,6 +58,19 @@ Class tireimportdetailController Extends baseController {
         $data = array(
             'where' => '1=1',
         );
+
+        if ($code>0) {
+            $data['where'] .= ' AND code = '.$code;
+        }
+        if ($thuonghieu>0) {
+            $data['where'] .= ' AND tire_brand = '.$thuonghieu;
+        }
+        if ($size>0) {
+            $data['where'] .= ' AND tire_size = '.$size;
+        }
+        if ($magai>0) {
+            $data['where'] .= ' AND tire_pattern = '.$magai;
+        }
         
         
         $tongsodong = count($tire_import_detail_model->getAllTire($data,$join));
@@ -61,6 +86,11 @@ Class tireimportdetailController Extends baseController {
         $this->view->data['limit'] = $limit;
         $this->view->data['sonews'] = $sonews;
 
+        $this->view->data['code'] = $code;
+        $this->view->data['thuonghieu'] = $thuonghieu;
+        $this->view->data['size'] = $size;
+        $this->view->data['magai'] = $magai;
+
         $data = array(
             'order_by'=>$order_by,
             'order'=>$order,
@@ -68,6 +98,18 @@ Class tireimportdetailController Extends baseController {
             'where' => '1=1',
             );
         
+        if ($code>0) {
+            $data['where'] .= ' AND code = '.$code;
+        }
+        if ($thuonghieu>0) {
+            $data['where'] .= ' AND tire_brand = '.$thuonghieu;
+        }
+        if ($size>0) {
+            $data['where'] .= ' AND tire_size = '.$size;
+        }
+        if ($magai>0) {
+            $data['where'] .= ' AND tire_pattern = '.$magai;
+        }
       
         if ($keyword != '') {
             $search = '( tire_brand_name LIKE "%'.$keyword.'%" 

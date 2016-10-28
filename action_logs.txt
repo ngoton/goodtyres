@@ -2498,3 +2498,9 @@ bxep: 6x14 = 84k-5-4--1484000
 
 21/10/2016 09:04:31|admincmg|edit|1093|daily|1-phuong--phuong-1475445600-Cty Hi-con VN đặt cọc----25000000-0---1509,1514,1516
 
+24/10/2016 10:37:57|admincmg|edit|56|staff|NV50-Nguyễn Thị Minh Trang-01/09/1996-1------0-1-Kế toán-15---1-1477280277
+
+24/10/2016 10:38:47|admincmg|edit|56|staff|NV50-Nguyễn Thị Minh Trang-01/09/1996-1------0-1-Kế toán-15-1476741600-1476914400-1-1477280327
+
+28/10/2016 13:38:11|admincmg|delete|314|order_tire_cost_|
+

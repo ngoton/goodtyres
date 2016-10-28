@@ -278,7 +278,7 @@ Class ordertireController Extends baseController {
             $data['where'] = 'order_number = "'.$sodonhang.'"';
         }
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
             $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
         }
 
@@ -329,7 +329,7 @@ Class ordertireController Extends baseController {
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
         }
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
 
             return $this->view->redirect('user/login');
 
@@ -500,7 +500,7 @@ Class ordertireController Extends baseController {
             $data['where'] .= ' AND order_number = '.$code;
         }
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
             $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
         }
 
@@ -578,9 +578,11 @@ Class ordertireController Extends baseController {
                     $expect_date = date('d-m-Y',strtotime('+'.$rs->customer_after_date.' day', strtotime(date('d-m-Y'))));
                 }
                 
-                $type = $tire_sale_model->getTireByWhere(array('customer'=>$rs->customer_id));
-                if ($type) {
-                    $type = $type->customer_type;
+                $types = $tire_sale_model->getAllTire(array('where'=>'customer='.$rs->customer_id,'order_by'=>'tire_sale_date','order'=>'DESC','limit'=>1));
+                if ($types) {
+                    foreach ($types as $t) {
+                        $type = $t->customer_type;
+                    }
                 }
                 else{
                     $type = 1;
@@ -1513,7 +1515,7 @@ Class ordertireController Extends baseController {
             $order_tire_model = $this->model->get('ordertireModel');
 
             $id = trim($_POST['data']);
-            $order_number = trim($_POST['order_number']);
+            $order_number = strtolower(trim($_POST['order_number']));
 
             $data = array(
                 'order_number'=>$order_number,
@@ -2072,6 +2074,35 @@ Class ordertireController Extends baseController {
             fclose($fh);
         }
     }
+    public function getvendor(){
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $vendor_model = $this->model->get('shipmentvendorModel');
+            
+            if ($_POST['keyword'] == "*") {
+                $list = $vendor_model->getAllVendor();
+            }
+            else{
+                $data = array(
+                'where'=>'( shipment_vendor_name LIKE "%'.$_POST['keyword'].'%" )',
+                );
+                $list = $vendor_model->getAllVendor($data);
+            }
+            
+
+            foreach ($list as $rs) {
+                // put in bold the written text
+                $shipment_vendor_name = $rs->shipment_vendor_name;
+                if ($_POST['keyword'] != "*") {
+                    $shipment_vendor_name = str_replace($_POST['keyword'], '<b>'.$_POST['keyword'].'</b>', $rs->shipment_vendor_name);
+                }
+                // add new option
+                echo '<li onclick="set_item_other(\''.$rs->shipment_vendor_name.'\',\''.$rs->shipment_vendor_id.'\',\''.$_POST['offset'].'\')">'.$shipment_vendor_name.'</li>';
+            }
+        }
+    }
     public function getordercost(){
         if(isset($_POST['order_tire'])){
             $order_cost_model = $this->model->get('ordertirecostModel');
@@ -2129,7 +2160,9 @@ Class ordertireController Extends baseController {
                     $str .= '<option  value="7">Khác</option></select></td></tr>';
                     
                     $str .= '<tr class="'.$_POST['order_tire'] .'">';
-                    $str .= '<td></td><td> Vendor</td><td><select tabindex="2" class="vendor" name="vendor[]" style="width:200px">'.$opt.'</select><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a></td>';
+                    $str .= '<td></td><td> Vendor</td><td><input required="required" type="text" class="vendor" name="vendor[]" autocomplete="false" placeholder="Nhập tên hoặc * để chọn"><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a>';
+                    $str .= '<ul class="customer_list_id"></ul></td>';
+                    //$str .= '<td></td><td> Vendor</td><td><select tabindex="2" class="vendor" name="vendor[]" style="width:200px">'.$opt.'</select><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a></td>';
                     $str .= '<td>Ngày chi</td>';
                     $str .= '<td><input tabindex="5" class="order_tire_cost_date" type="date"   name="order_tire_cost_date[]" required="required" value=""></td></tr>';
                     
@@ -2199,7 +2232,9 @@ Class ordertireController Extends baseController {
                     $str .= '<option '.$khac .' value="7">Khác</option></select></td></tr>';
                     
                     $str .= '<tr class="'.$v->order_tire .'">';
-                    $str .= '<td></td><td> Vendor</td><td><select disabled tabindex="2" class="vendor" name="vendor[]" style="width:200px">'.$opt.'</select><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a></td>';
+                    $str .= '<td></td><td> Vendor</td><td><input required="required" type="text" disabled value="'.$vendor_model->getvendor($v->vendor)->shipment_vendor_name.'" data="'.$v->vendor.'" class="vendor" name="vendor[]" required="required" autocomplete="false" placeholder="Nhập tên hoặc * để chọn"><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a>';
+                    $str .= '<ul class="customer_list_id"></ul></td>';
+                    //$str .= '<td></td><td> Vendor</td><td><select disabled tabindex="2" class="vendor" name="vendor[]" style="width:200px">'.$opt.'</select><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a></td>';
                     $str .= '<td>Ngày chi</td>';
                     $str .= '<td><input tabindex="5" class="order_tire_cost_date" type="date"   name="order_tire_cost_date[]" required="required" value="'.date('Y-m-d',$v->order_tire_cost_date) .'"></td></tr>';
                     

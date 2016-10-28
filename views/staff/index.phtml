@@ -134,6 +134,8 @@ elseif ($order_by == 'username')
             <td class="fix" id="position_<?php echo $staff->staff_id; ?>"><?php echo $staff->position; ?></td>
             <td style="display:none" class="fix" id="status_<?php echo $staff->staff_id; ?>"><?php echo $staff->status; ?></td>
             <td style="display:none" class="fix" id="priority_<?php echo $staff->staff_id; ?>"><?php echo $staff->priority; ?></td>
+            <td style="display:none" class="fix" id="start_date_<?php echo $staff->staff_id; ?>"><?php echo $staff->start_date>0?$lib->hien_thi_ngay_thang($staff->start_date):null; ?></td>
+            <td style="display:none" class="fix" id="end_date_<?php echo $staff->staff_id; ?>"><?php echo $staff->end_date>0?$lib->hien_thi_ngay_thang($staff->end_date):null; ?></td>
             <td>
                 <?php if($_SESSION['role_logined'] != 10){ ?>
                 <button onclick="del(<?php echo $staff->staff_id ?>)" >Xóa</button>
@@ -227,7 +229,11 @@ $this->helper('slidePaginator');
                         </tr>
                         <tr>
                             <td>Thứ tự vị trí</td>
-                            <td><input type="number"  id="priority" name="priority" tabindex="11" ></td>
+                            <td><input type="number"  id="priority" name="priority" tabindex="11" style="width:50px" ></td>
+                            <td>Ngày làm việc</td>
+                            <td><input type="text"  id="start_date" name="start_date" tabindex="12" ></td>
+                            <td>Ngày thôi việc</td>
+                            <td><input type="text"  id="end_date" name="end_date" tabindex="13" ></td>
                         </tr>
                         
                         <tr>
@@ -241,8 +247,8 @@ $this->helper('slidePaginator');
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="12"></td>
-                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="13"></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="14"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="15"></td>
                             <td></td>
                             <td></td>
                              
@@ -299,6 +305,8 @@ $('html').click(function(e) {
             var status = $(this).find("#status_"+$(this).attr('id')).text();
             var position = $(this).find("#position_"+$(this).attr('id')).text();
             var priority = $(this).find("#priority_"+$(this).attr('id')).text();
+            var start_date = $(this).find("#start_date_"+$(this).attr('id')).text();
+            var end_date = $(this).find("#end_date_"+$(this).attr('id')).text();
             //alert(staff_code);
             $('#yes').val($(this).attr('id'));
             
@@ -314,6 +322,8 @@ $('html').click(function(e) {
             $('#bank').val(bank);
             $('#position').val(position);
             $('#priority').val(priority);
+            $('#start_date').val(start_date.replace(/\//g,"-"));
+            $('#end_date').val(end_date.replace(/\//g,"-"));
             
             var radioLength = $("input[name='staff_gender']").length;
             for(var i = 0; i < radioLength; i++) {
@@ -399,6 +409,8 @@ $(document).ready(function(){
                     var status = $('input[name=status]:checked').val();
                     var position = $('#position').attr('value');
                     var priority = $('#priority').attr('value');
+                    var start_date = $('#start_date').attr('value');
+                    var end_date = $('#end_date').attr('value');
 
                     var yes = $('#yes').attr('value');
                     var check = $('#staff_code').attr('data');
@@ -424,6 +436,8 @@ $(document).ready(function(){
                             yes: yes,
                             check: check,
                             priority: priority,
+                            start_date: start_date,
+                            end_date: end_date,
                             }, // giá trị post
                         success: function(answer){ // if everything goes well
                             //alert(answer);
@@ -536,4 +550,66 @@ $( ".add-field" ).dialog({
     hide: 'fold',
     show: 'blind'
 });
+
+var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#end_date" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#start_date").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#start_date" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#end_date").datepicker(pickerOpts4);
 </script>

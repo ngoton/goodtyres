@@ -91,8 +91,9 @@ elseif ($order_by == 'tire_sale_volume')
         <div class="alignleft actions">
             <select name="action" id="action">
                 <option value="-1" selected="selected">Select</option>
-                
+                <?php if($_SESSION['role_logined']==1){ ?>
                 <option value="delete">Delete</option>
+                <?php } ?>
             </select>
             <input type="button" name="" id="doaction" class="button action" value="Apply" onclick="action();">
         </div>
@@ -183,8 +184,9 @@ elseif ($order_by == 'tire_sale_volume')
             <td class="fix" style="display:none" id="check_vat_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $tire_sale->check_vat; ?></td>
             <td class="fix" style="display:none" id="customer_type_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $tire_sale->customer_type; ?></td>
             <td>
+                <?php if($_SESSION['role_logined']==1){ ?>
                 <button class="error del" data="<?php echo $tire_sale->tire_sale_id ?>" >Xóa</button>
-                
+                <?php } ?>
                
             </td>
         </tr>

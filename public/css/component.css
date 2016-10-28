@@ -11,7 +11,7 @@
 .sticky-wrap .sticky-intersect {
 	opacity: 0;
 	position: absolute;
-	top: 0;
+	top: -50px;
 	left: 0;
 	transition: all .125s ease-in-out;
 	

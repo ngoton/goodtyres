@@ -667,7 +667,7 @@ Class totalsalaryController Extends baseController {
         
         $join = array();
         $data = array(
-            'where' => 'status=1',
+            'where' => '(start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) )',
         );
 
         
@@ -689,7 +689,7 @@ Class totalsalaryController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => 'status=1',
+            'where' => '(start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) )',
             );
 
         
@@ -1139,7 +1139,7 @@ Class totalsalaryController Extends baseController {
         
         $join = array();
         $data = array(
-            'where' => 'status=1',
+            'where' => '(start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) )',
         );
 
         
@@ -1161,7 +1161,7 @@ Class totalsalaryController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => 'status=1',
+            'where' => '(start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) )',
             );
 
         

@@ -1,5 +1,9 @@
 <?php $k = 1; ?>
-<table id="tblExport" class="table_data">
+<div class="add-box">
+    <a class="add_button" id="btnExport5" >Export Excel</a>
+    
+</div>
+<table id="tblExport5" class="table_data">
 <thead>
     <tr>
         <th style="width:30px" class="fix">
@@ -46,3 +50,13 @@
     </tr>
    </tbody>
 </table>
+<script type="text/javascript">
+$(document).ready(function () {
+            $("#btnExport5").click(function () {
+                $("#tblExport5").battatech_excelexport({
+                    containerid: "tblExport5"
+                   , datatype: 'table'
+                });
+            });
+        });
+</script>

@@ -36,9 +36,16 @@ elseif ($order_by == 'customer_name')
             <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
         </div>
         <div class="alignleft actions">
-            <input autocomplete="off" type="text" name="customer" id="customer" placeholder="Tên khách hàng" <?php echo isset($customer)?'value="'.$customer->customer_name.'"':null ?> />
+            <input autocomplete="off" type="text" name="customer" id="customer" placeholder="Tên khách hàng" <?php echo isset($customer->customer_name)?'value="'.$customer->customer_name.'"':null ?> />
             <ul id="customer_list_id"></ul>
             <input type="hidden" name="sl_status" id="sl_status" <?php echo isset($trangthai)?'value="'.$trangthai.'"':null ?> >
+            <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+        </div>
+        <div class="alignleft actions">
+            <select id="sl_tha" name="sl_tha" >
+                <option value="0">Còn nợ</option>
+                <option value="1">Đã thanh toán</option>
+            </select>
             <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
         </div>
 
@@ -49,32 +56,32 @@ elseif ($order_by == 'customer_name')
 
 </div>
 
-<table id="tblExport" class="table_data">
+<table id="tblExport" class="table_data tablesaw" data-tablesaw-mode="columntoggle" data-tablesaw-mode-switch data-tablesaw-minimap>
 <thead>
     <tr>
-    	<th  class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
-        <th  class="fix">
+    	<th  class="fix" scope="col" data-tablesaw-sortable-col data-tablesaw-priority="7"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th  class="fix" scope="col" data-tablesaw-sortable-col data-tablesaw-priority="6">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'customer_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         
-        <th  class="fix">
+        <th  class="fix" scope="col" data-tablesaw-sortable-col data-tablesaw-priority="persist">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_name','<?php echo $url_order ?>')">Khách hàng <?php if ($order_by == 'customer_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
-        <th  class="fix">
+        <th  class="fix" scope="col" data-tablesaw-sortable-col data-tablesaw-priority="5">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','order_tire_number','<?php echo $url_order ?>')">Sản lượng <?php if ($order_by == 'order_tire_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         
-        <th class="fix">
+        <th class="fix" scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','total','<?php echo $url_order ?>')">KH phải trả <?php if ($order_by == 'total'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
-        <th class="fix">
+        <th class="fix" scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','pay_money','<?php echo $url_order ?>')">Đã trả <?php if ($order_by == 'pay_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
-        <th class="fix">
+        <th class="fix" scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','total','<?php echo $url_order ?>')">Còn lại <?php if ($order_by == 'total'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         
-        <th class="fix">
+        <th class="fix" scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','username','<?php echo $url_order ?>')">Sale <?php if ($order_by == 'username'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th> 
         
@@ -84,14 +91,38 @@ elseif ($order_by == 'customer_name')
    <tbody>
     <?php $tongsl=0; $tongkhtra=0; $tongdatra=0; $tongcon=0; ?>
     <?php foreach ($customers as $order_tire) : 
-    if (isset($data_customer['money'][$order_tire->customer_id]) && ($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]>0)) {
-    $tongsl += $data_customer['number'][$order_tire->customer_id];
-    $tongkhtra += $data_customer['money'][$order_tire->customer_id];
-    $tongdatra += $data_customer['pay_money'][$order_tire->customer_id];
-    $tongcon += $data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id];
+    if ($tha == 0) {
+        if (isset($data_customer['money'][$order_tire->customer_id]) && ($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]>0)) {
+        $tongsl += $data_customer['number'][$order_tire->customer_id];
+        $tongkhtra += $data_customer['money'][$order_tire->customer_id];
+        $tongdatra += $data_customer['pay_money'][$order_tire->customer_id];
+        $tongcon += $data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id];
     ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->customer_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
         	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->customer_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            
+            <td class="fix title" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $order_tire->customer_name; ?></a></td>
+            <td class="fix"  id="order_tire_number_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $data_customer['number'][$order_tire->customer_id]; ?></a></td>
+            
+            <td class="fix"  id="total_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]); ?></a></td>
+            <td class="fix"  id="pay_money_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/cuspay/'.$order_tire->customer_id); ?>"><?php echo $lib->formatMoney($data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
+            <td class="fix error"  id="con_<?php echo $order_tire->customer_id; ?>"><a style="font-weight:bold;text-decoration:underline;" class="error customer" href="<?php echo $this->url('tiredebit/cus/'.$order_tire->customer_id); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
+            
+            <td class="fix" id="sale_<?php echo $order_tire->customer_id; ?>"><?php echo $data_customer['sale'][$order_tire->customer_id]; ?></td> 
+             
+        </tr>
+    <?php } 
+    }
+    else{
+        if (isset($data_customer['money'][$order_tire->customer_id]) && ($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]==0)) {
+        $tongsl += $data_customer['number'][$order_tire->customer_id];
+        $tongkhtra += $data_customer['money'][$order_tire->customer_id];
+        $tongdatra += $data_customer['pay_money'][$order_tire->customer_id];
+        $tongcon += $data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id];
+    ?>
+    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->customer_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->customer_id ?>"></td>
             <td class="fix"><?php echo $i++; ?></td>
             
             <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $order_tire->customer_name; ?></a></td>
@@ -104,7 +135,9 @@ elseif ($order_by == 'customer_name')
             <td class="fix" id="sale_<?php echo $order_tire->customer_id; ?>"><?php echo $data_customer['sale'][$order_tire->customer_id]; ?></td> 
              
         </tr>
-    <?php } endforeach; ?>
+    <?php    }
+    }
+    endforeach; ?>
     <tr style=" color:rgb(211, 11, 57); text-align: center; font-weight:bold;">
             <td class="fix" colspan="3">Tổng cộng</td>
             <td class="fix"><?php echo $lib->formatMoney($tongsl) ?></td>

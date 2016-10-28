@@ -122,6 +122,8 @@ Class staffController Extends baseController {
                         'status' => trim($_POST['status']),
                         'position' => trim($_POST['position']),
                         'priority' => trim($_POST['priority']),
+                        'start_date' => strtotime($_POST['start_date']),
+                        'end_date' => strtotime($_POST['end_date']),
                         );
 
 

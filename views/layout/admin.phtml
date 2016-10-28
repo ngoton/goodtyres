@@ -831,6 +831,9 @@
             </li>
           </ul>
         </li>
+        
+        <?php } ?>
+
         <li><a href="#">
             <i class="fa fa-fw fa-exclamation-triangle"></i>
             <span>Kiểm tra</span>
@@ -845,8 +848,6 @@
             <li><a  data="checking/cost" href="<?php echo $this->url('checking/cost') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí</a></li>
           </ul>
         </li>
-        <?php } ?>
-
         <li><a  data="checkin" href="<?php echo $this->url('checkin') ?>">
             <i class="fa fa-fw fa-calendar-check-o"></i>
             <span>Điểm danh</span>
@@ -1104,5 +1105,22 @@ $( document ).ajaxComplete(function() {
   $("#ajax_loader").fadeOut(200);
 });
 </script>
+<script type="text/javascript">
+var persist = 1;
+  $('.table_data').addClass('tablesaw');
+  $('.table_data').attr('data-tablesaw-mode','columntoggle');
+  $('.table_data').attr('data-tablesaw-mode-switch','');
+  $('.table_data').attr('data-tablesaw-minimap','');
+  $('.table_data th').attr('scope','col');
+  $('.table_data th').attr('data-tablesaw-sortable-col','');
+  //$('.table_data th.fix').attr('data-tablesaw-priority','persist');
+  $('.table_data th').each(function(){
+    $(this).attr('data-tablesaw-priority',persist++);
+  });
+</script>
+
+<link rel="stylesheet" href="<?php echo BASE_URL ?>/public/js/dist/tablesaw.css">
+<script src="<?php echo BASE_URL ?>/public/js/dist/tablesaw.jquery.js"></script>
+<script src="<?php echo BASE_URL ?>/public/js/dist/tablesaw-init.js"></script>
 </body>
 </html>

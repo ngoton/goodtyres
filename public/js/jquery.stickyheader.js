@@ -76,7 +76,7 @@ $(function(){
 							// When top of wrapping parent is in view
 							$stickyHead.add($stickyInsct).css({
 								opacity: 0,
-								top: 0
+								top: "-50px"
 							});
 						}
 					} else {
@@ -84,15 +84,24 @@ $(function(){
 						// Position sticky header based on viewport scrollTop
 						if($w.scrollTop() > $t.offset().top && $w.scrollTop() < $t.offset().top + $t.outerHeight() - allowance) {
 							// When top of viewport is in the table itself
-							$stickyHead.add($stickyInsct).css({
-								opacity: 1,
-								top: $w.scrollTop() - $t.offset().top
-							});
+							if ($t.hasClass("tablesaw")) {
+								$stickyHead.add($stickyInsct).css({
+									opacity: 1,
+									top: $w.scrollTop() - $t.offset().top+39.5
+								});
+							}
+							else{
+								$stickyHead.add($stickyInsct).css({
+									opacity: 1,
+									top: $w.scrollTop() - $t.offset().top
+								});
+							}
+							
 						} else {
 							// When top of viewport is above or below table
 							$stickyHead.add($stickyInsct).css({
 								opacity: 0,
-								top: 0
+								top: "-50px"
 							});
 						}
 					}

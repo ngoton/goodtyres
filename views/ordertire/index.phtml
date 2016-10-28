@@ -157,7 +157,7 @@
             <input class="iform number" type="text" name="reduce" id="reduce"  placeholder="Giảm giá khác" />
             <input style="width:100px" type="text" class="numbers" name="vat_percent" id="vat_percent" placeholder="VAT (%)" />
             <input style="width:350px" type="text" class="number" name="vat" id="vat" placeholder="VAT" />
-            <input type="checkbox" name="check_price_vat" id="check_price_vat" value="1"> Giá đã có VAT
+            <input type="checkbox" disabled name="check_price_vat" id="check_price_vat" value="1"> Giá đã có VAT
             <input type="text" class="iform ngay" name="delivery_date" id="delivery_date" placeholder="Ngày giao hàng" />
             <input type="hidden" id="max_discount" value="0">
             <input type="button" name="previous" class="previous action-button" value="Quay lại" />
@@ -843,6 +843,13 @@ $('#vat_percent').keyup(function(){
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         ;
     });
+
+    if (val==0 || val==""){
+        $('#check_price_vat').attr('disabled',true);
+        $('#check_price_vat').attr('checked',false);
+    }
+    else
+        $('#check_price_vat').attr('disabled',false);
 });
 
 $('#discount').keyup(function(){
@@ -1047,7 +1054,7 @@ $('#next_1').click(function(){
         max_discount += thanhtien*0.03;
     }
 
-    $('#max_discount').val(max_discount);
+    $('#max_discount').val(Math.round(max_discount/1000)*1000);
     
     $('#thanhtien2').val(function(index, value) {
         return value
@@ -1196,7 +1203,7 @@ $('#next_3').click(function(){
         max_discount += thanhtien*0.03;
     }
 
-    $('#max_discount').val(max_discount);
+    $('#max_discount').val(Math.round(max_discount/1000)*1000);
     
     $('#thanhtien2').val(function(index, value) {
         return value
@@ -1212,6 +1219,13 @@ $('#vat').keyup(function(){
     var thanhtien = parseInt($("#thanhtien2").val().replace(/[^0-9\.-]+/g,""));
 
     $('#vat_percent').val(Math.round(val*100/thanhtien));
+
+    if (val==0 || val==""){
+        $('#check_price_vat').attr('disabled',true);
+        $('#check_price_vat').attr('checked',false);
+    }
+    else
+        $('#check_price_vat').attr('disabled',false);
 });
 
 var pickerOpay2 = {

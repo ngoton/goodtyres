@@ -31,6 +31,7 @@ Class tiredebitController Extends baseController {
 
         $customer_model = $this->model->get('customerModel');
         $customer = $customer_model->getCustomer($trangthai);
+        $this->view->data['customer'] = $customer;
 
         $sonews = $limit;
         $x = ($page-1) * $sonews;
@@ -96,7 +97,7 @@ Class tiredebitController Extends baseController {
             $data['where'] .= ' AND sale IN (SELECT account FROM staff WHERE staff_id = '.$nv.') ';
         }
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
             $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
         }
 
@@ -118,6 +119,72 @@ Class tiredebitController Extends baseController {
             $data_customer['pay_money'][$order->customer] = isset($data_customer['pay_money'][$order->customer])?$data_customer['pay_money'][$order->customer]+$order->pay_money:$order->pay_money;
             $data_customer['sale'][$order->customer] = $order->username;
         }
+
+        $join = array('table'=>'customer','where'=>'customer.customer_id = receivable.customer AND trading > 0');
+
+        $receivable_model = $this->model->get('receivableModel'); 
+
+        $data = array(
+            'where'=>'1=1',
+            );
+
+
+        if ($trangthai > 0) {
+            $data['where'] .= ' AND customer_id = '.$trangthai;
+        } 
+        
+
+        if ($keyword != '') {
+            $search = '( code LIKE "%'.$keyword.'%" 
+                OR customer_name LIKE "%'.$keyword.'%" )';
+            
+                $data['where'] = $data['where'].' AND '.$search;
+        }
+
+        $receivables = $receivable_model->getAllCosts($data,$join);
+
+        $tire_sale_model = $this->model->get('tiresaleModel'); 
+        $join = array('table'=>'user, staff','where'=>'user_id = account AND staff_id = sale');
+
+        foreach ($receivables as $order) {
+            $yesterday = strtotime(date('d-m-Y',strtotime(date('d-m-Y',$order->expect_date)."-1 days")));
+            $tomorow = strtotime(date('d-m-Y',strtotime(date('d-m-Y',$order->expect_date)."+1 days")));
+            $data = array(
+            'where'=>'code = '.$order->code.' AND tire_sale_date > '.$yesterday.' AND tire_sale_date < '.$tomorow.' AND customer = '.$order->customer,
+            );
+            if ($nv > 0) {
+                $data['where'] .= ' AND sale = '.$nv;
+            }
+
+            $sales = $tire_sale_model->getAllTire($data,$join);
+            foreach ($sales as $sale) {
+                $data_customer['number'][$order->customer] = isset($data_customer['number'][$order->customer])?$data_customer['number'][$order->customer]+$sale->volume:$sale->volume;
+                $data_customer['sale'][$order->customer] = $sale->username;
+            }
+
+            if (!$sales) {
+                $data = array(
+                'where'=>'code = '.$order->code.' AND customer = '.$order->customer,
+                );
+                if ($nv > 0) {
+                    $data['where'] .= ' AND sale = '.$nv;
+                }
+
+                $sales = $tire_sale_model->getAllTire($data,$join);
+                foreach ($sales as $sale) {
+                    $data_customer['number'][$order->customer] = isset($data_customer['number'][$order->customer])?$data_customer['number'][$order->customer]+$sale->volume:$sale->volume;
+                    $data_customer['sale'][$order->customer] = $sale->username;
+                }
+            }
+            
+            if ($sales) {
+                $data_customer['money'][$order->customer] = isset($data_customer['money'][$order->customer])?$data_customer['money'][$order->customer]+$order->money:$order->money;
+                $data_customer['pay_money'][$order->customer] = isset($data_customer['pay_money'][$order->customer])?$data_customer['pay_money'][$order->customer]+$order->pay_money:$order->pay_money;
+            }
+            
+        }
+
+
         $this->view->data['data_customer'] = $data_customer;
 
         /* Lấy tổng doanh thu*/
@@ -197,7 +264,7 @@ Class tiredebitController Extends baseController {
             $data['where'] .= ' AND sale IN (SELECT account FROM staff WHERE staff_id = '.$nv.') ';
         }
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
             $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
         }
 
@@ -239,7 +306,7 @@ Class tiredebitController Extends baseController {
             $data['where'] .= ' AND sale IN (SELECT account FROM staff WHERE staff_id = '.$nv.') ';
         }
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
             $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
         }
 
@@ -280,6 +347,15 @@ Class tiredebitController Extends baseController {
             );
 
         $receives = $receive_model->getAllCosts($data,$join);
+        if (!$receives) {
+            $data = array(
+                'order_by'=>'receive_date',
+                'order'=>'ASC',
+                'where'=>'receivable  = '.$id,
+                );
+
+            $receives = $receive_model->getAllCosts($data,$join);
+        }
         $this->view->data['receives'] = $receives;
 
         /* Lấy tổng doanh thu*/
@@ -308,6 +384,36 @@ Class tiredebitController Extends baseController {
 
         $orders = $order_tire_model->getAllTire($data,$join);
         $this->view->data['orders'] = $orders;
+
+        $join = array('table'=>'customer','where'=>'customer.customer_id = receivable.customer AND trading > 0');
+
+        $receivable_model = $this->model->get('receivableModel'); 
+        $data = array(
+            'order_by'=>'receivable.expect_date',
+            'order'=>'DESC',
+            'where'=>'customer_id = '.$id,
+            );
+
+        $receivables = $receivable_model->getAllCosts($data,$join);
+        $this->view->data['receivables'] = $receivables;
+
+        $tire_sale_model = $this->model->get('tiresaleModel'); 
+        $join = array('table'=>'user, staff','where'=>'user_id = account AND staff_id = sale');
+        
+        $receivable_data = array();
+        foreach ($receivables as $re) {
+            $yesterday = strtotime(date('d-m-Y',strtotime(date('d-m-Y',$re->expect_date)."-1 days")));
+            $tomorow = strtotime(date('d-m-Y',strtotime(date('d-m-Y',$re->expect_date)."+1 days")));
+            $data = array(
+            'where'=>'code = '.$re->code.' AND tire_sale_date > '.$yesterday.' AND tire_sale_date < '.$tomorow.' AND customer = '.$re->customer,
+            );
+            $sales = $tire_sale_model->getAllTire($data,$join);
+            foreach ($sales as $sale) {
+                $receivable_data[$re->receivable_id]['number'] = isset($receivable_data[$re->receivable_id]['number'])?$receivable_data[$re->receivable_id]['number']+$sale->volume:$sale->volume;
+                $receivable_data[$re->receivable_id]['sale'] = $sale->username;
+            }
+        }
+        $this->view->data['receivable_data'] = $receivable_data;
 
         /* Lấy tổng doanh thu*/
         
@@ -362,6 +468,36 @@ Class tiredebitController Extends baseController {
 
         $orders = $order_tire_model->getAllTire($data,$join);
         $this->view->data['orders'] = $orders;
+
+        $join = array('table'=>'customer','where'=>'customer.customer_id = receivable.customer AND trading > 0');
+
+        $receivable_model = $this->model->get('receivableModel'); 
+        $data = array(
+            'order_by'=>'receivable.expect_date',
+            'order'=>'DESC',
+            'where'=>'(pay_money IS NULL OR pay_money < money) AND customer_id = '.$id,
+            );
+
+        $receivables = $receivable_model->getAllCosts($data,$join);
+        $this->view->data['receivables'] = $receivables;
+
+        $tire_sale_model = $this->model->get('tiresaleModel'); 
+        $join = array('table'=>'user, staff','where'=>'user_id = account AND staff_id = sale');
+        
+        $receivable_data = array();
+        foreach ($receivables as $re) {
+            $yesterday = strtotime(date('d-m-Y',strtotime(date('d-m-Y',$re->expect_date)."-1 days")));
+            $tomorow = strtotime(date('d-m-Y',strtotime(date('d-m-Y',$re->expect_date)."+1 days")));
+            $data = array(
+            'where'=>'code = '.$re->code.' AND tire_sale_date > '.$yesterday.' AND tire_sale_date < '.$tomorow.' AND customer = '.$re->customer,
+            );
+            $sales = $tire_sale_model->getAllTire($data,$join);
+            foreach ($sales as $sale) {
+                $receivable_data[$re->receivable_id]['number'] = isset($receivable_data[$re->receivable_id]['number'])?$receivable_data[$re->receivable_id]['number']+$sale->volume:$sale->volume;
+                $receivable_data[$re->receivable_id]['sale'] = $sale->username;
+            }
+        }
+        $this->view->data['receivable_data'] = $receivable_data;
 
         /* Lấy tổng doanh thu*/
         

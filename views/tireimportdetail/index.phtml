@@ -30,6 +30,34 @@ elseif ($order_by == 'code')
         <input type="button" name="" id="search-submit" class="button-search" value="Search" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
        
     </div>
+    <div class="add-box">
+        <select id="batdau" name="batdau" style="width:80px">
+            <option value="0">Code</option>
+            <?php foreach ($list_code as $l) { ?>
+                <option value="<?php echo $l->code ?>"><?php echo $l->code ?></option>
+            <?php } ?>
+        </select>
+        <select id="chonngaytao" name="chonngaytao" style="width:120px">
+            <option value="0">Thương hiệu</option>
+            <?php foreach ($tire_brands as $tire_brand) { ?>
+                <option value="<?php echo $tire_brand->tire_brand_id ?>"><?php echo $tire_brand->tire_brand_name ?></option>
+            <?php } ?>
+        </select>
+        <select id="chonngaytaobatdau" name="chonngaytaobatdau" style="width:90px">
+            <option value="0">Size</option>
+            <?php foreach ($tire_sizes as $tire_size) { ?>
+                <option value="<?php echo $tire_size->tire_size_id ?>"><?php echo $tire_size->tire_size_number ?></option>
+            <?php } ?>
+        </select>
+        
+        <select id="sl_status" name="sl_status" style="width:90px">
+            <option value="0">Mã gai</option>
+            <?php foreach ($tire_patterns as $tire_pattern) { ?>
+                <option value="<?php echo $tire_pattern->tire_pattern_id ?>"><?php echo $tire_pattern->tire_pattern_name ?></option>
+            <?php } ?>
+        </select>
+        <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
     <div class="tablenav top">
 
     	<div class="alignleft actions">
@@ -453,6 +481,17 @@ $("#import_excel").click(function(){
 var x = "<?php echo $limit ?>";
 $('#chonloc option[value='+x+']').attr('selected','selected');
 
+var c = "<?php echo $code ?>";
+$('#batdau option[value='+c+']').attr('selected','selected');
+
+var th = "<?php echo $thuonghieu ?>";
+$('#chonngaytao option[value='+th+']').attr('selected','selected');
+
+var s = "<?php echo $size ?>";
+$('#chonngaytaobatdau option[value='+s+']').attr('selected','selected');
+
+var g = "<?php echo $magai ?>";
+$('#sl_status option[value='+g+']').attr('selected','selected');
 
 </script>
 </div>
