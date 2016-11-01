@@ -30,6 +30,8 @@ Class importtireController Extends baseController {
             $ketthuc = date('d-m-Y', time()+86400); //cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y')).'-'.date('m-Y');
         }
 
+        $id = $this->registry->router->param_id;
+
         $bank_model = $this->model->get('bankModel');
         $banks = $bank_model->getAllBank();
         $this->view->data['banks'] = $banks;
@@ -231,6 +233,375 @@ Class importtireController Extends baseController {
         
     }
 
+    public function cost(){
+        $this->view->setLayout('admin');
+        $this->view->data['lib'] = $this->lib;
+
+        $this->view->data['title'] = 'Chi phí nhập';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_by = isset($_POST['order_by']) ? $_POST['order_by'] : null;
+            $order = isset($_POST['order']) ? $_POST['order'] : null;
+            $page = isset($_POST['page']) ? $_POST['page'] : null;
+            $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+            $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
+            $thuonghieu = isset($_POST['ngaytao']) ? $_POST['ngaytao'] : null;
+            $size = isset($_POST['ngaytaobatdau']) ? $_POST['ngaytaobatdau'] : null;
+            $magai = isset($_POST['trangthai']) ? $_POST['trangthai'] : null;
+            $code = isset($_POST['batdau']) ? $_POST['batdau'] : null;
+        }
+        else{
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'tire_brand_name';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC, tire_size_number ASC';
+            $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
+            $keyword = "";
+            $limit = 18446744073709;
+            $thuonghieu = 0;
+            $size = 0;
+            $magai = 0;
+            $code = $this->registry->router->param_id>0?$this->registry->router->param_id:0;
+        }
+
+        $tire_import_model = $this->model->get('tireimportModel');
+        $list_code = $tire_import_model->queryTire('SELECT code FROM import_tire GROUP BY code ORDER BY code ASC');
+        $this->view->data['list_code'] = $list_code;
+        
+        $tire_brand_model = $this->model->get('tirebrandModel');
+        $tire_size_model = $this->model->get('tiresizeModel');
+        $tire_pattern_model = $this->model->get('tirepatternModel');
+
+        $tire_brands = $tire_brand_model->getAllTire(array('order_by'=>'tire_brand_name','order'=>'ASC'));
+        $tire_sizes = $tire_size_model->getAllTire(array('order_by'=>'tire_size_number','order'=>'ASC'));
+        $tire_patterns = $tire_pattern_model->getAllTire(array('order_by'=>'tire_pattern_name','order'=>'ASC'));
+
+        $this->view->data['tire_brands'] = $tire_brands;
+        $this->view->data['tire_sizes'] = $tire_sizes;
+        $this->view->data['tire_patterns'] = $tire_patterns;
+
+        $tire_price_model = $this->model->get('tirepriceModel');
+        $tire_going_model = $this->model->get('tiregoingModel');
+        $join = array('table'=>'tire_pattern,tire_brand,tire_size','where'=>'tire_pattern = tire_pattern_id AND tire_brand = tire_brand_id AND tire_size = tire_size_id');
+
+        $sonews = $limit;
+        $x = ($page-1) * $sonews;
+        $pagination_stages = 2;
+        
+        $data = array(
+            'where' => 'code='.$code,
+        );
+        
+        if ($thuonghieu>0) {
+            $data['where'] .= ' AND tire_brand = '.$thuonghieu;
+        }
+        if ($size>0) {
+            $data['where'] .= ' AND tire_size = '.$size;
+        }
+        if ($magai>0) {
+            $data['where'] .= ' AND tire_pattern = '.$magai;
+        }
+        
+        $tongsodong = count($tire_going_model->getAllTire($data,$join));
+        $tongsotrang = ceil($tongsodong / $sonews);
+        
+
+        $this->view->data['page'] = $page;
+        $this->view->data['order_by'] = $order_by;
+        $this->view->data['order'] = $order;
+        $this->view->data['keyword'] = $keyword;
+        $this->view->data['pagination_stages'] = $pagination_stages;
+        $this->view->data['tongsotrang'] = $tongsotrang;
+        $this->view->data['limit'] = $limit;
+        $this->view->data['sonews'] = $sonews;
+
+        $this->view->data['code'] = $code;
+        $this->view->data['thuonghieu'] = $thuonghieu;
+        $this->view->data['size'] = $size;
+        $this->view->data['magai'] = $magai;
+
+        $data = array(
+            'order_by'=>$order_by,
+            'order'=>$order,
+            'limit'=>$x.','.$sonews,
+            'where' => 'code='.$code,
+            );
+        
+        if ($thuonghieu>0) {
+            $data['where'] .= ' AND tire_brand = '.$thuonghieu;
+        }
+        if ($size>0) {
+            $data['where'] .= ' AND tire_size = '.$size;
+        }
+        if ($magai>0) {
+            $data['where'] .= ' AND tire_pattern = '.$magai;
+        }
+      
+        if ($keyword != '') {
+            $search = '( tire_brand_name LIKE "%'.$keyword.'%" 
+                OR tire_size_number LIKE "%'.$keyword.'%" )';
+            
+                $data['where'] = $data['where'].' AND '.$search;
+        }
+
+        
+        $goings = $tire_going_model->getAllTire($data,$join);
+        
+        $this->view->data['tire_goings'] = $goings;
+        $this->view->data['lastID'] = isset($tire_going_model->getLastTire()->tire_going_id)?$tire_going_model->getLastTire()->tire_going_id:0;
+
+
+        $price = array();
+        $tax = array();
+        $stuff = array();
+        $logs = 0;
+        $total = 0;
+        foreach ($goings as $going) {
+            $qr = $tire_price_model->queryTire('SELECT * FROM tire_price WHERE tire_brand = '.$going->tire_brand.' AND tire_size = '.$going->tire_size.' AND tire_pattern = '.$going->tire_pattern.' AND price_end_time >= '.$going->tire_going_date.' ORDER BY price_end_time DESC');
+            foreach ($qr as $key) {
+                if (!isset($price[$going->tire_going_id])) {
+                    $price[$going->tire_going_id] = $key->supply_price;
+                }
+                if (!isset($tax[$going->tire_going_id])) {
+                    $tax[$going->tire_going_id] = $key->tax_price;
+                }
+            }
+
+            $st = $tire_price_model->queryTire('SELECT * FROM tire_stuff WHERE tire_size = '.$going->tire_size);
+            foreach ($st as $key2) {
+                $logs += $key2->stuff*$going->tire_number;
+                $stuff[$going->tire_going_id] = $key2->stuff;
+            }
+            $total += $going->tire_number;
+        }
+        $this->view->data['price'] = $price;
+        $this->view->data['tax'] = $tax;
+        $this->view->data['stuff'] = $stuff;
+        $this->view->data['logs'] = $logs;
+        $this->view->data['total'] = $total;
+
+
+        $import_tire_cost_model = $this->model->get('importtirecostModel');
+        $data = array(
+            'where'=>'trading IN (SELECT import_tire_id FROM import_tire WHERE code = '.$code.')'
+        );
+        $costs = $import_tire_cost_model->getAllVendor($data);
+        $cost_thue = 0;
+        $cost_hq = 0;
+        $cost_nangha = 0;
+        $cost_vttau = 0;
+        $cost_vtkho = 0;
+        $cost_bocxep = 0;
+        $cost_phichuyentien = 0;
+        $cost_mua1 = 0;
+        $cost_mua2 = 0;
+
+        foreach ($costs as $cost) {
+            if ($cost->check_deposit != 1) {
+                if ($cost->check_cost==1) {
+                    if ($cost->vendor == 53 || $cost->vendor == 59) {
+                        $cost_mua2 += $cost->cost+$cost->cost_vat;
+                    }
+                    else if ($cost->vendor == 90 || $cost->vendor == 200) {
+                        $cost_phichuyentien += $cost->cost+$cost->cost_vat;
+                    }
+                    else{
+                        $cost_mua1 += $cost->cost+$cost->cost_vat;
+                    }
+                }
+                else if ($cost->check_cost==2) {
+                    if ($cost->vendor == 90 || $cost->vendor == 200) {
+                        $cost_phichuyentien += $cost->cost+$cost->cost_vat;
+                    }
+                    else{
+                        $cost_thue += $cost->cost+$cost->cost_vat;
+                    }
+                }
+                else{
+                    if ($cost->vendor == 78 || $cost->vendor == 93 || $cost->vendor == 263) {
+                        $cost_vttau += $cost->cost+$cost->cost_vat;
+                    }
+                    else if ($cost->vendor == 90 || $cost->vendor == 200) {
+                        $cost_phichuyentien += $cost->cost+$cost->cost_vat;
+                    }
+                    else if ($cost->vendor == 79) {
+                        $cost_nangha += $cost->cost+$cost->cost_vat;
+                    }
+                    else if ($cost->vendor == 157 || $cost->vendor == 218 || $cost->vendor == 235 || $cost->type == 6) {
+                        $cost_hq += $cost->cost+$cost->cost_vat;
+                    }
+                    else if (strpos(strtolower($cost->comment), 'vc') !== false || strpos(strtolower($cost->comment), 'van chuyen') !== false || strpos(strtolower($cost->comment), 'vận chuyển') !== false) {
+                        $cost_vtkho += $cost->cost+$cost->cost_vat;
+                    }
+                    else{
+                        $cost_bocxep += $cost->cost+$cost->cost_vat;
+                    }
+                }
+            }
+        }
+
+        $arr = array(
+            'thue' => $cost_thue,
+            'tthq' => $cost_hq,
+            'tau' => $cost_vttau,
+            'vt' => $cost_vtkho,
+            'nangha' => $cost_nangha,
+            'bocxep' => $cost_bocxep,
+            'phichuyentien' => $cost_phichuyentien,
+            'mua1' => $cost_mua1,
+            'mua2' => $cost_mua2,
+        );
+
+        $this->view->data['arr_cost'] = $arr;
+
+        $this->view->show('importtire/cost');
+    }
+    public function viewcost(){
+        $this->view->disableLayout();
+        $this->view->data['lib'] = $this->lib;
+
+        $this->view->data['title'] = 'Chi phí nhập';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_by = isset($_POST['order_by']) ? $_POST['order_by'] : null;
+            $order = isset($_POST['order']) ? $_POST['order'] : null;
+            $page = isset($_POST['page']) ? $_POST['page'] : null;
+            $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+            $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
+            $thuonghieu = isset($_POST['ngaytao']) ? $_POST['ngaytao'] : null;
+            $size = isset($_POST['ngaytaobatdau']) ? $_POST['ngaytaobatdau'] : null;
+            $magai = isset($_POST['trangthai']) ? $_POST['trangthai'] : null;
+            $code = isset($_POST['batdau']) ? $_POST['batdau'] : null;
+        }
+        else{
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'tire_brand_name';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC, tire_size_number ASC';
+            $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
+            $keyword = "";
+            $limit = 18446744073709;
+            $thuonghieu = 0;
+            $size = 0;
+            $magai = 0;
+            $code = $this->registry->router->param_id>0?$this->registry->router->param_id:0;
+        }
+
+        $tire_import_model = $this->model->get('tireimportModel');
+        $list_code = $tire_import_model->queryTire('SELECT code FROM import_tire GROUP BY code ORDER BY code ASC');
+        $this->view->data['list_code'] = $list_code;
+        
+        $tire_brand_model = $this->model->get('tirebrandModel');
+        $tire_size_model = $this->model->get('tiresizeModel');
+        $tire_pattern_model = $this->model->get('tirepatternModel');
+
+        $tire_brands = $tire_brand_model->getAllTire(array('order_by'=>'tire_brand_name','order'=>'ASC'));
+        $tire_sizes = $tire_size_model->getAllTire(array('order_by'=>'tire_size_number','order'=>'ASC'));
+        $tire_patterns = $tire_pattern_model->getAllTire(array('order_by'=>'tire_pattern_name','order'=>'ASC'));
+
+        $this->view->data['tire_brands'] = $tire_brands;
+        $this->view->data['tire_sizes'] = $tire_sizes;
+        $this->view->data['tire_patterns'] = $tire_patterns;
+
+        $tire_price_model = $this->model->get('tirepriceModel');
+        $tire_going_model = $this->model->get('tiregoingModel');
+        $join = array('table'=>'tire_pattern,tire_brand,tire_size','where'=>'tire_pattern = tire_pattern_id AND tire_brand = tire_brand_id AND tire_size = tire_size_id');
+
+        $sonews = $limit;
+        $x = ($page-1) * $sonews;
+        $pagination_stages = 2;
+        
+        $data = array(
+            'where' => 'code='.$code,
+        );
+        
+        if ($thuonghieu>0) {
+            $data['where'] .= ' AND tire_brand = '.$thuonghieu;
+        }
+        if ($size>0) {
+            $data['where'] .= ' AND tire_size = '.$size;
+        }
+        if ($magai>0) {
+            $data['where'] .= ' AND tire_pattern = '.$magai;
+        }
+        
+        $tongsodong = count($tire_going_model->getAllTire($data,$join));
+        $tongsotrang = ceil($tongsodong / $sonews);
+        
+
+        $this->view->data['page'] = $page;
+        $this->view->data['order_by'] = $order_by;
+        $this->view->data['order'] = $order;
+        $this->view->data['keyword'] = $keyword;
+        $this->view->data['pagination_stages'] = $pagination_stages;
+        $this->view->data['tongsotrang'] = $tongsotrang;
+        $this->view->data['limit'] = $limit;
+        $this->view->data['sonews'] = $sonews;
+
+        $this->view->data['code'] = $code;
+        $this->view->data['thuonghieu'] = $thuonghieu;
+        $this->view->data['size'] = $size;
+        $this->view->data['magai'] = $magai;
+
+        $data = array(
+            'order_by'=>$order_by,
+            'order'=>$order,
+            'limit'=>$x.','.$sonews,
+            'where' => 'code='.$code,
+            );
+        
+        if ($thuonghieu>0) {
+            $data['where'] .= ' AND tire_brand = '.$thuonghieu;
+        }
+        if ($size>0) {
+            $data['where'] .= ' AND tire_size = '.$size;
+        }
+        if ($magai>0) {
+            $data['where'] .= ' AND tire_pattern = '.$magai;
+        }
+      
+        if ($keyword != '') {
+            $search = '( tire_brand_name LIKE "%'.$keyword.'%" 
+                OR tire_size_number LIKE "%'.$keyword.'%" )';
+            
+                $data['where'] = $data['where'].' AND '.$search;
+        }
+
+        
+        $goings = $tire_going_model->getAllTire($data,$join);
+        
+        $this->view->data['tire_goings'] = $goings;
+        $this->view->data['lastID'] = isset($tire_going_model->getLastTire()->tire_going_id)?$tire_going_model->getLastTire()->tire_going_id:0;
+
+
+        $price = array();
+        $tax = array();
+        $stuff = array();
+        $logs = 0;
+        $total = 0;
+        foreach ($goings as $going) {
+            $qr = $tire_price_model->queryTire('SELECT * FROM tire_price WHERE tire_brand = '.$going->tire_brand.' AND tire_size = '.$going->tire_size.' AND tire_pattern = '.$going->tire_pattern.' AND price_end_time >= '.$going->tire_going_date.' ORDER BY price_end_time DESC');
+            foreach ($qr as $key) {
+                if (!isset($price[$going->tire_going_id])) {
+                    $price[$going->tire_going_id] = $key->supply_price;
+                }
+                if (!isset($tax[$going->tire_going_id])) {
+                    $tax[$going->tire_going_id] = $key->tax_price;
+                }
+            }
+
+            $st = $tire_price_model->queryTire('SELECT * FROM tire_stuff WHERE tire_size = '.$going->tire_size);
+            foreach ($st as $key2) {
+                $logs += $key2->stuff*$going->tire_number;
+                $stuff[$going->tire_going_id] = $key2->stuff;
+            }
+            $total += $going->tire_number;
+        }
+        $this->view->data['price'] = $price;
+        $this->view->data['tax'] = $tax;
+        $this->view->data['stuff'] = $stuff;
+        $this->view->data['logs'] = $logs;
+        $this->view->data['total'] = $total;
+
+
+        $this->view->show('importtire/viewcost');
+    }
     public function going(){
         $this->view->disableLayout();
         $this->view->data['lib'] = $this->lib;

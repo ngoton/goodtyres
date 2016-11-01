@@ -99,6 +99,32 @@ $an = isset($stock[3])?$stock[3]:0;
         <!-- ./col -->
     </div>
     <div class="row">
+      <?php foreach ($staff_sales as $s) {?>
+      <div class="col-md-2">
+        <!-- Widget: user widget style 1 -->
+        <div class="box box-widget widget-user">
+          <!-- Add the bg color to the header using any of the bg-* classes -->
+          <div class="widget-user-header bg-gray">
+            <!-- /.widget-user-image -->
+            <h3 class="widget-user-username"><?php echo $s->staff_name ?></h3>
+            <h5 class="widget-user-desc">Sales</h5>
+          </div>
+          <div class="box-footer no-padding">
+            <ul class="nav nav-stacked">
+              <li><a href="#">Đơn hàng <span class="pull-right badge bg-blue"><?php echo isset($info_staff['dh'][$s->account])?$info_staff['dh'][$s->account]:0 ?></span></a></li>
+              <li><a href="#">Sản lượng <span class="pull-right badge bg-aqua"><?php echo isset($info_staff['sl'][$s->account])?$info_staff['sl'][$s->account]:0 ?></span></a></li>
+              <li><a href="#">KH mới <span class="pull-right badge bg-green"><?php echo isset($info_staff['khmoi'][$s->account])?$info_staff['khmoi'][$s->account]:0 ?></span></a></li>
+              <li><a href="#">KH cũ <span class="pull-right badge bg-red"><?php echo isset($info_staff['kh'][$s->account])?$info_staff['kh'][$s->account]-(isset($info_staff['khmoi'][$s->account])?$info_staff['khmoi'][$s->account]:0):0 ?></span></a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- /.widget-user -->
+      </div>
+      <?php } ?>
+      
+    </div>
+    <!-- /.row -->
+    <div class="row">
         <section class="col-lg-12 connectedSortable">
 
           <!-- solid sales graph -->

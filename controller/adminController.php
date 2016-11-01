@@ -48,7 +48,13 @@ Class adminController Extends baseController {
         $staffs = $staff_model->getAllStaff(array('order_by'=>'staff_name ASC'));
         $this->view->data['staffs'] = $staffs;
 
+        $data = array(
+            'where' => 'position = "Sales" AND ( (start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) ) )',
+        );
 
+        
+        $staff_sales = $staff_model->getAllStaff($data);
+        $this->view->data['staff_sales'] = $staff_sales;
 
         $data = array(
             'where' => 'tire_sale_date < '.strtotime($batdau),
@@ -76,6 +82,34 @@ Class adminController Extends baseController {
             }
         }*/
 
+        $c = array();
+
+        $info_staff = array();
+
+        if ($limit != "") {
+            $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN (SELECT order_tire FROM tire_sale WHERE sale = '.$limit.' AND tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).')'));
+            //$sales = $sale_model->getAllSale(array('where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc)),array('table'=>'staff','where'=>'sale=account AND staff_id = '.$limit));
+        }
+        else{
+            $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN (SELECT order_tire FROM tire_sale WHERE tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).')'));
+            //$sales = $sale_model->getAllSale(array('where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc)));
+        }
+
+        foreach ($orders as $tire) {
+            $info_staff['sl'][$tire->sale] = isset($info_staff['sl'][$tire->sale])?$info_staff['sl'][$tire->sale]+$tire->order_tire_number:$tire->order_tire_number;
+            $info_staff['dh'][$tire->sale] = isset($info_staff['dh'][$tire->sale])?$info_staff['dh'][$tire->sale]+1:1;
+            if(!in_array($tire->customer,$c)){
+                $info_staff['kh'][$tire->sale] = isset($info_staff['kh'][$tire->sale])?$info_staff['kh'][$tire->sale]+1:1;
+            }
+            $c[] = $tire->customer;
+            if (!in_array($tire->customer,$old)) {
+                $info_staff['khmoi'][$tire->sale] = isset($info_staff['khmoi'][$tire->sale])?$info_staff['khmoi'][$tire->sale]+1:1;
+            }
+        }
+
+        $this->view->data['info_staff'] = $info_staff;
+
+
         if ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9) {
             if ($limit != "") {
                 $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN (SELECT order_tire FROM tire_sale WHERE sale = '.$limit.' AND tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).')'));
@@ -96,6 +130,7 @@ Class adminController Extends baseController {
         $khachhang = 0;
         $donhang = 0;
         $sl = array();
+        
 
         /*foreach ($sales as $sale) {
             $doanhthu += $sale->revenue_vat+$sale->revenue;

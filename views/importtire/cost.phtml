@@ -1,0 +1,326 @@
+<?php
+$url_order = 'ASC';
+if ($order_by == 'tire_going_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_brand_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_size_number')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_pattern_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $l = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> CHI PHÍ DỰ KIẾN LÔ <?php echo $code ?></h1></center>
+<div class="add-box">
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Search">
+        <input type="button" name="" id="search-submit" class="button-search" value="Search" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+       
+    </div>
+    <div class="tablenav top">
+        <div class="add-box">
+            <select id="batdau" name="batdau" style="width:80px">
+                <option value="0">Code</option>
+                <?php foreach ($list_code as $list) { ?>
+                    <option value="<?php echo $list->code ?>"><?php echo $list->code ?></option>
+                <?php } ?>
+            </select>
+            <select id="chonngaytao" name="chonngaytao" style="width:120px">
+                <option value="0">Thương hiệu</option>
+                <?php foreach ($tire_brands as $tire_brand) { ?>
+                    <option value="<?php echo $tire_brand->tire_brand_id ?>"><?php echo $tire_brand->tire_brand_name ?></option>
+                <?php } ?>
+            </select>
+            <select id="chonngaytaobatdau" name="chonngaytaobatdau" style="width:90px">
+                <option value="0">Size</option>
+                <?php foreach ($tire_sizes as $tire_size) { ?>
+                    <option value="<?php echo $tire_size->tire_size_id ?>"><?php echo $tire_size->tire_size_number ?></option>
+                <?php } ?>
+            </select>
+            
+            <select id="sl_status" name="sl_status" style="width:90px">
+                <option value="0">Mã gai</option>
+                <?php foreach ($tire_patterns as $tire_pattern) { ?>
+                    <option value="<?php echo $tire_pattern->tire_pattern_id ?>"><?php echo $tire_pattern->tire_pattern_name ?></option>
+                <?php } ?>
+            </select>
+            <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+        </div>
+        <div class="alignleft actions">
+            <select name="m" id="chonloc">
+                <option  value="18446744073709">Hiển thị tất cả</option>
+                <option value="5">Hiển thị 5 giá trị</option>
+                <option value="10">Hiển thị 10 giá trị</option>
+                <option value="15">Hiển thị 15 giá trị</option>
+                <option selected="selected" value="20">Hiển thị 20 giá trị</option>
+            </select>
+            <input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">                               
+            </div>
+
+    </div>
+</div>
+
+<table class="table_data" id="tblExport">
+<thead>
+    <tr>
+        <th rowspan="2" class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_going_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'tire_going_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_brand_name','<?php echo $url_order ?>')">Thương hiệu <?php if ($order_by == 'tire_brand_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_size_number','<?php echo $url_order ?>')">Size <?php if ($order_by == 'tire_size_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_pattern','<?php echo $url_order ?>')">Mã gai <?php if ($order_by == 'tire_pattern'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_number','<?php echo $url_order ?>')">Số lượng <?php if ($order_by == 'tire_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="3" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Giá mua <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Logistics <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="3" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Thuế <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Đơn giá <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Tổng cộng <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+    </tr>
+    <tr>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Giá nhập <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Tàu 500 <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Tổng tiền <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Hệ số <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Thành tiền <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Tàu <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Thuế <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Thành tiền <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $tong = 0; $tongtienmua = 0; $tonglogs = 0; $tongthue = 0; $tongcong = 0;
+    foreach ($tire_goings as $tire_going) : 
+        $tong += $tire_going->tire_number;
+        $gia = isset($price[$tire_going->tire_going_id])?$price[$tire_going->tire_going_id]:0;
+        $tau = round(($tire_going->tire_number*500/$total)/$tire_going->tire_number);
+        $tienmua = round(($gia+$tau)*22330*$tire_going->tire_number);
+        $tongtienmua += $tienmua;
+        $xepdo = isset($stuff[$tire_going->tire_going_id])?$stuff[$tire_going->tire_going_id]:0;
+        $logistics = round($xepdo*(36300000/$logs)*$tire_going->tire_number);
+        $tonglogs += $logistics;
+        $thuetau = round($tau*0.25+($tau+$tau*0.25)*0.1);
+        $giagiam = isset($tax[$tire_going->tire_going_id])?$tax[$tire_going->tire_going_id]:0;
+        $thue = round(($thuetau+($giagiam*0.25+($giagiam+$giagiam*0.25)*0.1))*22330*$tire_going->tire_number);
+        $tongthue += $thue;
+        $tongdongia = $tienmua+$logistics+$thue;
+        $dongia = round($tongdongia/$tire_going->tire_number);
+        $tongcong += $tongdongia;
+    ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_going->tire_going_id ?>" class="edit_tr" >
+            <td class="fix"><?php echo $l++; ?></td>
+            <td class="fix" data="<?php echo $tire_going->tire_brand; ?>"  id="tire_brand_<?php echo $tire_going->tire_going_id; ?>"><?php echo $tire_going->tire_brand_name; ?></td>
+            <td class="fix" data="<?php echo $tire_going->tire_size; ?>" id="tire_size_<?php echo $tire_going->tire_going_id; ?>"><?php echo $tire_going->tire_size_number; ?></td>
+            <td class="fix" data="<?php echo $tire_going->tire_pattern; ?>" id="tire_pattern_<?php echo $tire_going->tire_going_id; ?>">
+                <?php echo $tire_going->tire_pattern_name; ?>
+            </td>
+            <td class="fix"  id="tire_number_<?php echo $tire_going->tire_going_id; ?>"><?php echo $tire_going->tire_number; ?></td>
+            <td class="fix" id="price_<?php echo $tire_going->tire_going_id; ?>"><a target="_blank" href="<?php echo $this->url('tireprice/view/'.$tire_going->tire_brand.'/'.$tire_going->tire_size.'/'.$tire_going->tire_pattern) ?>"> <?php echo $gia ?></a></td>
+            <td class="fix"  id="shipping_<?php echo $tire_going->tire_going_id; ?>"><?php echo $tau ?></td>
+            <td class="fix"  id="tienmua_<?php echo $tire_going->tire_going_id; ?>"><?php echo $lib->formatMoney($tienmua) ?></td>
+            <td class="fix"  id="xepdo_<?php echo $tire_going->tire_going_id; ?>"><a target="_blank" href="<?php echo $this->url('tirestuff') ?>"><?php echo $xepdo ?></a></td>
+            <td class="fix"  id="logistics_<?php echo $tire_going->tire_going_id; ?>"><?php echo $lib->formatMoney($logistics) ?></td>
+            <td class="fix"  id="thuetau_<?php echo $tire_going->tire_going_id; ?>"><?php echo $thuetau ?></td>
+            <td class="fix"  id="giagiam_<?php echo $tire_going->tire_going_id; ?>"><a target="_blank" href="<?php echo $this->url('tireprice/view/'.$tire_going->tire_brand.'/'.$tire_going->tire_size.'/'.$tire_going->tire_pattern) ?>"><?php echo $lib->formatMoney($giagiam) ?></a></td>
+            <td class="fix"  id="thue_<?php echo $tire_going->tire_going_id; ?>"><?php echo $lib->formatMoney($thue) ?></td>
+            <td class="fix"  id="dongia_<?php echo $tire_going->tire_going_id; ?>"><?php echo $lib->formatMoney($dongia) ?></td>
+            <td class="fix"  id="tongcong_<?php echo $tire_going->tire_going_id; ?>"><?php echo $lib->formatMoney($tongdongia) ?></td>
+            
+        </tr>
+    <?php endforeach; ?>
+    <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="4" >Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
+        <td class="fix" ></td>
+        <td class="fix" ></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongtienmua); ?></td>
+        <td class="fix" ></td>
+        <td class="fix"><?php echo $lib->formatMoney($tonglogs); ?></td>
+        <td class="fix" ></td>
+        <td class="fix" ></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongthue); ?></td>
+        <td class="fix" ></td>
+        <td class="fix"><?php echo $lib->formatMoney($tongcong); ?></td>
+    </tr>
+   </tbody>
+</table>
+
+<div style="width:60%">
+    <table class="table_data" id="tblExport2">
+        <thead>
+            <tr>
+                <th colspan="6" >KHOẢN CHI THỰC TẾ</th>
+            </tr>
+            <tr>
+                <th class="fix">Mục chi</th>
+                <th class="fix">Không HĐ</th>
+                <th class="fix">Có HĐ</th>
+                <th class="fix">Tổng cộng</th>
+                <th class="fix">Check</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="fix"><a href="<?php echo $this->url('importtire/index/'.$code) ?>" target="_blank">Nộp thuế</a></td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($arr_cost['thue']) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($arr_cost['thue']) ?></td>
+                <td class="fix error"><?php echo $lib->formatMoney($arr_cost['thue']-$tongthue) ?></td>
+            </tr>
+            <tr>
+                <td class="fix"><a href="<?php echo $this->url('importtire/index/'.$code) ?>" target="_blank">Hải quan </a></td>
+                <td class="fix"><?php echo $lib->formatMoney($arr_cost['tthq']) ?></td>
+                <td class="fix"></td>
+                <td rowspan="6" class="fix">
+                    <?php 
+                    echo $lib->formatMoney($arr_cost['tthq']+$arr_cost['nangha']+$arr_cost['tau']+$arr_cost['vt']+$arr_cost['bocxep']+$arr_cost['phichuyentien']) ;
+                    ?>
+                </td>
+                <td class="fix error"><?php echo $lib->formatMoney(($arr_cost['tthq']+$arr_cost['nangha']+$arr_cost['tau']+$arr_cost['vt']+$arr_cost['bocxep']+$arr_cost['phichuyentien'])-$tonglogs) ?></td>
+            </tr>
+            <tr>
+                <td class="fix"><a href="<?php echo $this->url('importtire/index/'.$code) ?>" target="_blank">Nâng hạ cont </a></td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($arr_cost['nangha']) ?></td>
+            </tr>
+            <tr>
+                <td class="fix"><a href="<?php echo $this->url('importtire/index/'.$code) ?>" target="_blank">Vận tải tàu TQ-VN </a></td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($arr_cost['tau']) ?></td>
+            </tr>
+            <tr>
+                <td class="fix"><a href="<?php echo $this->url('importtire/index/'.$code) ?>" target="_blank">Vận tải Cảng-Kho </a></td>
+                <td class="fix"><?php echo $lib->formatMoney($arr_cost['vt']) ?></td>
+                <td class="fix"></td>
+            </tr>
+            <tr>
+                <td class="fix"><a href="<?php echo $this->url('importtire/index/'.$code) ?>" target="_blank">Bốc xếp + Nhân công </a></td>
+                <td class="fix"><?php echo $lib->formatMoney($arr_cost['bocxep']) ?></td>
+                <td class="fix"></td>
+            </tr>
+            <tr>
+                <td class="fix"><a href="<?php echo $this->url('importtire/index/'.$code) ?>" target="_blank">Phí chuyển tiền </a></td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($arr_cost['phichuyentien']) ?></td>
+            </tr>
+            <tr>
+                <td class="fix"><a href="<?php echo $this->url('importtire/index/'.$code) ?>" target="_blank">Tiền mua lốp 1 </a></td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($arr_cost['mua1']) ?></td>
+                <td rowspan="2" class="fix"><?php echo $lib->formatMoney($arr_cost['mua1']+$arr_cost['mua2']) ?></td>
+                <td rowspan="2" class="fix error"><?php echo $lib->formatMoney(($arr_cost['mua1']+$arr_cost['mua2'])-$tongtienmua) ?></td>
+            </tr>
+            <tr>
+                <td class="fix"><a href="<?php echo $this->url('importtire/index/'.$code) ?>" target="_blank">Tiền mua lốp 2 </a></td>
+                <td class="fix"><?php echo $lib->formatMoney($arr_cost['mua2']) ?></td>
+                <td class="fix"></td>
+            </tr>
+            <tr style="font-weight: bold;">
+                <td class="fix">Tổng cộng</td>
+                <td class="fix"><?php echo $lib->formatMoney($arr_cost['tthq']+$arr_cost['vt']+$arr_cost['bocxep']+$arr_cost['mua2']) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($arr_cost['thue']+$arr_cost['tau']+$arr_cost['nangha']+$arr_cost['phichuyentien']+$arr_cost['mua1']) ?></td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+            </tr>
+            <tr style="text-align:center; font-weight: bold; color: red;">
+                <td class="fix">Tổng</td>
+                <td colspan="3" class="fix"><?php echo $lib->formatMoney($arr_cost['tthq']+$arr_cost['vt']+$arr_cost['bocxep']+$arr_cost['mua2']+$arr_cost['thue']+$arr_cost['tau']+$arr_cost['nangha']+$arr_cost['phichuyentien']+$arr_cost['mua1']) ?></td>
+                <td class="fix error"><?php echo $lib->formatMoney(($arr_cost['tthq']+$arr_cost['vt']+$arr_cost['bocxep']+$arr_cost['mua2']+$arr_cost['thue']+$arr_cost['tau']+$arr_cost['nangha']+$arr_cost['phichuyentien']+$arr_cost['mua1'])-$tongcong) ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('importtire/cost') ?>">&larr;</a></div>
+<div style="display:none" id="lasted"></div>
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+
+ 
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+var c = "<?php echo $code ?>";
+$('#batdau option[value='+c+']').attr('selected','selected');
+
+var th = "<?php echo $thuonghieu ?>";
+$('#chonngaytao option[value='+th+']').attr('selected','selected');
+
+var s = "<?php echo $size ?>";
+$('#chonngaytaobatdau option[value='+s+']').attr('selected','selected');
+
+var g = "<?php echo $magai ?>";
+$('#sl_status option[value='+g+']').attr('selected','selected');
+
+</script>
+</div>

@@ -611,7 +611,13 @@
               <li><a  data="paysale" href="<?php echo $this->url('paysale') ?>"><i class="fa fa-circle-o text-aqua"></i>Đã chi</a></li>
             </ul>
           </li>
-          <li><a  data="importtire" href="<?php echo $this->url('importtire') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Lô hàng lốp xe</a></li>
+          <li>
+            <a  data="importtire" href="<?php echo $this->url('importtire') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Lô hàng lốp xe</a>
+            <ul class="treeview-menu">
+              <li><a  data="importtire" href="<?php echo $this->url('importtire') ?>"><i class="fa fa-circle-o text-aqua"></i>Lô hàng</a></li>
+              <li><a  data="importtire/cost" href="<?php echo $this->url('importtire/cost') ?>"><i class="fa fa-circle-o text-aqua"></i>Chi phí</a></li>
+            </ul>
+          </li>
             
           <?php if ($_SESSION && ($_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 7 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 1)) { ?>
           

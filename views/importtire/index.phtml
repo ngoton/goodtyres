@@ -181,8 +181,11 @@ $this->helper('slidePaginator');
                         <tr>
                             <td colspan="7">
                                 <fieldset class="groupbox"><legend><span><h3>Chi phí mua lốp</h3></span></legend>
-                                    <div id="tire_going" style="font-weight:bold;" data="<?php echo $this->url('importtire/going/') ?>">
-                                        <a title="Thêm mới" id="add_new_list" href="#"> <img style="vertical-align:middle" src="<?php echo BASE_URL ?>/public/images/attachment.png"> Chi tiết hàng nhập </a>
+                                    <div id="tire_going" style="font-weight:bold;" >
+                                        <a data="<?php echo $this->url('importtire/going/') ?>" title="Thêm mới" id="add_new_list" href="#"> <img style="vertical-align:middle" src="<?php echo BASE_URL ?>/public/images/attachment.png"> Chi tiết hàng nhập </a>
+                                        <a data="<?php echo $this->url('importtire/viewcost/') ?>" id="view_tire_cost" class="btn btn-sm">
+                                            <i class="fa fa-dollar"></i> Chi phí dự kiến
+                                        </a>
 
                                     </div>
                                     <table id="dataTable4" border="1" style="width: 100%; border: 1px solid rgb(221, 217, 217); margin-bottom: 10px" >
@@ -1592,7 +1595,7 @@ $('.unlock').click(function(){
 
 });
 
-$('#tire_going').click(function(){
+$('#add_new_list').click(function(){
     var code = $('#code').attr("value");
     var date = $('#expect_date').attr("value");
     if (code == "") {
@@ -1615,6 +1618,28 @@ $('#tire_going').click(function(){
             
         });
         $("#winpopup").load($(this).attr('data')+code+'/1/'+date);
+        $("#winpopup").dialog("open");
+    }
+    return false;
+});
+$('#view_tire_cost').click(function(){
+    var code = $('#code').attr("value");
+    if (code == "") {
+        alert('Vui lòng nhập code lô hàng!');
+        $('#code').focus();
+    }
+    else{
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:600,
+            width:"90%",
+            resizable: false,
+            title:'Chi phí dự kiến',
+            
+        });
+        $("#winpopup").load($(this).attr('data')+code);
         $("#winpopup").dialog("open");
     }
     return false;

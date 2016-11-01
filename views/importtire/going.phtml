@@ -63,6 +63,12 @@
 </table>
 
 <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+<div  style="font-weight:bold;" >
+    <a data="<?php echo $this->url('importtire/viewcost/'.$code) ?>" id="view_tire_cost2" class="btn btn-app">
+        <i class="fa fa-dollar"></i> Chi phí dự kiến
+    </a>
+
+</div>
 
 <div class="add-field">
         <fieldset class="groupbox">
@@ -431,4 +437,22 @@ $('.tire_brand').keyup(function(){
             $('.tire_pattern').focus();
 
         }
+
+$('#view_tire_cost2').click(function(){
+   
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:600,
+            width:"90%",
+            resizable: false,
+            title:'Chi phí dự kiến',
+            
+        });
+        $("#winpopup").load($(this).attr('data'));
+        $("#winpopup").dialog("open");
+    
+    return false;
+});
 </script>
