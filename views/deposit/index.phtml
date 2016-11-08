@@ -1,0 +1,218 @@
+<?php
+$url_order = 'ASC';
+if ($order_by == 'deposit_tire_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'deposit_number')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'deposit_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> KHOẢN ĐẶT CỌC</h1></center>
+<div class="add-box">
+    <a class="add_button" id="btnExport" >Export excel</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Search">
+        <input type="button" name="" id="search-submit" class="button-search" value="Search" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+       
+    </div>
+    <div class="tablenav top">
+
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Select</option>
+                
+                <option value="delete">Delete</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Apply" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">All</option>
+			<option value="15">15 items</option>
+            <option value="20">20 items</option>
+            <option value="50">50 items</option>
+            <option selected="selected" value="100">100 items</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Apply" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+        
+      </div>
+
+</div>
+
+<table class="table_data">
+<thead>
+    <tr>
+        <th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th rowspan="2"  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','deposit_tire_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'deposit_tire_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','daily_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'daily_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer','<?php echo $url_order ?>')">Khách hàng <?php if ($order_by == 'customer'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','comment','<?php echo $url_order ?>')">Nội dung <?php if ($order_by == 'comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','money_in','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'money_in'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th colspan="3"  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','deposit_tire_id','<?php echo $url_order ?>')">Cấn trừ <?php if ($order_by == 'deposit_tire_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+    </tr>
+    <tr>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','money','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','comment','<?php echo $url_order ?>')">Nội dung <?php if ($order_by == 'comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $index_customer=0; $in_money=array(); $out_money=array();
+    foreach ($deposits as $deposit) : 
+       
+    if ($index_customer!=0 && $index_customer!=$deposit->customer) {
+        $in_money[$index_customer] = isset($in_money[$index_customer])?$in_money[$index_customer]:0;
+        $out_money[$index_customer] = isset($out_money[$index_customer])?$out_money[$index_customer]:0;
+    ?>
+        <tr style="background:rgba(70, 195, 232, 0.26)">
+            
+            <td  class="fix" colspan="5"></td>
+            <td class="fix" colspan="2" style="font-weight:bold; color:red; text-align:center"><?php echo $lib->formatMoney($in_money[$index_customer]-$out_money[$index_customer]); ?></td>
+            <td  class="fix" colspan="2"></td>
+            
+        </tr>
+    <?php 
+    $index_customer = $deposit->customer;
+    } 
+    elseif ($index_customer==0) {
+        $index_customer = $deposit->customer;
+    }
+    ?>
+
+    <?php
+    if ($deposit->customer>0 && $deposit->money_in>0) {
+        $in_money[$deposit->customer] = isset($in_money[$deposit->customer])?$in_money[$deposit->customer]+$deposit->money_in:$deposit->money_in;
+    ?>
+    
+        
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $deposit->deposit_tire_id ?>" class="edit_tr" >
+            
+            <td>
+                <input name="check[]" type="checkbox" class="checkbox" value="<?php echo $deposit->deposit_tire_id ?>">
+            </td>
+            
+            <td  class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="daily_date_<?php echo $deposit->deposit_tire_id; ?>"><?php echo $lib->hien_thi_ngay_thang($deposit->daily_date); ?></td>
+            <td class="fix" id="customer_<?php echo $deposit->deposit_tire_id; ?>"><?php echo $data_customer[$deposit->customer]; ?></td>
+            <td class="fix" id="comment_<?php echo $deposit->deposit_tire_id; ?>"><?php echo $deposit->comment; ?></td>
+            <td class="fix" id="money_in_<?php echo $deposit->deposit_tire_id; ?>"><?php echo $lib->formatMoney($deposit->money_in); ?></td>
+            <td  class="fix" colspan="3"></td>
+            
+        </tr>
+        <?php
+        if (isset($receive_data[$deposit->deposit_tire_id])) {
+            foreach ($receive_data[$deposit->deposit_tire_id] as $receive) {
+                $out_money[$deposit->customer] = isset($out_money[$deposit->customer])?$out_money[$deposit->customer]+$receive->money:$receive->money;
+        ?>
+            <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $receive->receive_id ?>" class="edit_tr" >
+            
+                <td  class="fix" colspan="6"></td>
+                <td class="fix" id="money_<?php echo $receive->receive_id; ?>"><?php echo $lib->formatMoney($receive->money); ?></td>
+                <td class="fix" id="receive_comment_<?php echo $receive->receive_id; ?>"><?php echo $receive->receive_comment; ?></td>
+                
+                <td class="fix" id="code_<?php echo $receive->receive_id; ?>"><?php echo $receive->code; ?></td>
+                
+            </tr>
+        <?php
+            }
+        }
+    }
+    elseif ($deposit->customer>0 && $deposit->money_out>0) {
+        $out_money[$deposit->customer] = isset($out_money[$deposit->customer])?$out_money[$deposit->customer]+$deposit->money_out:$deposit->money_out;
+        ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $deposit->deposit_tire_id ?>" class="edit_tr" >
+            
+            <td  class="fix" colspan="2"></td>
+            <td class="fix" id="daily_date_<?php echo $deposit->deposit_tire_id; ?>"><?php echo $lib->hien_thi_ngay_thang($deposit->daily_date); ?></td>
+            <td  class="fix" colspan="3"></td>
+            <td class="fix" id="money_out_<?php echo $deposit->deposit_tire_id; ?>"><?php echo $lib->formatMoney($deposit->money_out); ?></td>
+            <td class="fix" id="comment_<?php echo $deposit->deposit_tire_id; ?>"><?php echo $deposit->comment; ?></td>
+            <td class="fix" id="code_<?php echo $deposit->deposit_tire_id; ?>"><?php echo $deposit->code; ?></td>
+            
+        </tr>
+    <?php
+    }
+    ?>
+    
+    <?php endforeach; ?>
+    <?php
+        $in_money[$index_customer] = isset($in_money[$index_customer])?$in_money[$index_customer]:0;
+        $out_money[$index_customer] = isset($out_money[$index_customer])?$out_money[$index_customer]:0;
+    ?>
+        <tr style="background:rgba(70, 195, 232, 0.26)">
+            
+            <td  class="fix" colspan="5"></td>
+            <td class="fix" colspan="2" style="font-weight:bold; color:red; text-align:center"><?php echo $lib->formatMoney($in_money[$index_customer]-$out_money[$index_customer]); ?></td>
+            <td  class="fix" colspan="2"></td>
+            
+        </tr>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div style="display:none" id="lasted"></div>
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+
+ 
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+
+</script>
+</div>

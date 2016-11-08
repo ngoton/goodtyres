@@ -671,7 +671,7 @@ Class ordertireController Extends baseController {
                 $size = $size?$size->tire_quotation_size_id:null;
               
                 $data_q = array(
-                    'where' => 'tire_quotation_brand ='.$brand.' AND tire_quotation_size ='.$size.' AND tire_quotation_pattern='.$pattern_type.' AND start_date <= '.strtotime(date('d-m-Y')).' AND (end_date IS NULL OR end_date > '.strtotime(date('d-m-Y')).')',
+                    'where' => 'tire_quotation_brand ='.$brand.' AND tire_quotation_size ='.$size.' AND tire_quotation_pattern IN ('.$pattern_type.') AND start_date <= '.strtotime(date('d-m-Y')).' AND (end_date IS NULL OR end_date > '.strtotime(date('d-m-Y')).')',
                 );
                 $prices = $tire_quotation_model->getAllTire($data_q);
                 foreach ($prices as $p) {
@@ -2160,7 +2160,7 @@ Class ordertireController Extends baseController {
                     $str .= '<option  value="7">Khác</option></select></td></tr>';
                     
                     $str .= '<tr class="'.$_POST['order_tire'] .'">';
-                    $str .= '<td></td><td> Vendor</td><td><input required="required" type="text" class="vendor" name="vendor[]" autocomplete="false" placeholder="Nhập tên hoặc * để chọn"><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a>';
+                    $str .= '<td></td><td> Vendor</td><td><input required="required" type="text" class="vendor" name="vendor[]" autocomplete="off" placeholder="Nhập tên hoặc * để chọn"><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a>';
                     $str .= '<ul class="customer_list_id"></ul></td>';
                     //$str .= '<td></td><td> Vendor</td><td><select tabindex="2" class="vendor" name="vendor[]" style="width:200px">'.$opt.'</select><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a></td>';
                     $str .= '<td>Ngày chi</td>';
@@ -2232,7 +2232,7 @@ Class ordertireController Extends baseController {
                     $str .= '<option '.$khac .' value="7">Khác</option></select></td></tr>';
                     
                     $str .= '<tr class="'.$v->order_tire .'">';
-                    $str .= '<td></td><td> Vendor</td><td><input required="required" type="text" disabled value="'.$vendor_model->getvendor($v->vendor)->shipment_vendor_name.'" data="'.$v->vendor.'" class="vendor" name="vendor[]" required="required" autocomplete="false" placeholder="Nhập tên hoặc * để chọn"><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a>';
+                    $str .= '<td></td><td> Vendor</td><td><input required="required" type="text" disabled value="'.$vendor_model->getvendor($v->vendor)->shipment_vendor_name.'" data="'.$v->vendor.'" class="vendor" name="vendor[]" required="required" autocomplete="off" placeholder="Nhập tên hoặc * để chọn"><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a>';
                     $str .= '<ul class="customer_list_id"></ul></td>';
                     //$str .= '<td></td><td> Vendor</td><td><select disabled tabindex="2" class="vendor" name="vendor[]" style="width:200px">'.$opt.'</select><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a></td>';
                     $str .= '<td>Ngày chi</td>';

@@ -153,6 +153,8 @@ elseif ($order_by == 'money')
             
             <td class="fix" style="display:none" id="receivable_<?php echo $daily->daily_id; ?>"><?php echo $daily->receivable; ?></td>
             <td class="fix" style="display:none" id="payable_<?php echo $daily->daily_id; ?>"><?php echo $daily->payable; ?></td>
+            <td class="fix" style="display:none" id="deposit_<?php echo $daily->daily_id; ?>"><?php echo $daily->deposit; ?></td>
+            <td class="fix" style="display:none" id="customer_<?php echo $daily->daily_id; ?>"><?php echo $daily->customer; ?></td>
             <td class="fix" style="display:none" id="clearing_<?php echo $daily->daily_id; ?>">
                 <?php 
                     echo isset($clearing[$daily->daily_id])?$clearing[$daily->daily_id]:null;
@@ -347,6 +349,24 @@ $this->helper('slidePaginator');
 
                             </td>
                         </tr>
+                        <tr>
+                            <td>Đặt cọc</td>
+                            <td>
+                                <input  type="checkbox" id="deposit"  name="deposit" tabindex="13" value="1" >
+                                
+                            </td>
+                            <td>Khách hàng</td>
+                            <td>
+                                <select style="width:200px" name="customer" id="customer" tabindex="14" >
+                                    <option value="">Khách hàng</option>
+                                    <?php foreach ($customers as $customer) { ?>
+                                        <option value="<?php echo $customer->customer_id ?>"><?php echo $customer->customer_name ?></option>
+                                    <?php } ?>
+                                </select>
+                                
+                            </td>
+                            
+                        </tr>
                         
                         <tr>
                             <td>&nbsp;</td>
@@ -360,12 +380,12 @@ $this->helper('slidePaginator');
                             <td></td>
 
                             <td>
-                                <input type="submit" name="submit" value="Submit" tabindex="13">
+                                <input type="submit" name="submit" value="Submit" tabindex="15">
                                 
                             </td>
                             <td></td>
                             <td>
-                                <input type="reset" name="reset" value="Reset" tabindex="14">
+                                <input type="reset" name="reset" value="Reset" tabindex="16">
                             </td>
                              
                         </tr>
@@ -414,6 +434,8 @@ $('html').click(function(e) {
             var receivable = $(this).find("#receivable_"+$(this).attr('id')).text();
             var payable = $(this).find("#payable_"+$(this).attr('id')).text();
             var clearing = $(this).find("#clearing_"+$(this).attr('id')).text();
+            var deposit = $(this).find("#deposit_"+$(this).attr('id')).text();
+            var customer = $(this).find("#customer_"+$(this).attr('id')).text();
 
             //alert(cost_code);
             $('#yes').val($(this).attr('id'));
@@ -459,6 +481,12 @@ $('html').click(function(e) {
               }
             });
             
+            if (deposit==1)
+                $('#deposit').attr('checked',true);
+            else
+                $('#deposit').attr('checked',false);
+
+            $("#customer option[value=" + customer + "]").attr('selected', 'selected');
 
             $( ".add-field" ).dialog( "open" );
         }
@@ -498,6 +526,7 @@ function add_click(){
             $('#payable').attr('data',"");
 
             $('#clearing').val("");
+            $('#deposit').attr('checked',false);
                 
         $('.numbers').focus(function(){
             if ( $(this).val() == '0') {
@@ -552,6 +581,15 @@ $(document).ready(function(){
                     var payable = $('#payable').attr('data');
                     var clearing = $('#clearing').val().trim();
                     
+                    var customer = $('#customer').attr('value');
+                    
+                    if ($('#deposit').is(':checked')) {
+                        var deposit = 1;
+                    }
+                    else{
+                        var deposit = 0;
+                    }
+
                     var yes = $('#yes').attr('value');
                     
                     var action      = "them";
@@ -575,6 +613,8 @@ $(document).ready(function(){
                             receivable:receivable,
                             payable:payable,
                             clearing: clearing,
+                            deposit: deposit,
+                            customer: customer,
 
                             yes: yes,
 
@@ -986,5 +1026,6 @@ var pickerOpts3 = {
             of: $(this)
         });    
     });
+
 </script>
 

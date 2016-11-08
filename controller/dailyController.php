@@ -31,7 +31,10 @@ Class dailyController Extends baseController {
             $ngaytaobatdau = date('m-Y');
         }
 
-        
+        $customer_model = $this->model->get('customerModel');
+        $customers = $customer_model->getAllCustomer(array('order_by'=>'customer_name ASC'));
+        $this->view->data['customers'] = $customers;
+
         $daily_model = $this->model->get('dailyModel');
         $daily_bank_model = $this->model->get('dailybankModel');
         $bank_model = $this->model->get('bankModel');
@@ -932,6 +935,7 @@ Class dailyController Extends baseController {
             $obtain_model = $this->model->get('obtainModel');
             $costs_model = $this->model->get('costsModel');
             $daily_bank_model = $this->model->get('dailybankModel');
+            $deposit_model = $this->model->get('deposittireModel');
 
             $data = array(
                         
@@ -948,6 +952,8 @@ Class dailyController Extends baseController {
                         'money_out' => trim(str_replace(',','',$_POST['money_out'])),
                         'receivable' => trim($_POST['receivable']),
                         'payable' => trim($_POST['payable']),
+                        'deposit' => trim($_POST['deposit']),
+                        'customer' => trim($_POST['customer']),
                         );
             
             $data['clearing'] = null;
@@ -1035,6 +1041,23 @@ Class dailyController Extends baseController {
 
                     $daily_model->updateDaily($data,array('daily_id' => trim($_POST['yes'])));
                     echo "Cập nhật thành công";
+
+                    if ($daily->deposit != 1 && $data['deposit']>0) {
+                        $data_deposit = array(
+                            'customer' => $data['customer'],
+                            'daily' => trim($_POST['yes']),
+                        );
+                        $deposit_model->createDeposit($data_deposit);
+                    }
+                    else if ($daily->deposit == 1 && $data['deposit']>0) {
+                        $data_deposit = array(
+                            'customer' => $data['customer'],
+                        );
+                        $deposit_model->updateDeposit($data_deposit,array('daily'=>trim($_POST['yes'])));
+                    }
+                    if ($daily->deposit == 1 && $data['deposit'] != 1) {
+                        $deposit_model->queryDeposit('DELETE FROM deposit_tire WHERE daily = '.trim($_POST['yes']));
+                    }
 
                     $bank = $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id;
 
@@ -1904,6 +1927,14 @@ Class dailyController Extends baseController {
 
                     $id_daily_last = $daily_model->getLastDaily()->daily_id;
 
+                    if ($data['deposit']>0) {
+                        $data_deposit = array(
+                            'customer' => $data['customer'],
+                            'daily' => $id_daily_last,
+                        );
+                        $deposit_model->createDeposit($data_deposit);
+                    }
+
                     $bank = $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id;
 
                     $data_daily_bank = array(
@@ -2460,6 +2491,7 @@ Class dailyController Extends baseController {
             $obtain_model = $this->model->get('obtainModel');
             $daily_bank_model = $this->model->get('dailybankModel');
             $costs_model = $this->model->get('costsModel');
+            $deposit_model = $this->model->get('depositireModel');
            
             if (isset($_POST['xoa'])) {
                 $data = explode(',', $_POST['xoa']);
@@ -2492,6 +2524,7 @@ Class dailyController Extends baseController {
                         $pay_model->queryCosts('DELETE FROM pay WHERE additional = '.$data);
                         $owe_model->queryOwe('DELETE FROM owe WHERE additional = '.$data);
                         $costs_model->queryCosts('DELETE FROM costs WHERE additional = '.$data);
+                        $deposit_model->queryDeposit('DELETE FROM deposit_tire WHERE daily = '.$data);
                        
                         echo "Xóa thành công";
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
@@ -2535,6 +2568,7 @@ Class dailyController Extends baseController {
                         $pay_model->queryCosts('DELETE FROM pay WHERE additional = '.$_POST['data']);
                         $owe_model->queryOwe('DELETE FROM owe WHERE additional = '.$_POST['data']);
                         $costs_model->queryCosts('DELETE FROM costs WHERE additional = '.$_POST['data']);
+                        $deposit_model->queryDeposit('DELETE FROM deposit_tire WHERE daily = '.$_POST['data']);
 
                         echo "Xóa thành công";
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 

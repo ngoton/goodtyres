@@ -200,7 +200,7 @@ elseif ($order_by == 'order_tire_number')
             </td>
             <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->username; ?></td> 
             <td class="fix editable" data="percent" id="percent_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info['percent'][$order_tire->order_tire_id])?$info['percent'][$order_tire->order_tire_id].'%':null; ?></td> 
-            <td class="fix editable" id="doanhso_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney(isset($info['bonus'][$order_tire->order_tire_id])?$info['bonus'][$order_tire->order_tire_id]:(isset($info['percent'][$order_tire->order_tire_id])?$order_tire->total*($info['percent'][$order_tire->order_tire_id]/100):null)) ?></td> 
+            <td class="fix editable" id="doanhso_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney(round((isset($info['bonus'][$order_tire->order_tire_id])?$info['bonus'][$order_tire->order_tire_id]:(isset($info['percent'][$order_tire->order_tire_id])?$order_tire->total*($info['percent'][$order_tire->order_tire_id]/100):null))/1000)*1000) ?></td> 
             <td class="fix editable" id="vuotgia_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney(isset($info['vuotgia'][$order_tire->order_tire_id])?$info['vuotgia'][$order_tire->order_tire_id]:0); ?></td> 
             <td class="fix editable" id="khmoi_<?php echo $order_tire->order_tire_id; ?>"><?php echo $info['khmoi'][$order_tire->order_tire_id]==1?"x":null; ?></td> 
             <td class="fix editable" id="ghichu_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info['ghichu'][$order_tire->order_tire_id])?$info['ghichu'][$order_tire->order_tire_id]:null; ?></td> 
@@ -249,7 +249,7 @@ elseif ($order_by == 'order_tire_number')
             </td>
             <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->username; ?></td> 
             <td class="fix editable" data="percent" id="percent_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info2['percent'][$order_tire->order_tire_id])?$info2['percent'][$order_tire->order_tire_id].'%':null; ?></td> 
-            <td class="fix editable" id="doanhso_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney(isset($info2['bonus'][$order_tire->order_tire_id])?$info2['bonus'][$order_tire->order_tire_id]:(isset($info2['percent'][$order_tire->order_tire_id])?$order_tire->total*($info2['percent'][$order_tire->order_tire_id]/100):null)) ?></td> 
+            <td class="fix editable" id="doanhso_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney(round((isset($info2['bonus'][$order_tire->order_tire_id])?$info2['bonus'][$order_tire->order_tire_id]:(isset($info2['percent'][$order_tire->order_tire_id])?$order_tire->total*($info2['percent'][$order_tire->order_tire_id]/100):null))/1000)*1000) ?></td> 
             <td class="fix editable" id="vuotgia_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney(isset($info2['vuotgia'][$order_tire->order_tire_id])?$info2['vuotgia'][$order_tire->order_tire_id]:0); ?></td> 
             <td class="fix editable" id="khmoi_<?php echo $order_tire->order_tire_id; ?>"><?php echo $info2['khmoi'][$order_tire->order_tire_id]==1?"x":null; ?></td> 
             <td class="fix editable" id="ghichu_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info2['ghichu'][$order_tire->order_tire_id])?$info2['khmoi'][$order_tire->order_tire_id]:null; ?></td> 

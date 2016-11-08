@@ -81,7 +81,7 @@ Class checksalesalaryController Extends baseController {
             $data['where'] .= ' AND (check_salary IS NULL OR check_salary = 0)';
         }
         else if ($nv == 1) {
-            $data['where'] .= ' AND check_salary = 1';
+            $data['where'] = '(check_salary_date >= '.strtotime($batdau).' AND check_salary_date <= '.strtotime($ketthuc).') AND check_salary = 1';
         }
 
         if ($trangthai > 0) {
@@ -122,7 +122,7 @@ Class checksalesalaryController Extends baseController {
             $data['where'] .= ' AND (check_salary IS NULL OR check_salary = 0)';
         }
         else if ($nv == 1) {
-            $data['where'] .= ' AND check_salary = 1';
+            $data['where'] = '(check_salary_date >= '.strtotime($batdau).' AND check_salary_date <= '.strtotime($ketthuc).') AND check_salary = 1';
         }
 
         if ($trangthai > 0) {
