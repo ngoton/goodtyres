@@ -430,6 +430,163 @@ Class tireimportdetailController Extends baseController {
         $this->view->show('tireimportdetail/import');
 
     }
+
+    public function importedit(){
+        $this->view->disableLayout();
+        header('Content-Type: text/html; charset=utf-8');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 8) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_FILES['import']['name'] != null) {
+
+            require("lib/Classes/PHPExcel/IOFactory.php");
+            require("lib/Classes/PHPExcel.php");
+
+            $tireimportdetail = $this->model->get('tireimportdetailModel');
+            $tirebrand = $this->model->get('tirebrandModel');
+            $tiresize = $this->model->get('tiresizeModel');
+            $tirepattern = $this->model->get('tirepatternModel');
+            $tireimport = $this->model->get('tireimportModel');
+            $tire_sale_model = $this->model->get('tiresaleModel');
+            $tire_buy_model = $this->model->get('tirebuyModel');
+
+            $objPHPExcel = new PHPExcel();
+            // Set properties
+            if (pathinfo($_FILES['import']['name'], PATHINFO_EXTENSION) == "xls") {
+                $objReader = PHPExcel_IOFactory::createReader('Excel5');
+            }
+            else if (pathinfo($_FILES['import']['name'], PATHINFO_EXTENSION) == "xlsx") {
+                $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+            }
+            
+            $objReader->setReadDataOnly(false);
+
+            $objPHPExcel = $objReader->load($_FILES['import']['tmp_name']);
+            $objWorksheet = $objPHPExcel->getActiveSheet();
+
+            
+
+            $highestRow = $objWorksheet->getHighestRow(); // e.g. 10
+            $highestColumn = $objWorksheet->getHighestColumn(); // e.g 'F'
+
+            $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn); // e.g. 5
+
+            //var_dump($objWorksheet->getMergeCells());die();
+            
+            $cell_code = $objWorksheet->getCellByColumnAndRow(0, 1);
+            $code = $cell_code->getCalculatedValue();
+
+            $cell_order = $objWorksheet->getCellByColumnAndRow(2, 1);
+            $order = $cell_order->getCalculatedValue();
+
+            $cell_date = $objWorksheet->getCellByColumnAndRow(1, 1);
+            $start_date = $cell_date->getCalculatedValue();
+            $date = str_replace('/', '-', $start_date);
+            $start_date = strtotime($date);
+
+            $dauthang = strtotime('01-'.date('m-Y',$start_date));
+
+                for ($row = 3; $row <= $highestRow; ++ $row) {
+                    $val = array();
+                    for ($col = 0; $col < $highestColumnIndex; ++ $col) {
+                        $cell = $objWorksheet->getCellByColumnAndRow($col, $row);
+                        // Check if cell is merged
+                        foreach ($objWorksheet->getMergeCells() as $cells) {
+                            if ($cell->isInRange($cells)) {
+                                $currMergedCellsArray = PHPExcel_Cell::splitRange($cells);
+                                $cell = $objWorksheet->getCell($currMergedCellsArray[0][0]);
+                                break;
+                                
+                            }
+                        }
+                        //$val[] = $cell->getValue();
+                        //$val[] = is_numeric($cell->getCalculatedValue()) ? round($cell->getCalculatedValue()) : $cell->getCalculatedValue();
+                        $val[] = $cell->getCalculatedValue();
+                        //here's my prob..
+                        //echo $val;
+                    }
+                    if ($val[1] != null && $val[2] != null && $val[3] != null && $val[4] != null) {
+
+                            if($tirebrand->getTireByWhere(array('tire_brand_name'=>trim($val[1])))) {
+                                $id_brand = $tirebrand->getTireByWhere(array('tire_brand_name'=>trim($val[1])))->tire_brand_id;
+                            }
+                            else if(!$tirebrand->getTireByWhere(array('tire_brand_name'=>trim($val[1])))){
+                                $tirebrand_data = array(
+                                    'tire_brand_name' => trim($val[1]),
+                                    );
+                                $tirebrand->createTire($tirebrand_data);
+
+                                $id_brand = $tirebrand->getLastTire()->tire_brand_id;
+                            }
+
+                            if($tiresize->getTireByWhere(array('tire_size_number'=>trim($val[2])))) {
+                                $id_size = $tiresize->getTireByWhere(array('tire_size_number'=>trim($val[2])))->tire_size_id;
+                            }
+                            else if(!$tiresize->getTireByWhere(array('tire_size_number'=>trim($val[2])))){
+                                $tiresize_data = array(
+                                    'tire_size_number' => trim($val[2]),
+                                    );
+                                $tiresize->createTire($tiresize_data);
+
+                                $id_size = $tiresize->getLastTire()->tire_size_id;
+                            }
+
+                            if($tirepattern->getTireByWhere(array('tire_pattern_name'=>trim($val[3])))) {
+                                $id_pattern = $tirepattern->getTireByWhere(array('tire_pattern_name'=>trim($val[3])))->tire_pattern_id;
+                            }
+                            else if(!$tirepattern->getTireByWhere(array('tire_pattern_name'=>trim($val[3])))){
+                                $tirepattern_data = array(
+                                    'tire_pattern_name' => trim($val[3]),
+                                    );
+                                $tirepattern->createTire($tirepattern_data);
+
+                                $id_pattern = $tirepattern->getLastTire()->tire_pattern_id;
+                            }
+
+
+                            if ($id_brand != null && $id_size != null && $id_pattern != null) {
+                                
+                                
+                                    $tire_import_detail_data = array(
+                                    'tire_brand' => $id_brand,
+                                    'tire_size' => $id_size,
+                                    'tire_pattern' => $id_pattern,
+                                    'tire_price' => trim($val[4]),
+                                    'tire_number' => trim($val[5]),
+                                    'code' => $code,
+                                    'status' => 1,
+                                    );
+                                    $tireimportdetail->createTire($tire_import_detail_data);
+
+                                    $tire_import_data = array(
+                                    'tire_brand' => $id_brand,
+                                    'tire_size' => $id_size,
+                                    'tire_pattern' => $id_pattern,
+                                    'tire_price' => trim($val[4]),
+                                    'code' => $code,
+                                    'start_date' => $start_date,
+                                    'order_num' => $order,
+                                    );
+                                    $tireimport->createTire($tire_import_data);
+                            }
+                        
+                    }
+                    
+                    //var_dump($this->getNameDistrict($this->lib->stripUnicode($val[1])));
+                    // insert
+
+
+                }
+                //return $this->view->redirect('transport');
+            
+            return $this->view->redirect('tireimportdetail');
+        }
+        $this->view->show('tireimportdetail/importedit');
+
+    }
     
 
 }

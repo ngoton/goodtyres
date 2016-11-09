@@ -532,6 +532,17 @@ Class ordertireController Extends baseController {
                     $gia = $tire_import->tire_price;
                 }
 
+                $data = array(
+                    'where' => 'order_num = "'.$tire->order_number.'" AND start_date <= '.strtotime(date('t-m-Y',$tire->delivery_date)).' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                    'order_by' => 'start_date',
+                    'order' => 'DESC',
+                    'limit' => 1,
+                );
+                $tire_imports = $tire_import_model->getAllTire($data);
+                foreach ($tire_imports as $tire_import) {
+                    $gia = $tire_import->tire_price;
+                }
+
                 $costs[$tire->order_tire_id] = isset($costs[$tire->order_tire_id])?$costs[$tire->order_tire_id]+$l->tire_number*$gia:$l->tire_number*$gia;
             }
         }
@@ -540,6 +551,31 @@ Class ordertireController Extends baseController {
         $this->view->data['order_tires'] = $order_tires;
 
         $this->view->data['lastID'] = isset($order_tire_model->getLastTire()->order_tire_id)?$order_tire_model->getLastTire()->order_tire_id:0;
+
+        $tire_sale_model = $this->model->get('tiresaleModel');
+        $join = array('table'=>'customer, user, staff','where'=>'customer.customer_id = tire_sale.customer AND staff_id = sale AND account = user_id');
+        $data = array(
+            'where' => 'customer = 169 AND tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc),
+        );
+        $sales = $tire_sale_model->getAllTire($data,$join);
+
+        $costs2 = array();
+        foreach ($sales as $tire) {
+            $data = array(
+                'where' => 'start_date <= '.strtotime(date('t-m-Y',$tire->tire_sale_date)).' AND tire_brand = '.$tire->tire_brand.' AND tire_size = '.$tire->tire_size.' AND tire_pattern = '.$tire->tire_pattern,
+                'order_by' => 'start_date',
+                'order' => 'DESC',
+                'limit' => 1,
+            );
+            $tire_imports = $tire_import_model->getAllTire($data);
+            foreach ($tire_imports as $tire_import) {
+                $gia = $tire_import->tire_price;
+            }
+
+            $costs2[$tire->tire_sale_id] = isset($costs2[$tire->tire_sale_id])?$costs2[$tire->tire_sale_id]+$tire->volume*$gia:$tire->volume*$gia;
+        }
+        $this->view->data['costs2'] = $costs2;
+        $this->view->data['sales'] = $sales;
 
         $this->view->show('ordertire/report');
     }
