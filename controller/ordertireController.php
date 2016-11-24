@@ -587,44 +587,45 @@ Class ordertireController Extends baseController {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $customer_model = $this->model->get('customerModel');
             $tire_sale_model = $this->model->get('tiresaleModel');
-            
-            if ($_POST['keyword'] == "*") {
-                $list = $customer_model->getAllCustomer();
-            }
-            else{
-                $data = array(
-                'where'=>'( customer_name LIKE "%'.$_POST['keyword'].'%" )',
-                );
-                $list = $customer_model->getAllCustomer($data);
-            }
-            
-            $expect_date = "";
-
-            foreach ($list as $rs) {
-                // put in bold the written text
-                $customer_name = $rs->customer_name;
-                if ($_POST['keyword'] != "*") {
-                    $customer_name = str_replace($_POST['keyword'], '<b>'.$_POST['keyword'].'</b>', $rs->customer_name);
-                }
-
-                if ($rs->customer_expect_date != null) {
-                    $expect_date = date('d-m-Y',strtotime($rs->customer_expect_date.'-'.date('m-Y',strtotime(date('d-m-Y')))));
-                }
-                else if ($rs->customer_after_date != null) {
-                    $expect_date = date('d-m-Y',strtotime('+'.$rs->customer_after_date.' day', strtotime(date('d-m-Y'))));
-                }
-                
-                $types = $tire_sale_model->getAllTire(array('where'=>'customer='.$rs->customer_id,'order_by'=>'tire_sale_date','order'=>'DESC','limit'=>1));
-                if ($types) {
-                    foreach ($types as $t) {
-                        $type = $t->customer_type;
-                    }
+            if ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==3 || $_SESSION['role_logined']==4) {
+                if ($_POST['keyword'] == "*") {
+                    $list = $customer_model->getAllCustomer();
                 }
                 else{
-                    $type = 1;
+                    $data = array(
+                    'where'=>'( customer_name LIKE "%'.$_POST['keyword'].'%" )',
+                    );
+                    $list = $customer_model->getAllCustomer($data);
                 }
-                // add new option
-                echo '<li onclick="set_item(\''.$rs->customer_name.'\',\''.$rs->customer_id.'\',\''.$rs->company_name.'\',\''.$rs->customer_phone.'\',\''.$rs->customer_address.'\',\''.$rs->customer_email.'\',\''.$expect_date.'\',\''.$rs->mst.'\',\''.$type.'\')">'.$customer_name.'</li>';
+                
+                $expect_date = "";
+
+                foreach ($list as $rs) {
+                    // put in bold the written text
+                    $customer_name = $rs->customer_name;
+                    if ($_POST['keyword'] != "*") {
+                        $customer_name = str_replace($_POST['keyword'], '<b>'.$_POST['keyword'].'</b>', $rs->customer_name);
+                    }
+
+                    if ($rs->customer_expect_date != null) {
+                        $expect_date = date('d-m-Y',strtotime($rs->customer_expect_date.'-'.date('m-Y',strtotime(date('d-m-Y')))));
+                    }
+                    else if ($rs->customer_after_date != null) {
+                        $expect_date = date('d-m-Y',strtotime('+'.$rs->customer_after_date.' day', strtotime(date('d-m-Y'))));
+                    }
+                    
+                    $types = $tire_sale_model->getAllTire(array('where'=>'customer='.$rs->customer_id,'order_by'=>'tire_sale_date','order'=>'DESC','limit'=>1));
+                    if ($types) {
+                        foreach ($types as $t) {
+                            $type = $t->customer_type;
+                        }
+                    }
+                    else{
+                        $type = 1;
+                    }
+                    // add new option
+                    echo '<li onclick="set_item(\''.$rs->customer_name.'\',\''.$rs->customer_id.'\',\''.$rs->company_name.'\',\''.$rs->customer_phone.'\',\''.$rs->customer_address.'\',\''.$rs->customer_email.'\',\''.$expect_date.'\',\''.$rs->mst.'\',\''.$type.'\')">'.$customer_name.'</li>';
+                }
             }
         }
     }
@@ -1075,6 +1076,12 @@ Class ordertireController Extends baseController {
         $data = array(
             'where' => 'order_tire='.$id,
         );
+
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
+            $data = array(
+                'where' => 'order_tire IN (SELECT order_tire_id FROM order_tire WHERE order_tire_id ='.$id.' AND sale = '.$_SESSION["userid_logined"].')',
+            );
+        }
 
         $order_tire_lists = $order_tire_list_model->getAllTire($data,$join);
         $this->view->data['order_tire_lists'] = $order_tire_lists;

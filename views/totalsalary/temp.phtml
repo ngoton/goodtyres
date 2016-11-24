@@ -233,7 +233,7 @@ elseif ($order_by == 'staff_name')
             $dt = isset($doanhthu[$salary->staff_id])?$doanhthu[$salary->staff_id]:0;
             $tongdoanhthu += $dt;
 
-            $chuyencan = isset($arr_attend[$salary->staff_id])?$arr_attend[$salary->staff_id]:0;
+            $chuyencan = isset($arr_attend[$salary->staff_id])?$arr_attend[$salary->staff_id]:(isset($arr_attend_temp[$salary->staff_id])?300:0);
             $luongchuyencan = $salary->staff_id==14?round((($chuyencan*$den)*50/12)/1000)*1000:$chuyencan*$den;
             $luongchuyencan = $salary->staff_id==1?0:$luongchuyencan;
             $tongchuyencan += $luongchuyencan;

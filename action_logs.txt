@@ -2526,3 +2526,187 @@ bxep: 6x14 = 84k-5-4--1484000
 
 08/11/2016 14:51:04|admincmg|add|1129|daily|1----1478646000-trả tiền dặt cọc----0-1000000---1-154-
 
+24/11/2016 13:33:46|admincmg|add|1|plan|Check mail-rgb(0, 115, 183)-1
+
+24/11/2016 13:36:20|admincmg|add|2|plan|Soạn HĐ-rgb(240, 18, 190)-1
+
+24/11/2016 13:36:27|admincmg|delete|2|plan|
+
+24/11/2016 13:37:43|admincmg|delete|2|plan|
+
+24/11/2016 13:38:13|admincmg|add|3|plan|Soạn HĐ-rgb(221, 75, 57)-1
+
+24/11/2016 13:38:32|admincmg|delete|3|plan|
+
+24/11/2016 13:39:54|admincmg|add|4|plan|A-rgb(1, 255, 112)-1
+
+24/11/2016 13:39:59|admincmg|delete|4|plan|
+
+24/11/2016 13:40:56|admincmg|add|5|plan|a-#3c8dbc-1
+
+24/11/2016 13:40:59|admincmg|delete|5|plan|
+
+24/11/2016 13:41:03|admincmg|add|6|plan|b-#3c8dbc-1
+
+24/11/2016 13:41:10|admincmg|delete|6|plan|
+
+24/11/2016 14:40:17|admincmg|add|1|plan_list|0-1479714300-1479714300-1-1
+
+24/11/2016 14:45:39|admincmg|add|2|plan_list|1-1479799800-1479799800-1-1
+
+24/11/2016 14:56:34|admincmg|add|3|plan_list|1-1479713400-1479713400-1-1
+
+24/11/2016 15:12:03|admincmg|add|4|plan_list|---1-1
+
+24/11/2016 15:32:56|admincmg|add|5|plan_list|1---1-1
+
+24/11/2016 15:34:41|admincmg|add|6|plan_list|1---1-1
+
+24/11/2016 15:36:48|admincmg|add|7|plan_list|1-1479972600-1479972600-1-1
+
+24/11/2016 15:38:47|admincmg|delete|6|plan_list|
+
+24/11/2016 15:39:01|admincmg|delete|5|plan_list|
+
+24/11/2016 15:39:06|admincmg|delete|4|plan_list|
+
+24/11/2016 15:39:18|admincmg|delete|3|plan_list|
+
+24/11/2016 15:39:21|admincmg|delete|2|plan_list|
+
+24/11/2016 15:39:28|admincmg|add|8|plan_list|1-1479886200-1479886200-1-1
+
+24/11/2016 15:39:30|admincmg|delete|1|plan_list|
+
+24/11/2016 15:39:46|admincmg|delete|8|plan_list|
+
+24/11/2016 15:39:51|admincmg|add|9|plan_list|1-1479800700-1479800700-1-1
+
+24/11/2016 15:39:54|admincmg|delete|1|plan_list|
+
+24/11/2016 15:46:24|admincmg|edit||1479971700-1479971700-1|plan_list|
+
+24/11/2016 15:47:29|admincmg|edit|7|1479972600-1479972600-1|plan_list|
+
+24/11/2016 15:48:09|admincmg|edit|7|1479886200-1479886200-1|plan_list|
+
+24/11/2016 15:49:07|admincmg|edit|7|1479886200-1479886200-1|plan_list|
+
+24/11/2016 15:50:03|admincmg|edit|7|1479885300-1479885300-0|plan_list|
+
+24/11/2016 15:50:17|admincmg|edit|7|1479942000-1479942000-1|plan_list|
+
+24/11/2016 16:02:21|admincmg|edit|9|1479798900-1479798900-0|plan_list|
+
+24/11/2016 16:02:22|admincmg|edit|9|1479711600-1479711600-0|plan_list|
+
+24/11/2016 16:02:23|admincmg|edit|9|1479798000-1479798000-0|plan_list|
+
+24/11/2016 16:02:25|admincmg|edit|9|1479710700-1479710700-0|plan_list|
+
+24/11/2016 16:02:28|admincmg|edit|9|1479710700-1479710700-0|plan_list|
+
+24/11/2016 16:02:57|admincmg|edit|9|1479710700-1479710700-0|plan_list|
+
+24/11/2016 16:05:13|admincmg|edit|9|1479710700-1479710700-0|plan_list|
+
+24/11/2016 16:05:56|admincmg|edit|9|1479799800-1479799800-0|plan_list|
+
+24/11/2016 16:07:19|admincmg|edit|9|1479799800-1479799800-0|plan_list|
+
+24/11/2016 16:07:23|admincmg|edit|9|1479769200-1479769200-1|plan_list|
+
+24/11/2016 16:07:28|admincmg|edit|9|1479718800-1479718800-0|plan_list|
+
+24/11/2016 16:08:13|admincmg|edit|9|1479799800-1479799800-0|plan_list|
+
+24/11/2016 16:08:16|admincmg|edit|9|1479799800-1479799800-0|plan_list|
+
+24/11/2016 16:08:19|admincmg|edit|9|1479715200-1479721500-0|plan_list|
+
+24/11/2016 16:09:23|admincmg|edit|9|1479715200-1479721500-0|plan_list|
+
+24/11/2016 16:09:35|admincmg|edit|9|1479715200-1479721500-0|plan_list|
+
+24/11/2016 16:09:47|admincmg|edit|9|1479715200-1479724200-0|plan_list|
+
+24/11/2016 16:09:51|admincmg|edit|9|1479715200-1479719700-0|plan_list|
+
+24/11/2016 16:10:18|admincmg|edit|9|1479715200-1479727800-0|plan_list|
+
+24/11/2016 16:10:27|admincmg|edit|9|1479715200-1479727800-0|plan_list|
+
+24/11/2016 16:13:27|admincmg|edit|9|1479715200-1479727800-0|plan_list|
+
+24/11/2016 16:14:31|admincmg|edit|9|1479888000-1479900600-0|plan_list|
+
+24/11/2016 16:14:37|admincmg|edit|9|1479887100-1479899700-0|plan_list|
+
+24/11/2016 16:14:40|admincmg|edit|9|1479887100-1479899700-0|plan_list|
+
+24/11/2016 16:15:17|admincmg|edit|9|1479887100-1479899700-0|plan_list|
+
+24/11/2016 16:17:02|admincmg|edit|9|1479887100-1479895200-0|plan_list|
+
+24/11/2016 16:17:09|admincmg|edit|9|1479887100-1479888000-0|plan_list|
+
+24/11/2016 16:17:13|admincmg|edit|9|1479887100-1479895200-0|plan_list|
+
+24/11/2016 16:17:17|admincmg|edit|9|1479799800-1479807900-0|plan_list|
+
+24/11/2016 16:17:35|admincmg|delete|7|plan_list|
+
+24/11/2016 16:17:46|admincmg|add|7|plan|hd-rgb(1, 255, 112)-1
+
+24/11/2016 16:17:47|admincmg|add|10|plan_list|7-1479718800-1479718800-1-1
+
+24/11/2016 16:17:49|admincmg|edit|7|1479629700-1479629700-0|plan_list|
+
+24/11/2016 16:17:51|admincmg|edit|7|1479629700-1479635100-0|plan_list|
+
+24/11/2016 16:18:12|admincmg|edit|10|1479631500-1479631500-0|plan_list|
+
+24/11/2016 16:18:20|admincmg|delete|10|plan_list|
+
+24/11/2016 16:18:22|admincmg|add|11|plan_list|7-1479682800-1479682800-1-1
+
+24/11/2016 16:18:53|admincmg|edit|7|1479628800-1479628800-0|plan_list|
+
+24/11/2016 16:19:29|admincmg|delete|11|plan_list|
+
+24/11/2016 16:19:33|admincmg|add|12|plan_list|7-1479712500-1479712500-1-1
+
+24/11/2016 16:19:35|admincmg|edit|7|1479630600-1479630600-0|plan_list|
+
+24/11/2016 16:20:53|admincmg|add|13|plan_list|7-1479973500-1479973500-1-1
+
+24/11/2016 16:21:33|admincmg|delete|12|plan_list|
+
+24/11/2016 16:21:37|admincmg|delete|13|plan_list|
+
+24/11/2016 16:21:41|admincmg|add|14|plan_list|7-1479628800-1479628800-1-1
+
+24/11/2016 16:21:43|admincmg|edit|14|1479631500-1479631500-0|plan_list|
+
+24/11/2016 16:21:47|admincmg|edit|14|1479631500-1479635100-0|plan_list|
+
+24/11/2016 16:21:49|admincmg|edit|14|1479627000-1479630600-0|plan_list|
+
+24/11/2016 16:21:52|admincmg|edit|14|1479682800-1479682800-1|plan_list|
+
+24/11/2016 16:21:55|admincmg|edit|14|1479627900-1479627900-0|plan_list|
+
+24/11/2016 16:22:01|admincmg|delete|14|plan_list|
+
+24/11/2016 16:22:16|admincmg|add|15|plan_list|7-1479627900-1479627900-1-1
+
+24/11/2016 16:26:46|admincmg|delete|9|plan_list|
+
+24/11/2016 16:26:50|admincmg|delete|15|plan_list|
+
+24/11/2016 16:26:59|admincmg|delete|7|plan|
+
+24/11/2016 16:54:40|admincmg|add|16|plan_list|1-1477868400-1477868400-1-1
+
+24/11/2016 16:54:57|admincmg|delete|16|plan_list|
+

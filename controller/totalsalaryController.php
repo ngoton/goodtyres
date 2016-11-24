@@ -919,6 +919,58 @@ Class totalsalaryController Extends baseController {
 
         $this->view->data['arr_attend'] = $arr_attend;
 
+        $thangtruoc1 = date("d-m-Y", strtotime("-1 month", strtotime($batdau)));
+        $thangtruoc2 = date("d-m-Y", strtotime("-1 month", strtotime($ketthuc)));
+
+        $data = array(
+            'where' => 'attendance_date >= '.strtotime($thangtruoc1).' AND attendance_date <= '.strtotime($thangtruoc2),
+        );
+        $attendances = $attendance_model->getAllAttendance($data);
+        $arr_attend_temp = array();
+        $kpi = 300;
+        foreach ($attendances as $attendance) {
+            $sophut = 0;
+            $diemtru = 0;
+            if ($attendance->attendance_day == "Bảy") {
+                if (4 >= $attendance->attendance_total) {
+                    $sophut = (4 - $attendance->attendance_total)*60;
+                }
+            }
+            else{
+                if (8 >= $attendance->attendance_total) {
+                    $sophut = (8 - $attendance->attendance_total)*60;
+                }
+            }
+            
+
+            if ($sophut <= 3) {
+                $diemtru = 0;
+            }
+            else if ($sophut > 3 && $sophut <= 15) {
+                $diemtru = 1;
+            }
+            else if ($sophut > 15 && $sophut <= 30) {
+                $diemtru = 1.5;
+            }
+            else if ($sophut > 30 && $sophut <= 60) {
+                $diemtru = 3;
+            }
+            else if ($sophut > 60 && $sophut <= 240) {
+                $diemtru = 8;
+            }
+            else if ($sophut > 240 && $sophut <= 360) {
+                $diemtru = 10;
+            }
+            else if ($sophut > 360) {
+                $diemtru = 12;
+            }
+            
+            
+            $arr_attend_temp[$attendance->staff] = isset($arr_attend_temp[$attendance->staff])?$arr_attend_temp[$attendance->staff]-$diemtru:$kpi-$diemtru;
+        }
+
+        $this->view->data['arr_attend_temp'] = $arr_attend_temp;
+
         ////////
 
         $doanhthu = array();

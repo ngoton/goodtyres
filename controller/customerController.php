@@ -42,7 +42,7 @@ Class customerController Extends baseController {
             'where' => '1=1',
         );
 
-        if ($_SESSION['role_logined'] == 4) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
             $data['where'] .= ' AND customer_create_user = '.$_SESSION['userid_logined'];
         }
 
@@ -69,7 +69,7 @@ Class customerController Extends baseController {
             'limit'=>$x.','.$sonews,
             'where' => '1=1',
             );
-        if ($_SESSION['role_logined'] == 4) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
             $data['where'] .= ' AND customer_create_user = '.$_SESSION['userid_logined'];
         }
 

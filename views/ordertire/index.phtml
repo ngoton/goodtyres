@@ -24,7 +24,7 @@
             
             <input type="button" name="next" class="next action-button" value="Tiếp tục" />
         </fieldset>
-        <fieldset>
+        <fieldset class="field-sp">
             <h2 class="fs-title">Sản phẩm</h2>
             <h3 class="fs-subtitle">Bước 2</h3>
 
@@ -1816,6 +1816,12 @@ function addRow(tableID){
       });
     });
     
+    var field_height = $('.field-sp').height();
+    var min_height = $('.content-wrapper').height();
+    if (field_height > 897) {
+        min_height += 77;
+        $('.content-wrapper').height(min_height);
+    }
 
 }
 function deleteRow(tableID){
@@ -1870,6 +1876,14 @@ function deleteRow(tableID){
         alert(e);
     }
 }
+
+    var field_height = $('.field-sp').height();
+    var min_height = $('.content-wrapper').height();
+    if (field_height > 897) {
+        min_height += 77;
+        $('.content-wrapper').height(min_height);
+    }
+
 </script>
 <style type="text/css">
     /*custom font*/

@@ -1,0 +1,379 @@
+<!-- fullCalendar 2.2.5-->
+<link rel="stylesheet" href="<?php echo BASE_URL ?>/public/js/plugins/fullcalendar/fullcalendar.min.css">
+<link rel="stylesheet" href="<?php echo BASE_URL ?>/public/js/plugins/fullcalendar/fullcalendar.print.css" media="print">
+<style type="text/css">
+    #external-events{
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+    .input-group .form-control {
+        width: 80%;
+    }
+    .form-control {
+        height: 20px;
+    }
+    #trash{
+        border: 1px dashed red;
+        padding: 10px;
+        font-style: italic;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-3">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <h4 class="box-title">Công việc</h4>
+        </div>
+        <div class="box-body">
+          <!-- the events -->
+          <div id="external-events">
+            <?php foreach ($plans as $plan) { ?>
+              <div data="<?php echo $plan->plan_event_id ?>" style="background-color: <?php echo $plan->color ?>; border-color: <?php echo $plan->color ?>; color: rgb(255, 255, 255);" class="external-event"><?php echo $plan->plan_event_name ?></div>
+            <?php } ?>
+          </div>
+          <div id="trash" ><i class="fa fa-trash"></i> Kéo vào để xóa</div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /. box -->
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title">Tên công việc</h3>
+        </div>
+        <div class="box-body">
+          <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+            <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
+            <ul class="fc-color-picker" id="color-chooser">
+              <li><a class="text-aqua" href="#"><i class="fa fa-square"></i></a></li>
+              <li><a class="text-blue" href="#"><i class="fa fa-square"></i></a></li>
+              <li><a class="text-light-blue" href="#"><i class="fa fa-square"></i></a></li>
+              <li><a class="text-teal" href="#"><i class="fa fa-square"></i></a></li>
+              <li><a class="text-yellow" href="#"><i class="fa fa-square"></i></a></li>
+              <li><a class="text-orange" href="#"><i class="fa fa-square"></i></a></li>
+              <li><a class="text-green" href="#"><i class="fa fa-square"></i></a></li>
+              <li><a class="text-lime" href="#"><i class="fa fa-square"></i></a></li>
+              <li><a class="text-red" href="#"><i class="fa fa-square"></i></a></li>
+              <li><a class="text-purple" href="#"><i class="fa fa-square"></i></a></li>
+              <li><a class="text-fuchsia" href="#"><i class="fa fa-square"></i></a></li>
+              <li><a class="text-muted" href="#"><i class="fa fa-square"></i></a></li>
+              <li><a class="text-navy" href="#"><i class="fa fa-square"></i></a></li>
+            </ul>
+          </div>
+          <!-- /btn-group -->
+          <div class="input-group">
+            <input id="new-event" type="text" class="form-control" placeholder="Tên">
+
+            <div class="input-group-btn">
+              <button id="add-new-event" type="button" class="btn btn-primary btn-flat">Thêm</button>
+            </div>
+            <!-- /btn-group -->
+          </div>
+          <!-- /input-group -->
+          <div class="error"></div>
+        </div>
+      </div>
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+      <div class="box box-primary">
+        <div class="box-body no-padding">
+          <!-- THE CALENDAR -->
+          <div id="calendar"></div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /. box -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+<!-- fullCalendar 2.2.5 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+<script src="<?php echo BASE_URL ?>/public/js/plugins/fullcalendar/fullcalendar.min.js"></script>
+<!-- Page specific script -->
+<script>
+  $(function () {
+    var currentMousePos = {
+        x: -1,
+        y: -1
+    };
+
+    $(document).on("mousemove", function (event) {
+       currentMousePos.x = event.pageX;
+       currentMousePos.y = event.pageY;
+    });
+
+    function isElemOverDiv() {
+     var trashEl = jQuery('#trash');
+     var ofs = trashEl.offset();
+     var x1 = ofs.left;
+     var x2 = ofs.left + trashEl.outerWidth(true);
+     var y1 = ofs.top;
+     var y2 = ofs.top + trashEl.outerHeight(true);
+     if (currentMousePos.x >= x1 && currentMousePos.x <= x2 && currentMousePos.y >= y1 && currentMousePos.y <= y2) {
+        return true;    
+      }    
+      return false; 
+   }
+
+    /* initialize the external events
+     -----------------------------------------------------------------*/
+    function ini_events(ele) {
+      ele.each(function () {
+        var xPos=0, yPos=0;
+        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+        // it doesn't need to have a start or end
+        var eventObject = {
+          title: $.trim($(this).text()), // use the element's text as the event title
+          id: $(this).attr('data')
+        };
+
+        // store the Event Object in the DOM element so we can get to it later
+        $(this).data('eventObject', eventObject);
+
+        // make the event draggable using jQuery UI
+        $(this).draggable({
+          scroll: false,
+          helper: 'clone',
+          zIndex: 1070,
+          revert: true, // will cause the event to go back to its
+          revertDuration: 0,  //  original position after the drag
+          drag: function() {
+            var offset = $('.ui-draggable-dragging').offset();
+            xPos = offset.left;
+            yPos = offset.top;
+          },
+          stop: function() {
+            var trashEl = $('#trash');
+            var ofs = trashEl.offset();
+            var x1 = ofs.left;
+            var x2 = ofs.left + trashEl.outerWidth(true);
+            var y1 = ofs.top;
+            var y2 = ofs.top + trashEl.outerHeight(true);
+            var ele = $(this);
+            var id = ele.attr('data');
+            if (xPos >= x1 && xPos <= x2 && yPos >= y1 && yPos <= y2) {
+                
+                $.ajax({
+                  type: 'POST',
+                  url: '<?php echo BASE_URL ?>/plan/delete',
+                  data: {
+                    data: id,
+                  },
+                  dataType: 'json',
+                  success: function(response){
+                    ele.remove();
+                  }
+                });
+            }   
+          },
+        });
+
+      });
+    }
+
+    ini_events($('#external-events div.external-event'));
+
+    /* list events
+     -----------------------------------------------------------------*/
+    var json_events = null;
+    function getEvent(){
+      $.ajax({
+         url: '<?php echo BASE_URL ?>/plan/listevent',
+         type: 'GET',
+         data: {
+            all: 1,
+          },
+         async: false,
+         success: function(response){
+           json_events = response;
+         }
+      });
+    }
+
+    getEvent();
+
+    /* initialize the calendar
+     -----------------------------------------------------------------*/
+    //Date for the calendar events (dummy data)
+    var date = new Date();
+    var d = date.getDate(),
+        m = date.getMonth(),
+        y = date.getFullYear();
+    $('#calendar').fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'agendaDay,agendaWeek,month'
+      },
+      buttonText: {
+        today: 'Hôm nay',
+        month: 'Tháng',
+        week: 'Tuần',
+        day: 'Ngày'
+      },
+      minTime: "08:00:00",
+      maxTime: "17:00:00",
+      slotDuration : "00:15:00",
+      defaultView: 'agendaWeek',
+      //Random default events
+      events: JSON.parse(json_events),
+      editable: true,
+      droppable: true, // this allows things to be dropped onto the calendar !!!
+      drop: function (date, allDay) { // this function is called when something is dropped
+        
+        // retrieve the dropped element's stored Event Object
+        var originalEventObject = $(this).data('eventObject');
+
+        // we need to copy it, so that multiple events don't have a reference to the same object
+        var copiedEventObject = $.extend({}, originalEventObject);
+
+        // assign it the date that was reported
+        copiedEventObject.start = date;
+        copiedEventObject.allDay = allDay;
+        copiedEventObject.backgroundColor = $(this).css("background-color");
+        copiedEventObject.borderColor = $(this).css("border-color");
+
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/plan/addevent',
+            data: {
+              plan_event: originalEventObject.id,
+              start_date: copiedEventObject.start.format(),
+              end_date: copiedEventObject.start.format(),
+              all_day: 1,
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function(response){
+              copiedEventObject.id = response.planid;
+              $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+            },
+            error: function(e){
+              console.log(e.responseText);
+            }
+        });
+        
+      },
+      eventDrop: function(event, delta, revertFunc) {
+         var id = event.id;
+         var title = event.title;
+         var start = event.start.format();
+         var end = (event.end == null) ? start : event.end.format();
+         var all_day = event.allDay == true ? 1:0;
+         $.ajax({
+            url: '<?php echo BASE_URL ?>/plan/editevent',
+            data: {
+              start_date: start,
+              end_date: end,
+              all_day: all_day,
+              data: id,
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function(response){
+            },
+            error: function(e){
+              console.log(e.responseText);
+            }
+        });
+      },
+      eventResize: function(event, jsEvent, ui, view) {
+         var id = event.id;
+         var title = event.title;
+         var start = event.start.format();
+         var end = (event.end == null) ? start : event.end.format();
+         var all_day = event.allDay == true ? 1:0;
+         $.ajax({
+            url: '<?php echo BASE_URL ?>/plan/editevent',
+            data: {
+              start_date: start,
+              end_date: end,
+              all_day: all_day,
+              data: id,
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function(response){
+            },
+            error: function(e){
+              console.log(e.responseText);
+            }
+        });
+      },
+      eventDragStop: function (event, jsEvent, ui, view) {
+        if (isElemOverDiv()) {
+          $.ajax({
+              url: '<?php echo BASE_URL ?>/plan/deleteevent',
+              data: {
+                data: event.id,
+              },
+              type: 'POST',
+              dataType: 'json',
+              success: function(response){
+                $('#calendar').fullCalendar('removeEvents',[event.id]);
+              },
+              error: function(e){
+                console.log(e.responseText);
+              }
+          });
+         
+        }
+      },
+    });
+
+    /* ADDING EVENTS */
+    var currColor = "#3c8dbc"; //Red by default
+    //Color chooser button
+    var colorChooser = $("#color-chooser-btn");
+    $("#color-chooser > li > a").click(function (e) {
+      e.preventDefault();
+      //Save color
+      currColor = $(this).css("color");
+      //Add color effect to button
+      $('#add-new-event').css({"background-color": currColor, "border-color": currColor});
+    });
+    $("#add-new-event").click(function (e) {
+      e.preventDefault();
+      //Get value and make sure it is not null
+      var val = $("#new-event").val();
+      if (val.length == 0) {
+        return;
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo BASE_URL ?>/plan/add',
+        data: {
+          plan_event_name: val,
+          color: currColor,
+        },
+        dataType: 'json',
+        success: function(response){
+          if (response.planid > 0) {
+            //Create events
+            var event = $("<div />");
+            event.css({"background-color": currColor, "border-color": currColor, "color": "#fff"}).addClass("external-event");
+            event.html(val);
+            event.attr('data',response.planid);
+            $('#external-events').prepend(event);
+
+            //Add draggable funtionality
+            ini_events(event);
+
+            //Remove event from text input
+            $("#new-event").val("");
+          }
+          else{
+            $('.error').html(response.status);
+          }
+          
+        }
+      });
+
+      
+    });
+
+
+  });
+</script>

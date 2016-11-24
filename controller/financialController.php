@@ -25,6 +25,9 @@ Class financialController Extends baseController {
             $ketthuc = date('d-m-Y',$this->registry->router->page);
         }
 
+        $kt = date('d-m-Y',strtotime('+1 day', strtotime($ketthuc)));
+
+
         $account_model = $this->model->get('accountModel');
         $account_balance_model = $this->model->get('accountbalanceModel');
         $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0)'),array('order_by'=>'account_number','order'=>'ASC'));
@@ -55,7 +58,7 @@ Class financialController Extends baseController {
         }
 
         $data = array(
-            'where'=>'account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime($ketthuc),
+            'where'=>'account_balance_date >= '.strtotime($batdau).' AND account_balance_date < '.strtotime($kt),
         );
         $account_balances = $account_balance_model->getAllAccount($data,$join);
         $account_add = array();
@@ -119,6 +122,8 @@ Class financialController Extends baseController {
             $ketthuc = date('d-m-Y',$this->registry->router->page);
         }
 
+        $kt = date('d-m-Y',strtotime('+1 day', strtotime($ketthuc)));
+
         $account_model = $this->model->get('accountModel');
         $account_balance_model = $this->model->get('accountbalanceModel');
         $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0)'),array('order_by'=>'account_number','order'=>'ASC'));
@@ -160,7 +165,7 @@ Class financialController Extends baseController {
             $n = ($tuan+$i)>52?($nam+1):$nam;
 
             $data = array(
-                'where' => 'account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime($ketthuc).' AND week = '.$t.' AND year = '.$n,
+                'where' => 'account_balance_date >= '.strtotime($batdau).' AND account_balance_date < '.strtotime($kt).' AND week = '.$t.' AND year = '.$n,
             );
             $account_balances = $account_balance_model->getAllAccount($data,$join);
             
@@ -231,6 +236,8 @@ Class financialController Extends baseController {
                 $ketthuc = date('m-Y', strtotime("+1 month", $this->registry->router->page));
             }
         }
+
+        $kt = date('d-m-Y',strtotime('+1 day', strtotime($ketthuc)));
 
         $account_model = $this->model->get('accountModel');
         $account_balance_model = $this->model->get('accountbalanceModel');
@@ -366,6 +373,8 @@ Class financialController Extends baseController {
             $ketthuc = date('d-m-Y',$this->registry->router->page);
         }
 
+        $kt = date('d-m-Y',strtotime('+1 day', strtotime($ketthuc)));
+
         $tha = (int)date('m',strtotime($batdau));
         $na = date('Y',strtotime($batdau));
 
@@ -373,7 +382,7 @@ Class financialController Extends baseController {
         $this->view->data['na'] = $na;
 
         $tire_sale_model = $this->model->get('tiresaleModel');
-        $sales = $tire_sale_model->queryTire('SELECT SUM(volume) AS soluong FROM tire_sale WHERE tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc));
+        $sales = $tire_sale_model->queryTire('SELECT SUM(volume) AS soluong FROM tire_sale WHERE tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date < '.strtotime($kt));
         $total_sale = 0;
         foreach ($sales as $sale) {
             $total_sale = $sale->soluong;
@@ -409,7 +418,7 @@ Class financialController Extends baseController {
         }
 
         $data = array(
-            'where'=>'account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime($ketthuc),
+            'where'=>'account_balance_date >= '.strtotime($batdau).' AND account_balance_date < '.strtotime($kt),
         );
         $account_balances = $account_balance_model->getAllAccount($data,$join);
         $account_add = array();
@@ -477,6 +486,8 @@ Class financialController Extends baseController {
             $ketthuc = date('d-m-Y',$this->registry->router->page);
         }
 
+        $kt = date('d-m-Y',strtotime('+1 day', strtotime($ketthuc)));
+
         $tha = (int)date('m',strtotime($batdau));
         $na = date('Y',strtotime($batdau));
 
@@ -496,7 +507,7 @@ Class financialController Extends baseController {
 
         $join = array('table'=>'account','where'=>'account=account_id');
         $data = array(
-            'where'=>'account_balance_date <= '.strtotime($ketthuc),
+            'where'=>'account_balance_date < '.strtotime($kt),
         );
         $account_balance_afters = $account_balance_model->getAllAccount($data,$join);
         $account_after = array();
@@ -551,6 +562,8 @@ Class financialController Extends baseController {
             $ketthuc = date('d-m-Y',$this->registry->router->page);
         }
 
+        $kt = date('d-m-Y',strtotime('+1 day', strtotime($ketthuc)));
+
         $tha = (int)date('m',strtotime($batdau));
         $na = date('Y',strtotime($batdau));
 
@@ -570,7 +583,7 @@ Class financialController Extends baseController {
 
         $join = array('table'=>'account','where'=>'account=account_id');
         $data = array(
-            'where'=>'account_balance_date <= '.strtotime($ketthuc),
+            'where'=>'account_balance_date < '.strtotime($kt),
         );
         $account_balance_afters = $account_balance_model->getAllAccount($data,$join);
         $account_after = array();
@@ -627,6 +640,8 @@ Class financialController Extends baseController {
             $na = date('Y');
         }
 
+        $kt = date('d-m-Y',strtotime('+1 day', strtotime($ketthuc)));
+
         $tha = (int)date('m',strtotime($batdau));
         $na = date('Y',strtotime($batdau));
 
@@ -655,7 +670,7 @@ Class financialController Extends baseController {
         $pagination_stages = 2;
         
         $data = array(
-            'where' => '(debit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.')) AND additional_date >= '.strtotime($batdau).' AND additional_date <= '.strtotime($ketthuc),
+            'where' => '(debit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.')) AND additional_date >= '.strtotime($batdau).' AND additional_date < '.strtotime($kt),
         );
 
         if ($id>0) {
@@ -682,7 +697,7 @@ Class financialController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => '(debit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.')) AND additional_date >= '.strtotime($batdau).' AND additional_date <= '.strtotime($ketthuc),
+            'where' => '(debit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.')) AND additional_date >= '.strtotime($batdau).' AND additional_date < '.strtotime($kt),
             );
         
         if ($id>0) {
@@ -717,10 +732,12 @@ Class financialController Extends baseController {
             $batdau = isset($_POST['batdau']) ? $_POST['batdau'] : null;
             $ketthuc = isset($_POST['ketthuc']) ? $_POST['ketthuc'] : null;
 
+            $kt = date('d-m-Y',strtotime('+1 day', strtotime($ketthuc)));
+
             $additional_model = $this->model->get('additionalModel');
 
             $data = array(
-                'where' => '(debit = '.$account.' OR credit = '.$account.') AND additional_date >= '.strtotime($batdau).' AND additional_date <= '.strtotime($ketthuc),
+                'where' => '(debit = '.$account.' OR credit = '.$account.') AND additional_date >= '.strtotime($batdau).' AND additional_date < '.strtotime($kt),
                 'order_by' => 'additional_date',
                 'order' => 'ASC',
             );

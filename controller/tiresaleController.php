@@ -718,7 +718,7 @@ Class tiresaleController Extends baseController {
             $data['where'] .= ' AND tire_sale_date >= '.strtotime($tu).' AND tire_sale_date <= '.strtotime($den);
         }
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
             $data['where'] = $data['where'].' AND sale IN (SELECT staff_id FROM staff WHERE account = '.$_SESSION['userid_logined'].')';
         }
       

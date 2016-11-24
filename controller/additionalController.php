@@ -34,6 +34,8 @@ Class additionalController Extends baseController {
             $trangthai = "";
             $code = $this->registry->router->addition;
         }
+        $kt = date('d-m-Y',strtotime('+1 day', strtotime($ketthuc)));
+
         $id = $this->registry->router->param_id;
 
 
@@ -55,7 +57,7 @@ Class additionalController Extends baseController {
         $pagination_stages = 2;
         
         $data = array(
-            'where' => 'additional_date >= '.strtotime($batdau).' AND additional_date <= '.strtotime($ketthuc),
+            'where' => 'additional_date >= '.strtotime($batdau).' AND additional_date < '.strtotime($kt),
         );
 
         if ($id>0) {
@@ -98,7 +100,7 @@ Class additionalController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => 'additional_date >= '.strtotime($batdau).' AND additional_date <= '.strtotime($ketthuc),
+            'where' => 'additional_date >= '.strtotime($batdau).' AND additional_date < '.strtotime($kt),
             );
         
         if ($id>0) {
