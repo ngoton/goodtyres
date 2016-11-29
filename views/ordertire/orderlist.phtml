@@ -220,7 +220,14 @@ elseif ($order_by == 'order_tire_number')
                 
                 <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/invoice/'.$order_tire->order_tire_id ?>'">Hóa đơn</button>
                 
-                <?php if($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1){ ?>
+                
+                <?php if($order_tire->sale_lock==1 && $_SESSION['role_logined']==1){ ?>
+                <button data="<?php echo $order_tire->order_tire_id ?>" value="0"  class="unlock">Mở</button>
+                <?php }elseif ($order_tire->sale_lock!=1 && $_SESSION['role_logined']==1) { ?>
+                    <button data="<?php echo $order_tire->order_tire_id ?>" value="1"  class="unlock">Khóa</button>
+                <?php } ?>
+
+                <?php if(($order_tire->sale_lock!=1 && $order_tire->sale==$_SESSION['userid_logined']) || $_SESSION['role_logined']==1){ ?>
                 <a class="error del" data="<?php echo $order_tire->order_tire_id ?>" >Xóa</a>
                 <?php } ?>
             </td>
@@ -1488,6 +1495,20 @@ $( "#dialogContent4" ).dialog({
     var r = confirm("Bạn có chắc chắn không?");
     if (r == true){
          $.post("<?php echo BASE_URL ?>/ordertire/delete", {data: data},
+           function(data){
+                setTimeout(function() {
+                    sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                  }, 200);
+           }); 
+    }
+});
+
+  $('.unlock').click(function(){
+    var data = $(this).attr('data');
+    var val = $(this).val();
+    var r = confirm("Bạn có chắc chắn không?");
+    if (r == true){
+         $.post("<?php echo BASE_URL ?>/ordertire/unlock", {data: data, val: val},
            function(data){
                 setTimeout(function() {
                     sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');

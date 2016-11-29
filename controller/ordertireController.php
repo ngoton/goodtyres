@@ -1067,6 +1067,26 @@ Class ordertireController Extends baseController {
         }
     }
 
+    public function unlock(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_tire_model = $this->model->get('ordertireModel');
+
+            $order = trim($_POST['data']);
+            $lock = trim($_POST['val']);
+            $order_tire_model->updateTire(array('sale_lock'=>$lock),array('order_tire_id'=>$order));
+
+            echo "Thành công";
+
+            date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+            $filename = "action_logs.txt";
+            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."lock"."|".$order."|ordertire|".$lock."\n"."\r\n";
+            
+            $fh = fopen($filename, "a") or die("Could not open log file.");
+            fwrite($fh, $text) or die("Could not write file!");
+            fclose($fh);
+        }
+    }
+
     public function listtire($id){
         $this->view->disableLayout();
         $this->view->data['lib'] = $this->lib;
@@ -1288,6 +1308,7 @@ Class ordertireController Extends baseController {
                 $order_tire_model->updateTire($data_order,array('order_tire_id'=>$order_tire_list->order_tire));
 
                 if($order_tire->order_tire_status==1){
+                    $order_tire_model->updateTire(array('sale_lock'=>1),array('order_tire_id'=>$order_tire_list->order_tire));
 
                     $order_tire_list_old = $order_tire_list_model->getTire($_POST['yes']);
 
@@ -1417,6 +1438,8 @@ Class ordertireController Extends baseController {
                 $order_tire_model->updateTire($data_order,array('order_tire_id'=>$order_tire_list->order_tire));
 
                 if($order_tire->order_tire_status==1){
+
+                    $order_tire_model->updateTire(array('sale_lock'=>1),array('order_tire_id'=>$order_tire_list->order_tire));
 
                     $order_tire_list_old = $order_tire_list_model->getTire($order_tire_list_model->getLastTire()->order_tire_list_id);
 
@@ -1639,6 +1662,7 @@ Class ordertireController Extends baseController {
             $data = array(
                 'order_tire_status'=>1,
                 'delivery_date'=>strtotime($_POST['delivery_date']),
+                'sale_lock'=>1,
             );
 
             $order_tire_model->updateTire($data,array('order_tire_id'=>$id));
