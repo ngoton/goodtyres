@@ -446,6 +446,13 @@ Class financialController Extends baseController {
             
         }
 
+        $accounts = $account_model->getAllAccount();
+        $account_num = array();
+        foreach ($accounts as $acc) {
+            $account_num[$acc->account_number] = $acc->account_id;
+        }
+        $this->view->data['account_num'] = $account_num;
+
         $this->view->data['account_before'] = $account_before;
         $this->view->data['account_add'] = $account_add;
         $this->view->data['account_parent_before'] = $account_parent_before;
@@ -759,6 +766,30 @@ Class financialController Extends baseController {
                 }
                 $tr.= '<tfoot><tr style="color:red"><td colspan="2">Tổng cộng</td><td>'.$this->lib->formatMoney($tong).'</td><td></td></tr></tfoot>';
                 $tr.= "</tbody></table>";
+            }
+            else{
+                $data = array(
+                    'where' => '( debit IN (SELECT account_id FROM account WHERE account_parent = '.$account.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$account.') ) AND additional_date >= '.strtotime($batdau).' AND additional_date < '.strtotime($kt),
+                    'order_by' => 'additional_date',
+                    'order' => 'ASC',
+                );
+                $additionals = $additional_model->getAllAdditional($data);
+
+                if ($additionals) {
+                    $tr .= '<table class="table_data"><thead><tr><th>Ngày</th><th>ND</th><th>Số tiền</th><th>Code</th></tr></thead><tbody>';
+                    foreach ($additionals as $v) {
+                        $total = $v->debit==$account?$v->money:0-$v->money;
+                        $tr.= '<tr>';
+                        $tr.= '<td><a target="_blank" href="'.BASE_URL.'/additional/index/'.$v->additional_id.'">'.$this->lib->hien_thi_ngay_thang($v->additional_date).'</a></td>';
+                        $tr.= '<td><a target="_blank" href="'.BASE_URL.'/additional/index/'.$v->additional_id.'">'.$v->additional_comment.'</a></td>';
+                        $tr.= '<td><a target="_blank" href="'.BASE_URL.'/additional/index/'.$v->additional_id.'">'.$this->lib->formatMoney($total).'</a></td>';
+                        $tr.= '<td><a target="_blank" href="'.BASE_URL.'/additional/index/'.$v->additional_id.'">'.$v->code.'</a></td>';
+                        $tr.= '</tr>';
+                        $tong += $total;
+                    }
+                    $tr.= '<tfoot><tr style="color:red"><td colspan="2">Tổng cộng</td><td>'.$this->lib->formatMoney($tong).'</td><td></td></tr></tfoot>';
+                    $tr.= "</tbody></table>";
+                }
             }
             echo $tr;
         }

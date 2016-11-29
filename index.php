@@ -23,6 +23,14 @@ if (isset($_COOKIE['remember']) && isset($_COOKIE['ui']) && isset($_COOKIE['up']
 	    $_SESSION['userid_logined'] = $row->user_id;
 	    $_SESSION['role_logined'] = $row->role;
     }
+    else{
+    	session_destroy();
+        setcookie("remember", "",time() - 3600,"/");
+        setcookie("uu", "",time() - 3600,"/");
+        setcookie("ui", "",time() - 3600,"/");
+        setcookie("ro", "",time() - 3600,"/");
+        setcookie("up", "",time() - 3600,"/");
+    }
     unset($user);
     unset($row);
 }
