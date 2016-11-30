@@ -226,7 +226,7 @@ $this->helper('slidePaginator');
                             </td>
                             <td>Thương hiệu</td>
                             <td>
-                                <select name="tire_brand" id="tire_brand" tabindex="2"  required="required">
+                                <select name="tire_brand" id="tire_brand" tabindex="2"  required="required" disabled>
                                     <?php foreach ($tire_brands as $tire_brand) { ?>
                                         <option value="<?php echo $tire_brand->tire_brand_id ?>"><?php echo $tire_brand->tire_brand_name ?></option>
                                     <?php } ?>
@@ -236,7 +236,7 @@ $this->helper('slidePaginator');
                             </td>
                             <td>Size</td>
                             <td>
-                                <select name="tire_size" id="tire_size" tabindex="3"  required="required">
+                                <select name="tire_size" id="tire_size" tabindex="3"  required="required" disabled>
                                     <?php foreach ($tire_sizes as $tire_size) { ?>
                                         <option value="<?php echo $tire_size->tire_size_id ?>"><?php echo $tire_size->tire_size_number ?></option>
                                     <?php } ?>
@@ -250,13 +250,13 @@ $this->helper('slidePaginator');
                         <tr>
                             <td>Số lượng</td>
                             <td>
-                                <input style="width:50px" class="number" type="text" id="volume"  name="volume" tabindex="4"  required="required" >
+                                <input style="width:50px" class="number" type="text" id="volume"  name="volume" tabindex="4"  required="required" disabled>
                                 
                             </td>
                             <td>Giá bán</td>
                             <td>
-                                <input style="width:80px" class="numbers" type="text" id="sell_price"  name="sell_price" tabindex="5"  required="required" >
-                                <input type="checkbox" class="check_vat" name="check_vat" id="check_vat" > VAT
+                                <input style="width:80px" class="numbers" type="text" id="sell_price"  name="sell_price" tabindex="5"  required="required" disabled>
+                                <input type="checkbox" class="check_vat" name="check_vat" id="check_vat" disabled> VAT
                             </td>
                             <td>
                                 Mã gai
@@ -268,16 +268,16 @@ $this->helper('slidePaginator');
                         <tr>
                             <td>Ngày</td>
                             <td>
-                                <input style="width:80px" class="ngay" type="text" id="tire_sale_date"  name="tire_sale_date" tabindex="7"  required="required" >
+                                <input style="width:80px" class="ngay" type="text" id="tire_sale_date"  name="tire_sale_date" tabindex="7"  required="required" disabled>
                                 
                             </td>
                             <td>Khách hàng </td>
-                            <td><input type="text"  id="customer" name="customer" tabindex="8"  autocomplete="off" required="required" placeholder="Nhập tên hoặc * để chọn" > <a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="<?php echo $this->url('customer') ?>"> + </a>
+                            <td><input disabled type="text"  id="customer" name="customer" tabindex="8"  autocomplete="off" required="required" placeholder="Nhập tên hoặc * để chọn" > <a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="<?php echo $this->url('customer') ?>"> + </a>
                                 <ul id="customer_list_id"></ul>
                             </td>
                             <td>Sale</td>
                             <td>
-                                <select id="sale" name="sale">
+                                <select disabled id="sale" name="sale">
                                     <?php foreach ($staffs as $staff) { ?>
                                         <option value="<?php echo $staff->staff_id ?>"><?php echo $staff->staff_name ?></option>
                                     <?php } ?>
@@ -289,7 +289,7 @@ $this->helper('slidePaginator');
                             <td></td>
                             <td></td>
                             <td>
-                                <select name="customer_type" id="customer_type">
+                                <select disabled name="customer_type" id="customer_type">
                                     <option value="1">Đại lý</option>
                                     <option value="2">Trực tiếp</option>
                                 </select>

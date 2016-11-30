@@ -108,6 +108,7 @@ Class stockController Extends baseController {
             $pt_type = explode(',', $sale->tire_pattern_type);
             for ($l=0; $l < count($pt_type); $l++) {
                 $tonkho[$sale->tire_brand_group][$pt_type[$l]][$sale->tire_size_number] = isset($tonkho[$sale->tire_brand_group][$pt_type[$l]][$sale->tire_size_number])?$tonkho[$sale->tire_brand_group][$pt_type[$l]][$sale->tire_size_number]-$sale->volume:$sale->volume;
+                $tonkho[$sale->tire_brand_group][$pt_type[$l]][$sale->tire_size_number] = $tonkho[$sale->tire_brand_group][$pt_type[$l]][$sale->tire_size_number]!=0?$tonkho[$sale->tire_brand_group][$pt_type[$l]][$sale->tire_size_number]:null;
             }
         }
 

@@ -2231,7 +2231,7 @@ Class ordertireController Extends baseController {
                     $str .= '<ul class="customer_list_id"></ul></td>';
                     //$str .= '<td></td><td> Vendor</td><td><select tabindex="2" class="vendor" name="vendor[]" style="width:200px">'.$opt.'</select><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a></td>';
                     $str .= '<td>Ngày chi</td>';
-                    $str .= '<td><input tabindex="5" class="order_tire_cost_date" type="date"   name="order_tire_cost_date[]" required="required" value=""></td></tr>';
+                    $str .= '<td><input tabindex="5" class="order_tire_cost_date" type="date"   name="order_tire_cost_date[]" required="required" value="'.date('Y-m-d') .'"></td></tr>';
                     
                     $str .= '<tr class="'.$_POST['order_tire'].'"><td></td><td>Số tiền</td>'; 
                     $str .= '<td><input tabindex="3" type="text" style="width:120px" class="numbers order_tire_cost"  name="order_tire_cost[]" value="0"  ></td>';
