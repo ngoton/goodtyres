@@ -36,9 +36,9 @@ Class tireimportController Extends baseController {
         $tire_size_model = $this->model->get('tiresizeModel');
         $tire_pattern_model = $this->model->get('tirepatternModel');
 
-        $tire_brands = $tire_brand_model->getAllTire();
-        $tire_sizes = $tire_size_model->getAllTire();
-        $tire_patterns = $tire_pattern_model->getAllTire();
+        $tire_brands = $tire_brand_model->getAllTire(array('order_by'=>'tire_brand_name','order'=>'ASC'));
+        $tire_sizes = $tire_size_model->getAllTire(array('order_by'=>'tire_size_number','order'=>'ASC'));
+        $tire_patterns = $tire_pattern_model->getAllTire(array('order_by'=>'tire_pattern_name','order'=>'ASC'));
 
         $this->view->data['tire_brands'] = $tire_brands;
         $this->view->data['tire_sizes'] = $tire_sizes;
