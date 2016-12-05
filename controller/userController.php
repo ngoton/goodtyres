@@ -74,7 +74,7 @@ Class userController Extends baseController {
                 $row = $user->getUserByUsername(addslashes($_POST['username']));
                 
                 if ($row) {
-                    if ($row->password == md5($_POST['password'])) {
+                    if ($row->password == md5($_POST['password']) && $row->user_lock != 1) {
                         $_SESSION['user_logined'] = $row->username;
                         $_SESSION['userid_logined'] = $row->user_id;
                         $_SESSION['role_logined'] = $row->role;
@@ -88,9 +88,25 @@ Class userController Extends baseController {
                             setcookie("up", 'oi'.md5($_POST['password']),time()+30*60*24*100,"/");
                          }
 
+                        $ipaddress = '';
+                        if (getenv('HTTP_CLIENT_IP'))
+                            $ipaddress = getenv('HTTP_CLIENT_IP');
+                        else if(getenv('HTTP_X_FORWARDED_FOR'))
+                            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+                        else if(getenv('HTTP_X_FORWARDED'))
+                            $ipaddress = getenv('HTTP_X_FORWARDED');
+                        else if(getenv('HTTP_FORWARDED_FOR'))
+                            $ipaddress = getenv('HTTP_FORWARDED_FOR');
+                        else if(getenv('HTTP_FORWARDED'))
+                           $ipaddress = getenv('HTTP_FORWARDED');
+                        else if(getenv('REMOTE_ADDR'))
+                            $ipaddress = getenv('REMOTE_ADDR');
+                        else
+                            $ipaddress = 'UNKNOWN';
+
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "user_logs.txt";
-                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."login"."\n"."\r\n";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."login"."|".$ipaddress."\n"."\r\n";
                         
                         $fh = fopen($filename, "a") or die("Could not open log file.");
                         fwrite($fh, $text) or die("Could not write file!");

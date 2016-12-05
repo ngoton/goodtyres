@@ -85,6 +85,7 @@ Class tiresalaryController Extends baseController {
         $arr_customer = array();
         $arr_discount = array();
         $arr_vat = array();
+        $arr_number = array();
         
         foreach ($orders as $tire) {
             $arr_cost[$tire->order_tire_id] = $tire->order_cost/$tire->order_tire_number;
@@ -92,6 +93,7 @@ Class tiresalaryController Extends baseController {
             $arr_customer[$tire->customer][date('d-m-Y',$tire->delivery_date)] = isset($arr_customer[$tire->customer][date('d-m-Y',$tire->delivery_date)])?$arr_customer[$tire->customer][date('d-m-Y',$tire->delivery_date)]+$tire->order_tire_number:$tire->order_tire_number;
             $arr_discount[$tire->order_tire_id] = ($tire->discount+$tire->reduce)/$tire->order_tire_number;
             $arr_vat[$tire->order_tire_id] = $tire->vat/$tire->order_tire_number;
+            $arr_number[$tire->order_tire_id] = $tire->order_tire_number;
         }
 
         $data = array(
@@ -119,8 +121,11 @@ Class tiresalaryController Extends baseController {
         $daily_moi = array();
         $tt_moi = array();
         $tt_cu = array();
+        $donmoi = array();
+        $doncu = array();
 
         $cus_arr = array();
+        $od_arr = array();
 
         $luong_sp = array();
         $luong_vuotgia = array();
@@ -184,13 +189,20 @@ Class tiresalaryController Extends baseController {
                         }
                     }
                     else if($sale->sell_price < $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]){
-                        $a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                        //$a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                        $a = $sale->volume*($sale->sell_price - $ck);
                         $b = $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]*$sale->volume;
                         if ($a >= 0.95*$b) {
-                            if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 20) {
-                                //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*1/100):($sale->volume*$sale->sell_price)*1/100;
+                            if ($a >= 0.97*$b) {
                                 $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*1/100):($sale->volume*($sale->sell_price+$va-$ck))*1/100;
                             }
+                            else{
+                                if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 20) {
+                                    //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*1/100):($sale->volume*$sale->sell_price)*1/100;
+                                    $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*1/100):($sale->volume*($sale->sell_price+$va-$ck))*1/100;
+                                }
+                            }
+                            
                         }
                         else if ($a >= 0.94*$b) {
                             if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 50) {
@@ -250,7 +262,23 @@ Class tiresalaryController Extends baseController {
                 }
             }
 
+            if(!isset($od_arr[$sale->sale]) || !in_array($sale->order_tire,$od_arr[$sale->sale])){
+                if (in_array($sale->customer,$old)) {
+                    $doncu[$sale->sale] = isset($doncu[$sale->sale])?$doncu[$sale->sale]+1:1;
+                }
+                else{
+                    if ($arr_number[$sale->order_tire] > 2) {
+                        $donmoi[$sale->sale] = isset($donmoi[$sale->sale])?$donmoi[$sale->sale]+1:1;
+                    }
+                    else{
+                        $doncu[$sale->sale] = isset($doncu[$sale->sale])?$doncu[$sale->sale]+1:1;
+                    }
+                    
+                }
+            }
+
             $cus_arr[$sale->sale][] = $sale->customer;
+            $od_arr[$sale->sale][] = $sale->order_tire;
         }
 
         
@@ -261,6 +289,8 @@ Class tiresalaryController Extends baseController {
         $this->view->data['daily_moi'] = $daily_moi;
         $this->view->data['tt_moi'] = $tt_moi;
         $this->view->data['tt_cu'] = $tt_cu;
+        $this->view->data['don_moi'] = $donmoi;
+        $this->view->data['don_cu'] = $doncu;
 
         $this->view->data['luong_sp'] = $luong_sp;
         $this->view->data['luong_vuotgia'] = $luong_vuotgia;

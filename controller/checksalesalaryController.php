@@ -182,7 +182,7 @@ Class checksalesalaryController Extends baseController {
 
                 $sum_order = $tiresale_model->getAllTire(array('where'=>'tire_sale_date >= '.strtotime('01-'.date('m-Y',$order_tire->delivery_date)).' AND tire_sale_date <= '.strtotime(date('t-m-Y',$order_tire->delivery_date))));
                 foreach ($sum_order as $sum) {
-                    $total_order[date('m-Y',$order_tire->delivery_date)][$sum->customer] = isset($total_order[date('m-Y',$order_tire->delivery_date)][$sum->customer])?$total_order[date('m-Y',$order_tire->delivery_date)][$sum->customer]+$sum->volume:$sum->volume;
+                    $total_order[date('m-Y',$sum->tire_sale_date)][$sum->customer] = isset($total_order[date('m-Y',$sum->tire_sale_date)][$sum->customer])?$total_order[date('m-Y',$sum->tire_sale_date)][$sum->customer]+$sum->volume:$sum->volume;
                 }
 
 
@@ -191,7 +191,12 @@ Class checksalesalaryController Extends baseController {
                     $info['khmoi'][$order_tire->order_tire_id] = 0;
                 }
                 else{
-                    $info['khmoi'][$order_tire->order_tire_id] = 1;
+                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] > 2) {
+                        $info['khmoi'][$order_tire->order_tire_id] = 1;
+                    }
+                    else{
+                        $info['khmoi'][$order_tire->order_tire_id] = 0;
+                    }
                 }
 
                 $data = array(
@@ -237,11 +242,17 @@ Class checksalesalaryController Extends baseController {
                                 }
                             }
                             else if($sale->sell_price < $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]){
-                                $a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                                //$a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                                $a = $sale->volume*($sale->sell_price - $ck);
                                 $b = $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]*$sale->volume;
                                 if ($a >= 0.95*$b) {
-                                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 20) {
+                                    if ($a >= 0.97*$b) {
                                         $info['percent'][$sale->order_tire] = 1;
+                                    }
+                                    else{
+                                        if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 20) {
+                                            $info['percent'][$sale->order_tire] = 1;
+                                        }
                                     }
                                 }
                                 else if ($a >= 0.94*$b) {
@@ -325,6 +336,7 @@ Class checksalesalaryController Extends baseController {
         $total_order = array();
         $old = array();
         foreach ($order_tires as $order_tire) {
+            
             $receivables = $receivable_model->getCostsByWhere(array('order_tire'=>$order_tire->order_tire_id));
             $info['congno'][$order_tire->order_tire_id] = $receivables->money-$receivables->pay_money;
 
@@ -351,14 +363,20 @@ Class checksalesalaryController Extends baseController {
 
                 $sum_order = $tiresale_model->getAllTire(array('where'=>'tire_sale_date >= '.strtotime('01-'.date('m-Y',$order_tire->delivery_date)).' AND tire_sale_date <= '.strtotime(date('t-m-Y',$order_tire->delivery_date))));
                 foreach ($sum_order as $sum) {
-                    $total_order[date('m-Y',$order_tire->delivery_date)][$sum->customer] = isset($total_order[date('m-Y',$order_tire->delivery_date)][$sum->customer])?$total_order[date('m-Y',$order_tire->delivery_date)][$sum->customer]+$sum->volume:$sum->volume;
+                    $total_order[date('m-Y',$sum->tire_sale_date)][$sum->customer] = isset($total_order[date('m-Y',$sum->tire_sale_date)][$sum->customer])?$total_order[date('m-Y',$sum->tire_sale_date)][$sum->customer]+$sum->volume:$sum->volume;
                 }
 
                 if (in_array($order_tire->customer,$old)) {
                     $info['khmoi'][$order_tire->order_tire_id] = 0;
                 }
                 else{
-                    $info['khmoi'][$order_tire->order_tire_id] = 1;
+                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] > 2) {
+                        $info['khmoi'][$order_tire->order_tire_id] = 1;
+                    }
+                    else{
+                        $info['khmoi'][$order_tire->order_tire_id] = 0;
+                    }
+                    
                 }
 
                 $data = array(
@@ -403,12 +421,19 @@ Class checksalesalaryController Extends baseController {
                                 }
                             }
                             else if($sale->sell_price < $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]){
-                                $a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                                //$a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                                $a = $sale->volume*($sale->sell_price - $ck);
                                 $b = $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]*$sale->volume;
                                 if ($a >= 0.95*$b) {
-                                    if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 20) {
+                                    if ($a >= 0.97*$b) {
                                         $info['percent'][$sale->order_tire] = 1;
                                     }
+                                    else{
+                                        if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 20) {
+                                            $info['percent'][$sale->order_tire] = 1;
+                                        }
+                                    }
+                                    
                                 }
                                 else if ($a >= 0.94*$b) {
                                     if ($total_order[date('m-Y',$order_tire->delivery_date)][$order_tire->customer] >= 50) {

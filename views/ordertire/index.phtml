@@ -20,7 +20,7 @@
             <input class="iform" type="text" name="company" id="company" placeholder="Công ty" required="required" />
             <input class="iform" type="text" name="mst" id="mst" placeholder="Mã số thuế" />
             <input class="iform" type="text" name="address" id="address" placeholder="Địa chỉ" required="required" />
-            <input class="iform" type="text" name="phone" id="phone" placeholder="Số điện thoại liên hệ" required="required" />
+            <input class="iform phone" type="text" name="phone" id="phone" placeholder="Số điện thoại liên hệ" required="required" />
             
             <input type="button" name="next" class="next action-button" value="Tiếp tục" />
         </fieldset>
@@ -337,13 +337,33 @@ function set_item(item,value,company,phone,address,email,ngay,mst,type) {
     $("#customer").attr("data",value);
     $('#mst').val(mst);
     $('#address').val(address);
+    $('#phone').attr('data',phone.slice(-3));
     $('#phone').val(phone);
+    if (phone != "") {
+        $('#phone').val(phone.substring(0, phone.length - 3)+"xxx");
+    }
     $('#company').val(company);
     $("input[name=customer_type][value=" + type + "]").attr('checked', 'checked');
     $('#customer_list_id').hide();
     $('#customer').focus();
 
 }
+$('#phone').keyup(function(){
+    $('#phone').attr('data',$(this).val().slice(-3));
+});
+$('.phone').keyup(function(event) {
+
+      // skip for arrow keys
+  if(event.which >= 37 && event.which <= 40) return;
+
+  // format number
+  $(this).val(function(index, value) {
+    return value
+      .replace(/[^0-9]/g, "")
+      .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+    ;
+  });
+});
 
 $('#customer').keyup(function(){
       
@@ -364,6 +384,7 @@ $('#customer').keyup(function(){
             $('#address').val("");
             $('#company').val("");
             $('#phone').val("");
+            $('#phone').attr('data',"");
         }
       
       
@@ -377,6 +398,7 @@ $('#customer').on('keydown', function() {
             $('#address').val("");
             $('#company').val("");
             $('#phone').val("");
+            $('#phone').attr('data',"");
         }
             
       });  
@@ -1075,6 +1097,7 @@ $('#next_2').click(function(){
         var mst = $('#mst').attr('value');
         var address = $('#address').attr('value');
         var phone = $('#phone').attr('value');
+        phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
 
         var total_number = 0;
 
@@ -1263,6 +1286,7 @@ $("#msform").validate({
                     var mst = $('#mst').attr('value');
                     var address = $('#address').attr('value');
                     var phone = $('#phone').attr('value');
+                    phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
 
                     var payment = $('input[name=payment]:checked').val();
                     var debt = $('input[name=debt]:checked').val();

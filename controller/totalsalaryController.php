@@ -390,13 +390,20 @@ Class totalsalaryController Extends baseController {
                             }
                         }
                         else if($sale->sell_price < $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]){
-                            $a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                            //$a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                            $a = $sale->volume*($sale->sell_price - $ck);
                             $b = $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]*$sale->volume;
                             if ($a >= 0.95*$b) {
-                                if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 20) {
-                                    //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*1/100):($sale->volume*$sale->sell_price)*1/100;
+                                if ($a >= 0.97*$b) {
                                     $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*1/100):($sale->volume*($sale->sell_price+$va-$ck))*1/100;
                                 }
+                                else{
+                                    if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 20) {
+                                        //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*1/100):($sale->volume*$sale->sell_price)*1/100;
+                                        $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*1/100):($sale->volume*($sale->sell_price+$va-$ck))*1/100;
+                                    }
+                                }
+                                
                             }
                             else if ($a >= 0.94*$b) {
                                 if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 50) {
@@ -567,13 +574,20 @@ Class totalsalaryController Extends baseController {
                             }
                         }
                         else if($sale->sell_price < $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]){
-                            $a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                            //$a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                            $a = $sale->volume*($sale->sell_price - $ck);
                             $b = $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]*$sale->volume;
                             if ($a >= 0.95*$b) {
-                                if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 20) {
-                                    //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*1/100):($sale->volume*$sale->sell_price)*1/100;
+                                if ($a >= 0.97*$b) {
                                     $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*1/100):($sale->volume*($sale->sell_price+$va-$ck))*1/100;
                                 }
+                                else{
+                                    if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 20) {
+                                        //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*1/100):($sale->volume*$sale->sell_price)*1/100;
+                                        $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*1/100):($sale->volume*($sale->sell_price+$va-$ck))*1/100;
+                                    }
+                                }
+                                
                             }
                             else if ($a >= 0.94*$b) {
                                 if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 50) {
@@ -1092,13 +1106,20 @@ Class totalsalaryController Extends baseController {
                         }
                     }
                     else if($sale->sell_price < $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]){
-                        $a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                        //$a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
+                        $a = $sale->volume*($sale->sell_price - $ck);
                         $b = $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]*$sale->volume;
                         if ($a >= 0.95*$b) {
-                            if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 20) {
-                                //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*1/100):($sale->volume*$sale->sell_price)*1/100;
+                            if ($a >= 0.97*$b) {
                                 $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*1/100):($sale->volume*($sale->sell_price+$va-$ck))*1/100;
                             }
+                            else{
+                                if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 20) {
+                                    //$luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*$sale->sell_price)*1/100):($sale->volume*$sale->sell_price)*1/100;
+                                    $luong_sp[$sale->sale] = isset($luong_sp[$sale->sale])?$luong_sp[$sale->sale]+(($sale->volume*($sale->sell_price+$va-$ck))*1/100):($sale->volume*($sale->sell_price+$va-$ck))*1/100;
+                                }
+                            }
+                            
                         }
                         else if ($a >= 0.94*$b) {
                             if ($arr_customer[$sale->customer][date('d-m-Y',$sale->tire_sale_date)] >= 50) {

@@ -585,3 +585,25 @@ Time|User|Action
 
 13/10/2016 09:32:06|admincmg|login
 
+05/12/2016 08:26:21|admincmg|login
+
+05/12/2016 08:42:54|admincmg|logout
+
+05/12/2016 08:43:03|admincmg|login|127.0.0.1|Found.
+
+
+05/12/2016 08:45:44|admincmg|logout
+
+05/12/2016 08:45:53|admincmg|login|127.0.0.1|Found.
+
+
+05/12/2016 09:00:32|admincmg|logout
+
+05/12/2016 09:00:38|admincmg|logout
+
+05/12/2016 09:01:27|admincmg|login|127.0.0.1
+
+05/12/2016 09:02:40|admincmg|logout
+
+05/12/2016 09:31:43|admincmg|login|127.0.0.1
+

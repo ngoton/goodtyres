@@ -45,6 +45,7 @@ $tong = array();
             <th colspan="2" class="fix">Khách hàng mới</th>
             <th colspan="2" class="fix">Khách hàng cũ</th>
             <th colspan="2" class="fix">Sản lượng bán</th>
+            <th colspan="2" class="fix">Đơn hàng</th>
             <th rowspan="2" class="fix">Lương sản phẩm</th>
             <th rowspan="2" class="fix">Lương bán vượt giá</th>
             <th rowspan="2" class="fix">KPI năng lực</th>
@@ -58,10 +59,12 @@ $tong = array();
             <th class="fix">Trực tiếp</th>
             <th class="fix">Đại lý</th>
             <th class="fix">Trực tiếp</th>
+            <th class="fix">Mới</th>
+            <th class="fix">Cũ</th>
         </tr>
    </thead>
    <tbody>
-        <?php $moi=600000; $cu=200000; $sanluong=7000; $tongdl=0; $tongtt=0; $tongdlmoi=0; $tongdlcu=0; $tongttmoi=0; $tongttcu=0; $tongluongsp=0; $tongluongvuotgia=0; $tongkpi=0; $tongdoanhthu=0;
+        <?php $moi=600000; $cu=200000; $sanluong=7000; $tongdl=0; $tongtt=0; $tongdlmoi=0; $tongdlcu=0; $tongttmoi=0; $tongttcu=0; $tongluongsp=0; $tongluongvuotgia=0; $tongkpi=0; $tongdoanhthu=0; $donmoi=0; $doncu=0; $tongdonmoi=0; $tongdoncu=0; $tongdon=0;
         foreach ($users as $user): 
             $dl = isset($sl_daily[$user->staff_id])?$sl_daily[$user->staff_id]:0;
             $tt = isset($sl_tt[$user->staff_id])?$sl_tt[$user->staff_id]:0; 
@@ -69,19 +72,23 @@ $tong = array();
             $ttmoi = isset($tt_moi[$user->staff_id])?$tt_moi[$user->staff_id]:0; 
             $dlcu = isset($daily_cu[$user->staff_id])?$daily_cu[$user->staff_id]:0;
             $ttcu = isset($tt_cu[$user->staff_id])?$tt_cu[$user->staff_id]:0;
+            $donmoi = isset($don_moi[$user->staff_id])?$don_moi[$user->staff_id]:0;
+            $doncu = isset($don_cu[$user->staff_id])?$don_cu[$user->staff_id]:0;
             $tongdl += $dl;
             $tongtt += $tt;
             $tongdlmoi += $dlmoi;
             $tongdlcu += $dlcu;
             $tongttmoi += $ttmoi;
             $tongttcu += $ttcu;
+            $tongdonmoi += $donmoi;
+            $tongdoncu += $doncu;
 
             $luongsp = isset($luong_sp[$user->staff_id])?$luong_sp[$user->staff_id]:0;
             $luongvuotgia = isset($luong_vuotgia[$user->staff_id])?$luong_vuotgia[$user->staff_id]:0;
             $tongluongsp += $luongsp;
             $tongluongvuotgia += $luongvuotgia;
 
-            $kpi = ($dlmoi+$ttmoi)*$moi + ($dlcu+$ttcu)*$cu + ($dl+$tt)*$sanluong;
+            $kpi = ($donmoi)*$moi + ($doncu)*$cu + ($dl+$tt)*$sanluong;
             $tongkpi += $kpi;
 
             $dt = isset($doanhthu[$user->staff_id])?$doanhthu[$user->staff_id]:0;
@@ -95,6 +102,8 @@ $tong = array();
                 <td class="fix"><a href="<?php echo BASE_URL ?>/ordertire/report/0/<?php echo strtotime($batdau).'/'.$user->user_id ?>"><?php echo $ttcu; ?></a></td>
                 <td class="fix"><a href="<?php echo BASE_URL ?>/ordertire/report/0/<?php echo strtotime($batdau).'/'.$user->user_id ?>"><?php echo $dl; ?></a></td>
                 <td class="fix"><a href="<?php echo BASE_URL ?>/ordertire/report/0/<?php echo strtotime($batdau).'/'.$user->user_id ?>"><?php echo $tt; ?></a></td>
+                <td class="fix"><a href="<?php echo BASE_URL ?>/ordertire/report/0/<?php echo strtotime($batdau).'/'.$user->user_id ?>"><?php echo $donmoi; ?></a></td>
+                <td class="fix"><a href="<?php echo BASE_URL ?>/ordertire/report/0/<?php echo strtotime($batdau).'/'.$user->user_id ?>"><?php echo $doncu; ?></a></td>
                 <td class="fix"><?php echo $lib->formatMoney($luongsp); ?></td>
                 <td class="fix"><?php echo $lib->formatMoney($luongvuotgia); ?></td>
                 <td class="fix"><?php echo $lib->formatMoney($kpi); ?></td>
@@ -111,6 +120,8 @@ $tong = array();
             <td class="fix"><?php echo $tongttcu ?></td>
             <td class="fix"><?php echo $tongdl ?></td>
             <td class="fix"><?php echo $tongtt ?></td>
+            <td class="fix"><?php echo $tongdonmoi ?></td>
+            <td class="fix"><?php echo $tongdoncu ?></td>
             <td class="fix"></td>
             <td class="fix"></td>
             <td class="fix"></td>
@@ -122,6 +133,7 @@ $tong = array();
             <td class="fix" colspan="2"><?php echo $tongdlmoi+$tongttmoi ?></td>
             <td class="fix" colspan="2"><?php echo $tongdlcu+$tongttcu ?></td>
             <td class="fix" colspan="2"><?php echo $tongdl+$tongtt ?></td>
+            <td class="fix" colspan="2"><?php echo $tongdonmoi+$tongdoncu ?></td>
             <td class="fix"><?php echo $lib->formatMoney($tongluongsp) ?></td>
             <td class="fix"><?php echo $lib->formatMoney($tongluongvuotgia) ?></td>
             <td class="fix"><?php echo $lib->formatMoney($tongkpi) ?></td>
@@ -215,15 +227,6 @@ $tong = array();
 
 </script>
 <style type="text/css">
-    #ui-datepicker-div{
-        font-size: 13px;
-    }
-    .table_data tbody tr td.fix{
-        min-width: 100px;
-    }
-.table_data tbody tr td.fix:nth-child(1){
-        min-width: 30px;
-    }
 .report{
     width: 100%;
     margin: -5px auto;
