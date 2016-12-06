@@ -190,7 +190,7 @@ Class tiresalaryController Extends baseController {
                     }
                     else if($sale->sell_price < $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]){
                         //$a = $sale->volume*($sale->sell_price - $phi + 6000 - $ck);
-                        $a = $sale->volume*($sale->sell_price - $ck);
+                        $a = $sale->volume*($sale->sell_price - $ck + $va);
                         $b = $tire_prices[$tire_brand_name][$sale->tire_size_number][$pt_type[$l]]*$sale->volume;
                         if ($a >= 0.95*$b) {
                             if ($a >= 0.97*$b) {
