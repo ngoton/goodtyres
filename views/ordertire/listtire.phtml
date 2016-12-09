@@ -63,7 +63,9 @@
             </td>
             <td>
                 <input type="hidden" id="tire_price_vat_<?php echo $order_tire_list->order_tire_list_id; ?>" value="<?php echo $order_tire_list->tire_price ?>">
+                <?php if($order_tire->sale_lock!=1){ ?>
                 <button class="del_list" data="<?php echo $order_tire_list->order_tire_list_id ?>" style="display:block">Xóa</button>
+                <?php } ?>
             </td>
         </tr>
     <?php endforeach; ?>

@@ -2172,6 +2172,8 @@ Class ordertireController Extends baseController {
     }
     public function getordercost(){
         if(isset($_POST['order_tire'])){
+            $payable_model = $this->model->get('payableModel');
+
             $order_cost_model = $this->model->get('ordertirecostModel');
             $vendors = $order_cost_model->getAllTire(array('where'=>'order_tire='.$_POST['order_tire']));
             
@@ -2273,7 +2275,9 @@ Class ordertireController Extends baseController {
                         $opt .=  '<option '.$slvd.' class="'.$vendor->vendor_type .'" value="'.$vendor->shipment_vendor_id .'">'.$vendor->shipment_vendor_name .'</option>';
                            }
 
-                    
+                    $payable = $payable_model->getCostsByWhere(array('vendor'=>$v->vendor,'order_tire'=>$v->order_tire,'cost_type'=>$v->order_tire_cost_type));
+                    $payed = $payable->pay_money>0?"disabled":null;
+                    $payed_mes = $payable->pay_money>0?"Đã thanh toán: ".$this->lib->formatMoney($payable->pay_money):"Chưa thanh toán";
 
                      $truck = ($v->order_tire_cost_type==1)?'selected="selected"':null;
                      $bar = ($v->order_tire_cost_type==2)?'selected="selected"':null;
@@ -2285,7 +2289,7 @@ Class ordertireController Extends baseController {
 
 
                     $str .= '<tr class="'.$v->order_tire.'">';
-                    $str .= '<td><input type="checkbox" name="chk" tabindex="'.$v->order_tire_cost_type.'" data="'.$v->order_tire .'" class="'.$v->vendor.'" title="'.($v->order_tire_cost).'"></td>';
+                    $str .= '<td><input '.$payed.' type="checkbox" name="chk" tabindex="'.$v->order_tire_cost_type.'" data="'.$v->order_tire .'" class="'.$v->vendor.'" title="'.($v->order_tire_cost).'"></td>';
                     $str .= '<td><table style="width: 100%">';
                     $str .= '<tr class="'.$v->order_tire .'">';
                     $str .= '<td></td><td>Loại chi phí</td>';
@@ -2296,7 +2300,8 @@ Class ordertireController Extends baseController {
                     $str .= '<option '.$thu .' value="4">Thu hộ</option>';
                     $str .= '<option '.$hh .' value="5">Hoa hồng</option>';
                     $str .= '<option '.$tt .' value="6">TTHQ</option>';
-                    $str .= '<option '.$khac .' value="7">Khác</option></select></td></tr>';
+                    $str .= '<option '.$khac .' value="7">Khác</option></select></td>';
+                    $str .= '<td style="color:red" colspan="2">'.$payed_mes.'</td></tr>';
                     
                     $str .= '<tr class="'.$v->order_tire .'">';
                     $str .= '<td></td><td> Vendor</td><td><input required="required" type="text" disabled value="'.$vendor_model->getvendor($v->vendor)->shipment_vendor_name.'" data="'.$v->vendor.'" class="vendor" name="vendor[]" required="required" autocomplete="off" placeholder="Nhập tên hoặc * để chọn"><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a>';
