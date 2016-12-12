@@ -1,0 +1,144 @@
+<div id="content" style="padding:5px;">
+    <center ><h1> BẢNG GIÁ LỐP XE</h1></center>
+</div>
+<div><a href="#" id="tog"><i class="fa fa-th-large"></i> Thương hiệu</a></div>
+<div style="display:none" id="category">
+    <div class="col-md-12 main-content">
+        <div class="main-tag-list row">
+                <?php foreach (range('A', 'Z') as $char) { ?>
+                <div class="col-md-2">
+                    <div class="box box-info collapsed-box">
+                        <div class="box-header with-border">
+                          <h3 class="box-title"><?php echo $char ?></h3>
+
+                          <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                            </button>
+                          </div>
+                          <!-- /.box-tools -->
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="direct-chat-messages">
+                              <?php 
+                                if (isset($tire_producer_data[$char])) {
+                                foreach ($tire_producer_data[$char] as $tire) { 
+                                    ?>
+                                <div class="direct-chat-msg">
+                                    <a href="<?php echo $this->url('tireproduct/quotation/0/0/'.strtolower(str_replace(' ', '-', $tire))) ?>" class="q-tag"><?php echo $tire ?></a>
+                                </div>
+                                <?php } } ?>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </div>
+                <?php } ?>
+        </div><!-- END MAIN-TAGS-LIST -->    
+    </div>
+</div>
+<script type="text/javascript">
+$('#tog').toggle(function(){
+    $('#category').slideDown(300);
+},function(){
+    $('#category').slideUp(300);
+});
+</script>
+<?php
+if (isset($tire_products)) {
+    $i=1;
+?>
+<div class="add-box">
+
+    <select id="sl_nv" name="sl_nv" style="width:90px">
+        <option value="0">Size</option>
+        <?php foreach ($tire_sizes as $tire_size) { ?>
+            <option value="<?php echo $tire_size->tire_product_size_id ?>"><?php echo $tire_size->tire_product_size_number ?></option>
+        <?php } ?>
+    </select>
+    
+    <select id="sl_status" name="sl_status" style="width:120px">
+        <option value="0">Mã gai</option>
+        <?php foreach ($tire_patterns as $tire_pattern) { ?>
+            <option value="<?php echo $tire_pattern->tire_product_pattern_id ?>"><?php echo $tire_pattern->tire_product_pattern_name ?></option>
+        <?php } ?>
+    </select>
+    <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall(1,1,1);">
+</div>
+
+<table class="table_data" id="tblExport">
+    <thead>
+        <tr>
+            <th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+            <th  class="fix" >
+                <a class="sort" >STT</a>
+            </th>
+            <th  class="fix" >
+                <a class="sort">Hình ảnh</a>
+            </th>
+            <th  class="fix">
+                <a class="sort">Thương hiệu</a>
+            </th>
+            <th  class="fix">
+                <a class="sort" >Tên</a>
+            </th>
+            <th  class="fix">
+                <a class="sort">Size</a>
+            </th>
+            <th  class="fix">
+                <a class="sort" >PR</a>
+            </th>
+            <th  class="fix">
+                <a class="sort" >Mã gai</a>
+            </th>
+            
+            <th  class="fix">
+                <a class="sort" >Chưa VAT </a>
+            </th>
+        </tr>
+        
+       </thead>
+       <tbody>
+        <?php foreach ($tire_products as $tire_product) : ?>
+        <?php
+        $filename = BASE_URL."/public/images/upload/".$tire_product->tire_product_thumb;
+        if (!@getimagesize($filename)) {
+            $filename = BASE_URL."/public/images/upload/".$tire_product->tire_product_pattern_type.'.jpg';
+        }
+        ?>
+
+            <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_product->tire_product_id ?>" class="edit_tr">
+                
+                <td>
+                    <input name="check[]" type="checkbox" class="checkbox" value="<?php echo $tire_product->tire_product_id ?>">
+                </td>
+                
+                <td  class="fix"><?php echo $i++; ?></td>
+                <td  class="fix"><img height="50px" width="50px" src="<?php echo $filename ?>"></td>
+                <td class="fix" id="tire_producer_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_producer_name; ?></td>
+                <td class="fix" id="tire_product_name_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_product_name; ?></td>
+                <td class="fix" id="tire_size_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_product_size_number; ?></td>
+                <td class="fix" id="tire_pr_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_pr; ?></td>
+                <td class="fix" data="<?php echo $tire_product->tire_pattern; ?>" id="tire_pattern_<?php echo $tire_product->tire_product_id; ?>"><?php echo $tire_product->tire_product_pattern_name; ?></td>
+                
+                
+                <td class="fix" id="tire_retail_<?php echo $tire_product->tire_product_id; ?>"><?php echo $lib->formatMoney($tire_product->tire_retail); ?></td>
+                
+            </tr>
+
+
+        <?php endforeach; ?>
+         
+       </tbody>
+    </table>
+
+<script type="text/javascript">
+var s = "<?php echo $size ?>";
+$('#sl_nv option[value='+s+']').attr('selected','selected');
+
+var kh = "<?php echo $magai ?>";
+$('#sl_status option[value='+kh+']').attr('selected','selected');
+</script>
+<?php
+}
+?>

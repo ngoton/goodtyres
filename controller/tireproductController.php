@@ -246,6 +246,62 @@ Class tireproductController Extends baseController {
         $this->view->show('tireproduct/price');
     }
 
+    public function quotation() {
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Bảng giá lốp xe';
+
+        $size = isset($_POST['nv']) ? $_POST['nv'] : 0;
+        $magai = isset($_POST['trangthai']) ? $_POST['trangthai'] : 0;
+        
+        $this->view->data['size'] = $size;
+        $this->view->data['magai'] = $magai;
+
+        $brand = $this->registry->router->order_by;
+
+        if (!empty($brand)) {
+            $tire_size_model = $this->model->get('tireproductsizeModel');
+            $tire_pattern_model = $this->model->get('tireproductpatternModel');
+
+            $tire_sizes = $tire_size_model->getAllTire();
+            $tire_patterns = $tire_pattern_model->getAllTire(array('where'=>'tire_product_pattern_id IN (SELECT tire_pattern FROM tire_product,tire_producer WHERE tire_producer=tire_producer_id AND tire_producer_name LIKE "'.str_replace('-', ' ', $brand).'")'));
+
+            $this->view->data['tire_sizes'] = $tire_sizes;
+            $this->view->data['tire_patterns'] = $tire_patterns;
+
+            $tire_product_model = $this->model->get('tireproductModel');
+            $join = array('table'=>'tire_producer, tire_product_size, tire_product_pattern','where'=>'tire_producer_id = tire_producer AND tire_product_size_id = tire_size AND tire_product_pattern_id = tire_pattern');
+            $data = array(
+                'where'=>'tire_producer_name LIKE "'.str_replace('-', ' ', $brand).'"',
+            );
+
+            if ($size>0) {
+                $data['where'] .= ' AND tire_size = '.$size;
+            }
+            if ($magai>0) {
+                $data['where'] .= ' AND tire_pattern = '.$magai;
+            }
+
+            $this->view->data['tire_products'] = $tire_product_model->getAllTire($data,$join);
+        }
+        
+        $tire_producer_model = $this->model->get('tireproducerModel');
+        $tire_producers = $tire_producer_model->getAllTire(array('order_by'=>'tire_producer_name','order'=>'ASC'));
+        $tire_producer_data = array();
+        foreach ($tire_producers as $tire) {
+            $tire_producer_data[strtoupper(substr($tire->tire_producer_name, 0, 1))][] = $tire->tire_producer_name;
+        }
+        $this->view->data['tire_producer_data'] = $tire_producer_data;
+
+        /* Lấy tổng doanh thu*/
+        
+        /*************/
+        $this->view->show('tireproduct/quotation');
+    }
+
    
     public function add(){
         if (!isset($_SESSION['userid_logined'])) {
