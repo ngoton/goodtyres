@@ -18,6 +18,7 @@ Class ordertirecostController Extends baseController {
             $ketthuc = isset($_POST['ketthuc']) ? $_POST['ketthuc'] : null;
             $thang = isset($_POST['tha']) ? $_POST['tha'] : null;
             $nam = isset($_POST['na']) ? $_POST['na'] : null;
+            $trangthai = isset($_POST['trangthai']) ? $_POST['trangthai'] : null;
         }
         else{
             $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'order_number';
@@ -29,6 +30,7 @@ Class ordertirecostController Extends baseController {
             $ketthuc = date('t-m-Y');
             $thang = (int)date('m',strtotime($batdau));
             $nam = date('Y',strtotime($batdau));
+            $trangthai = "";
         }
 
         $thang = (int)date('m',strtotime($batdau));
@@ -61,6 +63,7 @@ Class ordertirecostController Extends baseController {
         $this->view->data['sonews'] = $sonews;
         $this->view->data['thang'] = $thang;
         $this->view->data['nam'] = $nam;
+        $this->view->data['trangthai'] = $trangthai;
 
         $data = array(
             'order_by'=>$order_by,
@@ -78,16 +81,32 @@ Class ordertirecostController Extends baseController {
         }
 
         $ordercost = $ordercost_model->getAllTire($data,$join);
-        $this->view->data['ordercost'] = $ordercost;
+        
 
         $payable_model = $this->model->get('payableModel');
 
         $pay_data = array();
-        foreach ($ordercost as $order) {
+        foreach ($ordercost as $key=>$order) {
             $payables = $payable_model->getCostsByWhere(array('order_tire'=>$order->order_tire,'vendor'=>$order->vendor,'cost_type'=>$order->order_tire_cost_type));
             $pay_data[$order->order_tire_cost_id] = $payables->pay_money;
+
+            if ($trangthai != "") {
+                if ($trangthai==0) {
+                    if ($payables->money==$payables->pay_money) {
+                        unset($ordercost[$key]);
+                    }
+                }
+                else {
+                    if ($payables->money!=$payables->pay_money) {
+                        unset($ordercost[$key]);
+                    }
+                }
+            }
+            
         }
         $this->view->data['pay_data'] = $pay_data;
+
+        $this->view->data['ordercost'] = $ordercost;
 
         $this->view->data['lastID'] = isset($ordercost_model->getLastTire()->order_tire_cost_id)?$ordercost_model->getLastTire()->order_tire_cost_id:0;
 

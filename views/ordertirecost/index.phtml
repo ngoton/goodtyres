@@ -75,7 +75,15 @@ elseif ($order_by == 'comment')
         </div>
 
       </div>
-    
+
+    <div class="add-box">
+        <select style="width:120px" id="sl_status" name="sl_status">
+            <option value="">Trạng thái</option>
+            <option value="0">Chưa thanh toán</option>
+            <option value="1">Đã thanh toán</option>
+        </select>
+        <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');"> 
+    </div>
 
 </div>
 
@@ -152,7 +160,8 @@ $('#sl_tha option[value='+th+']').attr('selected','selected');
 var n = "<?php echo $nam ?>";
 $('#sl_na option[value='+n+']').attr('selected','selected');
 
-
+var t = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+t+']').attr('selected','selected');
 </script>
 <script type="text/javascript">
     
