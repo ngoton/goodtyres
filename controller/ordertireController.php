@@ -691,6 +691,9 @@ Class ordertireController Extends baseController {
                 if ($tire_brand->tire_brand_name == "Aoteli" || $tire_brand->tire_brand_name == "Yatai" || $tire_brand->tire_brand_name == "Yatone" || $tire_brand->tire_brand_name == "Three-A") {
                     $tire_brand_name = "Shengtai";
                 }
+                else if ($tire_brand->tire_brand_name == "Guangda" || $tire_brand->tire_brand_name == "Qiangwei") {
+                        $tire_brand_name = "Amberstone";
+                    }
                 else{
                     $tire_brand_name = $tire_brand->tire_brand_name;
                 }
@@ -1118,6 +1121,9 @@ Class ordertireController Extends baseController {
             if ($tire_brand->tire_brand_name == "Aoteli" || $tire_brand->tire_brand_name == "Yatai" || $tire_brand->tire_brand_name == "Yatone" || $tire_brand->tire_brand_name == "Three-A") {
                 $tire_brand_name = "Shengtai";
             }
+            else if ($tire_brand->tire_brand_name == "Guangda" || $tire_brand->tire_brand_name == "Qiangwei") {
+                        $tire_brand_name = "Amberstone";
+                    }
             else{
                 $tire_brand_name = $tire_brand->tire_brand_name;
             }

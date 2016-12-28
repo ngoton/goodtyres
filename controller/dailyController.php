@@ -1350,7 +1350,7 @@ Class dailyController Extends baseController {
 
                                 $data_asset = array(
                                             'bank' => $bank,
-                                            'total' => $data['money_in'] - $daily->money_in,
+                                            'total' => $data['money_in'],
                                             'assets_date' => $data['daily_date'],
                                             'receivable' => $data['receivable'],
                                             'week' => $week,
@@ -1362,7 +1362,7 @@ Class dailyController Extends baseController {
                                 
                                 $data_receive = array(
                                             'source' => $bank,
-                                            'money' => $data['money_in'] - $daily->money_in,
+                                            'money' => $data['money_in'],
                                             'receive_date' => $data['daily_date'],
                                             'receivable' => $data['receivable'],
                                             'week' => $week,
@@ -1375,7 +1375,7 @@ Class dailyController Extends baseController {
 
                                 $data_obtain = array(
                                     'customer' => $receivable->customer,
-                                    'money' => 0 - $data['money_in'] + $daily->money_in,
+                                    'money' => 0 - $data['money_in'],
                                     'obtain_date' => $data['daily_date'],
                                     'week' => $week,
                                     'year' => $year,
@@ -1534,7 +1534,7 @@ Class dailyController Extends baseController {
 
                                 $data_asset = array(
                                             'bank' => $bank,
-                                            'total' => 0 - $data['money_out'] + $daily->money_out,
+                                            'total' => 0 - $data['money_out'],
                                             'assets_date' => $data['daily_date'],
                                             'payable' => $data['payable'],
                                             'week' => $week,
@@ -1546,7 +1546,7 @@ Class dailyController Extends baseController {
                                 
                                 $data_pay = array(
                                             'source' => $bank,
-                                            'money' => $data['money_out'] - $daily->money_out,
+                                            'money' => $data['money_out'],
                                             'pay_date' => $data['daily_date'],
                                             'payable' => $data['payable'],
                                             'week' => $week,
@@ -1559,7 +1559,7 @@ Class dailyController Extends baseController {
 
                                 $data_owe = array(
                                     'vendor' => $payable->vendor,
-                                    'money' => 0 - $data['money_out'] + $daily->money_out,
+                                    'money' => 0 - $data['money_out'],
                                     'owe_date' => $data['daily_date'],
                                     'week' => $week,
                                     'year' => $year,

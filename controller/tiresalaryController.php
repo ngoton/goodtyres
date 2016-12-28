@@ -136,6 +136,9 @@ Class tiresalaryController Extends baseController {
             if ($sale->tire_brand_name == "Aoteli" || $sale->tire_brand_name == "Yatai" || $sale->tire_brand_name == "Yatone" || $sale->tire_brand_name == "Three-A") {
                 $tire_brand_name = "Shengtai";
             }
+            else if ($sale->tire_brand_name == "Guangda" || $sale->tire_brand_name == "Qiangwei") {
+                        $tire_brand_name = "Amberstone";
+                    }
             else{
                 $tire_brand_name = $sale->tire_brand_name;
             }

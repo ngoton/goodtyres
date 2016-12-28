@@ -42,6 +42,10 @@
     </div>
     </form>
 </div>
+<div class="add-box">
+    <a class="add_button" id="btnExport" >Export Excel</a>
+    
+</div>
 <div style="clear:both"></div>
 
 <div style="width:30%;float:left">
@@ -74,27 +78,28 @@
             
     </table>
 </div>
+
 <div style="width:65%;float:right">
     <table id="tblExport" class="table_data">
 <thead>
     <tr>
         <th  class="fix" >
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'tire_buy_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            <a class="sort" >STT </a>
         </th>
         <th  class="fix" >
         </th>
         <th  class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_brand_name','<?php echo $url_order ?>')">Thương hiệu <?php if ($order_by == 'tire_brand_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            <a class="sort" >Thương hiệu </a>
         </th>
         <th  class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_size_number','<?php echo $url_order ?>')">Size <?php if ($order_by == 'tire_size_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            <a class="sort" >Size </a>
         </th>
         <th  class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_pattern','<?php echo $url_order ?>')">Mã gai <?php if ($order_by == 'tire_buy_pattern'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            <a class="sort " >Mã gai </a>
         </th>
         
         <th  class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_volume','<?php echo $url_order ?>')">Tồn kho <?php if ($order_by == 'tire_buy_volume'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            <a class="sort" >Tồn kho </a>
         </th>
         
     </tr>
