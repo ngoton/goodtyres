@@ -67,13 +67,10 @@ elseif ($order_by == 'tire_sale_volume')
             <?php } ?>
         </select>
         
-        <select id="sl_status" name="sl_status" style="width:120px">
-            <option value="0">Khách hàng</option>
-            <?php foreach ($customers as $customer) { ?>
-                <option value="<?php echo $customer->customer_id ?>"><?php echo $customer->customer_name ?></option>
-            <?php } ?>
-        </select>
+        
+        
     </div>
+
     <div class="add-box">
         <input value="<?php echo $ngay ?>" name="ketthuc" id="ketthuc" type="search" class="ngay" placeholder="Chọn ngày" style="width:90px">
     </div>
@@ -86,6 +83,7 @@ elseif ($order_by == 'tire_sale_volume')
         </select>
         <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
     </div>
+
     <div class="tablenav top">
 
         <div class="alignleft actions">
@@ -110,6 +108,12 @@ elseif ($order_by == 'tire_sale_volume')
 
         
       </div>
+      <div class="alignleft actions">
+        <input autocomplete="off" type="text" name="customer" id="customer" placeholder="Tên khách hàng" <?php echo isset($customer->customer_name)?'value="'.$customer->customer_name.'"':null ?> />
+            <ul id="customer_list_id"></ul>
+            <input type="hidden" name="sl_status" id="sl_status" <?php echo isset($kh)?'value="'.$kh.'"':null ?> >
+        <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
 
 </div>
 
@@ -676,14 +680,7 @@ $('#customer').on('keydown', function() {
 function get_number(id){
     return $(id).val().replace(/\,/g,'');
 }
-function set_item(item,value,phone,address,email,ngay) {
-    // change input value
-    $('#customer').val(item);
-    $("#customer").attr("data",value);
-    $('#customer_list_id').hide();
-    $('#customer').focus();
 
-}
 
 </script>
 <div style="display:none" id="lasted"></div>
@@ -719,8 +716,6 @@ $('#chonngaytao option[value='+th+']').attr('selected','selected');
 var s = "<?php echo $size ?>";
 $('#chonngaytaobatdau option[value='+s+']').attr('selected','selected');
 
-var kh = "<?php echo $kh ?>";
-$('#sl_status option[value='+kh+']').attr('selected','selected');
 
 var nv = "<?php echo $nv ?>";
 $('#sl_nv option[value='+nv+']').attr('selected','selected');
@@ -729,6 +724,53 @@ var tha = "<?php echo $tha ?>";
 $('#sl_tha option[value='+tha+']').attr('selected','selected');
 var na = "<?php echo $na ?>";
 $('#sl_na option[value='+na+']').attr('selected','selected');
+
+function set_item(item,value,company,phone,address,email,ngay,mst,type) {
+    // change input value
+    $('#customer').val(item);
+    $("#customer").attr("data",value);
+    $('#sl_status').val(value);
+    $('#customer_list_id').hide();
+    $('#customer').focus();
+
+}
+
+$('#customer').keyup(function(){
+      
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/ordertire/getcustomer',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#customer_list_id').slideDown(200);
+                $('#customer_list_id').html(data);
+            }
+        });
+        if ($('#customer').val() == "" || $('#customer').attr('data') == "") {
+            
+            $('#customer').attr('data',"");
+            $('#sl_status').val("");
+        }
+      
+      
+   });  
+$('#customer').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#customer').attr('data',"");
+            $('#sl_status').val("");
+        }
+            
+      });  
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        //$('.add-field').slideUp(500);      
+    }
+    $('#customer_list_id').slideUp(200); 
+    
+});
 
 </script>
 </div>

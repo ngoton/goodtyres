@@ -595,15 +595,13 @@ Class tiresaleController Extends baseController {
         $tire_brands = $tire_brand_model->getAllTire();
         $tire_sizes = $tire_size_model->getAllTire();
         $tire_patterns = $tire_pattern_model->getAllTire();
-        $customers = $customer_model->getAllCustomer(array(
-            'order_by'=> 'customer_name',
-            'order'=> 'ASC',
-            ));
+        
+        $customer = $customer_model->getCustomer($kh);
+        $this->view->data['customer'] = $customer;
 
         $this->view->data['tire_brands'] = $tire_brands;
         $this->view->data['tire_sizes'] = $tire_sizes;
         $this->view->data['tire_patterns'] = $tire_patterns;
-        $this->view->data['customers'] = $customers;
 
         $join = array('table'=>'tire_brand, tire_size, customer, tire_pattern','where'=>'tire_sale.customer=customer.customer_id AND tire_brand.tire_brand_id = tire_sale.tire_brand AND tire_size.tire_size_id = tire_sale.tire_size AND tire_pattern.tire_pattern_id = tire_sale.tire_pattern');
 
