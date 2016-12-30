@@ -705,7 +705,7 @@ $('#check_price_vat').click(function(){
         var gia = 0;
         $('.tire_price').each(function() { 
             var p = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
-            var n = Math.round((p/(1+val/100))/100)*100;
+            var n = Math.round(p/(1+val/100));
 
             var row = $(this).parent().parent().parent().parent().parent().parent();
             var rowIndex = row[0].rowIndex;

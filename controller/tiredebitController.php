@@ -522,6 +522,7 @@ Class tiredebitController Extends baseController {
 
         $order_tire_model = $this->model->get('ordertireModel');
         $order_tire_list_model = $this->model->get('ordertirelistModel');
+        $receivable_model = $this->model->get('receivableModel');
 
         $join = array('table'=>'customer','where'=>'customer_id = customer');
 
@@ -597,9 +598,9 @@ Class tiredebitController Extends baseController {
 
                ->setCellValue('H6', 'Thành tiền')
 
-               ->setCellValue('I6', 'Thuế GTGT')
+               ->setCellValue('I6', 'Trừ giảm')
 
-               ->setCellValue('J6', 'Trừ giảm')
+               ->setCellValue('J6', 'Đã TT')
 
                ->setCellValue('K6', 'KH Phải trải')
 
@@ -619,6 +620,8 @@ Class tiredebitController Extends baseController {
 
                 $k=0;
                 foreach ($orders as $row) {
+
+                    $receivable = $receivable_model->getCostsByWhere(array('order_tire'=>$row->order_tire_id));
 
                     $tencongty = $row->company_name;
 
@@ -650,23 +653,29 @@ Class tiredebitController Extends baseController {
 
                             ->setCellValue('F' . $hang, $order_list->tire_number)
 
-                            ->setCellValue('G' . $hang, $order_list->tire_price)
+                            ->setCellValue('G' . $hang, ($row->check_price_vat==1?$order_list->tire_price_vat:$order_list->tire_price)+($row->vat/$row->order_tire_number))
 
-                            ->setCellValue('H' . $hang, $order_list->tire_number*$order_list->tire_price)
+                            ->setCellValue('H' . $hang, '=F'.$hang.'*G'.$hang)
 
-                            ->setCellValue('I' . $hang, '=H'.$hang.'*'.$row->vat_percent.'%')
+                            ->setCellValue('I' . $hang, $row->discount+$row->reduce)
 
-                            ->setCellValue('J' . $hang, $order_list->tire_number*($row->discount+$row->reduce)/$row->order_tire_number)
-
-                            ->setCellValue('K' . $hang, '=(H'.$hang.'+I'.$hang.')-J'.$hang);
+                            ->setCellValue('J' . $hang, $receivable->pay_money);
 
                             $hang++;
 
                         }
 
+                        $objPHPExcel->setActiveSheetIndex(0)
+
+                            ->setCellValue('K' . $sohang, '=SUM(H'.$sohang.':H'.($hang-1).')-J'.$sohang.'-I'.$sohang);
+
                         $objPHPExcel->getActiveSheet()->mergeCells('A'.$sohang.':A'.($hang-1));
                         $objPHPExcel->getActiveSheet()->mergeCells('B'.$sohang.':B'.($hang-1));
                         $objPHPExcel->getActiveSheet()->mergeCells('C'.$sohang.':C'.($hang-1));
+                        $objPHPExcel->getActiveSheet()->mergeCells('I'.$sohang.':I'.($hang-1));
+                        $objPHPExcel->getActiveSheet()->mergeCells('J'.$sohang.':J'.($hang-1));
+                        $objPHPExcel->getActiveSheet()->mergeCells('K'.$sohang.':K'.($hang-1));
+                        $objPHPExcel->getActiveSheet()->mergeCells('L'.$sohang.':L'.($hang-1));
 
 
                       }
@@ -675,6 +684,7 @@ Class tiredebitController Extends baseController {
 
             }
 
+            $objPHPExcel->getActiveSheet()->getStyle('I7:L'.$hang)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
@@ -713,16 +723,20 @@ Class tiredebitController Extends baseController {
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
 
-                ->setCellValue('A'.($hang+1), 'Bằng chữ: '.$this->lib->convert_number_to_words(round($cell)).' đồng');
+                ->setCellValue('A'.($hang+2), 'Bằng chữ: ');
+
+            $objPHPExcel->setActiveSheetIndex($index_worksheet)
+
+            ->setCellValue('B'.($hang+2), $this->lib->convert_number_to_words(round($cell)).' đồng');
 
 
 
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':E'.$hang);
 
-            $objPHPExcel->getActiveSheet()->mergeCells('A'.($hang+1).':L'.($hang+1));
+            $objPHPExcel->getActiveSheet()->mergeCells('B'.($hang+2).':L'.($hang+2));
 
 
-
+            $objPHPExcel->getActiveSheet()->getRowDimension($hang+1)->setRowHeight(8);
 
 
             $objPHPExcel->getActiveSheet()->getStyle('A'.$hang)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -735,32 +749,32 @@ Class tiredebitController Extends baseController {
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
 
-                ->setCellValue('A'.($hang+3), 'NGƯỜI LẬP BIỂU')
+                ->setCellValue('A'.($hang+4), 'NGƯỜI LẬP BIỂU')
 
-                ->setCellValue('E'.($hang+3), 'CÔNG TY TNHH VIỆT TRA DE')
+                ->setCellValue('E'.($hang+4), 'CÔNG TY TNHH VIỆT TRA DE')
 
-               ->setCellValue('I'.($hang+3), mb_strtoupper($tencongty, "UTF-8"));
+               ->setCellValue('I'.($hang+4), mb_strtoupper($tencongty, "UTF-8"));
 
 
 
-            $objPHPExcel->getActiveSheet()->mergeCells('A'.($hang+3).':D'.($hang+3));
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.($hang+4).':D'.($hang+4));
 
-            $objPHPExcel->getActiveSheet()->mergeCells('E'.($hang+3).':H'.($hang+3));
+            $objPHPExcel->getActiveSheet()->mergeCells('E'.($hang+4).':H'.($hang+4));
 
-            $objPHPExcel->getActiveSheet()->mergeCells('I'.($hang+3).':L'.($hang+3));
+            $objPHPExcel->getActiveSheet()->mergeCells('I'.($hang+4).':L'.($hang+4));
 
 
             $objPHPExcel->getActiveSheet()->getStyle('A6:E'.$hang)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
             $objPHPExcel->getActiveSheet()->getStyle('A6:E'.$hang)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+3).':L'.($hang+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+4).':L'.($hang+4))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+3).':L'.($hang+3))->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+4).':L'.($hang+4))->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':L'.($hang+3))->applyFromArray(
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':L'.($hang+4))->applyFromArray(
 
                 array(
 
@@ -778,7 +792,8 @@ Class tiredebitController Extends baseController {
 
             );
 
-
+            $objPHPExcel->getActiveSheet()->getStyle('B'.($hang+2))->getFont()->setBold(false);
+            $objPHPExcel->getActiveSheet()->getStyle('B'.($hang+2))->getFont()->setItalic(true);
 
 
 
@@ -808,9 +823,8 @@ Class tiredebitController Extends baseController {
 
             $objPHPExcel->getActiveSheet()->getStyle('A1:L4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
+            $objPHPExcel->getActiveSheet()->getStyle('I2')->getFont()->setItalic(true);
 
-
-            $objPHPExcel->getActiveSheet()->getStyle("A4")->getFont()->setSize(16);
 
 
 
@@ -866,9 +880,16 @@ Class tiredebitController Extends baseController {
 
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
 
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(18);
+
             $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
 
             $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(25);
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getFont()->setName('Times New Roman');
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getFont()->setSize(12);
+
+            $objPHPExcel->getActiveSheet()->getStyle("A4")->getFont()->setSize(18);
 
 
 

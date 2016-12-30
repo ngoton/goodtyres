@@ -267,7 +267,7 @@ $('#tire_price').keyup(function(){
 
     vat_percent = parseInt(vat_percent);
 
-    var n = Math.round((val/(1+vat_percent/100))/100)*100;
+    var n = Math.round(val/(1+vat_percent/100));
     $("#tire_price_vat").val(n);
   }
 });
