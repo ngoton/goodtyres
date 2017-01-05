@@ -219,11 +219,11 @@ elseif ($order_by == 'staff_name')
             $tongttmoi += $ttmoi;
             $tongttcu += $ttcu;
 
-            $luongsp = isset($luong_sp[$salary->staff_id])?$luong_sp[$salary->staff_id]:0;
+            $luongsp = isset($luong_sp[$salary->staff_id])?round($luong_sp[$salary->staff_id]):0;
             if (isset($arr_logs[$salary->staff_id])) {
                 $luongsp += $arr_logs[$salary->staff_id];
             }
-            $luongvuotgia = isset($luong_vuotgia[$salary->staff_id])?$luong_vuotgia[$salary->staff_id]:0;
+            $luongvuotgia = isset($luong_vuotgia[$salary->staff_id])?round($luong_vuotgia[$salary->staff_id]):0;
             $tongluongsp += $luongsp;
             $tongluongvuotgia += $luongvuotgia;
 
@@ -233,10 +233,18 @@ elseif ($order_by == 'staff_name')
             $dt = isset($doanhthu[$salary->staff_id])?$doanhthu[$salary->staff_id]:0;
             $tongdoanhthu += $dt;
 
+            $chucvu = isset($arr_position_salary[$salary->staff_id])?$arr_position_salary[$salary->staff_id]:0;
+            
             $chuyencan = isset($arr_attend[$salary->staff_id])?$arr_attend[$salary->staff_id]:0;
-            $luongchuyencan = $salary->staff_id==14?round((($chuyencan*$den)*50/12)/1000)*1000:$chuyencan*$den;
+            $luongchuyencan = $chucvu>0?round((($chuyencan*$den)*$chucvu/1200000)/1000)*1000:$chuyencan*$den;
+
             $luongchuyencan = $salary->staff_id==1?0:$luongchuyencan;
             $tongchuyencan += $luongchuyencan;
+
+            if ($luongchuyencan>0) {
+                $chucvu = 0;
+            }
+            $tongchucvu += $chucvu;
 
             $phone = isset($arr_phone[$salary->staff_id])?$arr_phone[$salary->staff_id]:0;
             $tongphone += $phone;
@@ -244,8 +252,7 @@ elseif ($order_by == 'staff_name')
             $ngoaikhoa = isset($arr_curricular[$salary->staff_id])?$arr_curricular[$salary->staff_id]:0;
             $tongngoaikhoa += $ngoaikhoa;
 
-            $chucvu = isset($arr_position_salary[$salary->staff_id])?$arr_position_salary[$salary->staff_id]:0;
-            $tongchucvu += $chucvu;
+            
 
             $giaonhan = isset($arr_lift[$salary->staff_id])?$arr_lift[$salary->staff_id]:0;
             $tongluonggiaonhan += $giaonhan;

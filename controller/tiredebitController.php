@@ -653,7 +653,7 @@ Class tiredebitController Extends baseController {
 
                             ->setCellValue('F' . $hang, $order_list->tire_number)
 
-                            ->setCellValue('G' . $hang, ($row->check_price_vat==1?$order_list->tire_price_vat:$order_list->tire_price)+($row->vat/$row->order_tire_number))
+                            ->setCellValue('G' . $hang, ($row->check_price_vat==1?$order_list->tire_price_vat:$order_list->tire_price+($row->vat/$row->order_tire_number)))
 
                             ->setCellValue('H' . $hang, '=F'.$hang.'*G'.$hang)
 
@@ -876,6 +876,8 @@ Class tiredebitController Extends baseController {
 
             $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(26);
 
+            $objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(26);
+
             $objPHPExcel->getActiveSheet()->getDefaultColumnDimension()->setWidth(14);
 
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
@@ -934,6 +936,455 @@ Class tiredebitController Extends baseController {
             header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
             header("Content-Disposition: attachment; filename= BẢNG KÊ MUA HÀNG.xlsx");
+
+            header("Cache-Control: max-age=0");
+
+            ob_clean();
+
+            $objWriter->save("php://output");
+
+        
+
+    }
+
+        function exportdebit(){
+
+        $this->view->disableLayout();
+
+        if (!isset($_SESSION['userid_logined'])) {
+
+            return $this->view->redirect('user/login');
+
+        }
+
+        $customer_model = $this->model->get('customerModel');
+        $customers = $customer_model->getAllCustomer(array('order_by'=>'customer_name','order'=>'ASC'));
+
+        $join = array('table'=>'customer, user, receivable','where'=>'customer.customer_id = order_tire.customer AND user_id = sale AND order_tire = order_tire_id');
+
+        $order_tire_model = $this->model->get('ordertireModel'); 
+
+        $orders = $order_tire_model->getAllTire(null,$join);
+
+        $data_customer = array();
+        foreach ($orders as $order) {
+            $data_customer['number'][$order->customer] = isset($data_customer['number'][$order->customer])?$data_customer['number'][$order->customer]+$order->order_tire_number:$order->order_tire_number;
+            $data_customer['money'][$order->customer] = isset($data_customer['money'][$order->customer])?$data_customer['money'][$order->customer]+$order->total:$order->total;
+            $data_customer['pay_money'][$order->customer] = isset($data_customer['pay_money'][$order->customer])?$data_customer['pay_money'][$order->customer]+$order->pay_money:$order->pay_money;
+            $data_customer['sale'][$order->customer] = $order->username;
+        }
+
+        $join = array('table'=>'customer','where'=>'customer.customer_id = receivable.customer AND trading > 0');
+
+        $receivable_model = $this->model->get('receivableModel'); 
+
+        $receivables = $receivable_model->getAllCosts(null,$join);
+
+        $tire_sale_model = $this->model->get('tiresaleModel'); 
+        $join = array('table'=>'user, staff','where'=>'user_id = account AND staff_id = sale');
+
+        foreach ($receivables as $order) {
+            $yesterday = strtotime(date('d-m-Y',strtotime(date('d-m-Y',$order->expect_date)."-1 days")));
+            $tomorow = strtotime(date('d-m-Y',strtotime(date('d-m-Y',$order->expect_date)."+1 days")));
+            $data = array(
+            'where'=>'code = '.$order->code.' AND tire_sale_date > '.$yesterday.' AND tire_sale_date < '.$tomorow.' AND customer = '.$order->customer,
+            );
+            
+
+            $sales = $tire_sale_model->getAllTire($data,$join);
+            foreach ($sales as $sale) {
+                $data_customer['number'][$order->customer] = isset($data_customer['number'][$order->customer])?$data_customer['number'][$order->customer]+$sale->volume:$sale->volume;
+                $data_customer['sale'][$order->customer] = $sale->username;
+            }
+
+            if (!$sales) {
+                $data = array(
+                'where'=>'code = '.$order->code.' AND customer = '.$order->customer,
+                );
+                
+
+                $sales = $tire_sale_model->getAllTire($data,$join);
+                foreach ($sales as $sale) {
+                    $data_customer['number'][$order->customer] = isset($data_customer['number'][$order->customer])?$data_customer['number'][$order->customer]+$sale->volume:$sale->volume;
+                    $data_customer['sale'][$order->customer] = $sale->username;
+                }
+            }
+            
+            if ($sales) {
+                $data_customer['money'][$order->customer] = isset($data_customer['money'][$order->customer])?$data_customer['money'][$order->customer]+$order->money:$order->money;
+                $data_customer['pay_money'][$order->customer] = isset($data_customer['pay_money'][$order->customer])?$data_customer['pay_money'][$order->customer]+$order->pay_money:$order->pay_money;
+            }
+            
+        }
+
+        
+
+            require("lib/Classes/PHPExcel/IOFactory.php");
+
+            require("lib/Classes/PHPExcel.php");
+
+
+
+            $objPHPExcel = new PHPExcel();
+
+
+
+            
+
+
+
+            $index_worksheet = 0; //(worksheet mặc định là 0, nếu tạo nhiều worksheet $index_worksheet += 1)
+
+            $objPHPExcel->setActiveSheetIndex($index_worksheet)
+
+                ->setCellValue('A1', 'CÔNG TY TNHH VIỆT TRA DE')
+
+                ->setCellValue('A2', 'PHÒNG KINH DOANH')
+
+                ->setCellValue('E1', 'CỘNG HÒA XÃ CHỦ NGHĨA VIỆT NAM')
+
+                ->setCellValue('E2', 'Độc lập - Tự do - Hạnh phúc')
+
+                ->setCellValue('A4', 'BẢNG KÊ CÔNG NỢ KHÁCH HÀNG')
+
+                ->setCellValue('A6', 'STT')
+
+               ->setCellValue('B6', 'Khách hàng')
+
+               ->setCellValue('C6', 'KH phải trả')
+
+               ->setCellValue('D6', 'Đã trả')
+
+               ->setCellValue('E6', 'Còn lại')
+
+               ->setCellValue('F6', 'Sale')
+
+               ->setCellValue('G6', 'Ghi chú');
+
+               
+
+
+            if ($customers) {
+
+
+
+                $hang = 7;
+
+                $i=1;
+
+
+                $k=0;
+                foreach ($customers as $order_tire) {
+                    if (isset($data_customer['money'][$order_tire->customer_id]) && ( ($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]>0) || ($data_customer['pay_money'][$order_tire->customer_id]-$data_customer['money'][$order_tire->customer_id]>0)) ) {
+
+                        $sohang = $hang;
+
+                         $objPHPExcel->setActiveSheetIndex(0)
+
+                            ->setCellValue('A' . $hang, $i++)
+
+                            ->setCellValueExplicit('B' . $hang, $order_tire->customer_name)
+
+                            ->setCellValue('E' . $hang, $data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id])
+
+                            ->setCellValueExplicit('F' . $hang, $data_customer['sale'][$order_tire->customer_id]);
+
+                        $hang++;
+
+                        $join = array('table'=>'customer, user, receivable','where'=>'customer.customer_id = order_tire.customer AND user_id = sale AND order_tire = order_tire_id');
+                        $data = array(
+                            'order_by'=>'delivery_date',
+                            'order'=>'DESC',
+                            'where'=>'order_tire.customer = '.$order_tire->customer_id,
+                            );
+
+                        $orders = $order_tire_model->getAllTire($data,$join);
+
+                        $join = array('table'=>'customer','where'=>'customer.customer_id = receivable.customer AND trading > 0');
+
+                        $data = array(
+                            'order_by'=>'receivable.expect_date',
+                            'order'=>'DESC',
+                            'where'=>'customer_id = '.$order_tire->customer_id,
+                            );
+
+                        $receivables = $receivable_model->getAllCosts($data,$join);
+
+                        $join = array('table'=>'user, staff','where'=>'user_id = account AND staff_id = sale');
+                        
+                        $receivable_data = array();
+                        foreach ($receivables as $re) {
+                            $yesterday = strtotime(date('d-m-Y',strtotime(date('d-m-Y',$re->expect_date)."-1 days")));
+                            $tomorow = strtotime(date('d-m-Y',strtotime(date('d-m-Y',$re->expect_date)."+1 days")));
+                            $data = array(
+                            'where'=>'code = '.$re->code.' AND tire_sale_date > '.$yesterday.' AND tire_sale_date < '.$tomorow.' AND customer = '.$re->customer,
+                            );
+                            $sales = $tire_sale_model->getAllTire($data,$join);
+                            foreach ($sales as $sale) {
+                                $receivable_data[$re->receivable_id]['number'] = isset($receivable_data[$re->receivable_id]['number'])?$receivable_data[$re->receivable_id]['number']+$sale->volume:$sale->volume;
+                                $receivable_data[$re->receivable_id]['sale'] = $sale->username;
+                            }
+                        }
+
+
+                        foreach ($orders as $order_list) {
+
+                            if ($order_list->total-$order_list->pay_money != 0) {
+                                $objPHPExcel->setActiveSheetIndex(0)
+
+                                ->setCellValue('B' . $hang, $order_list->order_number)
+
+                                ->setCellValue('C' . $hang, $order_list->total)
+
+                                ->setCellValue('D' . $hang, $order_list->pay_money)
+
+                                ->setCellValue('E' . $hang, '=C'.$hang.'-D'.$hang);
+
+                                $hang++;
+                            }
+
+                        }
+
+                        foreach ($receivables as $order_list) {
+
+                            if ($order_list->money-$order_list->pay_money != 0) {
+
+                                $objPHPExcel->setActiveSheetIndex(0)
+
+                                ->setCellValue('B' . $hang, $order_list->code)
+
+                                ->setCellValue('C' . $hang, $order_list->money)
+
+                                ->setCellValue('D' . $hang, $order_list->pay_money)
+
+                                ->setCellValue('E' . $hang, '=C'.$hang.'-D'.$hang);
+
+                                $hang++;
+                            }
+
+                        }
+
+                        $objPHPExcel->getActiveSheet()->mergeCells('A'.$sohang.':A'.($hang-1));
+                        $objPHPExcel->getActiveSheet()->mergeCells('F'.$sohang.':F'.($hang-1));
+                        $objPHPExcel->getActiveSheet()->mergeCells('G'.$sohang.':G'.($hang-1));
+
+                        $objPHPExcel->getActiveSheet()->getStyle('B'.$sohang.':E'.$sohang)->getFont()->setBold(true);
+
+                        $objPHPExcel->getActiveSheet()->getStyle('B'.($sohang+1).':E'.($hang-1))->getFont()->setItalic(true);
+                        $objPHPExcel->getActiveSheet()->getStyle('B'.($sohang+1).':B'.($hang-1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+                        $objPHPExcel->getActiveSheet()->getStyle('B'.$sohang)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                        $objPHPExcel->getActiveSheet()->getStyle('B'.$sohang)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+                        
+                        $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':G'.$hang);
+                        $hang++;
+
+                      }
+
+                }
+
+            }
+
+            $objPHPExcel->getActiveSheet()->getStyle('F7:G'.$hang)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('F7:G'.$hang)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+
+            $objPHPExcel->setActiveSheetIndex($index_worksheet)
+
+                ->setCellValue('A'.$hang, 'TỔNG CỘNG')
+
+                ->setCellValue('E'.$hang, '=SUM(E7:E'.($hang-1).')/2');
+
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':E'.$hang)->getFont()->setBold(true);
+
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':B'.$hang);
+
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('A6:G'.$hang)->applyFromArray(
+
+                array(
+
+                    
+
+                    'borders' => array(
+
+                        'allborders' => array(
+
+                          'style' => PHPExcel_Style_Border::BORDER_THIN
+
+                        )
+
+                    )
+
+                )
+
+            );
+
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+
+            $objPHPExcel->setActiveSheetIndex($index_worksheet)
+
+                ->setCellValue('F'.($hang+2), 'Ngày '.date('d').' tháng '.date('m').' năm '.date('Y'));
+
+            
+
+            $objPHPExcel->getActiveSheet()->mergeCells('F'.($hang+2).':G'.($hang+2));
+
+            $objPHPExcel->getActiveSheet()->getStyle('F'.($hang+2))->getFont()->setItalic(true);
+
+            $objPHPExcel->getActiveSheet()->getStyle('F'.($hang+2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+
+
+
+            $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow();
+
+
+
+            $highestRow ++;
+
+
+
+            $objPHPExcel->getActiveSheet()->mergeCells('A1:C1');
+
+            $objPHPExcel->getActiveSheet()->mergeCells('E1:G1');
+
+            $objPHPExcel->getActiveSheet()->mergeCells('A2:C2');
+
+            $objPHPExcel->getActiveSheet()->mergeCells('E2:G2');
+
+
+
+            $objPHPExcel->getActiveSheet()->mergeCells('A4:G4');
+
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:G4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:G4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()->getStyle('E2')->getFont()->setItalic(true);
+
+
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:G4')->applyFromArray(
+
+                array(
+
+                    
+
+                    'font' => array(
+
+                        'bold'  => true,
+
+                        'color' => array('rgb' => '000000')
+
+                    )
+
+                )
+
+            );
+
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('A2:C2')->applyFromArray(
+
+                array(
+
+                    
+
+                    'font' => array(
+
+                        'underline' => PHPExcel_Style_Font::UNDERLINE_SINGLE,
+
+                    )
+
+                )
+
+            );
+
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('C7:E'.$highestRow)->getNumberFormat()->setFormatCode("#,##0_);[Black](#,##0)");
+
+            $objPHPExcel->getActiveSheet()->getStyle('A7:A'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()->getStyle('A7:A'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()->getStyle('A6:G6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()->getStyle('A6:G6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()->getStyle('A6:G6')->getFont()->setBold(true);
+
+            $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(26);
+
+            $objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(26);
+
+            $objPHPExcel->getActiveSheet()->getDefaultColumnDimension()->setWidth(17);
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(25);
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(35);
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:G'.$highestRow)->getFont()->setName('Times New Roman');
+            $objPHPExcel->getActiveSheet()->getStyle('A1:G'.$highestRow)->getFont()->setSize(12);
+
+            $objPHPExcel->getActiveSheet()->getStyle("A4")->getFont()->setSize(18);
+
+
+
+            // Set properties
+
+            $objPHPExcel->getProperties()->setCreator("VT")
+
+                            ->setLastModifiedBy($_SESSION['user_logined'])
+
+                            ->setTitle("Sale Report")
+
+                            ->setSubject("Sale Report")
+
+                            ->setDescription("Sale Report.")
+
+                            ->setKeywords("Sale Report")
+
+                            ->setCategory("Sale Report");
+
+            $objPHPExcel->getActiveSheet()->setTitle("Cong no khach hang");
+
+
+
+            $objPHPExcel->getActiveSheet()->freezePane('A7');
+
+            $objPHPExcel->setActiveSheetIndex(0);
+
+
+
+
+
+
+
+            
+
+
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+
+
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            header("Content-Disposition: attachment; filename= CÔNG NỢ.xlsx");
 
             header("Cache-Control: max-age=0");
 

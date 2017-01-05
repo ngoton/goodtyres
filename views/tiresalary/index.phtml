@@ -83,8 +83,8 @@ $tong = array();
             $tongdonmoi += $donmoi;
             $tongdoncu += $doncu;
 
-            $luongsp = isset($luong_sp[$user->staff_id])?$luong_sp[$user->staff_id]:0;
-            $luongvuotgia = isset($luong_vuotgia[$user->staff_id])?$luong_vuotgia[$user->staff_id]:0;
+            $luongsp = isset($luong_sp[$user->staff_id])?round($luong_sp[$user->staff_id]):0;
+            $luongvuotgia = isset($luong_vuotgia[$user->staff_id])?round($luong_vuotgia[$user->staff_id]):0;
             $tongluongsp += $luongsp;
             $tongluongvuotgia += $luongvuotgia;
 

@@ -353,7 +353,7 @@ Class ordertireController Extends baseController {
             $code = isset($_POST['tu']) ? $_POST['tu'] : null;
         }
         else{
-            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'order_tire_status ASC, delivery_date';
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'order_tire_status ASC, order_number';
             $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
@@ -519,10 +519,11 @@ Class ordertireController Extends baseController {
 
         $costs = array();
         foreach ($order_tires as $tire) {
+            $ngay = $tire->order_tire_status==1?$tire->delivery_date:strtotime(date('d-m-Y'));
             $order_tire_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$tire->order_tire_id));
             foreach ($order_tire_lists as $l) {
                 $data = array(
-                    'where' => 'start_date <= '.$tire->delivery_date.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                    'where' => 'start_date <= '.$ngay.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
                     'order_by' => 'start_date',
                     'order' => 'DESC',
                     'limit' => 1,
@@ -533,7 +534,7 @@ Class ordertireController Extends baseController {
                 }
 
                 $data = array(
-                    'where' => 'order_num = "'.$tire->order_number.'" AND start_date <= '.strtotime(date('t-m-Y',$tire->delivery_date)).' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                    'where' => 'order_num = "'.$tire->order_number.'" AND start_date <= '.strtotime(date('t-m-Y',$ngay)).' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
                     'order_by' => 'start_date',
                     'order' => 'DESC',
                     'limit' => 1,
@@ -1100,7 +1101,7 @@ Class ordertireController Extends baseController {
             'where' => 'order_tire='.$id,
         );
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8) {
             $data = array(
                 'where' => 'order_tire IN (SELECT order_tire_id FROM order_tire WHERE order_tire_id ='.$id.' AND sale = '.$_SESSION["userid_logined"].')',
             );
