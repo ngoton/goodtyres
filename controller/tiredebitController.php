@@ -580,31 +580,33 @@ Class tiredebitController Extends baseController {
 
                 ->setCellValue('I2', 'Độc lập - Tự do - Hạnh phúc')
 
-                ->setCellValue('A4', 'BẢNG KÊ MUA HÀNG LỐP XE')
+                ->setCellValue('I4', 'Biên Hòa, ngày '.date('d').' tháng '.date('m').' năm '.date('Y'))
 
-                ->setCellValue('A6', 'STT')
+                ->setCellValue('A6', 'BẢNG KÊ MUA HÀNG LỐP XE')
 
-               ->setCellValue('B6', 'Ngày')
+                ->setCellValue('A8', 'STT')
 
-               ->setCellValue('C6', 'Số ĐH')
+               ->setCellValue('B8', 'Ngày')
 
-               ->setCellValue('D6', 'Tên hàng')
+               ->setCellValue('C8', 'Số ĐH')
 
-               ->setCellValue('E6', 'Loại hàng')
+               ->setCellValue('D8', 'Tên hàng')
 
-               ->setCellValue('F6', 'Số lượng')
+               ->setCellValue('E8', 'Loại hàng')
 
-               ->setCellValue('G6', 'Đơn giá')
+               ->setCellValue('F8', 'Số lượng')
 
-               ->setCellValue('H6', 'Thành tiền')
+               ->setCellValue('G8', 'Đơn giá')
 
-               ->setCellValue('I6', 'Trừ giảm')
+               ->setCellValue('H8', 'Thành tiền')
 
-               ->setCellValue('J6', 'Đã TT')
+               ->setCellValue('I8', 'Trừ giảm')
 
-               ->setCellValue('K6', 'KH Phải trải')
+               ->setCellValue('J8', 'Đã TT')
 
-               ->setCellValue('L6', 'Ghi chú');
+               ->setCellValue('K8', 'KH Phải trải')
+
+               ->setCellValue('L8', 'Ghi chú');
 
                
 
@@ -613,7 +615,7 @@ Class tiredebitController Extends baseController {
 
 
 
-                $hang = 7;
+                $hang = 9;
 
                 $i=1;
 
@@ -684,20 +686,20 @@ Class tiredebitController Extends baseController {
 
             }
 
-            $objPHPExcel->getActiveSheet()->getStyle('I7:L'.$hang)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('I9:L'.$hang)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
 
                 ->setCellValue('A'.$hang, 'TỔNG CỘNG')
 
-                ->setCellValue('F'.$hang, '=SUM(F7:F'.($hang-1).')')
+                ->setCellValue('F'.$hang, '=SUM(F9:F'.($hang-1).')')
 
-               ->setCellValue('K'.$hang, '=SUM(K7:K'.($hang-1).')');
+               ->setCellValue('K'.$hang, '=SUM(K9:K'.($hang-1).')');
 
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A6:L'.$hang)->applyFromArray(
+            $objPHPExcel->getActiveSheet()->getStyle('A8:L'.$hang)->applyFromArray(
 
                 array(
 
@@ -764,9 +766,9 @@ Class tiredebitController Extends baseController {
             $objPHPExcel->getActiveSheet()->mergeCells('I'.($hang+4).':L'.($hang+4));
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A6:E'.$hang)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A8:E'.$hang)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A6:E'.$hang)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A8:E'.$hang)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
             $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+4).':L'.($hang+4))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
@@ -813,22 +815,42 @@ Class tiredebitController Extends baseController {
 
             $objPHPExcel->getActiveSheet()->mergeCells('I2:L2');
 
+            $objPHPExcel->getActiveSheet()->mergeCells('I4:L4');
+
+            $objPHPExcel->getActiveSheet()->mergeCells('A6:L6');
 
 
-            $objPHPExcel->getActiveSheet()->mergeCells('A4:L4');
 
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-
-            $objPHPExcel->getActiveSheet()->getStyle('A1:L4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-
-            $objPHPExcel->getActiveSheet()->getStyle('A1:L4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
             $objPHPExcel->getActiveSheet()->getStyle('I2')->getFont()->setItalic(true);
 
+            $objPHPExcel->getActiveSheet()->getStyle('I4')->getFont()->setItalic(true);
+
+            $objPHPExcel->getActiveSheet()->getStyle('I4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
 
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L3')->applyFromArray(
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:L4')->applyFromArray(
+                array(
+
+                    
+
+                    'font' => array(
+
+                        'bold'  => true,
+
+                        'color' => array('rgb' => '000000')
+
+                    )
+
+                )
+
+            );
+
+            $objPHPExcel->getActiveSheet()->getStyle('A6:L6')->applyFromArray(
 
                 array(
 
@@ -866,13 +888,13 @@ Class tiredebitController Extends baseController {
 
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('G7:L'.$highestRow)->getNumberFormat()->setFormatCode("#,##0_);[Black](#,##0)");
+            $objPHPExcel->getActiveSheet()->getStyle('G9:L'.$highestRow)->getNumberFormat()->setFormatCode("#,##0_);[Black](#,##0)");
 
-            $objPHPExcel->getActiveSheet()->getStyle('A6:L6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A8:L8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A6:L6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A8:L8')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A6:L6')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A8:L8')->getFont()->setBold(true);
 
             $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(26);
 
@@ -891,7 +913,7 @@ Class tiredebitController Extends baseController {
             $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getFont()->setName('Times New Roman');
             $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getFont()->setSize(12);
 
-            $objPHPExcel->getActiveSheet()->getStyle("A4")->getFont()->setSize(18);
+            $objPHPExcel->getActiveSheet()->getStyle("A6")->getFont()->setSize(18);
 
 
 
@@ -915,7 +937,7 @@ Class tiredebitController Extends baseController {
 
 
 
-            $objPHPExcel->getActiveSheet()->freezePane('A7');
+            $objPHPExcel->getActiveSheet()->freezePane('A9');
 
             $objPHPExcel->setActiveSheetIndex(0);
 
@@ -1045,21 +1067,23 @@ Class tiredebitController Extends baseController {
 
                 ->setCellValue('E2', 'Độc lập - Tự do - Hạnh phúc')
 
-                ->setCellValue('A4', 'BẢNG KÊ CÔNG NỢ KHÁCH HÀNG')
+                ->setCellValue('E4', 'Biên Hòa, ngày '.date('d').' tháng '.date('m').' năm '.date('Y'))
 
-                ->setCellValue('A6', 'STT')
+                ->setCellValue('A6', 'BẢNG KÊ CÔNG NỢ KHÁCH HÀNG')
 
-               ->setCellValue('B6', 'Khách hàng')
+                ->setCellValue('A8', 'STT')
 
-               ->setCellValue('C6', 'KH phải trả')
+               ->setCellValue('B8', 'Khách hàng')
 
-               ->setCellValue('D6', 'Đã trả')
+               ->setCellValue('C8', 'KH phải trả')
 
-               ->setCellValue('E6', 'Còn lại')
+               ->setCellValue('D8', 'Đã trả')
 
-               ->setCellValue('F6', 'Sale')
+               ->setCellValue('E8', 'Còn lại')
 
-               ->setCellValue('G6', 'Ghi chú');
+               ->setCellValue('F8', 'Sale')
+
+               ->setCellValue('G8', 'Ghi chú');
 
                
 
@@ -1068,7 +1092,7 @@ Class tiredebitController Extends baseController {
 
 
 
-                $hang = 7;
+                $hang = 9;
 
                 $i=1;
 
@@ -1186,15 +1210,15 @@ Class tiredebitController Extends baseController {
 
             }
 
-            $objPHPExcel->getActiveSheet()->getStyle('F7:G'.$hang)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-            $objPHPExcel->getActiveSheet()->getStyle('F7:G'.$hang)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('F9:G'.$hang)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('F9:G'.$hang)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
 
                 ->setCellValue('A'.$hang, 'TỔNG CỘNG')
 
-                ->setCellValue('E'.$hang, '=SUM(E7:E'.($hang-1).')/2');
+                ->setCellValue('E'.$hang, '=SUM(E9:E'.($hang-1).')/2');
 
             $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':E'.$hang)->getFont()->setBold(true);
 
@@ -1202,7 +1226,7 @@ Class tiredebitController Extends baseController {
 
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A6:G'.$hang)->applyFromArray(
+            $objPHPExcel->getActiveSheet()->getStyle('A8:G'.$hang)->applyFromArray(
 
                 array(
 
@@ -1231,16 +1255,40 @@ Class tiredebitController Extends baseController {
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
 
-                ->setCellValue('F'.($hang+2), 'Ngày '.date('d').' tháng '.date('m').' năm '.date('Y'));
+                ->setCellValue('A'.($hang+2), 'NGƯỜI LẬP BIỂU')
 
-            
+                ->setCellValue('E'.($hang+2), 'CÔNG TY TNHH VIỆT TRA DE');
 
-            $objPHPExcel->getActiveSheet()->mergeCells('F'.($hang+2).':G'.($hang+2));
 
-            $objPHPExcel->getActiveSheet()->getStyle('F'.($hang+2))->getFont()->setItalic(true);
 
-            $objPHPExcel->getActiveSheet()->getStyle('F'.($hang+2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.($hang+2).':C'.($hang+2));
 
+            $objPHPExcel->getActiveSheet()->mergeCells('E'.($hang+2).':G'.($hang+2));
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+2).':G'.($hang+2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+2).':G'.($hang+2))->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+2).':G'.($hang+2))->applyFromArray(
+
+                array(
+
+                    
+
+                    'font' => array(
+
+                        'bold'  => true,
+
+                        'color' => array('rgb' => '000000')
+
+                    )
+
+                )
+
+            );
 
 
 
@@ -1251,7 +1299,6 @@ Class tiredebitController Extends baseController {
             $highestRow ++;
 
 
-
             $objPHPExcel->getActiveSheet()->mergeCells('A1:C1');
 
             $objPHPExcel->getActiveSheet()->mergeCells('E1:G1');
@@ -1260,22 +1307,42 @@ Class tiredebitController Extends baseController {
 
             $objPHPExcel->getActiveSheet()->mergeCells('E2:G2');
 
+            $objPHPExcel->getActiveSheet()->mergeCells('E4:G4');
+
+            $objPHPExcel->getActiveSheet()->mergeCells('A6:G6');
 
 
-            $objPHPExcel->getActiveSheet()->mergeCells('A4:G4');
 
+            $objPHPExcel->getActiveSheet()->getStyle('A1:G6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-
-            $objPHPExcel->getActiveSheet()->getStyle('A1:G4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-
-            $objPHPExcel->getActiveSheet()->getStyle('A1:G4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:G6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
             $objPHPExcel->getActiveSheet()->getStyle('E2')->getFont()->setItalic(true);
 
+            $objPHPExcel->getActiveSheet()->getStyle('E4')->getFont()->setItalic(true);
+
+            $objPHPExcel->getActiveSheet()->getStyle('E4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
 
+            $objPHPExcel->getActiveSheet()->getStyle('A1:G3')->applyFromArray(
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:G4')->applyFromArray(
+                array(
+
+                    
+
+                    'font' => array(
+
+                        'bold'  => true,
+
+                        'color' => array('rgb' => '000000')
+
+                    )
+
+                )
+
+            );
+
+            $objPHPExcel->getActiveSheet()->getStyle('A6:G6')->applyFromArray(
 
                 array(
 
@@ -1311,19 +1378,20 @@ Class tiredebitController Extends baseController {
 
             );
 
+            
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('C7:E'.$highestRow)->getNumberFormat()->setFormatCode("#,##0_);[Black](#,##0)");
+            $objPHPExcel->getActiveSheet()->getStyle('C9:E'.$highestRow)->getNumberFormat()->setFormatCode("#,##0_);[Black](#,##0)");
 
-            $objPHPExcel->getActiveSheet()->getStyle('A7:A'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A9:A'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A7:A'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A9:A'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A6:G6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A8:G8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A6:G6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A8:G8')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A6:G6')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A8:G8')->getFont()->setBold(true);
 
             $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(26);
 
@@ -1340,7 +1408,7 @@ Class tiredebitController Extends baseController {
             $objPHPExcel->getActiveSheet()->getStyle('A1:G'.$highestRow)->getFont()->setName('Times New Roman');
             $objPHPExcel->getActiveSheet()->getStyle('A1:G'.$highestRow)->getFont()->setSize(12);
 
-            $objPHPExcel->getActiveSheet()->getStyle("A4")->getFont()->setSize(18);
+            $objPHPExcel->getActiveSheet()->getStyle("A6")->getFont()->setSize(18);
 
 
 
@@ -1364,7 +1432,7 @@ Class tiredebitController Extends baseController {
 
 
 
-            $objPHPExcel->getActiveSheet()->freezePane('A7');
+            $objPHPExcel->getActiveSheet()->freezePane('A9');
 
             $objPHPExcel->setActiveSheetIndex(0);
 
