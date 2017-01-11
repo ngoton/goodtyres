@@ -868,7 +868,7 @@ Class customertireController Extends baseController {
     }
 
     public function mail(){
-        $this->view->disableLayout();
+        $this->view->setLayout('admin');
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
         }

@@ -87,7 +87,7 @@ Class expectpayedController Extends baseController {
                 $query .= ' AND pay.pay_date >= '.strtotime($batdau).' AND pay.pay_date <= '.strtotime($ketthuc);
             }
             else{
-                $query .= ' AND ( expect_date < '.strtotime($batdau).' OR ( expect_date >= '.strtotime($batdau).' AND expect_date <= '.strtotime($ketthuc).') ) AND (pay_money is null OR pay_money != money)';
+                $query .= ' AND ( expect_date < '.strtotime($batdau).' OR ( expect_date >= '.strtotime($batdau).' AND expect_date <= '.strtotime($ketthuc).') ) AND (payable.pay_money is null OR payable.pay_money != payable.money)';
             }
             
         
@@ -114,7 +114,7 @@ Class expectpayedController Extends baseController {
             $search = '( comment LIKE "%'.$keyword.'%" 
                 OR bank.bank_name LIKE "%'.$keyword.'%"
                 OR code LIKE "%'.$keyword.'%" 
-                OR money LIKE "%'.$keyword.'%" 
+                OR pay.money LIKE "%'.$keyword.'%" 
                 OR invoice_number LIKE "%'.$keyword.'%" 
                 OR invoice_number_vat LIKE "%'.$keyword.'%" 
                 OR vendor in (SELECT shipment_vendor_id FROM shipment_vendor WHERE shipment_vendor_name LIKE "%'.$keyword.'%") 

@@ -63,6 +63,7 @@ Class totalsalaryController Extends baseController {
         $order_tire_model = $this->model->get('ordertireModel');
         $attendance_model = $this->model->get('attendanceModel');
         $phoneallowance_model = $this->model->get('phoneallowanceModel');
+        $eatingallowance_model = $this->model->get('eatingallowanceModel');
         $eating_model = $this->model->get('eatingModel');
         $curricular_model = $this->model->get('curricularModel');
         $position_salary_model = $this->model->get('positionsalaryModel');
@@ -136,6 +137,15 @@ Class totalsalaryController Extends baseController {
         }
 
         $this->view->data['arr_phone'] = $arr_phone;
+
+        $qr = 'SELECT * FROM (SELECT * FROM eating_allowance WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
+        $eatings = $eatingallowance_model->queryAllowance($qr);
+        $arr_eating = array();
+        foreach ($eatings as $eating) {
+            $arr_eating[$eating->staff] = isset($arr_eating[$eating->staff])?$arr_eating[$eating->staff]+$eating->eating_allowance:$eating->eating_allowance;
+        }
+
+        $this->view->data['arr_eating_allowance'] = $arr_eating;
 
         $qr = 'SELECT * FROM (SELECT * FROM insurrance WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
         $insurrances = $insurrance_model->querySalary($qr);
@@ -787,6 +797,7 @@ Class totalsalaryController Extends baseController {
         $order_tire_model = $this->model->get('ordertireModel');
         $attendance_model = $this->model->get('attendanceModel');
         $phoneallowance_model = $this->model->get('phoneallowanceModel');
+        $eatingallowance_model = $this->model->get('eatingallowanceModel');
         $eating_model = $this->model->get('eatingModel');
         $curricular_model = $this->model->get('curricularModel');
         $position_salary_model = $this->model->get('positionsalaryModel');
@@ -847,6 +858,15 @@ Class totalsalaryController Extends baseController {
         }
 
         $this->view->data['arr_phone'] = $arr_phone;
+
+        $qr = 'SELECT * FROM (SELECT * FROM eating_allowance WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
+        $eatings = $eatingallowance_model->queryAllowance($qr);
+        $arr_eating = array();
+        foreach ($eatings as $eating) {
+            $arr_eating[$eating->staff] = isset($arr_eating[$eating->staff])?$arr_eating[$eating->staff]+$eating->eating_allowance:$eating->eating_allowance;
+        }
+
+        $this->view->data['arr_eating_allowance'] = $arr_eating;
 
         $qr = 'SELECT * FROM (SELECT * FROM insurrance WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
         $insurrances = $insurrance_model->querySalary($qr);

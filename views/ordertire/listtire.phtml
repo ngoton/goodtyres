@@ -1,4 +1,9 @@
-<div class="alignleft actions">
+<?php if(isset($previous_url)){ ?>
+<div style="margin-bottom:10px" >
+<i class="fa fa-arrow-circle-o-left"></i><a style="font-weight:bold;text-decoration:underline" class="return" href="<?php echo BASE_URL.'/tiredebit/'.$previous_url; ?>">Quay lại</a>   
+</div>
+<?php } ?>
+<div >
     Ngày đặt hàng: <span class="error"><?php echo $lib->hien_thi_ngay_thang($order_tire->order_tire_date); ?></span>
 </div>
 <div>
@@ -266,8 +271,9 @@ $('#tire_price').keyup(function(){
     var vat_percent = <?php echo $order_tire->vat_percent; ?>;
 
     vat_percent = parseInt(vat_percent);
+    var v = Math.round((val*vat_percent*0.1)/1.1*0.1);
 
-    var n = Math.round(val/(1+vat_percent/100));
+    var n = val-v;
     $("#tire_price_vat").val(n);
   }
 });
@@ -646,4 +652,21 @@ $('.del_list').click(function(){
            }); 
       }
 });
+
+$(".return").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:"90%",
+            resizable: true,
+            title:'Công nợ',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
 </script>

@@ -98,11 +98,11 @@ elseif ($order_by == 'customer_name')
         $tongdatra += $data_customer['pay_money'][$order_tire->customer_id];
         $tongcon += $data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id];
     ?>
-        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->customer_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->customer_id ?>" class="edit_tr" >
         	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->customer_id ?>"></td>
             <td class="fix"><?php echo $i++; ?></td>
             
-            <td class="fix title" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $order_tire->customer_name; ?></a></td>
+            <td class="fix title" data="<?php echo $order_tire->customer_id; ?>"  id="customer_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $order_tire->customer_name; ?></a></td>
             <td class="fix"  id="order_tire_number_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $data_customer['number'][$order_tire->customer_id]; ?></a></td>
             
             <td style="text-align: right;" class="fix"  id="total_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]); ?></a></td>
@@ -121,11 +121,11 @@ elseif ($order_by == 'customer_name')
         $tongdatra += $data_customer['pay_money'][$order_tire->customer_id];
         $tongcon += $data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id];
     ?>
-    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->customer_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
+    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->customer_id ?>" class="edit_tr" >
             <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->customer_id ?>"></td>
             <td class="fix"><?php echo $i++; ?></td>
             
-            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $order_tire->customer_name; ?></a></td>
+            <td class="fix" data="<?php echo $order_tire->customer_id; ?>"  id="customer_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $order_tire->customer_name; ?></a></td>
             <td class="fix"  id="order_tire_number_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $data_customer['number'][$order_tire->customer_id]; ?></a></td>
             
             <td style="text-align: right;" class="fix"  id="total_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]); ?></a></td>

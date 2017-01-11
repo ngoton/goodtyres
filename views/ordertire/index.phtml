@@ -703,15 +703,19 @@ $('#check_price_vat').click(function(){
     if($(this).is(':checked')){
         var val = parseInt($('#vat_percent').val());
         var gia = 0;
+        var vat = 0;
         $('.tire_price').each(function() { 
             var p = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
-            var n = Math.round(p/(1+val/100));
+            var v = Math.round((p*val*0.1)/1.1*0.1);
+            var n = p-v;
 
             var row = $(this).parent().parent().parent().parent().parent().parent();
             var rowIndex = row[0].rowIndex;
 
             var this_sl = parseInt($(".tire_number:eq("+rowIndex+")").val().replace(/[^0-9\.-]+/g,""));
             gia = gia + (this_sl*n);
+
+            vat += v*this_sl;
 
             $(this).val(n);
             $(this).val(function(index, value) {
@@ -724,7 +728,7 @@ $('#check_price_vat').click(function(){
 
         $('#thanhtien').val(gia);
         $('#thanhtien2').val(gia);
-        $('#vat').val(Math.round(gia*val/100));
+        $('#vat').val(vat);
         
         $('#vat').val(function(index, value) {
             return value

@@ -523,7 +523,7 @@ Class ordertireController Extends baseController {
             $order_tire_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$tire->order_tire_id));
             foreach ($order_tire_lists as $l) {
                 $data = array(
-                    'where' => 'start_date <= '.$ngay.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                    'where' => 'order_num IS NULL AND start_date <= '.$ngay.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
                     'order_by' => 'start_date',
                     'order' => 'DESC',
                     'limit' => 1,
@@ -563,7 +563,7 @@ Class ordertireController Extends baseController {
         $costs2 = array();
         foreach ($sales as $tire) {
             $data = array(
-                'where' => 'start_date <= '.strtotime(date('t-m-Y',$tire->tire_sale_date)).' AND tire_brand = '.$tire->tire_brand.' AND tire_size = '.$tire->tire_size.' AND tire_pattern = '.$tire->tire_pattern,
+                'where' => 'order_num IS NULL AND start_date <= '.strtotime(date('t-m-Y',$tire->tire_sale_date)).' AND tire_brand = '.$tire->tire_brand.' AND tire_size = '.$tire->tire_size.' AND tire_pattern = '.$tire->tire_pattern,
                 'order_by' => 'start_date',
                 'order' => 'DESC',
                 'limit' => 1,
@@ -1094,6 +1094,14 @@ Class ordertireController Extends baseController {
     public function listtire($id){
         $this->view->disableLayout();
         $this->view->data['lib'] = $this->lib;
+
+        $cus = $this->registry->router->page;
+        $previous_url = $this->registry->router->order_by;
+        if ($cus > 0 && $previous_url != "") {
+            $this->view->data['previous_url'] = $previous_url.'/'.$cus;
+        }
+
+        
         $order_tire_list_model = $this->model->get('ordertirelistModel');
         $join = array('table'=>'tire_brand,tire_size,tire_pattern','where'=>'tire_brand = tire_brand_id AND tire_size = tire_size_id AND tire_pattern = tire_pattern_id');
 
@@ -1298,8 +1306,8 @@ Class ordertireController Extends baseController {
                 }
 
                 if ($order_tire->vat_percent > 0) {
-                    $vat = $vat - ($total_after*$order_tire->vat_percent/100) + (($number*$price)*$order_tire->vat_percent/100);
-                    $total = $total - ($total_after*$order_tire->vat_percent/100) + (($number*$price)*$order_tire->vat_percent/100);
+                    $vat = $vat - (($order_tire_list->tire_price_vat-$order_tire_list->tire_price)*$order_tire_list->tire_number) + (($price_vat-$price)*$number);
+                    $total = $total - (($order_tire_list->tire_price_vat-$order_tire_list->tire_price)*$order_tire_list->tire_number) + (($price_vat-$price)*$number);
                 }
 
                 $total = $total + ($number*$price);
@@ -1428,8 +1436,8 @@ Class ordertireController Extends baseController {
                 }
 
                 if ($order_tire->vat_percent > 0) {
-                    $vat = $vat + (($number*$price)*$order_tire->vat_percent/100);
-                    $total = $total + (($number*$price)*$order_tire->vat_percent/100);
+                    $vat = $vat + (($price_vat-$price)*$number);
+                    $total = $total + (($price_vat-$price)*$number);
                 }
 
                 $total = $total + ($number*$price);

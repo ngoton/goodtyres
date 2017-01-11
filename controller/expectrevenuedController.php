@@ -107,7 +107,7 @@ Class expectrevenuedController Extends baseController {
         if ($keyword != '') {
             $search = '( comment LIKE "%'.$keyword.'%" 
                 OR bank_name LIKE "%'.$keyword.'%"
-                OR receivable.money LIKE "%'.$keyword.'%" 
+                OR receive.money LIKE "%'.$keyword.'%" 
                 OR code LIKE "%'.$keyword.'%" 
                 OR invoice_number LIKE "%'.$keyword.'%" 
                 OR invoice_number_vat LIKE "%'.$keyword.'%" 

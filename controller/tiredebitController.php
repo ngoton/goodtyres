@@ -337,6 +337,10 @@ Class tiredebitController Extends baseController {
 
         $id = $this->registry->router->param_id;
 
+        $cus = $this->registry->router->page;
+        $previous_url = $this->registry->router->order_by;
+        $this->view->data['previous_url'] = $previous_url.'/'.$cus;
+
         $receive_model = $this->model->get('receiveModel');
 
         $join = array('table'=>'bank','where'=>'source = bank_id');

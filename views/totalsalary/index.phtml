@@ -196,6 +196,7 @@ elseif ($order_by == 'staff_name')
         <th class="fix">Cộng lương</th>
         <th class="fix">Ngày ăn</th>
         <th class="fix">Tiền cơm</th>
+        <th class="fix">Phụ cấp <br> cơm</th>
         <th class="fix">Bảo hiểm</th>
         <th class="fix">Trừ BH + Cơm</th>
         <th class="fix">Thực lĩnh</th>
@@ -203,7 +204,7 @@ elseif ($order_by == 'staff_name')
     </tr>
    </thead>
    <tbody>
-    <?php $diem_gio = 1.7; $tongdl=0; $tongtt=0; $tongdlmoi=0; $tongdlcu=0; $tongttmoi=0; $tongttcu=0; $tongluongsp=0; $tongluongvuotgia=0; $tongkpi=0; $tongdoanhthu=0; $tongchuyencan=0; $tongphone=0; $tongluong=0; $tongngayan=0; $tongtiencom=0; $tongbh=0; $tongkhautru=0; $tongluonggiaonhan=0; $tongngoaikhoa=0; $tongchucvu=0; ?>
+    <?php $diem_gio = 1.7; $tongdl=0; $tongtt=0; $tongdlmoi=0; $tongdlcu=0; $tongttmoi=0; $tongttcu=0; $tongluongsp=0; $tongluongvuotgia=0; $tongkpi=0; $tongdoanhthu=0; $tongchuyencan=0; $tongphone=0; $tongluong=0; $tongcom=0; $tongngayan=0; $tongtiencom=0; $tongbh=0; $tongkhautru=0; $tongluonggiaonhan=0; $tongngoaikhoa=0; $tongchucvu=0; ?>
     <?php foreach ($staffs as $salary) : ?>
     <?php
             $dl = isset($sl_daily[$salary->staff_id])?$sl_daily[$salary->staff_id]:0;
@@ -260,6 +261,9 @@ elseif ($order_by == 'staff_name')
             $congluong = $kpi+$luongsp+$luongvuotgia+$giaonhan+$ngoaikhoa+$luongchuyencan+$chucvu+0+$phone;
             $tongluong += $congluong;
 
+            $com = isset($arr_eating_allowance[$salary->staff_id])?$arr_eating_allowance[$salary->staff_id]:0;
+            $tongcom += $com;
+
             $ngayan = isset($arr_eating[$salary->staff_id]['ngay'])?$arr_eating[$salary->staff_id]['ngay']:0;
             $tiencom = isset($arr_eating[$salary->staff_id]['tien'])?$arr_eating[$salary->staff_id]['tien']:0;
             $tiennv = isset($arr_eating[$salary->staff_id]['tra'])?$arr_eating[$salary->staff_id]['tra']:0;
@@ -292,9 +296,10 @@ elseif ($order_by == 'staff_name')
             <td class="fix" id="congluong_<?php echo $salary->staff_id; ?>"><b><?php echo $lib->formatMoney($congluong); ?></b></td>
             <td class="fix" id="ngayan_<?php echo $salary->staff_id; ?>"><a href="eating/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $ngayan; ?></a></td>
             <td class="fix" id="tiencom_<?php echo $salary->staff_id; ?>"><a href="eating/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($tiencom); ?></a></td>
+            <td class="fix" id="com_<?php echo $salary->staff_id; ?>"><a href="eatingallowance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($com); ?></a></td>
             <td class="fix" data="<?php echo $salary->staff_id; ?>" id="baohiem_<?php echo $salary->staff_id; ?>"><a href="insurrance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($tienbh); ?></a></td>
             <td class="fix" id="khautru_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($khautru); ?></td>
-            <td class="fix" id="thuclinh_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($congluong-$khautru); ?></td>
+            <td class="fix" id="thuclinh_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($congluong-$khautru+$com); ?></td>
             
         </tr>
         <?php 
@@ -314,6 +319,7 @@ elseif ($order_by == 'staff_name')
            <td class="total error" id="total_luong" ><?php echo $lib->formatMoney($tongluong)  ?></td>
            <td class="total error" id="total_ngayan" ><?php echo $tongngayan  ?></td>
            <td class="total error" id="total_com" ><?php echo $lib->formatMoney($tongtiencom)  ?></td>
+           <td class="total error" id="total_com_phucap" ><?php echo $lib->formatMoney($tongcom)  ?></td>
            <td class="total error" id="total_bh" ><?php echo $lib->formatMoney($tongbh)  ?></td>
            <td class="total error" id="total_tru" ><?php echo $lib->formatMoney($tongkhautru)  ?></td>
            <td class="total error" id="total_thuclinh" ><?php echo $lib->formatMoney($tongluong-$tongkhautru)  ?></td>

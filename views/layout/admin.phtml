@@ -650,7 +650,7 @@
                 </li>
                 <li><a  data="ordertire/orderlist" href="<?php echo $this->url('ordertire/orderlist') ?>"><i class="fa fa-circle-o text-aqua"></i>Đơn hàng</a></li>
                 <li><a  data="ordertirewaiting" href="<?php echo $this->url('ordertirewaiting') ?>"><i class="fa fa-circle-o text-aqua"></i>Đơn hàng đang chờ</a></li>
-                <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3){ ?>
+                <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 8){ ?>
                 <li><a  data="ordertire/report" href="<?php echo $this->url('ordertire/report') ?>"><i class="fa fa-circle-o text-aqua"></i>Tổng hợp đơn hàng</a></li>
                 <?php } ?>
 
@@ -668,7 +668,7 @@
               <ul class="treeview-menu">
                 <li><a  data="stock" href="<?php echo $this->url('stock') ?>"><i class="fa fa-circle-o text-aqua"></i>Tồn kho - Dự kiến nhập</a></li>
                 <li><a  data="inventory" href="<?php echo $this->url('inventory') ?>"><i class="fa fa-circle-o text-aqua"></i>Tồn kho chi tiết</a></li>
-                <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3){ ?>
+                <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 8){ ?>
                 <li><a  data="stock/report" href="<?php echo $this->url('stock/report') ?>"><i class="fa fa-circle-o text-aqua"></i>Giá trị tồn</a></li>
                 <?php } ?>
               </ul>
@@ -676,7 +676,7 @@
             <li><a  data="tiresalary" href="<?php echo $this->url('tiresalary') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Doanh số bán hàng</a></li>
             <li><a  data="tiredebit" href="<?php echo $this->url('tiredebit') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Công nợ</a></li>
             <li><a  data="ordertirecost" href="<?php echo $this->url('ordertirecost') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí đơn hàng</a></li>
-            <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3){ ?>
+            <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 8){ ?>
             <li><a  data="tireimport" href="<?php echo $this->url('tireimport') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Giá vốn</a>
               <ul class="treeview-menu">
                 <li><a  data="tireimport" href="<?php echo $this->url('tireimport') ?>"><i class="fa fa-circle-o text-aqua"></i>Giá vốn</a></li>
@@ -730,6 +730,7 @@
             <li><a  data="totalsalary" href="<?php echo $this->url('totalsalary') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảng lương</a></li>
             <li><a  data="attendance" href="<?php echo $this->url('attendance') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảng chấm công</a></li>
             <li><a  data="eating" href="<?php echo $this->url('eating') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảng cơm</a></li>
+            <li><a  data="eatingallowance" href="<?php echo $this->url('eatingallowance') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Phụ cấp cơm</a></li>
             <li><a  data="phoneallowance" href="<?php echo $this->url('phoneallowance') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Phụ cấp điện thoại</a></li>
             <li><a  data="insurrance" href="<?php echo $this->url('insurrance') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bảo hiểm</a></li>
             <li><a  data="positionsalary" href="<?php echo $this->url('positionsalary') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Lương chức vụ</a></li>
