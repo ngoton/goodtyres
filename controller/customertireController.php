@@ -875,7 +875,8 @@ Class customertireController Extends baseController {
         $this->view->data['lib'] = $this->lib;
         $this->view->data['title'] = 'Gửi mail';
 
-        $customer_model = $this->model->get('customertireModel');
+        $customer_tire_model = $this->model->get('customertireModel');
+        $customer_model = $this->model->get('customerModel');
 
         $data = array(
             'where' => '(customer_tire_email IS NOT NULL AND customer_tire_email != "") ',
@@ -885,9 +886,15 @@ Class customertireController Extends baseController {
             $data['where'] .= ' AND customer_tire_sale = '.$_SESSION['userid_logined'];
         }
 
-        $customers = $customer_model->getAllCustomer($data);
+        $customers = $customer_tire_model->getAllCustomer($data);
+
+        $data = array(
+            'where' => '(customer_email IS NOT NULL AND customer_email != "") AND customer_email NOT IN (SELECT customer_tire_email FROM customer_tire)',
+        );
+        $customer_others = $customer_model->getAllCustomer($data);
 
         $this->view->data['customers'] = $customers;
+        $this->view->data['customer_others'] = $customer_others;
 
         $this->view->show('customertire/mail');
     }

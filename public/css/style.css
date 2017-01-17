@@ -1737,3 +1737,6 @@ border-radius: 3px;
 -moz-border-radius: 3px;
 -o-border-radius: 3px;
 }
+.table_data tr:nth-child(even) {background: rgba(255, 240, 250, 0.59)}
+.table_data tr:nth-child(odd) {background: #FFF}
+.table_data tr:hover{background: rgba(68, 157, 245, 0.56); cursor: pointer;}

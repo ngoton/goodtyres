@@ -288,7 +288,7 @@ Class totalsalaryController Extends baseController {
                         $daily_cu[$checks->staff] = isset($daily_cu[$checks->staff])?$daily_cu[$checks->staff]+1:1;
                     }
                 }
-                $luong_sp[$checks->staff] = isset($luong_sp[$checks->staff])?$luong_sp[$checks->staff]+$checks->bonus:$checks->bonus;
+                $luong_sp[$checks->staff] = isset($luong_sp[$checks->staff])?$luong_sp[$checks->staff]+(round($checks->bonus/1000)*1000):(round($checks->bonus/1000)*1000);
                 $luong_vuotgia[$checks->staff] = isset($luong_vuotgia[$checks->staff])?$luong_vuotgia[$checks->staff]+$checks->bonus_over:$checks->bonus_over;
                 $doanhthu[$checks->staff] = isset($doanhthu[$checks->staff])?$doanhthu[$checks->staff]+$orders->total:$orders->total;
             }

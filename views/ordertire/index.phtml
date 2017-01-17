@@ -15,12 +15,13 @@
             <h3 class="fs-subtitle">Bước 1</h3>
             <input type="radio" name="customer_type" value="2" checked> Trực tiếp
             <input type="radio" name="customer_type" value="1"> Đại lý <br>
-            <input autocomplete="off" class="iform" type="text" name="customer" id="customer" placeholder="Tên khách hàng" required="required" />
+            <input autocomplete="off" class="iform" title="Nhằm hỗ trợ tốt nhất cho Sale, hãy nhập đầy đủ thông tin (Tên cty, Mst, Địa chỉ, SĐT, Email)" type="text" name="customer" id="customer" placeholder="Tên khách hàng" required="required" data-toggle="tooltip" data-placement="left" />
             <ul id="customer_list_id"></ul>
-            <input class="iform" type="text" name="company" id="company" placeholder="Công ty" required="required" />
-            <input class="iform" type="text" name="mst" id="mst" placeholder="Mã số thuế" />
-            <input class="iform" type="text" name="address" id="address" placeholder="Địa chỉ" required="required" />
-            <input class="iform phone" type="text" name="phone" id="phone" placeholder="Số điện thoại liên hệ" required="required" />
+            <input class="iform" title="Nhằm hỗ trợ tốt nhất cho Sale, hãy nhập đầy đủ thông tin (Tên cty, Mst, Địa chỉ, SĐT, Email)" type="text" name="company" id="company" placeholder="Công ty" required="required" data-toggle="tooltip" data-placement="left" />
+            <input class="iform" title="Nhằm hỗ trợ tốt nhất cho Sale, hãy nhập đầy đủ thông tin (Tên cty, Mst, Địa chỉ, SĐT, Email)" type="text" name="mst" id="mst" placeholder="Mã số thuế" data-toggle="tooltip" data-placement="left" />
+            <input class="iform" title="Nhằm hỗ trợ tốt nhất cho Sale, hãy nhập đầy đủ thông tin (Tên cty, Mst, Địa chỉ, SĐT, Email)" type="text" name="address" id="address" placeholder="Địa chỉ" required="required" data-toggle="tooltip" data-placement="left" />
+            <input class="iform phone" title="Nhằm hỗ trợ tốt nhất cho Sale, hãy nhập đầy đủ thông tin (Tên cty, Mst, Địa chỉ, SĐT, Email)" type="text" name="phone" id="phone" placeholder="Số điện thoại liên hệ" required="required" data-toggle="tooltip" data-placement="left" />
+            <input class="iform email" title="Nhằm hỗ trợ tốt nhất cho Sale, hãy nhập đầy đủ thông tin (Tên cty, Mst, Địa chỉ, SĐT, Email)" type="text" name="email" id="email" placeholder="Email liên hệ" required="required" data-toggle="tooltip" data-placement="left" />
             
             <input type="button" name="next" class="next action-button" value="Tiếp tục" />
         </fieldset>
@@ -342,12 +343,20 @@ function set_item(item,value,company,phone,address,email,ngay,mst,type) {
     if (phone != "") {
         $('#phone').val(phone.substring(0, phone.length - 3)+"xxx");
     }
+    $('#email').attr('data',email.slice(0,5));
+    $('#email').val(email);
+    if (email != "") {
+        $('#email').val("xxxxx"+email.substring(5, email.length));
+    }
     $('#company').val(company);
     $("input[name=customer_type][value=" + type + "]").attr('checked', 'checked');
     $('#customer_list_id').hide();
     $('#customer').focus();
 
 }
+$('#email').keyup(function(){
+    $('#email').attr('data',$(this).val().slice(0,5));
+});
 $('#phone').keyup(function(){
     $('#phone').attr('data',$(this).val().slice(-3));
 });
@@ -385,6 +394,8 @@ $('#customer').keyup(function(){
             $('#company').val("");
             $('#phone').val("");
             $('#phone').attr('data',"");
+            $('#email').val("");
+            $('#email').attr('data',"");
         }
       
       
@@ -399,6 +410,8 @@ $('#customer').on('keydown', function() {
             $('#company').val("");
             $('#phone').val("");
             $('#phone').attr('data',"");
+            $('#email').val("");
+            $('#email').attr('data',"");
         }
             
       });  
@@ -860,8 +873,41 @@ $(':checkbox[name=dis]').bind('click',function(){
 $('#vat_percent').keyup(function(){
     var val = $(this).val(); 
     var thanhtien = parseInt($('#thanhtien2').val().replace(/[^0-9\.-]+/g,"")) || 0;
+
+    if($('#check_price_vat').is(':checked')){
+        var gia = 0;
+        var vat = 0;
+        $('.tire_price_vat').each(function() { 
+            var p = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
+            var v = Math.round((p*val*0.1)/1.1*0.1);
+            var n = p-v;
+
+            var row = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex = row[0].rowIndex;
+
+            var this_sl = parseInt($(".tire_number:eq("+rowIndex+")").val().replace(/[^0-9\.-]+/g,""));
+            gia = gia + (this_sl*n);
+
+            vat += v*this_sl;
+
+            $('.tire_price').val(n);
+            $('.tire_price').val(function(index, value) {
+                return value
+                  .replace(/\D/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+            });
+        });
+
+        $('#thanhtien').val(gia);
+        $('#thanhtien2').val(gia);
+        $('#vat').val(vat);
+    }
+    else{
+        $('#vat').val(Math.round(thanhtien*val/100));
+    }
     
-    $('#vat').val(Math.round(thanhtien*val/100));
+    
     
     $('#vat').val(function(index, value) {
         return value
@@ -1102,6 +1148,8 @@ $('#next_2').click(function(){
         var address = $('#address').attr('value');
         var phone = $('#phone').attr('value');
         phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
+        var email = $('#email').attr('value');
+        email = $('#email').attr('data')+email.substring(5, email.length);
 
         var total_number = 0;
 
@@ -1158,6 +1206,7 @@ $('#next_2').click(function(){
                 mst: mst,
                 address: address,
                 phone: phone,
+                email: email,
                 total_number: total_number,
                 customer_type: customer_type,
                 
@@ -1245,7 +1294,7 @@ $('#vat').keyup(function(){
     var val = parseInt($(this).val().replace(/[^0-9\.-]+/g,""));
     var thanhtien = parseInt($("#thanhtien2").val().replace(/[^0-9\.-]+/g,""));
 
-    $('#vat_percent').val(Math.round(val*100/thanhtien));
+    $('#vat_percent').val(Math.round((val*100/thanhtien)*100)/100);
 
     if (val==0 || val==""){
         $('#check_price_vat').attr('disabled',true);
@@ -1291,6 +1340,8 @@ $("#msform").validate({
                     var address = $('#address').attr('value');
                     var phone = $('#phone').attr('value');
                     phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
+                    var email = $('#email').attr('value');
+                    email = $('#email').attr('data')+email.substring(5, email.length);
 
                     var payment = $('input[name=payment]:checked').val();
                     var debt = $('input[name=debt]:checked').val();
@@ -1388,6 +1439,7 @@ $("#msform").validate({
                             mst: mst,
                             address: address,
                             phone: phone,
+                            email: email,
                             order_tire: order_tire,
                             payment: payment,
                             debt: debt,
@@ -1466,7 +1518,7 @@ $('.number').focus(function(){
       // format number
       $(this).val(function(index, value) {
         return value
-          .replace(/[^0-9-.]/g, "")
+          .replace(/[^0-9-]/g, "")
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         ;
       });
@@ -1493,7 +1545,7 @@ $('.numbers').focus(function(){
       // format number
       $(this).val(function(index, value) {
         return value
-          .replace(/[^0-9-]/g, "")
+          .replace(/[^0-9-.]/g, "")
         ;
       });
     });
@@ -1812,7 +1864,7 @@ function addRow(tableID){
       // format number
       $(this).val(function(index, value) {
         return value
-          .replace(/[^0-9-.]/g, "")
+          .replace(/[^0-9-]/g, "")
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         ;
       });
@@ -1839,7 +1891,7 @@ function addRow(tableID){
       // format number
       $(this).val(function(index, value) {
         return value
-          .replace(/[^0-9-]/g, "")
+          .replace(/[^0-9-.]/g, "")
         ;
       });
     });

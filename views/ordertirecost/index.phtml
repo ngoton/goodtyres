@@ -98,6 +98,9 @@ elseif ($order_by == 'comment')
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','order_number','<?php echo $url_order ?>')">Số đơn hàng <?php if ($order_by == 'order_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_name','<?php echo $url_order ?>')">Khách hàng <?php if ($order_by == 'customer_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','shipment_vendor_name','<?php echo $url_order ?>')">Phải trả <?php if ($order_by == 'shipment_vendor_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th  class="fix">
@@ -128,6 +131,7 @@ elseif ($order_by == 'comment')
         	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire_cost->order_tire_cost_id ?>"></td>
             <td class="fix"><?php echo $k++; ?></td>
             <td class="fix"  id="order_number_<?php echo $order_tire_cost->order_tire_cost_id; ?>"><?php echo $order_tire_cost->order_number;  ?></td>
+            <td class="fix"  id="customer_name_<?php echo $order_tire_cost->order_tire_cost_id; ?>"><?php echo $order_tire_cost->customer_name;  ?></td>
             <td class="fix" id="vendor_<?php echo $order_tire_cost->order_tire_cost_id; ?>"><?php echo $order_tire_cost->shipment_vendor_name; ?></td>
             <td class="fix" id="comment_<?php echo $order_tire_cost->order_tire_cost_id; ?>"><?php echo $order_tire_cost->comment; ?></td>
             <td class="fix"  id="order_tire_cost_<?php echo $order_tire_cost->order_tire_cost_id; ?>"><?php echo $lib->formatMoney($order_tire_cost->order_tire_cost); ?></td>
@@ -137,7 +141,7 @@ elseif ($order_by == 'comment')
         </tr>
     <?php endforeach; ?>
         <tr style="text-align:center; font-weight: bold; color: red;">
-            <td class="fix" colspan="5" >Tổng cộng</td>
+            <td class="fix" colspan="6" >Tổng cộng</td>
             <td class="fix"><?php echo $lib->formatMoney($tongphaitra); ?></td>
             <td class="fix"><?php echo $lib->formatMoney($tongtra); ?></td>
             <td class="fix"><?php echo $lib->formatMoney($tongphaitra-$tongtra); ?></td>

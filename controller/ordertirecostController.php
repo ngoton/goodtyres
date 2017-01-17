@@ -36,7 +36,7 @@ Class ordertirecostController Extends baseController {
         $thang = (int)date('m',strtotime($batdau));
         $nam = date('Y',strtotime($batdau));
         
-        $join = array('table'=>'order_tire, shipment_vendor','where'=>'vendor=shipment_vendor_id AND order_tire=order_tire_id');
+        $join = array('table'=>'order_tire, customer, shipment_vendor','where'=>'vendor=shipment_vendor_id AND order_tire=order_tire_id AND customer=customer_id');
         $data = array(
             'where' => 'delivery_date >='.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc),
         );

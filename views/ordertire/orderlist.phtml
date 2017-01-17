@@ -216,7 +216,7 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix"  id="delivery_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->delivery_date>0?$lib->hien_thi_ngay_thang($order_tire->delivery_date):null; ?></td>
             <td class="fix">    
                 <button data="<?php echo $order_tire->customer ?>" value="1"  class="editButton">HĐ</button>
-                <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/bangke/'.$order_tire->order_tire_id ?>'">Bảng kê</button>
+                <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/bienban/'.$order_tire->order_tire_id ?>'">BBBG</button>
                 
                 <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/invoice/'.$order_tire->order_tire_id ?>'">Hóa đơn</button>
                 
@@ -980,6 +980,7 @@ function addRow(tableID){
     $('input[name="chk"]:last').attr('tabindex',0);
     $('input[name="chk"]:last').attr('title',"");
     $('input[name="chk"]:last').attr('class',"");
+    $('input[name="chk"]:last').attr('disabled',false);
     //$(".vendor:last").val($(".vendor:last option:first").val());
     $(".order_tire_cost_type:last").val($(".order_tire_cost_type:last option:first").val());
 

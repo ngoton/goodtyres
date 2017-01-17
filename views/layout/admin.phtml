@@ -677,6 +677,7 @@
             <li><a  data="tiredebit" href="<?php echo $this->url('tiredebit') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Công nợ</a></li>
             <li><a  data="ordertirecost" href="<?php echo $this->url('ordertirecost') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Chi phí đơn hàng</a></li>
             <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 8){ ?>
+            <li><a  data="invoicetire" href="<?php echo $this->url('invoicetire') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Hóa đơn</a></li>
             <li><a  data="tireimport" href="<?php echo $this->url('tireimport') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Giá vốn</a>
               <ul class="treeview-menu">
                 <li><a  data="tireimport" href="<?php echo $this->url('tireimport') ?>"><i class="fa fa-circle-o text-aqua"></i>Giá vốn</a></li>
@@ -1111,9 +1112,11 @@
 <script type="text/javascript">
 $( document ).ajaxStart(function() {
   $("#ajax_loader").fadeIn(200);
+  $('input[type="submit"]').attr('disabled',true);
 });
 $( document ).ajaxComplete(function() {
   $("#ajax_loader").fadeOut(200);
+  $('input[type="submit"]').attr('disabled',false);
 });
 </script>
 <!--

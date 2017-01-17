@@ -339,7 +339,7 @@ Class reportController Extends baseController {
         
             $join = array('table'=>'staff','where'=>'staff.staff_id = staff_debt.staff ');
             $where = array(
-                'where' => 'status=1 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') OR (week <= '.$tuan.' AND year = '.$nam_report.') ) AND staff = '.$staff->staff_id,
+                'where' => 'staff_debt.status=1 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') OR (week <= '.$tuan.' AND year = '.$nam_report.') ) AND staff = '.$staff->staff_id,
             );
             $staff_debts = $staff_debt_model->getAllCost($where,$join);
             
@@ -348,7 +348,7 @@ Class reportController Extends baseController {
             }
 
             $where = array(
-                'where' => 'status=2 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') OR (week <= '.$tuan.' AND year = '.$nam_report.') ) AND staff = '.$staff->staff_id,
+                'where' => 'staff_debt.status=2 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') OR (week <= '.$tuan.' AND year = '.$nam_report.') ) AND staff = '.$staff->staff_id,
             );
             $staff_debts = $staff_debt_model->getAllCost($where,$join);
             foreach ($staff_debts as $staff_debt) {
@@ -368,7 +368,7 @@ Class reportController Extends baseController {
         
             $join_truoc = array('table'=>'staff','where'=>'staff.staff_id = staff_debt.staff ');
             $where_truoc = array(
-                'where' => 'status=1 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') )  AND staff = '.$staff->staff_id,
+                'where' => 'staff_debt.status=1 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') )  AND staff = '.$staff->staff_id,
             );
             $staff_debts_truoc = $staff_debt_model->getAllCost($where_truoc,$join_truoc);
             
@@ -377,7 +377,7 @@ Class reportController Extends baseController {
             }
 
             $where_truoc = array(
-                'where' => 'status=2 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') )  AND staff = '.$staff->staff_id,
+                'where' => 'staff_debt.status=2 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') )  AND staff = '.$staff->staff_id,
             );
             $staff_debts_truoc = $staff_debt_model->getAllCost($where_truoc,$join_truoc);
             foreach ($staff_debts_truoc as $staff_debt) {
@@ -402,7 +402,7 @@ Class reportController Extends baseController {
             
                 $new_join_truoc = array('table'=>'staff','where'=>'staff.staff_id = staff_debt.staff ');
                 $new_where_truoc = array(
-                    'where' => 'status=1 AND week = '.($tuan_truoc+$i).' AND year = '.$nam_truoc.' AND staff = '.$staff->staff_id,
+                    'where' => 'staff_debt.status=1 AND week = '.($tuan_truoc+$i).' AND year = '.$nam_truoc.' AND staff = '.$staff->staff_id,
                 );
                 $new_staff_debts_truoc = $staff_debt_model->getAllCost($new_where_truoc,$new_join_truoc);
                 
@@ -411,7 +411,7 @@ Class reportController Extends baseController {
                 }
 
                 $new_where_truoc = array(
-                    'where' => 'status=2 AND week = '.($tuan_truoc+$i).' AND year = '.$nam_truoc.' AND staff = '.$staff->staff_id,
+                    'where' => 'staff_debt.status=2 AND week = '.($tuan_truoc+$i).' AND year = '.$nam_truoc.' AND staff = '.$staff->staff_id,
                 );
                 $new_staff_debts_truoc = $staff_debt_model->getAllCost($new_where_truoc,$new_join_truoc);
                 foreach ($new_staff_debts_truoc as $staff_debt) {
@@ -1601,7 +1601,7 @@ Class reportController Extends baseController {
         
             $join = array('table'=>'staff','where'=>'staff.staff_id = staff_debt.staff ');
             $where = array(
-                'where' => 'status=1 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') OR (week <= '.$tuan.' AND year = '.$nam_report.') ) AND staff = '.$staff->staff_id,
+                'where' => 'staff_debt.status=1 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') OR (week <= '.$tuan.' AND year = '.$nam_report.') ) AND staff = '.$staff->staff_id,
             );
             $staff_debts = $staff_debt_model->getAllCost($where,$join);
             
@@ -1610,7 +1610,7 @@ Class reportController Extends baseController {
             }
 
             $where = array(
-                'where' => 'status=2 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') OR (week <= '.$tuan.' AND year = '.$nam_report.') ) AND staff = '.$staff->staff_id,
+                'where' => 'staff_debt.status=2 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') OR (week <= '.$tuan.' AND year = '.$nam_report.') ) AND staff = '.$staff->staff_id,
             );
             $staff_debts = $staff_debt_model->getAllCost($where,$join);
             foreach ($staff_debts as $staff_debt) {
@@ -1630,7 +1630,7 @@ Class reportController Extends baseController {
         
             $join_truoc = array('table'=>'staff','where'=>'staff.staff_id = staff_debt.staff ');
             $where_truoc = array(
-                'where' => 'status=1 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') )  AND staff = '.$staff->staff_id,
+                'where' => 'staff_debt.status=1 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') )  AND staff = '.$staff->staff_id,
             );
             $staff_debts_truoc = $staff_debt_model->getAllCost($where_truoc,$join_truoc);
             
@@ -1639,7 +1639,7 @@ Class reportController Extends baseController {
             }
 
             $where_truoc = array(
-                'where' => 'status=2 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') )  AND staff = '.$staff->staff_id,
+                'where' => 'staff_debt.status=2 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') )  AND staff = '.$staff->staff_id,
             );
             $staff_debts_truoc = $staff_debt_model->getAllCost($where_truoc,$join_truoc);
             foreach ($staff_debts_truoc as $staff_debt) {
@@ -1667,7 +1667,7 @@ Class reportController Extends baseController {
             
                 $new_join_truoc = array('table'=>'staff','where'=>'staff.staff_id = staff_debt.staff ');
                 $new_where_truoc = array(
-                    'where' => 'status=1 AND week = '.($t).' AND year = '.$n.' AND staff = '.$staff->staff_id,
+                    'where' => 'staff_debt.status=1 AND week = '.($t).' AND year = '.$n.' AND staff = '.$staff->staff_id,
                 );
                 $new_staff_debts_truoc = $staff_debt_model->getAllCost($new_where_truoc,$new_join_truoc);
                 
@@ -1676,7 +1676,7 @@ Class reportController Extends baseController {
                 }
 
                 $new_where_truoc = array(
-                    'where' => 'status=2 AND week = '.($t).' AND year = '.$n.' AND staff = '.$staff->staff_id,
+                    'where' => 'staff_debt.status=2 AND week = '.($t).' AND year = '.$n.' AND staff = '.$staff->staff_id,
                 );
                 $new_staff_debts_truoc = $staff_debt_model->getAllCost($new_where_truoc,$new_join_truoc);
                 foreach ($new_staff_debts_truoc as $staff_debt) {
@@ -4867,7 +4867,7 @@ Class reportController Extends baseController {
         
             $join = array('table'=>'staff','where'=>'staff.staff_id = staff_debt.staff ');
             $where = array(
-                'where' => 'status=1 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') OR (week <= '.$tuan.' AND year = '.$nam_report.') ) AND staff = '.$staff->staff_id,
+                'where' => 'staff_debt.status=1 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') OR (week <= '.$tuan.' AND year = '.$nam_report.') ) AND staff = '.$staff->staff_id,
             );
             $staff_debts = $staff_debt_model->getAllCost($where,$join);
             
@@ -4876,7 +4876,7 @@ Class reportController Extends baseController {
             }
 
             $where = array(
-                'where' => 'status=2 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') OR (week <= '.$tuan.' AND year = '.$nam_report.') ) AND staff = '.$staff->staff_id,
+                'where' => 'staff_debt.status=2 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') OR (week <= '.$tuan.' AND year = '.$nam_report.') ) AND staff = '.$staff->staff_id,
             );
             $staff_debts = $staff_debt_model->getAllCost($where,$join);
             foreach ($staff_debts as $staff_debt) {
@@ -4896,7 +4896,7 @@ Class reportController Extends baseController {
         
             $join_truoc = array('table'=>'staff','where'=>'staff.staff_id = staff_debt.staff ');
             $where_truoc = array(
-                'where' => 'status=1 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') )  AND staff = '.$staff->staff_id,
+                'where' => 'staff_debt.status=1 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') )  AND staff = '.$staff->staff_id,
             );
             $staff_debts_truoc = $staff_debt_model->getAllCost($where_truoc,$join_truoc);
             
@@ -4905,7 +4905,7 @@ Class reportController Extends baseController {
             }
 
             $where_truoc = array(
-                'where' => 'status=2 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') )  AND staff = '.$staff->staff_id,
+                'where' => 'staff_debt.status=2 AND ( (week <= '.$tuan_truoc.' AND year = '.$nam_truoc.') OR (week <= 53 AND year < '.$nam_truoc.') )  AND staff = '.$staff->staff_id,
             );
             $staff_debts_truoc = $staff_debt_model->getAllCost($where_truoc,$join_truoc);
             foreach ($staff_debts_truoc as $staff_debt) {
@@ -4930,7 +4930,7 @@ Class reportController Extends baseController {
             
                 $new_join_truoc = array('table'=>'staff','where'=>'staff.staff_id = staff_debt.staff ');
                 $new_where_truoc = array(
-                    'where' => 'status=1 AND week = '.($tuan_truoc+$i).' AND year = '.$nam_truoc.' AND staff = '.$staff->staff_id,
+                    'where' => 'staff_debt.status=1 AND week = '.($tuan_truoc+$i).' AND year = '.$nam_truoc.' AND staff = '.$staff->staff_id,
                 );
                 $new_staff_debts_truoc = $staff_debt_model->getAllCost($new_where_truoc,$new_join_truoc);
                 
@@ -4939,7 +4939,7 @@ Class reportController Extends baseController {
                 }
 
                 $new_where_truoc = array(
-                    'where' => 'status=2 AND week = '.($tuan_truoc+$i).' AND year = '.$nam_truoc.' AND staff = '.$staff->staff_id,
+                    'where' => 'staff_debt.status=2 AND week = '.($tuan_truoc+$i).' AND year = '.$nam_truoc.' AND staff = '.$staff->staff_id,
                 );
                 $new_staff_debts_truoc = $staff_debt_model->getAllCost($new_where_truoc,$new_join_truoc);
                 foreach ($new_staff_debts_truoc as $staff_debt) {
@@ -5374,7 +5374,7 @@ Class reportController Extends baseController {
             
                 $join = array('table'=>'staff','where'=>'staff.staff_id = staff_debt.staff ');
                 $where = array(
-                    'where' => 'status=1 AND ( (week <= '.$tuan.' AND year = '.$nam_report.') OR (week <= 53 AND year < '.$nam_report.') )  AND staff = '.$staff->staff_id,
+                    'where' => 'staff_debt.status=1 AND ( (week <= '.$tuan.' AND year = '.$nam_report.') OR (week <= 53 AND year < '.$nam_report.') )  AND staff = '.$staff->staff_id,
                 );
                 $staff_debts = $staff_debt_model->getAllCost($where,$join);
                 
@@ -5383,7 +5383,7 @@ Class reportController Extends baseController {
                 }
 
                 $where = array(
-                    'where' => 'status=2 AND ( (week <= '.$tuan.' AND year = '.$nam_report.') OR (week <= 53 AND year < '.$nam_report.') )  AND staff = '.$staff->staff_id,
+                    'where' => 'staff_debt.status=2 AND ( (week <= '.$tuan.' AND year = '.$nam_report.') OR (week <= 53 AND year < '.$nam_report.') )  AND staff = '.$staff->staff_id,
                 );
                 $staff_debts = $staff_debt_model->getAllCost($where,$join);
                 foreach ($staff_debts as $staff_debt) {

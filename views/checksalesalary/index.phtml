@@ -161,7 +161,7 @@ elseif ($order_by == 'order_tire_number')
     
    </thead>
    <tbody>
-    <?php $tongsl = 0; $tongthu=0; $tongthue=0; $tonggiam=0; $tongtra=0; $tongchiphi=0; ?>
+    <?php $tongsl = 0; $tongthu=0; $tongthue=0; $tonggiam=0; $tongtra=0; $tongchiphi=0; $tongsp=0; $tongvuot=0; ?>
     <?php foreach ($order_tires as $order_tire) : ?>
     <?php
         $tongsl += $order_tire->order_tire_number; 
@@ -170,6 +170,8 @@ elseif ($order_by == 'order_tire_number')
         $tonggiam += $order_tire->discount+$order_tire->reduce; 
         $tongtra += $order_tire->total;
         $tongchiphi += $order_tire->order_cost;
+        $tongsp += (round((isset($info['bonus'][$order_tire->order_tire_id])?$info['bonus'][$order_tire->order_tire_id]:(isset($info['percent'][$order_tire->order_tire_id])?$order_tire->total*($info['percent'][$order_tire->order_tire_id]/100):null))/1000)*1000);
+        $tongvuot += (isset($info['vuotgia'][$order_tire->order_tire_id])?$info['vuotgia'][$order_tire->order_tire_id]:0);
     ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->order_tire_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
         	
@@ -219,6 +221,8 @@ elseif ($order_by == 'order_tire_number')
         $tonggiam += $order_tire->discount+$order_tire->reduce; 
         $tongtra += $order_tire->total;
         $tongchiphi += $order_tire->order_cost;
+        $tongsp += (round((isset($info2['bonus'][$order_tire->order_tire_id])?$info2['bonus'][$order_tire->order_tire_id]:(isset($info2['percent'][$order_tire->order_tire_id])?$order_tire->total*($info2['percent'][$order_tire->order_tire_id]/100):null))/1000)*1000);
+        $tongvuot += (isset($info2['vuotgia'][$order_tire->order_tire_id])?$info2['vuotgia'][$order_tire->order_tire_id]:0);
     ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->order_tire_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
             
@@ -269,7 +273,10 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix"><?php echo $lib->formatMoney($tongtra); ?></td>
             <td class="fix"></td>
             <td class="fix"><?php echo $lib->formatMoney($tongchiphi); ?></td>
-            <td class="fix" colspan="7" ></td>
+            <td class="fix" colspan="2" ></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongsp); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongvuot); ?></td>
+            <td class="fix" colspan="4" ></td>
         </tr>
 
    </tbody>
@@ -968,6 +975,9 @@ $('#confirm').on('click', '.btn-ok', function(e) {
         else{
             $check.prop('checked', true);
         }
+        $('#confirm').modal('hide');
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
        });
 
     
