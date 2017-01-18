@@ -1,0 +1,141 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'post_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'post_title')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'post_desc')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'post_link')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'post_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'post_user')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> DANH SÁCH BÀI VIẾT </h1></center>
+ 
+<div class="add-box">
+    <a class="add_button" href="<?php echo $this->url('post/newpost') ?>">Thêm mới</a>
+    <a class="add_button" id="btnExport" >Export Excel</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+    	<div class="alignleft actions">
+			<select name="action" id="action">
+            	<option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+		</div>
+		<div class="alignleft actions">
+		<select name="m" id="chonloc">
+			<option  value="18446744073709">Hiển thị tất cả</option>
+			<option value="20">Hiển thị 20 giá trị</option>
+            <option value="50">Hiển thị 50 giá trị</option>
+            <option value="100">Hiển thị 100 giá trị</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+		</select>
+		<input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
+        </div>
+
+      </div>
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+    	<th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','post_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'post_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','post_title','<?php echo $url_order ?>')">Tiêu đề <?php if ($order_by == 'post_title'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','post_desc','<?php echo $url_order ?>')">Mô tả <?php if ($order_by == 'post_desc'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','post_link','<?php echo $url_order ?>')">Đường dẫn <?php if ($order_by == 'post_link'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','post_date','<?php echo $url_order ?>')">Ngày đăng <?php if ($order_by == 'post_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','post_user','<?php echo $url_order ?>')">Tác giả <?php if ($order_by == 'post_user'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($posts as $post) : ?>
+    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $post->post_id ?>" class="edit_tr">
+        <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $post->post_id ?>"></td>
+        <td class="fix"><?php echo $i++; ?></td>
+        <td class="fix" id="post_title_<?php echo $post->post_id; ?>"><?php echo $post->post_title ?></td>
+        <td class="fix" id="post_desc_<?php echo $post->post_id; ?>"><?php echo $post->post_desc ?></td>
+        <td class="fix" id="post_link_<?php echo $post->post_id; ?>"><?php echo $post->post_link ?></td>
+        <td class="fix" id="post_date_<?php echo $post->post_id; ?>"><?php echo $lib->hien_thi_ngay_thang($post->post_date) ?></td>
+        <td class="fix" id="post_user_<?php echo $post->post_id; ?>"><?php echo $post->username ?></td>
+        <td>
+            <button class="btn btn-sm btn-flat btn-primary" onclick="javascript:window.location.href='<?php echo $this->url("post/editpost/".$post->post_id) ?>'" ><i class="fa fa-edit"></i> Sửa</button>
+            <button class="btn btn-sm btn-flat btn-danger" onclick="del(<?php echo $post->post_id ?>)" ><i class="fa fa-remove"></i> Xóa</button>
+        </td>
+    </tr>
+     
+    <?php endforeach; ?>
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('post') ?>">&larr;</a></div>
+
+<div style="display:none" id="lasted"></div>
+<script type="text/javascript">
+    var count = parseInt(<?php echo $lastID ?>);
+    $('#lasted').html(count);
+
+$("#import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+</script>
+</div>
+
+<script type="text/javascript">
+var l = "<?php echo $limit ?>";
+$('#chonloc option[value='+l+']').attr('selected','selected');
+
+</script>

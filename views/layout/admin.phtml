@@ -486,6 +486,25 @@
         </li>
         <li class="treeview">
           <a href="#">
+            <i class="fa fa-newspaper-o"></i>
+            <span>Viết bài</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+              <li><a  data="post" href="<?php echo $this->url('post') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Bài đăng</a>
+                <ul class="treeview-menu">
+                  
+                  <li><a  data="post/newpost" href="<?php echo $this->url('post/newpost') ?>"><i class="fa fa-circle-o text-aqua"></i>Thêm bài mới</a></li>
+                  <li><a  data="post" href="<?php echo $this->url('post') ?>"><i class="fa fa-circle-o text-aqua"></i>Danh sách bài</a></li>
+                </ul>
+              </li>
+              <li><a  data="photo" href="<?php echo $this->url('photo') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Media</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
             <i class="fa fa-th-list"></i>
             <span>Danh mục</span>
             <span class="pull-right-container">

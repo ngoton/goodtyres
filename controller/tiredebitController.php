@@ -983,6 +983,8 @@ Class tiredebitController Extends baseController {
 
         }
 
+        $sal = $this->registry->router->param_id;
+
         $customer_model = $this->model->get('customerModel');
         $customers = $customer_model->getAllCustomer(array('order_by'=>'customer_name','order'=>'ASC'));
 
@@ -990,7 +992,17 @@ Class tiredebitController Extends baseController {
 
         $order_tire_model = $this->model->get('ordertireModel'); 
 
-        $orders = $order_tire_model->getAllTire(null,$join);
+        $data = array(
+            'where'=>'1=1',
+        );
+
+        if ($sal>0) {
+            $data = array(
+                'where'=>'sale IN (SELECT account FROM staff WHERE staff_id = '.$sal.')',
+                );
+        }
+
+        $orders = $order_tire_model->getAllTire($data,$join);
 
         $data_customer = array();
         foreach ($orders as $order) {
@@ -1015,6 +1027,10 @@ Class tiredebitController Extends baseController {
             $data = array(
             'where'=>'code = '.$order->code.' AND tire_sale_date > '.$yesterday.' AND tire_sale_date < '.$tomorow.' AND customer = '.$order->customer,
             );
+
+            if ($sal>0) {
+                $data['where'] .= ' AND sale = '.$sal;
+            }
             
 
             $sales = $tire_sale_model->getAllTire($data,$join);
@@ -1027,6 +1043,9 @@ Class tiredebitController Extends baseController {
                 $data = array(
                 'where'=>'code = '.$order->code.' AND customer = '.$order->customer,
                 );
+                if ($sal>0) {
+                    $data['where'] .= ' AND sale = '.$sal;
+                }
                 
 
                 $sales = $tire_sale_model->getAllTire($data,$join);

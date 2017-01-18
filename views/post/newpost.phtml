@@ -1,0 +1,249 @@
+<link href="<?php echo BASE_URL ?>/public/css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo BASE_URL ?>/public/css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+<script src="<?php echo BASE_URL ?>/public/js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript" src="<?php echo BASE_URL ?>/public/js/editor/ckeditor.js"></script>
+
+<link href="<?php echo BASE_URL ?>/public/js/jquery-file-upload/uploadfile.css" rel="stylesheet">
+<script src="<?php echo BASE_URL ?>/public/js/jquery-file-upload/jquery.uploadfile.min.js"></script>
+
+<!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+          <!-- general form elements -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Thêm bài viết mới</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form id="addpost" role="form" method="post" action="" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label for="post_title">Tiêu đề</label>
+                      <input type="text" id="post_title" placeholder="Tiêu đề" required="required" tabindex="1">
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="post_desc">Mô tả</label>
+                      <textarea id="post_desc" class="form-control" rows="3" placeholder="Mô tả ..." tabindex="9" required="required"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                      
+                      <input type="hidden" id="post_picture">
+                      <input type="hidden" id="yes">
+                      
+                    </div>
+                    
+                  </div>
+                  <!-- /.box-body -->
+                  <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" tabindex="12">Hoàn thành</button>
+                    <button type="reset" class="btn" tabindex="12">Nhập lại</button>
+                  </div>
+                  <div class="box-footer">
+                    <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+                  </div>
+                  
+                </div>
+
+                <div class="col-md-8">
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label for="post_link">Đường dẫn</label>
+                      <input type="text" id="post_link" placeholder="Đường dẫn" required="required" tabindex="2">
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="post_content">Nội dung</label>
+                      <textarea id="post_content" class="form-control" rows="6" placeholder="Nội dung ..." tabindex="9" required="required"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="post_tag">Tag</label>
+                      <input type="text" id="post_tag"  tabindex="3">
+                      <ul id="mytags"></ul>
+                    </div>
+                    
+                  </div>
+                  <!-- /.box-body -->
+
+                  
+                  
+                </div>
+
+              </div>
+            </form>
+            <div class="row">
+              <div class="col-md-4">
+              </div>
+              <div class="col-md-8">
+                <label for="post_picture">Hình ảnh</label>
+                <div id="multiple_file_uploader">Upload</div>
+              </div>
+            </div>
+            
+          </div>
+          <!-- /.box -->
+
+        </div>
+        <!--/.col (left) -->
+        
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('.numbers').keyup(function(event) {
+
+            // skip for arrow keys
+        if(event.which >= 37 && event.which <= 40) return;
+
+        // format number
+        $(this).val(function(index, value) {
+          return value
+            .replace(/[^0-9-.]/g, "")
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          ;
+        });
+      });
+
+      var sampleTags = ['Lốp xe', 'Vỏ xe', 'Tire', 'Tyre'];
+      $("#post_tag").tagit({
+        availableTags: sampleTags,
+      });
+
+      CKEDITOR.replace('post_desc');
+      CKEDITOR.replace('post_content');
+
+      
+      var upload_settings = {
+        url : "<?php echo $this->url('post/upload') ?>",
+        dragDrop:true,
+        multiple : true,
+        showProgress : true,
+        fileName: "myfile",
+        allowedTypes:"jpg,png,gif", 
+        returnType:"json",
+        onSuccess:function(files,data,xhr)
+        {
+           // alert((data));
+           var pic = $('#post_picture').val();
+           for(var i=0;i<data.length;i++)
+            {
+                if (pic=="") {
+                  $('#post_picture').val(pic + data[i]);
+                }
+                else{
+                  $('#post_picture').val(pic + "|" + data[i]);
+                }
+            }
+            
+        },
+        showDelete:true,
+        deleteCallback: function(data,pd)
+          {
+            for(var i=0;i<data.length;i++)
+            {
+              var pic = $('#post_picture').val(); 
+              $('#post_picture').val(pic.replace(data[i],""));
+
+                $.post("<?php echo $this->url('post/deletephoto') ?>",{op:"delete",name:data[i]},
+                function(resp, textStatus, jqXHR)
+                {
+                    //Show Message  
+                    $("#status").append("<div>File Deleted</div>");  
+                });
+             }      
+            pd.statusbar.hide(); //You choice to hide/not.
+
+        }
+      };
+    var uploadObj = $("#multiple_file_uploader").uploadFile(upload_settings);
+
+    $("#addpost").validate({
+        errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+        rules: {
+            
+        },
+        submitHandler: function(form) {
+            for ( instance in CKEDITOR.instances ){
+                CKEDITOR.instances['post_desc'].updateElement();
+                CKEDITOR.instances['post_content'].updateElement();
+            }
+
+            var post_title = $('#post_title').attr('value');
+            var post_link = $('#post_link').attr('value');
+            
+            var post_tag = $('#post_tag').attr('value').trim();
+            var post_picture = $('#post_picture').attr('value');
+            var post_desc = $('#post_desc').attr('value');
+            var post_content = $('#post_content').attr('value');
+
+            
+            var yes = $('#yes').attr('value');
+         
+            $.ajax({
+                type: "POST", // phương thức gởi đi
+                url: "<?php echo BASE_URL ?>/post/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                
+                data: {
+                    post_title: post_title,
+                    post_link: post_link,
+                    post_tag: post_tag,
+                    post_picture: post_picture,
+                    post_desc: post_desc,
+                    post_content: post_content,
+                    yes: yes,
+                }, // giá trị post
+                success: function(answer){ // if everything goes well
+                    //alert(answer);
+                    var data = JSON.parse(answer);
+
+                    $('#show').html(data.msg);
+                    $('#winpopup').show();
+                    $('#error').hide();
+                    $('#error').slideToggle(100); // hiển thị thẻ div success
+                    $('#error').html('<div class="successbox">'+data.msg+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                    $('#error').fadeOut(10000);
+
+                    $('#yes').val(data.id);
+
+                }
+            });
+            return false;
+             
+         }
+    });
+  });
+
+function remove_unicode(str) 
+{  
+      str= str.toLowerCase();  
+      str= str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a");  
+      str= str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e");  
+      str= str.replace(/ì|í|ị|ỉ|ĩ/g,"i");  
+      str= str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o");  
+      str= str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u");  
+      str= str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y");  
+      str= str.replace(/đ/g,"d");  
+      str= str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'| |\"|\&|\#|\[|\]|~|$|_/g,"-"); 
+    
+      str= str.replace(/-+-/g,"-"); //thay thế 2- thành 1- 
+      str= str.replace(/^\-+|\-+$/g,"");  
+    
+      return str;  
+} 
+
+$('#post_title').keyup(function(){
+    var str = $(this).val();
+    var link = remove_unicode(str);
+    $('#post_link').val(link);
+});
+</script>

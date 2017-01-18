@@ -2780,3 +2780,15 @@ bxep: 6x14 = 84k-5-4--1484000
 
 10/01/2017 17:43:41|admincmg|add|2-10-2-1-2890909-3000000-327|order_tire_list|
 
+18/01/2017 16:31:52|admincmg|add|1|post|Bài viết mới-<p>
+	<strong>Xin ch&agrave;o c&aacute;c bạn</strong></p>-<p>
+	<strong>Đ&acirc;y</strong> l&agrave; b&agrave;i mới</p>-bai-viet-moi-1484694000-1-New-3,4
+
+18/01/2017 16:37:38|admincmg|edit|1|post|Bài viết mới nhất-<p>
+	<strong>Xin ch&agrave;o c&aacute;c bạn hi</strong></p>-<p>
+	<strong>Đ&acirc;y</strong> l&agrave; b&agrave;i mới hi</p>-bai-viet-moi-nhat-1484694000-1-New,mới-
+
+18/01/2017 16:39:13|admincmg|delete|4|photo|
+
+18/01/2017 16:39:15|admincmg|delete|3|photo|
+

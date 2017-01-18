@@ -1,0 +1,105 @@
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> MEDIA </h1></center>
+</div>
+
+<!-- Main content -->
+    <section class="content">
+
+      <!-- row -->
+      <div class="row">
+        <div class="col-md-12">
+          <!-- The time line -->
+          <ul class="timeline">
+            <?php foreach ($photo_data as $key=>$value) { ?>
+            <!-- timeline time label -->
+            <li class="time-label">
+                  <span class="bg-green">
+                    <?php echo $lib->hien_thi_ngay_thang(strtotime($key)) ?>
+                  </span>
+            </li>
+            <!-- /.timeline-label -->
+            <!-- timeline item -->
+            <li>
+              <i class="fa fa-camera bg-purple"></i>
+
+              <div class="timeline-item">
+                <span class="time"><i class="fa fa-clock-o"></i> <?php echo $lib->time_elapsed_string($key) ?></span>
+
+                <h3 class="timeline-header">
+                    <?php 
+                    $old = array();
+                    foreach($value as $user){ 
+                        if (!in_array($user['user'],$old)) {
+                            echo '<a href="#">'.$user_data[$user['user']] .'</a>, ';
+                            $old[] = $user['user'];
+                        }
+                    
+                    } 
+                    echo 'đã thêm '.count($value).' ảnh mới';
+                    ?>
+                </h3>
+
+                <div class="timeline-body">
+                    <?php foreach($value as $photo){  ?>
+                    <a href="#" class="show-image" id="img_<?php echo $photo['id'] ?>"><img src="<?php echo BASE_URL.'/'.$photo['url'] ?>" ></a>
+                    <i class="fa fa-times remove_picture" data="<?php echo $photo['id'] ?>" title="Xoá hình ảnh"></i>
+                    <?php } ?>
+                </div>
+              </div>
+            </li>
+            <!-- END timeline item -->
+            <?php } ?>
+          </ul>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+    </section>
+    <!-- /.content -->
+
+<div id="dialog" title="Hình ảnh"></div>
+
+<style type="text/css">
+.timeline-body img{
+    border: 1px solid #f4f4f4;
+    width: 140px;
+    height: 110px;
+}
+.timeline-body i.fa-times {
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    padding-top: 1px;
+    color: #fff;
+    background: #0088cd;
+    position: relative;
+    top: -46px;
+    left: -19px;
+    cursor: pointer;
+}
+</style>
+
+<script type="text/javascript">
+$(".show-image").click(function(e) {
+    $('#dialog').html($(this).html());
+    $('#dialog').dialog({
+        'width': 'auto',
+        'height': 'auto',
+    });
+});
+
+$('.remove_picture').click(function(){
+    var id = $(this).attr('data');
+    var r = confirm("Thao tác này sẽ xóa vĩnh viễn hình ảnh. Bạn có chắc chắn muốn xóa không?");
+      if (r == true){
+        $.post("<?php echo BASE_URL ?>/photo/delete", {data: id},
+           function(data){
+            //alert(data);
+            $('#img_'+id).remove();
+           }); 
+        $(this).remove();
+      }
+});
+</script>
