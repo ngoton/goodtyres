@@ -222,8 +222,8 @@ Class postController Extends baseController {
 
             $data = array(
                         'post_title' => trim($_POST['post_title']),
-                        'post_desc' => trim($_POST['post_desc']),
-                        'post_content' => trim($_POST['post_content']),
+                        'post_desc' => stripslashes(trim($_POST['post_desc'])),
+                        'post_content' => stripslashes(trim($_POST['post_content'])),
                         'post_link' => trim($_POST['post_link']),
                         'post_date' => strtotime(date('d-m-Y')),
                         'post_user' => $_SESSION['userid_logined'],

@@ -879,7 +879,7 @@ Class customertireController Extends baseController {
         $customer_model = $this->model->get('customerModel');
 
         $data = array(
-            'where' => '(customer_tire_email IS NOT NULL AND customer_tire_email != "") ',
+            'where' => '(customer_tire_email IS NOT NULL AND customer_tire_email != "") AND customer_tire_email NOT IN (SELECT customer_email FROM customer WHERE customer_email IS NOT NULL AND customer_email != "")',
         );
 
         if ($_SESSION['role_logined'] == 3) {
@@ -889,7 +889,7 @@ Class customertireController Extends baseController {
         $customers = $customer_tire_model->getAllCustomer($data);
 
         $data = array(
-            'where' => '(customer_email IS NOT NULL AND customer_email != "") AND customer_email NOT IN (SELECT customer_tire_email FROM customer_tire)',
+            'where' => '(customer_email IS NOT NULL AND customer_email != "")',
         );
         $customer_others = $customer_model->getAllCustomer($data);
 

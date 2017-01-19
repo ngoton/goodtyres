@@ -837,7 +837,7 @@ Class importtireController Extends baseController {
                                         $check = $payable->getCostsByWhere(array('check_cost'=>2,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                         if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                            $payable_data['approve'] = 10;
+                                            $payable_data['approve'] = $check->approve;
                                         }
 
                                         $payable->updateCosts($payable_data,array('check_cost'=>2,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
@@ -1026,7 +1026,7 @@ Class importtireController Extends baseController {
                                             $check = $payable->getCostsByWhere(array('check_cost'=>2,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                             if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                                $payable_data['approve'] = 10;
+                                                $payable_data['approve'] = $check->approve;
                                             }
                                                 $payable->updateCosts($payable_data,array('check_cost'=>2,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
                                             
@@ -1063,7 +1063,7 @@ Class importtireController Extends baseController {
                                             $check = $payable->getCostsByWhere(array('check_cost'=>2,'money'=>$old_cost_vat,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                             if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                                $payable_data['approve'] = 10;
+                                                $payable_data['approve'] = $check->approve;
                                             }
 
                                                 $payable->updateCosts($payable_data,array('check_cost'=>2,'money'=>$old_cost_vat,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
@@ -1163,7 +1163,7 @@ Class importtireController Extends baseController {
                                             $check = $payable->getCostsByWhere(array('check_cost'=>2,'money'=>$old_cost_vat,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                             if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                                $payable_data['approve'] = 10;
+                                                $payable_data['approve'] = $check->approve;
                                             }
 
                                                 $payable->updateCosts($payable_data,array('check_cost'=>2,'money'=>$old_cost_vat,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
@@ -1209,7 +1209,7 @@ Class importtireController Extends baseController {
                                             $check = $payable->getCostsByWhere(array('check_cost'=>2,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                             if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                                $payable_data['approve'] = 10;
+                                                $payable_data['approve'] = $check->approve;
                                             }
                                                 $payable->updateCosts($payable_data,array('check_cost'=>2,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
                                             
@@ -1387,7 +1387,7 @@ Class importtireController Extends baseController {
                                         $check = $payable->getCostsByWhere(array('check_cost'=>1,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                         if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                            $payable_data['approve'] = 10;
+                                            $payable_data['approve'] = $check->approve;
                                         }
 
                                         $payable->updateCosts($payable_data,array('check_cost'=>1,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
@@ -1576,7 +1576,7 @@ Class importtireController Extends baseController {
                                             $check = $payable->getCostsByWhere(array('check_cost'=>1,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                             if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                                $payable_data['approve'] = 10;
+                                                $payable_data['approve'] = $check->approve;
                                             }
                                                 $payable->updateCosts($payable_data,array('check_cost'=>1,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
                                             
@@ -1613,7 +1613,7 @@ Class importtireController Extends baseController {
                                             $check = $payable->getCostsByWhere(array('check_cost'=>1,'money'=>$old_cost_vat,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                             if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                                $payable_data['approve'] = 10;
+                                                $payable_data['approve'] = $check->approve;
                                             }
 
                                                 $payable->updateCosts($payable_data,array('check_cost'=>1,'money'=>$old_cost_vat,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
@@ -1713,7 +1713,7 @@ Class importtireController Extends baseController {
                                             $check = $payable->getCostsByWhere(array('check_cost'=>1,'money'=>$old_cost_vat,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                             if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                                $payable_data['approve'] = 10;
+                                                $payable_data['approve'] = $check->approve;
                                             }
 
                                                 $payable->updateCosts($payable_data,array('check_cost'=>1,'money'=>$old_cost_vat,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
@@ -1759,7 +1759,7 @@ Class importtireController Extends baseController {
                                             $check = $payable->getCostsByWhere(array('check_cost'=>1,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                             if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                                $payable_data['approve'] = 10;
+                                                $payable_data['approve'] = $check->approve;
                                             }
                                                 $payable->updateCosts($payable_data,array('check_cost'=>1,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
                                             
@@ -1937,7 +1937,7 @@ Class importtireController Extends baseController {
                                         $check = $payable->getCostsByWhere(array('check_cost'=>3,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                         if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                            $payable_data['approve'] = 10;
+                                            $payable_data['approve'] = $check->approve;
                                         }
 
                                         $payable->updateCosts($payable_data,array('check_cost'=>3,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
@@ -2126,7 +2126,7 @@ Class importtireController Extends baseController {
                                             $check = $payable->getCostsByWhere(array('check_cost'=>3,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                             if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                                $payable_data['approve'] = 10;
+                                                $payable_data['approve'] = $check->approve;
                                             }
                                                 $payable->updateCosts($payable_data,array('check_cost'=>3,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
                                             
@@ -2163,7 +2163,7 @@ Class importtireController Extends baseController {
                                             $check = $payable->getCostsByWhere(array('check_cost'=>3,'money'=>$old_cost_vat,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                             if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                                $payable_data['approve'] = 10;
+                                                $payable_data['approve'] = $check->approve;
                                             }
 
                                                 $payable->updateCosts($payable_data,array('check_cost'=>3,'money'=>$old_cost_vat,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
@@ -2263,7 +2263,7 @@ Class importtireController Extends baseController {
                                             $check = $payable->getCostsByWhere(array('check_cost'=>3,'money'=>$old_cost_vat,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                             if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                                $payable_data['approve'] = 10;
+                                                $payable_data['approve'] = $check->approve;
                                             }
 
                                                 $payable->updateCosts($payable_data,array('check_cost'=>3,'money'=>$old_cost_vat,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
@@ -2309,7 +2309,7 @@ Class importtireController Extends baseController {
                                             $check = $payable->getCostsByWhere(array('check_cost'=>3,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
 
                                             if ($check->money >= $payable_data['money'] && $check->approve > 0) {
-                                                $payable_data['approve'] = 10;
+                                                $payable_data['approve'] = $check->approve;
                                             }
                                                 $payable->updateCosts($payable_data,array('check_cost'=>3,'money'=>$old_cost,'vendor' => $sale_vendor_data['vendor'],'import_tire'=>trim($_POST['yes']),'cost_type' => $sale_vendor_data['type']));
                                             
@@ -2445,7 +2445,7 @@ Class importtireController Extends baseController {
                     $check = $pending_payable->getCostsByWhere(array('import_tire'=>$_POST['yes']));
 
                     if ($check->money >= $data_pending['money'] && $check->approve > 0) {
-                        $data_pending['approve'] = 10;
+                        $data_pending['approve'] = $check->approve;
                     }
 
                         $pending_payable->updateCosts($data_pending,array('import_tire'=>$_POST['yes']));
