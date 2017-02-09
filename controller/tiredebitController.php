@@ -550,7 +550,7 @@ Class tiredebitController Extends baseController {
 
         $data['order_by'] = 'order_number';
 
-        $data['order'] = 'ASC';
+        $data['order'] = 'DESC';
 
 
 

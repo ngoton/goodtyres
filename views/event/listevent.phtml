@@ -1,0 +1,28 @@
+<?php $l=1; ?>
+<table class="table_data" id="or">
+<thead>
+    <tr>
+        <th class="fix">
+            <a class="sort">STT</a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Ngày gửi </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Email nhận </a>
+        </th>
+        
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($event_mails as $event_mail) : ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $event_mail->event_mail_id ?>" class="edit_tr" >
+            <td class="fix"><?php echo $l++; ?></td>
+            <td class="fix" id="event_mail_date_<?php echo $event_mail->event_mail_id; ?>"><?php echo $lib->hien_thi_ngay_thang($event_mail->event_mail_date); ?></td>
+            <td class="fix" id="email_customer_<?php echo $event_mail->event_mail_id; ?>"><?php echo $event_mail->email_customer; ?></td>
+            
+        </tr>
+    <?php endforeach; ?>
+   </tbody>
+</table>

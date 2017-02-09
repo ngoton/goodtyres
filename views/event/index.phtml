@@ -1,0 +1,392 @@
+
+<style type="text/css">
+    #external-events{
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+    .input-group .form-control {
+        width: 80%;
+    }
+    .form-control {
+        height: 20px;
+    }
+    #trash{
+        border: 1px dashed red;
+        padding: 10px;
+        font-style: italic;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-3">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <h4 class="box-title">Sự kiện</h4>
+        </div>
+        <div class="box-body">
+          <!-- the events -->
+          <div id="external-events">
+            <?php foreach ($events as $event) { ?>
+              <div data="<?php echo $event->event_id ?>" class="external-event"><?php echo $event->event_name ?></div>
+            <?php } ?>
+          </div>
+          <div id="trash" ><i class="fa fa-trash"></i> Kéo vào để xóa</div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /. box -->
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title">Tên sự kiện</h3>
+        </div>
+        <div class="box-body">
+          <!-- /btn-group -->
+          <div class="input-group">
+            <input id="new-event" type="text" class="form-control" placeholder="Tên">
+
+            <div class="input-group-btn">
+              <button id="add-new-event" type="button" class="btn btn-primary btn-flat">Thêm</button>
+            </div>
+            <!-- /btn-group -->
+          </div>
+          <!-- /input-group -->
+          <div class="error"></div>
+        </div>
+      </div>
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+      <div class="box box-primary">
+        <div class="box-body no-padding">
+          <?php
+            $url_order = 'ASC';
+            if ($order_by == 'event_run_id')
+                $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+              elseif ($order_by == 'event_name')
+                $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+            elseif ($order_by == 'event_content')
+                $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+            elseif ($order_by == 'event_frequently')
+                $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+            elseif ($order_by == 'start_date')
+                $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+            elseif ($order_by == 'end_date')
+                $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+            
+
+                $i = $sonews*$page-($sonews-1);
+
+            ?>
+
+            <div id="loading"></div>
+            <div id="winpopup"></div>
+
+            <div id="content" style="padding:5px;">
+                <center style="clear:both;margin-bottom: -30px;"><h1> SỰ KIỆN </h1></center>
+            <div class="add-box">
+                <a class="add_button" onClick="javascript:window.location.href='<?php echo $this->url("event/addevent") ?>'">Thêm lịch mới</a>
+            </div>
+              <div class="search-box">
+                    
+                    <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+                    <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+                </div>
+                <div class="tablenav top">
+                  <div class="alignleft actions">
+                  <select name="action" id="action">
+                          <option value="-1" selected="selected">Chọn</option>
+                            
+                            <option value="delete">Xóa</option>
+                        </select>
+                        <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+                </div>
+                <div class="alignleft actions">
+                <select name="m" id="chonloc">
+                  <option  value="18446744073709">Hiển thị tất cả</option>
+                        <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+                  <option value="20">Hiển thị 20 giá trị</option>
+                        <option value="30">Hiển thị 30 giá trị</option>
+                        <option value="50">Hiển thị 50 giá trị</option>
+                        
+                </select>
+                <input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">               
+                    </div>
+
+                  </div>
+                
+            </div>
+
+            <table id="tblExport" class="table_data">
+            <thead>
+                <tr>
+                  <th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+                    <th rowspan="2" class="fix">
+                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','event_run_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'event_run_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                    </th>
+                    <th  class="fix">
+                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','event_name','<?php echo $url_order ?>')">Tên sự kiện <?php if ($order_by == 'event_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                    </th>
+                    <th  class="fix">
+                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','event_content','<?php echo $url_order ?>')">Nội dung <?php if ($order_by == 'event_content'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                    </th>
+                    
+                    <th  class="fix">
+                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','event_frequently','<?php echo $url_order ?>')">Lặp lại <?php if ($order_by == 'event_frequently'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                    </th>
+                    <th  class="fix">
+                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','start_date','<?php echo $url_order ?>')">Bắt đầu <?php if ($order_by == 'start_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                    </th>
+                    <th  class="fix">
+                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','ende_date','<?php echo $url_order ?>')">Kết thúc <?php if ($order_by == 'ende_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                    </th>
+                    
+                    <th  class="fix">&nbsp;</th>
+                </tr>
+                
+               </thead>
+               <tbody>
+                <?php foreach ($event_runs as $event_run) : ?>
+                    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $event_run->event_run_id ?>" class="edit_tr" >
+                      <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $event_run->event_run_id ?>"></td>
+                        <td class="fix"><?php echo $i++; ?></td>
+                        
+                        <td class="fix"  id="event_name_<?php echo $event_run->event_run_id; ?>"><?php echo $event_run->event_name; ?></td>
+                        <td class="fix"  id="event_content_<?php echo $event_run->event_run_id; ?>"><?php echo $lib->truncateString($event_run->event_content,20); ?></td>
+                        
+                        <td class="fix" id="event_frequently_<?php echo $event_run->event_run_id; ?>"><?php echo $event_run->event_frequently==1?"Hằng ngày":($event_run->event_frequently==2?"Hằng tuần":($event_run->event_frequently==3?"Hằng tháng":"Không")); ?></td> 
+                        <td class="fix"  id="start_date_<?php echo $event_run->event_run_id; ?>"><?php echo $event_run->start_date>0?$lib->hien_thi_ngay_thang($event_run->start_date):null ?></td>
+                        <td class="fix"  id="end_date_<?php echo $event_run->event_run_id; ?>"><?php echo $event_run->end_date>0?$lib->hien_thi_ngay_thang($event_run->end_date):null ?></td>
+                        <td>
+                            <?php if($_SESSION['role_logined']==1){ ?>
+                            <?php if($event_run->event_status!=1){ ?>
+                            <button class="btn btn-sm btn-flat btn-warning event_run" data="<?php echo $event_run->event_run_id ?>" ><i class="fa fa-play"></i> Chạy</button>
+                            <?php }else{ ?>
+                            <button class="btn btn-sm btn-flat btn-warning event_pause" data="<?php echo $event_run->event_run_id ?>" ><i class="fa fa-pause"></i> Dừng</button>
+                            <?php } ?>
+                            <button class="btn btn-sm btn-flat btn-success event_run_list" href="<?php echo $this->url('event/listevent/'.$event_run->event_run_id) ?>" ><i class="fa fa-bar-chart"></i> Xem</button>
+                            <button class="btn btn-sm btn-flat btn-primary" onclick="javascript:window.location.href='<?php echo $this->url("event/editevent/".$event_run->event_run_id) ?>'" ><i class="fa fa-edit"></i> Sửa</button>
+                            <button class="btn btn-sm btn-flat btn-danger" onclick="del(<?php echo $event_run->event_run_id ?>)" ><i class="fa fa-remove"></i> Xóa</button>
+
+                            <?php } ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+               </tbody>
+            </table>
+            <?php
+            $this->helper('slidePaginator');
+            ?>
+            
+        <!-- /.box-body -->
+      </div>
+      <!-- /. box -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+
+<!-- Page specific script -->
+<script>
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+$('.event_run').click(function(){
+  var id = $(this).attr('data');
+    $.ajax({
+        type: 'POST',
+        url: '<?php echo BASE_URL ?>/event/eventrun',
+        data: {
+          data: id,
+          val: 1,
+        },
+        success: function(response){
+          setTimeout(function() {
+            sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+          }, 200);
+        }
+      });
+});
+
+$('.event_pause').click(function(){
+  var id = $(this).attr('data');
+    $.ajax({
+        type: 'POST',
+        url: '<?php echo BASE_URL ?>/event/eventrun',
+        data: {
+          data: id,
+          val: 0,
+        },
+        success: function(response){
+          setTimeout(function() {
+            sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+          }, 200);
+        }
+      });
+});
+
+$(".event_run_list").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:600,
+            resizable: false,
+            title:'Danh sách gửi mail',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+  $(function () {
+    var currentMousePos = {
+        x: -1,
+        y: -1
+    };
+
+    $(document).on("mousemove", function (event) {
+       currentMousePos.x = event.pageX;
+       currentMousePos.y = event.pageY;
+    });
+
+    function isElemOverDiv() {
+     var trashEl = jQuery('#trash');
+     var ofs = trashEl.offset();
+     var x1 = ofs.left;
+     var x2 = ofs.left + trashEl.outerWidth(true);
+     var y1 = ofs.top;
+     var y2 = ofs.top + trashEl.outerHeight(true);
+     if (currentMousePos.x >= x1 && currentMousePos.x <= x2 && currentMousePos.y >= y1 && currentMousePos.y <= y2) {
+        return true;    
+      }    
+      return false; 
+   }
+
+    /* initialize the external events
+     -----------------------------------------------------------------*/
+    function ini_events(ele) {
+      ele.each(function () {
+        var xPos=0, yPos=0;
+        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+        // it doesn't need to have a start or end
+        var eventObject = {
+          title: $.trim($(this).text()), // use the element's text as the event title
+          id: $(this).attr('data')
+        };
+
+        // store the Event Object in the DOM element so we can get to it later
+        $(this).data('eventObject', eventObject);
+
+        // make the event draggable using jQuery UI
+        $(this).draggable({
+          scroll: false,
+          helper: 'clone',
+          zIndex: 1070,
+          revert: true, // will cause the event to go back to its
+          revertDuration: 0,  //  original position after the drag
+          drag: function() {
+            var offset = $('.ui-draggable-dragging').offset();
+            xPos = offset.left;
+            yPos = offset.top;
+          },
+          stop: function() {
+            var trashEl = $('#trash');
+            var ofs = trashEl.offset();
+            var x1 = ofs.left;
+            var x2 = ofs.left + trashEl.outerWidth(true);
+            var y1 = ofs.top;
+            var y2 = ofs.top + trashEl.outerHeight(true);
+            var ele = $(this);
+            var id = ele.attr('data');
+            if (xPos >= x1 && xPos <= x2 && yPos >= y1 && yPos <= y2) {
+                
+                $.ajax({
+                  type: 'POST',
+                  url: '<?php echo BASE_URL ?>/event/deleteevent',
+                  data: {
+                    data: id,
+                  },
+                  dataType: 'json',
+                  success: function(response){
+                    ele.remove();
+                  }
+                });
+            }   
+          },
+        });
+
+      });
+    }
+
+    ini_events($('#external-events div.external-event'));
+
+    /* list events
+     -----------------------------------------------------------------*/
+    var json_events = null;
+    function getEvent(){
+      $.ajax({
+         url: '<?php echo BASE_URL ?>/event/listevent',
+         type: 'GET',
+         data: {
+            all: 1,
+          },
+         async: false,
+         success: function(response){
+           json_events = response;
+         }
+      });
+    }
+
+    getEvent();
+
+    
+
+    /* ADDING EVENTS */
+    
+    $("#add-new-event").click(function (e) {
+      e.preventDefault();
+      //Get value and make sure it is not null
+      var val = $("#new-event").val();
+      if (val.length == 0) {
+        return;
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo BASE_URL ?>/event/add',
+        data: {
+          event_name: val,
+        },
+        dataType: 'json',
+        success: function(response){
+          if (response.eventid > 0) {
+            //Create events
+            var event = $("<div />");
+            event.addClass("external-event");
+            event.html(val);
+            event.attr('data',response.eventid);
+            $('#external-events').prepend(event);
+
+            //Add draggable funtionality
+            ini_events(event);
+
+            //Remove event from text input
+            $("#new-event").val("");
+          }
+          else{
+            $('.error').html(response.status);
+          }
+          
+        }
+      });
+
+      
+    });
+
+
+  });
+</script>

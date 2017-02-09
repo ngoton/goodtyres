@@ -501,6 +501,15 @@
                 </ul>
               </li>
               <li><a  data="photo" href="<?php echo $this->url('photo') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Media</a></li>
+              <?php if ($_SESSION && ($_SESSION['role_logined'] == 1)) { ?>
+              <li><a  data="event" href="<?php echo $this->url('event') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Sự kiện</a>
+                <ul class="treeview-menu">
+                  
+                  <li><a  data="event/addevent" href="<?php echo $this->url('event/addevent') ?>"><i class="fa fa-circle-o text-aqua"></i>Thêm lịch gửi mới</a></li>
+                  <li><a  data="event" href="<?php echo $this->url('event') ?>"><i class="fa fa-circle-o text-aqua"></i>Danh sách sự kiện</a></li>
+                </ul>
+              </li>
+              <?php } ?>
           </ul>
         </li>
         <li class="treeview">

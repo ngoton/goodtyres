@@ -25,7 +25,7 @@ Class photoController Extends baseController {
             'where' => 'photo_create_date >= '.strtotime($batdau).' AND photo_create_date <= '.strtotime($ketthuc),
         );
 
-        $photos = $photo_model->getAllPhoto($data);
+        $photos = $photo_model->getAllPhoto();
 
         $photo_data = array();
 
