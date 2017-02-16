@@ -1105,6 +1105,8 @@ Class ordertireController Extends baseController {
             $this->view->data['previous_url'] = $previous_url.'/'.$cus;
         }
 
+        $order_tire_model = $this->model->get('ordertireModel');
+        $order_tire = $order_tire_model->getTire($id);
         
         $order_tire_list_model = $this->model->get('ordertirelistModel');
         $join = array('table'=>'tire_brand,tire_size,tire_pattern','where'=>'tire_brand = tire_brand_id AND tire_size = tire_size_id AND tire_pattern = tire_pattern_id');
@@ -1149,17 +1151,24 @@ Class ordertireController Extends baseController {
             $size = $tire_quotation_size_model->getTireByWhere(array('tire_quotation_size_number'=>$tire_size_number));
             $size = $size?$size->tire_quotation_size_id:null;
 
-            $data_q = array(
-                'where' => 'tire_quotation_brand ='.$brand.' AND tire_quotation_size ='.$size.' AND tire_quotation_pattern IN ('.$pattern_type.') AND start_date <= '.strtotime(date('d-m-Y')).' AND (end_date IS NULL OR end_date > '.strtotime(date('d-m-Y')).')',
-            );
+            if ($order_tire->delivery_date > 0) {
+                $data_q = array(
+                    'where' => 'tire_quotation_brand ='.$brand.' AND tire_quotation_size ='.$size.' AND tire_quotation_pattern IN ('.$pattern_type.') AND start_date <= '.$order_tire->delivery_date.' AND (end_date IS NULL OR end_date > '.$order_tire->delivery_date.')',
+                );
+            }
+            else{
+                $data_q = array(
+                    'where' => 'tire_quotation_brand ='.$brand.' AND tire_quotation_size ='.$size.' AND tire_quotation_pattern IN ('.$pattern_type.') AND start_date <= '.$order_tire->order_tire_date.' AND (end_date IS NULL OR end_date > '.$order_tire->order_tire_date.')',
+                );
+            }
+            
             $prices = $tire_quotation_model->getAllTire($data_q);
             foreach ($prices as $p) {
                 $price[$order->order_tire_list_id] = $p->tire_quotation_price;
             }
         }
 
-        $order_tire_model = $this->model->get('ordertireModel');
-        $order_tire = $order_tire_model->getTire($id);
+        
 
         $this->view->data['price'] = $price;
         $this->view->data['order'] = $id;

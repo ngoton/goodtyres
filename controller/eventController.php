@@ -305,6 +305,322 @@ Class eventController Extends baseController {
             fclose($fh);
         }
     }
+
+    public function mailmorning(){
+        $this->view->disableLayout();
+
+        $event_mail_model = $this->model->get('eventmailModel');
+
+        $customer_tire_model = $this->model->get('customertireModel');
+        $customer_model = $this->model->get('customerModel');
+
+        $today = strtotime(date('d-m-Y'));
+
+        $yesterday = strtotime(date('d-m-Y',strtotime("-1 days")));
+        $tomorrow = strtotime(date('d-m-Y',strtotime("+1 days")));
+
+        $monday =  strtotime(date("d-m-Y", strtotime('monday this week')));   
+        $sunday =  strtotime(date("d-m-Y", strtotime('sunday this week')));
+
+        $firstmonth = strtotime('01-'.date('m-Y'));
+        $lastmonth = strtotime(date('t-m-Y'));
+
+        $event_run_model = $this->model->get('eventrunModel');
+
+        $data = array(
+            'where' => 'event_frequently=3 AND event_status=1 AND start_date <= '.$today.' AND (end_date >= '.$today.' OR end_date IS NULL)',
+        );
+        $join = array('table'=>'event','where'=>"event=event_id");
+
+        $event_runs = $event_run_model->getAllEvent($data,$join);
+
+        if ($event_runs) {
+            foreach ($event_runs as $run) {
+                $emails = array();
+
+                $data = array(
+                    'where' => 'customer_tire_email NOT IN (SELECT email_customer FROM event_mail WHERE event_run = '.$run->event_run_id.' AND event_mail_date >= '.$firstmonth.' AND event_mail_date <= '.$lastmonth.') AND (customer_tire_email IS NOT NULL AND customer_tire_email != "") AND customer_tire_email NOT IN (SELECT customer_email FROM customer WHERE customer_email IS NOT NULL AND customer_email != "")',
+                    'limit' => 20,
+                );
+
+                $customers = $customer_tire_model->getAllCustomer($data);
+
+                $data = array(
+                    'where' => 'customer_email NOT IN (SELECT email_customer FROM event_mail WHERE event_run = '.$run->event_run_id.' AND event_mail_date >= '.$firstmonth.' AND event_mail_date <= '.$lastmonth.') AND (customer_email IS NOT NULL AND customer_email != "")',
+                    'limit' => 20,
+                );
+                $customer_others = $customer_model->getAllCustomer($data);
+
+                foreach ($customers as $customer) {
+                    if ($this->postmail($customer->customer_tire_email,"smtp.zoho.com","lopxe@viet-trade.org","lopxe!@#$",$run->event_name.' - VIET TRADE',$run->event_content) == 1) {
+                        $data_mail = array(
+                            'event_mail_date' => strtotime(date('d-m-Y')),
+                            'event_run' => $run->event_run_id,
+                            'email_customer' => $customer->customer_tire_email,
+                        );
+                        $event_mail_model->createEvent($data_mail);
+                    }
+                    
+                    sleep(10);
+                }
+                foreach ($customer_others as $customer) {
+                    if ($this->postmail($customer->customer_email,"smtp.zoho.com","lopxe@viet-trade.org","lopxe!@#$",$run->event_name.' - VIET TRADE',$run->event_content) == 1) {
+                        $data_mail = array(
+                            'event_mail_date' => strtotime(date('d-m-Y')),
+                            'event_run' => $run->event_run_id,
+                            'email_customer' => $customer->customer_email,
+                        );
+                        $event_mail_model->createEvent($data_mail);
+                    }
+                    
+                    sleep(10);
+                }
+            }
+            
+        }
+
+        $data = array(
+            'where' => 'event_frequently=2 AND event_status=1 AND start_date <= '.$today.' AND (end_date >= '.$today.' OR end_date IS NULL)',
+        );
+        $join = array('table'=>'event','where'=>"event=event_id");
+
+        $event_runs = $event_run_model->getAllEvent($data,$join);
+
+        if ($event_runs) {
+            foreach ($event_runs as $run) {
+                $emails = array();
+
+                $data = array(
+                    'where' => 'customer_tire_email NOT IN (SELECT email_customer FROM event_mail WHERE event_mail_date > '.$yesterday.' AND event_mail_date < '.$tomorrow.') AND customer_tire_email NOT IN (SELECT email_customer FROM event_mail WHERE event_run = '.$run->event_run_id.' AND event_mail_date >= '.$monday.' AND event_mail_date <= '.$sunday.') AND (customer_tire_email IS NOT NULL AND customer_tire_email != "") AND customer_tire_email NOT IN (SELECT customer_email FROM customer WHERE customer_email IS NOT NULL AND customer_email != "")',
+                    'limit' => 20,
+                );
+
+                $customers = $customer_tire_model->getAllCustomer($data);
+
+                $data = array(
+                    'where' => 'customer_email NOT IN (SELECT email_customer FROM event_mail WHERE event_mail_date > '.$yesterday.' AND event_mail_date < '.$tomorrow.') AND customer_email NOT IN (SELECT email_customer FROM event_mail WHERE event_run = '.$run->event_run_id.' AND event_mail_date >= '.$monday.' AND event_mail_date <= '.$sunday.') AND (customer_email IS NOT NULL AND customer_email != "")',
+                    'limit' => 20,
+                );
+                $customer_others = $customer_model->getAllCustomer($data);
+
+                foreach ($customers as $customer) {
+                    if ($this->postmail($customer->customer_tire_email,"smtp.zoho.com","lopxe@viet-trade.org","lopxe!@#$",$run->event_name.' - VIET TRADE',$run->event_content) == 1) {
+                        $data_mail = array(
+                            'event_mail_date' => strtotime(date('d-m-Y')),
+                            'event_run' => $run->event_run_id,
+                            'email_customer' => $customer->customer_tire_email,
+                        );
+                        $event_mail_model->createEvent($data_mail);
+                    }
+                    
+                    sleep(10);
+                }
+                foreach ($customer_others as $customer) {
+                    if ($this->postmail($customer->customer_email,"smtp.zoho.com","lopxe@viet-trade.org","lopxe!@#$",$run->event_name.' - VIET TRADE',$run->event_content) == 1) {
+                        $data_mail = array(
+                            'event_mail_date' => strtotime(date('d-m-Y')),
+                            'event_run' => $run->event_run_id,
+                            'email_customer' => $customer->customer_email,
+                        );
+                        $event_mail_model->createEvent($data_mail);
+                    }
+                    
+                    sleep(10);
+                }
+            }
+            
+        }
+
+    }
+    public function mailafternoon(){
+        $this->view->disableLayout();
+
+        $event_mail_model = $this->model->get('eventmailModel');
+
+        $customer_tire_model = $this->model->get('customertireModel');
+        $customer_model = $this->model->get('customerModel');
+
+        $today = strtotime(date('d-m-Y'));
+
+        $yesterday = strtotime(date('d-m-Y',strtotime("-1 days")));
+        $tomorrow = strtotime(date('d-m-Y',strtotime("+1 days")));
+
+        $monday =  strtotime(date("d-m-Y", strtotime('monday this week')));   
+        $sunday =  strtotime(date("d-m-Y", strtotime('sunday this week')));
+
+        $firstmonth = strtotime('01-'.date('m-Y'));
+        $lastmonth = strtotime(date('t-m-Y'));
+
+        $event_run_model = $this->model->get('eventrunModel');
+
+        $data = array(
+            'where' => 'event_frequently=3 AND event_status=1 AND start_date <= '.$today.' AND (end_date >= '.$today.' OR end_date IS NULL)',
+        );
+        $join = array('table'=>'event','where'=>"event=event_id");
+
+        $event_runs = $event_run_model->getAllEvent($data,$join);
+
+        if ($event_runs) {
+            foreach ($event_runs as $run) {
+                $emails = array();
+
+                $data = array(
+                    'where' => 'customer_tire_email NOT IN (SELECT email_customer FROM event_mail WHERE event_run = '.$run->event_run_id.' AND event_mail_date >= '.$firstmonth.' AND event_mail_date <= '.$lastmonth.') AND (customer_tire_email IS NOT NULL AND customer_tire_email != "") AND customer_tire_email NOT IN (SELECT customer_email FROM customer WHERE customer_email IS NOT NULL AND customer_email != "")',
+                    'limit' => 20,
+                );
+
+                $customers = $customer_tire_model->getAllCustomer($data);
+
+                $data = array(
+                    'where' => 'customer_email NOT IN (SELECT email_customer FROM event_mail WHERE event_run = '.$run->event_run_id.' AND event_mail_date >= '.$firstmonth.' AND event_mail_date <= '.$lastmonth.') AND (customer_email IS NOT NULL AND customer_email != "")',
+                    'limit' => 20,
+                );
+                $customer_others = $customer_model->getAllCustomer($data);
+
+                foreach ($customers as $customer) {
+                    if ($this->postmail($customer->customer_tire_email,"smtp.zoho.com","lopxe@viet-trade.org","lopxe!@#$",$run->event_name.' - VIET TRADE',$run->event_content) == 1) {
+                        $data_mail = array(
+                            'event_mail_date' => strtotime(date('d-m-Y')),
+                            'event_run' => $run->event_run_id,
+                            'email_customer' => $customer->customer_tire_email,
+                        );
+                        $event_mail_model->createEvent($data_mail);
+                    }
+                    
+                    sleep(10);
+                }
+                foreach ($customer_others as $customer) {
+                    if ($this->postmail($customer->customer_email,"smtp.zoho.com","lopxe@viet-trade.org","lopxe!@#$",$run->event_name.' - VIET TRADE',$run->event_content) == 1) {
+                        $data_mail = array(
+                            'event_mail_date' => strtotime(date('d-m-Y')),
+                            'event_run' => $run->event_run_id,
+                            'email_customer' => $customer->customer_email,
+                        );
+                        $event_mail_model->createEvent($data_mail);
+                    }
+                    
+                    sleep(10);
+                }
+            }
+            
+        }
+
+        $data = array(
+            'where' => 'event_frequently=2 AND event_status=1 AND start_date <= '.$today.' AND (end_date >= '.$today.' OR end_date IS NULL)',
+        );
+        $join = array('table'=>'event','where'=>"event=event_id");
+
+        $event_runs = $event_run_model->getAllEvent($data,$join);
+
+        if ($event_runs) {
+            foreach ($event_runs as $run) {
+                $emails = array();
+
+                $data = array(
+                    'where' => 'customer_tire_email NOT IN (SELECT email_customer FROM event_mail WHERE event_mail_date > '.$yesterday.' AND event_mail_date < '.$tomorrow.') AND customer_tire_email NOT IN (SELECT email_customer FROM event_mail WHERE event_run = '.$run->event_run_id.' AND event_mail_date >= '.$monday.' AND event_mail_date <= '.$sunday.') AND (customer_tire_email IS NOT NULL AND customer_tire_email != "") AND customer_tire_email NOT IN (SELECT customer_email FROM customer WHERE customer_email IS NOT NULL AND customer_email != "")',
+                    'limit' => 20,
+                );
+
+                $customers = $customer_tire_model->getAllCustomer($data);
+
+                $data = array(
+                    'where' => 'customer_email NOT IN (SELECT email_customer FROM event_mail WHERE event_mail_date > '.$yesterday.' AND event_mail_date < '.$tomorrow.') AND customer_email NOT IN (SELECT email_customer FROM event_mail WHERE event_run = '.$run->event_run_id.' AND event_mail_date >= '.$monday.' AND event_mail_date <= '.$sunday.') AND (customer_email IS NOT NULL AND customer_email != "")',
+                    'limit' => 20,
+                );
+                $customer_others = $customer_model->getAllCustomer($data);
+
+                foreach ($customers as $customer) {
+                    if ($this->postmail($customer->customer_tire_email,"smtp.zoho.com","lopxe@viet-trade.org","lopxe!@#$",$run->event_name.' - VIET TRADE',$run->event_content) == 1) {
+                        $data_mail = array(
+                            'event_mail_date' => strtotime(date('d-m-Y')),
+                            'event_run' => $run->event_run_id,
+                            'email_customer' => $customer->customer_tire_email,
+                        );
+                        $event_mail_model->createEvent($data_mail);
+                    }
+                    
+                    sleep(10);
+                }
+                foreach ($customer_others as $customer) {
+                    if ($this->postmail($customer->customer_email,"smtp.zoho.com","lopxe@viet-trade.org","lopxe!@#$",$run->event_name.' - VIET TRADE',$run->event_content) == 1) {
+                        $data_mail = array(
+                            'event_mail_date' => strtotime(date('d-m-Y')),
+                            'event_run' => $run->event_run_id,
+                            'email_customer' => $customer->customer_email,
+                        );
+                        $event_mail_model->createEvent($data_mail);
+                    }
+                    
+                    sleep(10);
+                }
+            }
+            
+        }
+    }
+
+    private function postmail($email, $host, $user, $pass, $sub, $content){
+            require "lib/class.phpmailer.php";
+
+            $nguoinhan = $email;
+            $noidung = stripslashes(trim($content));
+            $chude = trim($sub);
+            $usr = trim($user);
+            $pas = trim($pass);
+            $hostname = trim($host);
+
+            
+                // Khai báo tạo PHPMailer
+                $mail = new PHPMailer();
+                //Khai báo gửi mail bằng SMTP
+                $mail->IsSMTP();
+                //Tắt mở kiểm tra lỗi trả về, chấp nhận các giá trị 0 1 2
+                // 0 = off không thông báo bất kì gì, tốt nhất nên dùng khi đã hoàn thành.
+                // 1 = Thông báo lỗi ở client
+                // 2 = Thông báo lỗi cả client và lỗi ở server
+                $mail->SMTPDebug  = 0;
+                 
+                $mail->Debugoutput = "html"; // Lỗi trả về hiển thị với cấu trúc HTML
+                $mail->Host       = $hostname; //host smtp để gửi mail
+                $mail->Port       = 587; // cổng để gửi mail
+                $mail->SMTPSecure = "tls"; //Phương thức mã hóa thư - ssl hoặc tls
+                $mail->SMTPAuth   = true; //Xác thực SMTP
+                $mail->CharSet = 'UTF-8';
+                $mail->Username   = $usr; // Tên đăng nhập tài khoản Gmail
+                $mail->Password   = $pas; //Mật khẩu của gmail
+                $mail->SetFrom($usr, "VIET TRADE"); // Thông tin người gửi
+                //$mail->AddReplyTo("sale@cmglogistics.com.vn","Sale CMG");// Ấn định email sẽ nhận khi người dùng reply lại.
+
+                $mail->AddAddress($nguoinhan, $nguoinhan);//Email của người nhận
+                $mail->Subject = $chude; //Tiêu đề của thư
+                $mail->IsHTML(true); // send as HTML   
+                //$mail->AddEmbeddedImage('public/img/christmas.jpg', 'hinhanh');
+                $mail->MsgHTML($noidung); //Nội dung của bức thư.
+                // $mail->MsgHTML(file_get_contents("email-template.html"), dirname(__FILE__));
+                // Gửi thư với tập tin html
+
+                $mail->AltBody = $chude;//Nội dung rút gọn hiển thị bên ngoài thư mục thư.
+                //$mail->AddAttachment("images/attact-tui.gif");//Tập tin cần attach
+                // For most clients expecting the Priority header:
+                // 1 = High, 2 = Medium, 3 = Low
+                $mail->Priority = 1;
+                // MS Outlook custom header
+                // May set to "Urgent" or "Highest" rather than "High"
+                $mail->AddCustomHeader("X-MSMail-Priority: High");
+                // Not sure if Priority will also set the Importance header:
+                $mail->AddCustomHeader("Importance: High"); 
+
+                if($mail->Send()){
+                    return 1;
+                }
+                else{
+                    return 0;
+                }
+                //Tiến hành gửi email và kiểm tra lỗi
+                
+
+            
+        
+    }
     
     
 
