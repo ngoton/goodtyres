@@ -6,7 +6,6 @@ Class ordertireController Extends baseController {
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
         }
-        
         $this->view->data['lib'] = $this->lib;
         $this->view->data['title'] = 'Lốp xe';
 
@@ -39,6 +38,23 @@ Class ordertireController Extends baseController {
 
 
         $this->view->show('ordertire/index');
+    }
+    public function getPattern(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $brand = trim($_POST['data']);
+            $str = "";
+
+            $tire_buy_model = $this->model->get('tirebuyModel');
+            $tire_pattern_model = $this->model->get('tirepatternModel');
+
+            $tire_buys = $tire_buy_model->queryTire('SELECT tire_buy_pattern FROM tire_buy WHERE tire_buy_brand = '.$brand.' GROUP BY tire_buy_pattern');
+            foreach ($tire_buys as $tire_buy) {
+                $tire_patterns = $tire_pattern_model->getTire($tire_buy->tire_buy_pattern);
+                $str .= '<option value="'.$tire_patterns->tire_pattern_id.'">'.$tire_patterns->tire_pattern_name.'</option>';
+            }
+
+            echo $str;
+        }
     }
     public function waiting($id) {
         $this->view->setLayout('admin');
@@ -640,9 +656,12 @@ Class ordertireController Extends baseController {
             $price = array(
                 'price' => "",
                 'max' => 0,
+                'date' => null,
                 );
 
             $ton = 0;
+
+            $old = array();
 
             $tire_buy_model = $this->model->get('tirebuyModel');
             $tire_sale_model = $this->model->get('tiresaleModel');
@@ -653,6 +672,13 @@ Class ordertireController Extends baseController {
             $tire_buys = $tire_buy_model->getAllTire(array('where'=>'tire_buy_brand = '.$brand.' AND tire_buy_size = '.$size.' AND tire_buy_pattern = '.$pattern));
             foreach ($tire_buys as $tire) {
                 $ton += $tire->tire_buy_volume;
+                if ($tire->date_manufacture > 0) {
+                    if (!in_array($tire->date_manufacture,$old)) {
+                        $old[] = $tire->date_manufacture;
+                        $price['date'] .= '<option value="'.$tire->date_manufacture.'">'.date('m/Y',$tire->date_manufacture).'</option>';
+                    }
+                    
+                }
             }
 
             $tire_sales = $tire_sale_model->getAllTire(array('where'=>'tire_brand = '.$brand.' AND tire_size = '.$size.' AND tire_pattern = '.$pattern));
@@ -838,6 +864,7 @@ Class ordertireController Extends baseController {
                     'tire_price' => trim(str_replace(',','',$v['tire_price'])),
                     'tire_price_vat' => $v['tire_price_vat'],
                     'order_tire' => $id_order_tire,
+                    'tire_date' => $v['tire_date'],
                 );
 
                 if ($order_tire_list_model->getTireByWhere(array('tire_brand'=>$data_order['tire_brand'],'tire_size'=>$data_order['tire_size'],'tire_pattern'=>$data_order['tire_pattern'],'order_tire'=>$data_order['order_tire']))) {
@@ -1099,10 +1126,11 @@ Class ordertireController Extends baseController {
         $this->view->disableLayout();
         $this->view->data['lib'] = $this->lib;
 
+        $ketthuc = date('d-m-Y',$this->registry->router->order);
         $cus = $this->registry->router->page;
         $previous_url = $this->registry->router->order_by;
         if ($cus > 0 && $previous_url != "") {
-            $this->view->data['previous_url'] = $previous_url.'/'.$cus;
+            $this->view->data['previous_url'] = $previous_url.'/'.$cus.'/'.strtotime($ketthuc);
         }
 
         $order_tire_model = $this->model->get('ordertireModel');
@@ -1269,6 +1297,7 @@ Class ordertireController Extends baseController {
             $price = trim(str_replace(',','',$_POST['tire_price_vat']));
             $check_price_vat = trim($_POST['check_price_vat']);
             $price_vat = $check_price_vat==1?trim(str_replace(',','',$_POST['tire_price'])):null;
+            $tire_date = trim($_POST['tire_date']);
 
             $data = array(
                 'tire_brand'=>$brand,
@@ -1277,6 +1306,7 @@ Class ordertireController Extends baseController {
                 'tire_number'=>$number,
                 'tire_price'=>$price,
                 'tire_price_vat'=>$price_vat,
+                'tire_date'=>$tire_date,
             );
 
             if ($_POST['yes'] != "") {
@@ -1350,6 +1380,7 @@ Class ordertireController Extends baseController {
                         'volume' => $order_tire_list_old->tire_number,
                         'sell_price' => $order_tire_list_old->tire_price,
                         'sell_price_vat' => $order_tire_list_old->tire_price_vat,
+                        'date_manufacture_sale' => $order_tire_list_old->tire_date,
                     );
                     $tire_sale_model->updateTire($data_sale,array('tire_sale_id'=>$tire_sale->tire_sale_id));
 
@@ -1493,6 +1524,7 @@ Class ordertireController Extends baseController {
                         'sale' => $staff->staff_id,
                         'customer_type' => $order_tire_old->customer_type,
                         'order_tire' => $order_tire_list->order_tire,
+                        'date_manufacture_sale' => $order_tire_list_old->tire_date,
                     );
                     $tire_sale_model->createTire($data_sale);
 

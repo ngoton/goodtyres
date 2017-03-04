@@ -62,6 +62,7 @@ Class totalsalaryController Extends baseController {
         $tire_quotation_model = $this->model->get('tirequotationModel');
         $order_tire_model = $this->model->get('ordertireModel');
         $attendance_model = $this->model->get('attendanceModel');
+        $attendance_rate_model = $this->model->get('attendancerateModel');
         $phoneallowance_model = $this->model->get('phoneallowanceModel');
         $eatingallowance_model = $this->model->get('eatingallowanceModel');
         $eating_model = $this->model->get('eatingModel');
@@ -237,6 +238,15 @@ Class totalsalaryController Extends baseController {
         }
 
         $this->view->data['arr_attend'] = $arr_attend;
+
+        $qr = 'SELECT * FROM (SELECT * FROM attendance_rate WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
+        $attendance_rates = $attendance_rate_model->queryAttendance($qr);
+        $arr_attendance_rate = array();
+        foreach ($attendance_rates as $attendance_rate) {
+            $arr_attendance_rate[$attendance_rate->staff] = isset($arr_attendance_rate[$attendance_rate->staff])?$arr_attendance_rate[$attendance_rate->staff]+$attendance_rate->attendance_rate_salary:$attendance_rate->attendance_rate_salary;
+        }
+
+        $this->view->data['arr_attendance_rate'] = $arr_attendance_rate;
 
         ////////
 
@@ -796,6 +806,7 @@ Class totalsalaryController Extends baseController {
         $tire_quotation_model = $this->model->get('tirequotationModel');
         $order_tire_model = $this->model->get('ordertireModel');
         $attendance_model = $this->model->get('attendanceModel');
+        $attendance_rate_model = $this->model->get('attendancerateModel');
         $phoneallowance_model = $this->model->get('phoneallowanceModel');
         $eatingallowance_model = $this->model->get('eatingallowanceModel');
         $eating_model = $this->model->get('eatingModel');
@@ -958,6 +969,15 @@ Class totalsalaryController Extends baseController {
         }
 
         $this->view->data['arr_attend'] = $arr_attend;
+
+        $qr = 'SELECT * FROM (SELECT * FROM attendance_rate WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
+        $attendance_rates = $attendance_rate_model->queryAttendance($qr);
+        $arr_attendance_rate = array();
+        foreach ($attendance_rates as $attendance_rate) {
+            $arr_attendance_rate[$attendance_rate->staff] = isset($arr_attendance_rate[$attendance_rate->staff])?$arr_attendance_rate[$attendance_rate->staff]+$attendance_rate->attendance_rate_salary:$attendance_rate->attendance_rate_salary;
+        }
+
+        $this->view->data['arr_attendance_rate'] = $arr_attendance_rate;
 
         $thangtruoc1 = date("d-m-Y", strtotime("-1 month", strtotime($batdau)));
         $thangtruoc2 = date("d-m-Y", strtotime("-1 month", strtotime($ketthuc)));

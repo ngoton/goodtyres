@@ -116,6 +116,7 @@ Class dailyController Extends baseController {
         if ($keyword != '') {
             $search = '( note LIKE "%'.$keyword.'%" 
                     OR comment LIKE "%'.$keyword.'%" 
+                    OR owner LIKE "%'.$keyword.'%" 
                     OR code LIKE "%'.$keyword.'%" 
                     OR money_in LIKE "%'.$keyword.'%" 
                     OR money_out LIKE "%'.$keyword.'%" 
@@ -2491,7 +2492,7 @@ Class dailyController Extends baseController {
             $obtain_model = $this->model->get('obtainModel');
             $daily_bank_model = $this->model->get('dailybankModel');
             $costs_model = $this->model->get('costsModel');
-            $deposit_model = $this->model->get('depositireModel');
+            $deposit_model = $this->model->get('deposittireModel');
            
             if (isset($_POST['xoa'])) {
                 $data = explode(',', $_POST['xoa']);
@@ -2677,7 +2678,7 @@ Class dailyController Extends baseController {
                         $service = trim($val[5]);
                         $service = ($service=="Hành chính" || $service=="hành chính" || substr($service, -1)=="h" )?1:(($service=="Lốp xe" || $service=="lốp xe" || substr($service, -1)=="e")?2:(($service=="Logistics" || $service=="logistics" || substr($service, -1)=="s" || substr($service, -1)=="c")?3:null));
 
-                        if (BASE_URL == "http://viet-trade.org" || BASE_URL == "http://www.viet-trade.org") {
+                        if (BASE_URL == "http://viet-trade.org" || BASE_URL == "http://www.viet-trade.org" || BASE_URL == "https://www.viet-trade.org" || BASE_URL == "https://viet-trade.org") {
                             if ($service < 3) {
                                 $daily_data = array(
                                     'daily_date' => $ngay,

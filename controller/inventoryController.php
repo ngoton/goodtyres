@@ -40,17 +40,16 @@ Class inventoryController Extends baseController {
         $this->view->data['tire_sizes'] = $tire_sizes;
         $this->view->data['tire_patterns'] = $tire_patterns;
 
-        $query = "SELECT *,SUM(tire_buy_volume) AS soluong FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_buy_date <= ".strtotime($ngay)." AND tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern";
+        $query = "SELECT t2.soluong, t1.*, t2.tire_brand_name, t2.tire_size_number, t2.tire_pattern_name FROM tire_buy t1 JOIN (SELECT sum(tire_buy_volume) as soluong, tire_buy_brand, tire_buy_size, tire_buy_pattern, MAX(tire_buy_id) as lonnhat, tire_brand_name, tire_size_number, tire_pattern_name, tire_buy_id FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_buy_date <= ".strtotime($ngay)." AND tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern GROUP BY tire_buy_brand, tire_buy_size, tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC) t2 ON t1.tire_buy_id = t2.lonnhat AND t1.tire_buy_brand = t2.tire_buy_brand AND t1.tire_buy_size = t2.tire_buy_size AND t1.tire_buy_pattern = t2.tire_buy_pattern";
         if ($thuonghieu > 0) {
-            $query .= " AND tire_buy_brand = ".$thuonghieu;
+            $query .= " AND t1.tire_buy_brand = ".$thuonghieu;
         }
         if ($kichco > 0) {
-            $query .= " AND tire_buy_size = ".$kichco;
+            $query .= " AND t1.tire_buy_size = ".$kichco;
         }
         if ($magai > 0) {
-            $query .= " AND tire_buy_pattern = ".$magai;
+            $query .= " AND t1.tire_buy_pattern = ".$magai;
         }
-        $query .= " GROUP BY tire_buy_brand,tire_buy_size,tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC";
 
         $tire_buys = $tire_buy_model->queryTire($query);
         $this->view->data['tire_buys'] = $tire_buys;

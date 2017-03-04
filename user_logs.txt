@@ -661,3 +661,17 @@ Time|User|Action
 
 16/02/2017 11:36:12|admincmg|login|127.0.0.1
 
+02/03/2017 11:27:23|admincmg|login|127.0.0.1
+
+02/03/2017 13:26:08|admincmg|logout
+
+02/03/2017 13:26:24|admincmg|login|127.0.0.1
+
+02/03/2017 13:26:32|admincmg|logout
+
+02/03/2017 13:33:15|admincmg|login|127.0.0.1
+
+03/03/2017 08:44:16|admincmg|login|127.0.0.1
+
+04/03/2017 08:20:56|admincmg|login|127.0.0.1
+

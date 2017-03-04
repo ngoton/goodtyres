@@ -699,6 +699,11 @@
                 <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 8){ ?>
                 <li><a  data="stock/report" href="<?php echo $this->url('stock/report') ?>"><i class="fa fa-circle-o text-aqua"></i>Giá trị tồn</a></li>
                 <?php } ?>
+                <li><a  data="expired" href="<?php echo $this->url('expired') ?>"><i class="fa fa-circle-o text-aqua"></i>Hàng quá hạn
+                      <span class="pull-right-container">
+                        <small class="label pull-right bg-red">expired</small>
+                      </span>
+                  </a></li>
               </ul>
             </li>
             <li><a  data="tiresalary" href="<?php echo $this->url('tiresalary') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Doanh số bán hàng</a></li>
@@ -713,6 +718,7 @@
               </ul>
             </li>
             <?php } ?>
+            <li><a data="tireagent" href="<?php echo $this->url('tireagent') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Đăng ký đại lý</a></li>
             <li><a  data="tireproduct/quotation" href="<?php echo $this->url('tireproduct/quotation') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Báo giá web</a></li>
             <li><a  data="tirequotation" href="<?php echo $this->url('tirequotation') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Gửi báo giá</a></li>
             <li><a  data="customertire" href="<?php echo $this->url('customertire') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Liên lạc hàng ngày</a>

@@ -35,6 +35,29 @@ function printDiv(divName) {
      document.body.innerHTML = originalContents;
 }
 
+/**/
+
+$('input[type="text"]').keyup(function(evt){
+
+  // force: true to lower case all letter except first
+  var cp_value= ucfirst($(this).val(),true) ;
+
+  // to capitalize all words  
+  //var cp_value= ucwords($(this).val(),true) ;
+
+
+  $(this).val(cp_value );
+
+});
+
+function ucfirst(str,force){
+      str=force ? str.toLowerCase() : str;
+      return str.replace(/(\b)([a-zA-Z])/,
+               function(firstLetter){
+                  return   firstLetter.toUpperCase();
+               });
+ }
+
 
 function searchall(page,cot,sapxep){
   var page = 1;

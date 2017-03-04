@@ -58,5 +58,60 @@
               </td>
               <td><?php echo $tire_going->tire_number ?></td>
             </tr>
+            <tr>
+              <td>
+                <span class="add-on"><i class="icon-th-list" ></i></span>
+                <span>Ngày SX:  </span>
+              </td>
+              <td><input style="width:50%" class="ngay" type="text" id="date_manufacture_<?php echo $tire_going->tire_going_id ?>" value="<?php echo $tire_going->date_manufacture>0?date('m/Y',$tire_going->date_manufacture):null ?>">
+                <input type="button" data="<?php echo $tire_going->tire_going_id ?>" class="submit" value="Cập nhật">
+              </td>
+            </tr>
           <?php } ?>
         </table>
+        <div id="error" class="error"></div>
+
+<script type="text/javascript">
+var pickerOpay3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'mm/yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $(".ngay").datepicker(pickerOpay3);
+
+$('.submit').click(function(e){
+  var id = $(this).attr('data');
+  var date_manufacture = $("#date_manufacture_"+id).val();
+  $.ajax({
+      type: "POST", // phương thức gởi đi
+      url: "<?php echo BASE_URL ?>/stock/editdate", // nơi mà dữ liệu sẽ chuyển đến khi submit
+      data: {
+          date_manufacture: date_manufacture,
+          data: id,
+
+          }, // giá trị post
+      success: function(answer){ // if everything goes well
+          //alert(answer);
+          $('#error').hide();
+          $('#error').slideToggle(100); // hiển thị thẻ div success
+          $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+          $('#error').fadeOut(10000);
+
+          
+      }
+  });
+});
+</script>

@@ -316,15 +316,44 @@ Class stockController Extends baseController {
                 'date_solow' => $tire->tire_going_date,
                 'date_shipper' => $tire->tire_going_date,
                 'tire_buy_date' => $tire->tire_going_date,
+                'date_manufacture' => $tire->date_manufacture,
                 );
 
                 $tirebuy->createTire($data);
 
                 $tiregoing->updateTire(array('status'=>1),array('tire_going_id'=>$tire->tire_going_id));
             }
+
+            date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+            $filename = "action_logs.txt";
+            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."import_stock"."|".$code."|tire_going|"."\n"."\r\n";
+            
+            $fh = fopen($filename, "a") or die("Could not open log file.");
+            fwrite($fh, $text) or die("Could not write file!");
+            fclose($fh);
             
         }
         return $this->view->redirect('stock');
+    }
+    public function editdate(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $tiregoing = $this->model->get('tiregoingModel');
+
+            $id = $_POST['data'];
+            $date_manufacture = strtotime('01-'.str_replace('/', '-', $_POST['date_manufacture']));
+
+            $tiregoing->updateTire(array('date_manufacture'=>$date_manufacture),array('tire_going_id'=>$id));
+
+            echo "Cập nhật thành công";
+
+            date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+            $filename = "action_logs.txt";
+            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."date_manufacture"."|".$id."|tire_going|"."\n"."\r\n";
+            
+            $fh = fopen($filename, "a") or die("Could not open log file.");
+            fwrite($fh, $text) or die("Could not write file!");
+            fclose($fh);
+        }
     }
 
     public function goingimport(){
@@ -553,7 +582,7 @@ Class stockController Extends baseController {
         $goings = $tire_going_model->getAllTire($data,$join);
         $this->view->data['tire_goings'] = $goings;
 
-        $this->view->data['tire_brand'] = $this->registry->router->param_id==1?"DR":($this->registry->router->param_id==2?"Shengtai":($this->registry->router->param_id==3?"Annaite":"GS"));
+        $this->view->data['tire_brand'] = $this->registry->router->param_id==1?"DR":($this->registry->router->param_id==2?"ST":($this->registry->router->param_id==3?"AN":($this->registry->router->param_id==4?"GS":"LL")));
         $this->view->data['tire_size'] = $this->registry->router->order_by;
         $this->view->data['tire_pattern'] = $this->registry->router->order==1?"DC01":($this->registry->router->order==2?"DC02":($this->registry->router->order==3?"DC03":($this->registry->router->order==4?"NC01":($this->registry->router->order==5?"BC01":($this->registry->router->order==6?"BC02":($this->registry->router->order==7?"DK01":($this->registry->router->order==8?"DK02":($this->registry->router->order==9?"NK01":"NK02"))))))));
 

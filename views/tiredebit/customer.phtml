@@ -61,8 +61,9 @@
     $tongthue += $order_tire->vat;
     $tongtru += $order_tire->discount+$order_tire->reduce;
     $tongkhtra += $order_tire->total;
-    $tongdatra += $order_tire->pay_money;
-    $tongcon += $order_tire->total-$order_tire->pay_money;
+    $pay_money = isset($receivable_data[$order_tire->receivable_id]['pay_money'])?$receivable_data[$order_tire->receivable_id]['pay_money']:0;
+    $tongdatra += $pay_money;
+    $tongcon += $order_tire->total-$pay_money;
     ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->order_tire_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
             <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->order_tire_id ?>"></td>
@@ -75,12 +76,12 @@
             </td>
             
             <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->customer_name; ?></td>
-            <td class="fix"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id.'/'.$order_tire->customer.'/customer'); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
+            <td class="fix"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id.'/'.$order_tire->customer.'/customer/'.strtotime($ketthuc)); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
             <td class="fix" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
             <td class="fix"  id="vat_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></td>
             <td class="fix"  id="discount_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></td>
             <td style="font-weight:bold" class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?></td>
-            <td class="fix"  id="pay_money_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/pay/'.$order_tire->order_tire_id.'/'.$order_tire->customer.'/customer'); ?>"><?php echo $lib->formatMoney($order_tire->pay_money); ?></a></td>
+            <td class="fix"  id="pay_money_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/pay/'.$order_tire->order_tire_id.'/'.$order_tire->customer.'/customer/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($pay_money); ?></a></td>
             <td class="fix error"  id="con_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->pay_money); ?></td>
             
             <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->username; ?></td> 
@@ -91,8 +92,9 @@
     <?php foreach ($receivables as $order_tire) : 
     $tongthu += $order_tire->money;
     $tongkhtra += $order_tire->money;
-    $tongdatra += $order_tire->pay_money;
-    $tongcon += $order_tire->money-$order_tire->pay_money;
+    $pay_money = isset($receivable_data[$order_tire->receivable_id]['pay_money'])?$receivable_data[$order_tire->receivable_id]['pay_money']:0;
+    $tongdatra += $pay_money;
+    $tongcon += $order_tire->money-$pay_money;
     $tongsl += isset($receivable_data[$order_tire->receivable_id]['number'])?$receivable_data[$order_tire->receivable_id]['number']:0;
     ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->receivable_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
@@ -111,8 +113,8 @@
             <td class="fix"  id="vat_<?php echo $order_tire->receivable_id; ?>"></td>
             <td class="fix"  id="discount_<?php echo $order_tire->receivable_id; ?>"></td>
             <td style="font-weight:bold" class="fix"  id="total_<?php echo $order_tire->receivable_id; ?>"><?php echo $lib->formatMoney($order_tire->money); ?></td>
-            <td class="fix"  id="pay_money_<?php echo $order_tire->receivable_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/pay/'.$order_tire->receivable_id.'/'.$order_tire->customer.'/customer'); ?>"><?php echo $lib->formatMoney($order_tire->pay_money); ?></a></td>
-            <td class="fix error"  id="con_<?php echo $order_tire->receivable_id; ?>"><?php echo $lib->formatMoney($order_tire->money-$order_tire->pay_money); ?></td>
+            <td class="fix"  id="pay_money_<?php echo $order_tire->receivable_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/pay/'.$order_tire->receivable_id.'/'.$order_tire->customer.'/customer/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($pay_money); ?></a></td>
+            <td class="fix error"  id="con_<?php echo $order_tire->receivable_id; ?>"><?php echo $lib->formatMoney($order_tire->money-$pay_money); ?></td>
             
             <td class="fix" id="sale_<?php echo $order_tire->receivable_id; ?>"><?php echo isset($receivable_data[$order_tire->receivable_id]['sale'])?$receivable_data[$order_tire->receivable_id]['sale']:null ?></td> 
              

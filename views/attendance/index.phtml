@@ -41,7 +41,7 @@ $tongngay = 0;
     <?php if($_SESSION['role_logined'] != 10){ ?>
 <div class="add-box">
     <a class="add_button" onClick="add_click();">Thêm bảng chấm công</a>
-    
+    <a class="add_button" href="<?= $this->url('attendancerate')?>">Hệ số</a>
     <a class="add_button" id="import_excel" href="<?= $this->url('attendance/import')?>">Import Excel</a>
     <a class="add_button" id="btnExport"> Export Excel</a>
      

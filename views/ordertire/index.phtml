@@ -55,9 +55,12 @@
                                     <td>
                                         <select required class="tire_pattern" name="tire_pattern[]">
                                             <option value="">Mã gai</option>
-                                            <?php foreach ($tire_patterns as $tire_pattern) { ?>
-                                               <option value="<?php echo $tire_pattern->tire_pattern_id ?>"><?php echo $tire_pattern->tire_pattern_name ?></option>
-                                            <?php } ?>
+                                            
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select required class="date_manufacture" name="date_manufacture[]">
+                                            <option value="">Ngày SX</option>
                                         </select>
                                     </td>
                                     
@@ -482,9 +485,21 @@ $('.tire_brand').change(function(){
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     ;
                 });
+                $('.date_manufacture:eq('+rowIndex+')').html("<option>Ngày SX</option>"+data.date);
             }
         });
-    }    
+    }
+    if (brand != "") {
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/ordertire/getPattern',
+            type: 'POST',
+            data: {data:brand},
+            success:function(answer){
+                $('.tire_pattern:eq('+rowIndex+')').html('<option value="">Mã gai</option>'+answer);
+            }
+        });
+    }
+        
 });
 $('.tire_size').change(function(){
     var row = $(this).parent().parent().parent().parent().parent().parent();
@@ -545,6 +560,7 @@ $('.tire_size').change(function(){
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     ;
                 });
+                $('.date_manufacture:eq('+rowIndex+')').html("<option>Ngày SX</option>"+data.date);
             }
         });
     }    
@@ -609,6 +625,7 @@ $('.tire_pattern').change(function(){
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     ;
                 });
+                $('.date_manufacture:eq('+rowIndex+')').html("<option>Ngày SX</option>"+data.date);
             }
         });
     }    
@@ -1391,6 +1408,7 @@ $("#msform").validate({
                     var tire_number = [];
                     var tire_price = [];
                     var max_number = [];
+                    var date_manufacture = [];
 
                     var tire_price_vat = [];
                     
@@ -1419,10 +1437,13 @@ $("#msform").validate({
                     $('.tire_price_vat').each(function() { 
                         tire_price_vat.push($(this).val());
                     });
+                    $('.date_manufacture').each(function() { 
+                        date_manufacture.push($(this).val());
+                    });
 
                     
                     for (var i = 0; i < tire_number.length; i++) {
-                        order_tire.push({'tire_brand':tire_brand[i], 'tire_size':tire_size[i], 'tire_pattern':tire_pattern[i], 'tire_number':tire_number[i], 'tire_price':tire_price[i], 'max_number':max_number[i], 'tire_price_vat':tire_price_vat[i]});
+                        order_tire.push({'tire_brand':tire_brand[i], 'tire_size':tire_size[i], 'tire_pattern':tire_pattern[i], 'tire_number':tire_number[i], 'tire_price':tire_price[i], 'max_number':max_number[i], 'tire_price_vat':tire_price_vat[i], 'tire_date':date_manufacture[i]});
                         
                         
                     };
@@ -1641,6 +1662,17 @@ function addRow(tableID){
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         ;
                     });
+                    $('.date_manufacture:eq('+rowIndex+')').html("<option>Ngày SX</option>"+data.date);
+                }
+            });
+        }
+        if (brand != "") {
+            $.ajax({
+                url: '<?php echo BASE_URL ?>/ordertire/getPattern',
+                type: 'POST',
+                data: {data:brand},
+                success:function(answer){
+                    $('.tire_pattern:eq('+rowIndex+')').html('<option value="">Mã gai</option>'+answer);
                 }
             });
         }    
@@ -1704,6 +1736,7 @@ function addRow(tableID){
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         ;
                     });
+                    $('.date_manufacture:eq('+rowIndex+')').html("<option>Ngày SX</option>"+data.date);
                 }
             });
         }    
@@ -1767,6 +1800,7 @@ function addRow(tableID){
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         ;
                     });
+                    $('.date_manufacture:eq('+rowIndex+')').html("<option>Ngày SX</option>"+data.date);
                 }
             });
         }    
@@ -1967,7 +2001,7 @@ function deleteRow(tableID){
 </script>
 <style type="text/css">
     /*custom font*/
-@import url(http://fonts.googleapis.com/css?family=Montserrat);
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
 
 /*basic reset*/
 .order{

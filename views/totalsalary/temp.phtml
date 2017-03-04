@@ -235,17 +235,13 @@ elseif ($order_by == 'staff_name')
             $tongdoanhthu += $dt;
 
             $chucvu = isset($arr_position_salary[$salary->staff_id])?$arr_position_salary[$salary->staff_id]:0;
+            $tongchucvu += $chucvu;
+
+            $heso = isset($arr_attendance_rate[$salary->staff_id])?$arr_attendance_rate[$salary->staff_id]:0;
 
             $chuyencan = isset($arr_attend[$salary->staff_id])?$arr_attend[$salary->staff_id]:(isset($arr_attend_temp[$salary->staff_id])?300:0);
-            $luongchuyencan = $chucvu>0?round((($chuyencan*$den)*$chucvu/1200000)/1000)*1000:$chuyencan*$den;
-
-            $luongchuyencan = $salary->staff_id==1?0:$luongchuyencan;
+            $luongchuyencan = round((($chuyencan*$den)*$heso/1200000)/1000)*1000;
             $tongchuyencan += $luongchuyencan;
-
-            if ($luongchuyencan>0) {
-                $chucvu = 0;
-            }
-            $tongchucvu += $chucvu;
 
             $phone = isset($arr_phone[$salary->staff_id])?$arr_phone[$salary->staff_id]:0;
             $tongphone += $phone;

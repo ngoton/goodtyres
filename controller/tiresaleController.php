@@ -321,6 +321,7 @@ Class tiresaleController Extends baseController {
                         'date_solow' => strtotime($_POST['date_solow']),
                         'date_shipper' => strtotime($_POST['date_shipper']),
                         'tire_buy_date' => strtotime($_POST['tire_buy_date']),
+                        'date_manufacture' => strtotime("01-".str_replace('/','-',$_POST['date_manufacture'])),
                         );
             if (trim($_POST['tire_buy_pattern']) == "" && trim($_POST['tire_pattern_name']) != "") {
                 $tire_pattern_model = $this->model->get('tirepatternModel');

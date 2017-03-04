@@ -17,6 +17,7 @@ Class tiredebitController Extends baseController {
             $trangthai = isset($_POST['trangthai']) ? $_POST['trangthai'] : null;
             $nv = isset($_POST['nv']) ? $_POST['nv'] : null;
             $tha = isset($_POST['tha']) ? $_POST['tha'] : null;
+            $ketthuc = isset($_POST['ketthuc']) ? $_POST['ketthuc'] : null;
         }
         else{
             $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'customer_name';
@@ -27,6 +28,7 @@ Class tiredebitController Extends baseController {
             $trangthai = 0;
             $nv = 0;
             $tha = 0;
+            $ketthuc = date('d-m-Y');
         }
 
         $customer_model = $this->model->get('customerModel');
@@ -52,6 +54,7 @@ Class tiredebitController Extends baseController {
         $this->view->data['trangthai'] = $trangthai;
         $this->view->data['nv'] = $nv;
         $this->view->data['tha'] = $tha;
+        $this->view->data['ketthuc'] = $ketthuc;
 
         $data = array(
             'order_by'=>$order_by,
@@ -86,7 +89,7 @@ Class tiredebitController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where'=>'1=1',
+            'where'=>'delivery_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
 
 
@@ -112,12 +115,21 @@ Class tiredebitController Extends baseController {
 
         $this->view->data['order_tires'] = $orders;
 
+        $receive_model = $this->model->get('receiveModel');
+
         $data_customer = array();
         foreach ($orders as $order) {
             $data_customer['number'][$order->customer] = isset($data_customer['number'][$order->customer])?$data_customer['number'][$order->customer]+$order->order_tire_number:$order->order_tire_number;
             $data_customer['money'][$order->customer] = isset($data_customer['money'][$order->customer])?$data_customer['money'][$order->customer]+$order->total:$order->total;
-            $data_customer['pay_money'][$order->customer] = isset($data_customer['pay_money'][$order->customer])?$data_customer['pay_money'][$order->customer]+$order->pay_money:$order->pay_money;
             $data_customer['sale'][$order->customer] = $order->username;
+
+            $data = array(
+                'where' => 'receivable = '.$order->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+            );
+            $receives = $receive_model->getAllCosts($data);
+            foreach ($receives as $receive) {
+                $data_customer['pay_money'][$order->customer] = isset($data_customer['pay_money'][$order->customer])?$data_customer['pay_money'][$order->customer]+$receive->money:$receive->money;
+            }
         }
 
         $join = array('table'=>'customer','where'=>'customer.customer_id = receivable.customer AND trading > 0');
@@ -125,7 +137,7 @@ Class tiredebitController Extends baseController {
         $receivable_model = $this->model->get('receivableModel'); 
 
         $data = array(
-            'where'=>'1=1',
+            'where'=>'receivable_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
 
 
@@ -145,6 +157,8 @@ Class tiredebitController Extends baseController {
 
         $tire_sale_model = $this->model->get('tiresaleModel'); 
         $join = array('table'=>'user, staff','where'=>'user_id = account AND staff_id = sale');
+
+        
 
         foreach ($receivables as $order) {
             $yesterday = strtotime(date('d-m-Y',strtotime(date('d-m-Y',$order->expect_date)."-1 days")));
@@ -176,10 +190,18 @@ Class tiredebitController Extends baseController {
                     $data_customer['sale'][$order->customer] = $sale->username;
                 }
             }
+
+            $data = array(
+                'where' => 'receivable = '.$order->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+            );
+            $receives = $receive_model->getAllCosts($data);
             
             if ($sales) {
                 $data_customer['money'][$order->customer] = isset($data_customer['money'][$order->customer])?$data_customer['money'][$order->customer]+$order->money:$order->money;
-                $data_customer['pay_money'][$order->customer] = isset($data_customer['pay_money'][$order->customer])?$data_customer['pay_money'][$order->customer]+$order->pay_money:$order->pay_money;
+                foreach ($receives as $receive) {
+                    $data_customer['pay_money'][$order->customer] = isset($data_customer['pay_money'][$order->customer])?$data_customer['pay_money'][$order->customer]+$receive->money:$receive->money;
+                }
+                
             }
             
         }
@@ -336,10 +358,11 @@ Class tiredebitController Extends baseController {
         $this->view->data['title'] = 'Đã thu';
 
         $id = $this->registry->router->param_id;
+        $ketthuc = date('d-m-Y',$this->registry->router->order);
 
         $cus = $this->registry->router->page;
         $previous_url = $this->registry->router->order_by;
-        $this->view->data['previous_url'] = $previous_url.'/'.$cus;
+        $this->view->data['previous_url'] = $previous_url.'/'.$cus.'/'.strtotime($ketthuc);
 
         $receive_model = $this->model->get('receiveModel');
 
@@ -347,7 +370,7 @@ Class tiredebitController Extends baseController {
         $data = array(
             'order_by'=>'receive_date',
             'order'=>'ASC',
-            'where'=>'receivable IN (SELECT receivable_id FROM receivable WHERE order_tire = '.$id.')',
+            'where'=>'receivable IN (SELECT receivable_id FROM receivable WHERE order_tire = '.$id.') AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
 
         $receives = $receive_model->getAllCosts($data,$join);
@@ -355,7 +378,7 @@ Class tiredebitController Extends baseController {
             $data = array(
                 'order_by'=>'receive_date',
                 'order'=>'ASC',
-                'where'=>'receivable  = '.$id,
+                'where'=>'receivable  = '.$id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
                 );
 
             $receives = $receive_model->getAllCosts($data,$join);
@@ -378,13 +401,18 @@ Class tiredebitController Extends baseController {
         $id = $this->registry->router->param_id;
         $this->view->data['cus'] = $id;
 
+        $ketthuc = date('d-m-Y',$this->registry->router->page);
+        $this->view->data['ketthuc'] = $ketthuc;
+
         $order_tire_model = $this->model->get('ordertireModel');
+
+        $receive_model = $this->model->get('receiveModel');
 
         $join = array('table'=>'customer, user, receivable','where'=>'customer.customer_id = order_tire.customer AND user_id = sale AND order_tire = order_tire_id');
         $data = array(
             'order_by'=>'delivery_date',
             'order'=>'DESC',
-            'where'=>'order_tire.customer = '.$id,
+            'where'=>'order_tire.customer = '.$id.' AND delivery_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
 
         $orders = $order_tire_model->getAllTire($data,$join);
@@ -396,7 +424,7 @@ Class tiredebitController Extends baseController {
         $data = array(
             'order_by'=>'receivable.expect_date',
             'order'=>'DESC',
-            'where'=>'customer_id = '.$id,
+            'where'=>'customer_id = '.$id.' AND receivable.expect_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
 
         $receivables = $receivable_model->getAllCosts($data,$join);
@@ -417,7 +445,28 @@ Class tiredebitController Extends baseController {
                 $receivable_data[$re->receivable_id]['number'] = isset($receivable_data[$re->receivable_id]['number'])?$receivable_data[$re->receivable_id]['number']+$sale->volume:$sale->volume;
                 $receivable_data[$re->receivable_id]['sale'] = $sale->username;
             }
+
+            $data = array(
+                'where' => 'receivable = '.$re->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+            );
+            $receives = $receive_model->getAllCosts($data);
+            
+            foreach ($receives as $receive) {
+                $receivable_data[$re->receivable_id]['pay_money'] = isset($receivable_data[$re->receivable_id]['pay_money'])?$receivable_data[$re->receivable_id]['pay_money']+$receive->money:$receive->money;
+            }
         }
+
+        foreach ($orders as $order) {
+            $data = array(
+                'where' => 'receivable = '.$order->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+            );
+            $receives = $receive_model->getAllCosts($data);
+            
+            foreach ($receives as $receive) {
+                $receivable_data[$order->receivable_id]['pay_money'] = isset($receivable_data[$order->receivable_id]['pay_money'])?$receivable_data[$order->receivable_id]['pay_money']+$receive->money:$receive->money;
+            }
+        }
+
         $this->view->data['receivable_data'] = $receivable_data;
 
         /* Lấy tổng doanh thu*/
@@ -434,6 +483,7 @@ Class tiredebitController Extends baseController {
         $this->view->data['title'] = 'Đã thu';
 
         $id = $this->registry->router->param_id;
+        $ketthuc = date('d-m-Y',$this->registry->router->page);
 
         $receive_model = $this->model->get('receiveModel');
 
@@ -441,7 +491,7 @@ Class tiredebitController Extends baseController {
         $data = array(
             'order_by'=>'receive_date',
             'order'=>'ASC',
-            'where'=>'receivable IN (SELECT receivable_id FROM receivable WHERE customer = '.$id.')',
+            'where'=>'receivable IN (SELECT receivable_id FROM receivable WHERE customer = '.$id.') AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
 
         $receives = $receive_model->getAllCosts($data,$join);
@@ -461,14 +511,17 @@ Class tiredebitController Extends baseController {
         $this->view->data['title'] = 'Đơn hàng';
 
         $id = $this->registry->router->param_id;
+        $ketthuc = date('d-m-Y',$this->registry->router->page);
+        $this->view->data['ketthuc'] = $ketthuc;
 
         $order_tire_model = $this->model->get('ordertireModel');
+        $receive_model = $this->model->get('receiveModel');
 
         $join = array('table'=>'customer, user, receivable','where'=>'customer.customer_id = order_tire.customer AND user_id = sale AND order_tire = order_tire_id');
         $data = array(
             'order_by'=>'delivery_date',
             'order'=>'DESC',
-            'where'=>'(pay_money IS NULL OR pay_money < money) AND order_tire.customer = '.$id,
+            'where'=>'(pay_money IS NULL OR pay_money < money) AND order_tire.customer = '.$id.' AND delivery_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
 
         $orders = $order_tire_model->getAllTire($data,$join);
@@ -480,7 +533,7 @@ Class tiredebitController Extends baseController {
         $data = array(
             'order_by'=>'receivable.expect_date',
             'order'=>'DESC',
-            'where'=>'(pay_money IS NULL OR pay_money < money) AND customer_id = '.$id,
+            'where'=>'(pay_money IS NULL OR pay_money < money) AND customer_id = '.$id.' AND receivable.expect_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
 
         $receivables = $receivable_model->getAllCosts($data,$join);
@@ -501,7 +554,28 @@ Class tiredebitController Extends baseController {
                 $receivable_data[$re->receivable_id]['number'] = isset($receivable_data[$re->receivable_id]['number'])?$receivable_data[$re->receivable_id]['number']+$sale->volume:$sale->volume;
                 $receivable_data[$re->receivable_id]['sale'] = $sale->username;
             }
+
+            $data = array(
+                'where' => 'receivable = '.$re->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+            );
+            $receives = $receive_model->getAllCosts($data);
+            
+            foreach ($receives as $receive) {
+                $receivable_data[$re->receivable_id]['pay_money'] = isset($receivable_data[$re->receivable_id]['pay_money'])?$receivable_data[$re->receivable_id]['pay_money']+$receive->money:$receive->money;
+            }
         }
+
+        foreach ($orders as $order) {
+            $data = array(
+                'where' => 'receivable = '.$order->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+            );
+            $receives = $receive_model->getAllCosts($data);
+            
+            foreach ($receives as $receive) {
+                $receivable_data[$order->receivable_id]['pay_money'] = isset($receivable_data[$order->receivable_id]['pay_money'])?$receivable_data[$order->receivable_id]['pay_money']+$receive->money:$receive->money;
+            }
+        }
+
         $this->view->data['receivable_data'] = $receivable_data;
 
         /* Lấy tổng doanh thu*/
@@ -984,6 +1058,7 @@ Class tiredebitController Extends baseController {
         }
 
         $sal = $this->registry->router->param_id;
+        $ketthuc = date('d-m-Y',$this->registry->router->page);
 
         $customer_model = $this->model->get('customerModel');
         $customers = $customer_model->getAllCustomer(array('order_by'=>'customer_name','order'=>'ASC'));
@@ -991,9 +1066,10 @@ Class tiredebitController Extends baseController {
         $join = array('table'=>'customer, user, receivable','where'=>'customer.customer_id = order_tire.customer AND user_id = sale AND order_tire = order_tire_id');
 
         $order_tire_model = $this->model->get('ordertireModel'); 
+        $receive_model = $this->model->get('receiveModel');
 
         $data = array(
-            'where'=>'1=1',
+            'where'=>'delivery_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
         );
 
         if ($sal>0) {
@@ -1008,8 +1084,15 @@ Class tiredebitController Extends baseController {
         foreach ($orders as $order) {
             $data_customer['number'][$order->customer] = isset($data_customer['number'][$order->customer])?$data_customer['number'][$order->customer]+$order->order_tire_number:$order->order_tire_number;
             $data_customer['money'][$order->customer] = isset($data_customer['money'][$order->customer])?$data_customer['money'][$order->customer]+$order->total:$order->total;
-            $data_customer['pay_money'][$order->customer] = isset($data_customer['pay_money'][$order->customer])?$data_customer['pay_money'][$order->customer]+$order->pay_money:$order->pay_money;
             $data_customer['sale'][$order->customer] = $order->username;
+
+            $data = array(
+                'where' => 'receivable = '.$order->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+            );
+            $receives = $receive_model->getAllCosts($data);
+            foreach ($receives as $receive) {
+                $data_customer['pay_money'][$order->customer] = isset($data_customer['pay_money'][$order->customer])?$data_customer['pay_money'][$order->customer]+$receive->money:$receive->money;
+            }
         }
 
         $join = array('table'=>'customer','where'=>'customer.customer_id = receivable.customer AND trading > 0');
@@ -1055,9 +1138,18 @@ Class tiredebitController Extends baseController {
                 }
             }
             
+            
+            $data = array(
+                'where' => 'receivable = '.$order->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+            );
+            $receives = $receive_model->getAllCosts($data);
+            
             if ($sales) {
                 $data_customer['money'][$order->customer] = isset($data_customer['money'][$order->customer])?$data_customer['money'][$order->customer]+$order->money:$order->money;
-                $data_customer['pay_money'][$order->customer] = isset($data_customer['pay_money'][$order->customer])?$data_customer['pay_money'][$order->customer]+$order->pay_money:$order->pay_money;
+                foreach ($receives as $receive) {
+                    $data_customer['pay_money'][$order->customer] = isset($data_customer['pay_money'][$order->customer])?$data_customer['pay_money'][$order->customer]+$receive->money:$receive->money;
+                }
+                
             }
             
         }
@@ -1142,7 +1234,7 @@ Class tiredebitController Extends baseController {
                         $data = array(
                             'order_by'=>'delivery_date',
                             'order'=>'DESC',
-                            'where'=>'order_tire.customer = '.$order_tire->customer_id,
+                            'where'=>'order_tire.customer = '.$order_tire->customer_id.' AND delivery_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
                             );
 
                         $orders = $order_tire_model->getAllTire($data,$join);
@@ -1152,7 +1244,7 @@ Class tiredebitController Extends baseController {
                         $data = array(
                             'order_by'=>'receivable.expect_date',
                             'order'=>'DESC',
-                            'where'=>'customer_id = '.$order_tire->customer_id,
+                            'where'=>'customer_id = '.$order_tire->customer_id.' AND receivable.expect_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
                             );
 
                         $receivables = $receivable_model->getAllCosts($data,$join);
@@ -1171,19 +1263,38 @@ Class tiredebitController Extends baseController {
                                 $receivable_data[$re->receivable_id]['number'] = isset($receivable_data[$re->receivable_id]['number'])?$receivable_data[$re->receivable_id]['number']+$sale->volume:$sale->volume;
                                 $receivable_data[$re->receivable_id]['sale'] = $sale->username;
                             }
+
+                            $data = array(
+                                'where' => 'receivable = '.$re->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+                            );
+                            $receives = $receive_model->getAllCosts($data);
+                            
+                            foreach ($receives as $receive) {
+                                $receivable_data[$re->receivable_id]['pay_money'] = isset($receivable_data[$re->receivable_id]['pay_money'])?$receivable_data[$re->receivable_id]['pay_money']+$receive->money:$receive->money;
+                            }
+                        }
+                        foreach ($orders as $order) {
+                            $data = array(
+                                'where' => 'receivable = '.$order->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+                            );
+                            $receives = $receive_model->getAllCosts($data);
+                            
+                            foreach ($receives as $receive) {
+                                $receivable_data[$order->receivable_id]['pay_money'] = isset($receivable_data[$order->receivable_id]['pay_money'])?$receivable_data[$order->receivable_id]['pay_money']+$receive->money:$receive->money;
+                            }
                         }
 
 
                         foreach ($orders as $order_list) {
-
-                            if ($order_list->total-$order_list->pay_money != 0) {
+                            $pay_money = isset($receivable_data[$order_list->receivable_id]['pay_money'])?$receivable_data[$order_list->receivable_id]['pay_money']:0;
+                            if ($order_list->total-$pay_money != 0) {
                                 $objPHPExcel->setActiveSheetIndex(0)
 
                                 ->setCellValue('B' . $hang, $order_list->order_number)
 
                                 ->setCellValue('C' . $hang, $order_list->total)
 
-                                ->setCellValue('D' . $hang, $order_list->pay_money)
+                                ->setCellValue('D' . $hang, $pay_money)
 
                                 ->setCellValue('E' . $hang, '=C'.$hang.'-D'.$hang);
 
@@ -1193,8 +1304,8 @@ Class tiredebitController Extends baseController {
                         }
 
                         foreach ($receivables as $order_list) {
-
-                            if ($order_list->money-$order_list->pay_money != 0) {
+                            $pay_money = isset($receivable_data[$order_list->receivable_id]['pay_money'])?$receivable_data[$order_list->receivable_id]['pay_money']:0;
+                            if ($order_list->money-$pay_money != 0) {
 
                                 $objPHPExcel->setActiveSheetIndex(0)
 
@@ -1202,7 +1313,7 @@ Class tiredebitController Extends baseController {
 
                                 ->setCellValue('C' . $hang, $order_list->money)
 
-                                ->setCellValue('D' . $hang, $order_list->pay_money)
+                                ->setCellValue('D' . $hang, $pay_money)
 
                                 ->setCellValue('E' . $hang, '=C'.$hang.'-D'.$hang);
 

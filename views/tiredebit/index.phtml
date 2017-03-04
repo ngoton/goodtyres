@@ -17,7 +17,7 @@ elseif ($order_by == 'customer_name')
 <div id="content" style="padding:5px;">
     <center style="clear:both;margin-bottom: -30px;"><h1> CÔNG NỢ ĐƠN HÀNG </h1></center>
 <div class="add-box">
-    <a class="add_button" href="<?php echo $this->url('tiredebit/exportdebit/'.$nv) ?>" >Export Excel</a>
+    <a class="add_button" href="<?php echo $this->url('tiredebit/exportdebit/'.($nv>0?$nv:0).'/'.strtotime($ketthuc)) ?>" >Export Excel</a>
     
 </div>
 	<div class="search-box">
@@ -25,7 +25,12 @@ elseif ($order_by == 'customer_name')
         <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
         <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
     </div>
-    <div class="tablenav top">       
+    <div class="tablenav top">  
+        <div class="add-box">
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');"> 
+                                    
+        </div>     
         <div class="add-box">
             <select id="sl_nv" name="sl_nv" style="width:150px">
                 <option value="">Nhân viên</option>
@@ -102,12 +107,12 @@ elseif ($order_by == 'customer_name')
         	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->customer_id ?>"></td>
             <td class="fix"><?php echo $i++; ?></td>
             
-            <td class="fix title" data="<?php echo $order_tire->customer_id; ?>"  id="customer_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $order_tire->customer_name; ?></a></td>
-            <td class="fix"  id="order_tire_number_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $data_customer['number'][$order_tire->customer_id]; ?></a></td>
+            <td class="fix title" data="<?php echo $order_tire->customer_id; ?>"  id="customer_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $order_tire->customer_name; ?></a></td>
+            <td class="fix"  id="order_tire_number_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $data_customer['number'][$order_tire->customer_id]; ?></a></td>
             
-            <td style="text-align: right;" class="fix"  id="total_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]); ?></a></td>
-            <td style="text-align: right;" class="fix"  id="pay_money_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/cuspay/'.$order_tire->customer_id); ?>"><?php echo $lib->formatMoney($data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
-            <td style="text-align: right;" class="fix error"  id="con_<?php echo $order_tire->customer_id; ?>"><a style="font-weight:bold;text-decoration:underline;" class="error customer" href="<?php echo $this->url('tiredebit/cus/'.$order_tire->customer_id); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
+            <td style="text-align: right;" class="fix"  id="total_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]); ?></a></td>
+            <td style="text-align: right;" class="fix"  id="pay_money_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/cuspay/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
+            <td style="text-align: right;" class="fix error"  id="con_<?php echo $order_tire->customer_id; ?>"><a style="font-weight:bold;text-decoration:underline;" class="error customer" href="<?php echo $this->url('tiredebit/cus/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
             
             <td class="fix" id="sale_<?php echo $order_tire->customer_id; ?>"><?php echo $data_customer['sale'][$order_tire->customer_id]; ?></td> 
              
@@ -125,12 +130,12 @@ elseif ($order_by == 'customer_name')
             <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->customer_id ?>"></td>
             <td class="fix"><?php echo $i++; ?></td>
             
-            <td class="fix" data="<?php echo $order_tire->customer_id; ?>"  id="customer_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $order_tire->customer_name; ?></a></td>
-            <td class="fix"  id="order_tire_number_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $data_customer['number'][$order_tire->customer_id]; ?></a></td>
+            <td class="fix" data="<?php echo $order_tire->customer_id; ?>"  id="customer_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $order_tire->customer_name; ?></a></td>
+            <td class="fix"  id="order_tire_number_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $data_customer['number'][$order_tire->customer_id]; ?></a></td>
             
-            <td style="text-align: right;" class="fix"  id="total_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]); ?></a></td>
-            <td style="text-align: right;" class="fix"  id="pay_money_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/cuspay/'.$order_tire->customer_id); ?>"><?php echo $lib->formatMoney($data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
-            <td style="text-align: right;" class="fix error"  id="con_<?php echo $order_tire->customer_id; ?>"><a style="font-weight:bold;text-decoration:underline;" class="error customer" href="<?php echo $this->url('tiredebit/cus/'.$order_tire->customer_id); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
+            <td style="text-align: right;" class="fix"  id="total_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]); ?></a></td>
+            <td style="text-align: right;" class="fix"  id="pay_money_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/cuspay/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
+            <td style="text-align: right;" class="fix error"  id="con_<?php echo $order_tire->customer_id; ?>"><a style="font-weight:bold;text-decoration:underline;" class="error customer" href="<?php echo $this->url('tiredebit/cus/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
             
             <td class="fix" id="sale_<?php echo $order_tire->customer_id; ?>"><?php echo $data_customer['sale'][$order_tire->customer_id]; ?></td> 
              
@@ -272,4 +277,33 @@ $('html').click(function(e) {
     $('#customer_list_id').slideUp(200); 
     
 });
+
+var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#ketthuc").change();
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts);
+
 </script>
