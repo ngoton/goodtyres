@@ -77,6 +77,9 @@
         <th  class="fix">
             <a class="sort" >Ngày nhập </a>
         </th>
+        <th  class="fix">
+            <a class="sort" >Quá hạn </a>
+        </th>
         
     </tr>
     
@@ -118,6 +121,7 @@
             <td class="fix" id="date_manufacture_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->date_manufacture>0?date('m/Y',$tire_buy->date_manufacture):null; ?></td>
             <td class="fix" id="code_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->code; ?></td>
             <td class="fix" id="tire_buy_date_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->hien_thi_ngay_thang($tire_buy->tire_buy_date); ?></td>
+            <td class="fix error" id="expired_<?php echo $tire_buy->tire_buy_id; ?>"><i class="fa fa-clock-o"></i> <?php echo str_replace('ago', '', $lib->time_elapsed_string(date('d-m-Y',$tire_buy->date_manufacture),2)); ?></td>
             
         </tr>
 
@@ -127,7 +131,7 @@
     <tr style="text-align:center; font-weight: bold; color: red;">
         <td class="fix" colspan="5" >Tổng cộng</td>
         <td class="fix"><?php echo $soluong-$daban; ?></td>
-        <td class="fix" colspan="3" ></td>
+        <td class="fix" colspan="4" ></td>
     </tr>
      
    </tbody>

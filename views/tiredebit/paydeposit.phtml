@@ -1,0 +1,85 @@
+<?php $k = 1; ?>
+<?php if(isset($previous_url)){ ?>
+<i class="fa fa-arrow-circle-o-left"></i><a style="font-weight:bold;text-decoration:underline" class="return" href="<?php echo BASE_URL.'/tiredebit/'.$previous_url; ?>">Quay lại</a>   
+<?php } ?>
+<div class="add-box">
+    <a class="add_button" id="btnExport4" >Export Excel</a> 
+</div>
+<table id="tblExport4" class="table_data">
+<thead>
+    <tr>
+        <th style="width:30px" class="fix">
+            <a class="sort" >STT </a>
+        </th>
+        <th class="fix">
+            <a class="sort" >Code</a>
+        </th>
+        <th class="fix">
+            <a class="sort" >Ngày</a>
+        </th>
+        <th class="fix">
+            <a class="sort " >Đã thu </a>
+        </th>
+         
+        <th class="fix">
+            <a class="sort " >Tài khoản </a>
+        </th> 
+       
+        
+        <th style="width:200px" class="fix" >
+            <a class="sort " >Ghi chú</a>
+        </th>
+        
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $tong = 0; ?>
+    <?php foreach ($receives as $receive) : ?>
+    <?php $tong += $receive->money; ?>
+        
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $receive->receive_id ?>" class="edit_tr">
+            <td class="fix"><?php echo $k++; ?></td>
+            <td class="fix" id="code_<?php echo $receive->receive_id; ?>"><?php echo $receive->code; ?></td>
+            <td class="fix" id="receive_date_<?php echo $receive->receive_id; ?>"><?php echo $lib->hien_thi_ngay_thang($receive->receive_date); ?></td>
+            <td class="fix" id="money_<?php echo $receive->receive_id; ?>"><?php echo $lib->formatMoney($receive->money); ?></td>
+            <td class="fix" id="source_<?php echo $receive->receive_id; ?>"><?php echo $receive->bank_name; ?></td>
+            <td class="fix" id="receive_comment_<?php echo $receive->receive_id; ?>"><?php echo $receive->receive_comment; ?></td> 
+                       
+        </tr>
+        
+    <?php endforeach; ?>
+    <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="3" >Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
+        <td class="fix" colspan="2" ></td>
+    </tr>
+   </tbody>
+</table>
+<script type="text/javascript">
+$(document).ready(function () {
+            $("#btnExport4").click(function () {
+                $("#tblExport4").battatech_excelexport({
+                    containerid: "tblExport4"
+                   , datatype: 'table'
+                });
+            });
+        });
+
+$(".return").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:"90%",
+            resizable: true,
+            title:'Công nợ',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+</script>

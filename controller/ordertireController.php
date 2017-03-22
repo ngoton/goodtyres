@@ -143,6 +143,91 @@ Class ordertireController Extends baseController {
 
         $this->view->show('ordertire/waiting');
     }
+    public function photo() {
+        $this->view->disableLayout();
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Hình ảnh đơn hàng';
+
+        $order_tire_model = $this->model->get('ordertireModel');
+        $order_tires = $order_tire_model->getAllTire(array('where'=>'order_tire_status=1','order_by'=>'order_number','order'=>'ASC'));
+        $this->view->data['order_tires'] = $order_tires;
+
+        $this->view->show('ordertire/photo');
+    }
+    public function uploadphoto() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (isset($_FILES['myFile'])) {
+                $order_tire = $_POST['order_tire'];
+                $photo_model = $this->model->get('ordertirephotoModel');
+                $output_dir = "public/images/upload/";
+
+                $error =$_FILES["myFile"]["error"];
+                //You need to handle  both cases
+                //If Any browser does not support serializing of multiple files using FormData() 
+                if(!is_array($_FILES["myFile"]["name"])) //single file
+                {
+                    $fileName = $_FILES["myFile"]["name"];
+                    $fullpath = $output_dir.$fileName;
+                    $file_info = pathinfo($fullpath);
+                    $uploaded_filename = $file_info['filename'];
+
+                    $count = 1;                 
+                    while (file_exists($fullpath)) {
+                      $info = pathinfo($fullpath);
+                      $fullpath = $info['dirname'] . '/' . $uploaded_filename
+                      . '(' . $count++ . ')'
+                      . '.' . $info['extension'];
+                    }
+                    move_uploaded_file($_FILES["myFile"]["tmp_name"],$fullpath);
+
+                    $data = array(
+                        'photo_url'=>$fullpath,
+                        'create_user'=>$_SESSION['userid_logined'],
+                        'order_tire_photo_date'=>strtotime(date('d-m-Y')),
+                        'order_tire' => $order_tire,
+                    );
+                    $photo_model->createTire($data);
+
+                    echo 'Successful';
+                }
+                else  //Multiple files, file[]
+                {
+                  $fileCount = count($_FILES["myFile"]["name"]);
+                  for($i=0; $i < $fileCount; $i++)
+                  {
+                    $fileName = $_FILES["myFile"]["name"][$i];
+                    $fullpath = $output_dir.$fileName;
+                    $file_info = pathinfo($fullpath);
+                    $uploaded_filename = $file_info['filename'];
+
+                    $count = 1;                 
+                    while (file_exists($fullpath)) {
+                      $info = pathinfo($fullpath);
+                      $fullpath = $info['dirname'] . '/' . $uploaded_filename
+                      . '(' . $count++ . ')'
+                      . '.' . $info['extension'];
+                    }
+                    move_uploaded_file($_FILES["myFile"]["tmp_name"][$i],$fullpath);
+                    
+                    $data = array(
+                        'photo_url'=>$fullpath,
+                        'create_user'=>$_SESSION['userid_logined'],
+                        'order_tire_photo_date'=>strtotime(date('d-m-Y')),
+                        'order_tire' => $order_tire,
+                    );
+                    $photo_model->createTire($data);
+
+                    echo 'Successful';
+                  }
+                
+                }
+            }
+        }
+    }
     public function orderlist() {
         $this->view->setLayout('admin');
         if (!isset($_SESSION['userid_logined'])) {
@@ -1764,6 +1849,7 @@ Class ordertireController Extends baseController {
                     'sale' => $staff->staff_id,
                     'customer_type' => $order_tire->customer_type,
                     'order_tire' => $id,
+                    'date_manufacture_sale' => $order->tire_date,
                 );
                 $tire_sale_model->createTire($data_sale);
             }

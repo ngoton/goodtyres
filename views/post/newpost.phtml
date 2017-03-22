@@ -7,6 +7,8 @@
 <link href="<?php echo BASE_URL ?>/public/js/jquery-file-upload/uploadfile.css" rel="stylesheet">
 <script src="<?php echo BASE_URL ?>/public/js/jquery-file-upload/jquery.uploadfile.min.js"></script>
 
+<div id="winpopup"></div>
+
 <!-- Main content -->
     <section class="content">
       <div class="row">
@@ -83,6 +85,10 @@
               </div>
               <div class="col-md-8">
                 <label for="post_picture">Hình ảnh</label>
+                <button href="<?php echo $this->url('post/showpic') ?>" id="select_image" class="btn btn-primary btn-sm"><i class="fa fa-folder-open"></i></button>
+                <div class="row">
+                  <div id="show_pic" class="each_post"></div>
+                </div>
                 <div id="multiple_file_uploader">Upload</div>
               </div>
             </div>
@@ -246,4 +252,63 @@ $('#post_title').keyup(function(){
     var link = remove_unicode(str);
     $('#post_link').val(link);
 });
+
+$("#select_image").click(function(){
+      $("#winpopup").dialog({
+          draggable:true,
+          modal: true,
+          autoOpen: false,
+          height:"auto",
+          width:"80%",
+          resizable: false,
+          title:'Hình ảnh',
+          buttons: {
+              OK: function() {
+                  var pic = $('#i_pic').val();
+                  $('#show_pic').html('<img src="<?php echo BASE_URL ?>/public/images/upload/'+pic+'"><i class="fa fa-times remove_picture" data="'+pic+'" title="Xoá khỏi post"></i>');
+                  $('#post_picture').val(pic);
+                  $('.remove_picture').click(function(){
+                    $('#post_picture').val("");
+                    $('#show_pic').html("")
+                  });
+                    
+                  $( this ).dialog( "close" );
+              },        
+              Cancel: function() {
+                  $( this ).dialog( "close" );
+              }
+          }
+          
+      });
+      $("#winpopup").load($(this).attr('href'));
+      $("#winpopup").dialog("open");
+       
+      return false;
+  });
+$('.remove_picture').click(function(){
+        $('#post_picture').val("");
+        $('#show_pic').html("")
+      });
 </script>
+<style type="text/css">
+.each_post img {
+    float: left;
+    margin: 0 10px 0 10px;
+    width: 100px;
+    height: 100px;
+    border: 1px solid #eee;
+}
+.each_post i.fa-times {
+    display: block;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    padding-top: 3px;
+    color: #fff;
+    background: #0088cd;
+    position: absolute;
+    top: 45px;
+    left: 100px;
+    cursor: pointer;
+}
+</style>

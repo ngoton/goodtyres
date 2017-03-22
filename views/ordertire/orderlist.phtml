@@ -63,7 +63,7 @@ elseif ($order_by == 'order_tire_number')
         </div>
         
         <div class="add-box">
-            <select id="sl_status" name="sl_status" style="width:200px">
+            <select id="sl_status" name="sl_status" style="width:200px" class="selectpicker" data-show-subtext="true" data-live-search="true">
                 <option value="">Khách hàng</option>
                 <?php foreach ($customers as $customer) { ?>
                     <option value="<?php echo $customer->customer_id ?>"><?php echo $customer->customer_name ?></option>

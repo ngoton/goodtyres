@@ -210,6 +210,15 @@ Class postController Extends baseController {
             echo "Deleted File ".$fileName."<br>";
         }
     }
+    public function showpic() {
+        $this->view->disableLayout();
+
+        $photo_model = $this->model->get('photoModel');
+        $photos = $photo_model->getAllPhoto();
+        $this->view->data['photos'] = $photos;
+
+        $this->view->show('post/showpic');
+    }
 
     public function add(){
         if (!isset($_SESSION['userid_logined'])) {

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+ 
+<html class="no-js">
+ 
+<head>
+ 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Take or select photo(s) and upload</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,  minimum-scale=1.0"> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+ 
+    <script>(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);</script>
+    <script type="text/javascript">
+ 
+      function fileSelected() {
+ 
+        var count = document.getElementById('fileToUpload').files.length;
+ 
+              document.getElementById('details').innerHTML = "";
+ 
+              for (var index = 0; index < count; index ++)
+ 
+              {
+ 
+                     var file = document.getElementById('fileToUpload').files[index];
+ 
+                     var fileSize = 0;
+ 
+                     if (file.size > 1024 * 1024)
+ 
+                            fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
+ 
+                     else
+ 
+                            fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
+ 
+                     document.getElementById('details').innerHTML += 'Name: ' + file.name + '<br>Size: ' + fileSize + '<br>Type: ' + file.type;
+ 
+                     document.getElementById('details').innerHTML += '<p>';
+ 
+              }
+ 
+      }
+ 
+      function uploadFile() {
+        
+        var fd = new FormData();
+ 
+              var count = document.getElementById('fileToUpload').files.length;
+ 
+              for (var index = 0; index < count; index ++)
+ 
+              {
+ 
+                     var file = document.getElementById('fileToUpload').files[index];
+ 
+                     fd.append('myFile', file);
+ 
+              }
+
+        var e = document.getElementById("order_tire");
+        var order_tire = e.options[e.selectedIndex].value;
+        fd.append('order_tire', order_tire);
+ 
+        var xhr = new XMLHttpRequest();
+ 
+        xhr.upload.addEventListener("progress", uploadProgress, false);
+ 
+        xhr.addEventListener("load", uploadComplete, false);
+ 
+        xhr.addEventListener("error", uploadFailed, false);
+ 
+        xhr.addEventListener("abort", uploadCanceled, false);
+ 
+        xhr.open("POST", "<?php echo BASE_URL ?>/ordertire/uploadphoto");
+ 
+        xhr.send(fd);
+ 
+      }
+ 
+      function uploadProgress(evt) {
+ 
+        if (evt.lengthComputable) {
+ 
+          var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+ 
+          document.getElementById('progress').innerHTML = percentComplete.toString() + '%';
+ 
+        }
+ 
+        else {
+ 
+          document.getElementById('progress').innerHTML = 'unable to compute';
+ 
+        }
+ 
+      }
+ 
+      function uploadComplete(evt) {
+ 
+        /* This event is raised when the server send back a response */
+ 
+        //alert(evt.target.responseText);
+        document.getElementById('progress').innerHTML = evt.target.responseText;
+ 
+      }
+ 
+      function uploadFailed(evt) {
+ 
+        alert("There was an error attempting to upload the file.");
+ 
+      }
+ 
+      function uploadCanceled(evt) {
+ 
+        alert("The upload has been canceled by the user or the browser dropped the connection.");
+ 
+      }
+ 
+    </script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $.widget( "custom.combobox", {
+      _create: function() {
+        this.wrapper = $( "<span>" )
+          .addClass( "custom-combobox" )
+          .insertAfter( this.element );
+ 
+        this.element.hide();
+        this._createAutocomplete();
+        this._createShowAllButton();
+      },
+ 
+      _createAutocomplete: function() {
+        var selected = this.element.children( ":selected" ),
+          value = selected.val() ? selected.text() : "";
+ 
+        this.input = $( "<input>" )
+          .appendTo( this.wrapper )
+          .val( value )
+          .attr( "title", "" )
+          .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
+          .autocomplete({
+            delay: 0,
+            minLength: 0,
+            source: $.proxy( this, "_source" )
+          })
+          .tooltip({
+            classes: {
+              "ui-tooltip": "ui-state-highlight"
+            }
+          });
+ 
+        this._on( this.input, {
+          autocompleteselect: function( event, ui ) {
+            ui.item.option.selected = true;
+            this._trigger( "select", event, {
+              item: ui.item.option
+            });
+          },
+ 
+          autocompletechange: "_removeIfInvalid"
+        });
+      },
+ 
+      _createShowAllButton: function() {
+        var input = this.input,
+          wasOpen = false;
+ 
+        $( "<a>" )
+          .attr( "tabIndex", -1 )
+          .tooltip()
+          .appendTo( this.wrapper )
+          .button({
+            icons: {
+              primary: "ui-icon-triangle-1-s"
+            },
+            text: false
+          })
+          .removeClass( "ui-corner-all" )
+          .addClass( "custom-combobox-toggle ui-corner-right" )
+          .on( "mousedown", function() {
+            wasOpen = input.autocomplete( "widget" ).is( ":visible" );
+          })
+          .on( "click", function() {
+            input.trigger( "focus" );
+ 
+            // Close if already visible
+            if ( wasOpen ) {
+              return;
+            }
+ 
+            // Pass empty string as value to search for, displaying all results
+            input.autocomplete( "search", "" );
+          });
+      },
+ 
+      _source: function( request, response ) {
+        var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+        response( this.element.children( "option" ).map(function() {
+          var text = $( this ).text();
+          if ( this.value && ( !request.term || matcher.test(text) ) )
+            return {
+              label: text,
+              value: text,
+              option: this
+            };
+        }) );
+      },
+ 
+      _removeIfInvalid: function( event, ui ) {
+ 
+        // Selected an item, nothing to do
+        if ( ui.item ) {
+          return;
+        }
+ 
+        // Search for a match (case-insensitive)
+        var value = this.input.val(),
+          valueLowerCase = value.toLowerCase(),
+          valid = false;
+        this.element.children( "option" ).each(function() {
+          if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+            this.selected = valid = true;
+            return false;
+          }
+        });
+ 
+        // Found a match, nothing to do
+        if ( valid ) {
+          return;
+        }
+ 
+        // Remove invalid value
+        this.input
+          .val( "" )
+          .attr( "title", value + " không tìm thấy" )
+          .tooltip( "open" );
+        this.element.val( "" );
+        this._delay(function() {
+          this.input.tooltip( "close" ).attr( "title", "" );
+        }, 2500 );
+        this.input.autocomplete( "instance" ).term = "";
+      },
+ 
+      _destroy: function() {
+        this.wrapper.remove();
+        this.element.show();
+      }
+    });
+ 
+    $( "#order_tire" ).combobox();
+  } );
+  </script>
+ 
+</head>
+ 
+<body>
+    <div id="container" class="container">
+        <div class="col-lg-12 col-md-12">
+            <form id="form1" enctype="multipart/form-data" method="post" action="">
+ 
+            <div class="row">
+                <input required class="inputfile" type="file" name="fileToUpload" id="fileToUpload" onchange="fileSelected();" accept="image/*" capture="camera" />
+              <label for="fileToUpload">
+                <div class="circle"><i class="fa fa-camera"></i></div>
+                <span>Chọn hoặc chụp ảnh</span>
+              </label>
+            </div>
+            <div id="details" class="row"></div>
+            <div class="form-group">
+         
+         
+              <select required class="form-control" id="order_tire" name="order_tire">
+                <option>Đơn hàng</option>
+                <?php foreach ($order_tires as $order_tire) { ?>
+                    <option value="<?php echo $order_tire->order_tire_id ?>"><?php echo $order_tire->order_number ?></option>
+                <?php } ?>
+              </select>
+         
+            </div>
+            <div class="row">
+         
+              <button class="btn btn-primary btn-lg outline" onclick="uploadFile()">
+                <figure>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">
+                        <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path>
+                    </svg>
+                </figure> Tải lên
+              </button>
+         
+            </div>
+         
+            <div id="progress" class="row"></div>
+         
+          </form>
+        </div>
+    </div>
+    <div id="navigation">
+        <div class="left">
+            <a href="<?php echo BASE_URL ?>" >Trang chủ</a>
+        </div>
+        <div class="right">
+            <a href="<?php echo BASE_URL ?>/ordertire/orderlist" >Danh sách đơn hàng</a>
+        </div>
+    </div> 
+
+
+<style type="text/css">
+#navigation {
+    list-style: none;
+    margin: 0;
+    padding: 0;   
+    text-align: center;
+    font-size: 15px;
+    font-family: 'Cham-WebFont', Arial, sans-serif;
+    background-color: #FFF;
+    position: fixed;   /* new */
+    bottom: 0;  /* new */
+    width: 100%;  /* new */
+}
+#navigation div{
+    border: 1px solid #fff;
+    background: #0099cc;
+    padding: 10px 0px 10px 0px;
+    width: 49%;
+}
+#navigation a{
+    color: #fff;
+    text-decoration: none;
+    display:inline-block;
+    width:100%;
+    height:100%;
+}
+.left{
+    float: left; 
+}
+.right{
+    float: right;
+}
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+.inputfile + label {
+    color: #d3394c;
+    max-width: 80%;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.625rem 1.25rem;
+
+}
+.inputfile + label svg {
+    vertical-align: middle;
+    margin-top: -0.25em;
+    margin-right: 0.25em;
+    width: 100%;
+    height: 100%;
+    fill: #f1e5e6;
+}
+.inputfile + label {
+    cursor: pointer; /* "hand" cursor */
+}
+.inputfile:focus + label, .inputfile + label:hover {
+    color: #722040;
+}
+.inputfile:focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+.inputfile + label * {
+    pointer-events: none;
+}
+.inputfile + label figure {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #d3394c;
+    display: block;
+    padding: 20px;
+    margin: 0 auto 10px;
+}
+.circle{
+    color: #d3394c;
+    text-align: center;
+    font-size: 8em;
+}
+.js .inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.no-js .inputfile + label {
+    display: none;
+}
+.inputfile:focus + label,
+.inputfile.has-focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+.btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 10px 16px;
+}
+  
+.btn-lg {
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 6px;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #428bca;
+  border-color: #357ebd;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: #3276b1;
+  border-color: #285e8e;
+}
+
+/***********************
+  OUTLINE BUTTONS
+************************/
+
+.btn.outline {
+    background: none;
+    padding: 12px 22px;
+}
+.btn-primary.outline {
+    border: 2px solid #0099cc;
+    color: #0099cc;
+}
+.btn-primary.outline:hover, .btn-primary.outline:focus, .btn-primary.outline:active, .btn-primary.outline.active, .open > .dropdown-toggle.btn-primary {
+    color: #33a6cc;
+    border-color: #33a6cc;
+    background: rgba(211, 57, 76, 0.1);
+}
+.btn-primary.outline:active, .btn-primary.outline.active {
+    border-color: #007299;
+    color: #007299;
+    box-shadow: none;
+}
+
+/***********************
+  CUSTON BTN VALUES
+************************/
+
+.btn {
+    padding: 14px 24px;
+    border: 0 none;
+    font-weight: 200;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}
+.btn figure{
+    margin: 0;
+    float: left;
+}
+.btn svg {
+    vertical-align: middle;
+    margin-top: -0.25em;
+    margin-right: 0.25em;
+    width: 100%;
+    height: 100%;
+    fill: #0099cc;
+}
+select {
+  border: 1px solid #111;
+  background: transparent;
+  width: 150px;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  height: 34px;
+  text-align-last:center;
+}
+
+/* CAUTION: IE hackery ahead */
+select::-ms-expand { 
+    display: none; /* remove default arrow on ie10 and ie11 */
+}
+#container{
+    border: 1px #000 dashed;
+    padding: 20px;
+    text-align: center;
+}
+#progress{
+    color: rgb(0, 185, 33);
+}
+.row{
+    margin: 10px;
+}
+.custom-combobox {
+    position: relative;
+    display: inline-block;
+  }
+  .custom-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+  }
+  .custom-combobox-input {
+    margin: 0;
+    padding: 5px 10px;
+  }
+ul {
+    width: 12em;
+    height: 20em;
+    line-height: 2em;
+    border: 1px solid #ccc;
+    padding: 0;
+    margin: 0;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+li {
+    border-top: 1px solid #ccc;
+}
+
+ul ul {
+    text-indent: 1em;
+}
+
+ul ul ul {
+    text-indent: 2em;
+}
+</style>
+
+</body>
+ 
+</html>

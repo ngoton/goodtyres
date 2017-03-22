@@ -82,7 +82,7 @@
             <td class="fix"  id="discount_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></td>
             <td style="font-weight:bold" class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?></td>
             <td class="fix"  id="pay_money_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/pay/'.$order_tire->order_tire_id.'/'.$order_tire->customer.'/customer/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($pay_money); ?></a></td>
-            <td class="fix error"  id="con_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->pay_money); ?></td>
+            <td class="fix error"  id="con_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$pay_money); ?></td>
             
             <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->username; ?></td> 
              
@@ -133,6 +133,102 @@
             <td class="fix"></td>
             <td class="fix"></td>
         </tr>
+        <?php if(count($deposits)>0){ ?>
+        <tr>
+
+        </tr>
+        <tr><th colspan="14">CÁC KHOẢN ĐẶT CỌC</th></tr>
+        <tr>
+            <th  class="fix"></th>
+            <th  class="fix">
+                <a class="sort " >STT </a>
+            </th>
+            <th  class="fix">
+                <a class="sort" >Ngày </a>
+            </th>
+            <th  class="fix">
+                <a class="sort" >Nội dung </a>
+            </th>
+            
+            <th  class="fix">
+                <a class="sort" >Khách hàng </a>
+            </th>
+            <th  class="fix">
+                <a class="sort" ></a>
+            </th>
+            <th  class="fix">
+                <a class="sort" >Thu </a>
+            </th>
+            <th  class="fix">
+                <a class="sort" >Chi</a>
+            </th>
+            <th  class="fix">
+                <a class="sort" ></a>
+            </th>
+            
+            <th class="fix">
+                <a class="sort" ></a>
+            </th>
+            <th class="fix">
+                <a class="sort" >Đã cấn trừ </a>
+            </th>
+            <th class="fix">
+                <a class="sort" >Còn lại </a>
+            </th>
+            
+            <th class="fix">
+                <a class="sort" ></a>
+            </th> 
+            
+            <th class="fix">
+                <a class="sort" ></a>
+            </th> 
+        </tr>
+        <?php 
+        $l=1; $tongthu=0; $tongcantru=0; $tongcon=0; $tongchi=0;
+        foreach ($deposits as $order_tire) : 
+        $tongthu += $order_tire->money_in;
+        $tongchi += $order_tire->money_out;
+        $pay_money = isset($deposit_data[$order_tire->deposit_tire_id]['pay_money'])?$deposit_data[$order_tire->deposit_tire_id]['pay_money']:0;
+        $tongcantru += $pay_money;
+        $tongcon += $order_tire->money_in-$pay_money-$order_tire->money_out;
+        ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->deposit_tire_id ?>" class="edit_tr" >
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->deposit_tire_id ?>"></td>
+            <td class="fix"><?php echo $l++; ?></td>
+            <td class="fix"  id="daily_date_<?php echo $order_tire->deposit_tire_id; ?>"><?php echo $lib->hien_thi_ngay_thang($order_tire->daily_date); ?></td>
+            <td class="fix"  id="order_number_<?php echo $order_tire->deposit_tire_id; ?>">
+                <?php 
+                    echo $order_tire->comment;
+                ?>
+            </td>
+            
+            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->deposit_tire_id; ?>"><?php echo $order_tire->customer_name; ?></td>
+            <td class="fix"  id="order_tire_number_<?php echo $order_tire->deposit_tire_id; ?>"></td>
+            <td class="fix" id="thu_<?php echo $order_tire->deposit_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->money_in); ?></td> 
+            <td class="fix" id="chi_<?php echo $order_tire->deposit_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->money_out); ?></td> 
+            <td class="fix"  id="discount_<?php echo $order_tire->deposit_tire_id; ?>"></td>
+            <td style="font-weight:bold" class="fix"  id="total_<?php echo $order_tire->deposit_tire_id; ?>"></td>
+            <td class="fix"  id="pay_money_<?php echo $order_tire->deposit_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/paydeposit/'.$order_tire->daily.'/'.$order_tire->customer.'/customer/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($pay_money); ?></a></td>
+            <td class="fix error"  id="con_<?php echo $order_tire->deposit_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->money_in-$pay_money-$order_tire->money_out); ?></td>
+            
+            <td class="fix" id="sale_<?php echo $order_tire->deposit_tire_id; ?>"></td> 
+             
+            <td class="fix"  id="delivery_date_<?php echo $order_tire->deposit_tire_id; ?>"></td>
+        </tr>
+    <?php endforeach; ?>
+    <tr style=" color:rgb(211, 11, 57); text-align: center; font-weight:bold;">
+            <td class="fix" colspan="5">Tổng cộng</td>
+            <td class="fix"></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongthu) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongchi) ?></td>
+            <td class="fix" colspan="2"></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongcantru) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongcon) ?></td>
+            <td class="fix"></td>
+            <td class="fix"></td>
+        </tr>
+        <?php } ?>
    </tbody>
 </table>
 

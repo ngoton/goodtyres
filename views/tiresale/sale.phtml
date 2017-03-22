@@ -12,7 +12,7 @@ elseif ($order_by == 'tire_sale_volume')
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
 
     $i = $sonews*$page-($sonews-1);
-
+    $k = 0;
 ?>
 
 <div id="loading"></div>
@@ -32,16 +32,16 @@ elseif ($order_by == 'tire_sale_volume')
     <div class="add-box">
         <select id="sl_tha" name="sl_tha" style="width:90px; margin-left:5px;">
          <?php 
-            for ($i=1; $i < 13; $i++) { 
-                echo '<option value="'.$i.'">Tháng '.$i.'</option>';
+            for ($k=1; $k < 13; $k++) { 
+                echo '<option value="'.$k.'">Tháng '.$k.'</option>';
             }
          ?>
         </select>
         <select id="sl_na" name="sl_na" style="width:100px">
          <?php 
             $nam = date('Y');
-            for ($i=($nam-5); $i < ($nam+5); $i++) { 
-                echo '<option value="'.$i.'">Năm '.$i.'</option>';
+            for ($k=($nam-5); $k < ($nam+5); $k++) { 
+                echo '<option value="'.$k.'">Năm '.$k.'</option>';
             }
          ?>
         </select> 

@@ -206,6 +206,21 @@ Class tiredebitController Extends baseController {
             
         }
 
+        $deposit_model = $this->model->get('deposittireModel');
+        $join = array('table'=>'daily','where'=>'daily = daily_id');
+        $data = array(
+            'where' => 'daily_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+        );
+        $deposits = $deposit_model->getAllDeposit($data,$join);
+
+        foreach ($deposits as $de) {
+            $data_customer['pay_money'][$de->customer] = isset($data_customer['pay_money'][$de->customer])?$data_customer['pay_money'][$de->customer]+$de->money_in-$de->money_out:$de->money_in-$de->money_out;
+            $receives = $receive_model->queryCosts('SELECT receive_id, receive.money, receive_comment, receivable.code FROM receive, receivable WHERE receivable=receivable_id AND receive.additional = '.$de->daily.' AND receivable_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))));
+            foreach ($receives as $re) {
+                $data_customer['pay_money'][$de->customer] = isset($data_customer['pay_money'][$de->customer])?$data_customer['pay_money'][$de->customer]-$re->money:(0-$re->money);
+            }
+        }
+
 
         $this->view->data['data_customer'] = $data_customer;
 
@@ -390,6 +405,31 @@ Class tiredebitController Extends baseController {
         /*************/
         $this->view->show('tiredebit/pay');
     }
+    public function paydeposit() {
+        $this->view->disableLayout();
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Đã cấn trừ';
+
+        $id = $this->registry->router->param_id;
+        $ketthuc = date('d-m-Y',$this->registry->router->order);
+
+        $cus = $this->registry->router->page;
+        $previous_url = $this->registry->router->order_by;
+        $this->view->data['previous_url'] = $previous_url.'/'.$cus.'/'.strtotime($ketthuc);
+
+        $receive_model = $this->model->get('receiveModel');
+
+        $receives = $receive_model->queryCosts('SELECT receivable.code, receive_date, receive.money, bank_id, bank_name, receive_comment FROM receive, receivable, bank WHERE receive.source = bank_id AND receivable = receivable_id AND receive.additional = '.$id.' AND receivable_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))).' ORDER BY receive_date ASC');
+        $this->view->data['receives'] = $receives;
+
+        /* Lấy tổng doanh thu*/
+        
+        /*************/
+        $this->view->show('tiredebit/paydeposit');
+    }
     public function customer() {
         $this->view->disableLayout();
         if (!isset($_SESSION['userid_logined'])) {
@@ -469,6 +509,23 @@ Class tiredebitController Extends baseController {
 
         $this->view->data['receivable_data'] = $receivable_data;
 
+        $deposit_model = $this->model->get('deposittireModel');
+        $join = array('table'=>'daily, customer','where'=>'daily = daily_id AND deposit_tire.customer = customer_id');
+        $data = array(
+            'where' => 'deposit_tire.customer = '.$id.' AND daily_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+        );
+        $deposits = $deposit_model->getAllDeposit($data,$join);
+        $this->view->data['deposits'] = $deposits;
+
+        $deposit_data = array();
+        foreach ($deposits as $de) {
+            $receives = $receive_model->queryCosts('SELECT receive_id, receive.money, receive_comment, receivable.code FROM receive, receivable WHERE receivable=receivable_id AND receive.additional = '.$de->daily.' AND receivable_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))));
+            foreach ($receives as $re) {
+                $deposit_data[$de->deposit_tire_id]['pay_money'] = isset($deposit_data[$de->deposit_tire_id]['pay_money'])?$deposit_data[$de->deposit_tire_id]['pay_money']+$re->money:$re->money;
+            }
+        }
+        $this->view->data['deposit_data'] = $deposit_data;
+
         /* Lấy tổng doanh thu*/
         
         /*************/
@@ -521,7 +578,7 @@ Class tiredebitController Extends baseController {
         $data = array(
             'order_by'=>'delivery_date',
             'order'=>'DESC',
-            'where'=>'(pay_money IS NULL OR pay_money < money) AND order_tire.customer = '.$id.' AND delivery_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+            'where'=>'order_tire.customer = '.$id.' AND delivery_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
 
         $orders = $order_tire_model->getAllTire($data,$join);
@@ -533,7 +590,7 @@ Class tiredebitController Extends baseController {
         $data = array(
             'order_by'=>'receivable.expect_date',
             'order'=>'DESC',
-            'where'=>'(pay_money IS NULL OR pay_money < money) AND customer_id = '.$id.' AND receivable.expect_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+            'where'=>'customer_id = '.$id.' AND receivable.expect_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
 
         $receivables = $receivable_model->getAllCosts($data,$join);
@@ -577,6 +634,23 @@ Class tiredebitController Extends baseController {
         }
 
         $this->view->data['receivable_data'] = $receivable_data;
+
+        $deposit_model = $this->model->get('deposittireModel');
+        $join = array('table'=>'daily, customer','where'=>'daily = daily_id AND deposit_tire.customer = customer_id');
+        $data = array(
+            'where' => 'deposit_tire.customer = '.$id.' AND daily_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+        );
+        $deposits = $deposit_model->getAllDeposit($data,$join);
+        $this->view->data['deposits'] = $deposits;
+
+        $deposit_data = array();
+        foreach ($deposits as $de) {
+            $receives = $receive_model->queryCosts('SELECT receive_id, receive.money, receive_comment, receivable.code FROM receive, receivable WHERE receivable=receivable_id AND receive.additional = '.$de->daily.' AND receivable_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))));
+            foreach ($receives as $re) {
+                $deposit_data[$de->deposit_tire_id]['pay_money'] = isset($deposit_data[$de->deposit_tire_id]['pay_money'])?$deposit_data[$de->deposit_tire_id]['pay_money']+$re->money:$re->money;
+            }
+        }
+        $this->view->data['deposit_data'] = $deposit_data;
 
         /* Lấy tổng doanh thu*/
         
@@ -1154,6 +1228,21 @@ Class tiredebitController Extends baseController {
             
         }
 
+        $deposit_model = $this->model->get('deposittireModel');
+        $join = array('table'=>'daily','where'=>'daily = daily_id');
+        $data = array(
+            'where' => 'daily_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+        );
+        $deposits = $deposit_model->getAllDeposit($data,$join);
+
+        foreach ($deposits as $de) {
+            $data_customer['pay_money'][$de->customer] = isset($data_customer['pay_money'][$de->customer])?$data_customer['pay_money'][$de->customer]+$de->money_in-$de->money_out:$de->money_in-$de->money_out;
+            $receives = $receive_model->queryCosts('SELECT receive_id, receive.money, receive_comment, receivable.code FROM receive, receivable WHERE receivable=receivable_id AND receive.additional = '.$de->daily.' AND receivable_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))));
+            foreach ($receives as $re) {
+                $data_customer['pay_money'][$de->customer] = isset($data_customer['pay_money'][$de->customer])?$data_customer['pay_money'][$de->customer]-$re->money:(0-$re->money);
+            }
+        }
+
         
 
             require("lib/Classes/PHPExcel/IOFactory.php");
@@ -1284,6 +1373,20 @@ Class tiredebitController Extends baseController {
                             }
                         }
 
+                        $join = array('table'=>'daily, customer','where'=>'daily = daily_id AND deposit_tire.customer = customer_id');
+                        $data = array(
+                            'where' => 'deposit_tire.customer = '.$order_tire->customer_id.' AND daily_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+                        );
+                        $deposits = $deposit_model->getAllDeposit($data,$join);
+
+                        $deposit_data = array();
+                        foreach ($deposits as $de) {
+                            $receives = $receive_model->queryCosts('SELECT receive_id, receive.money, receive_comment, receivable.code FROM receive, receivable WHERE receivable=receivable_id AND receive.additional = '.$de->daily.' AND receivable_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))));
+                            foreach ($receives as $re) {
+                                $deposit_data[$de->deposit_tire_id]['pay_money'] = isset($deposit_data[$de->deposit_tire_id]['pay_money'])?$deposit_data[$de->deposit_tire_id]['pay_money']+$re->money:$re->money;
+                            }
+                        }
+
 
                         foreach ($orders as $order_list) {
                             $pay_money = isset($receivable_data[$order_list->receivable_id]['pay_money'])?$receivable_data[$order_list->receivable_id]['pay_money']:0;
@@ -1314,6 +1417,25 @@ Class tiredebitController Extends baseController {
                                 ->setCellValue('C' . $hang, $order_list->money)
 
                                 ->setCellValue('D' . $hang, $pay_money)
+
+                                ->setCellValue('E' . $hang, '=C'.$hang.'-D'.$hang);
+
+                                $hang++;
+                            }
+
+                        }
+
+                        foreach ($deposits as $order_list) {
+                            $pay_money = isset($deposit_data[$order_list->deposit_tire_id]['pay_money'])?$deposit_data[$order_list->deposit_tire_id]['pay_money']:0;
+                            if ($order_list->money_in-$pay_money-$order_list->money_out != 0) {
+
+                                $objPHPExcel->setActiveSheetIndex(0)
+
+                                ->setCellValue('B' . $hang, $order_list->comment)
+
+                                ->setCellValue('C' . $hang, $order_list->money_out)
+
+                                ->setCellValue('D' . $hang, $order_list->money_in-$pay_money)
 
                                 ->setCellValue('E' . $hang, '=C'.$hang.'-D'.$hang);
 

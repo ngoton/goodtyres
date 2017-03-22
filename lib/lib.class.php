@@ -129,7 +129,7 @@ class Library{
 	/*
 	4 months, 2 weeks, 3 days, 1 hour, 49 minutes, 15 seconds ago
     */
-	public function time_elapsed_string($datetime, $full = false) {
+	public function time_elapsed_string($datetime, $full = 1) {
 	    $now = new DateTime;
 	    $ago = new DateTime($datetime);
 	    $diff = $now->diff($ago);
@@ -154,7 +154,7 @@ class Library{
 	        }
 	    }
 
-	    if (!$full) $string = array_slice($string, 0, 1);
+	    $string = array_slice($string, 0, $full);
 	    return $string ? implode(', ', $string) . ' ago' : 'just now';
 	}
 

@@ -1,0 +1,19 @@
+<div class="row">
+  <?php foreach ($photos as $photo) {?>
+  <div class="col-md-2 col-sm-6 col-xs-12 choose" data="<?php echo substr($photo->photo_url, strripos($photo->photo_url, "/") + 1) ?>">
+    <img src="<?php echo BASE_URL.'/'.$photo->photo_url ?>" width="100%" height="100%">
+  </div>
+  <?php } ?>
+</div>
+<input type="hidden" id="i_pic">
+<script type="text/javascript">
+$('.choose').toggle(function(){
+  var data = $(this).attr('data');
+  $('.choose').css({'border':'none'});
+  $(this).css({'border':'2px dashed red'});
+  $('#i_pic').val(data);
+},function(){
+  $(this).css({'border':'none'});
+  $('#i_pic').val("");
+});
+</script>
