@@ -1122,7 +1122,7 @@
 </div>
 <!-- ./wrapper -->
 
-<div id='ajax_loader' style="position: fixed; left: 50%; top: 50%; display: none; margin-left : -16px; margin-top : -16px;">
+<div id='ajax_loader' style="position: fixed; left: 50%; top: 50%; margin-left : -16px; margin-top : -16px; z-index:999999">
     <img src="<?php echo BASE_URL?>/public/img/loader-gears.gif"></img>
 </div>
 
@@ -1155,6 +1155,9 @@ $( document ).ajaxStart(function() {
 $( document ).ajaxComplete(function() {
   $("#ajax_loader").fadeOut(200);
   $('input[type="submit"]').attr('disabled',false);
+});
+$(window).load(function() { 
+  $("#ajax_loader").fadeOut(200);
 });
 </script>
 <!--
