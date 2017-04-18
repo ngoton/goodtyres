@@ -731,7 +731,7 @@ $('input[name="payment"]').click(function(){
 
 $('#check_price_vat').click(function(){
     if($(this).is(':checked')){
-        var val = parseInt($('#vat_percent').val());
+        var val = parseFloat($('#vat_percent').val());
         var gia = 0;
         var vat = 0;
         $('.tire_price').each(function() { 
@@ -804,7 +804,7 @@ $('#check_price_vat').click(function(){
         $('#thanhtien').val(gia);
         $('#thanhtien2').val(gia);
 
-        var val = $('#vat_percent').val();
+        var val = parseFloat($('#vat_percent').val());
         
         $('#vat').val(Math.round(gia*val/100));
         
@@ -888,7 +888,7 @@ $(':checkbox[name=dis]').bind('click',function(){
 });
 
 $('#vat_percent').keyup(function(){
-    var val = $(this).val(); 
+    var val = parseFloat($(this).val()); 
     var thanhtien = parseInt($('#thanhtien2').val().replace(/[^0-9\.-]+/g,"")) || 0;
 
     if($('#check_price_vat').is(':checked')){
@@ -1005,7 +1005,7 @@ $('#last_next').click(function(){
     var chietkhau = parseInt($('#discount').val().replace(/[^0-9\.-]+/g,"")) || 0;
     var giam = parseInt($('#reduce').val().replace(/[^0-9\.-]+/g,"")) || 0;
     var vat = parseInt($('#vat').val().replace(/[^0-9\.-]+/g,"")) || 0;
-    var vat_percent = $('#vat_percent').val();
+    var vat_percent = parseFloat($('#vat_percent').val());
     var thanhtien = parseInt($('#thanhtien2').val().replace(/[^0-9\.-]+/g,"")) || 0;
     
 
