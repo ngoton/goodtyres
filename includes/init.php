@@ -7,6 +7,9 @@
   /*** include the view class ***/
  include __SITE_PATH . '/application/' . 'view_base.class.php';
 
+   /*** include the database class ***/
+ include __SITE_PATH . '/application/' . 'db.class.php';
+
    /*** include the model class ***/
  include __SITE_PATH . '/application/' . 'model_base.class.php';
  
@@ -23,6 +26,7 @@
  /*** a new registry object ***/
  $registry = new registry;
  
+ Db::getInstance();
  
 ?>
 

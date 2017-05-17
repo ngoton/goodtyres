@@ -35,11 +35,18 @@ Class tiredebitController Extends baseController {
         $customer = $customer_model->getCustomer($trangthai);
         $this->view->data['customer'] = $customer;
 
+        $data = array(
+            'where' => 'customer_id IN (SELECT customer FROM tire_sale)',
+        );
+        if ($nv > 0) {
+            $data['where'] = 'customer_id IN (SELECT customer FROM tire_sale WHERE sale = '.$nv.' )';
+        }
+
         $sonews = $limit;
         $x = ($page-1) * $sonews;
         $pagination_stages = 2;
 
-        $tongsodong = count($customer_model->getAllCustomer());
+        $tongsodong = count($customer_model->getAllCustomer($data));
         $tongsotrang = ceil($tongsodong / $sonews);
         
 
@@ -60,8 +67,16 @@ Class tiredebitController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where'=>'1=1',
+            'where'=>'customer_id IN (SELECT customer FROM tire_sale)',
             );
+
+        if ($nv > 0) {
+            $data['where'] = 'customer_id IN (SELECT customer FROM tire_sale WHERE sale  = '.$nv.' )';
+        }
+
+        if ($trangthai > 0) {
+            $data['where'] .= ' AND customer_id = '.$trangthai;
+        } 
 
         if ($keyword != '') {
             $search = '( customer_name LIKE "%'.$keyword.'%" )';

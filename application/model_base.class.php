@@ -2,34 +2,16 @@
 class baseModel {
     private static $instance;
     
-    public $host;
-    public $db_name; 
-    public $db_username; 
-    public $db_password;
     public $dbh;
     
     /*
     * Khởi tạo kết nối database
     */
-    function __construct($config = array('host'=>DB_SERVER,'db_name'=>DB_DATABASE,'db_username'=>DB_USERNAME,'db_password'=>DB_PASSWORD)) 
+    function __construct() 
     {
-        if(is_array($config))
-        {
-            $this->host = $config['host'];
-            $this->db_name = $config['db_name'];
-            $this->db_username = $config['db_username'];
-            $this->db_password = $config['db_password'];
-        }   
-        try 
-        {
-            $this->dbh = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->db_username, $this->db_password);
-            $this->dbh->exec("SET CHARACTER SET utf8");
-        }
-        catch (PDOException $e)
-        {
-            throw new Exception($e->getMessage());
-        }
+        $this->dbh = Db::dbConnection();
     }
+
 
     /*
     * Lấy tên Model
@@ -328,12 +310,5 @@ class baseModel {
         return $res->Column_name;
     }
        
-    function __destruct() {
-        try {
-            $this->dbh = null; //Closes connection
-            return $this->dbh;
-        } catch (PDOException $e) {
-            throw new Exception($e->getMessage());
-        }
-    }
+    
 } 

@@ -500,7 +500,7 @@ Class ordertireController Extends baseController {
         
         
         $data = array(
-            'where' => 'order_tire_date >= '.strtotime($batdau).' AND order_tire_date <= '.strtotime($ketthuc),
+            'where' => ' ( (order_tire_status IS NULL OR order_tire_status = 0) OR (order_tire_status = 1 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc).') )',
         );
 
         if ($nv == 1) {
@@ -571,7 +571,7 @@ Class ordertireController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => 'order_tire_date >= '.strtotime($batdau).' AND order_tire_date <= '.strtotime($ketthuc),
+            'where' => ' ( (order_tire_status IS NULL OR order_tire_status = 0) OR (order_tire_status = 1 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc).') )',
             );
 
         if ($nv == 1) {
@@ -624,7 +624,7 @@ Class ordertireController Extends baseController {
             $order_tire_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$tire->order_tire_id));
             foreach ($order_tire_lists as $l) {
                 $data = array(
-                    'where' => 'order_num IS NULL AND start_date <= '.$ngay.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                    'where' => '(order_num = "" OR order_num IS NULL) AND start_date <= '.$ngay.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
                     'order_by' => 'start_date',
                     'order' => 'DESC',
                     'limit' => 1,
@@ -633,16 +633,18 @@ Class ordertireController Extends baseController {
                 foreach ($tire_imports as $tire_import) {
                     $gia = $tire_import->tire_price;
                 }
-
-                $data = array(
-                    'where' => 'order_num = "'.$tire->order_number.'" AND start_date <= '.strtotime(date('t-m-Y',$ngay)).' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
-                    'order_by' => 'start_date',
-                    'order' => 'DESC',
-                    'limit' => 1,
-                );
-                $tire_imports = $tire_import_model->getAllTire($data);
-                foreach ($tire_imports as $tire_import) {
-                    $gia = $tire_import->tire_price;
+                
+                if ($tire->order_number != "") {
+                    $data = array(
+                        'where' => 'order_num = "'.$tire->order_number.'" AND start_date <= '.strtotime(date('t-m-Y',$ngay)).' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                        'order_by' => 'start_date',
+                        'order' => 'DESC',
+                        'limit' => 1,
+                    );
+                    $tire_imports = $tire_import_model->getAllTire($data);
+                    foreach ($tire_imports as $tire_import) {
+                        $gia = $tire_import->tire_price;
+                    }
                 }
 
                 $costs[$tire->order_tire_id] = isset($costs[$tire->order_tire_id])?$costs[$tire->order_tire_id]+$l->tire_number*$gia:$l->tire_number*$gia;
@@ -664,7 +666,7 @@ Class ordertireController Extends baseController {
         $costs2 = array();
         foreach ($sales as $tire) {
             $data = array(
-                'where' => 'order_num IS NULL AND start_date <= '.strtotime(date('t-m-Y',$tire->tire_sale_date)).' AND tire_brand = '.$tire->tire_brand.' AND tire_size = '.$tire->tire_size.' AND tire_pattern = '.$tire->tire_pattern,
+                'where' => '(order_num = "" OR order_num IS NULL) AND start_date <= '.strtotime(date('t-m-Y',$tire->tire_sale_date)).' AND tire_brand = '.$tire->tire_brand.' AND tire_size = '.$tire->tire_size.' AND tire_pattern = '.$tire->tire_pattern,
                 'order_by' => 'start_date',
                 'order' => 'DESC',
                 'limit' => 1,
@@ -2433,6 +2435,7 @@ Class ordertireController Extends baseController {
                      $tt = ($v->order_tire_cost_type==6)?'selected="selected"':null;
                      $khac = ($v->order_tire_cost_type==7)?'selected="selected"':null;
 
+                     $ten = $vendor_model->getvendor($v->vendor);
 
                     $str .= '<tr class="'.$v->order_tire.'">';
                     $str .= '<td><input '.$payed.' type="checkbox" name="chk" tabindex="'.$v->order_tire_cost_type.'" data="'.$v->order_tire .'" class="'.$v->vendor.'" title="'.($v->order_tire_cost).'"></td>';
@@ -2450,7 +2453,7 @@ Class ordertireController Extends baseController {
                     $str .= '<td style="color:red" colspan="2">'.$payed_mes.'</td></tr>';
                     
                     $str .= '<tr class="'.$v->order_tire .'">';
-                    $str .= '<td></td><td> Vendor</td><td><input required="required" type="text" disabled value="'.$vendor_model->getvendor($v->vendor)->shipment_vendor_name.'" data="'.$v->vendor.'" class="vendor" name="vendor[]" required="required" autocomplete="off" placeholder="Nhập tên hoặc * để chọn"><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a>';
+                    $str .= '<td></td><td> Vendor</td><td><input required="required" type="text" disabled value="'.(isset($ten->shipment_vendor_name)?$ten->shipment_vendor_name:"").'" data="'.$v->vendor.'" class="vendor" name="vendor[]" required="required" autocomplete="off" placeholder="Nhập tên hoặc * để chọn"><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a>';
                     $str .= '<ul class="customer_list_id"></ul></td>';
                     //$str .= '<td></td><td> Vendor</td><td><select disabled tabindex="2" class="vendor" name="vendor[]" style="width:200px">'.$opt.'</select><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a></td>';
                     $str .= '<td>Ngày chi</td>';

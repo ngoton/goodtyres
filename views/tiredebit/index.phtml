@@ -97,22 +97,26 @@ elseif ($order_by == 'customer_name')
     <?php $tongsl=0; $tongkhtra=0; $tongdatra=0; $tongcon=0; ?>
     <?php foreach ($customers as $order_tire) : 
     if ($tha == 0) {
-        if (isset($data_customer['money'][$order_tire->customer_id]) && ( ($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]>0) || ($data_customer['pay_money'][$order_tire->customer_id]-$data_customer['money'][$order_tire->customer_id]>0)) ) {
-        $tongsl += $data_customer['number'][$order_tire->customer_id];
-        $tongkhtra += $data_customer['money'][$order_tire->customer_id];
-        $tongdatra += $data_customer['pay_money'][$order_tire->customer_id];
-        $tongcon += $data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id];
+        $khtra = isset($data_customer['money'][$order_tire->customer_id])?$data_customer['money'][$order_tire->customer_id]:null;
+        $datra = isset($data_customer['pay_money'][$order_tire->customer_id])?$data_customer['pay_money'][$order_tire->customer_id]:null;
+        $sl = isset($data_customer['number'][$order_tire->customer_id])?$data_customer['number'][$order_tire->customer_id]:null;
+
+        if ( $khtra-$datra != 0 ) {
+        $tongsl += $sl;
+        $tongkhtra += $khtra;
+        $tongdatra += $datra;
+        $tongcon += $khtra-$datra;
     ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->customer_id ?>" class="edit_tr" >
         	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->customer_id ?>"></td>
             <td class="fix"><?php echo $i++; ?></td>
             
             <td class="fix title" data="<?php echo $order_tire->customer_id; ?>"  id="customer_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $order_tire->customer_name; ?></a></td>
-            <td class="fix"  id="order_tire_number_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $data_customer['number'][$order_tire->customer_id]; ?></a></td>
+            <td class="fix"  id="order_tire_number_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $sl; ?></a></td>
             
-            <td style="text-align: right;" class="fix"  id="total_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]); ?></a></td>
-            <td style="text-align: right;" class="fix"  id="pay_money_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/cuspay/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
-            <td style="text-align: right;" class="fix error"  id="con_<?php echo $order_tire->customer_id; ?>"><a style="font-weight:bold;text-decoration:underline;" class="error customer" href="<?php echo $this->url('tiredebit/cus/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
+            <td style="text-align: right;" class="fix"  id="total_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($khtra); ?></a></td>
+            <td style="text-align: right;" class="fix"  id="pay_money_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/cuspay/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($datra); ?></a></td>
+            <td style="text-align: right;" class="fix error"  id="con_<?php echo $order_tire->customer_id; ?>"><a style="font-weight:bold;text-decoration:underline;" class="error customer" href="<?php echo $this->url('tiredebit/cus/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($khtra-$datra); ?></a></td>
             
             <td class="fix" id="sale_<?php echo $order_tire->customer_id; ?>"><?php echo $data_customer['sale'][$order_tire->customer_id]; ?></td> 
              
@@ -120,22 +124,26 @@ elseif ($order_by == 'customer_name')
     <?php } 
     }
     else{
-        if (isset($data_customer['money'][$order_tire->customer_id]) && ($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]==0)) {
-        $tongsl += $data_customer['number'][$order_tire->customer_id];
-        $tongkhtra += $data_customer['money'][$order_tire->customer_id];
-        $tongdatra += $data_customer['pay_money'][$order_tire->customer_id];
-        $tongcon += $data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id];
+        $khtra = isset($data_customer['money'][$order_tire->customer_id])?$data_customer['money'][$order_tire->customer_id]:null;
+        $datra = isset($data_customer['pay_money'][$order_tire->customer_id])?$data_customer['pay_money'][$order_tire->customer_id]:null;
+        $sl = isset($data_customer['number'][$order_tire->customer_id])?$data_customer['number'][$order_tire->customer_id]:null;
+
+        if ($khtra-$datra==0) {
+        $tongsl += $sl;
+        $tongkhtra += $khtra;
+        $tongdatra += $datra;
+        $tongcon += $khtra-$datra;
     ?>
     <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->customer_id ?>" class="edit_tr" >
             <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->customer_id ?>"></td>
             <td class="fix"><?php echo $i++; ?></td>
             
             <td class="fix" data="<?php echo $order_tire->customer_id; ?>"  id="customer_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $order_tire->customer_name; ?></a></td>
-            <td class="fix"  id="order_tire_number_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $data_customer['number'][$order_tire->customer_id]; ?></a></td>
+            <td class="fix"  id="order_tire_number_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $sl; ?></a></td>
             
-            <td style="text-align: right;" class="fix"  id="total_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]); ?></a></td>
-            <td style="text-align: right;" class="fix"  id="pay_money_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/cuspay/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
-            <td style="text-align: right;" class="fix error"  id="con_<?php echo $order_tire->customer_id; ?>"><a style="font-weight:bold;text-decoration:underline;" class="error customer" href="<?php echo $this->url('tiredebit/cus/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]); ?></a></td>
+            <td style="text-align: right;" class="fix"  id="total_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($khtra); ?></a></td>
+            <td style="text-align: right;" class="fix"  id="pay_money_<?php echo $order_tire->customer_id; ?>"><a style="text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/cuspay/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($datra); ?></a></td>
+            <td style="text-align: right;" class="fix error"  id="con_<?php echo $order_tire->customer_id; ?>"><a style="font-weight:bold;text-decoration:underline;" class="error customer" href="<?php echo $this->url('tiredebit/cus/'.$order_tire->customer_id.'/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($khtra-$datra); ?></a></td>
             
             <td class="fix" id="sale_<?php echo $order_tire->customer_id; ?>"><?php echo $data_customer['sale'][$order_tire->customer_id]; ?></td> 
              
