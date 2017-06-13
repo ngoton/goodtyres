@@ -2505,6 +2505,33 @@ Class ordertireController Extends baseController {
         $this->view->show('ordertire/contract');
     }
 
+    public function bill() {
+        $this->view->disableLayout();
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+
+        $order = $this->registry->router->param_id;
+
+        $order_model = $this->model->get('ordertireModel');
+        $tire_order_list_model = $this->model->get('ordertirelistModel');
+        $customer_model = $this->model->get('customerModel');
+
+        $orders = $order_model->getTire($order);
+
+        $customers = $customer_model->getCustomer($orders->customer);
+
+        $data = array('where'=>'order_tire = '.$order);
+        $join = array('table'=>'tire_pattern, tire_brand, tire_size','where'=> 'tire_brand_id=tire_brand AND tire_size_id=tire_size AND tire_pattern_id=tire_pattern');
+        $order_types = $tire_order_list_model->getAllTire($data,$join);
+
+        $this->view->data['orders'] = $orders;
+        $this->view->data['customers'] = $customers;
+        $this->view->data['order_types'] = $order_types;
+                
+        $this->view->show('ordertire/bill');
+    }
+
    
 
     function bangke(){
@@ -2848,7 +2875,7 @@ Class ordertireController Extends baseController {
                         ->setCellValue('I' . $hang, '=G'.$hang.'*H'.$hang);
                      $hang++;
 
-                     $tong += $row->tire_number*$row->tire_price;
+                     $tong += $row->tire_number*(($orders->vat_percent>0?($orders->check_price_vat==1?$row->tire_price_vat*$orders->vat_percent*0.1/1.1:$row->tire_price*$orders->vat_percent*0.1):$row->tire_price));
 
                      
 

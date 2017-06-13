@@ -220,6 +220,8 @@ elseif ($order_by == 'order_tire_number')
                 
                 <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/invoice/'.$order_tire->order_tire_id ?>'">Hóa đơn</button>
                 
+                <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/bill/'.$order_tire->order_tire_id ?>'">PGN</button>
+                
                 
                 <?php if($order_tire->sale_lock==1 && $_SESSION['role_logined']==1){ ?>
                 <button data="<?php echo $order_tire->order_tire_id ?>" value="0"  class="unlock">Mở</button>

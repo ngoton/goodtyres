@@ -245,6 +245,7 @@ Class attendanceController Extends baseController {
     public function import(){
         $this->view->disableLayout();
         header('Content-Type: text/html; charset=utf-8');
+        date_default_timezone_set("Asia/Ho_Chi_Minh"); 
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
         }
@@ -312,7 +313,9 @@ Class attendanceController Extends baseController {
 
                 $ngay = $val[1];
                 $ngaythang = PHPExcel_Shared_Date::ExcelToPHP($ngay);                                      
-                $ngaythang = $ngaythang-3600;
+                $ngaythang = $ngaythang+86400;
+
+                $ngaythang = strtotime(date('d-m-Y',$ngaythang));
 
 
                 if ($val[0] != null) {
@@ -348,7 +351,7 @@ Class attendanceController Extends baseController {
                         $id_staff = $staff->getStaffByWhere(array('staff_name'=>trim($val[0])))->staff_id;
 
 
-                        if (!$attendance->getAttendanceByWhere(array('staff'=>$id_staff,'attendance_late' => strtotime($ngaythang)))) {
+                        if (!$attendance->getAttendanceByWhere(array('staff'=>$id_staff,'attendance_date' => $ngaythang))) {
                             $attendance_data = array(
                                 'staff' => $id_staff,
                                 'attendance_day' => trim($val[2]),
@@ -367,7 +370,7 @@ Class attendanceController Extends baseController {
                             $attendance->createAttendance($attendance_data);
                         }
                         else{
-                            $id_attendance = $attendance->getAttendanceByWhere(array('staff'=>$id_staff,'attendance_date' => strtotime($ngaythang)))->attendance_id;
+                            $id_attendance = $attendance->getAttendanceByWhere(array('staff'=>$id_staff,'attendance_date' => $ngaythang))->attendance_id;
 
                             $attendance_data = array(
                                 'staff' => $id_staff,
@@ -386,6 +389,7 @@ Class attendanceController Extends baseController {
 
                                 $attendance->updateAttendance($attendance_data,array('attendance_id' => $id_attendance));
                         }
+                        
                     }
                     
                 }

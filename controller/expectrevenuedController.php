@@ -173,17 +173,33 @@ Class expectrevenuedController Extends baseController {
 
         $this->view->data['staffs'] = $staffs;
 
+        $costs_model = $this->model->get('costsModel');
+
+        $join = array('table'=>'bank, daily, customer','where'=>'bank.bank_id = costs.source_in AND additional=daily_id AND customer=customer_id');
+        $data = array(
+            'where' => 'costs.money_in != 0 AND deposit = 1',
+        );
+        if ($trangthai==1) {
+            $data['where'] .= ' AND pay_date > '.strtotime($ngaybatdau).' AND pay_date < '.strtotime($ngayketthuc).' AND pay_money = money';
+        }
+        else{
+            $data['where'] .= ' AND ( expect_date < '.strtotime($batdau).' OR ( expect_date > '.strtotime($ngaybatdau).' AND expect_date < '.strtotime($ngayketthuc).') ) AND (pay_date is null OR pay_date = 0)';
+        }
+
+        $deposits = $costs_model->getAllCosts($data,$join);
+        $this->view->data['deposits'] = $deposits;
+
         $join = array('table'=>'bank','where'=>'bank.bank_id = costs.source_in');
 
         $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'pay_date';
 
-        $costs_model = $this->model->get('costsModel');
+        
         $sonews = $limit;
         $x = ($page-1) * $sonews;
         $pagination_stages = 2;
         
         $data = array(
-            'where' => 'money_in != 0 ',
+            'where' => 'money_in != 0 AND additional NOT IN (SELECT daily_id FROM daily WHERE deposit = 1)',
         );
 
         if (isset($id) && $id > 0) {
@@ -209,7 +225,7 @@ Class expectrevenuedController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => 'money_in != 0 ',
+            'where' => 'money_in != 0 AND additional NOT IN (SELECT daily_id FROM daily WHERE deposit = 1)',
             );
 
         if (isset($id) && $id > 0) {
