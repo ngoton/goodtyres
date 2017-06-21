@@ -139,7 +139,7 @@ VI">&nbsp;</span></b></p>
   text-align:center;line-height:normal">
                     <span style="font-size:13.0pt;
   font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;;
-  color:black"><?php echo $order->tire_size_number.' '.$order->tire_pattern_name ?><o:p></o:p></span></p>
+  color:black"><?php echo mb_strtoupper($order->tire_brand_name.' '.$order->tire_size_number.' '.$order->tire_pattern_name,"UTF-8") ?><o:p></o:p></span></p>
             </td>
             <td nowrap="nowrap" style="width:85.55pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;

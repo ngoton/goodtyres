@@ -75,6 +75,7 @@ Class ordertirecostController Extends baseController {
 
         if ($keyword != '') {
             $search = ' AND ( order_number LIKE "%'.$keyword.'%" 
+                        OR customer_name LIKE "%'.$keyword.'%" 
                         OR shipment_vendor_name LIKE "%'.$keyword.'%"  )';
             
                 $data['where'] .= $search;
