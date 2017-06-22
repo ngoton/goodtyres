@@ -2857,3 +2857,21 @@ bxep: 6x14 = 84k-5-4--1484000
 
 03/03/2017 11:20:38|admincmg|date_manufacture|252|tire_going|
 
+22/06/2017 16:13:16|admincmg|edit|26|tire_brand|Goubao-1
+
+22/06/2017 16:21:55|admincmg|edit|1|tire_pattern|DR801-1,7,8
+
+22/06/2017 16:22:07|admincmg|edit|1|tire_pattern|DR801-1,7
+
+22/06/2017 16:25:52|admincmg|edit|5|tire_size|10.00R201
+
+22/06/2017 16:25:57|admincmg|edit|5|tire_size|10.00R20
+
+22/06/2017 16:32:58|admincmg|edit|2|tire_brand_group|Shengtai1
+
+22/06/2017 16:33:02|admincmg|edit|2|tire_brand_group|Shengtai
+
+22/06/2017 16:38:10|admincmg|edit|20|tire_brand|Yatone-3
+
+22/06/2017 16:38:19|admincmg|edit|20|tire_brand|Yatone-2
+
