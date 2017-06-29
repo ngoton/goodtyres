@@ -67,8 +67,8 @@ elseif ($order_by == 'customer_address')
 <table id="tblExport" class="table_data">
 <thead>
     <tr>
-    	<th rowspan="2" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
-        <th rowspan="2" class="fix">
+    	<th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'customer_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th  class="fix">
@@ -124,6 +124,7 @@ elseif ($order_by == 'customer_address')
             <td class="fix" style="display:none" id="customer_district_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_district; ?></td>
             <td class="fix" style="display:none" id="customer_city_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_city; ?></td>
             <td class="fix" style="display:none" id="customer_province_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_province; ?></td>
+            <td class="fix" style="display:none" id="customer_province_<?php echo $customer->customer_id; ?>"><?php echo isset($district_datas[$customer->customer_province]['name'])?$district_datas[$customer->customer_province]['name']:null; ?></td>
 
             <td>
                 <a class="error" href="#">Sửa</a>

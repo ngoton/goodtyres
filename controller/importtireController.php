@@ -46,7 +46,7 @@ Class importtireController Extends baseController {
         $pagination_stages = 2;
         
         $data = array(
-            'where' => 'import_tire_date >= '.strtotime($batdau).' AND import_tire_date <= '.strtotime($ketthuc),
+            'where' => 'import_type = 1 AND import_tire_date >= '.strtotime($batdau).' AND import_tire_date <= '.strtotime($ketthuc),
         );
 
         if (isset($id) && $id > 0) {
@@ -73,7 +73,7 @@ Class importtireController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => 'import_tire_date >= '.strtotime($batdau).' AND import_tire_date <= '.strtotime($ketthuc),
+            'where' => 'import_type = 1 AND import_tire_date >= '.strtotime($batdau).' AND import_tire_date <= '.strtotime($ketthuc),
             );
 
         if (isset($id) && $id > 0) {
@@ -98,6 +98,105 @@ Class importtireController Extends baseController {
         $this->view->data['lastID'] = isset($sale_model->getLastSale()->import_tire_id)?$sale_model->getLastSale()->import_tire_id:0;
 
         $this->view->show('importtire/index');
+    }
+    public function stone() {
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 4 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
+            return $this->view->redirect('user/login');
+        }*/
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Nhập hàng đá';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_by = isset($_POST['order_by']) ? $_POST['order_by'] : null;
+            $order = isset($_POST['order']) ? $_POST['order'] : null;
+            $page = isset($_POST['page']) ? $_POST['page'] : null;
+            $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+            $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
+            $batdau = isset($_POST['batdau']) ? $_POST['batdau'] : null;
+            $ketthuc = isset($_POST['ketthuc']) ? $_POST['ketthuc'] : null;
+        }
+        else{
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'import_tire_date';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC';
+            $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
+            $keyword = "";
+            $limit = 20;
+            $batdau = '01-'.date('m-Y');
+            $ketthuc = date('d-m-Y', time()+86400); //cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y')).'-'.date('m-Y');
+        }
+
+        $id = $this->registry->router->param_id;
+
+        $bank_model = $this->model->get('bankModel');
+        $banks = $bank_model->getAllBank();
+        $this->view->data['banks'] = $banks;
+
+        $vendor_model = $this->model->get('shipmentvendorModel');
+        $vendors = $vendor_model->getAllVendor(array('order_by'=>'shipment_vendor_name','order'=>'ASC'));
+        $this->view->data['vendor_list'] = $vendors;
+
+        $sale_model = $this->model->get('importtireModel');
+        $sonews = $limit;
+        $x = ($page-1) * $sonews;
+        $pagination_stages = 2;
+        
+        $data = array(
+            'where' => 'import_type = 2 AND import_tire_date >= '.strtotime($batdau).' AND import_tire_date <= '.strtotime($ketthuc),
+        );
+
+        if (isset($id) && $id > 0) {
+            $data['where'] = 'code = '.$id;
+        }
+        
+        
+        $tongsodong = count($sale_model->getAllSale($data));
+        $tongsotrang = ceil($tongsodong / $sonews);
+        
+
+        $this->view->data['page'] = $page;
+        $this->view->data['order_by'] = $order_by;
+        $this->view->data['order'] = $order;
+        $this->view->data['keyword'] = $keyword;
+        $this->view->data['pagination_stages'] = $pagination_stages;
+        $this->view->data['tongsotrang'] = $tongsotrang;
+        $this->view->data['limit'] = $limit;
+        $this->view->data['sonews'] = $sonews;
+        $this->view->data['batdau'] = $batdau;
+        $this->view->data['ketthuc'] = $ketthuc;
+
+        $data = array(
+            'order_by'=>$order_by,
+            'order'=>$order,
+            'limit'=>$x.','.$sonews,
+            'where' => 'import_type = 2 AND import_tire_date >= '.strtotime($batdau).' AND import_tire_date <= '.strtotime($ketthuc),
+            );
+
+        if (isset($id) && $id > 0) {
+            $data['where'] = 'code = '.$id;
+        }
+
+        /*if ($_SESSION['role_logined'] == 4) {
+            $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
+        }*/
+
+        if ($keyword != '') {
+            $search = '( code LIKE "%'.$keyword.'%" 
+                OR comment LIKE "%'.$keyword.'%" )';
+            
+                $data['where'] = $data['where'].' AND '.$search;
+        }
+
+        $sales = $sale_model->getAllSale($data);
+        
+        $this->view->data['sales'] = $sales;
+
+        $this->view->data['lastID'] = isset($sale_model->getLastSale()->import_tire_id)?$sale_model->getLastSale()->import_tire_id:0;
+
+        $this->view->show('importtire/stone');
     }
 
     public function goingimport(){
@@ -728,6 +827,7 @@ Class importtireController Extends baseController {
                         'comment' => trim($_POST['comment']),
                         'expect_date' => strtotime(trim($_POST['expect_date'])),
                         'import_tire_lock' => 0,
+                        'import_type' => isset($_POST['import_type'])?$_POST['import_type']:1,
                         );
     
             $vendor = $this->model->get('shipmentvendorModel');

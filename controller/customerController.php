@@ -27,6 +27,12 @@ Class customerController Extends baseController {
 
         $district_model = $this->model->get('districtModel');
         $districts = $district_model->getAllDistrict();
+
+        $district_datas = array();
+        foreach ($districts as $district) {
+            $district_datas[$district->district_id]['name'] = $district->district_name;
+        }
+        $this->view->data['district_datas'] = $district_datas;
         $this->view->data['districts'] = $districts;
 
         $bank_model = $this->model->get('bankModel');
