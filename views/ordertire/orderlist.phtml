@@ -178,7 +178,8 @@ elseif ($order_by == 'order_tire_number')
                     echo '<button class="order_number" data="'.$order_tire->order_tire_id.'">Số ĐH</button>';
                 ?>
             </td>
-            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->customer_name; ?></td>
+            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><a target="_blank" href="<?php echo $this->url('customer/index/'.$order_tire->customer); ?>"><?php echo $order_tire->customer_name; ?></a> 
+            </td>
             <td class="fix"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
             <td class="fix" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
             <td class="fix"  id="vat_<?php echo $order_tire->order_tire_id; ?>">
@@ -187,7 +188,8 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix"  id="discount_<?php echo $order_tire->order_tire_id; ?>">
                 <a class="order_discount" href="<?php echo $this->url('ordertire/listdiscount/'.$order_tire->order_tire_id); ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></a>
             </td>
-            <td class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?></td>
+            <td class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?><br>
+                <a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer.'/'.strtotime($ketthuc)); ?>"><i class="fa fa-search-plus"></i>Công nợ</a></td>
             <td class="fix"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
                 <?php if($order_tire->order_cost != ""){ ?>
                 <a style="font-weight:bold;text-decoration:underline" class="order_cost" data="<?php echo $order_tire->order_tire_id; ?>">
@@ -1678,4 +1680,21 @@ function set_item_other(item,value,vitri) {
             
         };
 }
+
+$(".customer").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:"90%",
+            resizable: false,
+            title:'Danh sách đơn hàng',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
 </script>

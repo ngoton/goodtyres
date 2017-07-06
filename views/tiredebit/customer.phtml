@@ -75,7 +75,7 @@
                 ?>
             </td>
             
-            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->customer_name; ?></td>
+            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><a target="_blank" href="<?php echo $this->url('customer/index/'.$order_tire->customer); ?>"><?php echo $order_tire->customer_name; ?></a></td>
             <td class="fix"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id.'/'.$order_tire->customer.'/customer/'.strtotime($ketthuc)); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
             <td class="fix" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
             <td class="fix"  id="vat_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></td>

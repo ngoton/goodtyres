@@ -4,8 +4,6 @@ if ($order_by == 'tire_brand_id')
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
 elseif ($order_by == 'tire_brand_name')
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
-elseif ($order_by == 'tire_brand_group_name')
-    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
 
     $i = $sonews*$page-($sonews-1);
 
@@ -82,7 +80,7 @@ elseif ($order_by == 'tire_brand_group_name')
             
             <td  class="fix"><?php echo $i++; ?></td>
             <td class="fix" id="tire_brand_name_<?php echo $tire_brand->tire_brand_id; ?>"><?php echo $tire_brand->tire_brand_name; ?></td>
-            <td class="fix" id="tire_brand_group_<?php echo $tire_brand->tire_brand_id; ?>"><?php echo $tire_brand->tire_brand_group_name; ?></td>
+            <td class="fix" data="<?php echo $tire_brand->tire_brand_group; ?>" id="tire_brand_group_<?php echo $tire_brand->tire_brand_id; ?>"><?php echo isset($group_data[$tire_brand->tire_brand_group])?$group_data[$tire_brand->tire_brand_group]:null; ?></td>
             <td>
                 <button class="error" onclick="del(<?php echo $tire_brand->tire_brand_id ?>)" >Xóa</button>
                 
@@ -178,12 +176,12 @@ $('html').click(function(e) {
             }
             
             var tire_brand_name = $(this).find("#tire_brand_name_"+$(this).attr('id')).text();
-            var tire_brand_group = $(this).find("#tire_brand_group_"+$(this).attr('id')).text();
+            var tire_brand_group = $(this).find("#tire_brand_group_"+$(this).attr('id')).attr('data');
             //alert(cost_code);
             $('#yes').val($(this).attr('id'));
             
             $('#tire_brand_name').val(tire_brand_name);
-            $("#tire_brand_group option:contains(" + tire_brand_group + ")").attr('selected', 'selected');
+            $("#tire_brand_group option[value=" + tire_brand_group + "]").attr('selected', 'selected');
             
 
             $( ".add-field" ).dialog( "open" );

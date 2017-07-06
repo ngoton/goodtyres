@@ -447,7 +447,7 @@ Class additionalController Extends baseController {
                 if ($val[3] != null && $val[6] != null && $val[6] > 0 ) {
                     
                     $ngay = PHPExcel_Shared_Date::ExcelToPHP(trim($val[1]));                                      
-                    $ngay = $ngay-3600;
+                    //$ngay = $ngay-3600;
 
                     $no_id = null;
                     $co_id = null;
