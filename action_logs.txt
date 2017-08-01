@@ -2875,3 +2875,1229 @@ bxep: 6x14 = 84k-5-4--1484000
 
 22/06/2017 16:38:19|admincmg|edit|20|tire_brand|Yatone-2
 
+06/07/2017 16:03:11|admincmg|add|656|order_tire|1-1499292000-1-130-1-1----------0-0-0---10-1000000--11000000-1-0-1
+
+13/07/2017 08:44:28|admincmg|add|1|work_plan|1499896800-A-h-0-1-1499896800-1499896800-1-
+
+13/07/2017 08:48:33|admincmg|delete|1|work_plan|
+
+13/07/2017 08:50:39|admincmg|add|2|work_plan|1499896800-A-a-0-1-1499896800-1501279200-1-14
+
+13/07/2017 08:54:21|admincmg|edit|2|work_plan|1499896800-Ab-ab-1-1-1499896800-1501279200-1-14
+
+13/07/2017 09:07:23|admincmg|edit|2|work_plan|1499896800-Ab-ab-1-2-1499896800-1501279200-1-12,14
+
+13/07/2017 10:21:05|admincmg|edit|2|work_plan|1499896800-Ab-ab-1-1-1499896800-1499896800-1-12,14
+
+13/07/2017 10:46:11|admincmg|edit|2|work_plan|1499896800-Ab-ab-1-1-1499896800-1499896800-1-14
+
+13/07/2017 10:46:22|admincmg|edit|2|work_plan|1499896800-Ab-ab-1-1-1499896800-1499896800-1-2,14
+
+14/07/2017 10:17:26|admincmg|edit|2|work_plan|1499983200-Ab-ab-1-1-1499896800-1499896800-1-2,14
+
+14/07/2017 10:18:36|admincmg|edit|2|work_plan|1499983200-Ab-ab-1-1-1499896800-1499896800-1-2,14
+
+14/07/2017 10:26:19|admincmg|edit|2|work_plan|1499983200-Ab-ab-1-1-1499896800-1499896800-1-2,14
+
+14/07/2017 10:30:21|admincmg|edit|2|work_plan|1499983200-Ab-ab-1-1-1499896800-1499896800-1-2,14
+
+14/07/2017 10:47:26|admincmg|edit|2|work_plan|1499983200-Ab-ab-1-1-1499896800-1499896800-1-2,14
+
+14/07/2017 10:48:31|admincmg|edit|2|work_plan|1499983200-Ab-ab-1-1-1499896800-1499896800-1-2,14
+
+14/07/2017 10:50:47|admincmg|edit|2|work_plan|1499983200-Ab-ab-1-1-1499896800-1499896800-1-2,14
+
+15/07/2017 10:31:45|admincmg|edit|2|work_plan|1500069600-Ab-ab-1-1--1499896800-1499896800-1-14
+
+17/07/2017 13:57:12|admincmg|add|3|work_plan|1500242400-Ab--0-1--1500242400-1500242400-1-14
+
+17/07/2017 13:58:58|admincmg|edit|3|work_plan|1500242400-Ab--0-1-0-1500242400-1500242400-1-14
+
+17/07/2017 13:59:15|admincmg|edit|3|work_plan|1500242400-Ab--0-1-0-1500242400-1500242400-1-14
+
+17/07/2017 14:09:45|admincmg|edit|3|work_plan|1500242400-Ab--0-1-0-1500242400-1500242400-1-14
+
+20/07/2017 16:49:33|admincmg|add|657|order_tire|1-1500501600-1-109-1-1----------0-0-0------3000000-1-0-0
+
+22/07/2017 09:50:50|admincmg|add|4|work_plan|1500674400-Ab--0-1--1500847200-1501192800-14-1
+
+22/07/2017 10:27:43|admincmg|add|5|work_plan|1500674400-Ab--0-1--1500674400-1500674400-14-1
+
+22/07/2017 10:27:49|admincmg|add|6|work_plan|1500674400-Ab--0-1--1500674400-1500674400-14-1
+
+22/07/2017 10:27:55|admincmg|add|7|work_plan|1500674400-Ab--0-1--1500674400-1500674400-14-1
+
+24/07/2017 09:06:23|admincmg|edit|5|work_plan|1500847200-Ab--1-1-0-1500674400-1500674400-14
+
+24/07/2017 09:42:40|admincmg|edit|6|work_plan|1500847200-Ab--0-1-1-1500674400-1500674400-14
+
+24/07/2017 09:42:54|admincmg|edit|6|work_plan|1500847200-Ab--0-1-1.5-1500674400-1500674400-14
+
+24/07/2017 09:51:29|admincmg|edit|6|work_plan|1500847200-Ab--0-1-1500674400-1500674400-14-1.6666666666667
+
+24/07/2017 09:53:34|admincmg|edit|6|work_plan|1500847200-Ab--0-1-1500674400-1500674400-14-1.67
+
+24/07/2017 09:56:46|admincmg|edit|6|work_plan|1500847200-Ab--0-1-1500674400-1500674400-14-1.5
+
+24/07/2017 09:56:56|admincmg|edit|6|work_plan|1500847200-Ab--0-1-1500674400-1500674400-14-1.42
+
+24/07/2017 09:57:51|admincmg|edit|6|work_plan|1500847200-Ab--0-1-1500674400-1500674400-14-1.28
+
+24/07/2017 14:02:27|admincmg|edit|4|work_plan|1500847200-Ab---1-1500847200-1501192800---0.5
+
+24/07/2017 14:03:53|admincmg|edit|4|work_plan|1500847200-Ab--1-1-1500847200-1501192800---0.5
+
+24/07/2017 14:26:36|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 14:33:58|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 14:34:34|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 14:34:47|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 14:35:15|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 14:35:38|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 14:36:54|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 14:37:14|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 14:45:03|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 14:46:03|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 14:58:04|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 14:58:53|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 14:59:45|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 15:00:08|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 15:00:21|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 15:00:43|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 15:01:01|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 15:01:16|admincmg|edit|4|work_plan|1500847200-Ab--0-0-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 15:03:21|admincmg|edit|4|work_plan|1500847200-Ab--0-1-1500847200-1501192800-1500847200--0.5
+
+24/07/2017 15:04:55|admincmg|edit|4|work_plan|1500847200-Ab--0-1-1500847200-1501192800-1500847200-14-0.5
+
+24/07/2017 15:05:03|admincmg|edit|4|work_plan|1500847200-Ab--0-1-1500847200-1501192800-1500847200-12,14-0.5
+
+24/07/2017 15:05:12|admincmg|edit|4|work_plan|1500847200-Ab--0-1-1500847200-1501192800-1500847200-14-0.5
+
+24/07/2017 15:06:02|admincmg|edit|4|work_plan|1500847200-Ab-hi-0-1-1500847200-1501192800-1500847200-14-1.5
+
+24/07/2017 15:17:23|admincmg|edit|4|work_plan|1500847200-Ab-hi-0-1-1500847200-1501192800-1500847200-14-1.5-
+
+24/07/2017 15:17:36|admincmg|edit|4|work_plan|1500847200-Ab-hi-0-1-1500847200-1501192800-1500847200-14-1.5-1
+
+24/07/2017 15:18:41|admincmg|edit|4|work_plan|1500847200-Ab-hi-0-1-1500847200-1501192800-1500847200-14-1.5-2
+
+24/07/2017 15:33:59|admincmg|edit|4|work_plan|1500847200-Ab-hi-0-1-1500847200-1501192800-1500847200-14-1.5-3,4
+
+25/07/2017 08:08:15|admincmg|edit|4|work_plan|1500933600-Ab-hi-0-1-1500847200-1501192800-1500847200-14-1.5-3
+
+25/07/2017 08:13:04|admincmg|edit|4|work_plan|1500933600-Ab-hi-0-1-1500847200-1501192800-1500847200-14-1.5-4
+
+25/07/2017 08:15:06|admincmg|edit|4|work_plan|1500933600-Ab-hi-0-1-1500847200-1501192800-1500847200-14-1.5-5
+
+25/07/2017 08:15:57|admincmg|edit|4|work_plan|1500933600-Ab-hi-0-1-1500847200-1501192800-1500847200-14-1.5-
+
+25/07/2017 09:17:09|admincmg|edit|7|work_plan|1500933600-Ab--1-1-1500674400-1500674400-1500933600-14-0-
+
+26/07/2017 08:01:07|admincmg|edit|7|work_plan|1501020000-Ab--1-1-1500674400-1500674400-1501020000-14-0-
+
+28/07/2017 08:11:24|admincmg|add|8|work_plan|1501192800-Khách hàng A-Còn nợ-0-1-1501192800-1501192800--1-14-0.5--1
+
+28/07/2017 08:12:54|admincmg|edit|8|work_plan|1501192800-Khách hàng A-Còn nợ-0-1-1501192800-1501192800--1-14-0.5-
+
+28/07/2017 08:49:12|admincmg|add|9|work_plan|1501192800-Khách hàng B-Đã đòi nợ-1-1-1501192800-1501192800-1501192800-1-14-1--1
+
+28/07/2017 08:51:19|admincmg|add|10|work_plan|1501192800-Khách hàng C-Khó đòi-0-1-1500847200-1500847200--1-14-8.33--1
+
+28/07/2017 09:10:16|admincmg|edit|8|work_plan|1501192800-Khách hàng A-Còn nợ-0-1-1500933600-1501192800--1-14-0.5-
+
+28/07/2017 10:33:37|admincmg|edit|10|work_plan|1501192800-Khách hàng C-Khó đòi-0-2-1500847200-1500847200--1-14-8.33-
+
+28/07/2017 10:37:37|admincmg|edit|10|work_plan|1501192800-Khách hàng C-Khó đòi-0-3-1500847200-1500847200--1-14-8.33-
+
+28/07/2017 14:56:11|admincmg|add|11|work_plan|1501192800-Tìm khách hàng--0-10-1500933600-1501020000--2-14-3.58--1
+
+29/07/2017 07:58:56|admincmg|edit|10|work_plan|1501279200-Khách hàng C-Khó đòi-0-3-1500847200-1500847200--1-14-8.33-
+
+29/07/2017 07:59:31|admincmg|edit|10|work_plan|1501279200-Khách hàng C-Khó đòi-0-3-Người-1500847200-1500847200--1-14-8.33-
+
+29/07/2017 08:02:34|admincmg|edit|8|work_plan|1501279200-Khách hàng A-Còn nợ-0-1-Người-1500933600-1501192800--1-14-0.5-
+
+29/07/2017 08:02:49|admincmg|edit|11|work_plan|1501279200-Tìm khách hàng--0-10-Người-1500933600-1501020000--2-14-3.58-
+
+29/07/2017 11:31:58|admincmg|delete|51|work_plan|
+
+29/07/2017 11:31:58|admincmg|delete|52|work_plan|
+
+29/07/2017 11:31:58|admincmg|delete|53|work_plan|
+
+29/07/2017 11:31:58|admincmg|delete|54|work_plan|
+
+29/07/2017 11:31:58|admincmg|delete|55|work_plan|
+
+29/07/2017 11:31:58|admincmg|delete|56|work_plan|
+
+29/07/2017 11:31:58|admincmg|delete|57|work_plan|
+
+29/07/2017 11:31:58|admincmg|delete|58|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|59|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|60|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|61|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|62|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|63|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|64|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|65|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|66|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|67|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|68|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|69|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|70|work_plan|
+
+29/07/2017 11:31:59|admincmg|delete|71|work_plan|
+
+29/07/2017 11:32:00|admincmg|delete|72|work_plan|
+
+29/07/2017 11:32:00|admincmg|delete|73|work_plan|
+
+29/07/2017 11:32:00|admincmg|delete|74|work_plan|
+
+29/07/2017 11:32:00|admincmg|delete|75|work_plan|
+
+29/07/2017 11:32:00|admincmg|delete|76|work_plan|
+
+29/07/2017 11:32:00|admincmg|delete|77|work_plan|
+
+29/07/2017 11:32:00|admincmg|delete|78|work_plan|
+
+29/07/2017 11:32:01|admincmg|delete|79|work_plan|
+
+29/07/2017 11:32:01|admincmg|delete|80|work_plan|
+
+29/07/2017 11:32:01|admincmg|delete|81|work_plan|
+
+29/07/2017 11:32:01|admincmg|delete|82|work_plan|
+
+29/07/2017 11:32:01|admincmg|delete|83|work_plan|
+
+29/07/2017 11:32:01|admincmg|delete|84|work_plan|
+
+29/07/2017 11:32:01|admincmg|delete|85|work_plan|
+
+29/07/2017 11:32:01|admincmg|delete|86|work_plan|
+
+29/07/2017 11:32:02|admincmg|delete|87|work_plan|
+
+29/07/2017 11:32:02|admincmg|delete|88|work_plan|
+
+29/07/2017 11:32:02|admincmg|delete|89|work_plan|
+
+29/07/2017 11:32:02|admincmg|delete|90|work_plan|
+
+29/07/2017 11:32:02|admincmg|delete|91|work_plan|
+
+29/07/2017 11:32:02|admincmg|delete|92|work_plan|
+
+29/07/2017 11:32:03|admincmg|delete|93|work_plan|
+
+29/07/2017 11:32:03|admincmg|delete|94|work_plan|
+
+29/07/2017 11:32:03|admincmg|delete|95|work_plan|
+
+29/07/2017 11:32:03|admincmg|delete|96|work_plan|
+
+29/07/2017 11:32:03|admincmg|delete|97|work_plan|
+
+29/07/2017 11:32:03|admincmg|delete|98|work_plan|
+
+29/07/2017 11:32:03|admincmg|delete|99|work_plan|
+
+29/07/2017 11:32:03|admincmg|delete|100|work_plan|
+
+29/07/2017 11:32:03|admincmg|delete|101|work_plan|
+
+29/07/2017 11:32:04|admincmg|delete|102|work_plan|
+
+29/07/2017 11:32:04|admincmg|delete|103|work_plan|
+
+29/07/2017 11:32:04|admincmg|delete|104|work_plan|
+
+29/07/2017 11:32:04|admincmg|delete|105|work_plan|
+
+29/07/2017 11:32:04|admincmg|delete|106|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|107|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|108|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|109|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|110|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|111|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|112|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|113|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|114|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|115|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|116|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|117|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|118|work_plan|
+
+29/07/2017 11:32:05|admincmg|delete|119|work_plan|
+
+29/07/2017 11:32:06|admincmg|delete|120|work_plan|
+
+29/07/2017 11:32:06|admincmg|delete|121|work_plan|
+
+29/07/2017 11:32:06|admincmg|delete|122|work_plan|
+
+29/07/2017 11:32:06|admincmg|delete|123|work_plan|
+
+29/07/2017 11:32:06|admincmg|delete|124|work_plan|
+
+29/07/2017 11:32:06|admincmg|delete|125|work_plan|
+
+29/07/2017 11:32:06|admincmg|delete|126|work_plan|
+
+29/07/2017 11:32:06|admincmg|delete|127|work_plan|
+
+29/07/2017 11:32:06|admincmg|delete|128|work_plan|
+
+29/07/2017 11:32:06|admincmg|delete|129|work_plan|
+
+29/07/2017 11:32:07|admincmg|delete|130|work_plan|
+
+29/07/2017 11:32:07|admincmg|delete|131|work_plan|
+
+29/07/2017 11:32:07|admincmg|delete|132|work_plan|
+
+29/07/2017 11:32:07|admincmg|delete|133|work_plan|
+
+29/07/2017 11:32:07|admincmg|delete|134|work_plan|
+
+29/07/2017 11:32:07|admincmg|delete|135|work_plan|
+
+29/07/2017 11:32:08|admincmg|delete|136|work_plan|
+
+29/07/2017 11:32:08|admincmg|delete|137|work_plan|
+
+29/07/2017 11:32:08|admincmg|delete|138|work_plan|
+
+29/07/2017 11:32:08|admincmg|delete|139|work_plan|
+
+29/07/2017 11:32:08|admincmg|delete|140|work_plan|
+
+29/07/2017 11:32:08|admincmg|delete|141|work_plan|
+
+29/07/2017 11:32:08|admincmg|delete|142|work_plan|
+
+29/07/2017 11:32:09|admincmg|delete|143|work_plan|
+
+29/07/2017 11:32:09|admincmg|delete|144|work_plan|
+
+29/07/2017 11:32:09|admincmg|delete|145|work_plan|
+
+29/07/2017 11:32:09|admincmg|delete|146|work_plan|
+
+29/07/2017 11:32:09|admincmg|delete|147|work_plan|
+
+29/07/2017 11:32:09|admincmg|delete|148|work_plan|
+
+29/07/2017 11:32:09|admincmg|delete|149|work_plan|
+
+29/07/2017 11:32:09|admincmg|delete|150|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|151|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|152|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|153|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|154|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|155|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|156|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|157|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|158|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|159|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|160|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|161|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|162|work_plan|
+
+29/07/2017 11:32:10|admincmg|delete|163|work_plan|
+
+29/07/2017 11:32:11|admincmg|delete|164|work_plan|
+
+29/07/2017 11:32:11|admincmg|delete|165|work_plan|
+
+29/07/2017 11:32:11|admincmg|delete|166|work_plan|
+
+29/07/2017 11:32:11|admincmg|delete|167|work_plan|
+
+29/07/2017 11:32:11|admincmg|delete|168|work_plan|
+
+29/07/2017 11:32:11|admincmg|delete|169|work_plan|
+
+29/07/2017 11:32:11|admincmg|delete|170|work_plan|
+
+29/07/2017 11:32:11|admincmg|delete|171|work_plan|
+
+29/07/2017 11:32:11|admincmg|delete|172|work_plan|
+
+29/07/2017 11:32:11|admincmg|delete|173|work_plan|
+
+29/07/2017 11:32:12|admincmg|delete|174|work_plan|
+
+29/07/2017 11:32:12|admincmg|delete|175|work_plan|
+
+29/07/2017 11:32:12|admincmg|delete|176|work_plan|
+
+29/07/2017 11:32:12|admincmg|delete|177|work_plan|
+
+29/07/2017 11:32:12|admincmg|delete|178|work_plan|
+
+29/07/2017 11:32:12|admincmg|delete|179|work_plan|
+
+29/07/2017 11:32:12|admincmg|delete|180|work_plan|
+
+29/07/2017 11:32:12|admincmg|delete|181|work_plan|
+
+29/07/2017 11:32:13|admincmg|delete|182|work_plan|
+
+29/07/2017 11:32:13|admincmg|delete|183|work_plan|
+
+29/07/2017 11:32:13|admincmg|delete|184|work_plan|
+
+29/07/2017 11:32:13|admincmg|delete|185|work_plan|
+
+29/07/2017 11:32:13|admincmg|delete|186|work_plan|
+
+29/07/2017 11:32:13|admincmg|delete|187|work_plan|
+
+29/07/2017 11:32:13|admincmg|delete|188|work_plan|
+
+29/07/2017 11:32:13|admincmg|delete|189|work_plan|
+
+29/07/2017 11:32:13|admincmg|delete|190|work_plan|
+
+29/07/2017 11:32:14|admincmg|delete|191|work_plan|
+
+29/07/2017 11:32:14|admincmg|delete|192|work_plan|
+
+29/07/2017 11:32:14|admincmg|delete|193|work_plan|
+
+29/07/2017 11:32:14|admincmg|delete|194|work_plan|
+
+29/07/2017 11:32:14|admincmg|delete|195|work_plan|
+
+29/07/2017 11:32:14|admincmg|delete|196|work_plan|
+
+29/07/2017 11:32:14|admincmg|delete|197|work_plan|
+
+29/07/2017 11:32:14|admincmg|delete|198|work_plan|
+
+29/07/2017 11:32:14|admincmg|delete|199|work_plan|
+
+29/07/2017 11:32:15|admincmg|delete|200|work_plan|
+
+29/07/2017 11:32:15|admincmg|delete|201|work_plan|
+
+29/07/2017 11:32:15|admincmg|delete|202|work_plan|
+
+29/07/2017 11:32:15|admincmg|delete|203|work_plan|
+
+29/07/2017 11:32:15|admincmg|delete|204|work_plan|
+
+29/07/2017 11:32:15|admincmg|delete|205|work_plan|
+
+29/07/2017 11:32:15|admincmg|delete|206|work_plan|
+
+29/07/2017 11:32:15|admincmg|delete|207|work_plan|
+
+29/07/2017 11:32:15|admincmg|delete|208|work_plan|
+
+29/07/2017 11:32:15|admincmg|delete|209|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|210|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|211|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|212|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|213|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|214|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|215|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|216|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|217|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|218|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|219|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|220|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|221|work_plan|
+
+29/07/2017 11:32:16|admincmg|delete|222|work_plan|
+
+29/07/2017 11:32:17|admincmg|delete|223|work_plan|
+
+29/07/2017 11:32:17|admincmg|delete|12|work_plan|
+
+29/07/2017 11:32:17|admincmg|delete|13|work_plan|
+
+29/07/2017 11:32:17|admincmg|delete|14|work_plan|
+
+29/07/2017 11:32:17|admincmg|delete|15|work_plan|
+
+29/07/2017 11:32:17|admincmg|delete|16|work_plan|
+
+29/07/2017 11:32:17|admincmg|delete|17|work_plan|
+
+29/07/2017 11:32:17|admincmg|delete|18|work_plan|
+
+29/07/2017 11:32:17|admincmg|delete|19|work_plan|
+
+29/07/2017 11:32:17|admincmg|delete|20|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|21|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|22|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|23|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|24|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|25|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|26|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|27|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|28|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|29|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|30|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|31|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|32|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|33|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|34|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|35|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|36|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|37|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|38|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|39|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|40|work_plan|
+
+29/07/2017 11:32:18|admincmg|delete|41|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|42|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|43|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|44|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|45|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|46|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|47|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|48|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|49|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|224|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|225|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|226|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|227|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|228|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|229|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|230|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|231|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|232|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|233|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|234|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|235|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|236|work_plan|
+
+29/07/2017 11:32:19|admincmg|delete|237|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|238|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|239|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|240|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|241|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|242|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|243|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|244|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|245|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|246|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|247|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|248|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|249|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|250|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|251|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|252|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|253|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|254|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|255|work_plan|
+
+29/07/2017 11:32:20|admincmg|delete|256|work_plan|
+
+29/07/2017 11:32:21|admincmg|delete|257|work_plan|
+
+29/07/2017 11:32:21|admincmg|delete|258|work_plan|
+
+29/07/2017 11:32:21|admincmg|delete|259|work_plan|
+
+29/07/2017 11:32:21|admincmg|delete|260|work_plan|
+
+29/07/2017 11:32:21|admincmg|delete|261|work_plan|
+
+29/07/2017 11:32:21|admincmg|delete|262|work_plan|
+
+29/07/2017 11:32:21|admincmg|delete|263|work_plan|
+
+29/07/2017 11:32:21|admincmg|delete|264|work_plan|
+
+29/07/2017 11:32:21|admincmg|delete|265|work_plan|
+
+29/07/2017 11:32:21|admincmg|delete|266|work_plan|
+
+29/07/2017 11:32:21|admincmg|delete|267|work_plan|
+
+29/07/2017 11:32:21|admincmg|delete|268|work_plan|
+
+29/07/2017 11:32:22|admincmg|delete|269|work_plan|
+
+29/07/2017 11:32:22|admincmg|delete|270|work_plan|
+
+29/07/2017 11:32:22|admincmg|delete|271|work_plan|
+
+29/07/2017 11:32:22|admincmg|delete|272|work_plan|
+
+29/07/2017 11:32:22|admincmg|delete|273|work_plan|
+
+29/07/2017 11:32:22|admincmg|delete|274|work_plan|
+
+29/07/2017 11:32:22|admincmg|delete|50|work_plan|
+
+29/07/2017 11:34:47|admincmg|delete|314|work_plan|
+
+29/07/2017 11:34:47|admincmg|delete|315|work_plan|
+
+29/07/2017 11:34:47|admincmg|delete|316|work_plan|
+
+29/07/2017 11:34:47|admincmg|delete|317|work_plan|
+
+29/07/2017 11:34:47|admincmg|delete|318|work_plan|
+
+29/07/2017 11:34:47|admincmg|delete|319|work_plan|
+
+29/07/2017 11:34:47|admincmg|delete|320|work_plan|
+
+29/07/2017 11:34:47|admincmg|delete|321|work_plan|
+
+29/07/2017 11:34:47|admincmg|delete|322|work_plan|
+
+29/07/2017 11:34:47|admincmg|delete|323|work_plan|
+
+29/07/2017 11:34:47|admincmg|delete|324|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|325|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|326|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|327|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|328|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|329|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|330|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|331|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|332|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|333|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|334|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|335|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|336|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|337|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|338|work_plan|
+
+29/07/2017 11:34:48|admincmg|delete|339|work_plan|
+
+29/07/2017 11:34:49|admincmg|delete|340|work_plan|
+
+29/07/2017 11:34:49|admincmg|delete|341|work_plan|
+
+29/07/2017 11:34:49|admincmg|delete|342|work_plan|
+
+29/07/2017 11:34:49|admincmg|delete|343|work_plan|
+
+29/07/2017 11:34:49|admincmg|delete|344|work_plan|
+
+29/07/2017 11:34:49|admincmg|delete|345|work_plan|
+
+29/07/2017 11:34:49|admincmg|delete|346|work_plan|
+
+29/07/2017 11:34:49|admincmg|delete|347|work_plan|
+
+29/07/2017 11:34:49|admincmg|delete|348|work_plan|
+
+29/07/2017 11:34:49|admincmg|delete|349|work_plan|
+
+29/07/2017 11:34:49|admincmg|delete|350|work_plan|
+
+29/07/2017 11:34:49|admincmg|delete|351|work_plan|
+
+29/07/2017 11:34:50|admincmg|delete|352|work_plan|
+
+29/07/2017 11:34:50|admincmg|delete|353|work_plan|
+
+29/07/2017 11:34:50|admincmg|delete|354|work_plan|
+
+29/07/2017 11:34:50|admincmg|delete|355|work_plan|
+
+29/07/2017 11:34:50|admincmg|delete|356|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|357|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|358|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|359|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|360|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|361|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|362|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|363|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|364|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|365|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|366|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|367|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|368|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|369|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|370|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|371|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|372|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|373|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|374|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|375|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|376|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|377|work_plan|
+
+29/07/2017 11:34:51|admincmg|delete|378|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|379|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|380|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|381|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|382|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|383|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|384|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|385|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|386|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|387|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|388|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|389|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|390|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|391|work_plan|
+
+29/07/2017 11:34:52|admincmg|delete|392|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|393|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|394|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|395|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|396|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|397|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|398|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|399|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|400|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|401|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|402|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|403|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|404|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|405|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|406|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|407|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|408|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|409|work_plan|
+
+29/07/2017 11:34:53|admincmg|delete|410|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|411|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|412|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|413|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|414|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|415|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|416|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|417|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|418|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|419|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|420|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|421|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|422|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|423|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|424|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|425|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|426|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|427|work_plan|
+
+29/07/2017 11:34:54|admincmg|delete|428|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|429|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|430|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|431|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|432|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|433|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|434|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|435|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|436|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|437|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|438|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|439|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|440|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|441|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|442|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|443|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|444|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|445|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|446|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|447|work_plan|
+
+29/07/2017 11:34:55|admincmg|delete|448|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|449|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|450|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|451|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|452|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|453|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|454|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|455|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|456|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|457|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|458|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|459|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|460|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|461|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|462|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|463|work_plan|
+
+29/07/2017 11:34:56|admincmg|delete|464|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|465|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|466|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|467|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|468|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|469|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|470|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|471|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|472|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|473|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|474|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|475|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|476|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|477|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|478|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|479|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|480|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|481|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|482|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|483|work_plan|
+
+29/07/2017 11:34:57|admincmg|delete|484|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|485|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|486|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|275|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|276|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|277|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|278|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|279|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|280|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|281|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|282|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|283|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|284|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|285|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|286|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|287|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|288|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|289|work_plan|
+
+29/07/2017 11:34:58|admincmg|delete|290|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|291|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|292|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|293|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|294|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|295|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|296|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|297|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|298|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|299|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|300|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|301|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|302|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|303|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|304|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|305|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|306|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|307|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|308|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|309|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|310|work_plan|
+
+29/07/2017 11:34:59|admincmg|delete|311|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|312|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|487|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|488|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|489|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|490|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|491|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|492|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|493|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|494|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|495|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|496|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|497|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|498|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|499|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|500|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|501|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|502|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|503|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|504|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|505|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|506|work_plan|
+
+29/07/2017 11:35:00|admincmg|delete|507|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|508|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|509|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|510|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|511|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|512|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|513|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|514|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|515|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|516|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|517|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|518|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|519|work_plan|
+
+29/07/2017 11:35:01|admincmg|delete|520|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|521|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|522|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|523|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|524|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|525|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|526|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|527|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|528|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|529|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|530|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|531|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|532|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|533|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|534|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|535|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|536|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|537|work_plan|
+
+29/07/2017 11:35:02|admincmg|delete|313|work_plan|
+
+31/07/2017 08:59:27|admincmg|edit|3|tire_brand|Amberstone-3-2
+
+31/07/2017 08:59:33|admincmg|edit|3|tire_brand|Amberstone-3-1
+
+01/08/2017 08:45:35|admincmg|edit|8|work_plan|1501538400-Khách hàng A-Còn nợ-0-1-Người-1500933600-1501192800--2-14-0.5-
+
+01/08/2017 08:45:46|admincmg|edit|8|work_plan|1501538400-Khách hàng A-Còn nợ-0-1-Người-1500933600-1501192800--1-14-0.5-
+
+01/08/2017 15:15:02|admincmg|edit|1|work_plan_code|-Đòi nợ-
+
+01/08/2017 15:16:08|admincmg|edit|1|work_plan_code|DN-Đòi nợ-0
+

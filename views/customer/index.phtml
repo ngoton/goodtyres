@@ -124,6 +124,7 @@ elseif ($order_by == 'customer_address')
             <td class="fix" style="display:none" id="customer_district_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_district; ?></td>
             <td class="fix" style="display:none" id="customer_city_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_city; ?></td>
             <td class="fix" style="display:none" id="customer_province_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_province; ?></td>
+            <td class="fix" style="display:none" id="customer_contact_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_contact; ?></td>
             <td class="fix" style="display:none" id="customer_province_<?php echo $customer->customer_id; ?>"><?php echo isset($district_datas[$customer->customer_province]['name'])?$district_datas[$customer->customer_province]['name']:null; ?></td>
 
             <td>
@@ -201,9 +202,16 @@ $this->helper('slidePaginator');
                             
                         </tr>
                         <tr>
-                            
                             <td>Giám đốc </td>
                             <td><input type="text" id="director"  name="director" tabindex="9" ></td>
+                            <td>Người liên hệ </td>
+                            <td><input type="text" id="customer_contact"  name="customer_contact" tabindex="10" ></td>
+                            
+                            
+                        </tr>
+                        <tr>
+                            
+                            
                             <td>Tài khoản ngân hàng </td>
                             <td>
                                 <input type="text" style="width:90px" id="customer_bank_name"  name="customer_bank_name" tabindex="10" >
@@ -308,6 +316,7 @@ $('html').click(function(e) {
         var customer_district = $(this).find("#customer_district_"+$(this).attr('id')).text();
         var customer_city = $(this).find("#customer_city_"+$(this).attr('id')).text();
         var customer_province = $(this).find("#customer_province_"+$(this).attr('id')).text();
+        var customer_contact = $(this).find("#customer_contact_"+$(this).attr('id')).text();
         
         //alert(customer_code);
         $('#yes').val($(this).attr('id'));
@@ -335,6 +344,7 @@ $('html').click(function(e) {
        $('#customer_district').val(customer_district);
        $('#customer_city').val(customer_city);
        $("#customer_province option[value=" + customer_province + "]").attr('selected', 'selected');
+       $('#customer_contact').val(customer_contact);
 
         $('#customer_name').focus();
         $('#customer_name').attr('data',"true");
@@ -368,6 +378,7 @@ function add_click(){
        $('#customer_ward').val("");
        $('#customer_district').val("");
        $('#customer_city').val("");
+       $('#customer_contact').val("");
 
    $('#customer_name').focus();
    $('#customer_name').attr('data',"false");
@@ -405,6 +416,7 @@ $(document).ready(function(){
                     var customer_district = $('#customer_district').attr('value');
                     var customer_city = $('#customer_city').attr('value');
                     var customer_province = $('#customer_province').attr('value');
+                    var customer_contact = $('#customer_contact').attr('value');
                     
 
                     var yes = $('#yes').attr('value');
@@ -436,6 +448,7 @@ $(document).ready(function(){
                             customer_district: customer_district,
                             customer_city: customer_city,
                             customer_province: customer_province,
+                            customer_contact: customer_contact,
                             yes: yes,
                             check: check,
                             }, // giá trị post

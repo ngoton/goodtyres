@@ -86,6 +86,7 @@ Class customerController Extends baseController {
         if ($keyword != '') {
             $search = ' AND ( customer_name LIKE "%'.$keyword.'%" 
                             OR mst LIKE "%'.$keyword.'%" 
+                            OR customer_code LIKE "%'.$keyword.'%" 
                             OR customer_address LIKE "%'.$keyword.'%" 
                             )';
             $data['where'] .= $search;
@@ -128,9 +129,10 @@ Class customerController Extends baseController {
                         'customer_city' => trim($_POST['customer_city']),
                         'customer_province' => trim($_POST['customer_province']),
                         'customer_code' => trim($_POST['customer_code']),
+                        'customer_contact' => trim($_POST['customer_contact']),
                         
                         );
-            if ($_POST['check'] == "true") {
+            if ($_POST['yes'] != "") {
                 $data['customer_update_user'] = $_SESSION['userid_logined'];
                 $data['customer_update_time'] = time();
                 //var_dump($data);

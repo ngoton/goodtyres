@@ -189,7 +189,7 @@ elseif ($order_by == 'order_tire_number')
                 <a class="order_discount" href="<?php echo $this->url('ordertire/listdiscount/'.$order_tire->order_tire_id); ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></a>
             </td>
             <td class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?><br>
-                <a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer.'/'.strtotime($ketthuc)); ?>"><i class="fa fa-search-plus"></i>Công nợ</a></td>
+                <a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer.'/'.strtotime(date('d-m-Y'))); ?>"><i class="fa fa-search-plus"></i>Công nợ</a></td>
             <td class="fix"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
                 <?php if($order_tire->order_cost != ""){ ?>
                 <a style="font-weight:bold;text-decoration:underline" class="order_cost" data="<?php echo $order_tire->order_tire_id; ?>">
@@ -218,7 +218,7 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix"  id="delivery_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->delivery_date>0?$lib->hien_thi_ngay_thang($order_tire->delivery_date):null; ?></td>
             <td class="fix">    
                 <button data="<?php echo $order_tire->customer ?>" value="1"  class="editButton">HĐ</button>
-                <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/bienban/'.$order_tire->order_tire_id ?>'">BBBG</button>
+                <button class="bienban" data="<?php echo $order_tire->order_tire_id ?>">BBBG</button>
                 
                 <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/invoice/'.$order_tire->order_tire_id ?>'">Hóa đơn</button>
                 
@@ -252,6 +252,7 @@ elseif ($order_by == 'order_tire_number')
 <?php
 $this->helper('slidePaginator');
 ?>
+<div id="hoanthanh"><input type="hidden" id="lastID"></div><!-- /.modal -->
 <div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('ordertire/orderlist') ?>">&larr;</a></div>
 
 <div id="dialogContent" title="Mã đơn hàng">
@@ -910,6 +911,11 @@ $('.ex_stock_edit')
         
         $('#i_order6').val($(this).attr('data'));
         $('#i_delivery_date6').val($(this).attr('alt'));
+
+        if ($('#i_lift6').hasClass('tagit-hidden-field')) {
+            $('#i_lift6').tagit('destroy');
+        }
+
         $('#i_lift6').val($(this).attr('name').trim());
 
         $("#i_lift6").tagit({
@@ -1697,4 +1703,60 @@ $(".customer").click(function(){
          
         return false;
     });
+
+$( "#hoanthanh" ).dialog({
+
+    autoOpen: false,
+
+    modal: true,
+
+    width: "auto",
+
+    maxHeight: $(window).height()-50,
+
+    title: "Thông báo",
+
+    hide: 'fold',
+
+    show: 'blind',
+
+    buttons: [
+
+    {
+
+        text: "In đơn hàng",
+        icons: { primary: "ui-icon-print" },
+
+        click: function() {
+
+          $( this ).dialog( "close" );
+
+          var lastID = $('#lastID').val();
+
+          window.open("<?php echo $this->url('ordertire/printview/') ?>"+lastID);
+
+        },
+    },
+    {
+        text: "Tải xuống",
+        icons: { primary: "ui-icon-disk" },
+        click: function() {
+
+          $( this ).dialog( "close" );
+
+          var lastID = $('#lastID').val();
+
+          window.location.href = "<?php echo $this->url('ordertire/bienban/') ?>"+lastID;
+
+        }       
+
+
+    }
+    ]
+
+});
+$('.bienban').click(function(){
+    $('#lastID').val($(this).attr('data'));
+    $('#hoanthanh').dialog('open');
+});
 </script>

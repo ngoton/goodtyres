@@ -22,6 +22,11 @@ Class tirebrandController Extends baseController {
             $keyword = "";
             $limit = 20;
         }
+
+        $tire_brand_region_model = $this->model->get('tirebrandregionModel');
+        $tire_regions = $tire_brand_region_model->getAllTire();
+        $this->view->data['tire_regions'] = $tire_regions;
+
         $tire_brand_group_model = $this->model->get('tirebrandgroupModel');
         $tire_groups = $tire_brand_group_model->getAllTire();
         $this->view->data['tire_groups'] = $tire_groups;
@@ -32,6 +37,8 @@ Class tirebrandController Extends baseController {
         }
         $this->view->data['group_data'] = $group_data;
 
+        $join = array('table'=>'tire_brand_region','where'=>'tire_brand_region=tire_brand_region_id');
+
         $tire_brand_model = $this->model->get('tirebrandModel');
         $sonews = $limit;
         $x = ($page-1) * $sonews;
@@ -41,7 +48,7 @@ Class tirebrandController Extends baseController {
             'where' => '1=1',
         );
 
-        $tongsodong = count($tire_brand_model->getAllTire($data));
+        $tongsodong = count($tire_brand_model->getAllTire($data,$join));
         $tongsotrang = ceil($tongsodong / $sonews);
         
 
@@ -71,7 +78,7 @@ Class tirebrandController Extends baseController {
         
 
         
-        $this->view->data['tire_brands'] = $tire_brand_model->getAllTire($data);
+        $this->view->data['tire_brands'] = $tire_brand_model->getAllTire($data,$join);
         $this->view->data['lastID'] = isset($tire_brand_model->getLastTire()->tire_brand_id)?$tire_brand_model->getLastTire()->tire_brand_id:0;
 
         /* Lấy tổng doanh thu*/
@@ -93,6 +100,7 @@ Class tirebrandController Extends baseController {
                         
                         'tire_brand_name' => trim($_POST['tire_brand_name']),
                         'tire_brand_group' => $_POST['tire_brand_group'],
+                        'tire_brand_region' => $_POST['tire_brand_region'],
                         );
             
 

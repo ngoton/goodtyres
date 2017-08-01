@@ -39,6 +39,61 @@ Class ordertireController Extends baseController {
 
         $this->view->show('ordertire/index');
     }
+    public function printview() {
+        $this->view->disableLayout();
+        $this->view->data['lib'] = $this->lib;
+
+        $order = $this->registry->router->param_id;
+
+        include('lib/phpqrcode/qrlib.php'); 
+
+        $tempDir = "public/images/qr/"; 
+        array_map('unlink', glob($tempDir."*"));
+        $codeContents = 'https://www.viet-trade.org/onlineservices/tireorder/00'.$order.'1';
+        $fileName = 'qr_'.md5($codeContents).'.png'; 
+        $pngAbsoluteFilePath = $tempDir.$fileName; 
+        QRcode::png($codeContents, $pngAbsoluteFilePath); 
+        $this->view->data['img'] = $pngAbsoluteFilePath;
+        
+        $tire_order_model = $this->model->get('ordertireModel');
+        $tire_order_list_model = $this->model->get('ordertirelistModel');
+        $customer_model = $this->model->get('customerModel');
+        $staff_model = $this->model->get('staffModel');
+
+        $orders = $tire_order_model->getTire($order);
+
+        $staffs = $staff_model->getStaffByWhere(array('account'=>$orders->sale));
+
+        if($orders->delivery_date>0){
+            $ngay = date('d',$orders->delivery_date);
+            $thang = date('m',$orders->delivery_date);
+            $nam = date('Y',$orders->delivery_date);
+        }
+        else{
+            $ngay = date('d');
+            $thang = date('m');
+            $nam = date('Y');
+        }
+        
+        $order_number = $orders->order_number!=""?$orders->order_number:"lx-".substr($nam, -2).$thang."...";
+
+        $customers = $customer_model->getCustomer($orders->customer);
+
+        $data = array('where'=>'order_tire = '.$order);
+        $join = array('table'=>'tire_pattern, tire_brand, tire_size','where'=> 'tire_brand_id=tire_brand AND tire_size_id=tire_size AND tire_pattern_id=tire_pattern');
+        $order_types = $tire_order_list_model->getAllTire($data,$join);
+
+        $this->view->data['orders'] = $orders;
+        $this->view->data['order_types'] = $order_types;
+        $this->view->data['ngay'] = $ngay;
+        $this->view->data['thang'] = $thang;
+        $this->view->data['nam'] = $nam;
+        $this->view->data['order_number'] = $order_number;
+        $this->view->data['staffs'] = $staffs;
+        $this->view->data['customers'] = $customers;
+
+        $this->view->show('ordertire/printview');
+    }
     public function getPattern(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $brand = trim($_POST['data']);
@@ -728,7 +783,7 @@ Class ordertireController Extends baseController {
                         $type = 1;
                     }
                     // add new option
-                    echo '<li onclick="set_item(\''.$rs->customer_name.'\',\''.$rs->customer_id.'\',\''.$rs->company_name.'\',\''.$rs->customer_phone.'\',\''.$rs->customer_address.'\',\''.$rs->customer_email.'\',\''.$expect_date.'\',\''.$rs->mst.'\',\''.$type.'\')">'.$customer_name.'</li>';
+                    echo '<li onclick="set_item(\''.$rs->customer_name.'\',\''.$rs->customer_id.'\',\''.$rs->company_name.'\',\''.$rs->customer_phone.'\',\''.$rs->customer_address.'\',\''.$rs->customer_email.'\',\''.$rs->customer_contact.'\',\''.$expect_date.'\',\''.$rs->mst.'\',\''.$type.'\')">'.$customer_name.'</li>';
                 }
             }
         }
@@ -849,6 +904,7 @@ Class ordertireController Extends baseController {
             $tire_brand_model = $this->model->get('tirebrandModel');
             $tire_brands = $tire_brand_model->getAllTire();
             $data_brand = array();
+            $id_order_tire = 0;
             foreach ($tire_brands as $tire) {
                 $data_brand[$tire->tire_brand_id]['group'] = $tire->tire_brand_group;
             }
@@ -869,6 +925,7 @@ Class ordertireController Extends baseController {
                         'customer_address' => trim($_POST['address']),
                         'customer_phone' => trim($_POST['phone']),
                         'customer_email' => trim($_POST['email']),
+                        'customer_contact' => trim($_POST['contact']),
                         'customer_create_user' => $_SESSION['userid_logined'],
                     );
 
@@ -885,6 +942,7 @@ Class ordertireController Extends baseController {
                         'customer_address' => trim($_POST['address']),
                         'customer_phone' => trim($_POST['phone']),
                         'customer_email' => trim($_POST['email']),
+                        'customer_contact' => trim($_POST['contact']),
                         'customer_create_user' => $_SESSION['userid_logined'],
                     );
 
@@ -992,7 +1050,7 @@ Class ordertireController Extends baseController {
                 $tire_waiting_model->updateTire(array('order_tire_waiting_number'=>$total_waiting),array('order_tire_waiting_id'=>$id_waiting));
             }
 
-            echo "Đặt hàng thành công";
+            echo $id_order_tire;
 
             date_default_timezone_set("Asia/Ho_Chi_Minh"); 
             $filename = "action_logs.txt";
@@ -1125,6 +1183,7 @@ Class ordertireController Extends baseController {
                         'customer_address' => trim($_POST['address']),
                         'customer_phone' => trim($_POST['phone']),
                         'customer_email' => trim($_POST['email']),
+                        'customer_contact' => trim($_POST['contact']),
                     );
 
                     $customer_model->createCustomer($data_cus);
@@ -1140,6 +1199,7 @@ Class ordertireController Extends baseController {
                         'customer_address' => trim($_POST['address']),
                         'customer_phone' => trim($_POST['phone']),
                         'customer_email' => trim($_POST['email']),
+                        'customer_contact' => trim($_POST['contact']),
                         'customer_create_user' => $_SESSION['userid_logined'],
                     );
 
@@ -3153,7 +3213,7 @@ Class ordertireController Extends baseController {
                 ->setCellValue('C12', mb_strtoupper($customers->company_name, "UTF-8"))
                 ->setCellValue('A13', '- Mã số thuế: '.$customers->mst)
                 ->setCellValue('A14', '- Địa chỉ: '.$customers->customer_address)
-                ->setCellValue('A15', '- Ông/bà: ')
+                ->setCellValue('A15', '- Ông/bà: '.$customers->customer_contact)
                 ->setCellValue('E15', 'CMND: ')
                 ->setCellValue('F15', 'SĐT: '.$customers->customer_phone)
                 ->setCellValue('A16', 'NỘI DUNG BÀN GIAO: ')
@@ -3289,19 +3349,19 @@ Class ordertireController Extends baseController {
                         ->setCellValue('A'.($hang+11), '(Ký, họ tên)')
                         ->setCellValue('C'.($hang+11), '(Ký, đóng dấu & ghi rõ họ tên)')
                         ->setCellValue('F'.($hang+11), '(Ký & ghi rõ họ tên, BS xe, SĐT)')
-                        ->setCellValue('A'.($hang+17), $staffs->staff_name);
+                        ->setCellValue('A'.($hang+16), $staffs->staff_name);
 
                 $objPHPExcel->getActiveSheet()->mergeCells('A'.($hang+10).':B'.($hang+10));
-                $objPHPExcel->getActiveSheet()->mergeCells('A'.($hang+17).':B'.($hang+17));
+                $objPHPExcel->getActiveSheet()->mergeCells('A'.($hang+16).':B'.($hang+16));
                 $objPHPExcel->getActiveSheet()->mergeCells('C'.($hang+10).':E'.($hang+10));
                 $objPHPExcel->getActiveSheet()->mergeCells('F'.($hang+10).':G'.($hang+10));
                 $objPHPExcel->getActiveSheet()->mergeCells('A'.($hang+11).':B'.($hang+11));
                 $objPHPExcel->getActiveSheet()->mergeCells('C'.($hang+11).':E'.($hang+11));
                 $objPHPExcel->getActiveSheet()->mergeCells('F'.($hang+11).':G'.($hang+11));
                 $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+10).':G'.($hang+10))->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+17).':G'.($hang+17))->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+10).':G'.($hang+17))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+10).':G'.($hang+17))->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+16).':G'.($hang+16))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+10).':G'.($hang+16))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.($hang+10).':G'.($hang+16))->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                 $objPHPExcel->getActiveSheet()->getRowDimension(($hang+3))->setRowHeight(36);
                   
           }
@@ -3423,7 +3483,36 @@ Class ordertireController Extends baseController {
             $objPHPExcel->getActiveSheet()->getPageSetup()->setFitToWidth(1);    
             $objPHPExcel->getActiveSheet()->getPageSetup()->setFitToHeight(0); 
             $objPHPExcel->getActiveSheet()->getPageMargins()->setRight(0.2); 
-            $objPHPExcel->getActiveSheet()->getPageMargins()->setLeft(0.2); 
+            $objPHPExcel->getActiveSheet()->getPageMargins()->setLeft(0.4); 
+            $objPHPExcel->getActiveSheet()->getPageMargins()->setTop(0.4); 
+            $objPHPExcel->getActiveSheet()->getPageMargins()->setBottom(0); 
+            $objPHPExcel->getActiveSheet()->getPageMargins()->setFooter(0); 
+
+            include('lib/phpqrcode/qrlib.php'); 
+
+            $tempDir = "public/images/"; 
+            $codeContents = 'https://www.viet-trade.org/onlineservices/tireorder/00'.$order.'1';
+            $fileName = 'qr_'.md5($codeContents).'.png'; 
+            $pngAbsoluteFilePath = $tempDir.$fileName; 
+            QRcode::png($codeContents, $pngAbsoluteFilePath); 
+            // Add a drawing to the header
+            $objDrawing = new PHPExcel_Worksheet_HeaderFooterDrawing();
+            $objDrawing->setName('Image');
+            $objDrawing->setPath($pngAbsoluteFilePath);
+            $objDrawing->setHeight(50);
+            $objPHPExcel->getActiveSheet()->getHeaderFooter()->addImage($objDrawing, PHPExcel_Worksheet_HeaderFooter::IMAGE_FOOTER_LEFT);
+            //$objPHPExcel->getActiveSheet()->getHeaderFooter()->setOddHeader('&L&G&');
+
+            // $objDrawing = new PHPExcel_Worksheet_Drawing();
+            // $objDrawing->setName("Image");
+            // $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+            // $logo = "public/images/logo-viet-trade.png";
+            // $objDrawing->setPath($logo);
+            // $objDrawing->setHeight(40);  
+            // $objDrawing->setWidth(130);  
+            // $objDrawing->setCoordinates('G3');
+
+            $objPHPExcel->getActiveSheet()->getHeaderFooter()->setOddFooter('&L&G&"-,Italic"&K848a91Please visit our website to view the status of your order. https://www.viet-trade.org');
 
 
             // Set properties
@@ -3449,7 +3538,8 @@ Class ordertireController Extends baseController {
             header("Cache-Control: max-age=0");
             ob_clean();
             $objWriter->save("php://output");
-        
+            
+            unlink($pngAbsoluteFilePath);
     }
 
     

@@ -249,6 +249,7 @@ Class userController Extends baseController {
                             'role' => trim($_POST['role']),
                             'user_group' => trim($_POST['user_group']),
                             'user_dept' => trim($_POST['user_dept']),
+                            'user_lock' => trim($_POST['userlock']),
                             );
                     }
                     else{
@@ -256,6 +257,7 @@ Class userController Extends baseController {
                             'role' => trim($_POST['role']),
                             'user_group' => trim($_POST['user_group']),
                             'user_dept' => trim($_POST['user_dept']),
+                            'user_lock' => trim($_POST['userlock']),
                             );
                     }
                         $user->updateUser($data,array('user_id'=>$id));

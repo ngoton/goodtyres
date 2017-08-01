@@ -1,7 +1,7 @@
 <?php
-$dr = isset($stock[1])?$stock[1]:0;
-$st = isset($stock[2])?$stock[2]:0;
-$an = isset($stock[3])?$stock[3]:0;
+$china = isset($stock[1])?$stock[1]:0;
+$linglong = isset($stock[2])?$stock[2]:0;
+$zhongce = isset($stock[3])?$stock[3]:0;
 ?>
 <div class="row">
     <div class="col-lg-12 ">
@@ -41,7 +41,7 @@ $an = isset($stock[3])?$stock[3]:0;
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3><?php echo $donhang ?></h3>
+              <h4><?php echo $donhang ?></h4>
 
               <p>Đơn hàng</p>
             </div>
@@ -56,7 +56,7 @@ $an = isset($stock[3])?$stock[3]:0;
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <h3><?php echo $sanluong ?></h3>
+              <h4><?php echo $sanluong ?></h4>
 
               <p>Sản lượng</p>
             </div>
@@ -71,7 +71,7 @@ $an = isset($stock[3])?$stock[3]:0;
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-              <h3><?php echo $khachhang ?></h3>
+              <h4><?php echo $khachhang ?></h4>
 
               <p>Khách hàng</p>
             </div>
@@ -86,7 +86,7 @@ $an = isset($stock[3])?$stock[3]:0;
           <!-- small box -->
           <div class="small-box bg-red">
             <div class="inner">
-              <h3><?php echo $lib->formatMoney($doanhthu) ?></h3>
+              <h4><?php echo $lib->formatMoney($doanhthu) ?></h4>
 
               <p>Doanh thu</p>
             </div>
@@ -252,9 +252,9 @@ $an = isset($stock[3])?$stock[3]:0;
                 <!-- /.col -->
                 <div class="col-md-4">
                   <ul class="chart-legend clearfix">
-                    <li><i class="fa fa-circle-o text-red"></i> GS/DR</li>
-                    <li><i class="fa fa-circle-o text-green"></i> Shengtai</li>
-                    <li><i class="fa fa-circle-o text-yellow"></i> Annaite</li>
+                    <li><i class="fa fa-circle-o text-red"></i> China</li>
+                    <li><i class="fa fa-circle-o text-green"></i> Linglong</li>
+                    <li><i class="fa fa-circle-o text-yellow"></i> Zhongce</li>
                   </ul>
                 </div>
                 <!-- /.col -->
@@ -264,13 +264,13 @@ $an = isset($stock[3])?$stock[3]:0;
             <!-- /.box-body -->
             <div class="box-footer no-padding">
               <ul class="nav nav-pills nav-stacked">
-                <li><a href="#">Ginstin - Double Road
-                    <span class="pull-right text-red"><?php echo round(($dr*100)/($dr+$st+$an),1) ?>%</span></a></li>
-                <li><a href="#">Shengtai 
-                    <span class="pull-right text-green"><?php echo round(($st*100)/($dr+$st+$an),1) ?>%</span></a>
+                <li><a href="#">China
+                    <span class="pull-right text-red"><?php echo round(($china*100)/($china+$linglong+$zhongce),1) ?>%</span></a></li>
+                <li><a href="#">Linglong 
+                    <span class="pull-right text-green"><?php echo round(($linglong*100)/($china+$linglong+$zhongce),1) ?>%</span></a>
                 </li>
-                <li><a href="#">Annaite - Amberstone
-                  <span class="pull-right text-yellow"><?php echo round(($an*100)/($dr+$st+$an),1) ?>%</span></a></li>
+                <li><a href="#">Zhongce
+                  <span class="pull-right text-yellow"><?php echo round(($zhongce*100)/($china+$linglong+$zhongce),1) ?>%</span></a></li>
               </ul>
             </div>
             <!-- /.footer -->
@@ -309,22 +309,22 @@ $an = isset($stock[3])?$stock[3]:0;
     var pieChart = new Chart(pieChartCanvas);
     var PieData = [
       {
-        value: <?php echo $dr; ?>,
+        value: <?php echo $china; ?>,
         color: "#f56954",
         highlight: "#f56954",
-        label: "GS/DR"
+        label: "China"
       },
       {
-        value: <?php echo $st; ?>,
+        value: <?php echo $linglong; ?>,
         color: "#00a65a",
         highlight: "#00a65a",
-        label: "Shengtai"
+        label: "Linglong"
       },
       {
-        value: <?php echo $an; ?>,
+        value: <?php echo $zhongce; ?>,
         color: "#f39c12",
         highlight: "#f39c12",
-        label: "Annaite"
+        label: "Zhongce"
       }
     ];
     var pieOptions = {

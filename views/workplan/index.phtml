@@ -1,0 +1,1024 @@
+<?php
+$url_order = 'ASC';
+if ($order_by == 'work_plan_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'work_plan_number')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'work_plan_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'end_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+  elseif ($order_by == 'work_plan_comment')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+  elseif ($order_by == 'work_plan_complete')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+  elseif ($order_by == 'work_plan_owner')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+  elseif ($order_by == 'work_plan_point')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-2">
+          <a onClick="add_click();" class="btn btn-primary btn-block margin-bottom"><i class="fa  fa-pencil-square-o"></i> Thêm công việc</a>
+
+          <div class="box box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title">Hôm nay</h3>
+
+              <div class="box-tools">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="box-body no-padding">
+              <ul class="nav nav-pills nav-stacked">
+                <li><a href="<?php echo $this->url('workplan/todayworking') ?>"><i class="fa fa-calendar-minus-o"></i> Đang thực hiện
+                  <span class="label label-warning pull-right"><?php echo count($works) ?></span></a>
+                </li>
+                <li><a href="<?php echo $this->url('workplan/todayworkcomplete') ?>"><i class="fa fa-calendar-check-o"></i> Đã hoàn thành
+                  <span class="label label-success pull-right"><?php echo $todaycomplete ?></span></a>
+                </li>
+                <li><a href="<?php echo $this->url('workplan/todaydeadline') ?>"><i class="fa fa-calendar-times-o"></i> Trễ Deadline
+                  <span class="label label-danger pull-right"><?php echo $todaydeadline ?></span></a>
+                </li>
+              </ul>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /. box -->
+          <div class="box box-solid collapsed-box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Tuần này</h3>
+
+              <div class="box-tools">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="box-body no-padding">
+              <ul class="nav nav-pills nav-stacked">
+                <li><a href="<?php echo $this->url('workplan/total') ?>"><i class="fa fa-calendar-o"></i> Tổng cộng
+                  <span class="label label-primary pull-right"><?php echo $worktotal ?></span></a>
+                </li>
+                <li><a href="<?php echo $this->url('workplan/working') ?>"><i class="fa fa-calendar-minus-o"></i> Đang thực hiện
+                  <span class="label label-warning pull-right"><?php echo $working ?></span></a>
+                </li>
+                <li><a href="<?php echo $this->url('workplan/workcomplete') ?>"><i class="fa fa-calendar-check-o"></i> Đã hoàn thành
+                  <span class="label label-success pull-right"><?php echo $complete ?></span></a>
+                </li>
+                <li><a href="<?php echo $this->url('workplan/deadline') ?>"><i class="fa fa-calendar-times-o"></i> Trễ Deadline
+                  <span class="label label-danger pull-right"><?php echo $deadline ?></span></a>
+                </li>
+              </ul>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /. box -->
+          <div class="box box-solid collapsed-box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Tổng hợp</h3>
+
+              <div class="box-tools">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="box-body no-padding">
+              <ul class="nav nav-pills nav-stacked">
+                <li><a href="<?php echo $this->url('workplan/weekcomplete') ?>"><i class="fa fa-circle-o text-red"></i> Hoàn thành trong tuần</a></li>
+                <li><a href="<?php echo $this->url('workplan/monthcomplete') ?>"><i class="fa fa-circle-o text-yellow"></i> Hoàn thành trong tháng</a></li>
+                <li><a href="<?php echo $this->url('workplan/totalcomplete') ?>"><i class="fa fa-circle-o text-light-blue"></i> Tổng số công việc</a></li>
+              </ul>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-10">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Công việc</h3>
+
+              <div class="box-tools pull-right">
+                <div class="has-feedback">
+                    <div class="input-group">
+                      <input type="text" class="pull-right" id="reservation" value="<?php echo date('d/m/Y',strtotime($batdau)).' - '.date('d/m/Y',strtotime($ketthuc)) ?>">
+                      <div class="form-control-feedback">
+                        <i class="fa fa-calendar"></i>
+                      </div>
+                      <input type="hidden" name="batdau" id="batdau" value="<?php echo $batdau ?>">
+                      <input type="hidden" name="ketthuc" id="ketthuc" value="<?php echo $ketthuc ?>">
+                    </div>
+                  
+                </div>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+              <div class="search-box">
+        
+                  <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+                  <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+
+              </div>
+              
+              <div class="tablenav top">
+                <div class="alignleft actions">
+                    <select name="action" id="action">
+                        <option value="-1" selected="selected">Chọn</option>
+                        
+                        <option value="delete">Xóa</option>
+                    </select>
+                    <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+                </div>
+                <div class="alignleft actions">
+                  <select name="m" id="chonloc">
+                    <option  value="18446744073709">Hiển thị tất cả</option>
+                    <option value="50">Hiển thị 50 giá trị</option>
+                    <option value="100">Hiển thị 100 giá trị</option>
+                    <option value="150">Hiển thị 150 giá trị</option>
+                    <option selected="selected" value="200">Hiển thị 200 giá trị</option>
+                  </select>
+                  <input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">                               
+                </div>
+                <div class="alignleft actions">
+                  <select id="sl_status" name="sl_status" style="width:150px">
+                        <option value="0">Nhân viên</option>
+                        <?php foreach ($staffs as $staff) { 
+                          $randomcolor[$staff->staff_id] = '#' . $lib->rand_color();
+                        ?>
+                          <option value="<?php echo $staff->staff_id ?>"><?php echo $staff->staff_name ?></option>
+                        <?php } ?>
+                    </select>
+                    <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+                </div>
+                
+              </div>
+              <div style="clear:both"></div>
+              <div class="table-responsive mailbox-messages">
+                <table class="table_data" id="tblExport">
+                  <thead>
+                      <tr>
+                          <th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+                          <th class="fix" >
+                              <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','work_plan_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'work_plan_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                          </th>
+                          <th class="fix">
+                              <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','work_plan_name','<?php echo $url_order ?>')">Tên công việc <?php if ($order_by == 'work_plan_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                          </th>
+                          <th class="fix">
+                              <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','end_date','<?php echo $url_order ?>')">Ngày thực hiện <?php if ($order_by == 'end_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                          </th>
+                          <th class="fix">
+                              <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','work_plan_number','<?php echo $url_order ?>')">SL <?php if ($order_by == 'work_plan_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                          </th>
+                          <th class="fix">
+                              <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','work_plan_owner','<?php echo $url_order ?>')">Người thực hiện <?php if ($order_by == 'work_plan_owner'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                          </th>
+                          <th class="fix">
+                              <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','work_plan_comment','<?php echo $url_order ?>')">Ghi chú <?php if ($order_by == 'work_plan_comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                          </th>
+                          <th class="fix">
+                              <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','work_plan_point','<?php echo $url_order ?>')">Thời gian <?php if ($order_by == 'work_plan_point'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                          </th>
+                          <th class="fix">
+                              <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','work_plan_complete','<?php echo $url_order ?>')">Hoàn thành <?php if ($order_by == 'work_plan_complete'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                          </th>
+                          <th class="fix"></th>
+                      </tr>
+                      
+                     </thead>
+                     <tbody>
+                      <?php
+                      $tong = 0;
+                      $day = array();
+                      for ($k = strtotime('last Sunday', strtotime($ketthuc)); $k <= strtotime($ketthuc); $k = strtotime('+1 day', $k)) {
+                        $day[] = $k;
+                      }
+                      ?>
+                      <?php foreach ($works as $work_plan) : 
+                      $timeDiff = abs($work_plan->end_date - $work_plan->start_date);
+                      $numberDays = $timeDiff/86400;
+                      $numberDays = intval($numberDays+1);
+
+                      $day_color = isset($randomcolor[$work_plan->work_plan_owner])?$randomcolor[$work_plan->work_plan_owner]:'rgba(255, 1, 60, 0.61)';
+                      $tong += round(($work_plan->work_plan_point*$work_plan->work_plan_number)/$numberDays,2);
+                      ?>
+                      
+                          
+                          <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $work_plan->work_plan_id ?>" class="edit_tr" <?php echo ($work_plan->work_plan_complete!=1 && $work_plan->end_date < strtotime(date('d-m-Y')) || ($work_plan->work_plan_complete==1 && $work_plan->work_plan_complete_date > $work_plan->end_date) )?'style="color:red"':null ?> >
+                              
+                              <td>
+                                <?php if(($_SESSION['userid_logined'] == 1 || $_SESSION['userid_logined'] == $work_plan->create_user) && ($work_plan->end_date >= strtotime(date('d-m-Y')) )){ ?>
+                                  <input name="check[]" type="checkbox" class="checkbox" value="<?php echo $work_plan->work_plan_id ?>">
+                                <?php } ?>
+                              </td>
+                              
+                              <td  class="fix"><?php echo $i++; ?></td>
+                              <td class="fix" id="work_plan_name_<?php echo $work_plan->work_plan_id; ?>"><?php echo $work_plan->work_plan_name; ?></td>
+                              <td class="fix" id="work_plan_time_<?php echo $work_plan->work_plan_id; ?>"><?php echo date('d/m/Y',$work_plan->start_date).' - '.date('d/m/Y',$work_plan->end_date); ?></td>
+                              <td class="fix" id="work_plan_number_<?php echo $work_plan->work_plan_id; ?>"><?php echo $work_plan->work_plan_number; ?></td>
+                              <td class="fix" data="<?php echo $work_plan->work_plan_owner; ?>" id="work_plan_owner_<?php echo $work_plan->work_plan_id; ?>">
+                                  <?php 
+                                  $str = "";
+                                      if($work_plan->work_plan_owner != ""){
+                                          $contributors = explode(',', $work_plan->work_plan_owner);
+                                          foreach ($contributors as $key) {
+                                            $pieces = explode(' ', $staff_data['name'][$key]);
+                                            $last_word = array_pop($pieces);
+                                            if ($str == "") {
+                                              $str = $last_word;
+                                            }
+                                            else{
+                                              $str .= ",".$last_word;
+                                            }
+                                          }
+                                        echo $str;
+                                      }
+                                      ?>
+                              </td>
+                              <td class="fix" id="work_plan_comment_<?php echo $work_plan->work_plan_id; ?>"><?php echo $work_plan->work_plan_comment; ?></td>
+                              <td class="fix" id="work_plan_point_<?php echo $work_plan->work_plan_id; ?>"><?php echo $work_plan->work_plan_point; ?></td>
+                              <td class="fix" id="work_plan_complete_<?php echo $work_plan->work_plan_id; ?>" data="<?php echo $work_plan->work_plan_complete; ?>"><input data="<?php echo $work_plan->work_plan_id; ?>" class="checkbox2" type="checkbox" <?php echo $work_plan->work_plan_complete==1?'checked disabled':null; ?> ></td>
+                              <td style="display:none" class="fix" id="work_plan_complete_date_<?php echo $work_plan->work_plan_id; ?>"><?php echo $lib->hien_thi_ngay_thang($work_plan->work_plan_complete_date); ?></td>
+                              <td style="display:none" class="fix" id="end_date_<?php echo $work_plan->work_plan_id; ?>"><?php echo $work_plan->end_date; ?></td>
+                              <td style="display:none" class="fix" data="<?php echo $work_plan->work_plan_attachment; ?>" id="work_plan_attachment_<?php echo $work_plan->work_plan_id; ?>">
+                                  <?php 
+                                  $str = "";
+                                      if($work_plan->work_plan_attachment != ""){
+                                          $contributors = explode(',', $work_plan->work_plan_attachment);
+                                          foreach ($contributors as $key) {
+                                            $pieces = explode(' ', $attachment_data['name'][$key]);
+                                            $last_word = array_pop($pieces);
+                                            if ($str == "") {
+                                              $str = $last_word;
+                                            }
+                                            else{
+                                              $str .= ",".$last_word;
+                                            }
+                                          }
+                                        echo $str;
+                                      }
+                                      ?>
+                              </td>
+                              <td class="pull-right">
+                                <?php if(($_SESSION['userid_logined'] == 1 || $_SESSION['userid_logined'] == $work_plan->create_user) && ($work_plan->end_date >= strtotime(date('d-m-Y')) ) ){ ?>
+                                  <button class="btn btn-sm btn-flat btn-danger" onclick="del(<?php echo $work_plan->work_plan_id ?>)" ><i class="fa fa-remove"></i></button>
+                                <?php } ?>
+                              </td>
+                          </tr>
+
+
+                      <?php endforeach; ?>
+                      <tr  style="font-weight: bold; color: rgb(23, 119, 226);" >
+            
+                          <th colspan="3" style="border-right: 1px solid rgb(236, 235, 235);border-top: 1px solid #80C8E5;padding: 7px; text-align: right;" >
+                              Tổng thời gian làm việc
+                          </th>
+                          <td class="fix" colspan="4" ></td>
+                          <td class="fix" ><?php echo $lib->formatMoney($tong) ?></td>
+                          <td class="fix" ></td>
+                          <td class="fix" ></td>
+                      </tr>
+                     </tbody>
+                  </table>
+                </div>
+                
+              <!-- /.mail-box-messages -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer no-padding">
+              <div class="mailbox-controls">
+                <?php
+                $this->helper('slidePaginator');
+                ?>
+                <!-- /.pull-right -->
+              </div>
+            </div>
+          </div>
+          <!-- /. box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+<div class="add-field">
+  <form id="add_work" method="post" action="" enctype="multipart/form-data">
+    <div class="box box-info">
+      <div class="box-body">
+        <div class="col-md-6">
+          <div class="input-group">
+            <label>Tên công việc</label>
+            <input autocomplete="off" type="text" name="work_plan_name" id="work_plan_name" tabindex="1" required="required" >
+            <ul id="customer_list_id"></ul>
+          </div>
+          <div class="input-group">
+            <label>Người thực hiện</label>
+            <select style="width:200px" class="form-control select2" multiple="multiple" name="work_plan_owner" id="work_plan_owner" tabindex="2" required="required">
+              <?php foreach ($staffs as $staff) { ?>
+                <option <?php echo $staff->staff_id==$staff_info->staff_id?'selected':null ?> value="<?php echo $staff->staff_id ?>" ><?php echo $staff->staff_name ?></option>
+              <?php } ?>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Ngày thực hiện</label>
+            <input type="text" name="work_plan_time" id="work_plan_time" tabindex="3" required="required" >
+          </div>
+          <div class="input-group detail">
+            <label>Số lượng</label>
+            <input style="width:50px" type="text" name="work_plan_number" id="work_plan_number" tabindex="4" value="1" required="required">
+          </div>
+          <div class="input-group detail">
+              <table id="dataTable" border="1" style="width: 100%; border: 1px solid rgb(221, 217, 217); margin-bottom: 10px" >
+                  <tbody>
+                  <tr>
+                      <td><input type="checkbox" name="chk"></td>
+                      <td>
+                          <table style="width:100%">
+                              <tr>
+                                  <td>
+                                      Nội dung
+                                  </td>
+                                  <td>
+                                      <input type="text" name="work_plan_detail[]" class="work_plan_detail" required="required">
+                                  </td>
+                                  
+                              </tr>
+                              
+                          </table>
+                      </td>
+                  </tr>
+              </tbody>
+              </table>
+              <input type="button" value="Thêm" onclick="addRow('dataTable')">
+              <input type="button" value="Xóa" onclick="deleteRow('dataTable')">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <label>Ghi chú</label>
+            <textarea name="work_plan_comment" id="work_plan_comment" tabindex="5"></textarea>
+          </div>
+          
+          <div class="input-group">
+            <label>Thời gian (Giờ:phút)</label>
+            <input style="width:50px" type="text" name="work_plan_point" id="work_plan_point" tabindex="6" required="required" placeholder="Giờ" >
+            <input style="width:50px" type="text" name="work_plan_point2" id="work_plan_point2" tabindex="6" placeholder="Phút" >
+          </div>
+          <div class="input-group">
+            <input type="checkbox" name="work_plan_complete" id="work_plan_complete" value="1" tabindex="7"> Đã hoàn thành
+            <input style="width:80px" type="text" name="work_plan_complete_date" id="work_plan_complete_date" tabindex="7" disabled >
+          </div>
+          <div class="input-group">
+              <label><i class="fa fa-paperclip"></i> Đính kèm </label>
+              <input type="file" name="attachment[]" id="attachment" multiple>
+              <div id="show-attach">
+                
+              </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+            <div class="box-footer">
+            <input type="hidden" readonly id="yes" name="yes" required="required" >
+            <button type="submit" class="btn btn-primary" tabindex="8">Hoàn tất</button>
+            <button type="reset" class="btn" tabindex="9">Nhập lại</button>
+          </div>
+          <div class="box-footer">
+            <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="hoanthanh"></div><!-- /.modal -->
+
+<script type="text/javascript">
+$('html').click(function(e) {
+
+    $('#customer_list_id').slideUp(200);
+
+});
+function add_click(){
+  $('#yes').val("");
+  $('.add-field').slideDown(500);
+  $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
+
+  $('#work_plan_name').val("");
+  var staff = ["<?php echo $staff_info->staff_id ?>"];
+  $('#work_plan_owner option[value='+staff+']').attr("selected",'selected');
+  $('#work_plan_owner').val(staff).trigger("change");
+  $('#work_plan_number').val(1);
+  $('#work_plan_comment').val("");
+  $('#work_plan_point').val("");
+  $('#work_plan_complete').prop("checked",false);
+  $('#work_plan_complete_date').val("");
+  $('#show-attach').html("");
+  $('input[name="chk"]').attr('data',"");
+  $('.work_plan_detail').val("");
+  //$('.detail').hide();
+  $('.add-field input').attr('disabled',false);
+  $('.add-field button').attr('disabled',false);
+
+  $( ".add-field" ).dialog( "open" );
+}
+
+$('.edit_tr').click(function(e){
+  if(!$('.checkbox').is(':focus') && e.target.nodeName != "I" && e.target.nodeName != "BUTTON" && e.target.nodeName != "A" && !$('.checkbox2').is(':focus')){
+      if(!$('.checkbox').is(':focus') && !$('.checkbox2').is(':focus')){
+          $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
+      }
+
+      var work_plan_name = $(this).find("#work_plan_name_"+$(this).attr('id')).text();
+      var work_plan_owner = $(this).find("#work_plan_owner_"+$(this).attr('id')).attr('data');
+      var work_plan_time = $(this).find("#work_plan_time_"+$(this).attr('id')).text();
+      var work_plan_number = $(this).find("#work_plan_number_"+$(this).attr('id')).text();
+      var work_plan_comment = $(this).find("#work_plan_comment_"+$(this).attr('id')).text();
+      var work_plan_complete = $(this).find("#work_plan_complete_"+$(this).attr('id')).attr('data');
+      var work_plan_point = $(this).find("#work_plan_point_"+$(this).attr('id')).text();
+      var end_date = $(this).find("#end_date_"+$(this).attr('id')).text();
+      var today = "<?php echo strtotime(date('d-m-Y')) ?>";
+      var work_plan_complete_date = $(this).find("#work_plan_complete_date_"+$(this).attr('id')).text();
+      var work_plan_attachment = $(this).find("#work_plan_attachment_"+$(this).attr('id')).text();
+
+
+      $('#yes').val($(this).attr('id'));
+
+      $('#work_plan_name').val(work_plan_name);
+      
+      $('#work_plan_number').val(work_plan_number);
+      $('#work_plan_time').val(work_plan_time);
+
+      var entry = work_plan_owner.split(",");
+      $('#work_plan_owner').val(entry).trigger("change");
+
+      work_plan_point = work_plan_point.split('.');
+      
+      $('#work_plan_point').val(work_plan_point[0]);
+      $('#work_plan_point2').val(Math.round(parseFloat('0.'+work_plan_point[1])*60) || null);
+
+      $('#show-attach').empty();
+      var attach = work_plan_attachment.split(",");
+      for (var s = 0; s < attach.length; s++) {
+        $('#show-attach').append('<p class="help-block '+attach[s].trim().replace('.','-')+'"><a target="_blank" href="<?php echo BASE_URL ?>/public/files/'+attach[s].trim()+'" >'+attach[s]+'</a> <i class="fa fa-trash remove-attach" data="'+attach[s].trim()+'" ></i></p>');
+      };
+      $('.remove-attach').click(function(){
+        var data = $('#yes').val();
+        var val = $(this).attr('data');
+        $.ajax({
+              url: '<?php echo BASE_URL ?>/workplan/deleteattach',
+              type: 'POST',
+              data: {data:data, val:val},
+              success:function(data){
+                  $('.'+val.replace('.','-')).remove();
+                  console.log(val);
+              }
+          });
+      });
+
+      $('#work_plan_comment').val(work_plan_comment);
+      if (work_plan_complete == 1) {
+        $('#work_plan_complete').prop("checked",true);
+        $('.add-field input').attr('disabled',true);
+        $('.add-field button').attr('disabled',true);
+      }
+      else{
+        $('#work_plan_complete').prop("checked",false);
+        $('.add-field input').attr('disabled',false);
+        $('.add-field button').attr('disabled',false);
+      }
+
+      $('#work_plan_complete_date').val(work_plan_complete_date);
+
+      if (end_date <  today) {
+        $('#work_plan_time').attr('disabled',true);
+      }
+
+      /*if (work_plan_number>0) {
+        $('.detail').show();
+      }
+      else{
+        $('.detail').hide();
+      }*/
+      
+
+      $('#dataTable tbody tr').remove();
+      var work_plan_id = $(this).attr('id');
+      $.ajax({
+        url: '<?php echo BASE_URL ?>/workplan/getdetail',
+        type: 'POST',
+        data: {work_plan:work_plan_id},
+        success:function(data){
+            //alert(data);
+            $('#dataTable tbody').append(data);
+
+            
+        }
+    });
+
+      $( ".add-field" ).dialog( "open" );
+  }
+});
+
+$('.checkbox2').click(function(){
+  var work_plan_id = $(this).attr('data');
+  if ($(this).is(':checked')) {
+    var work_plan_complete = 1;
+  }
+  else{
+    var work_plan_complete = 0;
+  }
+      $.ajax({
+        url: '<?php echo BASE_URL ?>/workplan/complete',
+        type: 'POST',
+        data: {work_plan:work_plan_id,work_plan_complete:work_plan_complete},
+        success:function(data){
+            //alert(data);
+            
+        }
+    });
+});
+$('#work_plan_complete').click(function(){
+  if ($(this).is(':checked')) {
+    $('#work_plan_complete_date').attr("disabled",false);
+    $('#work_plan_complete_date').val("<?php echo date('d/m/Y') ?>");
+  }
+  else{
+    $('#work_plan_complete_date').attr("disabled",true);
+    $('#work_plan_complete_date').val("");
+  }
+  
+    
+});
+
+
+
+$('#work_plan_name').keyup(function(){
+
+      
+
+  var keyword = $(this).val();
+
+  $.ajax({
+
+      url: '<?php echo BASE_URL ?>/workplan/getworkname',
+
+      type: 'POST',
+
+      data: {keyword:keyword},
+
+      success:function(data){
+
+          $('#customer_list_id').slideDown(200);
+
+          $('#customer_list_id').html(data);
+
+      }
+
+  });
+
+  if ($('#work_plan_name').val() == "" || $('#work_plan_name').attr('data') == "") {
+
+      //$('#loc_from').val("");
+
+      $('#work_plan_name').attr('data',"");
+
+      $('#work_plan_name').attr('code',false);
+
+  }
+
+
+
+});
+
+$('#work_plan_name').on('keydown', function() {
+
+  var key = event.keyCode || event.charCode;
+
+
+
+  if( key == 8 || key == 46 ){
+
+      $('#work_plan_name').attr('data',"");
+
+  }
+
+      
+
+}); 
+
+$(document).ready(function(){
+  // Validate form
+  $("#add_work").validate({
+      errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+      rules: {
+          
+      },
+      submitHandler: function(form) {
+      
+          var work_plan_name = $('#work_plan_name').attr('value');
+          var work_plan_owner = $('#work_plan_owner').val();
+          var work_plan_time = $('#work_plan_time').attr('value');
+          var work_plan_number = $('#work_plan_number').attr('value');
+          var work_plan_comment = $('#work_plan_comment').attr('value');
+          var work_plan_point = $('#work_plan_point').attr('value');
+          var work_plan_point2 = $('#work_plan_point2').attr('value');
+          var work_plan_complete_date = $('#work_plan_complete_date').attr('value');
+          
+          if ($('#work_plan_complete').is(':checked')) {
+            var work_plan_complete = 1;
+          }
+          else{
+            var work_plan_complete = 0;
+          }
+
+          var work_plan_detail = [];
+
+          var work_plan_detail_name = [];
+          var work_plan_detail_id = [];
+          
+
+          $('.work_plan_detail').each(function() { 
+              work_plan_detail_name.push($(this).val());
+          });
+          $("input[name='chk']").each( function () {
+              work_plan_detail_id.push($(this).attr('data'));
+          });
+
+          for (var i = 0; i < work_plan_detail_name.length; i++) {
+              work_plan_detail.push({'work_plan_detail_name':work_plan_detail_name[i], 'work_plan_detail_id':work_plan_detail_id[i]});
+              
+              
+          };
+
+          
+          var yes = $('#yes').attr('value');
+          
+          var action      = "them";
+
+          var formData = new FormData();
+          formData.append('work_plan_name',work_plan_name);
+          formData.append('work_plan_owner',work_plan_owner);
+          formData.append('work_plan_time',work_plan_time);
+          formData.append('work_plan_number',work_plan_number);
+          formData.append('work_plan_comment',work_plan_comment);
+          formData.append('work_plan_point',work_plan_point);
+          formData.append('work_plan_point2',work_plan_point2);
+          formData.append('work_plan_complete',work_plan_complete);
+          formData.append('work_plan_complete_date',work_plan_complete_date);
+          formData.append('work_plan_detail',JSON.stringify(work_plan_detail));
+          formData.append('yes',yes);
+          var ins = document.getElementById('attachment').files.length;
+          for (var x = 0; x < ins; x++) {
+              formData.append("myfile[]", document.getElementById('attachment').files[x]);
+          }
+       
+          $.ajax({
+              type: "POST", // phương thức gởi đi
+              url: "<?php echo BASE_URL ?>/workplan/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
+              data: formData, // giá trị post
+              contentType: false,
+              processData: false,
+              success: function(answer){ // if everything goes well
+                  //alert(answer);
+                  $('#error').hide();
+                  $('#error').slideToggle(100); // hiển thị thẻ div success
+                  $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                  $('#error').fadeOut(10000);
+
+                  if (yes != "") {
+                      if (answer.trim() != "Thông tin này đã tồn tại" ) {
+                        $('#hoanthanh').dialog('open');
+                      
+                      }
+                  }
+                  else{
+                      if (answer.trim() != "Thông tin này đã tồn tại") {
+                        $('#hoanthanh').dialog('open');
+                      }
+                  }
+              }
+          });
+          return false;
+           
+       }
+  });
+});
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+var t = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+t+']').attr('selected','selected');
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Công việc",
+    hide: 'fold',
+    show: 'blind'
+});
+$( "#hoanthanh" ).dialog({
+
+    autoOpen: false,
+
+    modal: true,
+
+    width: "auto",
+
+    maxHeight: $(window).height()-50,
+
+    title: "Thông báo",
+
+    hide: 'fold',
+
+    show: 'blind',
+
+    buttons: {
+
+        'Thêm công việc': function() {
+
+          $( this ).dialog( "close" );
+
+          add_click();
+
+        },
+        'Kết thúc': function(){
+
+          setTimeout(function() {
+            sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+          }, 100);
+
+          $( this ).dialog( "close" );
+
+        } ,       
+
+
+    }
+
+});
+$('.number').keyup(function(event) {
+
+        // skip for arrow keys
+    if(event.which >= 37 && event.which <= 40) return;
+
+    // format number
+    $(this).val(function(index, value) {
+      return value
+        .replace(/[^0-9-.]/g, "")
+      ;
+    });
+  });
+
+$('#work_plan_number').keyup(function(){
+  var number = parseFloat($(this).val());
+  if (number == 0 || number == "") {
+    $(this).val("1");
+  }
+  var table=document.getElementById('dataTable');
+  var rowCount=table.rows.length;
+  var val_add = parseInt($(this).val());
+  if (rowCount < val_add) {
+    var num_row = val_add-rowCount;
+    for (var i = 0; i < num_row; i++) {
+      var row=table.insertRow(rowCount);
+      var colCount=table.rows[0].cells.length;
+      for(var j=0;j<colCount;j++){
+          var newcell=row.insertCell(j);
+          newcell.innerHTML=table.rows[0].cells[j].innerHTML;
+          switch(newcell.childNodes[0].type){
+              case"text":newcell.childNodes[0].value="";
+              break;
+              case"checkbox":newcell.childNodes[0].checked=false;
+              break;
+              case"select-one":newcell.childNodes[0].selectedIndex=0;
+              break;
+          }
+      }
+
+      $('.work_plan_detail:last').val("");
+      
+      $('input[name="chk"]:last').attr('data',"");
+      $('input[name="chk"]:last').attr('tabindex',0);
+      $('input[name="chk"]:last').attr('title',"");
+      $('input[name="chk"]:last').attr('class',"");
+      $('input[name="chk"]:last').attr('alt',0);
+
+      rowCount++;
+    }
+  }
+  else if(rowCount > val_add){
+   
+    for(var i=rowCount;i>val_add;i--){
+          if(rowCount>1){
+            table.deleteRow(rowCount-1);
+            rowCount--;
+          }
+          
+      }
+  }
+});
+
+function addRow(tableID){
+    var table=document.getElementById(tableID);
+    var rowCount=table.rows.length;
+    var row=table.insertRow(rowCount);
+    var colCount=table.rows[0].cells.length;
+    for(var i=0;i<colCount;i++){
+        var newcell=row.insertCell(i);
+        newcell.innerHTML=table.rows[0].cells[i].innerHTML;
+        switch(newcell.childNodes[0].type){
+            case"text":newcell.childNodes[0].value="";
+            break;
+            case"checkbox":newcell.childNodes[0].checked=false;
+            break;
+            case"select-one":newcell.childNodes[0].selectedIndex=0;
+            break;
+        }
+    }
+
+    $('.work_plan_detail:last').val("");
+    
+    $('input[name="chk"]:last').attr('data',"");
+    $('input[name="chk"]:last').attr('tabindex',0);
+    $('input[name="chk"]:last').attr('title',"");
+    $('input[name="chk"]:last').attr('class',"");
+    $('input[name="chk"]:last').attr('alt',0);
+
+    $('#work_plan_number').val(rowCount+1);
+
+    
+
+}
+function deleteRow(tableID){
+    try{
+        var table=document.getElementById(tableID);
+        var rowCount=table.rows.length;
+
+        var r = confirm("Bạn có chắc chắn không?");
+        if (r == true){
+            for(var i=0;i<rowCount;i++){
+                var row=table.rows[i];
+                var chkbox=row.cells[0].childNodes[0];
+                if(null!=chkbox&&true==chkbox.checked){
+                    if(rowCount<=1){
+                        alert("Cannot delete all the rows.");
+                        break;
+                    }
+                    else if(chkbox.getAttribute("data") > 0){
+                        
+                            var work_plan_detail = chkbox.getAttribute("data");
+                            $.post("<?php echo BASE_URL ?>/workplan/deletedetail", {work_plan_detail: work_plan_detail},
+                               function(data){
+                                //alert(data);
+                               }); 
+                        
+                    }
+                    
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+
+                    $('#work_plan_number').val(rowCount);
+                }
+            }
+        }
+    }
+    catch(e){
+        alert(e);
+    }
+}
+
+function set_item_work(value,name) {
+
+    // change input value
+
+    $('#work_plan_name').val(name);
+
+    $("#work_plan_name").attr("data",value);
+
+    $("#work_plan_name").attr("code",'true');
+
+
+
+    // hide proposition list
+
+    $('#customer_list_id').hide();
+
+    $('#work_plan_name').focus();
+
+     
+}
+
+function del(id)
+{
+  if($('.add-field') != null)
+  {
+    $('.add-field').slideUp();
+  }
+  var r = confirm("Bạn có chắc chắn muốn xóa không?");
+  if (r == true){
+    //$('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+    $.post("<?php echo $this->url('workplan') ?>/delete", {data: id},
+       function(data){
+        //alert(data);
+        if (data.trim() != 'Bạn không có quyền thực hiện thao tác này') {
+          $('tr#'+id).remove(); 
+          //$('#loading').fadeOut(500); 
+        };
+        //$('#loading').fadeOut(500);
+        $("html, body").animate({ scrollTop: 0 }, 100);
+       
+       }); 
+  }
+}
+</script>
+<!-- Select2 -->
+<link rel="stylesheet" href="<?php echo BASE_URL ?>/public/js/plugins/select2/select2.min.css">
+<script src="<?php echo BASE_URL ?>/public/js/plugins/select2/select2.full.min.js"></script>
+<!-- daterange picker -->
+<link rel="stylesheet" href="<?php echo BASE_URL ?>/public/js/plugins/daterangepicker/daterangepicker.css">
+<script src="<?php echo BASE_URL ?>/public/js/plugins/daterangepicker/moment.min.js"></script>
+<script src="<?php echo BASE_URL ?>/public/js/plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript">
+$(function () {
+  $('body').addClass('sidebar-collapse');
+
+  $(".select2").select2();
+    //Date range picker
+    $('#reservation').daterangepicker({
+      locale: {
+        format: 'DD/MM/YYYY'
+      },
+      singleDatePicker: true,
+    });
+
+    $('#reservation').on('apply.daterangepicker', function(ev, picker) {
+      $('#batdau').val(picker.startDate.format('DD-MM-YYYY'));
+      $('#ketthuc').val(picker.endDate.format('DD-MM-YYYY'));
+        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+    });
+
+    $('#work_plan_time').daterangepicker({
+      locale: {
+        format: 'DD/MM/YYYY'
+      },
+      minDate: '<?php echo date("d/m/Y",strtotime("monday this week")) ?>',
+      maxDate: '<?php echo date("d/m/Y",strtotime($ketthuc)+604800) ?>',
+    });
+});
+
+var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        showButtonPanel: true,
+        maxDate: "+1d",
+        minDate: "-1d",
+         
+    };  
+    $("#work_plan_complete_date").datepicker(pickerOpts4);
+</script>
+<style type="text/css">
+.daterangepicker_input{
+  width: 50%;
+}
+.daterangepicker.dropdown-menu, .select2-container{
+  z-index: 9999999;
+}
+#customer_list_id, .modal {
+  z-index: 99999999;
+}
+.remove-attach{
+  cursor: pointer;
+}
+</style>

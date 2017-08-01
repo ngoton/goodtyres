@@ -63,6 +63,9 @@ elseif ($order_by == 'tire_brand_name')
         <th  class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_brand_group','<?php echo $url_order ?>')">Nhóm <?php if ($order_by == 'tire_brand_group'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_brand_region','<?php echo $url_order ?>')">Vùng <?php if ($order_by == 'tire_brand_region'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
         
         <th class="fix"></th>
     </tr>
@@ -81,6 +84,7 @@ elseif ($order_by == 'tire_brand_name')
             <td  class="fix"><?php echo $i++; ?></td>
             <td class="fix" id="tire_brand_name_<?php echo $tire_brand->tire_brand_id; ?>"><?php echo $tire_brand->tire_brand_name; ?></td>
             <td class="fix" data="<?php echo $tire_brand->tire_brand_group; ?>" id="tire_brand_group_<?php echo $tire_brand->tire_brand_id; ?>"><?php echo isset($group_data[$tire_brand->tire_brand_group])?$group_data[$tire_brand->tire_brand_group]:null; ?></td>
+            <td class="fix" id="tire_brand_region_name_<?php echo $tire_brand->tire_brand_id; ?>"><?php echo $tire_brand->tire_brand_region_name; ?></td>
             <td>
                 <button class="error" onclick="del(<?php echo $tire_brand->tire_brand_id ?>)" >Xóa</button>
                 
@@ -119,6 +123,16 @@ $this->helper('slidePaginator');
                                 <select name="tire_brand_group" id="tire_brand_group" tabindex="2"  required="required">
                                     <?php foreach ($tire_groups as $tire_group) { ?>
                                         <option value="<?php echo $tire_group->tire_brand_group_id ?>"><?php echo $tire_group->tire_brand_group_name ?></option>
+                                    <?php } ?>
+                                    
+                                </select>
+                                
+                            </td>
+                            <td>Nhóm</td>
+                            <td>
+                                <select name="tire_brand_region" id="tire_brand_region" tabindex="3"  required="required">
+                                    <?php foreach ($tire_regions as $tire_region) { ?>
+                                        <option value="<?php echo $tire_region->tire_brand_region_id ?>"><?php echo $tire_region->tire_brand_region_name ?></option>
                                     <?php } ?>
                                     
                                 </select>
@@ -177,11 +191,13 @@ $('html').click(function(e) {
             
             var tire_brand_name = $(this).find("#tire_brand_name_"+$(this).attr('id')).text();
             var tire_brand_group = $(this).find("#tire_brand_group_"+$(this).attr('id')).attr('data');
+            var tire_brand_region = $(this).find("#tire_brand_region_name_"+$(this).attr('id')).text();
             //alert(cost_code);
             $('#yes').val($(this).attr('id'));
             
             $('#tire_brand_name').val(tire_brand_name);
             $("#tire_brand_group option[value=" + tire_brand_group + "]").attr('selected', 'selected');
+            $("#tire_brand_region option:contains(" + tire_brand_region + ")").attr('selected', 'selected');
             
 
             $( ".add-field" ).dialog( "open" );
@@ -230,6 +246,7 @@ $(document).ready(function(){
                 
                     var tire_brand_name = $('#tire_brand_name').attr('value');
                     var tire_brand_group = $('#tire_brand_group').attr('value');
+                    var tire_brand_region = $('#tire_brand_region').attr('value');
                     var yes = $('#yes').attr('value');
                     
                     var action      = "them";
@@ -241,6 +258,7 @@ $(document).ready(function(){
                             
                             tire_brand_name: tire_brand_name,
                             tire_brand_group: tire_brand_group,
+                            tire_brand_region: tire_brand_region,
                             yes: yes,
 
                             }, // giá trị post

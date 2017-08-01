@@ -11,12 +11,24 @@ class Library{
     }
 
 	public function hien_thi_ngay_thang($day){
-		$i = date('d',$day);
-		$j = date('m',$day);
-		$k = date('Y',$day);
-		$result = $i.'/'.$j.'/'.$k;
+		$result = null;
+		if ($day > 0) {
+			$i = date('d',$day);
+			$j = date('m',$day);
+			$k = date('Y',$day);
+			$result = $i.'/'.$j.'/'.$k;
+		}
 		return $result;
 	}
+
+	/*
+	* Xuất ra ngẫu nhiên mã màu
+	*/
+
+	public function rand_color() {
+	    return substr('00000' . dechex(mt_rand(0, 0xffffff)), -6);
+	}
+
 
 	/*
 	* cắt đầu 1 xâu với số từ nhất định

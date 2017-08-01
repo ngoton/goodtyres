@@ -98,10 +98,10 @@ Class adminController Extends baseController {
         foreach ($orders as $tire) {
             $info_staff['sl'][$tire->sale] = isset($info_staff['sl'][$tire->sale])?$info_staff['sl'][$tire->sale]+$tire->order_tire_number:$tire->order_tire_number;
             $info_staff['dh'][$tire->sale] = isset($info_staff['dh'][$tire->sale])?$info_staff['dh'][$tire->sale]+1:1;
-            if(!in_array($tire->customer,$c)){
+            if(!in_array($tire->customer,$c[$tire->sale])){
                 $info_staff['kh'][$tire->sale] = isset($info_staff['kh'][$tire->sale])?$info_staff['kh'][$tire->sale]+1:1;
             }
-            $c[] = $tire->customer;
+            $c[$tire->sale][] = $tire->customer;
             if (!in_array($tire->customer,$old)) {
                 $info_staff['khmoi'][$tire->sale] = isset($info_staff['khmoi'][$tire->sale])?$info_staff['khmoi'][$tire->sale]+1:1;
             }
@@ -152,16 +152,43 @@ Class adminController Extends baseController {
             }
 
             $sl['ngay'][(int)date('d',$tire->delivery_date)] = isset($sl['ngay'][(int)date('d',$tire->delivery_date)])?$sl['ngay'][(int)date('d',$tire->delivery_date)]+$tire->order_tire_number:$tire->order_tire_number;
+            
+          
+        }
+
+        if ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9) {
+            if ($limit != "") {
+                $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN (SELECT order_tire FROM tire_sale WHERE sale = '.$limit.' AND tire_sale_date >= '.strtotime('01-01-'.date('Y')).' AND tire_sale_date <= '.strtotime('31-12-'.date('Y')).')'));
+                //$sales = $sale_model->getAllSale(array('where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc)),array('table'=>'staff','where'=>'sale=account AND staff_id = '.$limit));
+            }
+            else{
+                $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN (SELECT order_tire FROM tire_sale WHERE tire_sale_date >= '.strtotime('01-01-'.date('Y')).' AND tire_sale_date <= '.strtotime('31-12-'.date('Y')).')'));
+                //$sales = $sale_model->getAllSale(array('where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc)));
+            }
+        }
+        else{
+            $orders = $order_tire_model->getAllTire(array('where'=>'sale = '.$_SESSION['userid_logined'].' AND order_tire_id IN (SELECT order_tire FROM tire_sale WHERE tire_sale_date >= '.strtotime('01-01-'.date('Y')).' AND tire_sale_date <= '.strtotime('31-12-'.date('Y')).')'));
+            //$sales = $sale_model->getAllSale(array('where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc)),array('table'=>'staff','where'=>'sale=account AND staff_id = '.$_SESSION['userid_logined']));
+        }
+
+        foreach ($orders as $tire) {
+            
             $sl['thang'][(int)date('m',$tire->delivery_date)] = isset($sl['thang'][(int)date('m',$tire->delivery_date)])?$sl['thang'][(int)date('m',$tire->delivery_date)]+$tire->order_tire_number:$tire->order_tire_number;
           
         }
 
-        $start = date('d',strtotime($batdau));
-        $start_month = date('m',strtotime($batdau));
-        $start_year = date('Y',strtotime($batdau));
-        $end = date('d',strtotime($ketthuc));
-        $end_month = date('m',strtotime($ketthuc));
-        $end_year = date('Y',strtotime($ketthuc));
+        // $start = date('d',strtotime($batdau));
+        // $start_month = date('m',strtotime($batdau));
+        // $start_year = date('Y',strtotime($batdau));
+        // $end = date('d',strtotime($ketthuc));
+        // $end_month = date('m',strtotime($ketthuc));
+        // $end_year = date('Y',strtotime($ketthuc));
+
+        $start_month = 01;
+        $start_year = date('Y');
+        $end_month = 12;
+        $end_year = date('Y');
+
         $graph = array();
         if ($start_month == $end_month && $start_year == $end_year) {
             for ($i=$start; $i <= $end; $i++) { 
@@ -196,7 +223,8 @@ Class adminController Extends baseController {
         $sell = array();
         $stock = array();
         foreach ($tire_buys as $tire_buy) {
-            $stock[$tire_buy->tire_brand_group] = isset($stock[$tire_buy->tire_brand_group])?$stock[$tire_buy->tire_brand_group]+$tire_buy->soluong:$tire_buy->soluong;
+            //$stock[$tire_buy->tire_brand_group] = isset($stock[$tire_buy->tire_brand_group])?$stock[$tire_buy->tire_brand_group]+$tire_buy->soluong:$tire_buy->soluong;
+            $stock[$tire_buy->tire_brand_region] = isset($stock[$tire_buy->tire_brand_region])?$stock[$tire_buy->tire_brand_region]+$tire_buy->soluong:$tire_buy->soluong;
             $link_picture[$tire_buy->tire_buy_id]['image'] = $tire_buy->tire_pattern_name.'.jpg';
 
             $data_sale = array(
@@ -208,7 +236,8 @@ Class adminController Extends baseController {
                 
                 if ($tire_sale->customer != 119) {
                     $sell[$tire_buy->tire_buy_id]['number'] = isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']+$tire_sale->volume:$tire_sale->volume;
-                    $stock[$tire_buy->tire_brand_group] = isset($stock[$tire_buy->tire_brand_group])?$stock[$tire_buy->tire_brand_group]-$tire_sale->volume:(0-$tire_sale->volume);
+                    //$stock[$tire_buy->tire_brand_group] = isset($stock[$tire_buy->tire_brand_group])?$stock[$tire_buy->tire_brand_group]-$tire_sale->volume:(0-$tire_sale->volume);
+                    $stock[$tire_buy->tire_brand_region] = isset($stock[$tire_buy->tire_brand_region])?$stock[$tire_buy->tire_brand_region]-$tire_sale->volume:(0-$tire_sale->volume);
                 }
                 
             }

@@ -22,6 +22,7 @@
             <input class="iform" title="Nhằm hỗ trợ tốt nhất cho Sale, hãy nhập đầy đủ thông tin (Tên cty, Mst, Địa chỉ, SĐT, Email)" type="text" name="address" id="address" placeholder="Địa chỉ" required="required" data-toggle="tooltip" data-placement="left" />
             <input class="iform phone" title="Nhằm hỗ trợ tốt nhất cho Sale, hãy nhập đầy đủ thông tin (Tên cty, Mst, Địa chỉ, SĐT, Email)" type="text" name="phone" id="phone" placeholder="Số điện thoại liên hệ" required="required" data-toggle="tooltip" data-placement="left" />
             <input class="iform email" title="Nhằm hỗ trợ tốt nhất cho Sale, hãy nhập đầy đủ thông tin (Tên cty, Mst, Địa chỉ, SĐT, Email)" type="text" name="email" id="email" placeholder="Email liên hệ" required="required" data-toggle="tooltip" data-placement="left" />
+            <input class="iform contact" title="Nhằm hỗ trợ tốt nhất cho Sale, hãy nhập đầy đủ thông tin (Tên cty, Mst, Địa chỉ, SĐT, Email)" type="text" name="contact" id="contact" placeholder="Người liên hệ" required="required" data-toggle="tooltip" data-placement="left" />
             
             <input type="button" name="next" class="next action-button" value="Tiếp tục" />
         </fieldset>
@@ -218,7 +219,7 @@
         </fieldset>
     </form>
 </div>
-
+<div id="hoanthanh"><input type="hidden" id="lastID"></div><!-- /.modal -->
 <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
 <!-- jQuery easing plugin -->
 <script src="<?php echo BASE_URL ?>/public/js/jquery.easing.min.js" type="text/javascript"></script>
@@ -235,6 +236,7 @@ $(".next").click(function(){
     var customer = $('#customer').val().trim();
     var phone = $('#phone').val().trim();
     var address = $('#address').val().trim();
+    var contact = $('#contact').val().trim();
 
     if (customer == "") {
         alert("Vui lòng nhập vào tên khách hàng!");
@@ -247,6 +249,10 @@ $(".next").click(function(){
     else if (address == "") {
         alert("Vui lòng nhập vào địa chỉ!");
         $('#address').focus();
+    }
+    else if (contact == "") {
+        alert("Vui lòng nhập vào tên người liên hệ!");
+        $('#contact').focus();
     }
     else{
         if(animating) return false;
@@ -335,7 +341,7 @@ $(".previous").click(function(){
 
 
 <script type="text/javascript">
-function set_item(item,value,company,phone,address,email,ngay,mst,type) {
+function set_item(item,value,company,phone,address,email,contact,ngay,mst,type) {
     // change input value
     $('#customer').val(item);
     $("#customer").attr("data",value);
@@ -352,6 +358,7 @@ function set_item(item,value,company,phone,address,email,ngay,mst,type) {
         $('#email').val("xxxxx"+email.substring(5, email.length));
     }
     $('#company').val(company);
+    $('#contact').val(contact);
     $("input[name=customer_type][value=" + type + "]").attr('checked', 'checked');
     $('#customer_list_id').hide();
     $('#customer').focus();
@@ -399,6 +406,7 @@ $('#customer').keyup(function(){
             $('#phone').attr('data',"");
             $('#email').val("");
             $('#email').attr('data',"");
+            $('#contact').val("");
         }
       
       
@@ -415,6 +423,7 @@ $('#customer').on('keydown', function() {
             $('#phone').attr('data',"");
             $('#email').val("");
             $('#email').attr('data',"");
+            $('#contact').val("");
         }
             
       });  
@@ -1167,6 +1176,7 @@ $('#next_2').click(function(){
         phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
         var email = $('#email').attr('value');
         email = $('#email').attr('data')+email.substring(5, email.length);
+        var contact = $('#contact').attr('value');
 
         var total_number = 0;
 
@@ -1224,6 +1234,7 @@ $('#next_2').click(function(){
                 address: address,
                 phone: phone,
                 email: email,
+                contact: contact,
                 total_number: total_number,
                 customer_type: customer_type,
                 
@@ -1234,7 +1245,7 @@ $('#next_2').click(function(){
                console.log(thrownError);
            },
             success: function(answer){ // if everything goes well
-                alert(answer);
+                alert('Đặt hàng thành công');
                 $('#error').hide();
                 $('#error').slideToggle(100); // hiển thị thẻ div success
                 $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
@@ -1359,6 +1370,7 @@ $("#msform").validate({
                     phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
                     var email = $('#email').attr('value');
                     email = $('#email').attr('data')+email.substring(5, email.length);
+                    var contact = $('#contact').attr('value');
 
                     var payment = $('input[name=payment]:checked').val();
                     var debt = $('input[name=debt]:checked').val();
@@ -1461,6 +1473,7 @@ $("#msform").validate({
                             address: address,
                             phone: phone,
                             email: email,
+                            contact: contact,
                             order_tire: order_tire,
                             payment: payment,
                             debt: debt,
@@ -1494,13 +1507,16 @@ $("#msform").validate({
                            console.log(thrownError);
                        },
                         success: function(answer){ // if everything goes well
-                            alert(answer);
+                            //alert(answer);
                             $('#error').hide();
                             $('#error').slideToggle(100); // hiển thị thẻ div success
                             $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
                             $('#error').fadeOut(10000);
 
-                            window.location.href = "<?php echo $this->url('ordertire') ?>";
+                            if (parseInt(answer)>0) {
+                                $('#lastID').val(answer);
+                                $('#hoanthanh').dialog('open');
+                            }
                         }
                     });
                     return false;
@@ -1570,6 +1586,74 @@ $('.numbers').focus(function(){
         ;
       });
     });
+
+
+
+$( "#hoanthanh" ).dialog({
+
+    autoOpen: false,
+
+    modal: true,
+
+    width: "auto",
+
+    maxHeight: $(window).height()-50,
+
+    title: "Thông báo",
+
+    hide: 'fold',
+
+    show: 'blind',
+
+    buttons: [
+
+    {
+
+        text: "In đơn hàng",
+        icons: { primary: "ui-icon-print" },
+
+        click: function() {
+
+          $( this ).dialog( "close" );
+
+          var lastID = $('#lastID').val();
+
+          window.open("<?php echo $this->url('ordertire/printview/') ?>"+lastID);
+
+          window.location.href = "<?php echo $this->url('ordertire/orderlist') ?>";
+
+        },
+    },
+    {
+        text: "Tiếp tục",
+        icons: { primary: "ui-icon-check" },
+        click: function() {
+
+          $( this ).dialog( "close" );
+
+          window.location.href = "<?php echo $this->url('ordertire') ?>";
+
+        }       
+
+
+    },
+    {
+        text: "Kết thúc",
+        icons: { primary: "ui-icon-cancel" },
+        click: function() {
+
+          $( this ).dialog( "close" );
+
+          window.location.href = "<?php echo $this->url('ordertire/orderlist') ?>";
+
+        }       
+
+
+    }
+    ]
+
+
+});
 
 
 function addRow(tableID){
