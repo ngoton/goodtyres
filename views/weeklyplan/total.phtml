@@ -175,6 +175,9 @@ elseif ($order_by == 'end_date')
                 </div>
                 
               </div>
+              <div class="add-box">
+                    <a class="add_button" href="<?php echo $this->url('weeklyplan/export/'.strtotime($batdau).'/'.strtotime($ketthuc).'/'.$nv.'/'.$trangthai.'/'.$comp) ?>" >Export Excel</a>
+                </div>
               <div style="clear:both"></div>
               <div class="table-responsive mailbox-messages">
                 <table class="table_data" id="tblExport">
@@ -284,6 +287,7 @@ elseif ($order_by == 'end_date')
                               <td class="fix" id="work_plan_point_<?php echo $work_plan->work_plan_id; ?>"><?php echo $work_plan->work_plan_point; ?></td>
                               <td class="fix" id="work_plan_complete_<?php echo $work_plan->work_plan_id; ?>" data="<?php echo $work_plan->work_plan_complete; ?>"><input data="<?php echo $work_plan->work_plan_id; ?>" class="checkbox2" type="checkbox" <?php echo $work_plan->work_plan_complete==1?'checked disabled':null; ?> ></td>
                               <td style="display:none" class="fix" id="work_plan_complete_date_<?php echo $work_plan->work_plan_id; ?>"><?php echo $lib->hien_thi_ngay_thang($work_plan->work_plan_complete_date); ?></td>
+                              <td style="display:none" class="fix" id="work_plan_result_<?php echo $work_plan->work_plan_id; ?>"><?php echo $work_plan->work_plan_result; ?></td>
                               <td style="display:none" class="fix" id="end_date_<?php echo $work_plan->work_plan_id; ?>"><?php echo $work_plan->end_date; ?></td>
                               <td style="display:none" class="fix" data="<?php echo $work_plan->work_plan_attachment; ?>" id="work_plan_attachment_<?php echo $work_plan->work_plan_id; ?>">
                                   <?php 
@@ -402,7 +406,11 @@ elseif ($order_by == 'end_date')
           </div>
           <div class="input-group">
             <input type="checkbox" name="work_plan_complete" id="work_plan_complete" value="1" tabindex="9"> Đã hoàn thành
-            <input style="width:80px" type="text" name="work_plan_complete_date" id="work_plan_complete_date" tabindex="10" disabled >
+            <input class="ngay" style="width:80px" type="text" name="work_plan_complete_date" id="work_plan_complete_date" tabindex="10" disabled >
+          </div>
+          <div class="input-group">
+            <label>Kết quả</label>
+            <textarea name="work_plan_result" id="work_plan_result" tabindex="11" maxlength="50" disabled></textarea>
           </div>
           <div class="input-group">
               <label><i class="fa fa-paperclip"></i> Đính kèm </label>
@@ -415,8 +423,8 @@ elseif ($order_by == 'end_date')
         <div class="col-md-12">
             <div class="box-footer">
             <input type="hidden" readonly id="yes" name="yes" required="required" >
-            <button type="submit" class="btn btn-primary" tabindex="11">Hoàn tất</button>
-            <button type="reset" class="btn" tabindex="12">Nhập lại</button>
+            <button type="submit" class="btn btn-primary" tabindex="12">Hoàn tất</button>
+            <button type="reset" class="btn" tabindex="13">Nhập lại</button>
           </div>
           <div class="box-footer">
             <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
@@ -428,6 +436,25 @@ elseif ($order_by == 'end_date')
 </div>
 
 <div id="hoanthanh"></div><!-- /.modal -->
+
+<div id="dialogContent" title="Hoàn thành">
+    
+    
+    <form action="#" method="post" id="editForm">
+        
+        <label>
+            <span>Ngày hoàn thành: </span>
+            <input class="ngay" type="text" id="i_work_plan_complete_date" name="i_work_plan_complete_date" value="" required="required" />
+        </label>
+        <label>
+            <span>Kết quả: </span><br>
+            <input type="text" id="i_work_plan_result" name="i_work_plan_result" value="" required="required" />
+            <input type="hidden" id="i_work_plan" name="i_work_plan" value="" required="required" />
+            <input type="hidden" id="i_work_plan_complete" name="i_work_plan_complete" value="" required="required" />
+        </label>
+        
+    </form>
+</div>
 
 <script type="text/javascript">
 $('html').click(function(e) {
@@ -452,6 +479,9 @@ function add_click(){
   $('#work_plan_complete_date').val("");
   $('#work_plan_number').val(1);
   $('#work_plan_unit').val("");
+  $('#work_plan_result').val("");
+  $('#work_plan_result').attr('disabled',true);
+  $('#work_plan_result').attr('required',false);
   $('#show-attach').html("");
   //$('.detail').hide();
   $('.add-field input').attr('disabled',false);
@@ -461,7 +491,7 @@ function add_click(){
 }
 
 $('.edit_tr').click(function(e){
-  if(!$('.checkbox').is(':focus') && e.target.nodeName != "I" && e.target.nodeName != "BUTTON" && e.target.nodeName != "A" && !$('.checkbox2').is(':focus')){
+  if(!$('.checkbox').is(':focus') && e.target.nodeName != "I" && e.target.nodeName != "BUTTON" && e.target.nodeName != "A" && !$('.checkbox2').is(':focus') && e.target.nodeName != "INPUT"){
       if(!$('.checkbox').is(':focus') && !$('.checkbox2').is(':focus')){
           $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
       }
@@ -480,6 +510,7 @@ $('.edit_tr').click(function(e){
       var work_plan_attachment = $(this).find("#work_plan_attachment_"+$(this).attr('id')).text();
       var work_plan_number = $(this).find("#work_plan_number_"+$(this).attr('id')).text();
       var work_plan_unit = $(this).find("#work_plan_unit_"+$(this).attr('id')).text();
+      var work_plan_result = $(this).find("#work_plan_result_"+$(this).attr('id')).text();
 
 
       $('#yes').val($(this).attr('id'));
@@ -492,6 +523,7 @@ $('.edit_tr').click(function(e){
       $('#work_plan_number').val(work_plan_number);
       $('#work_plan_time').val(work_plan_time);
       $('#work_plan_unit').val(work_plan_unit);
+      $('#work_plan_result').val(work_plan_result);
 
       var entry = work_plan_owner.split(",");
       $('#work_plan_owner').val(entry).trigger("change");
@@ -534,11 +566,15 @@ $('.edit_tr').click(function(e){
         $('#work_plan_complete').prop("checked",true);
         $('.add-field input').attr('disabled',true);
         $('.add-field button').attr('disabled',true);
+        $('#work_plan_result').attr('disabled',false);
+        $('#work_plan_result').attr('required',true);
       }
       else{
         $('#work_plan_complete').prop("checked",false);
         $('.add-field input').attr('disabled',false);
         $('.add-field button').attr('disabled',false);
+        $('#work_plan_result').attr('disabled',true);
+        $('#work_plan_result').attr('required',false);
       }
       <?php } ?>
 
@@ -565,28 +601,72 @@ $('.checkbox2').click(function(){
   var work_plan_id = $(this).attr('data');
   if ($(this).is(':checked')) {
     var work_plan_complete = 1;
+    $('#i_work_plan').val(work_plan_id);
+    $( "#dialogContent" ).dialog( "open" )
   }
   else{
+    var id = work_plan_id;
+    var work_plan_result = "";
     var work_plan_complete = 0;
-  }
-      $.ajax({
+    var work_plan_complete_date = "";
+
+    $.ajax({
         url: '<?php echo BASE_URL ?>/weeklyplan/complete',
         type: 'POST',
-        data: {work_plan:work_plan_id,work_plan_complete:work_plan_complete},
+        data: {data: id, work_plan_result: work_plan_result, work_plan_complete: work_plan_complete, work_plan_complete_date:work_plan_complete_date},
         success:function(data){
-            //alert(data);
+            setTimeout(function() {
+          sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+        }, 200);
             
         }
     });
+  }
+   
+
+      
 });
+//set up the dialog box.
+$( "#dialogContent" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var id = $('#i_work_plan').val();
+            var work_plan_result = $('#i_work_plan_result').val();
+            var work_plan_complete = 1;
+            var work_plan_complete_date = $('#i_work_plan_complete_date').val();
+                
+                $.post("<?php echo BASE_URL ?>/weeklyplan/complete", {data: id, work_plan_result: work_plan_result, work_plan_complete: work_plan_complete, work_plan_complete_date:work_plan_complete_date},
+                   function(data){
+                    $("html, body").animate({ scrollTop: 0 }, 100);
+                    setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                   
+                   }); 
+              
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
+
 $('#work_plan_complete').click(function(){
   if ($(this).is(':checked')) {
     $('#work_plan_complete_date').attr("disabled",false);
     $('#work_plan_complete_date').val("<?php echo date('d/m/Y') ?>");
+    $('#work_plan_result').attr('disabled',false);
+    $('#work_plan_result').attr('required',true);
   }
   else{
     $('#work_plan_complete_date').attr("disabled",true);
     $('#work_plan_complete_date').val("");
+    $('#work_plan_result').val("");
+    $('#work_plan_result').attr('disabled',true);
+    $('#work_plan_result').attr('required',false);
   }
   
     
@@ -670,6 +750,7 @@ $(document).ready(function(){
           var work_plan_complete_date = $('#work_plan_complete_date').attr('value');
           var work_plan_number = $('#work_plan_number').attr('value');
           var work_plan_unit = $('#work_plan_unit').attr('value');
+          var work_plan_result = $('#work_plan_result').attr('value');
           
           if ($('#work_plan_complete').is(':checked')) {
             var work_plan_complete = 1;
@@ -697,6 +778,7 @@ $(document).ready(function(){
           formData.append('work_plan_point2',work_plan_point2);
           formData.append('work_plan_complete',work_plan_complete);
           formData.append('work_plan_complete_date',work_plan_complete_date);
+          formData.append('work_plan_result',work_plan_result);
           formData.append('yes',yes);
           var ins = document.getElementById('attachment').files.length;
           for (var x = 0; x < ins; x++) {
@@ -946,7 +1028,7 @@ var pickerOpts4 = {
         minDate: "-5d",
          
     };  
-    $("#work_plan_complete_date").datepicker(pickerOpts4);
+    $(".ngay").datepicker(pickerOpts4);
 </script>
 <style type="text/css">
 .daterangepicker_input{

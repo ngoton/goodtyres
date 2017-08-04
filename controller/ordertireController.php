@@ -434,9 +434,9 @@ Class ordertireController Extends baseController {
             $data['where'] = 'order_number = "'.$sodonhang.'"';
         }
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
+        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
             $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
-        }
+        }*/
 
         if ($keyword != '') {
             $search = '( order_number LIKE "%'.$keyword.'%" 
@@ -1290,11 +1290,11 @@ Class ordertireController Extends baseController {
             'where' => 'order_tire='.$id,
         );
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8) {
+        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8) {
             $data = array(
                 'where' => 'order_tire IN (SELECT order_tire_id FROM order_tire WHERE order_tire_id ='.$id.' AND sale = '.$_SESSION["userid_logined"].')',
             );
-        }
+        }*/
 
         $order_tire_lists = $order_tire_list_model->getAllTire($data,$join);
         $this->view->data['order_tire_lists'] = $order_tire_lists;
@@ -1738,6 +1738,8 @@ Class ordertireController Extends baseController {
     public function editvat(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $order_tire_model = $this->model->get('ordertireModel');
+            $order_tire_list_model = $this->model->get('ordertirelistModel');
+            $tire_sale_model = $this->model->get('tiresaleModel');
 
             $id = trim($_POST['data']);
             $vat_percent = trim(str_replace(',','',$_POST['vat_percent']));
@@ -1745,7 +1747,12 @@ Class ordertireController Extends baseController {
             $thu = trim(str_replace(',','',$_POST['thu']));
 
             $order = $order_tire_model->getTire($id);
-            $total = $order->total-$order->vat+$vat;
+
+            $total = $order->total;
+            if ($order->check_price_vat!=1) {
+                $total = $order->total-$order->vat+$vat;
+            }
+            
 
             $data = array(
                 'vat'=>$vat,
@@ -1769,6 +1776,17 @@ Class ordertireController Extends baseController {
             );
 
             $obtain_model->updateObtain($obtain_data,array('order_tire'=>$id,'money'=>$order->total));
+
+            $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire='.$id));
+            foreach ($order_lists as $ord) {
+                $tv = round($ord->tire_price_vat*$vat_percent/110);
+                $dg = $ord->tire_price_vat-$tv;
+
+                $tire_sale = $tire_sale_model->getTireByWhere(array('tire_brand'=>$ord->tire_brand,'tire_size'=>$ord->tire_size,'tire_pattern'=>$ord->tire_pattern,'order_tire'=>$id));
+                $tire_sale_model->updateTire(array('sell_price'=>$dg),array('tire_sale_id'=>$tire_sale->tire_sale_id));
+
+                $order_tire_list_model->updateTire(array('tire_price'=>$dg),array('order_tire_list_id'=>$ord->order_tire_list_id));
+            }
 
             echo "Cập nhật thành công";
 

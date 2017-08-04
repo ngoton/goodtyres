@@ -183,7 +183,7 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
             <td class="fix" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
             <td class="fix"  id="vat_<?php echo $order_tire->order_tire_id; ?>">
-                <a class="order_vat" tabindex="<?php echo $lib->formatMoney($order_tire->vat_percent); ?>" alt="<?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?>" data="<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></a>
+                <a class="order_vat" tabindex="<?php echo $lib->formatMoney($order_tire->vat_percent); ?>" alt="<?php echo $lib->formatMoney($order_tire->check_price_vat>0?($order_tire->total+$order_tire->discount+$order_tire->reduce):($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce)); ?>" title="<?php echo $order_tire->check_price_vat>0?1:0; ?>" data="<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></a>
             </td>
             <td class="fix"  id="discount_<?php echo $order_tire->order_tire_id; ?>">
                 <a class="order_discount" href="<?php echo $this->url('ordertire/listdiscount/'.$order_tire->order_tire_id); ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></a>
@@ -283,6 +283,7 @@ $this->helper('slidePaginator');
             <input type="text" id="i_vat_percent" name="i_vat_percent" value="" required="required" />
             <input type="hidden" id="i_order5" name="i_order5" value="" required="required" />
             <input type="hidden" id="i_thu" name="i_thu" value="" required="required" />
+            <input type="hidden" id="i_check_vat" name="i_check_vat" value="" required="required" />
         </label>
         <label>
             <span class="add-on"><i class="icon-ok-circle" ></i></span>
@@ -538,14 +539,22 @@ $('.order_vat')
         $('#i_vat_percent').val($(this).attr('tabindex'));
 
         $('#i_thu').val($(this).attr('alt'));
+        $('#i_check_vat').val($(this).attr('title'));
 
         $( "#dialogContent5" ).dialog( "open" );
 
         $('#i_vat_percent').keyup(function(){
             var val = $(this).val(); 
             var thanhtien = parseInt($('#i_thu').val().replace(/[^0-9\.-]+/g,"")) || 0;
+            var check_vat = $('#i_check_vat').val();
             
-            $('#i_vat').val(Math.round(thanhtien*val/100));
+            if (check_vat>0) {
+                $('#i_vat').val(Math.round(thanhtien*val/110));
+            }
+            else{
+                $('#i_vat').val(Math.round(thanhtien*val/100));
+            }
+            
             
             $('#i_vat').val(function(index, value) {
                 return value
@@ -558,8 +567,15 @@ $('.order_vat')
         $('#i_vat').keyup(function(){
             var val = parseInt($(this).val().replace(/[^0-9\.-]+/g,""));
             var thanhtien = parseInt($("#i_thu").val().replace(/[^0-9\.-]+/g,""));
+            var check_vat = $('#i_check_vat').val();
 
-            $('#i_vat_percent').val(val*100/thanhtien);
+            if (check_vat>0) {
+                $('#i_vat_percent').val(Math.round(val*110/thanhtien));
+            }
+            else{
+                $('#i_vat_percent').val(Math.round(val*100/thanhtien));
+            }
+            
         });
 
     });

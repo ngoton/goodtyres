@@ -59,11 +59,11 @@ Class weeklyplanController Extends baseController {
         $work_model = $this->model->get('workplanModel');
 
         $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
-
+        $st=0;
         $and = "";
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
             $and .= ' AND ( work_plan_owner = '.$staff->staff_id.' )';
-        }*/
+        }
 
         if ($nv>0) {
             $and .= ' AND (work_plan_owner = '.$nv.')';
@@ -121,6 +121,7 @@ Class weeklyplanController Extends baseController {
         $this->view->data['ketthuc'] = $ketthuc;
         $this->view->data['trangthai'] = $trangthai;
         $this->view->data['nv'] = $nv;
+        $this->view->data['comp'] = 0;
 
         $data = array(
             'order_by'=>$order_by,
@@ -219,9 +220,9 @@ Class weeklyplanController Extends baseController {
         $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
 
         $and = "";
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
             $and .= ' AND ( work_plan_owner = '.$staff->staff_id.' )';
-        }*/
+        }
         if ($nv>0) {
             $and .= ' AND (work_plan_owner = '.$nv.')';
         }
@@ -278,6 +279,7 @@ Class weeklyplanController Extends baseController {
         $this->view->data['ketthuc'] = $ketthuc;
         $this->view->data['trangthai'] = $trangthai;
         $this->view->data['nv'] = $nv;
+        $this->view->data['comp'] = 1;
 
         $data = array(
             'order_by'=>$order_by,
@@ -376,9 +378,9 @@ Class weeklyplanController Extends baseController {
         $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
 
         $and = "";
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
             $and .= ' AND ( work_plan_owner = '.$staff->staff_id.' )';
-        }*/
+        }
         if ($nv>0) {
             $and .= ' AND (work_plan_owner = '.$nv.')';
         }
@@ -435,6 +437,7 @@ Class weeklyplanController Extends baseController {
         $this->view->data['ketthuc'] = $ketthuc;
         $this->view->data['trangthai'] = $trangthai;
         $this->view->data['nv'] = $nv;
+        $this->view->data['comp'] = 2;
 
         $data = array(
             'order_by'=>$order_by,
@@ -585,9 +588,9 @@ Class weeklyplanController Extends baseController {
         $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
 
         $and = "";
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
             $and .= ' AND ( work_plan_owner = '.$staff->staff_id.' )';
-        }*/
+        }
         if ($nv>0) {
             $and .= ' AND (work_plan_owner = '.$nv.')';
         }
@@ -646,6 +649,7 @@ Class weeklyplanController Extends baseController {
         $this->view->data['ketthuc'] = $ketthuc;
         $this->view->data['trangthai'] = $trangthai;
         $this->view->data['nv'] = $nv;
+        $this->view->data['comp'] = 0;
 
         $data = array(
             'order_by'=>$order_by,
@@ -736,9 +740,9 @@ Class weeklyplanController Extends baseController {
         $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
 
         $and = "";
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
             $and .= ' AND ( work_plan_owner = '.$staff->staff_id.' )';
-        }*/
+        }
         if ($nv>0) {
             $and .= ' AND (work_plan_owner = '.$nv.')';
         }
@@ -797,6 +801,7 @@ Class weeklyplanController Extends baseController {
         $this->view->data['ketthuc'] = $ketthuc;
         $this->view->data['trangthai'] = $trangthai;
         $this->view->data['nv'] = $nv;
+        $this->view->data['comp'] = 0;
 
         $data = array(
             'order_by'=>$order_by,
@@ -887,9 +892,9 @@ Class weeklyplanController Extends baseController {
         $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
 
         $and = "";
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
             $and .= ' AND ( work_plan_owner = '.$staff->staff_id.' )';
-        }*/
+        }
         if ($nv>0) {
             $and .= ' AND (work_plan_owner = '.$nv.')';
         }
@@ -948,6 +953,7 @@ Class weeklyplanController Extends baseController {
         $this->view->data['ketthuc'] = $ketthuc;
         $this->view->data['trangthai'] = $trangthai;
         $this->view->data['nv'] = $nv;
+        $this->view->data['comp'] = 1;
 
         $data = array(
             'order_by'=>$order_by,
@@ -1038,9 +1044,9 @@ Class weeklyplanController Extends baseController {
         $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
 
         $and = "";
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
             $and .= ' AND ( work_plan_owner = '.$staff->staff_id.' )';
-        }*/
+        }
         if ($nv>0) {
             $and .= ' AND (work_plan_owner = '.$nv.')';
         }
@@ -1099,6 +1105,7 @@ Class weeklyplanController Extends baseController {
         $this->view->data['ketthuc'] = $ketthuc;
         $this->view->data['trangthai'] = $trangthai;
         $this->view->data['nv'] = $nv;
+        $this->view->data['comp'] = 2;
 
         $data = array(
             'order_by'=>$order_by,
@@ -1193,9 +1200,9 @@ Class weeklyplanController Extends baseController {
         $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
 
         $and = "";
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
             $and .= ' AND ( work_plan_owner = '.$staff->staff_id.' )';
-        }*/
+        }
         if ($nv>0) {
             $and .= ' AND (work_plan_owner = '.$nv.')';
         }
@@ -1225,7 +1232,7 @@ Class weeklyplanController Extends baseController {
         $join = array('table'=>'user,work_plan_code','where'=>'create_user = user_id AND work_plan_code = work_plan_code_id');
         
         $data = array(
-            'where' => '(work_plan_complete = 1 AND work_plan_complete_date >= '.strtotime($batdau).')',
+            'where' => '(work_plan_complete = 1 AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).')',
         );
 
         if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
@@ -1256,12 +1263,13 @@ Class weeklyplanController Extends baseController {
         $this->view->data['ketthuc'] = $ketthuc;
         $this->view->data['trangthai'] = $trangthai;
         $this->view->data['nv'] = $nv;
+        $this->view->data['comp'] = 1;
 
         $data = array(
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => '(work_plan_complete = 1 AND work_plan_complete_date >= '.strtotime($batdau).')',
+            'where' => '(work_plan_complete = 1 AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).')',
             );
 
         if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
@@ -1350,9 +1358,9 @@ Class weeklyplanController Extends baseController {
         $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
 
         $and = "";
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
             $and .= ' AND ( work_plan_owner = '.$staff->staff_id.' )';
-        }*/
+        }
         if ($nv>0) {
             $and .= ' AND (work_plan_owner = '.$nv.')';
         }
@@ -1382,7 +1390,7 @@ Class weeklyplanController Extends baseController {
         $join = array('table'=>'user,work_plan_code','where'=>'create_user = user_id AND work_plan_code = work_plan_code_id');
         
         $data = array(
-            'where' => '(work_plan_complete = 1 AND work_plan_complete_date >= '.strtotime($batdau).')',
+            'where' => '(work_plan_complete = 1 AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).')',
         );
 
         if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
@@ -1413,12 +1421,13 @@ Class weeklyplanController Extends baseController {
         $this->view->data['ketthuc'] = $ketthuc;
         $this->view->data['trangthai'] = $trangthai;
         $this->view->data['nv'] = $nv;
+        $this->view->data['comp'] = 1;
 
         $data = array(
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => '(work_plan_complete = 1 AND work_plan_complete_date >= '.strtotime($batdau).')',
+            'where' => '(work_plan_complete = 1 AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).')',
             );
 
         if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
@@ -1507,9 +1516,9 @@ Class weeklyplanController Extends baseController {
         $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
 
         $and = "";
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
             $and .= ' AND ( work_plan_owner = '.$staff->staff_id.' )';
-        }*/
+        }
         if ($nv>0) {
             $and .= ' AND (work_plan_owner = '.$nv.')';
         }
@@ -1570,6 +1579,7 @@ Class weeklyplanController Extends baseController {
         $this->view->data['ketthuc'] = $ketthuc;
         $this->view->data['trangthai'] = $trangthai;
         $this->view->data['nv'] = $nv;
+        $this->view->data['comp'] = 0;
 
         $data = array(
             'order_by'=>$order_by,
@@ -1625,6 +1635,7 @@ Class weeklyplanController Extends baseController {
             $time = explode('-', trim($_POST['work_plan_time']));
 
             $data = array(
+                        'work_plan_code' => trim($_POST['work_plan_code_id']),
                         'work_plan_date' => strtotime(date('d-m-Y')),
                         'work_plan_name' => trim($_POST['work_plan_name']),
                         'work_plan_comment' => trim($_POST['work_plan_comment']),
@@ -1634,26 +1645,9 @@ Class weeklyplanController Extends baseController {
                         'start_date' => strtotime(str_replace('/', '-', $time[0])),
                         'end_date' => strtotime(str_replace('/', '-', $time[1])),
                         'work_plan_complete_date' => strtotime(str_replace('/', '-', $_POST['work_plan_complete_date'])),
+                        'work_plan_result' => trim($_POST['work_plan_result']),
                         );
             
-            if ($_POST['work_plan_code_id'] > 0) {
-                $data['work_plan_code'] = $_POST['work_plan_code_id'];
-            }
-            else{
-                if ($work_plan_code_model->getWorkByWhere(array('work_plan_code_name'=>trim($_POST['work_plan_code_name'])))) {
-                    $data['work_plan_code'] = $work_plan_code_model->getWorkByWhere(array('work_plan_code_name'=>trim($_POST['work_plan_code_name'])))->work_plan_code_id;
-                }
-                else{
-                    $words = explode(" ", trim($_POST['work_plan_code_name']));
-                    $acronym = "";
-
-                    foreach ($words as $w) {
-                      $acronym .= $w[0];
-                    }
-                    $work_plan_code_model->createWork(array('work_plan_code_name'=>trim($_POST['work_plan_code_name']),'work_plan_code_number'=>$acronym));
-                    $data['work_plan_code'] = $work_plan_code_model->getLastWork()->work_plan_code_id;
-                }
-            }
 
             $contributor = $_POST['work_plan_owner'];
 
@@ -1878,11 +1872,11 @@ Class weeklyplanController Extends baseController {
 
 
 
-        if (isset($_POST['work_plan'])) {
+        if (isset($_POST['data'])) {
 
             $work_plan_model = $this->model->get('workplanModel');
 
-            $work_plan_model->updateWork(array('work_plan_complete'=>$_POST['work_plan_complete'],'work_plan_complete_date'=>strtotime(date('d-m-Y'))),array('work_plan_id'=>$_POST['work_plan']));
+            $work_plan_model->updateWork(array('work_plan_complete'=>$_POST['work_plan_complete'],'work_plan_complete_date'=>strtotime(str_replace('/', '-', $_POST['work_plan_complete_date'])),'work_plan_result'=>trim($_POST['work_plan_result'])),array('work_plan_id'=>$_POST['data']));
 
 
             echo 'Thành công';
@@ -1895,7 +1889,307 @@ Class weeklyplanController Extends baseController {
 
     }
 
-    
+    function export(){
+
+        $this->view->disableLayout();
+        require("lib/Classes/PHPExcel/IOFactory.php");
+        require("lib/Classes/PHPExcel.php");
+        $objPHPExcel = new PHPExcel();
+
+        $work_model = $this->model->get('workplanModel');
+        $staff_model = $this->model->get('staffModel');
+
+        $staff = $this->registry->router->order_by;
+        $code = $this->registry->router->order;
+        $complete = $this->registry->router->addition;
+        $batdau = $this->registry->router->param_id;
+        $ketthuc = $this->registry->router->page;
+
+        
+        $staffs = $staff_model->getAllStaff(array('where'=>'status=1'));
+        $staff_data = array();
+        foreach ($staffs as $st) {
+            $staff_data['name'][$st->staff_id] = $st->staff_name;
+        }
+
+        if ($complete==1) {
+            $data = array(
+            'order_by'=>'start_date',
+            'order'=>'ASC',
+            'where' => '(work_plan_complete = 1 AND work_plan_complete_date >= '.$batdau.' AND work_plan_complete_date <= '.$ketthuc.')',
+            );
+        }
+        else if ($complete==2) {
+            $data = array(
+            'order_by'=>'start_date',
+            'order'=>'ASC',
+            'where' => '((work_plan_complete != 1 AND end_date < '.$batdau.') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.$batdau.' AND work_plan_complete_date <= '.$ketthuc.'))',
+            );
+        }
+        else{
+            $data = array(
+            'order_by'=>'start_date',
+            'order'=>'ASC',
+            'where' => '((work_plan_complete != 1 AND start_date <= '.$ketthuc.') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.$batdau.' AND work_plan_complete_date <= '.$ketthuc.') OR (start_date >= '.$batdau.' AND end_date <= '.$ketthuc.') )',
+            );
+        }
+        
+
+        $add = "";
+        if($staff > 0){
+
+            $data['where'] .= ' AND work_plan_owner = '.$staff;
+
+            $add .= ' AND work_plan_owner = '.$staff;
+        }
+        if($code > 0){
+
+            $data['where'] .= ' AND work_plan_code = '.$code;
+
+            $add .= ' AND work_plan_code = '.$code;
+        }
+
+        $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
+
+        $works = $work_model->getAllWork($data,$join);
+
+        
+
+        $objPHPExcel = $objPHPExcel;
+
+
+
+            
+
+
+
+            $index_worksheet = 0; //(worksheet mặc định là 0, nếu tạo nhiều worksheet $index_worksheet += 1)
+
+            $objPHPExcel->setActiveSheetIndex($index_worksheet)
+
+                ->setCellValue('A2', 'KẾ HOẠCH LÀM VIỆC')
+
+                ->setCellValue('A4', 'STT')
+
+               ->setCellValue('B4', 'Mã CV')
+
+               ->setCellValue('C4', 'Nội dung công việc')
+
+               ->setCellValue('D4', 'SL')
+
+               ->setCellValue('E4', 'ĐVT')
+
+               ->setCellValue('F4', 'Ngày thực hiện')
+
+               ->setCellValue('F5', 'Từ ngày')
+
+               ->setCellValue('G5', 'Đến ngày')
+
+               ->setCellValue('H4', 'PIC')
+
+               ->setCellValue('H5', 'Giao')
+
+               ->setCellValue('I5', 'Thực hiện')
+
+               ->setCellValue('J4', 'Ghi chú')
+
+               ->setCellValue('K4', 'Thời gian')
+
+               ->setCellValue('L4', 'Hoàn thành')
+
+               ->setCellValue('M4', 'Kết quả');
+
+            
+            
+
+
+            if ($works) {
+
+
+
+                $hang = 6;
+
+                $i=1;
+
+
+                $k=0;
+                foreach ($works as $row) {
+
+                    $str = "";
+                      if($row->work_plan_owner != ""){
+                          $contributors = explode(',', $row->work_plan_owner);
+                          foreach ($contributors as $key) {
+                            $pieces = explode(' ', $staff_data['name'][$key]);
+                            $last_word = array_pop($pieces);
+                            if ($str == "") {
+                              $str = $last_word;
+                            }
+                            else{
+                              $str .= ",".$last_word;
+                            }
+                          }
+                      }
+                      $staff = $staff_model->getStaffByWhere(array('account'=>$row->create_user));
+
+                    $objPHPExcel->setActiveSheetIndex(0)
+
+                            ->setCellValue('A' . $hang, $i++)
+
+                            ->setCellValueExplicit('B' . $hang, $row->work_plan_code_name)
+
+                            ->setCellValueExplicit('C' . $hang, $row->work_plan_name)
+
+                            ->setCellValue('D' . $hang, $row->work_plan_number)
+
+                            ->setCellValue('E' . $hang, $row->work_plan_unit)
+
+                            ->setCellValue('F' . $hang, date('d/m/Y',$row->start_date))
+
+                            ->setCellValue('G' . $hang, ($row->start_date!=$row->end_date?date('d/m/Y',$row->end_date):null))
+
+                            ->setCellValue('H' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
+
+                            ->setCellValue('I' . $hang, $str)
+
+                            ->setCellValue('J' . $hang, $row->work_plan_comment)
+
+                            ->setCellValue('K' . $hang, $row->work_plan_point)
+
+                            ->setCellValue('L' . $hang, $this->lib->hien_thi_ngay_thang($row->work_plan_complete_date))
+
+                            ->setCellValue('M' . $hang, $row->work_plan_result);
+
+
+                     $hang++; 
+
+                }
+
+            }
+
+            $objPHPExcel->setActiveSheetIndex($index_worksheet)
+                        ->setCellValue('A' . $hang, 'Tổng thời gian làm việc')
+                        ->setCellValue('K' . $hang, '=SUM(K6:K'.($hang-1).')');
+
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':C'.$hang);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':M'.$hang)->getFont()->setBold(true);
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('A4:M'.$hang)->applyFromArray(
+
+                array(
+
+                    
+
+                    'borders' => array(
+
+                        'allborders' => array(
+
+                          'style' => PHPExcel_Style_Border::BORDER_THIN
+
+                        )
+
+                    )
+
+                )
+
+            );
+
+
+
+            $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow();
+
+
+
+            $highestRow ++;
+
+
+
+            $objPHPExcel->getActiveSheet()->mergeCells('A2:M2');
+            $objPHPExcel->getActiveSheet()->mergeCells('A4:A5');
+            $objPHPExcel->getActiveSheet()->mergeCells('B4:B5');
+            $objPHPExcel->getActiveSheet()->mergeCells('C4:C5');
+            $objPHPExcel->getActiveSheet()->mergeCells('D4:D5');
+            $objPHPExcel->getActiveSheet()->mergeCells('E4:E5');
+            $objPHPExcel->getActiveSheet()->mergeCells('F4:G4');
+            $objPHPExcel->getActiveSheet()->mergeCells('H4:I4');
+            $objPHPExcel->getActiveSheet()->mergeCells('J4:J5');
+            $objPHPExcel->getActiveSheet()->mergeCells('K4:K5');
+            $objPHPExcel->getActiveSheet()->mergeCells('L4:L5');
+            $objPHPExcel->getActiveSheet()->mergeCells('M4:M5');
+
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M4')->getFont()->setBold(true);
+
+            $objPHPExcel->getActiveSheet()->getDefaultColumnDimension()->setWidth(14);
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(5);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(7);
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getFont()->setName('Times New Roman');
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getFont()->setSize(12);
+
+            $objPHPExcel->getActiveSheet()->getStyle("A2")->getFont()->setSize(16);
+
+
+
+            // Set properties
+
+            $objPHPExcel->getProperties()->setCreator("VT")
+
+                            ->setTitle("Sale Report")
+
+                            ->setSubject("Sale Report")
+
+                            ->setDescription("Sale Report.")
+
+                            ->setKeywords("Sale Report")
+
+                            ->setCategory("Sale Report");
+
+            $objPHPExcel->getActiveSheet()->setTitle("Planning");
+
+
+
+            $objPHPExcel->getActiveSheet()->freezePane('A6');
+
+            $objPHPExcel->setActiveSheetIndex(0);
+
+
+
+
+
+
+
+            
+
+
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+
+
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            header("Content-Disposition: attachment; filename= WEEKLY PLAN.xlsx");
+
+            header("Cache-Control: max-age=0");
+
+            ob_clean();
+
+            $objWriter->save("php://output");
+
+            
+    }
 
     function exportstaff($mail,$objPHPExcel,$staff_model,$work_plan_model,$sti,$bd,$kt){
 
@@ -1957,23 +2251,27 @@ Class weeklyplanController Extends baseController {
 
                ->setCellValue('D4', 'SL')
 
-               ->setCellValue('E4', 'Ngày thực hiện')
+               ->setCellValue('E4', 'ĐVT')
 
-               ->setCellValue('E5', 'Từ ngày')
+               ->setCellValue('F4', 'Ngày thực hiện')
 
-               ->setCellValue('F5', 'Đến ngày')
+               ->setCellValue('F5', 'Từ ngày')
 
-               ->setCellValue('G4', 'PIC')
+               ->setCellValue('G5', 'Đến ngày')
 
-               ->setCellValue('G5', 'Giao')
+               ->setCellValue('H4', 'PIC')
 
-               ->setCellValue('H5', 'Thực hiện')
+               ->setCellValue('H5', 'Giao')
 
-               ->setCellValue('I4', 'Ghi chú')
+               ->setCellValue('I5', 'Thực hiện')
 
-               ->setCellValue('J4', 'Thời gian')
+               ->setCellValue('J4', 'Ghi chú')
 
-               ->setCellValue('K4', 'Hoàn thành');
+               ->setCellValue('K4', 'Thời gian')
+
+               ->setCellValue('L4', 'Hoàn thành')
+
+               ->setCellValue('M4', 'Kết quả');
 
             
             
@@ -2017,19 +2315,23 @@ Class weeklyplanController Extends baseController {
 
                             ->setCellValue('D' . $hang, $row->work_plan_number)
 
-                            ->setCellValue('E' . $hang, date('d/m/Y',$row->start_date))
+                            ->setCellValue('E' . $hang, $row->work_plan_unit)
 
-                            ->setCellValue('F' . $hang, ($row->start_date!=$row->end_date?date('d/m/Y',$row->end_date):null))
+                            ->setCellValue('F' . $hang, date('d/m/Y',$row->start_date))
 
-                            ->setCellValue('G' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
+                            ->setCellValue('G' . $hang, ($row->start_date!=$row->end_date?date('d/m/Y',$row->end_date):null))
 
-                            ->setCellValue('H' . $hang, $str)
+                            ->setCellValue('H' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
 
-                            ->setCellValue('I' . $hang, $row->work_plan_comment)
+                            ->setCellValue('I' . $hang, $str)
 
-                            ->setCellValue('J' . $hang, $row->work_plan_point)
+                            ->setCellValue('J' . $hang, $row->work_plan_comment)
 
-                            ->setCellValue('K' . $hang, ($row->work_plan_complete==1?'x':null));
+                            ->setCellValue('K' . $hang, $row->work_plan_point)
+
+                            ->setCellValue('L' . $hang, $this->lib->hien_thi_ngay_thang($row->work_plan_complete_date))
+
+                            ->setCellValue('M' . $hang, $row->work_plan_result);
 
 
                      $hang++; 
@@ -2038,15 +2340,15 @@ Class weeklyplanController Extends baseController {
 
             }
 
-            $objPHPExcel->setActiveSheetIndex(0)
+            $objPHPExcel->setActiveSheetIndex($index_worksheet)
                         ->setCellValue('A' . $hang, 'Tổng thời gian làm việc')
-                        ->setCellValue('J' . $hang, '=SUM(J6:J'.($hang-1).')');
+                        ->setCellValue('K' . $hang, '=SUM(K6:K'.($hang-1).')');
 
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':C'.$hang);
-            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':K'.$hang)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':M'.$hang)->getFont()->setBold(true);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A4:K'.$hang)->applyFromArray(
+            $objPHPExcel->getActiveSheet()->getStyle('A4:M'.$hang)->applyFromArray(
 
                 array(
 
@@ -2076,25 +2378,27 @@ Class weeklyplanController Extends baseController {
 
 
 
-            $objPHPExcel->getActiveSheet()->mergeCells('A2:K2');
+            $objPHPExcel->getActiveSheet()->mergeCells('A2:M2');
             $objPHPExcel->getActiveSheet()->mergeCells('A4:A5');
             $objPHPExcel->getActiveSheet()->mergeCells('B4:B5');
             $objPHPExcel->getActiveSheet()->mergeCells('C4:C5');
             $objPHPExcel->getActiveSheet()->mergeCells('D4:D5');
-            $objPHPExcel->getActiveSheet()->mergeCells('E4:F4');
-            $objPHPExcel->getActiveSheet()->mergeCells('G4:H4');
-            $objPHPExcel->getActiveSheet()->mergeCells('I4:I5');
+            $objPHPExcel->getActiveSheet()->mergeCells('E4:E5');
+            $objPHPExcel->getActiveSheet()->mergeCells('F4:G4');
+            $objPHPExcel->getActiveSheet()->mergeCells('H4:I4');
             $objPHPExcel->getActiveSheet()->mergeCells('J4:J5');
             $objPHPExcel->getActiveSheet()->mergeCells('K4:K5');
+            $objPHPExcel->getActiveSheet()->mergeCells('L4:L5');
+            $objPHPExcel->getActiveSheet()->mergeCells('M4:M5');
 
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K4')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M4')->getFont()->setBold(true);
 
             $objPHPExcel->getActiveSheet()->getDefaultColumnDimension()->setWidth(14);
 
@@ -2102,10 +2406,11 @@ Class weeklyplanController Extends baseController {
             $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(5);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(7);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getFont()->setName('Times New Roman');
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getFont()->setSize(12);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getFont()->setName('Times New Roman');
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getFont()->setSize(12);
 
             $objPHPExcel->getActiveSheet()->getStyle("A2")->getFont()->setSize(16);
 
@@ -2330,23 +2635,27 @@ Class weeklyplanController Extends baseController {
 
                ->setCellValue('D4', 'SL')
 
-               ->setCellValue('E4', 'Ngày thực hiện')
+               ->setCellValue('E4', 'ĐVT')
 
-               ->setCellValue('E5', 'Từ ngày')
+               ->setCellValue('F4', 'Ngày thực hiện')
 
-               ->setCellValue('F5', 'Đến ngày')
+               ->setCellValue('F5', 'Từ ngày')
 
-               ->setCellValue('G4', 'PIC')
+               ->setCellValue('G5', 'Đến ngày')
 
-               ->setCellValue('G5', 'Giao')
+               ->setCellValue('H4', 'PIC')
 
-               ->setCellValue('H5', 'Thực hiện')
+               ->setCellValue('H5', 'Giao')
 
-               ->setCellValue('I4', 'Ghi chú')
+               ->setCellValue('I5', 'Thực hiện')
 
-               ->setCellValue('J4', 'Thời gian')
+               ->setCellValue('J4', 'Ghi chú')
 
-               ->setCellValue('K4', 'Hoàn thành');
+               ->setCellValue('K4', 'Thời gian')
+
+               ->setCellValue('L4', 'Hoàn thành')
+
+               ->setCellValue('M4', 'Kết quả');
 
             
             
@@ -2390,19 +2699,23 @@ Class weeklyplanController Extends baseController {
 
                             ->setCellValue('D' . $hang, $row->work_plan_number)
 
-                            ->setCellValue('E' . $hang, date('d/m/Y',$row->start_date))
+                            ->setCellValue('E' . $hang, $row->work_plan_unit)
 
-                            ->setCellValue('F' . $hang, ($row->start_date!=$row->end_date?date('d/m/Y',$row->end_date):null))
+                            ->setCellValue('F' . $hang, date('d/m/Y',$row->start_date))
 
-                            ->setCellValue('G' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
+                            ->setCellValue('G' . $hang, ($row->start_date!=$row->end_date?date('d/m/Y',$row->end_date):null))
 
-                            ->setCellValue('H' . $hang, $str)
+                            ->setCellValue('H' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
 
-                            ->setCellValue('I' . $hang, $row->work_plan_comment)
+                            ->setCellValue('I' . $hang, $str)
 
-                            ->setCellValue('J' . $hang, $row->work_plan_point)
+                            ->setCellValue('J' . $hang, $row->work_plan_comment)
 
-                            ->setCellValue('K' . $hang, ($row->work_plan_complete==1?'x':null));
+                            ->setCellValue('K' . $hang, $row->work_plan_point)
+
+                            ->setCellValue('L' . $hang, $this->lib->hien_thi_ngay_thang($row->work_plan_complete_date))
+
+                            ->setCellValue('M' . $hang, $row->work_plan_result);
 
 
                      $hang++; 
@@ -2413,13 +2726,13 @@ Class weeklyplanController Extends baseController {
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
                         ->setCellValue('A' . $hang, 'Tổng thời gian làm việc')
-                        ->setCellValue('J' . $hang, '=SUM(J6:J'.($hang-1).')');
+                        ->setCellValue('K' . $hang, '=SUM(K6:K'.($hang-1).')');
 
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':C'.$hang);
-            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':K'.$hang)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':M'.$hang)->getFont()->setBold(true);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A4:K'.$hang)->applyFromArray(
+            $objPHPExcel->getActiveSheet()->getStyle('A4:M'.$hang)->applyFromArray(
 
                 array(
 
@@ -2449,25 +2762,27 @@ Class weeklyplanController Extends baseController {
 
 
 
-            $objPHPExcel->getActiveSheet()->mergeCells('A2:K2');
+            $objPHPExcel->getActiveSheet()->mergeCells('A2:M2');
             $objPHPExcel->getActiveSheet()->mergeCells('A4:A5');
             $objPHPExcel->getActiveSheet()->mergeCells('B4:B5');
             $objPHPExcel->getActiveSheet()->mergeCells('C4:C5');
             $objPHPExcel->getActiveSheet()->mergeCells('D4:D5');
-            $objPHPExcel->getActiveSheet()->mergeCells('E4:F4');
-            $objPHPExcel->getActiveSheet()->mergeCells('G4:H4');
-            $objPHPExcel->getActiveSheet()->mergeCells('I4:I5');
+            $objPHPExcel->getActiveSheet()->mergeCells('E4:E5');
+            $objPHPExcel->getActiveSheet()->mergeCells('F4:G4');
+            $objPHPExcel->getActiveSheet()->mergeCells('H4:I4');
             $objPHPExcel->getActiveSheet()->mergeCells('J4:J5');
             $objPHPExcel->getActiveSheet()->mergeCells('K4:K5');
+            $objPHPExcel->getActiveSheet()->mergeCells('L4:L5');
+            $objPHPExcel->getActiveSheet()->mergeCells('M4:M5');
 
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K4')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M4')->getFont()->setBold(true);
 
             $objPHPExcel->getActiveSheet()->getDefaultColumnDimension()->setWidth(14);
 
@@ -2475,10 +2790,11 @@ Class weeklyplanController Extends baseController {
             $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(5);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(7);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getFont()->setName('Times New Roman');
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getFont()->setSize(12);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getFont()->setName('Times New Roman');
+            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getFont()->setSize(12);
 
             $objPHPExcel->getActiveSheet()->getStyle("A2")->getFont()->setSize(16);
 
@@ -2689,23 +3005,23 @@ Class weeklyplanController Extends baseController {
 
                ->setCellValue('D4', 'SL')
 
-               ->setCellValue('E4', 'Ngày thực hiện')
+               ->setCellValue('E4', 'ĐVT')
 
-               ->setCellValue('E5', 'Từ ngày')
+               ->setCellValue('F4', 'Ngày thực hiện')
 
-               ->setCellValue('F5', 'Đến ngày')
+               ->setCellValue('F5', 'Từ ngày')
 
-               ->setCellValue('G4', 'PIC')
+               ->setCellValue('G5', 'Đến ngày')
 
-               ->setCellValue('G5', 'Giao')
+               ->setCellValue('H4', 'PIC')
 
-               ->setCellValue('H5', 'Thực hiện')
+               ->setCellValue('H5', 'Giao')
 
-               ->setCellValue('I4', 'Ghi chú')
+               ->setCellValue('I5', 'Thực hiện')
 
-               ->setCellValue('J4', 'Thời gian')
+               ->setCellValue('J4', 'Ghi chú')
 
-               ->setCellValue('K4', 'Hoàn thành');
+               ->setCellValue('K4', 'Thời gian');
 
             
             
@@ -2749,19 +3065,19 @@ Class weeklyplanController Extends baseController {
 
                             ->setCellValue('D' . $hang, $row->work_plan_number)
 
-                            ->setCellValue('E' . $hang, date('d/m/Y',$row->start_date))
+                            ->setCellValue('E' . $hang, $row->work_plan_unit)
 
-                            ->setCellValue('F' . $hang, ($row->start_date!=$row->end_date?date('d/m/Y',$row->end_date):null))
+                            ->setCellValue('F' . $hang, date('d/m/Y',$row->start_date))
 
-                            ->setCellValue('G' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
+                            ->setCellValue('G' . $hang, ($row->start_date!=$row->end_date?date('d/m/Y',$row->end_date):null))
 
-                            ->setCellValue('H' . $hang, $str)
+                            ->setCellValue('H' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
 
-                            ->setCellValue('I' . $hang, $row->work_plan_comment)
+                            ->setCellValue('I' . $hang, $str)
 
-                            ->setCellValue('J' . $hang, $row->work_plan_point)
+                            ->setCellValue('J' . $hang, $row->work_plan_comment)
 
-                            ->setCellValue('K' . $hang, ($row->work_plan_complete==1?'x':null));
+                            ->setCellValue('K' . $hang, $row->work_plan_point);
 
 
                      $hang++; 
@@ -2772,7 +3088,7 @@ Class weeklyplanController Extends baseController {
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
                         ->setCellValue('A' . $hang, 'Tổng thời gian làm việc')
-                        ->setCellValue('J' . $hang, '=SUM(J6:J'.($hang-1).')');
+                        ->setCellValue('K' . $hang, '=SUM(K6:K'.($hang-1).')');
 
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':C'.$hang);
             $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':K'.$hang)->getFont()->setBold(true);
@@ -2808,14 +3124,14 @@ Class weeklyplanController Extends baseController {
 
 
 
-            $objPHPExcel->getActiveSheet()->mergeCells('A2:K2');
+            $objPHPExcel->getActiveSheet()->mergeCells('A2:M2');
             $objPHPExcel->getActiveSheet()->mergeCells('A4:A5');
             $objPHPExcel->getActiveSheet()->mergeCells('B4:B5');
             $objPHPExcel->getActiveSheet()->mergeCells('C4:C5');
             $objPHPExcel->getActiveSheet()->mergeCells('D4:D5');
-            $objPHPExcel->getActiveSheet()->mergeCells('E4:F4');
-            $objPHPExcel->getActiveSheet()->mergeCells('G4:H4');
-            $objPHPExcel->getActiveSheet()->mergeCells('I4:I5');
+            $objPHPExcel->getActiveSheet()->mergeCells('E4:E5');
+            $objPHPExcel->getActiveSheet()->mergeCells('F4:G4');
+            $objPHPExcel->getActiveSheet()->mergeCells('H4:I4');
             $objPHPExcel->getActiveSheet()->mergeCells('J4:J5');
             $objPHPExcel->getActiveSheet()->mergeCells('K4:K5');
 
@@ -2834,6 +3150,7 @@ Class weeklyplanController Extends baseController {
             $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(5);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(7);
 
 
             $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getFont()->setName('Times New Roman');
@@ -3073,9 +3390,7 @@ Class weeklyplanController Extends baseController {
             );
 
             if ($sal>0) {
-                $data = array(
-                    'where'=>'sale IN (SELECT account FROM staff WHERE staff_id = '.$sal.')',
-                    );
+                $data['where'] .= ' AND sale IN (SELECT account FROM staff WHERE staff_id = '.$sal.')';
             }
 
             $orders = $order_tire_model->getAllTire($data,$join);
@@ -3174,11 +3489,12 @@ Class weeklyplanController Extends baseController {
                     if (isset($data_customer['money'][$order_tire->customer_id]) && (!isset($data_customer['pay_money'][$order_tire->customer_id]) || $data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]>0) ) {
                         $data_plan = array(
                         'work_plan_date' => $today,
-                        'work_plan_name' => $order_tire->customer_name,
+                        'work_plan_code' => $work_plan_code->work_plan_code_id,
+                        'work_plan_name' => 'Đòi nợ '.$order_tire->customer_name,
                         'work_plan_comment' => 'Còn nợ '.$this->lib->formatMoney($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]),
                         'work_plan_complete' => 0,
-                        'work_plan_number' => 1,
-                        'work_plan_unit' => 'kh',
+                        'work_plan_number' => round(($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id])/1000000),
+                        'work_plan_unit' => 'tr',
                         'start_date' => strtotime('next tuesday'),
                         'end_date' => strtotime('next tuesday'),
                         'work_plan_point' => round(4/60,2),

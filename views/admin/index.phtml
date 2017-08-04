@@ -283,6 +283,14 @@ $zhongce = isset($stock[3])?$stock[3]:0;
 <!-- ChartJS 1.0.1 -->
 <script src="<?php BASE_URL ?>/public/js/adminbar/plugins/chartjs/Chart.min.js"></script>
 <script>
+var y = ['item1'];
+var lb = ['Sản lượng'];
+<?php foreach ($staff_datas as $st) { ?>
+  y.push('staff<?php echo $st->staff_id ?>');
+  lb.push('<?php echo $st->staff_name ?>');
+<?php } ?>
+
+
   $(function () {
     "use strict";
 
@@ -293,10 +301,9 @@ $zhongce = isset($stock[3])?$stock[3]:0;
       resize: true,
       data: <?php echo $graph ?>,
       xkey: 'y',
-      ykeys: ['item1'],
-      labels: ['Sản lượng'],
-      lineColors: ['#00c0ef'],
-      hideHover: 'auto'
+      ykeys: y,
+      labels: lb,
+      lineColors: ['#f39c12','#00a65a','#269abc','#8226bc','#2D619C','#dd4b39'],
     });
 
   });

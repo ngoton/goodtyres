@@ -1162,9 +1162,7 @@ Class tiredebitController Extends baseController {
         );
 
         if ($sal>0) {
-            $data = array(
-                'where'=>'sale IN (SELECT account FROM staff WHERE staff_id = '.$sal.')',
-                );
+            $data['where'] .= ' AND sale IN (SELECT account FROM staff WHERE staff_id = '.$sal.')';
         }
 
         $orders = $order_tire_model->getAllTire($data,$join);

@@ -49,7 +49,7 @@ Class adminController Extends baseController {
         $this->view->data['staffs'] = $staffs;
 
         $data = array(
-            'where' => 'position = "Sales" AND ( (start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) ) )',
+            'where' => 'staff_id IN (SELECT sale FROM tire_sale WHERE tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).') AND ( (start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) ) )',
         );
 
         
@@ -130,6 +130,7 @@ Class adminController Extends baseController {
         $khachhang = 0;
         $donhang = 0;
         $sl = array();
+        $sa = array();
         
 
         /*foreach ($sales as $sale) {
@@ -151,29 +152,37 @@ Class adminController Extends baseController {
                 $khachhang++;
             }
 
-            $sl['ngay'][(int)date('d',$tire->delivery_date)] = isset($sl['ngay'][(int)date('d',$tire->delivery_date)])?$sl['ngay'][(int)date('d',$tire->delivery_date)]+$tire->order_tire_number:$tire->order_tire_number;
-            
           
         }
 
-        if ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9) {
+
+
+        /*if ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9) {
             if ($limit != "") {
-                $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN (SELECT order_tire FROM tire_sale WHERE sale = '.$limit.' AND tire_sale_date >= '.strtotime('01-01-'.date('Y')).' AND tire_sale_date <= '.strtotime('31-12-'.date('Y')).')'));
-                //$sales = $sale_model->getAllSale(array('where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc)),array('table'=>'staff','where'=>'sale=account AND staff_id = '.$limit));
+                $orders = $tire_sale_model->queryTire('SELECT sale,tire_sale_date,volume FROM tire_sale WHERE sale='.$limit.' AND tire_sale_date >= '.strtotime('01-01-2016').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
+                
             }
             else{
-                $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN (SELECT order_tire FROM tire_sale WHERE tire_sale_date >= '.strtotime('01-01-'.date('Y')).' AND tire_sale_date <= '.strtotime('31-12-'.date('Y')).')'));
-                //$sales = $sale_model->getAllSale(array('where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc)));
+                $orders = $tire_sale_model->queryTire('SELECT sale,tire_sale_date,volume FROM tire_sale WHERE tire_sale_date >= '.strtotime('01-01-2016').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
             }
         }
         else{
-            $orders = $order_tire_model->getAllTire(array('where'=>'sale = '.$_SESSION['userid_logined'].' AND order_tire_id IN (SELECT order_tire FROM tire_sale WHERE tire_sale_date >= '.strtotime('01-01-'.date('Y')).' AND tire_sale_date <= '.strtotime('31-12-'.date('Y')).')'));
-            //$sales = $sale_model->getAllSale(array('where' => 'sale_type = 1 AND sale_date >= '.strtotime($batdau).' AND sale_date <= '.strtotime($ketthuc)),array('table'=>'staff','where'=>'sale=account AND staff_id = '.$_SESSION['userid_logined']));
+            $staff_account = $staff_model->getStaffByWhere(array('account'=>$_SESSION['userid_logined']));
+            $orders = $tire_sale_model->queryTire('SELECT sale,tire_sale_date,volume FROM tire_sale WHERE sale='.$staff_account->staff_id.' AND tire_sale_date >= '.strtotime('01-01-2016').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
+        }*/
+
+        if ($limit != "") {
+            $orders = $tire_sale_model->queryTire('SELECT sale,tire_sale_date,volume FROM tire_sale WHERE sale='.$limit.' AND tire_sale_date >= '.strtotime('01-01-2016').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
+            
+        }
+        else{
+            $orders = $tire_sale_model->queryTire('SELECT sale,tire_sale_date,volume FROM tire_sale WHERE tire_sale_date >= '.strtotime('01-01-2016').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
         }
 
         foreach ($orders as $tire) {
             
-            $sl['thang'][(int)date('m',$tire->delivery_date)] = isset($sl['thang'][(int)date('m',$tire->delivery_date)])?$sl['thang'][(int)date('m',$tire->delivery_date)]+$tire->order_tire_number:$tire->order_tire_number;
+            $sl[(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)] = isset($sl[(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)])?$sl[(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)]+$tire->volume:$tire->volume;
+            $sa[$tire->sale][(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)] = isset($sa[$tire->sale][(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)])?$sa[$tire->sale][(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)]+$tire->volume:$tire->volume;
           
         }
 
@@ -184,24 +193,26 @@ Class adminController Extends baseController {
         // $end_month = date('m',strtotime($ketthuc));
         // $end_year = date('Y',strtotime($ketthuc));
 
-        $start_month = 01;
-        $start_year = date('Y');
-        $end_month = 12;
-        $end_year = date('Y');
+        $staff_datas = $staff_model->getAllStaff(array('where'=>'position != "Director" AND ( ( (start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) ) ) ) AND staff_id IN (SELECT sale FROM tire_sale WHERE volume > 0 AND tire_sale_date >= '.strtotime('01-01-2016').' AND tire_sale_date <= '.strtotime(date('t-m-Y')).')'));
+        $this->view->data['staff_datas'] = $staff_datas;
 
-        $graph = array();
-        if ($start_month == $end_month && $start_year == $end_year) {
-            for ($i=$start; $i <= $end; $i++) { 
-                $graph[]['y'] = $start_year.'-'.$start_month.'-'.$i;
-                $graph[]['item1'] = isset($sl['ngay'][$i])?$sl['ngay'][$i]:0;
+        $start = $month = strtotime('01-01-2016');
+        $end = strtotime(date('t-m-Y'));
+        $u = 0;
+        while($month < $end)
+        {
+            $graph[$u]['y'] = date('Y-m',$month);
+            $graph[$u]['item1'] = isset($sl[(int)date('m',$month)][date('Y',$month)])?$sl[(int)date('m',$month)][date('Y',$month)]:0;
+
+            foreach ($staff_datas as $st) {
+                $graph[$u]['staff'.$st->staff_id] = isset($sa[$st->staff_id][(int)date('m',$month)][date('Y',$month)])?$sa[$st->staff_id][(int)date('m',$month)][date('Y',$month)]:0;
             }
+            
+
+            $month = strtotime("+1 month", $month);
+            $u++;
         }
-        elseif ($start_month != $end_month && $start_year == $end_year) {
-            for ($i=$start_month; $i <= $end_month; $i++) { 
-                $graph[]['y'] = $start_year.'-'.$i;
-                $graph[]['item1'] = isset($sl['thang'][$i])?$sl['thang'][$i]:0;
-            }
-        }
+
         
         $graph = str_replace('"},{"i','","i',json_encode($graph));
 
