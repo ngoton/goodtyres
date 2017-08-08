@@ -131,6 +131,7 @@ Class adminController Extends baseController {
         $donhang = 0;
         $sl = array();
         $sa = array();
+        $dt = array();
         
 
         /*foreach ($sales as $sale) {
@@ -172,11 +173,11 @@ Class adminController Extends baseController {
         }*/
 
         if ($limit != "") {
-            $orders = $tire_sale_model->queryTire('SELECT sale,tire_sale_date,volume FROM tire_sale WHERE sale='.$limit.' AND tire_sale_date >= '.strtotime('01-01-2016').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
+            $orders = $tire_sale_model->queryTire('SELECT sale,tire_sale_date,volume,sell_price,sell_price_vat FROM tire_sale WHERE sale='.$limit.' AND tire_sale_date >= '.strtotime('01-01-2016').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
             
         }
         else{
-            $orders = $tire_sale_model->queryTire('SELECT sale,tire_sale_date,volume FROM tire_sale WHERE tire_sale_date >= '.strtotime('01-01-2016').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
+            $orders = $tire_sale_model->queryTire('SELECT sale,tire_sale_date,volume,sell_price,sell_price_vat FROM tire_sale WHERE tire_sale_date >= '.strtotime('01-01-2016').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
         }
 
         foreach ($orders as $tire) {
@@ -184,6 +185,8 @@ Class adminController Extends baseController {
             $sl[(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)] = isset($sl[(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)])?$sl[(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)]+$tire->volume:$tire->volume;
             $sa[$tire->sale][(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)] = isset($sa[$tire->sale][(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)])?$sa[$tire->sale][(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)]+$tire->volume:$tire->volume;
           
+            $dt[(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)] = isset($dt[(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)])?$dt[(int)date('m',$tire->tire_sale_date)][date('Y',$tire->tire_sale_date)]+$tire->volume*($tire->sell_price_vat>0?$tire->sell_price_vat:$tire->sell_price):$tire->volume*($tire->sell_price_vat>0?$tire->sell_price_vat:$tire->sell_price);
+            
         }
 
         // $start = date('d',strtotime($batdau));
@@ -193,7 +196,7 @@ Class adminController Extends baseController {
         // $end_month = date('m',strtotime($ketthuc));
         // $end_year = date('Y',strtotime($ketthuc));
 
-        $staff_datas = $staff_model->getAllStaff(array('where'=>'position != "Director" AND ( ( (start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) ) ) ) AND staff_id IN (SELECT sale FROM tire_sale WHERE volume > 0 AND tire_sale_date >= '.strtotime('01-01-2016').' AND tire_sale_date <= '.strtotime(date('t-m-Y')).')'));
+        $staff_datas = $staff_model->getAllStaff(array('where'=>'staff_id=60 OR staff_id=15 OR staff_id=14 OR staff_id=12 OR staff_id=2'));
         $this->view->data['staff_datas'] = $staff_datas;
 
         $start = $month = strtotime('01-01-2016');
@@ -203,6 +206,7 @@ Class adminController Extends baseController {
         {
             $graph[$u]['y'] = date('Y-m',$month);
             $graph[$u]['item1'] = isset($sl[(int)date('m',$month)][date('Y',$month)])?$sl[(int)date('m',$month)][date('Y',$month)]:0;
+            $graph[$u]['item2'] = isset($dt[(int)date('m',$month)][date('Y',$month)])?round($dt[(int)date('m',$month)][date('Y',$month)]/1000000):0;
 
             foreach ($staff_datas as $st) {
                 $graph[$u]['staff'.$st->staff_id] = isset($sa[$st->staff_id][(int)date('m',$month)][date('Y',$month)])?$sa[$st->staff_id][(int)date('m',$month)][date('Y',$month)]:0;

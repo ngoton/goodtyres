@@ -741,6 +741,75 @@ Class tiresaleController Extends baseController {
         $this->view->show('tiresale/sale');
     }
 
+    public function total(){
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Tổng hợp';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $batdau = isset($_POST['batdau']) ? $_POST['batdau'] : null;
+            $ketthuc = isset($_POST['ketthuc']) ? $_POST['ketthuc'] : null;
+            $vong = isset($_POST['sl_round']) ? $_POST['sl_round'] : null;
+            $trangthai = isset($_POST['sl_trangthai']) ? $_POST['sl_trangthai'] : null;
+        }
+        else{
+            $batdau = '01-'.date('m-Y');
+            $ketthuc = date('t-m-Y');
+            $vong = (int)date('m',strtotime($batdau));
+            $trangthai = date('Y',strtotime($batdau));
+        }
+
+        $vong = (int)date('m',strtotime($batdau));
+        $trangthai = date('Y',strtotime($batdau));
+
+        
+        $tiresale_model = $this->model->get('tiresaleModel');
+
+
+        $join = array('table'=>'tire_size,tire_pattern','where'=>'tire_pattern=tire_pattern_id AND tire_size=tire_size_id AND (tire_size_number = "11.00R20" OR tire_size_number = "12.00R20" OR tire_size_number = "11R22.5" OR tire_size_number = "12R22.5")');
+        
+        $data = array(
+            'where' => 'tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc),
+        );
+
+        $sales = $tiresale_model->getAllTire($data,$join);
+        $sale_data = array();
+
+        foreach ($sales as $cus) {
+            $arr = explode(',', $cus->tire_size_type);
+            if (in_array(1, $arr) || in_array(2, $arr) || in_array(3, $arr) || in_array(7, $arr) || in_array(8, $arr)) {
+                if ($cus->customer_type==1) {
+                    $sale_data['dl'][$cus->tire_size_number]['doc'] = isset($sale_data['dl'][$cus->tire_size_number]['doc'])?$sale_data['dl'][$cus->tire_size_number]['doc']+$cus->volume:$cus->volume;
+                }
+                else{
+                    $sale_data['tt'][$cus->tire_size_number]['doc'] = isset($sale_data['tt'][$cus->tire_size_number]['doc'])?$sale_data['tt'][$cus->tire_size_number]['doc']+$cus->volume:$cus->volume;
+                }
+            }
+            else{
+                if ($cus->customer_type==1) {
+                    $sale_data['dl'][$cus->tire_size_number]['ngang'] = isset($sale_data['dl'][$cus->tire_size_number]['ngang'])?$sale_data['dl'][$cus->tire_size_number]['ngang']+$cus->volume:$cus->volume;
+                }
+                else{
+                    $sale_data['tt'][$cus->tire_size_number]['ngang'] = isset($sale_data['tt'][$cus->tire_size_number]['ngang'])?$sale_data['tt'][$cus->tire_size_number]['ngang']+$cus->volume:$cus->volume;
+                }
+                
+            }
+            
+        }
+
+        $this->view->data['sale_data'] = $sale_data;
+        $this->view->data['batdau'] = $batdau;
+        $this->view->data['ketthuc'] = $ketthuc;
+        $this->view->data['vong'] = $vong;
+        $this->view->data['trangthai'] = $trangthai;
+
+        $this->view->show('tiresale/total');
+
+    }
+
     public function analytics(){
         $this->view->setLayout('admin');
         if (!isset($_SESSION['userid_logined'])) {

@@ -4111,3 +4111,5 @@ bxep: 6x14 = 84k-5-4--1484000
 
 03/08/2017 14:29:59|admincmg|edit|12|work_plan|undefined-1501711200-Bán hàng--0-1-kh-1501711200-1501711200---14-1-
 
+07/08/2017 10:10:53|admincmg|delete|657|invoice_tire|
+

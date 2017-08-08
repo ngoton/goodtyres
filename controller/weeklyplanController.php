@@ -3487,30 +3487,33 @@ Class weeklyplanController Extends baseController {
             if ($customers) {
                 foreach ($customers as $order_tire) {
                     if (isset($data_customer['money'][$order_tire->customer_id]) && (!isset($data_customer['pay_money'][$order_tire->customer_id]) || $data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]>0) ) {
-                        $data_plan = array(
-                        'work_plan_date' => $today,
-                        'work_plan_code' => $work_plan_code->work_plan_code_id,
-                        'work_plan_name' => 'Đòi nợ '.$order_tire->customer_name,
-                        'work_plan_comment' => 'Còn nợ '.$this->lib->formatMoney($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]),
-                        'work_plan_complete' => 0,
-                        'work_plan_number' => round(($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id])/1000000),
-                        'work_plan_unit' => 'tr',
-                        'start_date' => strtotime('next tuesday'),
-                        'end_date' => strtotime('next tuesday'),
-                        'work_plan_point' => round(4/60,2),
-                        'work_plan_owner' => $sal,
-                        'create_user' => $st->account,
-                        );
+                        $pay = isset($data_customer['pay_money'][$order_tire->customer_id])?$data_customer['pay_money'][$order_tire->customer_id]:0;
+                        if ($data_customer['money'][$order_tire->customer_id]-$pay > 1000000) {
+                           
+                            $data_plan = array(
+                            'work_plan_date' => $today,
+                            'work_plan_name' => 'Đòi nợ '.$order_tire->customer_name,
+                            'work_plan_comment' => 'Còn nợ '.$this->lib->formatMoney($data_customer['money'][$order_tire->customer_id]-$pay),
+                            'work_plan_complete' => 0,
+                            'work_plan_number' => round(($data_customer['money'][$order_tire->customer_id]-$pay)/1000000),
+                            'work_plan_unit' => 'tr',
+                            'start_date' => strtotime('next tuesday'),
+                            'end_date' => strtotime('next tuesday'),
+                            'work_plan_point' => round(4/60,2),
+                            'work_plan_owner' => $sal,
+                            'create_user' => $st->account,
+                            );
 
-                        if ($work_plan_code_model->getWorkByWhere(array('work_plan_code_name'=>"Đòi nợ"))) {
-                            $data_plan['work_plan_code'] = $work_plan_code_model->getWorkByWhere(array('work_plan_code_name'=>"Đòi nợ"))->work_plan_code_id;
-                        }
-                        else{
-                            $work_plan_code_model->createWork(array('work_plan_code_name'=>"Đòi nợ",'work_plan_code_number'=>"ĐN"));
-                            $data_plan['work_plan_code'] = $work_plan_code_model->getLastWork()->work_plan_code_id;
-                        }
+                            if ($work_plan_code_model->getWorkByWhere(array('work_plan_code_name'=>"Đòi nợ"))) {
+                                $data_plan['work_plan_code'] = $work_plan_code_model->getWorkByWhere(array('work_plan_code_name'=>"Đòi nợ"))->work_plan_code_id;
+                            }
+                            else{
+                                $work_plan_code_model->createWork(array('work_plan_code_name'=>"Đòi nợ",'work_plan_code_number'=>"ĐN"));
+                                $data_plan['work_plan_code'] = $work_plan_code_model->getLastWork()->work_plan_code_id;
+                            }
 
-                        $work_plan_model->createWork($data_plan);
+                            $work_plan_model->createWork($data_plan);
+                        }
                     }
                 }
             }

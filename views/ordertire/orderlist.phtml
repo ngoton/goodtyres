@@ -183,7 +183,11 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
             <td class="fix" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
             <td class="fix"  id="vat_<?php echo $order_tire->order_tire_id; ?>">
+                <b>
                 <a class="order_vat" tabindex="<?php echo $lib->formatMoney($order_tire->vat_percent); ?>" alt="<?php echo $lib->formatMoney($order_tire->check_price_vat>0?($order_tire->total+$order_tire->discount+$order_tire->reduce):($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce)); ?>" title="<?php echo $order_tire->check_price_vat>0?1:0; ?>" data="<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></a>
+                </b>
+                <br>
+                <a style="text-decoration:underline" class="vat_list" data="<?php echo $order_tire->order_tire_id ?>" ><i class="fa fa-file-text-o"></i> HĐ</a>
             </td>
             <td class="fix"  id="discount_<?php echo $order_tire->order_tire_id; ?>">
                 <a class="order_discount" href="<?php echo $this->url('ordertire/listdiscount/'.$order_tire->order_tire_id); ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></a>
@@ -476,6 +480,55 @@ $this->helper('slidePaginator');
         
     </form>
 </div>
+
+<div id="dialogContent7" title="Hóa đơn lô hàng">
+    
+    
+    <form action="#" method="post" id="editForm3">
+        
+        <input type="hidden" id="i_order7" name="i_order7" value="" required="required" />
+        <table id="dataTable2" border="1" style="width: 100%; border: 1px solid rgb(221, 217, 217); margin-bottom: 10px" >
+            <tbody>
+                <?php if( !isset($vat_data) || count($vat_data) == 0){ ?>
+                <tr>
+                    <td><input type="checkbox" name="ch2"></td>
+                    <td>
+                        <table style="width: 100%">
+                            <tr>
+                                <td></td>
+                                <td>
+                                    Số hóa đơn
+                                </td>
+                                <td>
+                                    <input tabindex="1" type="text" style="width:120px" class="number invoice_tire_number"  name="invoice_tire_number[]"  >
+                                </td>
+                                <td>
+                                    Ngày hóa đơn
+                                </td>
+                                <td>
+                                    <input tabindex="2" class="invoice_tire_date" type="date"   name="invoice_tire_date[]" >
+                                </td>
+                            </tr>
+                            
+                            
+                        </table>
+                    </td>
+                </tr>
+                <?php } ?>
+                
+
+                
+
+            </tbody>
+        </table>
+
+        <input type="button" value="Thêm hóa đơn khác" onclick="addRow2('dataTable2')">
+
+        <input type="button" value="Xóa hóa đơn" onclick="deleteRow2('dataTable2')">
+        
+    </form>
+</div>
+
 
 <script type="text/javascript">
 var x = "<?php echo $limit ?>";
@@ -805,6 +858,115 @@ $( "#dialogContent2" ).dialog({
     }
 });
 
+$('.vat_list')
+    //.button({ icons: { primary: "ui-icon-document" }})
+    .click(function() {
+        
+        $('#i_order7').val($(this).attr('data'));
+
+        $('#dataTable2 tbody tr').remove();
+
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/ordertire/getordervat',
+            type: 'POST',
+            data: {order_tire:$(this).attr('data')},
+            success:function(data){
+                //alert(data);
+                $('#dataTable2 tbody').append(data);
+
+                $('.number').focus(function(){
+                    if ( $(this).val() == '0') {
+                       $(this).val(""); 
+                    };
+                    
+                });
+                $('.number').blur(function(){
+                    if ( $(this).val() == "") {
+                        $(this).val(0);
+                    };
+                    
+                });
+                $('.number').keyup(function(event) {
+
+                      // skip for arrow keys
+                  if(event.which >= 37 && event.which <= 40) return;
+
+                  // format number
+                  $(this).val(function(index, value) {
+                    return value
+                      .replace(/[^0-9-]/g, "")
+                    ;
+                  });
+                });
+
+                $('.invoice_tire_number').keyup(function(){
+                    var val = $(this).val();
+                    $(this).val(val.substring(1, val.length));
+
+                    var val_new = $(this).val();
+                    if (val_new.length<7) {
+                        $(this).val("0"+val_new);
+                    }
+                });
+            }
+        });
+
+        $("#dialogContent7").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:"30%",
+            
+        });
+
+        $( "#dialogContent7" ).dialog( "open" )
+    });
+
+
+//set up the dialog box.
+$( "#dialogContent7" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var id = $('#i_order7').val();
+            
+            var invoice_tire = [];
+
+            var invoice_tire_number = [];
+            var invoice_tire_date = [];
+            
+
+            $('.invoice_tire_number').each(function() { 
+                invoice_tire_number.push($(this).val());
+            });
+            $('.invoice_tire_date').each(function() { 
+                invoice_tire_date.push($(this).val());
+            });
+            for (var i = 0; i < invoice_tire_number.length; i++) {
+                invoice_tire.push({'invoice_tire_number':invoice_tire_number[i], 'invoice_tire_date':invoice_tire_date[i]});
+                
+                
+            };
+                
+                $.post("<?php echo BASE_URL ?>/ordertire/addordervat", {data: id, invoice_tire: invoice_tire},
+                   function(data){
+                    $("html, body").animate({ scrollTop: 0 }, 100);
+                    setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                   
+                   }); 
+              
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
+
 $(".order_list").click(function(){
         $("#winpopup").dialog({
             draggable:true,
@@ -1001,7 +1163,6 @@ function addRow(tableID){
     $('.order_tire_cost_type:last').attr('disabled',false);
     $('.order_tire_cost:last').val("");
     $('.comment:last').val("");
-    $('.order_tire_cost_date:last').val("");
     $('input[name="chk"]:last').attr('data',"");
     $('input[name="chk"]:last').attr('tabindex',0);
     $('input[name="chk"]:last').attr('title',"");
@@ -1215,6 +1376,104 @@ function deleteRow(tableID){
                             var type = chkbox.getAttribute("tabindex");
                             var vendor = chkbox.className;
                             $.post("<?php echo BASE_URL ?>/ordertire/deleteordercost", {data: data, vendor: vendor, type: type},
+                               function(data){
+                                //alert(data);
+                               }); 
+                        
+                    }
+                    if(rowCount<=1){
+                        alert("Cannot delete all the rows.");
+                        break;
+                    }
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+            }
+        }
+    }
+    catch(e){
+        alert(e);
+    }
+}
+
+function addRow2(tableID){
+    var table=document.getElementById(tableID);
+    var rowCount=table.rows.length;
+    var row=table.insertRow(rowCount);
+    var colCount=table.rows[0].cells.length;
+    for(var i=0;i<colCount;i++){
+        var newcell=row.insertCell(i);
+        newcell.innerHTML=table.rows[0].cells[i].innerHTML;
+        switch(newcell.childNodes[0].type){
+            case"text":newcell.childNodes[0].value="";
+            break;
+            case"checkbox":newcell.childNodes[0].checked=false;
+            break;
+            case"select-one":newcell.childNodes[0].selectedIndex=0;
+            break;
+        }
+    }
+
+    $('.invoice_tire_number:last').val("0000000");
+    $('input[name="chk2"]:last').attr('data',"");
+    $('input[name="chk2"]:last').attr('tabindex',0);
+    $('input[name="chk2"]:last').attr('title',"");
+    $('input[name="chk2"]:last').attr('class',"");
+    $('input[name="chk2"]:last').attr('disabled',false);
+
+    $('.number').focus(function(){
+        if ( $(this).val() == '0') {
+           $(this).val(""); 
+        };
+        
+    });
+    $('.number').blur(function(){
+        if ( $(this).val() == "") {
+            $(this).val(0);
+        };
+        
+    });
+    $('.number').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-]/g, "")
+        ;
+      });
+    });
+
+    $('.invoice_tire_number').keyup(function(){
+        var val = $(this).val();
+        $(this).val(val.substring(1, val.length));
+
+        var val_new = $(this).val();
+        if (val_new.length<7) {
+            $(this).val("0"+val_new);
+        }
+    });
+
+}
+function deleteRow2(tableID){
+    try{
+        var table=document.getElementById(tableID);
+        var rowCount=table.rows.length;
+
+        var r = confirm("Bạn có chắc chắn không?");
+        if (r == true){
+            for(var i=0;i<rowCount;i++){
+                var row=table.rows[i];
+                var chkbox=row.cells[0].childNodes[0];
+                if(null!=chkbox&&true==chkbox.checked){
+                    if(chkbox.getAttribute("title") > 0){
+                        
+                            var data = chkbox.getAttribute("data");
+                            var number = chkbox.getAttribute("title");
+                            $.post("<?php echo BASE_URL ?>/ordertire/deleteordervat", {data: data, number: number},
                                function(data){
                                 //alert(data);
                                }); 

@@ -283,11 +283,11 @@ $zhongce = isset($stock[3])?$stock[3]:0;
 <!-- ChartJS 1.0.1 -->
 <script src="<?php BASE_URL ?>/public/js/adminbar/plugins/chartjs/Chart.min.js"></script>
 <script>
-var y = ['item1'];
-var lb = ['Sản lượng'];
+var y = ['item2','item1'];
+var lb = ['Doanh thu (triệu)','Sản lượng (bộ)'];
 <?php foreach ($staff_datas as $st) { ?>
   y.push('staff<?php echo $st->staff_id ?>');
-  lb.push('<?php echo $st->staff_name ?>');
+  lb.push('- <?php echo $st->staff_name ?>');
 <?php } ?>
 
 
@@ -303,7 +303,7 @@ var lb = ['Sản lượng'];
       xkey: 'y',
       ykeys: y,
       labels: lb,
-      lineColors: ['#f39c12','#00a65a','#269abc','#8226bc','#2D619C','#dd4b39'],
+      lineColors: ['#f39c12','#dd4b39','#00a65a','#269abc','#8226bc','#2D619C','#aabd08'],
     });
 
   });
@@ -517,3 +517,8 @@ var lb = ['Sản lượng'];
     $('#chonloc option[value='+x+']').attr('selected','selected');
 <?php } ?>
 </script>
+<style type="text/css">
+.morris-hover.morris-default-style{
+  text-align: right;
+}
+</style>

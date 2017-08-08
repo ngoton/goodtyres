@@ -2550,6 +2550,93 @@ Class ordertireController Extends baseController {
         }
     }
 
+    public function addordervat(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $invoice_tire_model = $this->model->get('invoicetireModel');
+            
+
+            $invoice_tire = $_POST['invoice_tire'];
+            foreach ($invoice_tire as $v) {
+                $cost_data = array(
+                    'order_tire' => $_POST['data'],
+                    'invoice_tire_number' => trim($v['invoice_tire_number']),
+                    'invoice_tire_date' => strtotime(date('d-m-Y',strtotime($v['invoice_tire_date']))),
+                );
+                
+
+                if ($invoice_tire_model->getInvoiceByWhere(array('order_tire'=>$cost_data['order_tire'],'invoice_tire_number'=>$cost_data['invoice_tire_number']))) {
+                    $data_order = $invoice_tire_model->getInvoiceByWhere(array('order_tire'=>$cost_data['order_tire'],'invoice_tire_number'=>$cost_data['invoice_tire_number']));
+                    $invoice_tire_model->updateInvoice($cost_data,array('invoice_tire_id'=>$data_order->invoice_tire_id));
+
+                }
+                else{
+                    $invoice_tire_model->createInvoice($cost_data);
+                }
+            }
+        }
+    }
+    public function getordervat(){
+        if(isset($_POST['order_tire'])){
+            $invoice_tire_model = $this->model->get('invoicetireModel');
+            $invoices = $invoice_tire_model->getAllInvoice(array('where'=>'order_tire='.$_POST['order_tire']));
+
+            $str = "";
+
+            if(!$invoices){
+
+                $str .= '<tr class="'.$_POST['order_tire'].'">';
+                    $str .= '<td><input type="checkbox"  name="chk2"></td>';
+                    $str .= '<td><table style="width: 100%">';
+                    $str .= '<tr class="'.$_POST['order_tire'] .'">';
+                    $str .= '<td></td><td>Số hóa đơn</td>';
+                    $str .= '<td><input tabindex="1" type="text" style="width:120px" class="number invoice_tire_number" required="required"  name="invoice_tire_number[]" value="0000000" maxLength="8" ></td></tr>';
+                    
+                    $str .= '<tr class="'.$_POST['order_tire'] .'">';
+                    $str .= '<td></td><td>Ngày hóa đơn</td>';
+                    $str .= '<td><input tabindex="2" class="invoice_tire_date" type="date" name="invoice_tire_date[]" required="required" value="'.date('Y-m-d') .'"></td></tr>';
+                    
+                    $str .= '</table></td></tr>';                                         
+                    
+            }
+            else{
+
+                foreach ($invoices as $v) {
+                    $str .= '<tr class="'.$v->order_tire.'">';
+                    $str .= '<td><input type="checkbox" name="chk2" data="'.$v->order_tire .'" title="'.($v->invoice_tire_number).'"></td>';
+                    $str .= '<td><table style="width: 100%">';
+                    $str .= '<tr class="'.$v->order_tire .'">';
+                    $str .= '<td></td><td>Số hóa đơn</td>';
+                    $str .= '<td><input tabindex="1" type="text" style="width:120px" class="number invoice_tire_number" required="required" name="invoice_tire_number[]" value="'.($v->invoice_tire_number).'" maxLength="8" ></td></tr>';
+                    
+                    $str .= '<tr class="'.$_POST['order_tire'] .'">';
+                    $str .= '<td></td><td>Ngày hóa đơn</td>';
+                    $str .= '<td><input tabindex="2" class="invoice_tire_date" type="date" name="invoice_tire_date[]" required="required" value="'.date('Y-m-d',$v->invoice_tire_date) .'"></td></tr>';
+                    
+                    $str .= '</table></td></tr>';                                         
+                    
+                }
+            }
+
+            echo $str;
+        }
+    }
+    public function deleteordervat(){
+        if(isset($_POST['data'])){
+            $invoice_tire_model = $this->model->get('invoicetireModel');
+            $invoice_tire_model->queryInvoice('DELETE FROM invoice_tire WHERE order_tire = '.$_POST['data'].' AND invoice_tire_number = "'.$_POST['number'].'"');
+
+            echo "Xóa thành công";
+
+            date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+            $filename = "action_logs.txt";
+            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."delete"."|".$_POST['data']."|invoice_tire|"."\n"."\r\n";
+            
+            $fh = fopen($filename, "a") or die("Could not open log file.");
+            fwrite($fh, $text) or die("Could not write file!");
+            fclose($fh);
+        }
+    }
+
     public function contract() {
         $this->view->disableLayout();
         if (!isset($_SESSION['userid_logined'])) {
