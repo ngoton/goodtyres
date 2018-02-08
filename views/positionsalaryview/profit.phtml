@@ -1,0 +1,149 @@
+
+<?php
+
+    $j = 1;
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div class="add-box">
+    <a class="add_button" id="btnExport2" >Export Excel</a>
+    
+</div>
+
+<table id="tblExport2" class="table_data">
+<thead>
+    <tr>
+        <th  class="fix">
+            <a class="sort" >STT </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Ngày </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Số ĐH </a>
+        </th>
+        
+        <th  class="fix">
+            <a class="sort " >Khách hàng </a>
+        </th>
+        <th  class="fix">
+            <a class="sort ">Sản lượng </a>
+        </th>
+        <th  class="fix">
+            <a class="sort ">Thu </a>
+        </th>
+        <th class="fix">
+            <a class="sort ">Chi phí bán </a>
+        </th> 
+        <th class="fix">
+            <a class="sort ">Chi phí nhập </a>
+        </th> 
+        <th class="fix">
+            <a class="sort ">Lợi nhuận </a>
+        </th> 
+        <th class="fix">
+            <a class="sort ">Lợi nhuận sau thuế </a>
+        </th> 
+        <th class="fix">
+            <a class="sort ">%</a>
+        </th>
+        <th class="fix">
+            <a class="sort ">Lương Lợi nhuận </a>
+        </th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $tongsl=0; $tongkhtra=0; $tongcpban=0; $tongcpnhap=0; $tongloinhuan=0; $tongluong=0; ?>
+    <?php foreach ($order_tires as $order_tire) : 
+    $tongsl += $order_tire->order_tire_number;
+    $tongkhtra += $order_tire->total;
+    $tongcpban += $order_tire->order_cost;
+    $tongcpnhap += $costs[$order_tire->order_tire_id];
+    $loinhuan = $order_tire->total-$order_tire->order_cost-$costs[$order_tire->order_tire_id];
+    $luong_ln = isset($luong_loinhuan[$order_tire->order_tire_id])?$luong_loinhuan[$order_tire->order_tire_id]:0;
+    $tongluong += $luong_ln;
+    ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->order_tire_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
+            <td class="fix"><?php echo $j++; ?></td>
+            <td class="fix"  id="delivery_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->delivery_date>0?$lib->hien_thi_ngay_thang($order_tire->delivery_date):"Chưa giao"; ?></td>
+            <td class="fix"  id="order_number_<?php echo $order_tire->order_tire_id; ?>">
+                <?php 
+                    echo $order_tire->order_number;
+                ?>
+            </td>
+            
+            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->customer_name; ?></td>
+            <td class="fix"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
+            <td class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?>
+                <br>
+                <a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer.'/'.strtotime(date('t-m-Y',$order_tire->delivery_date))); ?>"><i class="fa fa-search-plus"></i>Công nợ</a>
+            </td>
+            <td class="fix"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
+                <a style="font-weight:bold;text-decoration:underline" class="order_cost" data="<?php echo $order_tire->order_tire_id; ?>" href="<?php echo $this->url('ordertire/listcost/'.$order_tire->order_tire_id); ?>">
+                    <?php echo $lib->formatMoney($order_tire->order_cost); ?>
+                </a>
+            </td>
+            <td class="fix"  id="costs_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($costs[$order_tire->order_tire_id]); ?></td>
+            <td class="fix"  id="profit_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($loinhuan); ?></td>
+            <td class="fix"  id="profit_after_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($loinhuan-($loinhuan*20/100)); ?></td>
+            <td class="fix"  id="salary_percent_<?php echo $order_tire->order_tire_id; ?>"><?php echo round($luong_ln/($loinhuan-($loinhuan*20/100))*100)."%"; ?></td>
+            <td class="fix"  id="salary_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($luong_ln); ?></td>
+        </tr>
+    <?php endforeach; ?>
+    
+    <tr style=" color:rgb(211, 11, 57); text-align: center; font-weight:bold;">
+            <td class="fix" colspan="4">Tổng cộng</td>
+            <td class="fix"><?php echo $lib->formatMoney($tongsl) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongkhtra) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongcpban) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongcpnhap) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongkhtra-$tongcpban-$tongcpnhap) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongkhtra-$tongcpban-$tongcpnhap-(($tongkhtra-$tongcpban-$tongcpnhap)*20/100)) ?></td>
+            <td class="fix"></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongluong) ?></td>
+        </tr>
+   </tbody>
+</table>
+
+<script type="text/javascript">
+
+$(".order_cost").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:600,
+            resizable: false,
+            title:'Chi phí',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+$(".order_list").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:600,
+            resizable: false,
+            title:'Thông tin',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+
+
+</script>

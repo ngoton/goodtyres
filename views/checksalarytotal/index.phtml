@@ -1,0 +1,629 @@
+<style type="text/css">
+    .ui-datepicker-calendar {
+        display: none;
+    }​
+</style>
+<script type="text/javascript">
+    $(function() {
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'MM yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#chonngaytao").change();
+         },
+         
+    };  
+    $("#chonngaytao").datepicker(pickerOpts);
+              
+            
+    $("#chonngaytao").change(function(){
+        var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+        var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+        if (month<9) {
+            var ngay = "0"+(month+1)+"-"+year;
+        }
+        else
+            var ngay = (month+1)+"-"+year;
+
+        var page = "<?php echo $page; ?>";
+        var cot = "<?php echo $order_by; ?>";
+        var sapxep = "<?php echo $order; ?>";
+        var keyword = "<?php echo $keyword; ?>";
+        var loc =    $('#chonloc').val();
+          if($('#sl_status') != null)
+          {
+            var trangthai = $('#sl_status').val();
+          }
+          if($('#sl_nv') != null)
+          {
+            var nv = $('#sl_nv').val();
+          }
+          if($('#sl_tha') != null)
+          {
+            var tha = $('#sl_tha').val();
+          }
+          if($('#sl_na') != null)
+          {
+            var na = $('#sl_na').val();
+          }
+          if($('#tu') != null)
+          {
+            var tu = $('#tu').val();
+          }
+          if($('#den') != null)
+          {
+            var den = $('#den').val();
+          }
+        
+        
+        var dataString = 'keyword='+ keyword+"&limit="+loc+"&ngaytao="+ngay+"&page="+ page +"&order_by="+ cot +"&order="+ sapxep+"&trangthai="+ trangthai+"&nv="+nv+"&tha="+tha+"&na="+na+"&tu="+tu+"&den="+den;  
+        
+        $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+        
+            $.ajax({
+                type: "POST",                            // Phương thức gọi là GET
+                url: "#",                 // File xử lý
+                data: dataString,                       // Dữ liệu truyền vào
+                beforeSend:  function() {               // add class "loading" cho khung nhập
+                    $('input#search-input').addClass('loading');
+                },
+                success: function(server_response)      // Khi xử lý thành công sẽ chạy hàm này
+                {
+                    $('body').html(server_response);    // Hiển thị dữ liệu vào thẻ div #searchresultdata
+                    
+                     
+                    if ($('input#search-input').hasClass("loading")) {      // Kiểm tra class "loading"
+                        $("input#search-input").removeClass("loading");     // Remove class "loading"
+                    }
+                    $('#loading').fadeOut(500); 
+                }
+            });
+        
+        
+    });
+});
+</script>
+<?php
+$url_order = 'ASC';
+if ($order_by == 'staff_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'staff_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> CHI PHÍ NHÂN SỰ </h1></center>
+<div class="add-box">
+    <a class="add_button" id="btnExport" href="#">Export Excel</a>
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+        <div class="add-box">
+            THÁNG
+        	<input type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn ngày" <?php if(isset($thang)) echo 'value="'.date('m-Y',$thang).'"'; else if(isset($ngaytao)) echo "value='$ngaytao'"; ?>>  
+                                        
+        </div>
+        
+      </div>
+
+
+</div>
+
+<?php if( $_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9){ ?>
+<div class="add-box">
+    <a class="add_button approve" data="<?php echo '01-'.$ngaytao ?>" >Duyệt</a>
+</div>
+<?php } ?>
+
+<table class="table_data" id="tblExport">
+<thead>
+    <tr style="display:none">
+        <th colspan="17"><center>BẢNG LƯƠNG THÁNG <?php echo isset($thang)?date('m/Y',$thang):(isset($ngaytao)?$ngaytao:"") ?></center></th>
+    </tr>
+    <tr style="display:none">
+        <th colspan="17"></th>
+    </tr>
+    <tr>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'staff_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff_name','<?php echo $url_order ?>')">Họ và tên <?php if ($order_by == 'staff_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','position','<?php echo $url_order ?>')">Chức vụ <?php if ($order_by == 'position'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th rowspan="2" class="fix">Lương <br> chức vụ</th>
+        <th rowspan="2" class="fix">Lương <br> SP</th>
+        <th rowspan="2" class="fix">Lương <br> giao nhận</th>
+        <th colspan="3" class="fix">Phụ cấp</th>
+        <th rowspan="2" class="fix">Bảo hiểm</th>
+        <th rowspan="2" class="fix">Tổng chi lương</th>
+        <th colspan="2" class="fix">Hệ số</th>
+        <th rowspan="2" class="fix">Cộng lương</th>
+        <th rowspan="2" class="fix">Trừ BH</th>
+        <th rowspan="2" class="fix">Giữ lương</th>
+        <th rowspan="2" class="fix">Thực lĩnh</th>
+        <th colspan="3" class="fix">Ghi chú</th>
+            
+    </tr>
+    <tr>
+        <th class="fix">CT</th>
+        <th class="fix">ĐT</th>
+        <th class="fix">Cơm</th>
+        <th class="fix">Đánh giá</th>
+        <th class="fix">Thời gian</th>
+        <th class="fix">Nợ</th>
+        <th class="fix">Nợ trả</th>
+        <th class="fix">Nợ trước</th>
+    </tr>
+   </thead>
+   <tbody>
+    <?php 
+    function countDays($year, $month, $ignore) {
+        $count = 0;
+        $counter = mktime(0, 0, 0, $month, 1, $year);
+        while (date("n", $counter) == $month) {
+            $day = date("w", $counter);
+            if (in_array($day, $ignore) == false) {
+                if ($day==6) {
+                    $count += 0.5;
+                }
+                else{
+                    $count++;
+                }
+                
+            }
+            $counter = strtotime("+1 day", $counter);
+        }
+        return $count;
+    }
+
+    $tongngaylamviec = countDays(date('Y',strtotime('01-'.$ngaytao)), date('m',strtotime('01-'.$ngaytao)), array(0, 7));
+
+    $chucvu_tuvan=0; $sanpham_tuvan=0; $giaonhan_tuvan=0; $phone_tuvan=0; $ngoaikhoa_tuvan=0; $com_tuvan=0; $tienbh_tuvan=0; $congluong_tuvan=0; $tienbhnv_tuvan=0; $sono_tuvan=0; $chiluong_tuvan=0; $heso_thoigian_tuvan=null; $heso_danhgia_tuvan=null; $check_tuvan=0;
+
+    $tongchucvu=0; $tongphone=0; $tongngoaikhoa=0; $tongcom=0; $tongbh=0; $tongbhnv=0; $tongkpi=0; $tongsp=0; $tonggiaonhan=0; $tongluong=0; $tongthuclinh=0; $tonggiuluong=0; $tongchi=0; $tongkhnothangtruoc=0; $tongkhnothangnay=0; $tongkhdatra=0;
+    foreach ($staffs as $salary) : ?>
+    <?php
+    $sanpham = 0;
+    $sanpham1 = 0;
+
+        
+            $chucvu = isset($arr_position_salary[$salary->staff_id])?$arr_position_salary[$salary->staff_id]:0;
+            $tongchucvu += $chucvu;
+
+            if ($salary->position=="Kế toán") {
+                $sanpham1 = isset($luong_sp[$salary->staff_id])?$luong_sp[$salary->staff_id]:0;
+                $sanpham1 += isset($luong_vuotgia[$salary->staff_id])?$luong_vuotgia[$salary->staff_id]:0;
+                $sanpham1 += isset($luong_kpi[$salary->staff_id])?$luong_kpi[$salary->staff_id]:0;
+
+                //$sanpham1 = $sanpham1*2;
+
+                $sanpham_tuvan += $sanpham1;
+                $chiluong_tuvan += $sanpham1;
+                $congluong_tuvan += $sanpham1;
+                $tongsp += $sanpham1;
+                $tongchi += $sanpham1;
+                $tongluong += $sanpham1;
+            }
+            else{
+                $sanpham = isset($luong_sp[$salary->staff_id])?$luong_sp[$salary->staff_id]:0;
+                $sanpham += isset($luong_vuotgia[$salary->staff_id])?$luong_vuotgia[$salary->staff_id]:0;
+                
+                $sanpham += isset($luong_kpi[$salary->staff_id])?$luong_kpi[$salary->staff_id]:0;
+                $tongsp += $sanpham;
+            }
+            
+            /*if ($salary->user_group==10) {
+                $sanpham_tuvan += $sanpham;
+                $chiluong_tuvan += $sanpham;
+                $congluong_tuvan += $sanpham;
+            }*/
+            
+
+            $giaonhan = isset($arr_lift[$salary->staff_id])?$arr_lift[$salary->staff_id]:0;
+            $tonggiaonhan += $giaonhan;
+
+            $phone = isset($arr_phone[$salary->staff_id])?$arr_phone[$salary->staff_id]:0;
+            $tongphone += $phone;
+
+            $ngoaikhoa = isset($arr_curricular[$salary->staff_id])?$arr_curricular[$salary->staff_id]:0;
+            $tongngoaikhoa += $ngoaikhoa;
+
+            $com = isset($arr_eating_allowance[$salary->staff_id])?$arr_eating_allowance[$salary->staff_id]:0;
+            $tongcom += $com;
+
+            $tienbh = isset($arr_insurrance[$salary->staff_id]['congty'])?$arr_insurrance[$salary->staff_id]['congty']:0;
+            $tienbhnv = isset($arr_insurrance[$salary->staff_id]['nhanvien'])?$arr_insurrance[$salary->staff_id]['nhanvien']:0;
+            $tienbhnv += $tienbh;
+            $tongbh += $tienbh; 
+            $tongbhnv += $tienbhnv;
+
+            $chiluong = $chucvu+$sanpham+$giaonhan+$phone+$ngoaikhoa+$com+$tienbh;
+            $tongchi += $chiluong;
+
+            $heso_thoigian = isset($arr_attend[$salary->staff_id])?round($arr_attend[$salary->staff_id]/$tongngaylamviec,2):"";
+
+            $heso_danhgia = isset($position_evaluate[$salary->staff_id])?round((100+$position_evaluate[$salary->staff_id])/100,2):"";
+
+            $congluong = $chiluong;
+            if ($heso_thoigian!="") {
+                $congluong *= $heso_thoigian;
+            }
+            if ($heso_danhgia!="") {
+                $congluong *= $heso_danhgia;
+            }
+
+            $congluong = round($congluong);
+            $tongluong += $congluong;
+
+            $sonothangtruoc = isset($congnothangtruoc[$salary->staff_id])?$congnothangtruoc[$salary->staff_id]:0;
+            $sonodatra = isset($congnodatra[$salary->staff_id])?$congnodatra[$salary->staff_id]:0;
+            $sono = isset($congno[$salary->staff_id])?$congno[$salary->staff_id]:0;
+
+            $tongkhnothangtruoc += $sonothangtruoc;
+            $tongkhnothangnay += $sono;
+            $tongkhdatra += $sonodatra;
+            
+
+            $tyle_giuluong = 0;
+            if ($sono>0 && $sono<=3) {
+                $tyle_giuluong = 1/3;
+            }
+            else if ($sono>3 && $sono<=5) {
+                $tyle_giuluong = 1/2;
+            }
+            else if ($sono>5) {
+                $tyle_giuluong = 2/3;
+            }
+
+            $thuclinh = round($congluong-$tienbhnv);
+
+            $giuluong = round($thuclinh*$tyle_giuluong);
+
+            if (isset($arr_salary_keep[$salary->staff_id])) {
+                $giuluong = $arr_salary_keep[$salary->staff_id];
+            }
+            $tonggiuluong += $giuluong;
+
+            $thuclinh = $thuclinh-$giuluong;
+
+            $tongthuclinh += $thuclinh;
+        ?>
+            <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $salary->staff_id ?>"  class="edit_tr">
+            	
+                <td class="fix"><?php echo $i++; ?></td>
+                <td class="fix" id="staff_name_<?php echo $salary->staff_id; ?>"><?php echo $salary->staff_name; ?></td>
+                <td class="fix" id="position_<?php echo $salary->staff_id; ?>"><?php echo $salary->position; ?></td>
+                <td class="fix text-right" id="chucvu_<?php echo $salary->staff_id; ?>"><a href="positionsalary/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($chucvu); ?></a></td>
+                <td class="fix text-right" id="luongsp_<?php echo $salary->staff_id; ?>"><a href="checksalary/index/<?php echo $salary->staff_id ?>/1/order_number/ASC/<?php echo strtotime('01-'.$ngaytao) ?>"><?php echo $lib->formatMoney($sanpham); ?></a></td>
+                <td class="fix text-right" id="luonggiaonhan_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($giaonhan); ?></td>
+                <td class="fix text-right editable" data="<?php echo $salary->staff_id; ?>" id="ngoaikhoa_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($ngoaikhoa) ?></td>
+                <td class="fix text-right"><a href="phoneallowance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($phone) ?></a></td>
+                <td class="fix text-right"><a href="eatingallowance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($com) ?><a></td>
+                <td class="fix text-right"><a href="insurrance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($tienbh) ?></a></td>
+                <td class="fix text-right"><b><?php echo $lib->formatMoney($chiluong) ?></b></td>
+                <td class="fix text-right"><a href="<?php echo $this->url('positionstaffevaluate/index/-1/'.$salary->staff_id.'/'.strtotime('01-'.$ngaytao)) ?>" ><?php echo $heso_danhgia ?></a></td>
+                <td class="fix text-right"><a href="attendance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $heso_thoigian ?></a></td>
+                <td class="fix text-right"><b><?php echo $lib->formatMoney($congluong) ?></b></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tienbhnv) ?></td>
+                <td class="fix text-right editable2" data="<?php echo $salary->staff_id; ?>" id="giuluong_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($giuluong) ?></td>
+                <td class="fix text-right"><b><?php echo $lib->formatMoney($thuclinh) ?></b></td>
+                <td class="fix text-right"><?php echo $sono ?></td>
+                <td class="fix text-right"><?php echo $sonodatra ?></td>
+                <td class="fix text-right"><?php echo $sonothangtruoc ?></td>
+                
+            </tr>
+        
+    <?php endforeach; ?> 
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');"  class="edit_tr">
+                
+            <td class="fix"><?php echo $i++; ?></td>
+            <td class="fix">Tư vấn</td>
+            <td class="fix">SEO</td>
+            <td class="fix text-right"><a href="positionsalary/index/<?php echo strtotime('01-'.$ngaytao) ?>"></a></td>
+            <td class="fix text-right"><a href="checksalary/index/0/1/order_number/ASC/<?php echo strtotime('01-'.$ngaytao) ?>"><?php echo $lib->formatMoney($sanpham_tuvan); ?></a></td>
+            <td class="fix text-right"></td>
+            <td class="fix text-right" ></td>
+            <td class="fix text-right"></td>
+            <td class="fix text-right"></td>
+            <td class="fix text-right"></td>
+            <td class="fix text-right"><b><?php echo $lib->formatMoney($chiluong_tuvan) ?></b></td>
+            <td class="fix text-right"></td>
+            <td class="fix text-right"></td>
+            <td class="fix text-right"><b><?php echo $lib->formatMoney($congluong_tuvan) ?></b></td>
+            <td class="fix text-right"></td>
+            <td class="fix text-right"></td>
+            <td class="fix text-right"><b><?php echo $lib->formatMoney($thuclinh_tuvan) ?></b></td>
+            <td class="fix text-right"></td>
+            <td class="fix text-right"></td>
+            <td class="fix text-right"></td>
+            
+        </tr>
+   </tbody>
+   <tfoot>
+       <tr style="font-weight:bold"> 
+           <td colspan="3">Tổng cộng</td>
+           <td class="fix text-right"><?php echo $lib->formatMoney($tongchucvu) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongsp) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tonggiaonhan) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongngoaikhoa) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongphone) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongcom) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongbh) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongchi) ?></td>
+            <td class="fix text-right"></td>
+            <td class="fix text-right"></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongluong) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongbhnv) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tonggiuluong) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongthuclinh) ?></td>
+            <td class="fix text-right"><?php echo $tongkhnothangnay ?></td>
+            <td class="fix text-right"><?php echo $tongkhdatra ?></td>
+            <td class="fix text-right"><?php echo $tongkhnothangtruoc ?></td>
+       </tr>
+       
+   </tfoot>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+
+<div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+
+<script type="text/javascript">
+
+$(".table_data a").click(function(){
+    $("#winpopup").dialog({
+        draggable:true,
+        modal: true,
+        autoOpen: false,
+        maxHeight:500,
+        width:"80%",
+        resizable: false,
+        title:'Chi tiết',
+        position: ['center',20],
+        
+    });
+    $("#winpopup").load($(this).attr('href'));
+    $("#winpopup").dialog("open");
+     
+    return false;
+});
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "auto",
+    title: "Bảng lương",
+    hide: 'fold',
+    show: 'blind'
+});
+
+$('.approve').click(function(){
+    var id = $(this).attr("data");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/checksalarytotal/approveall", {data: id},
+           function(data){
+            
+
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                                        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+            $('#loading').fadeOut(500);
+           
+           }); 
+      }
+
+});
+
+$('.editButton').click(function(){
+    var id = $(this).attr("data");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/newsalary/approve", {data: id},
+           function(data){
+
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                                        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+            $('#loading').fadeOut(500);
+           
+           }); 
+      }
+
+});
+
+$('.number').keyup(function(){
+    // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+});
+
+
+$('.editable').dblclick(function(e){  
+        var i=0;
+        var id=$(this).attr('id');
+        e.stopPropagation();      //<-------stop the bubbling of the event here
+        var value = $('#'+id).html();
+        var data=$(this).attr('data');
+
+        updateVal('#'+id, value, data);
+        
+    });
+    function updateVal(currentEle, value, id) {
+        var id = id;
+        $(currentEle).html('<input class="thVal" style="width:50px"  type="text" value="'+value+'" />');
+        $(".thVal").focus();
+        $(".thVal").keyup(function (event) {
+            if (event.keyCode == 13) {
+                var keyword = $(".thVal").val().trim();
+                var thang = $('#chonngaytao').val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/totalsalary/ngoaikhoa',
+                    type: 'POST',
+                    data: {data:id,keyword:keyword,thang:thang},
+                    success:function(data){
+                        $(currentEle).html(keyword);
+                        setTimeout(function() {
+                                        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 100);
+                    }
+                });
+
+            }
+        });
+        
+        $(".thVal").focusout(function () { // you can use $('html')
+            var keyword = $(".thVal").val().trim();
+            var thang = $('#chonngaytao').val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/totalsalary/ngoaikhoa',
+                    type: 'POST',
+                    data: {data:id,keyword:keyword,thang:thang},
+                    success:function(data){
+                        $(currentEle).html(keyword);
+                        setTimeout(function() {
+                                        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 100);
+                    }
+                });
+        });
+    }
+
+$('.editable2').dblclick(function(e){  
+        var i=0;
+        var id=$(this).attr('id');
+        e.stopPropagation();      //<-------stop the bubbling of the event here
+        var value = $('#'+id).html();
+        var data=$(this).attr('data');
+
+        updateVal2('#'+id, value, data);
+        
+    });
+    function updateVal2(currentEle, value, id) {
+        var id = id;
+        $(currentEle).html('<input class="thVal2" style="width:50px"  type="text" value="'+value+'" />');
+        $(".thVal2").focus();
+        $(".thVal2").keyup(function (event) {
+            if (event.keyCode == 13) {
+                var keyword = $(".thVal2").val().trim();
+                var thang = $('#chonngaytao').val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/checksalarytotal/giuluong',
+                    type: 'POST',
+                    data: {data:id,keyword:keyword,thang:thang},
+                    success:function(data){
+                        $(currentEle).html(keyword);
+                        setTimeout(function() {
+                                        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 100);
+                    }
+                });
+
+            }
+        });
+        
+        $(".thVal2").focusout(function () { // you can use $('html')
+            var keyword = $(".thVal2").val().trim();
+            var thang = $('#chonngaytao').val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/checksalarytotal/giuluong',
+                    type: 'POST',
+                    data: {data:id,keyword:keyword,thang:thang},
+                    success:function(data){
+                        $(currentEle).html(keyword);
+                        setTimeout(function() {
+                                        searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 100);
+                    }
+                });
+        });
+    }
+
+$('.editable3').dblclick(function(e){  
+        var i=0;
+        var id=$(this).attr('id');
+        e.stopPropagation();      //<-------stop the bubbling of the event here
+        var value = $('#'+id).html();
+        var data=$(this).attr('data');
+
+        updateVal3('#'+id, value, data);
+        
+    });
+    function updateVal3(currentEle, value, id) {
+        var id = "group10";
+        $(currentEle).html('<input class="thVal3" style="width:50px" type="text" value="'+value+'" />');
+        $(".thVal3").focus();
+        $(".thVal3").keyup(function (event) {
+            if (event.keyCode == 13) {
+                var keyword = $(".thVal3").val().trim();
+                var thang = $('#chonngaytao').val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/checksalarytotal/giuluong',
+                    type: 'POST',
+                    data: {data:id,keyword:keyword,thang:thang},
+                    success:function(data){
+                        $(currentEle).html(keyword);
+                    }
+                });
+
+            }
+        });
+        
+        $(".thVal3").focusout(function () { // you can use $('html')
+            var keyword = $(".thVal3").val().trim();
+            var thang = $('#chonngaytao').val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/checksalarytotal/giuluong',
+                    type: 'POST',
+                    data: {data:id,keyword:keyword,thang:thang},
+                    success:function(data){
+                        $(currentEle).html(keyword);
+                    }
+                });
+        });
+    }
+</script>

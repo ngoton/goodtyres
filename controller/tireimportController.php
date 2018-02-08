@@ -268,6 +268,18 @@ Class tireimportController Extends baseController {
             $cell_code = $objWorksheet->getCellByColumnAndRow(0, 1);
             $code = $cell_code->getCalculatedValue();
 
+            $cell_date = $objWorksheet->getCellByColumnAndRow(1, 1);
+            $start_date = $cell_date->getCalculatedValue();
+
+            if (is_numeric($start_date)) {
+                $start_date = PHPExcel_Shared_Date::ExcelToPHP($start_date);
+                $dauthang = strtotime(date('d-m-Y',$start_date));
+            }
+            else{
+                $date = str_replace('/', '-', $start_date);
+                $dauthang = strtotime($date);
+            }
+
                 for ($row = 3; $row <= $highestRow; ++ $row) {
                     $val = array();
                     for ($col = 0; $col < $highestColumnIndex; ++ $col) {
@@ -337,7 +349,7 @@ Class tireimportController Extends baseController {
                                     'tire_pattern' => $id_pattern,
                                     'tire_price' => trim($val[4]),
                                     'code' => $code,
-                                    
+                                    'start_date' => $dauthang,
                                     );
                                     $tireimport->updateTire($tire_import_data,array('tire_import_id' => $id_tire_import));
                                 }
@@ -348,7 +360,7 @@ Class tireimportController Extends baseController {
                                     'tire_pattern' => $id_pattern,
                                     'tire_price' => trim($val[4]),
                                     'code' => $code,
-                                    
+                                    'start_date' => $dauthang,
                                     );
                                     $tireimport->createTire($tire_import_data);
                                 }

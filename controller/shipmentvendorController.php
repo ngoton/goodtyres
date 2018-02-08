@@ -107,6 +107,7 @@ Class shipmentvendorController Extends baseController {
                         'vendor_expect_date' => trim($_POST['vendor_expect_date']),
                         'vendor_after_date' => trim($_POST['vendor_after_date']),
                         'director' => trim($_POST['director']),
+                        'shipment_vendor_code' => trim($_POST['shipment_vendor_code']),
                         
                         );
             if ($_POST['check'] == "true") {

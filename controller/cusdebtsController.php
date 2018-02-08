@@ -17,6 +17,7 @@ Class cusdebtsController Extends baseController {
             $page = isset($_POST['page']) ? $_POST['page'] : null;
             $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
             $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
+            $batdau = isset($_POST['batdau']) ? $_POST['batdau'] : null;
         }
         else{
             $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'customer_name';
@@ -24,7 +25,10 @@ Class cusdebtsController Extends baseController {
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
             $limit = 50;
+            $batdau = date('d-m-Y');
         }
+
+        $ngayketthuc = date('d-m-Y', strtotime($batdau. ' + 1 days'));
 
         $id = $this->registry->router->param_id;
 
@@ -42,12 +46,12 @@ Class cusdebtsController Extends baseController {
         $customers = $customer_model->getAllCustomer($data);
         $obtain_data = array();
         foreach ($customers as $customer) {
-            $obtains = $obtain_model->getAllObtain(array('where'=>'money > 0 AND customer = '.$customer->customer_id));
+            $obtains = $obtain_model->getAllObtain(array('where'=>'money > 0 AND customer = '.$customer->customer_id.' AND obtain_date < '.strtotime($ngayketthuc)));
             foreach ($obtains as $obtain) {
                 $obtain_data['total'][$customer->customer_id] = isset($obtain_data['total'][$customer->customer_id])?($obtain_data['total'][$customer->customer_id]+$obtain->money):(0+$obtain->money);
             }
 
-            $obtain_downs = $obtain_model->getAllObtain(array('where'=>'money < 0 AND customer = '.$customer->customer_id));
+            $obtain_downs = $obtain_model->getAllObtain(array('where'=>'money < 0 AND customer = '.$customer->customer_id.' AND obtain_date < '.strtotime($ngayketthuc)));
             foreach ($obtain_downs as $obtain_down) {
                 $obtain_data['down'][$customer->customer_id] = isset($obtain_data['down'][$customer->customer_id])?($obtain_data['down'][$customer->customer_id]-$obtain_down->money):(0-$obtain_down->money);
             }
@@ -72,6 +76,7 @@ Class cusdebtsController Extends baseController {
         $this->view->data['tongsotrang'] = $tongsotrang;
         $this->view->data['limit'] = $limit;
         $this->view->data['sonews'] = $sonews;
+        $this->view->data['batdau'] = $batdau;
 
         $data = array(
             'order_by'=>$order_by,

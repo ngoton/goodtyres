@@ -169,24 +169,26 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix"><?php echo $j++; ?></td>
             <td class="fix"  id="delivery_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->delivery_date>0?$lib->hien_thi_ngay_thang($order_tire->delivery_date):"Chưa giao"; ?></td>
             <td class="fix"  id="order_number_<?php echo $order_tire->order_tire_id; ?>">
+                <a target="_blank" href="<?php echo $this->url('ordertire/orderlist/'.$order_tire->order_tire_id); ?>">
                 <?php 
                     echo $order_tire->order_number;
                 ?>
+                </a>
             </td>
             
             <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->customer_name; ?></td>
-            <td class="fix"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
-            <td class="fix" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
-            <td class="fix"  id="vat_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></td>
-            <td class="fix"  id="discount_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></td>
-            <td class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?></td>
-            <td class="fix"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
+            <td class="fix text-right"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
+            <td class="fix text-right" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
+            <td class="fix text-right"  id="vat_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></td>
+            <td class="fix text-right"  id="discount_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></td>
+            <td class="fix text-right"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?></td>
+            <td class="fix text-right"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
                 <a style="font-weight:bold;text-decoration:underline" class="order_cost" data="<?php echo $order_tire->order_tire_id; ?>" href="<?php echo $this->url('ordertire/listcost/'.$order_tire->order_tire_id); ?>">
                     <?php echo $lib->formatMoney($order_tire->order_cost); ?>
                 </a>
             </td>
-            <td class="fix"  id="costs_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($costs[$order_tire->order_tire_id]); ?></td>
-            <td class="fix"  id="profit_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->order_cost-$costs[$order_tire->order_tire_id]); ?></td>
+            <td class="fix text-right"  id="costs_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($costs[$order_tire->order_tire_id]); ?></td>
+            <td class="fix text-right"  id="profit_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->order_cost-$costs[$order_tire->order_tire_id]); ?></td>
             <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->username; ?></td> 
              
             
@@ -206,15 +208,15 @@ elseif ($order_by == 'order_tire_number')
             </td>
             
             <td class="fix" data="<?php echo $tire_sale->customer; ?>"  id="customer_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $tire_sale->customer_name; ?></td>
-            <td class="fix"  id="tire_sale_number_<?php echo $tire_sale->tire_sale_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$tire_sale->tire_sale_id); ?>"><?php echo $tire_sale->volume; ?></a></td>
-            <td class="fix" id="thu_<?php echo $tire_sale->tire_sale_id; ?>"></td> 
-            <td class="fix"  id="vat_<?php echo $tire_sale->tire_sale_id; ?>"></td>
-            <td class="fix"  id="discount_<?php echo $tire_sale->tire_sale_id; ?>"></td>
-            <td class="fix"  id="total_<?php echo $tire_sale->tire_sale_id; ?>"></td>
-            <td class="fix"  id="order_cost_<?php echo $tire_sale->tire_sale_id; ?>">
+            <td class="fix text-right"  id="tire_sale_number_<?php echo $tire_sale->tire_sale_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$tire_sale->tire_sale_id); ?>"><?php echo $tire_sale->volume; ?></a></td>
+            <td class="fix text-right" id="thu_<?php echo $tire_sale->tire_sale_id; ?>"></td> 
+            <td class="fix text-right"  id="vat_<?php echo $tire_sale->tire_sale_id; ?>"></td>
+            <td class="fix text-right"  id="discount_<?php echo $tire_sale->tire_sale_id; ?>"></td>
+            <td class="fix text-right"  id="total_<?php echo $tire_sale->tire_sale_id; ?>"></td>
+            <td class="fix text-right"  id="order_cost_<?php echo $tire_sale->tire_sale_id; ?>">
             </td>
-            <td class="fix"  id="costs_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney($costs2[$tire_sale->tire_sale_id]); ?></td>
-            <td class="fix"  id="profit_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney(0-$costs2[$tire_sale->tire_sale_id]); ?></td>
+            <td class="fix text-right"  id="costs_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney($costs2[$tire_sale->tire_sale_id]); ?></td>
+            <td class="fix text-right"  id="profit_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney(0-$costs2[$tire_sale->tire_sale_id]); ?></td>
             <td class="fix" id="sale_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $tire_sale->username; ?></td> 
              
             
@@ -223,14 +225,14 @@ elseif ($order_by == 'order_tire_number')
     <?php endforeach; ?>
     <tr style=" color:rgb(211, 11, 57); text-align: center; font-weight:bold;">
             <td class="fix" colspan="5">Tổng cộng</td>
-            <td class="fix"><?php echo $lib->formatMoney($tongsl) ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongthu) ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongthue) ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongtru) ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongkhtra) ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongcpban) ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongcpnhap) ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongkhtra-$tongcpban-$tongcpnhap) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongsl) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongthu) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongthue) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongtru) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongkhtra) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongcpban) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongcpnhap) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongkhtra-$tongcpban-$tongcpnhap) ?></td>
             <td class="fix"></td>
             <td class="fix"></td>
             <td class="fix"></td>

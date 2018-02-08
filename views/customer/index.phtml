@@ -92,7 +92,9 @@ elseif ($order_by == 'customer_address')
         <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_email','<?php echo $url_order ?>')">Email <?php if ($order_by == 'customer_email'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>   
-        
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_province','<?php echo $url_order ?>')">Tỉnh <?php if ($order_by == 'customer_province'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>  
            
         <th  class="fix">&nbsp;</th>
     </tr>
@@ -123,9 +125,10 @@ elseif ($order_by == 'customer_address')
             <td class="fix" style="display:none" id="customer_ward_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_ward; ?></td>
             <td class="fix" style="display:none" id="customer_district_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_district; ?></td>
             <td class="fix" style="display:none" id="customer_city_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_city; ?></td>
-            <td class="fix" style="display:none" id="customer_province_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_province; ?></td>
+            
             <td class="fix" style="display:none" id="customer_contact_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_contact; ?></td>
-            <td class="fix" style="display:none" id="customer_province_<?php echo $customer->customer_id; ?>"><?php echo isset($district_datas[$customer->customer_province]['name'])?$district_datas[$customer->customer_province]['name']:null; ?></td>
+            <td class="fix" style="display:none" id="company_phone_<?php echo $customer->customer_id; ?>"><?php echo $customer->company_phone; ?></td>
+            <td class="fix" id="customer_province_<?php echo $customer->customer_id; ?>"><?php echo isset($district_datas[$customer->customer_province]['name'])?$district_datas[$customer->customer_province]['name']:null; ?></td>
 
             <td>
                 <a class="error" href="#">Sửa</a>
@@ -173,49 +176,53 @@ $this->helper('slidePaginator');
                             
                             <td>Tên KH</td>
                             <td>
-                                <input type="text" id="customer_name"  name="customer_name" tabindex="1" required="required" >
+                                <input type="text" id="customer_name"  name="customer_name" tabindex="2" required="required" >
                             </td>
                             <td>Tên công ty</td>
                             <td>
-                                <input type="text" id="company_name"  name="company_name" tabindex="2" required="required" >
+                                <input type="text" id="company_name"  name="company_name" tabindex="3" required="required" >
                             </td>
                             <td>Mã số thuế </td>
-                            <td><input type="text" id="mst"  name="mst" tabindex="3" ></td>
+                            <td><input type="text" id="mst"  name="mst" tabindex="4" ></td>
                             <td>Tên rút gọn </td>
-                            <td><input type="text" id="co_name"  name="co_name" tabindex="4" ></td>
+                            <td><input type="text" id="co_name"  name="co_name" tabindex="5" ></td>
 
                         </tr>
                         <tr>
-                            
                             <td>Địa chỉ </td>
-                            <td><textarea id="customer_address"  name="customer_address" tabindex="5" ></textarea></td>
-                            <td>Email </td>
-                            <td><input type="email"  id="customer_email" name="customer_email" tabindex="6" ></td>
+                            <td><textarea id="customer_address"  name="customer_address" tabindex="6" ></textarea></td>
+                            
+                            
                             <td>Số điện thoại </td>
                             <td>
-                                <input type="text" class="numbers" id="customer_phone" name="customer_phone" tabindex="7" >
+                                <input type="text" class="numbers" id="company_phone" name="company_phone" tabindex="7" >
                             </td>
                             <td>Số fax </td>
                             <td>
                                 <input type="text" class="numbers" id="customer_fax" name="customer_fax" tabindex="8" >
                             </td>
-                            
-                        </tr>
-                        <tr>
                             <td>Giám đốc </td>
                             <td><input type="text" id="director"  name="director" tabindex="9" ></td>
+                        </tr>
+                        <tr>
+                            
+                            
                             <td>Người liên hệ </td>
                             <td><input type="text" id="customer_contact"  name="customer_contact" tabindex="10" ></td>
-                            
-                            
+                            <td>Di động </td>
+                            <td>
+                                <input type="text" class="numbers" id="customer_phone" name="customer_phone" tabindex="11" >
+                            </td>
+                            <td>Email </td>
+                            <td><input type="email"  id="customer_email" name="customer_email" tabindex="12" ></td>
                         </tr>
                         <tr>
                             
                             
                             <td>Tài khoản ngân hàng </td>
                             <td>
-                                <input type="text" style="width:90px" id="customer_bank_name"  name="customer_bank_name" tabindex="10" >
-                                <input type="text" style="width:150px" id="account_number"  name="account_number" tabindex="11" >
+                                <input type="text" style="width:90px" id="customer_bank_name"  name="customer_bank_name" tabindex="13" >
+                                <input type="text" style="width:150px" id="account_number"  name="account_number" tabindex="14" >
                             </td>
                             <td>Tài khoản ngân hàng CMG </td>
                             <td>
@@ -230,26 +237,26 @@ $this->helper('slidePaginator');
                             <td>Công nợ </td>
                             <td>
                                 
-                                <input type="text" style="width:30px" class="number" id="customer_expect_date" name="customer_expect_date" tabindex="12" placeholder="Ngày" > hàng tháng <br>
-                                <input type="text" style="width:30px" class="number" id="customer_after_date" name="customer_after_date" tabindex="13" placeholder="Số" > ngày sau xuất HĐ
+                                <input type="text" style="width:30px" class="number" id="customer_expect_date" name="customer_expect_date" tabindex="15" placeholder="Ngày" > hàng tháng <br>
+                                <input type="text" style="width:30px" class="number" id="customer_after_date" name="customer_after_date" tabindex="16" placeholder="Số" > ngày sau xuất HĐ
                             </td>
                         </tr>
                         <tr>
                             
                             <td>Đường </td>
-                            <td><textarea id="customer_street"  name="customer_street" tabindex="14" ></textarea></td>
+                            <td><textarea id="customer_street"  name="customer_street" tabindex="17" ></textarea></td>
                             <td>Phường/Xã </td>
-                            <td><textarea id="customer_ward"  name="customer_ward" tabindex="15" ></textarea></td>
+                            <td><textarea id="customer_ward"  name="customer_ward" tabindex="18" ></textarea></td>
                             <td>Quận/Huyện</td>
-                            <td><textarea id="customer_district"  name="customer_district" tabindex="16" ></textarea></td>
+                            <td><textarea id="customer_district"  name="customer_district" tabindex="19" ></textarea></td>
                             <td>Thành phố</td>
-                            <td><textarea id="customer_city"  name="customer_city" tabindex="17" ></textarea></td>
+                            <td><textarea id="customer_city"  name="customer_city" tabindex="20" ></textarea></td>
                             
                         </tr>
                         <tr>
                             <td>Tỉnh</td>
                             <td>
-                                <select  style="width:100px"  id="customer_province"  name="customer_province" tabindex="18">
+                                <select  style="width:100px"  id="customer_province"  name="customer_province" tabindex="21">
                                     <?php foreach($districts as $district){ ?>
                                     <option value="<?php echo $district->district_id ?>"><?php echo $district->district_name ?></option>
                                     <?php } ?>
@@ -269,8 +276,8 @@ $this->helper('slidePaginator');
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="19"></td>
-                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="20"></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="22"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="23"></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -317,6 +324,7 @@ $('html').click(function(e) {
         var customer_city = $(this).find("#customer_city_"+$(this).attr('id')).text();
         var customer_province = $(this).find("#customer_province_"+$(this).attr('id')).text();
         var customer_contact = $(this).find("#customer_contact_"+$(this).attr('id')).text();
+        var company_phone = $(this).find("#company_phone_"+$(this).attr('id')).text();
         
         //alert(customer_code);
         $('#yes').val($(this).attr('id'));
@@ -338,13 +346,16 @@ $('html').click(function(e) {
        $('#customer_expect_date').val(customer_expect_date);
        $('#customer_after_date').val(customer_after_date);
        $("#cmg_bank option[value=" + cmg_bank + "]").attr('selected', 'selected');
+
+       $('#customer_contact').val(customer_contact);
+       $('#company_phone').val(company_phone);
        
        $('#customer_street').val(customer_street);
        $('#customer_ward').val(customer_ward);
        $('#customer_district').val(customer_district);
        $('#customer_city').val(customer_city);
-       $("#customer_province option[value=" + customer_province + "]").attr('selected', 'selected');
-       $('#customer_contact').val(customer_contact);
+       $("#customer_province option:contains(" + customer_province + ")").attr('selected', 'selected');
+       
 
         $('#customer_name').focus();
         $('#customer_name').attr('data',"true");
@@ -379,6 +390,7 @@ function add_click(){
        $('#customer_district').val("");
        $('#customer_city').val("");
        $('#customer_contact').val("");
+       $('#company_phone').val("");
 
    $('#customer_name').focus();
    $('#customer_name').attr('data',"false");
@@ -417,6 +429,7 @@ $(document).ready(function(){
                     var customer_city = $('#customer_city').attr('value');
                     var customer_province = $('#customer_province').attr('value');
                     var customer_contact = $('#customer_contact').attr('value');
+                    var company_phone = $('#company_phone').attr('value');
                     
 
                     var yes = $('#yes').attr('value');
@@ -449,6 +462,7 @@ $(document).ready(function(){
                             customer_city: customer_city,
                             customer_province: customer_province,
                             customer_contact: customer_contact,
+                            company_phone: company_phone,
                             yes: yes,
                             check: check,
                             }, // giá trị post

@@ -156,7 +156,7 @@ elseif ($order_by == 'order_tire_number')
             
             <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->username; ?></td> 
             <td class="fix editable" data="invoice_tire_number" id="invoice_tire_number_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($invoice_data[$order_tire->order_tire_id]['number'])?$invoice_data[$order_tire->order_tire_id]['number']:null; ?></td> 
-            <td class="fix ngay editable" id="invoice_tire_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($invoice_data[$order_tire->order_tire_id]['date'])?$lib->hien_thi_ngay_thang($invoice_data[$order_tire->order_tire_id]['date']):null ?></td> 
+            <td class="fix ngay editable" id="invoice_tire_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($invoice_data[$order_tire->order_tire_id]['date'])?$invoice_data[$order_tire->order_tire_id]['date']:null ?></td> 
             
             <td class="fix"><input <?php echo isset($invoice_data[$order_tire->order_tire_id]['number'])?'checked="checked"':null ?> id="check_invoice_<?php echo $order_tire->order_tire_id; ?>" type="checkbox" class="checkbox" value="<?php echo $order_tire->order_tire_id ?>" data-toggle="modal" data-target="#confirm"></td>
             <td class="fix" style="display:none" id="staff_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->staff_id ?></td> 

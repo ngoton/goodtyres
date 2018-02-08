@@ -61,5 +61,8 @@ Class importtireModel Extends baseModel {
     public function getLastSale(){
         return $this->getLast($this->table);
     }
+    public function querySale($sql){
+        return $this->query($sql);
+    }
 }
 ?>

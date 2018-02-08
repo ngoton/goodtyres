@@ -30,8 +30,8 @@ Class expectpayedController Extends baseController {
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
             $limit = 18446744073709;
-            $batdau = date('d-m-Y', strtotime('last Monday',strtotime(date('d-m-Y'))));
-            $ketthuc = date('d-m-Y', strtotime('next Sunday',strtotime(date('d-m-Y'))));
+            $batdau = date('d-m-Y');
+            $ketthuc = date('d-m-Y');
             $trangthai = 1;
         }
 
@@ -139,7 +139,7 @@ Class expectpayedController Extends baseController {
         $pagination_stages = 2;
         
         $data = array(
-            'where' => 'money != 0',
+            'where' => 'money != 0 AND (check_lohang IS NULL OR check_lohang != 1)',
         );
 
         if (isset($id) && $id > 0) {
@@ -164,7 +164,7 @@ Class expectpayedController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => 'money != 0 ',
+            'where' => 'money != 0 AND (check_lohang IS NULL OR check_lohang != 1) ',
             );
 
         if (isset($id) && $id > 0) {
@@ -192,6 +192,20 @@ Class expectpayedController Extends baseController {
         $costs = $costs_model->getAllCosts($data,$join);
 
         $this->view->data['costs'] = $costs;
+
+        $data = array(
+            'where' => 'money != 0 AND check_lohang = 1',
+        );
+        if ($trangthai==1) {
+            $data['where'] .= ' AND pay_date > '.strtotime($ngaybatdau).' AND pay_date < '.strtotime($ngayketthuc).' AND pay_money = money';
+        }
+        else{
+            $data['where'] .= ' AND ( expect_date < '.strtotime($batdau).' OR ( expect_date > '.strtotime($ngaybatdau).' AND expect_date < '.strtotime($ngayketthuc).') ) AND (pay_date is null OR pay_date = 0)';
+        }
+
+        $lohang_costs = $costs_model->getAllCosts($data,$join);
+
+        $this->view->data['lohang_costs'] = $lohang_costs;
 
         $join = array('table'=>'bank,assets','where'=>'bank.bank_id = lender_pay.source AND lender_pay_id=lender_pay');
         $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'lender_pay_date';

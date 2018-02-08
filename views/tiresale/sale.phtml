@@ -52,8 +52,6 @@ elseif ($order_by == 'tire_sale_volume')
     </div>
     
     <div class="add-box">
-        <input value="<?php echo $code ?>" name="batdau" id="batdau" type="search" placeholder="Code" style="width:50px">
-
         <select id="chonngaytao" name="chonngaytao" style="width:120px">
             <option value="0">Thương hiệu</option>
             <?php foreach ($tire_brands as $tire_brand) { ?>
@@ -66,7 +64,12 @@ elseif ($order_by == 'tire_sale_volume')
                 <option value="<?php echo $tire_size->tire_size_id ?>"><?php echo $tire_size->tire_size_number ?></option>
             <?php } ?>
         </select>
-        
+        <select id="batdau" name="batdau" style="width:90px">
+            <option value="0">Mã gai</option>
+            <?php foreach ($tire_patterns as $tire_p) { ?>
+                <option value="<?php echo $tire_p->tire_pattern_id ?>"><?php echo $tire_p->tire_pattern_name ?></option>
+            <?php } ?>
+        </select>
         
         
     </div>
@@ -147,6 +150,9 @@ elseif ($order_by == 'tire_sale_volume')
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','volume','<?php echo $url_order ?>')">Số lượng <?php if ($order_by == 'volume'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sell_price_vat','<?php echo $url_order ?>')">Giá bán(VAT) <?php if ($order_by == 'sell_price_vat'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sell_price','<?php echo $url_order ?>')">Giá bán <?php if ($order_by == 'sell_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th  class="fix">
@@ -164,7 +170,7 @@ elseif ($order_by == 'tire_sale_volume')
     <?php $tongtt=0; $tong=0; ?>
     <?php foreach ($tire_sales as $tire_sale) : ?>
     
-        <?php $tong += $tire_sale->volume; $tongtt += $tire_sale->volume*$tire_sale->sell_price; 
+        <?php $tong += $tire_sale->volume; $tongtt += $tire_sale->volume*$tire_sale->sell_price_vat; 
             $link = 'ordertire/orderlist/'.$tire_sale->code;
         ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_sale->tire_sale_id ?>" class="edit_tr">
@@ -181,8 +187,9 @@ elseif ($order_by == 'tire_sale_volume')
             <td class="fix" id="tire_size_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $tire_sale->tire_size_number; ?></td>
             <td class="fix" data="<?php echo $tire_sale->tire_pattern; ?>" id="tire_pattern_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $tire_sale->tire_pattern_name; ?></td>
             <td class="fix" id="volume_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $tire_sale->volume; ?></td>
+            <td class="fix" id="sell_price_vat_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney($tire_sale->sell_price_vat); ?></td>
             <td class="fix" id="sell_price_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney($tire_sale->sell_price); ?></td>
-            <td class="fix" id="profit_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney($tire_sale->volume*$tire_sale->sell_price); ?></td>
+            <td class="fix" id="profit_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney($tire_sale->volume*$tire_sale->sell_price_vat); ?></td>
             <td class="fix" id="sale_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $staff_data[$tire_sale->sale]['name']; ?></td>
             <td class="fix" id="revenue_<?php echo $tire_sale->tire_sale_id; ?>"><a class="revenue" style="text-decoration: underline;" href="<?php echo $this->url('allshipment/receivable/'.$tire_sale->code.'/'.$tire_sale->customer) ?>">Chi tiết</a></td>
             <td class="fix" style="display:none" id="check_vat_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $tire_sale->check_vat; ?></td>
@@ -225,7 +232,7 @@ $this->helper('slidePaginator');
                         <tr>
                             <td>Code</td>
                             <td>
-                                <input style="width:80px" disabled class="number" type="text" id="code"  name="code" tabindex="1"  required="required" value="<?php echo $code ?>" >
+                                <input style="width:80px" disabled class="number" type="text" id="code"  name="code" tabindex="1"  required="required" value="" >
                                 
                             </td>
                             <td>Thương hiệu</td>
@@ -716,6 +723,8 @@ $('#chonngaytao option[value='+th+']').attr('selected','selected');
 var s = "<?php echo $size ?>";
 $('#chonngaytaobatdau option[value='+s+']').attr('selected','selected');
 
+var g = "<?php echo $magai ?>";
+$('#batdau option[value='+g+']').attr('selected','selected');
 
 var nv = "<?php echo $nv ?>";
 $('#sl_nv option[value='+nv+']').attr('selected','selected');
@@ -1028,5 +1037,22 @@ var pickerOpts5 = {
          
     };  
     $("#den").datepicker(pickerOpts4);
+
+
+$('#chonngaytao').change(function(){
+    var brand = $(this).val();
+    
+    if (brand != "") {
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/ordertire/getPattern',
+            type: 'POST',
+            data: {data:brand},
+            success:function(answer){
+                $('#batdau').html('<option value="">Mã gai</option>'+answer);
+            }
+        });
+    }
+        
+});
 
 </script>

@@ -123,6 +123,7 @@ elseif ($order_by == 'vendor_type')
             <td class="fix" style="display:none" id="shipment_vendor_contact_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->shipment_vendor_contact; ?></td>
             <td class="fix" style="display:none" id="vendor_expect_date_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->vendor_expect_date; ?></td>
             <td class="fix" style="display:none" id="vendor_after_date_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->vendor_after_date; ?></td>
+            <td class="fix" style="display:none" id="shipment_vendor_code_<?php echo $shipment_vendor->shipment_vendor_id; ?>"><?php echo $shipment_vendor->shipment_vendor_code; ?></td>
             
             <td>
                 <a class="error" href="#">Sửa</a>
@@ -234,8 +235,8 @@ $this->helper('slidePaginator');
                                     <option value="7">Other</option>
                                 </select> 
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>Mã</td>
+                            <td><input type="text"  id="shipment_vendor_code" name="shipment_vendor_code" tabindex="16" ></td>
                         </tr>
                         
                         
@@ -251,8 +252,8 @@ $this->helper('slidePaginator');
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="16"></td>
-                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="17"></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="17"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="18"></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -293,6 +294,7 @@ $('html').click(function(e) {
         var vendor_type = $(this).find("#vendor_type_"+$(this).attr('id')).text();
         var loc_from = $(this).find("#loc_from_"+$(this).attr('id')).text();
         var loc_to = $(this).find("#loc_to_"+$(this).attr('id')).text();
+        var shipment_vendor_code = $(this).find("#shipment_vendor_code_"+$(this).attr('id')).text();
         
         //alert(shipment_vendor_code);
         $('#yes').val($(this).attr('id'));
@@ -317,6 +319,7 @@ $('html').click(function(e) {
        $("#vendor_type option:contains(" + vendor_type + ")").attr('selected', 'selected');
        $('#loc_from').val(loc_from);
        $('#loc_to').val(loc_to);
+       $('#shipment_vendor_code').val(shipment_vendor_code);
        
 
         $('#shipment_vendor_name').focus();
@@ -349,6 +352,7 @@ function add_click(){
        $("#vendor_type option[value=2]").attr('selected', 'selected');
        $('#loc_from').val("");
        $('#loc_to').val("");
+       $('#shipment_vendor_code').val("");
 
    $('#shipment_vendor_name').focus();
    $('#shipment_vendor_name').attr('data',"false");
@@ -382,6 +386,7 @@ $(document).ready(function(){
                     var loc_to = $('#loc_to').attr('value');
                     var loc_from = $('#loc_from').attr('value');
                     var vendor_type = $('#vendor_type').attr('value');
+                    var shipment_vendor_code = $('#shipment_vendor_code').attr('value');
                     
 
                     var yes = $('#yes').attr('value');
@@ -410,6 +415,7 @@ $(document).ready(function(){
                             loc_from: loc_from,
                             loc_to: loc_to,
                             vendor_type: vendor_type,
+                            shipment_vendor_code: shipment_vendor_code,
                             yes: yes,
                             check: check,
                             }, // giá trị post

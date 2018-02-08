@@ -229,7 +229,7 @@ $('html').click(function(e) {
                 data: {brand:tire_brand, size:tire_size, pattern:tire_pattern, customer:customer},
                 success:function(data){
                     var data = jQuery.parseJSON(data);
-                    var ton = parseInt(tire_number)+parseInt(data.max);
+                    var ton = parseInt(tire_number)+parseInt(data.max)+parseInt(data.going);
                     $('#max_number').val(ton);
                     
                 }
@@ -423,7 +423,8 @@ $('#tire_brand').change(function(){
             data: {brand:brand, size:size, pattern:pattern, customer:customer},
             success:function(data){
                 var data = jQuery.parseJSON(data);
-                $('#max_number').val(data.max);
+                var ton = parseInt(data.max)+parseInt(data.going);
+                $('#max_number').val(ton);
                 $('#tire_date').html("<option>Chọn</option>"+data.date);
             }
         });
@@ -443,7 +444,8 @@ $('#tire_size').change(function(){
             data: {brand:brand, size:size, pattern:pattern, customer:customer},
             success:function(data){
                 var data = jQuery.parseJSON(data);
-                $('#max_number').val(data.max);
+                var ton = parseInt(data.max)+parseInt(data.going);
+                $('#max_number').val(ton);
                 $('#tire_date').html("<option>Chọn</option>"+data.date);
             }
         });
@@ -465,7 +467,8 @@ $('#tire_pattern').change(function(){
             success:function(data){
 
                 var data = jQuery.parseJSON(data);
-                $('#max_number').val(data.max);
+                var ton = parseInt(data.max)+parseInt(data.going);
+                $('#max_number').val(ton);
                 $('#tire_date').html("<option>Chọn</option>"+data.date);
             }
         });
@@ -591,7 +594,8 @@ $('.tire_brand').keyup(function(){
                     success:function(data){
 
                         var data = jQuery.parseJSON(data);
-                        $('#max_number').val(data.max);
+                        var ton = parseInt(data.max)+parseInt(data.going);
+                        $('#max_number').val(ton);
                         $('#tire_date').html("<option>Chọn</option>"+data.date);
                     }
                 });
@@ -621,7 +625,8 @@ $('.tire_brand').keyup(function(){
                     success:function(data){
 
                         var data = jQuery.parseJSON(data);
-                        $('#max_number').val(data.max);
+                        var ton = parseInt(data.max)+parseInt(data.going);
+                        $('#max_number').val(ton);
                         $('#tire_date').html("<option>Chọn</option>"+data.date);
                     }
                 });
@@ -651,7 +656,8 @@ $('.tire_brand').keyup(function(){
                     success:function(data){
 
                         var data = jQuery.parseJSON(data);
-                        $('#max_number').val(data.max);
+                        var ton = parseInt(data.max)+parseInt(data.going);
+                        $('#max_number').val(ton);
                         $('#tire_date').html("<option>Chọn</option>"+data.date);
                     }
                 });

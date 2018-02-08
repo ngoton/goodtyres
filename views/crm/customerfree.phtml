@@ -1,0 +1,105 @@
+<?php $i=1; ?>
+<table class="table_data">
+  <thead>
+    <tr>
+      <th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+      <th class="fix">STT</th>
+      <th class="fix">Tên khách hàng</th>
+      <th class="fix">Số điện thoại</th>
+      <th class="fix">Địa chỉ</th>
+      <th class="fix">Loại</th>
+      <th class="fix"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach ($customers as $customer) { ?>
+    <tr class="edit_tr" id="<?php echo $customer->customer_tire_id ?>">
+      <td class="fix"><input id="ch_<?php echo $customer->customer_tire_id ?>" name="check[]" type="checkbox" class="checkbox" value="<?php echo $customer->customer_tire_id ?>"></td>
+      <td class="fix"><?php echo $i++ ?></td>
+      <td class="fix"><?php echo $customer->customer_tire_company ?></td>
+      <td class="fix"><?php echo $customer->customer_tire_phone ?></td>
+      <td class="fix"><?php echo isset($district_data[$customer->customer_tire_province])?$district_data[$customer->customer_tire_province]:null ?></td>
+      <td class="fix"><?php echo $customer->customer_tire_type ?></td>
+      <td class="fix" title="Cập nhật thông tin"><a style="display:none" id="edit_<?php echo $customer->customer_tire_id ?>" href="<?php echo $this->url('crm/customer/2/'.$customer->customer_tire_id) ?>" target="_blank"><i class="fa fa-edit"></i></a></td>
+    </tr>
+    <?php } ?>
+  </tbody>
+</table>
+<div class="alignleft"><button class="btn btn-sm bg-maroon" id="getCus"><i class="fa fa-user-plus"></i> Nhận khách hàng</button> <button class="btn btn-sm bg-navy" id="moveCus"><i class="fa fa-user-times"></i> Nhả khách hàng</button> <button onClick="javascript:window.location.href='<?php echo $this->url('crm/customer/1') ?>'" class="btn btn-sm" id="addCus"><i class="fa fa-plus"></i> Thêm khách hàng mới</button></div>
+<div class="add-box">
+<i class="error">*Loại: 1-Đại lý | 2-Nhà xe | 3-Vá vỏ | 4-Cộng tác</i>
+</div>
+
+
+<script type="text/javascript">
+$('.edit_tr').click(function(){
+  var cus_id = $(this).attr('id');
+  $('#ch_'+cus_id).prop('checked',!($('#ch_'+cus_id).is(':checked')));
+});
+
+$('.edit_tr').hover(function(){
+  var cus_id = $(this).attr('id');
+  $('#edit_'+cus_id).show();
+  }, 
+  function () {
+    var cus_id = $(this).attr('id');
+    $('#edit_'+cus_id).hide();
+});
+
+$('#getCus').click(function(){
+  var r = confirm("Bạn có chắc chắn muốn thực hiện không?");
+  if (r == true){
+    var chk = [];
+      ids = $('input:checkbox.checkbox:checked').map(function() { return chk.push(this.value); });
+
+     $.ajax({
+        url: "<?php echo $this->url('crm/getCus') ?>",   
+        type: 'POST',   
+        data: "data="+chk+"&type=1",   
+        success:function(answer){ 
+          for(var i=0; i<chk.length; i++){
+            $('tr#'+chk[i]).css({'color':'#eeeeee'});
+            $('#ch_'+chk[i]).attr('disable',true);
+          }
+        }
+      });
+    
+  }
+});
+$('#moveCus').click(function(){
+  var r = confirm("Bạn có chắc chắn muốn thực hiện không?");
+  if (r == true){
+    var chk = [];
+      ids = $('input:checkbox.checkbox:checked').map(function() { return chk.push(this.value); });
+
+      $.ajax({
+        url: "<?php echo $this->url('crm/getCus') ?>",   
+        type: 'POST',   
+        data: "data="+chk+"&type=2",   
+        success:function(answer){ 
+          for(var i=0; i<chk.length; i++){
+            $('tr#'+chk[i]).css({'color':'#333333'});
+            $('#ch_'+chk[i]).attr('disable',false);
+          }
+        }
+      });
+    
+  }
+});
+
+$(document).ready(function() {
+  $('.table_data').DataTable({
+      "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Tất cả"]],  
+      "order": [[ 2, "asc" ]],
+      "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+        var index = iDisplayIndex +1;
+          $('td:eq(1)',nRow).html(index);
+          return nRow
+      },
+      "columnDefs": [ {
+        "targets": [0,6],
+        "orderable": false
+        } ]
+  });
+});
+</script>

@@ -515,7 +515,7 @@ Class stockController Extends baseController {
         $tire_size_model = $this->model->get('tiresizeModel');
         $tire_size = $tire_size_model->getTireByWhere(array('tire_size_number'=>str_replace('~', '/', $this->registry->router->order_by)));
         $tire_order_list_model = $this->model->get('ordertirelistModel');
-        $join = array('table'=>'tire_pattern,tire_brand,tire_size,order_tire,user','where'=>'order_tire.sale = user_id AND tire_pattern = tire_pattern_id AND tire_brand = tire_brand_id AND tire_size = tire_size_id AND order_tire = order_tire_id AND (order_tire_status IS NULL OR order_tire_status = 0)');
+        $join = array('table'=>'tire_pattern,tire_brand,tire_size,order_tire,user,customer','where'=>'order_tire.customer=customer_id AND order_tire.sale = user_id AND tire_pattern = tire_pattern_id AND tire_brand = tire_brand_id AND tire_size = tire_size_id AND order_tire = order_tire_id AND (order_tire_status IS NULL OR order_tire_status = 0)');
 
         $data = array(
             'where' => 'tire_brand_group='.$this->registry->router->param_id.' AND tire_size='.$tire_size->tire_size_id.' AND (tire_pattern_type LIKE '.$this->registry->router->order.' OR tire_pattern_type LIKE "%,'.$this->registry->router->order.',%" OR tire_pattern_type LIKE "'.$this->registry->router->order.',%" OR tire_pattern_type LIKE "%,'.$this->registry->router->order.'")',
@@ -719,6 +719,8 @@ Class stockController Extends baseController {
         }
         $this->view->data['ngay'] = $ngay;
 
+        $ngayketthuc = date('d-m-Y', strtotime($ngay. ' + 1 days'));
+
         $tire_order_model = $this->model->get('tireorderModel');
         $tire_sale_model = $this->model->get('tiresaleModel');
         $tire_buy_model = $this->model->get('tirebuyModel');
@@ -727,7 +729,7 @@ Class stockController Extends baseController {
         $tire_imports = $tire_import_model->getAllTire();
         $tire_prices = array();
 
-        $query = "SELECT *,SUM(tire_buy_volume) AS soluong FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern GROUP BY tire_buy_brand,tire_buy_size,tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC";
+        $query = "SELECT *,SUM(tire_buy_volume) AS soluong FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_buy_date < ".strtotime($ngayketthuc)." AND tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern GROUP BY tire_buy_brand,tire_buy_size,tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC";
         $tire_buys = $tire_buy_model->queryTire($query);
         $this->view->data['tire_buys'] = $tire_buys;
 
@@ -743,7 +745,7 @@ Class stockController Extends baseController {
             }
 
             $data_sale = array(
-                'where'=>'tire_brand='.$tire_buy->tire_buy_brand.' AND tire_size='.$tire_buy->tire_buy_size.' AND tire_pattern='.$tire_buy->tire_buy_pattern,
+                'where'=>'tire_sale_date < '.strtotime($ngayketthuc).' AND tire_brand='.$tire_buy->tire_buy_brand.' AND tire_size='.$tire_buy->tire_buy_size.' AND tire_pattern='.$tire_buy->tire_buy_pattern,
             );
             $tire_sales = $tire_sale_model->getAllTire($data_sale);
 
@@ -755,10 +757,12 @@ Class stockController Extends baseController {
                 
             }
 
+
             $data = array(
-                'where' => 'tire_brand = '.$tire_buy->tire_buy_brand.' AND tire_size = '.$tire_buy->tire_buy_size.' AND tire_pattern = '.$tire_buy->tire_buy_pattern,
+                'where' => 'start_date < '.strtotime($ngayketthuc).' AND tire_brand = '.$tire_buy->tire_buy_brand.' AND tire_size = '.$tire_buy->tire_buy_size.' AND tire_pattern = '.$tire_buy->tire_buy_pattern,
                 'order_by' => 'start_date',
-                'order' => 'ASC',
+                'order' => 'DESC, tire_import_id DESC',
+                'limit' => 1,
             );
             $tire_imports = $tire_import_model->getAllTire($data);
             foreach ($tire_imports as $tire_import) {

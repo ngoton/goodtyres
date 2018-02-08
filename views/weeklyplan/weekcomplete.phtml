@@ -190,8 +190,8 @@ elseif ($order_by == 'end_date')
                           <th rowspan="2" class="fix">
                               <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','work_plan_unit','<?php echo $url_order ?>')">ĐVT <?php if ($order_by == 'work_plan_unit'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
                           </th>
-                          <th colspan="2" class="fix">
-                              <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','end_date','<?php echo $url_order ?>')">Ngày thực hiện <?php if ($order_by == 'end_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+                          <th rowspan="2" class="fix">
+                              <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','end_date','<?php echo $url_order ?>')">Deadline <?php if ($order_by == 'end_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
                           </th>
                           <th colspan="2" class="fix">
                               <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','work_plan_owner','<?php echo $url_order ?>')">PIC <?php if ($order_by == 'work_plan_owner'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
@@ -210,8 +210,6 @@ elseif ($order_by == 'end_date')
                           </th>
                       </tr>
                       <tr>
-                        <th class="fix">Từ ngày</th>
-                        <th class="fix">Đến ngày</th>
                         <th class="fix">
                             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','create_user','<?php echo $url_order ?>')">Giao <?php if ($order_by == 'create_user'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
                         </th>
@@ -239,16 +237,15 @@ elseif ($order_by == 'end_date')
                       ?>
                       
                           
-                          <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $work_plan->work_plan_id ?>" class="edit_tr" <?php echo ($work_plan->work_plan_complete!=1 && $work_plan->end_date < strtotime(date('d-m-Y')) || ($work_plan->work_plan_complete==1 && $work_plan->work_plan_complete_date > $work_plan->end_date) )?'style="color:red"':null ?> >
+                          <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $work_plan->work_plan_id ?>" class="edit_tr" <?php echo ($work_plan->work_plan_complete!=1 && $work_plan->start_date < strtotime(date('d-m-Y')) || ($work_plan->work_plan_complete==1 && $work_plan->work_plan_complete_date > $work_plan->start_date) )?'style="color:red"':null ?> >
                               
                               <td  class="fix"><?php echo $i++; ?></td>
                               <td class="fix" data="<?php echo $work_plan->work_plan_code; ?>" id="work_plan_code_name_<?php echo $work_plan->work_plan_id; ?>"><?php echo $work_plan->work_plan_code_name; ?></td>
                               <td class="fix" id="work_plan_name_<?php echo $work_plan->work_plan_id; ?>"><?php echo $work_plan->work_plan_name; ?></td>
                               <td class="fix" id="work_plan_number_<?php echo $work_plan->work_plan_id; ?>"><?php echo $work_plan->work_plan_number; ?></td>
                               <td class="fix" id="work_plan_unit_<?php echo $work_plan->work_plan_id; ?>"><?php echo $work_plan->work_plan_unit; ?></td>
-                              <td class="fix" id="start_date_<?php echo $work_plan->work_plan_id; ?>"><?php echo $lib->hien_thi_ngay_thang($work_plan->start_date); ?></td>
                               <td class="fix" id="end_date_<?php echo $work_plan->work_plan_id; ?>"><?php echo $lib->hien_thi_ngay_thang($work_plan->end_date); ?></td>
-                              <td style="display:none" class="fix" id="work_plan_time_<?php echo $work_plan->work_plan_id; ?>"><?php echo date('d/m/Y',$work_plan->start_date).' - '.date('d/m/Y',$work_plan->end_date); ?></td>
+                              <td style="display:none" class="fix" id="work_plan_time_<?php echo $work_plan->work_plan_id; ?>"><?php echo $lib->hien_thi_ngay_thang($work_plan->end_date); ?></td>
                               <td class="fix" id="create_user_<?php echo $work_plan->work_plan_id; ?>"><?php echo !isset($staff_account['id'][$work_plan->create_user])?$work_plan->username:($staff_account['id'][$work_plan->create_user]!=$work_plan->work_plan_owner?array_pop(explode(' ', $staff_account['name'][$work_plan->create_user])):null); ?></td>
                               <td class="fix" data="<?php echo $work_plan->work_plan_owner; ?>" id="work_plan_owner_<?php echo $work_plan->work_plan_id; ?>">
                                   <?php 
@@ -361,7 +358,7 @@ elseif ($order_by == 'end_date')
             </div>
           </div>
           <div class="input-group">
-            <label>Ngày thực hiện</label>
+            <label>Deadline</label>
             <input type="text" name="work_plan_time" id="work_plan_time" tabindex="4" required="required" >
           </div>
           <div class="input-group">
@@ -552,9 +549,9 @@ $('.edit_tr').click(function(e){
 
       $('#work_plan_complete_date').val(work_plan_complete_date);
 
-      if (end_date <  today) {
+      /*if (end_date <  today) {
         $('#work_plan_time').attr('disabled',true);
-      }
+      }*/
 
       /*if (work_plan_number>0) {
         $('.detail').show();
@@ -644,9 +641,9 @@ $('#work_plan_complete').click(function(){
     
 });
 
-$('#work_plan_name').keyup(function(){
+/*$('#work_plan_name').keyup(function(){
   $(this).val(ucfirst($(this).val()));
-});
+});*/
 
 $('#work_plan_code_name').keyup(function(){
 
@@ -712,7 +709,7 @@ $(document).ready(function(){
       submitHandler: function(form) {
       
           var work_plan_code_name = $('#work_plan_code_name').attr('value');
-          var work_plan_code_id = $('#work_plan_code_name').attr('data');
+          var work_plan_code_id = $('#work_plan_code_name').attr('value');
           var work_plan_name = $('#work_plan_name').attr('value');
           var work_plan_owner = $('#work_plan_owner').val();
           var work_plan_time = $('#work_plan_time').attr('value');
@@ -771,13 +768,13 @@ $(document).ready(function(){
                   $('#error').fadeOut(10000);
 
                   if (yes != "") {
-                      if (answer.trim() != "Thông tin này đã tồn tại" ) {
+                      if (answer.trim() != "Thông tin này đã tồn tại" && answer.trim() != "Vượt quá số giờ tối đa trong tuần" && answer.trim() != "Vui lòng hoàn tất báo cáo tuần trước hoặc cập nhật lại Deadline") {
                         $('#hoanthanh').dialog('open');
                       
                       }
                   }
                   else{
-                      if (answer.trim() != "Thông tin này đã tồn tại") {
+                      if (answer.trim() != "Thông tin này đã tồn tại" && answer.trim() != "Vượt quá số giờ tối đa trong tuần" && answer.trim() != "Vui lòng hoàn tất báo cáo tuần trước hoặc cập nhật lại Deadline") {
                         $('#hoanthanh').dialog('open');
                       }
                   }
@@ -963,13 +960,7 @@ $(function () {
         searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
     });
 
-    $('#work_plan_time').daterangepicker({
-      locale: {
-        format: 'DD/MM/YYYY'
-      },
-      minDate: '<?php echo date("d/m/Y",strtotime("monday this week")) ?>',
-      maxDate: '<?php echo date("d/m/Y",strtotime($ketthuc)+604800) ?>',
-    });
+    
 });
 
 var pickerOpts4 = {
@@ -1001,6 +992,36 @@ var pickerOpts4 = {
          
     };  
     $(".ngay").datepicker(pickerOpts4);
+
+var pickerOpts5 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        showButtonPanel: true,
+        maxDate: "+7d",
+        minDate: "-5d",
+         
+    };  
+    $("#work_plan_time").datepicker(pickerOpts5);
 </script>
 <style type="text/css">
 .daterangepicker_input{

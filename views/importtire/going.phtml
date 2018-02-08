@@ -1,10 +1,11 @@
 
 <div>
   <a class="add_button" id="import_excel" href="<?= $this->url('importtire/goingimport')?>">Import Excel</a>
+  <a class="add_button" id="btnExport2">Export Excel</a>
   <div class="add-box"><a class="add_button" onClick="add_click();">Thêm</a></div>
 </div>
 <?php $l=1 ; $tong=0;?>
-<table class="table_data">
+<table class="table_data" id="tblExport2">
 <thead>
     <tr>
         <th class="fix">
@@ -455,4 +456,13 @@ $('#view_tire_cost2').click(function(){
     
     return false;
 });
+
+$(document).ready(function () {
+            $("#btnExport2").click(function () {
+                $("#tblExport2").battatech_excelexport({
+                    containerid: "tblExport2"
+                   , datatype: 'table'
+                });
+            });
+        });
 </script>

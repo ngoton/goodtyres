@@ -1,0 +1,435 @@
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
+
+  <div class="workarea-content-paddings">
+    <div class="startpage-table-wrap">
+      <div class="startpage-table-wrap-head">
+        <!--<span class="startpage-table-wrap-settings"></span>-->
+        <span id="start_help_btn" class="startpage-table-wrap-help"></span>
+        <span class="startpage-table-wrap-title-container">
+          <span class="startpage-table-wrap-title-inner">
+            <span class="startpage-table-wrap-title">Theo dõi tiến độ bán hàng</span>
+          </span>
+        </span>
+      </div>
+      <div class="startpage-table-wrap-content">
+        <div class="startpage-table-container" id="start_container">
+          <div class="startpage-table">
+            <div class="startpage-table-header">
+              <div>
+                <div class="startpage-table-header-container">
+                  <div class="startpage-table-header-block col1">
+                    <div class="startpage-table-header-block-title">
+                      <span>Khách hàng đang chờ</span>
+                    </div>
+                    <div class="startpage-table-header-block-count">
+                      <span><a class="kh_trong" href="<?php echo $this->url('crm/customerfree') ?>"><?php echo count($kh_trong) ?></a></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="startpage-table-header-container">
+                  <div class="startpage-table-header-block col2">
+                    <div class="startpage-table-header-block-title">
+                      <span>Liên hệ</span>
+                    </div>
+                    <div class="startpage-table-header-block-count">
+                      <span><a href="<?php echo $this->url('crm/customerinfo') ?>"><?php echo count($kh_lienhe) ?></a></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="startpage-table-header-container">
+                  <div class="startpage-table-header-block col3">
+                    <div class="startpage-table-header-block-title">
+                      <span>Đang chào giá</span>
+                    </div>
+                    <div class="startpage-table-header-block-count">
+                      <span><a href="<?php echo $this->url('crm/customerinfo') ?>"><?php echo count($kh_chaogia) ?></a></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="startpage-table-header-container">
+                  <div class="startpage-table-header-block col4">
+                    <div class="startpage-table-header-block-title">
+                      <span>Đơn đặt hàng</span>
+                    </div>
+                    <div class="startpage-table-header-block-count">
+                      <span><a href="<?php echo $this->url('ordertire/orderlist') ?>"><?php echo count($donhang) ?></a></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="startpage-table-header-container">
+                  <div class="startpage-table-header-block col5">
+                    <div class="startpage-table-header-block-title">
+                      <span>Doanh thu bán hàng</span>
+                    </div>
+                    <div class="startpage-table-header-block-count">
+                        <span><a href="<?php echo $this->url('ordertire/orderlist') ?>"><?php echo $lib->formatMoney($doanhthu) ?></a></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="startpage-table-data-body" style="">
+              <div class="startpage-table-data startpage-table-interlacing odd">
+                  <div class="startpage-table-column">
+                    <div class="startpage-table-column-content">
+                      <a target="_blank" href="<?php echo $this->url('crm/customerfree') ?>">Khách hàng</a>
+                    </div>
+                  </div>
+                  <div class="startpage-table-column">
+                    <div class="startpage-table-column-content">
+                      <a target="_blank" href="<?php echo $this->url('crm/emailmarketing') ?>">Email marketing</a>
+                    </div>
+                  </div>
+                  <div class="startpage-table-column">
+                    <div class="startpage-table-column-content">
+                      <a target="_blank" href="<?php echo $this->url('crm/customerinfo') ?>">Tiềm năng</a>
+                    </div>
+                  </div>
+                  <div class="startpage-table-column">
+                    <div class="startpage-table-column-content">-</div>
+                  </div>
+                  <div class="startpage-table-column">
+                    <div class="startpage-table-column-content">-</div>
+                  </div>
+              </div>
+              <div class="startpage-table-data startpage-table-interlacing odd">
+                  <div class="startpage-table-column">
+                    <div class="startpage-table-column-content">-</div>
+                  </div>
+                  <div class="startpage-table-column">
+                    <div class="startpage-table-column-content">
+                      
+                      <a target="_blank" href="<?php echo $this->url('crm/smsmarketing') ?>">SMS marketing</a>
+                    </div>
+                  </div>
+                  <div class="startpage-table-column">
+                    <div class="startpage-table-column-content">-</div>
+                  </div>
+                  <div class="startpage-table-column">
+                    <div class="startpage-table-column-content">-</div>
+                  </div>
+                  <div class="startpage-table-column">
+                    <div class="startpage-table-column-content">-</div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="startpage-table-wrap">
+      <div class="startpage-table-wrap-head">
+        <!--<span class="startpage-table-wrap-settings"></span>-->
+        <span id="start_help_btn" class="startpage-table-wrap-help"></span>
+        <span class="startpage-table-wrap-title-container">
+          <span class="startpage-table-wrap-title-inner">
+            <span class="startpage-table-wrap-title">Thống kê</span>
+          </span>
+        </span>
+      </div>
+      <div class="startpage-table-wrap-content">
+        <div class="col col-md-6">
+          <div class="ct-chart ct-perfect-fourth" id="chart"></div>
+        </div>
+        <div class="col col-md-6">
+          <div class="ct-chart ct-golden-section" id="chart1"></div>
+        </div>
+        <div class="col col-md-6">
+          <div class="ct-chart ct-golden-section" id="chart2"></div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div id="winpopup"></div>
+
+<script type="text/javascript">
+$('body').addClass('sidebar-collapse');
+
+$(".kh_trong").click(function(){
+    $("#winpopup").dialog({
+        draggable:true,
+        modal: true,
+        autoOpen: false,
+        maxHeight:600,
+        width:"70%",
+        resizable: false,
+        title:'Khách hàng đang chờ',
+        position: ['center',10] 
+        
+    });
+    $("#winpopup").load($(this).attr('href'));
+    $("#winpopup").dialog("open");
+     
+    return false;
+});
+
+</script>
+
+<style type="text/css">
+#workarea-content {
+    overflow: hidden;
+    background-color: #fff;
+    height: 100%;
+}
+.workarea-content-paddings {
+    padding: 15px 15px 20px;
+    overflow-x: auto;
+    overflow-y: visible;
+}
+.startpage-table-wrap {
+    border: 1px solid #e9eef2;
+    border-radius: 2px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.startpage-table-wrap-head {
+    position: relative;
+    color: #000;
+    font-size: 13px;
+    text-transform: uppercase;
+    padding: 0 0 0 17px;
+    background: #e9eef2;
+    border-radius: 2px 2px 0 0;
+    cursor: move;
+}
+.startpage-table-wrap-content {
+    box-sizing: border-box;
+    position: relative;
+    padding: 12px 10px;
+}
+.startpage-table-container {
+    overflow: hidden;
+    -webkit-transition: height 350ms linear;
+    -moz-transition: height 350ms linear;
+    -ms-transition: height 350ms linear;
+    -o-transition: height 350ms linear;
+    transition: height 350ms linear;
+    min-height: 108px;
+}
+.startpage-table {
+    width: 100%;
+    border-spacing: 3px 0;
+}
+.startpage-table-header, .startpage-table-data {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+.startpage-table-header>div:last-child, .startpage-table-column:last-child {
+    -webkit-box-flex: 1.5;
+    -ms-flex: 1.5;
+    flex: 1.5;
+}
+.startpage-table-header-container {
+    position: relative;
+    width: 100%;
+    height: 106px;
+}
+.startpage-table-header-block.col1 {
+    left: 0;
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 37px 25px 2px 3px;
+    -webkit-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol1.svg) 37 25 2 3;
+    -moz-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol1.svg) 37 25 2 3;
+    -o-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol1.svg) 37 25 2 3;
+    border-image: url(<?php echo BASE_URL ?>/public/img/bgcol1.svg) 37 25 2 3 fill;
+    z-index: 100;
+}
+.startpage-table-header-block {
+    position: absolute;
+    top: 0;
+    left: -4px;
+    right: -26px;
+    bottom: 0;
+}
+.startpage-table-header-block.col1 .startpage-table-header-block-title {
+    left: 10px;
+}
+.startpage-table-header-block-title {
+    height: 37px;
+    position: absolute;
+    top: -37px;
+    left: 21px;
+    right: 10px;
+    color: #fff;
+    overflow: hidden;
+}
+.startpage-table-header-block-title span {
+    display: block;
+    max-height: 37px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+.startpage-table-header-block-count {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.startpage-table-header-block-count span {
+    font-size: 20px;
+}
+.startpage-table-header-block-count span, .startpage-table-header-block-count a {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    color: #000;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    text-align: center;
+    font-size: 31px;
+}
+.startpage-table-header>div, .startpage-table-column {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+.startpage-table-header-block.col2 {
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 37px 25px 2px 3px;
+    -webkit-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol2.svg) 37 25 2 3;
+    -moz-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol2.svg) 37 25 2 3;
+    -o-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol2.svg) 37 25 2 3;
+    border-image: url(<?php echo BASE_URL ?>/public/img/bgcol2.svg) 37 25 2 3 fill;
+    z-index: 90;
+}
+.startpage-table-header-block.col3 {
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 37px 25px 2px 3px;
+    -webkit-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol3.svg) 37 25 2 3;
+    -moz-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol3.svg) 37 25 2 3;
+    -o-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol3.svg) 37 25 2 3;
+    border-image: url(<?php echo BASE_URL ?>/public/img/bgcol3.svg) 37 25 2 3 fill;
+    z-index: 80;
+}
+.startpage-table-header-block.col4 {
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 37px 25px 2px 3px;
+    -webkit-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol4.svg) 37 25 2 3;
+    -moz-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol4.svg) 37 25 2 3;
+    -o-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol4.svg) 37 25 2 3;
+    border-image: url(<?php echo BASE_URL ?>/public/img/bgcol4.svg) 37 25 2 3 fill;
+    z-index: 70;
+}
+.startpage-table-header-block.col5 {
+    right: 0;
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 38px 2px 3px;
+    -webkit-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol5.svg) 38 2 3;
+    -moz-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol5.svg) 38 2 3;
+    -o-border-image: url(<?php echo BASE_URL ?>/public/img/bgcol5.svg) 38 2 3;
+    border-image: url(<?php echo BASE_URL ?>/public/img/bgcol5.svg) 38 2 3 fill;
+    z-index: 50;
+}
+.startpage-table-header, .startpage-table-data {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+.startpage-table-data.odd .startpage-table-column:nth-child(1) {
+    background-color: #eefafb;
+}
+.startpage-table-data.even .startpage-table-column:nth-child(1) {
+    background-color: #f4fcfc;
+}
+.startpage-table-data.odd .startpage-table-column:nth-child(2) {
+    background-color: #e6fbe8;
+}
+.startpage-table-data.even .startpage-table-column:nth-child(2) {
+    background-color: #f0fcf1;
+}
+.startpage-table-data.odd .startpage-table-column:nth-child(3) {
+    background-color: #ffefee;
+}
+.startpage-table-data.even .startpage-table-column:nth-child(3) {
+    background-color: #fff5f4;
+}
+.startpage-table-data.odd .startpage-table-column:nth-child(4) {
+    background-color: #eef9ff;
+}
+.startpage-table-data.even .startpage-table-column:nth-child(4) {
+    background-color: #f4fbff;
+}
+.startpage-table-data.odd .startpage-table-column:nth-child(5) {
+    background-color: #fffbe9;
+}
+.startpage-table-data.even .startpage-table-column:nth-child(5) {
+    background-color: #fffcf1;
+}
+.startpage-table-header>div:last-child, .startpage-table-column:last-child {
+    -webkit-box-flex: 1.5;
+    -ms-flex: 1.5;
+    flex: 1.5;
+}
+.startpage-table-header>div, .startpage-table-column {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+.startpage-table-column .startpage-table-column-content, .startpage-table-column .startpage-table-column-content a {
+    font-size: 14px;
+    line-height: 17px;
+}
+.startpage-table-column:first-child .startpage-table-column-content {
+    text-align: left;
+}
+.startpage-table-data .startpage-table-column-content {
+    padding: 9px 20px;
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+.startpage-table-column-content, .startpage-table-column-content a {
+    color: #80868e;
+    vertical-align: middle;
+    font-size: 17px;
+    line-height: 17px;
+}
+.startpage-table-column-content {
+    position: relative;
+}
+
+.startpage-table-header-block.col5 .startpage-table-header-block-count span {
+    text-align: right;
+    font-weight: bold;
+}
+</style>

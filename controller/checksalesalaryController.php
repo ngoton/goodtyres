@@ -320,7 +320,7 @@ Class checksalesalaryController Extends baseController {
         }
 
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 9) {
             $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
         }
 

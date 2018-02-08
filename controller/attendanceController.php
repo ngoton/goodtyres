@@ -318,7 +318,7 @@ Class attendanceController Extends baseController {
                 $ngaythang = strtotime(date('d-m-Y',$ngaythang));
 
 
-                if ($val[0] != null) {
+                if ($val[0] != null && trim($val[2]) != "CN") {
                     //var_dump($val[11]);die();
                     if(!$staff->getStaffByWhere(array('staff_name'=>trim($val[0])))){
                         $staff_data = array(

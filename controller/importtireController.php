@@ -326,9 +326,143 @@ Class importtireController Extends baseController {
                 }
                 //return $this->view->redirect('transport');
             
-            //return $this->view->redirect('stock');
+            return $this->view->redirect('importtire');
         }
         $this->view->show('importtire/goingimport');
+        
+    }
+    public function goingimportorder(){
+        $this->view->disableLayout();
+        header('Content-Type: text/html; charset=utf-8');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_FILES['import']['name'] != null) {
+            require("lib/Classes/PHPExcel/IOFactory.php");
+            require("lib/Classes/PHPExcel.php");
+
+            $tiregoing = $this->model->get('tiregoingorderModel');
+            $tirebrand = $this->model->get('tirebrandModel');
+            $tiresize = $this->model->get('tiresizeModel');
+            $tirepattern = $this->model->get('tirepatternModel');
+
+            $objPHPExcel = new PHPExcel();
+            // Set properties
+            if (pathinfo($_FILES['import']['name'], PATHINFO_EXTENSION) == "xls") {
+                $objReader = PHPExcel_IOFactory::createReader('Excel5');
+            }
+            else if (pathinfo($_FILES['import']['name'], PATHINFO_EXTENSION) == "xlsx") {
+                $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+            }
+            
+            $objReader->setReadDataOnly(false);
+
+            $objPHPExcel = $objReader->load($_FILES['import']['tmp_name']);
+            $objWorksheet = $objPHPExcel->getActiveSheet();
+
+            
+
+            $highestRow = $objWorksheet->getHighestRow(); // e.g. 10
+            $highestColumn = $objWorksheet->getHighestColumn(); // e.g 'F'
+
+            $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn); // e.g. 5
+
+            //var_dump($objWorksheet->getMergeCells());die();
+            
+             
+
+                for ($row = 2; $row <= $highestRow; ++ $row) {
+                    $val = array();
+                    for ($col = 0; $col < $highestColumnIndex; ++ $col) {
+                        $cell = $objWorksheet->getCellByColumnAndRow($col, $row);
+                        // Check if cell is merged
+                        foreach ($objWorksheet->getMergeCells() as $cells) {
+                            if ($cell->isInRange($cells)) {
+                                $currMergedCellsArray = PHPExcel_Cell::splitRange($cells);
+                                $cell = $objWorksheet->getCell($currMergedCellsArray[0][0]);
+                                break;
+                                
+                            }
+                        }
+                        //$val[] = $cell->getValue();
+                        //$val[] = is_numeric($cell->getCalculatedValue()) ? round($cell->getCalculatedValue()) : $cell->getCalculatedValue();
+                        $val[] = $cell->getCalculatedValue();
+                        //here's my prob..
+                        //echo $val;
+                    }
+                    if ($val[1] != null && $val[2] != null && $val[4] != null) {
+
+                        $tire_brand = $tirebrand->getTireByWhere(array('tire_brand_name'=>trim($val[3]))); 
+                        if (!$tire_brand) {
+                               $tirebrand->createTire(array('tire_brand_name'=>trim($val[3])));
+                               $tire_brand_id = $tirebrand->getLastTire()->tire_brand_id;
+                           }   
+                           else{
+                                $tire_brand_id = $tire_brand->tire_brand_id;
+                           }
+
+                        $tire_size = $tiresize->getTireByWhere(array('tire_size_number'=>trim($val[4]))); 
+                        if (!$tire_size) {
+                               $tiresize->createTire(array('tire_size_number'=>trim($val[4])));
+                               $tire_size_id = $tiresize->getLastTire()->tire_size_id;
+                           }   
+                           else{
+                                $tire_size_id = $tire_size->tire_size_id;
+                           }
+
+                        $tire_pattern = $tirepattern->getTireByWhere(array('tire_pattern_name'=>trim($val[5]))); 
+                        if (!$tire_pattern) {
+                               $tirepattern->createTire(array('tire_pattern_name'=>trim($val[5])));
+                               $tire_pattern_id = $tirepattern->getLastTire()->tire_pattern_id;
+                           }   
+                           else{
+                                $tire_pattern_id = $tire_pattern->tire_pattern_id;
+                           }
+
+                        $ngay = PHPExcel_Shared_Date::ExcelToPHP(trim($val[2]));                                      
+
+                        $ngay = $ngay-3600;
+                                
+                                if($tiregoing->getTireByWhere(array('code'=>trim($val[1]),'tire_brand'=>$tire_brand_id,'tire_size'=>$tire_size_id,'tire_pattern'=>$tire_pattern_id))) {
+                                    $id_tire_going = $tiregoing->getTireByWhere(array('code'=>trim($val[1]),'tire_brand'=>$tire_brand_id,'tire_size'=>$tire_size_id,'tire_pattern'=>$tire_pattern_id))->tire_going_id;
+
+                                    $tire_going_data = array(
+                                    'tire_going_order_date' => $ngay,
+                                    'code' => trim($val[1]),
+                                    'tire_size' => $tire_size_id,
+                                    'tire_pattern' => $tire_pattern_id,
+                                    'tire_brand' => $tire_brand_id,
+                                    'tire_number' => trim($val[6]),
+                                    'tire_price' => trim($val[7]),
+                                    );
+                                    $tiregoing->updateTire($tire_going_data,array('tire_going_order_id' => $id_tire_going));
+                                }
+                                else{
+                                    $tire_going_data = array(
+                                    'tire_going_order_date' => $ngay,
+                                    'code' => trim($val[1]),
+                                    'tire_size' => $tire_size_id,
+                                    'tire_pattern' => $tire_pattern_id,
+                                    'tire_brand' => $tire_brand_id,
+                                    'tire_number' => trim($val[6]),
+                                    'tire_price' => trim($val[7]),
+                                    );
+                                    $tiregoing->createTire($tire_going_data);
+                                }
+                            
+                        
+                    }
+                    
+                    //var_dump($this->getNameDistrict($this->lib->stripUnicode($val[1])));
+                    // insert
+
+
+                }
+                //return $this->view->redirect('transport');
+            
+            return $this->view->redirect('importtire');
+        }
+        $this->view->show('importtire/goingimportorder');
         
     }
 
@@ -798,6 +932,103 @@ Class importtireController Extends baseController {
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
                         $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."delete"."|".$_POST['data']."|tire_going|"."\n"."\r\n";
+                        
+                        $fh = fopen($filename, "a") or die("Could not open log file.");
+                        fwrite($fh, $text) or die("Could not write file!");
+                        fclose($fh);
+                    }
+            }
+            
+        }
+    }
+
+    public function goingorder(){
+        $this->view->disableLayout();
+        $this->view->data['lib'] = $this->lib;
+        $code = $this->registry->router->param_id;
+
+        $tire_going_model = $this->model->get('tiregoingorderModel');
+        $join = array('table'=>'tire_pattern,tire_brand,tire_size','where'=>'tire_pattern = tire_pattern_id AND tire_brand = tire_brand_id AND tire_size = tire_size_id');
+
+        $data = array(
+            'where' => 'code='.$code,
+        );
+
+        $goings = $tire_going_model->getAllTire($data,$join);
+        $this->view->data['tire_goings'] = $goings;
+
+        $this->view->data['code'] = $code;
+        $this->view->data['tire_going_order_date'] = $this->registry->router->order_by;
+
+        $this->view->show('importtire/goingorder');
+    }
+    public function editgoingorder(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $tire_going_model = $this->model->get('tiregoingorderModel');
+
+            $brand = trim($_POST['tire_brand']);
+            $pattern = trim($_POST['tire_pattern']);
+            $size = trim($_POST['tire_size']);
+            $number = trim($_POST['tire_number']);
+            $code = trim($_POST['code']);
+            $tire_going_order_date = strtotime(trim($_POST['tire_going_order_date']));
+            $tire_price = str_replace(',', '', $_POST['tire_price']);
+
+            $data = array(
+                'tire_brand'=>$brand,
+                'tire_pattern'=>$pattern,
+                'tire_size'=>$size,
+                'tire_number'=>$number,
+                'code'=>$code,
+                'tire_going_order_date'=>$tire_going_order_date,
+                'tire_price'=>$tire_price,
+            );
+
+            if ($_POST['yes'] != "") {
+                $tire_going_model->updateTire($data,array('tire_going_order_id'=>$_POST['yes']));
+
+                date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                $filename = "action_logs.txt";
+                $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['yes']."|tire_going_order|"."\n"."\r\n";
+                
+                $fh = fopen($filename, "a") or die("Could not open log file.");
+                fwrite($fh, $text) or die("Could not write file!");
+                fclose($fh);
+            }
+            else{
+                $tire_going_model->createTire($data);
+                date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                $filename = "action_logs.txt";
+                $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."add"."|".$tire_going_model->getLastTire()->tire_going_order_id."|tire_going_order|"."\n"."\r\n";
+                
+                $fh = fopen($filename, "a") or die("Could not open log file.");
+                fwrite($fh, $text) or die("Could not write file!");
+                fclose($fh);
+            }
+            
+
+        }
+    }
+    public function deletegoingorder(){
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $tire_going_model = $this->model->get('tiregoingorderModel');
+            if(isset($_POST['data'])){
+                    if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
+                        
+                            echo "Bạn không có quyền thực hiện thao tác này";
+                            return false;
+                        
+                    }
+                    else{
+                        $tire_going_model->deleteTire($_POST['data']);
+                        echo "Xóa thành công";
+
+                        date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                        $filename = "action_logs.txt";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."delete"."|".$_POST['data']."|tire_going_order|"."\n"."\r\n";
                         
                         $fh = fopen($filename, "a") or die("Could not open log file.");
                         fwrite($fh, $text) or die("Could not write file!");
@@ -3430,7 +3661,7 @@ Class importtireController Extends baseController {
                 $salesdata = $sales_model->getSalesByWhere(array('import_tire'=>$_POST['data']));
                 $data_sales = array(
                     'cost' => $salesdata->cost-$kvat-$vat-$estimate,
-                    'profit' => $sale_data->profit+$kvat+$vat+$estimate,
+                    'profit' => $salesdata->profit+$kvat+$vat+$estimate,
                     'import_tire' => $_POST['data'],
                     'sales_update_user' => $_SESSION['userid_logined'],
                     'sales_update_time' => strtotime(date('d-m-Y')),
@@ -3723,7 +3954,7 @@ Class importtireController Extends baseController {
                 $salesdata = $sales_model->getSalesByWhere(array('import_tire'=>$_POST['data']));
                 $data_sales = array(
                     'cost' => $salesdata->cost-$kvat-$vat-$estimate,
-                    'profit' => $sale_data->profit+$kvat+$vat+$estimate,
+                    'profit' => $salesdata->profit+$kvat+$vat+$estimate,
                     'import_tire' => $_POST['data'],
                     'sales_update_user' => $_SESSION['userid_logined'],
                     'sales_update_time' => strtotime(date('d-m-Y')),
@@ -4016,7 +4247,7 @@ Class importtireController Extends baseController {
                 $salesdata = $sales_model->getSalesByWhere(array('import_tire'=>$_POST['data']));
                 $data_sales = array(
                     'cost' => $salesdata->cost-$kvat-$vat-$estimate,
-                    'profit' => $sale_data->profit+$kvat+$vat+$estimate,
+                    'profit' => $salesdata->profit+$kvat+$vat+$estimate,
                     'import_tire' => $_POST['data'],
                     'sales_update_user' => $_SESSION['userid_logined'],
                     'sales_update_time' => strtotime(date('d-m-Y')),

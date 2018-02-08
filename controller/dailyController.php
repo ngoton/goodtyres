@@ -16,20 +16,26 @@ Class dailyController Extends baseController {
             $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
             $batdau = isset($_POST['batdau']) ? $_POST['batdau'] : null;
             $ketthuc = isset($_POST['ketthuc']) ? $_POST['ketthuc'] : null;
-            $ngaytao = isset($_POST['ngaytao']) ? $_POST['ngaytao'] : null;
-            $ngaytaobatdau = isset($_POST['ngaytaobatdau']) ? $_POST['ngaytaobatdau'] : null;
+            $nv = isset($_POST['nv']) ? $_POST['nv'] : null;
+            $tha = isset($_POST['tha']) ? $_POST['tha'] : null;
+            $na = isset($_POST['na']) ? $_POST['na'] : null;
         }
         else{
             $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'daily_date';
-            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'DESC';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
-            $limit = 100;
-            $batdau = '01-'.date('m-Y');
-            $ketthuc = date('t-m-Y');
-            $ngaytao = date('m-Y');
-            $ngaytaobatdau = date('m-Y');
+            $limit = 18446744073709;
+            $batdau = date('d-m-Y');
+            $ketthuc = date('d-m-Y');
+            $nv = 1;
+            $tha = date('m');
+            $na = date('Y');
         }
+
+        $id = $this->registry->router->param_id;
+
+        $ngayketthuc = date('d-m-Y', strtotime($ketthuc. ' + 1 days'));
 
         $customer_model = $this->model->get('customerModel');
         $customers = $customer_model->getAllCustomer(array('order_by'=>'customer_name ASC'));
@@ -39,7 +45,7 @@ Class dailyController Extends baseController {
         $daily_bank_model = $this->model->get('dailybankModel');
         $bank_model = $this->model->get('bankModel');
 
-        $banks = $bank_model->getAllBank(array('where'=>'symbol IS NOT NULL'));
+        $banks = $bank_model->getAllBank(array('where'=>'symbol IS NOT NULL AND symbol != ""'));
         $this->view->data['banks'] = $banks;
 
         $data_bank = array(
@@ -52,7 +58,7 @@ Class dailyController Extends baseController {
         }
 
         $data_bank = array(
-            'where' => 'daily_bank_date >= '.strtotime($batdau).' AND daily_bank_date <= '.strtotime($ketthuc),
+            'where' => 'daily_bank_date >= '.strtotime($batdau).' AND daily_bank_date < '.strtotime($ngayketthuc),
         );
         $bank_ps = $daily_bank_model->getAllDaily($data_bank);
         $thu = array(); $chi = array();
@@ -84,7 +90,192 @@ Class dailyController Extends baseController {
         $pagination_stages = 2;
         
         $data = array(
+            'where' => 'daily_date >= '.strtotime($batdau).' AND daily_date < '.strtotime($ngayketthuc),
+        );
+
+        if ($id > 0) {
+            $data['where'] = 'daily_id = '.$id;
+        }
+        
+        
+        $tongsodong = count($daily_model->getAllDaily($data));
+        $tongsotrang = ceil($tongsodong / $sonews);
+        
+
+        $this->view->data['page'] = $page;
+        $this->view->data['order_by'] = $order_by;
+        $this->view->data['order'] = $order;
+        $this->view->data['keyword'] = $keyword;
+        $this->view->data['pagination_stages'] = $pagination_stages;
+        $this->view->data['tongsotrang'] = $tongsotrang;
+        $this->view->data['limit'] = $limit;
+        $this->view->data['sonews'] = $sonews;
+        $this->view->data['batdau'] = $batdau;
+        $this->view->data['ketthuc'] = $ketthuc;
+        $this->view->data['nv'] = $nv;
+        $this->view->data['tha'] = $tha;
+        $this->view->data['na'] = $na;
+
+        $data = array(
+            'order_by'=>$order_by,
+            'order'=>$order,
+            'limit'=>$x.','.$sonews,
             'where' => 'daily_date >= '.strtotime($batdau).' AND daily_date <= '.strtotime($ketthuc),
+            );
+        
+        if ($id > 0) {
+            $data['where'] = 'daily_id = '.$id;
+        }
+      
+        if ($keyword != '') {
+            $search = '( note LIKE "%'.$keyword.'%" 
+                    OR comment LIKE "%'.$keyword.'%" 
+                    OR owner LIKE "%'.$keyword.'%" 
+                    OR code LIKE "%'.$keyword.'%" 
+                    OR money_in LIKE "%'.$keyword.'%" 
+                    OR money_out LIKE "%'.$keyword.'%" 
+                    OR account LIKE "%'.$keyword.'%" 
+                )';
+            
+                $data['where'] = $data['where'].' AND '.$search;
+        }
+
+        
+        $dailys = $daily_model->getAllDaily($data);
+        
+        $this->view->data['dailys'] = $dailys;
+
+        $receivable_model = $this->model->get('receivableModel');
+        $payable_model = $this->model->get('payableModel');
+        $clearing = array();
+        foreach ($dailys as $daily) {
+            
+            $sts = explode(',', $daily->clearing);
+            foreach ($sts as $key) {
+                if ($daily->money_in > 0) {
+                    $receivables = $receivable_model->getCosts($key);
+                    if ($receivables) {
+                        if (!isset($clearing[$daily->daily_id])) {
+                            $clearing[$daily->daily_id] = str_replace(',', '.', $receivables->code.':'.$receivables->comment.'~'.$receivables->receivable_id);
+                        }
+                        else{
+                            $clearing[$daily->daily_id] .= ','.str_replace(',', '.', $receivables->code.':'.$receivables->comment.'~'.$receivables->receivable_id);
+                        }
+                    }
+                }
+                if ($daily->money_out > 0) {
+                    $payables = $payable_model->getCosts($key);
+                    if ($payables) {
+                        if (!isset($clearing[$daily->daily_id])) {
+                            $clearing[$daily->daily_id] = str_replace(',', '.', $payables->code.':'.$payables->comment.'~'.$payables->payable_id);
+                        }
+                        else{
+                            $clearing[$daily->daily_id] .= ','.str_replace(',', '.', $payables->code.':'.$payables->comment.'~'.$payables->payable_id);
+                        }
+                    }
+                }
+                
+            }
+            
+        }
+        $this->view->data['clearing'] = $clearing;
+
+        $this->view->data['lastID'] = isset($daily_model->getLastDaily()->daily_id)?$daily_model->getLastDaily()->daily_id:0;
+
+        /* Lấy tổng doanh thu*/
+        
+        /*************/
+        $this->view->show('daily/index');
+    }
+    public function index1() {
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Báo cáo Thu chi ';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_by = isset($_POST['order_by']) ? $_POST['order_by'] : null;
+            $order = isset($_POST['order']) ? $_POST['order'] : null;
+            $page = isset($_POST['page']) ? $_POST['page'] : null;
+            $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+            $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
+            $batdau = isset($_POST['batdau']) ? $_POST['batdau'] : null;
+            $ketthuc = isset($_POST['ketthuc']) ? $_POST['ketthuc'] : null;
+            $nv = isset($_POST['nv']) ? $_POST['nv'] : null;
+            $tha = isset($_POST['tha']) ? $_POST['tha'] : null;
+            $na = isset($_POST['na']) ? $_POST['na'] : null;
+        }
+        else{
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'daily_date';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'DESC';
+            $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
+            $keyword = "";
+            $limit = 18446744073709;
+            $batdau = date('d-m-Y');
+            $ketthuc = date('d-m-Y');
+            $nv = 1;
+            $tha = date('m');
+            $na = date('Y');
+        }
+
+        $ngayketthuc = date('d-m-Y', strtotime($ketthuc. ' + 1 days'));
+
+        $customer_model = $this->model->get('customerModel');
+        $customers = $customer_model->getAllCustomer(array('order_by'=>'customer_name ASC'));
+        $this->view->data['customers'] = $customers;
+
+        $daily_model = $this->model->get('dailyModel');
+        $daily_bank_model = $this->model->get('dailybankModel');
+        $bank_model = $this->model->get('bankModel');
+
+        $banks = $bank_model->getAllBank(array('where'=>'symbol IS NOT NULL AND symbol != ""'));
+        $this->view->data['banks'] = $banks;
+
+        $data_bank = array(
+            'where' => 'daily_bank_date < '.strtotime($batdau),
+        );
+        $bank_dau = $daily_bank_model->getAllDaily($data_bank);
+        $tondau = array();
+        foreach ($bank_dau as $ba) {
+            $tondau[$ba->bank] = isset($tondau[$ba->bank])?$tondau[$ba->bank]+$ba->money:$ba->money;
+        }
+
+        $data_bank = array(
+            'where' => 'daily_bank_date >= '.strtotime($batdau).' AND daily_bank_date < '.strtotime($ngayketthuc),
+        );
+        $bank_ps = $daily_bank_model->getAllDaily($data_bank);
+        $thu = array(); $chi = array();
+        foreach ($bank_ps as $ba) {
+            if ($ba->money > 0) {
+                $thu[$ba->bank] = isset($thu[$ba->bank])?$thu[$ba->bank]+$ba->money:$ba->money;
+            }
+            else{
+                $chi[$ba->bank] = isset($chi[$ba->bank])?$chi[$ba->bank]+$ba->money:$ba->money;
+            }
+        }
+
+        $this->view->data['tondau'] = $tondau;
+        $this->view->data['thu'] = $thu;
+        $this->view->data['chi'] = $chi;
+
+        $account_model = $this->model->get('accountModel');
+
+        $account_parents = $account_model->getAllAccount(array('order_by'=>'account_number ASC'));
+        $account_data = array();
+        foreach ($account_parents as $account_parent) {
+            $account_data[$account_parent->account_id] = $account_parent->account_number;
+        }
+        $this->view->data['account_parents'] = $account_parents;
+        $this->view->data['account_data'] = $account_data;
+
+        $sonews = $limit;
+        $x = ($page-1) * $sonews;
+        $pagination_stages = 2;
+        
+        $data = array(
+            'where' => 'daily_date >= '.strtotime($batdau).' AND daily_date < '.strtotime($ngayketthuc),
         );
         
         
@@ -102,8 +293,9 @@ Class dailyController Extends baseController {
         $this->view->data['sonews'] = $sonews;
         $this->view->data['batdau'] = $batdau;
         $this->view->data['ketthuc'] = $ketthuc;
-        $this->view->data['ngaytao'] = $ngaytao;
-        $this->view->data['ngaytaobatdau'] = $ngaytaobatdau;
+        $this->view->data['nv'] = $nv;
+        $this->view->data['tha'] = $tha;
+        $this->view->data['na'] = $na;
 
         $data = array(
             'order_by'=>$order_by,
@@ -171,7 +363,158 @@ Class dailyController Extends baseController {
         /* Lấy tổng doanh thu*/
         
         /*************/
-        $this->view->show('daily/index');
+        $this->view->show('daily/index1');
+    }
+    public function deposit() {
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Báo cáo Thu chi ';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_by = isset($_POST['order_by']) ? $_POST['order_by'] : null;
+            $order = isset($_POST['order']) ? $_POST['order'] : null;
+            $page = isset($_POST['page']) ? $_POST['page'] : null;
+            $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+            $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
+            $batdau = isset($_POST['batdau']) ? $_POST['batdau'] : null;
+            $ketthuc = isset($_POST['ketthuc']) ? $_POST['ketthuc'] : null;
+            $nv = isset($_POST['nv']) ? $_POST['nv'] : null;
+            $tha = isset($_POST['tha']) ? $_POST['tha'] : null;
+            $na = isset($_POST['na']) ? $_POST['na'] : null;
+        }
+        else{
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'daily_date';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'DESC';
+            $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
+            $keyword = "";
+            $limit = 18446744073709;
+            $batdau = '01-'.date('m-Y');
+            $ketthuc = date('t-m-Y');
+            $nv = 1;
+            $tha = date('m');
+            $na = date('Y');
+        }
+
+        $ngayketthuc = date('d-m-Y', strtotime($ketthuc. ' + 1 days'));
+
+        $customer_model = $this->model->get('customerModel');
+        $customers = $customer_model->getAllCustomer(array('order_by'=>'customer_name ASC'));
+        $this->view->data['customers'] = $customers;
+
+        $daily_model = $this->model->get('dailyModel');
+        $bank_model = $this->model->get('bankModel');
+
+        $banks = $bank_model->getAllBank(array('where'=>'symbol IS NOT NULL AND symbol != ""'));
+        $this->view->data['banks'] = $banks;
+
+        $data_bank = array(
+            'where' => 'daily_bank_date >= '.strtotime($batdau).' AND daily_bank_date < '.strtotime($ngayketthuc),
+        );
+        
+
+        $account_model = $this->model->get('accountModel');
+
+        $account_parents = $account_model->getAllAccount(array('order_by'=>'account_number ASC'));
+        
+        $this->view->data['account_parents'] = $account_parents;
+
+        $sonews = $limit;
+        $x = ($page-1) * $sonews;
+        $pagination_stages = 2;
+        
+        $data = array(
+            'where' => 'deposit>0 AND daily_date >= '.strtotime($batdau).' AND daily_date < '.strtotime($ngayketthuc),
+        );
+        
+        
+        $tongsodong = count($daily_model->getAllDaily($data));
+        $tongsotrang = ceil($tongsodong / $sonews);
+        
+
+        $this->view->data['page'] = $page;
+        $this->view->data['order_by'] = $order_by;
+        $this->view->data['order'] = $order;
+        $this->view->data['keyword'] = $keyword;
+        $this->view->data['pagination_stages'] = $pagination_stages;
+        $this->view->data['tongsotrang'] = $tongsotrang;
+        $this->view->data['limit'] = $limit;
+        $this->view->data['sonews'] = $sonews;
+        $this->view->data['batdau'] = $batdau;
+        $this->view->data['ketthuc'] = $ketthuc;
+        $this->view->data['nv'] = $nv;
+        $this->view->data['tha'] = $tha;
+        $this->view->data['na'] = $na;
+
+        $data = array(
+            'order_by'=>$order_by,
+            'order'=>$order,
+            'limit'=>$x.','.$sonews,
+            'where' => 'deposit>0 AND daily_date >= '.strtotime($batdau).' AND daily_date <= '.strtotime($ketthuc),
+            );
+        
+      
+        if ($keyword != '') {
+            $search = '( note LIKE "%'.$keyword.'%" 
+                    OR comment LIKE "%'.$keyword.'%" 
+                    OR owner LIKE "%'.$keyword.'%" 
+                    OR code LIKE "%'.$keyword.'%" 
+                    OR money_in LIKE "%'.$keyword.'%" 
+                    OR money_out LIKE "%'.$keyword.'%" 
+                    OR account LIKE "%'.$keyword.'%" 
+                )';
+            
+                $data['where'] = $data['where'].' AND '.$search;
+        }
+
+        
+        $dailys = $daily_model->getAllDaily($data);
+        
+        $this->view->data['dailys'] = $dailys;
+
+        $receivable_model = $this->model->get('receivableModel');
+        $payable_model = $this->model->get('payableModel');
+        $clearing = array();
+        foreach ($dailys as $daily) {
+            
+            $sts = explode(',', $daily->clearing);
+            foreach ($sts as $key) {
+                if ($daily->money_in > 0) {
+                    $receivables = $receivable_model->getCosts($key);
+                    if ($receivables) {
+                        if (!isset($clearing[$daily->daily_id])) {
+                            $clearing[$daily->daily_id] = str_replace(',', '.', $receivables->code.':'.$receivables->comment.'~'.$receivables->receivable_id);
+                        }
+                        else{
+                            $clearing[$daily->daily_id] .= ','.str_replace(',', '.', $receivables->code.':'.$receivables->comment.'~'.$receivables->receivable_id);
+                        }
+                    }
+                }
+                if ($daily->money_out > 0) {
+                    $payables = $payable_model->getCosts($key);
+                    if ($payables) {
+                        if (!isset($clearing[$daily->daily_id])) {
+                            $clearing[$daily->daily_id] = str_replace(',', '.', $payables->code.':'.$payables->comment.'~'.$payables->payable_id);
+                        }
+                        else{
+                            $clearing[$daily->daily_id] .= ','.str_replace(',', '.', $payables->code.':'.$payables->comment.'~'.$payables->payable_id);
+                        }
+                    }
+                }
+                
+            }
+            
+        }
+        $this->view->data['clearing'] = $clearing;
+
+        $this->view->data['lastID'] = isset($daily_model->getLastDaily()->daily_id)?$daily_model->getLastDaily()->daily_id:0;
+
+        /* Lấy tổng doanh thu*/
+        
+        /*************/
+        $this->view->show('daily/deposit');
     }
 
     public function getClearing(){
@@ -690,6 +1033,277 @@ Class dailyController Extends baseController {
         /*************/
         $this->view->show('daily/report');
     }
+    public function ordertire() {
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
+
+            return $this->view->redirect('user/login');
+
+        }
+        
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Đơn đặt hàng';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_by = isset($_POST['order_by']) ? $_POST['order_by'] : null;
+            $order = isset($_POST['order']) ? $_POST['order'] : null;
+            $page = isset($_POST['page']) ? $_POST['page'] : null;
+            $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+            $limit = isset($_POST['limit']) ? $_POST['limit'] : 18446744073709;
+            $trangthai = isset($_POST['trangthai']) ? $_POST['trangthai'] : null;
+            $nv = isset($_POST['nv']) ? $_POST['nv'] : null;
+            $batdau = isset($_POST['batdau']) ? $_POST['batdau'] : null;
+            $ketthuc = isset($_POST['ketthuc']) ? $_POST['ketthuc'] : null;
+            $thang = isset($_POST['tha']) ? $_POST['tha'] : null;
+            $nam = isset($_POST['na']) ? $_POST['na'] : null;
+            $code = isset($_POST['tu']) ? $_POST['tu'] : null;
+        }
+        else{
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'order_tire_status ASC, order_number';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC';
+            $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
+            $keyword = "";
+            $limit = 18446744073709;
+            $trangthai = 0;
+            $nv = 0;
+            $batdau = '01-'.date('m-Y');
+            $ketthuc = date('t-m-Y');
+            $thang = (int)date('m',strtotime($batdau));
+            $nam = date('Y',strtotime($batdau));
+            $code = "";
+        }
+
+        $ma = $this->registry->router->param_id;
+
+        $tg = $this->registry->router->page;
+        $stf = $this->registry->router->order_by;
+
+        $ngayketthuc = date('d-m-Y', strtotime($ketthuc. ' + 1 days'));
+
+        $account_model = $this->model->get('accountModel');
+
+        $account_parents = $account_model->getAllAccount(array('order_by'=>'account_number ASC'));
+        $account_data = array();
+        foreach ($account_parents as $account_parent) {
+            $account_data[$account_parent->account_id] = $account_parent->account_number;
+        }
+        $this->view->data['account_parents'] = $account_parents;
+        $this->view->data['account_data'] = $account_data;
+
+        $customer_model = $this->model->get('customerModel');
+        $customers = $customer_model->getAllCustomer(array(
+            'order_by'=> 'customer_name',
+            'order'=> 'ASC',
+            ));
+
+        $this->view->data['customers'] = $customers;
+
+        $vendor_model = $this->model->get('shipmentvendorModel');
+        $vendors = $vendor_model->getAllVendor(array('order_by'=>'shipment_vendor_name','order'=>'ASC'));
+
+        $this->view->data['vendor_list'] = $vendors;
+
+        $user_model = $this->model->get('userModel');
+        $users = $user_model->getAllUser();
+        $user_data = array();
+        foreach ($users as $user) {
+            $user_data['name'][$user->user_id] = $user->username;
+            $user_data['id'][$user->user_id] = $user->user_id;
+        }
+        $this->view->data['users'] = $user_data;
+
+        
+        
+        $data = array(
+            'where' => ' ( delivery_date >= '.strtotime($batdau).' AND delivery_date < '.strtotime($ngayketthuc).' )',
+        );
+
+        if ($nv == 1) {
+            $data['where'] .= ' AND order_tire_id IN (SELECT order_tire FROM additional WHERE order_tire>0)';
+        }
+        else{
+            $data['where'] .= ' AND order_tire_id NOT IN (SELECT order_tire FROM additional WHERE order_tire>0)';
+        }
+
+        if (isset($tg) && $tg > 0) {
+            $data['where'] = 'delivery_date >= '.$tg.' AND delivery_date <= '.strtotime(date('t-m-Y',$tg));
+
+            $batdau = '01-'.date('m-Y',$tg);
+            $ketthuc = date('t-m-Y',$tg);
+
+            if (isset($stf) && $stf > 0) {
+                $data['where'] .= ' AND sale = '.$stf;
+                $page = 1;
+                $order_by = 'order_tire_status ASC, delivery_date';
+                $order = ' ASC';
+            }
+        }
+
+        $thang = (int)date('m',strtotime($batdau));
+        $nam = date('Y',strtotime($batdau));
+
+        if ($trangthai > 0) {
+            $data['where'] .= ' AND customer = '.$trangthai;
+        }
+        
+
+        if ($ma != "" && $ma != 0) {
+            $code = '"'.$ma.'"';
+        }
+
+        if ($code != "" && $code != "undefined") {
+            $data['where'] .= ' AND order_number = '.$code;
+        }
+
+        $order_tire_model = $this->model->get('ordertireModel');
+        $sonews = $limit;
+        $x = ($page-1) * $sonews;
+        $pagination_stages = 2;
+        
+        $join = array('table'=>'customer, user','where'=>'customer.customer_id = order_tire.customer AND user_id = sale');
+        
+        $tongsodong = count($order_tire_model->getAllTire($data,$join));
+        $tongsotrang = ceil($tongsodong / $sonews);
+        
+
+        $this->view->data['page'] = $page;
+        $this->view->data['order_by'] = $order_by;
+        $this->view->data['order'] = $order;
+        $this->view->data['keyword'] = $keyword;
+        $this->view->data['pagination_stages'] = $pagination_stages;
+        $this->view->data['tongsotrang'] = $tongsotrang;
+        $this->view->data['limit'] = $limit;
+        $this->view->data['sonews'] = $sonews;
+        $this->view->data['trangthai'] = $trangthai;
+        $this->view->data['nv'] = $nv;
+        $this->view->data['batdau'] = $batdau;
+        $this->view->data['ketthuc'] = $ketthuc;
+        $this->view->data['thang'] = $thang;
+        $this->view->data['nam'] = $nam;
+
+        $data = array(
+            'order_by'=>$order_by,
+            'order'=>$order,
+            'limit'=>$x.','.$sonews,
+            'where' => ' ( delivery_date >= '.strtotime($batdau).' AND delivery_date < '.strtotime($ngayketthuc).' )',
+            );
+
+        if ($nv == 1) {
+            $data['where'] .= ' AND order_tire_id IN (SELECT order_tire FROM additional WHERE order_tire>0)';
+        }
+        else{
+            $data['where'] .= ' AND order_tire_id NOT IN (SELECT order_tire FROM additional WHERE order_tire>0)';
+        }
+
+        if (isset($tg) && $tg > 0) {
+            $data['where'] = 'delivery_date >= '.$tg.' AND delivery_date <= '.strtotime(date('t-m-Y',$tg));
+
+            if (isset($stf) && $stf > 0) {
+                $data['where'] .= ' AND sale = '.$stf;
+            }
+        }
+
+        if ($trangthai > 0) {
+            $data['where'] .= ' AND customer = '.$trangthai;
+        }
+        
+
+        if ($ma != "" && $ma != 0) {
+            $code = '"'.$ma.'"';
+        }
+
+        if ($code != "" && $code != "undefined") {
+            $data['where'] .= ' AND order_number = '.$code;
+        }
+
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
+            $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
+        }
+
+        if ($keyword != '') {
+            $search = '( order_number LIKE "%'.$keyword.'%" 
+                OR customer_name LIKE "%'.$keyword.'%"   )';
+            
+                $data['where'] = $data['where'].' AND '.$search;
+        }
+
+        $order_tire_list_model = $this->model->get('ordertirelistModel');
+
+        $order_tires = $order_tire_model->getAllTire($data,$join);
+
+        $tire_import_model = $this->model->get('tireimportModel');
+
+        $costs = array();
+        foreach ($order_tires as $tire) {
+            $ngay = $tire->order_tire_status==1?$tire->delivery_date:strtotime(date('d-m-Y'));
+            $ngayketthuc = strtotime(date('d-m-Y', strtotime(date('d-m-Y',$ngay). ' + 1 days')));
+            $order_tire_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$tire->order_tire_id));
+            foreach ($order_tire_lists as $l) {
+                $gia = 0;
+                $data = array(
+                    'where' => '(order_num = "" OR order_num IS NULL) AND start_date <= '.$ngayketthuc.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                    'order_by' => 'start_date',
+                    'order' => 'DESC, tire_import_id DESC',
+                    'limit' => 1,
+                );
+                $tire_imports = $tire_import_model->getAllTire($data);
+                foreach ($tire_imports as $tire_import) {
+                    $gia = $tire_import->tire_price;
+                }
+                
+                if ($tire->order_number != "") {
+                    $data = array(
+                        'where' => 'order_num = "'.$tire->order_number.'" AND start_date <= '.strtotime(date('t-m-Y',$ngay)).' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                        'order_by' => 'start_date',
+                        'order' => 'DESC, tire_import_id DESC',
+                        'limit' => 1,
+                    );
+                    $tire_imports = $tire_import_model->getAllTire($data);
+                    foreach ($tire_imports as $tire_import) {
+                        $gia = $tire_import->tire_price;
+                    }
+                }
+
+                $costs[$tire->order_tire_id] = isset($costs[$tire->order_tire_id])?$costs[$tire->order_tire_id]+$l->tire_number*$gia:$l->tire_number*$gia;
+            }
+        }
+        
+        $this->view->data['costs'] = $costs;
+        $this->view->data['order_tires'] = $order_tires;
+
+        $this->view->data['lastID'] = isset($order_tire_model->getLastTire()->order_tire_id)?$order_tire_model->getLastTire()->order_tire_id:0;
+
+        $tire_sale_model = $this->model->get('tiresaleModel');
+        $join = array('table'=>'customer, user, staff','where'=>'customer.customer_id = tire_sale.customer AND staff_id = sale AND account = user_id');
+        $data = array(
+            'where' => 'customer = 169 AND tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date < '.strtotime($ngayketthuc),
+        );
+        $sales = $tire_sale_model->getAllTire($data,$join);
+
+        $costs2 = array();
+        foreach ($sales as $tire) {
+            $gia = 0;
+            $data = array(
+                'where' => '(order_num = "" OR order_num IS NULL) AND start_date <= '.strtotime(date('t-m-Y',$tire->tire_sale_date)).' AND tire_brand = '.$tire->tire_brand.' AND tire_size = '.$tire->tire_size.' AND tire_pattern = '.$tire->tire_pattern,
+                'order_by' => 'start_date',
+                'order' => 'DESC',
+                'limit' => 1,
+            );
+            $tire_imports = $tire_import_model->getAllTire($data);
+            foreach ($tire_imports as $tire_import) {
+                $gia = $tire_import->tire_price;
+            }
+
+            $costs2[$tire->tire_sale_id] = isset($costs2[$tire->tire_sale_id])?$costs2[$tire->tire_sale_id]+$tire->volume*$gia:$tire->volume*$gia;
+        }
+        $this->view->data['costs2'] = $costs2;
+        $this->view->data['sales'] = $sales;
+
+        $this->view->show('daily/ordertire');
+    }
 
     public function approve(){
         $this->view->setLayout('admin');
@@ -755,97 +1369,43 @@ Class dailyController Extends baseController {
             return $this->view->redirect('user/login');
         }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $sale_report_model = $this->model->get('salereportModel');
-            $agent_model = $this->model->get('agentModel');
-            $agent_manifest_model = $this->model->get('agentmanifestModel');
-            $invoice_model = $this->model->get('invoiceModel');
-            $order_tire_model = $this->model->get('ordertireModel');
+            $q = $_POST["keyword"];
+            $in = $_POST["in"];
+            $out = $_POST["out"];
 
-            if ($_POST['keyword'] == "*") {
-                $list_sale = $sale_report_model->getAllSale();
-                $list_agent = $agent_model->getAllAgent();
-                $list_agentmanifest = $agent_manifest_model->getAllAgent();
-                $list_invoice = $invoice_model->getAllInvoice();
-                $list_order = $order_tire_model->getAllTire();
+            if ($in != "" && $in != 0) {
+                $receivable_model = $this->model->get('receivableModel');
+                $data = array(
+                    'where' => 'code LIKE "%'.$q.'%" OR comment LIKE "%'.$q.'%"',
+                );
+                $receivables = $receivable_model->getAllCosts($data);
+                foreach ($receivables as $receivable) {
+                    if ($receivable->money-$receivable->pay_money > 0) {
+                        $code = str_replace($q, '<b>'.$q.'</b>', $receivable->code);
+                        
+                        echo '<li onclick="set_item(\''.$receivable->code.'\',\''.$receivable->receivable_id.'\')">'.$code." (".$receivable->comment.") - ".$this->lib->formatMoney($receivable->money-$receivable->pay_money).'</li>';
+                
+                    }
+                    
+                }
             }
-            else{
-                $data_sale = array(
-                'where'=>'( code LIKE "%'.$_POST['keyword'].'%" )',
+            if ($out != "" && $out != 0) {
+                $payable_model = $this->model->get('payableModel');
+                $data = array(
+                    'where' => 'code LIKE "%'.$q.'%" OR comment LIKE "%'.$q.'%"',
                 );
-                $list_sale = $sale_report_model->getAllSale($data_sale);
-
-                $data_agent = array(
-                'where'=>'( code LIKE "%'.$_POST['keyword'].'%" )',
-                );
-                $list_agent = $agent_model->getAllAgent($data_agent);
-
-                $data_agentmanifest = array(
-                'where'=>'( code LIKE "%'.$_POST['keyword'].'%" )',
-                );
-                $list_agentmanifest = $agent_manifest_model->getAllAgent($data_agentmanifest);
-
-                $data_invoice = array(
-                'where'=>'( invoice_number LIKE "%'.$_POST['keyword'].'%" )',
-                );
-                $list_invoice = $invoice_model->getAllInvoice($data_invoice);
-
-                $data_order = array(
-                'where'=>'( order_number LIKE "%'.$_POST['keyword'].'%" )',
-                );
-                $list_order = $order_tire_model->getAllTire($data_order);
+                $payables = $payable_model->getAllCosts($data);
+                $arr = array();
+                foreach ($payables as $payable) {
+                    if ($payable->money-$payable->pay_money > 0) {
+                        $code = str_replace($q, '<b>'.$q.'</b>', $payable->code);
+                        
+                        echo '<li onclick="set_item(\''.$payable->code.'\',\''.$payable->payable_id.'\')">'.$code." (".$payable->comment.") - ".$this->lib->formatMoney($payable->money-$payable->pay_money).'</li>';
+                    }
+                }
             }
 
             
-            foreach ($list_sale as $rs) {
-                // put in bold the written text
-                $code = $rs->code;
-                if ($_POST['keyword'] != "*") {
-                    $code = str_replace($_POST['keyword'], '<b>'.$_POST['keyword'].'</b>', $rs->code);
-                }
-                
-                // add new option
-                echo '<li onclick="set_item(\''.$rs->code.'\',\''.$rs->code.'\')">'.$code." (".$rs->comment.")".'</li>';
-            }
-            foreach ($list_agent as $rs) {
-                // put in bold the written text
-                $code = $rs->code;
-                if ($_POST['keyword'] != "*") {
-                    $code = str_replace($_POST['keyword'], '<b>'.$_POST['keyword'].'</b>', $rs->code);
-                }
-                
-                // add new option
-                echo '<li onclick="set_item(\''.$rs->code.'\',\''.$rs->code.'\')">'.$code." (".$rs->name.")".'</li>';
-            }
-            foreach ($list_agentmanifest as $rs) {
-                // put in bold the written text
-                $code = $rs->code;
-                if ($_POST['keyword'] != "*") {
-                    $code = str_replace($_POST['keyword'], '<b>'.$_POST['keyword'].'</b>', $rs->code);
-                }
-                
-                // add new option
-                echo '<li onclick="set_item(\''.$rs->code.'\',\''.$rs->code.'\')">'.$code." (".$rs->comment.")".'</li>';
-            }
-            foreach ($list_invoice as $rs) {
-                // put in bold the written text
-                $code = $rs->invoice_number;
-                if ($_POST['keyword'] != "*") {
-                    $code = str_replace($_POST['keyword'], '<b>'.$_POST['keyword'].'</b>', $rs->invoice_number);
-                }
-                
-                // add new option
-                echo '<li onclick="set_item(\''.$rs->invoice_number.'\',\''.$rs->invoice_number.'\')">'.$code." (".$rs->comment.")".'</li>';
-            }
-            foreach ($list_order as $rs) {
-                // put in bold the written text
-                $code = $rs->order_number;
-                if ($_POST['keyword'] != "*") {
-                    $code = str_replace($_POST['keyword'], '<b>'.$_POST['keyword'].'</b>', $rs->order_number);
-                }
-                
-                // add new option
-                echo '<li onclick="set_item(\''.$rs->order_number.'\',\''.$rs->order_number.'\')">'.$code.'</li>';
-            }
         }
     }
 
@@ -915,7 +1475,162 @@ Class dailyController Extends baseController {
             
         }
     }
-   
+    public function getitemadd(){
+        if (isset($_POST['daily'])) {
+            $account_model = $this->model->get('accountModel');
+            $additional_model = $this->model->get('additionalModel');
+            
+            $accounts = $account_model->getAllAccount(array('order_by'=>'account_number ASC'));
+            $additionals = $additional_model->getAllAdditional(array('where'=>'daily='.$_POST['daily']));
+
+            $str = "";
+            $i = 1;
+            if ($additionals) {
+                foreach ($additionals as $additional) {
+                    $str .= '<tr>';
+                    $str .= '<td class="width-3">'.$i.'</td>';
+                    $str .= '<td class="width-10">';
+                    $str .= '<select name="additional_debit[]" class="additional_debit dropchosen" required="required">';
+                    $str .= '<option >Tài khoản</option>';
+                      foreach ($accounts as $account) {
+                          $str .= '<option '.($account->account_id==$additional->debit?'selected':null).' value="'.$account->account_id.'">'.$account->account_number.' - '.$account->account_name.'</option>';
+                      }
+                    $str .= '</select>';
+                    $str .= '</td>';
+                    $str .= '<td class="width-10">';
+                    $str .= '<select name="additional_credit[]" class="additional_credit dropchosen" required="required">';
+                    $str .= '<option >Tài khoản</option>';
+                      foreach ($accounts as $account) {
+                          $str .= '<option '.($account->account_id==$additional->credit?'selected':null).' value="'.$account->account_id.'">'.$account->account_number.' - '.$account->account_name.'</option>';
+                      }
+                    $str .= '</select>';
+                    $str .= '</td>';
+                    $str .= '<td class="width-10"><input data="'.$additional->additional_id.'" value="'.$this->lib->formatMoney($additional->money).'" type="text" name="additional_money[]" class="additional_money numbers text-right" required="required" autocomplete="off"></td>';
+                    $str .= '<td><input value="'.$additional->additional_comment.'" type="text" name="additional_comment[]" class="additional_comment keep-val" required="required" autocomplete="off"></td>';
+                    $str .= '<td class="width-10"><input value="'.$additional->code.'" type="text" name="additional_code[]" class="additional_code keep-val" autocomplete="off"></td>';
+                    
+                    $str .= '</tr>';
+
+                  $i++;
+                }
+            }
+            else{
+                $str .= '<tr>';
+                $str .= '<td class="width-3">'.$i.'</td>';
+                $str .= '<td class="width-10">';
+                $str .= '<select name="additional_debit[]" class="additional_debit dropchosen" required="required">';
+                $str .= '<option >Tài khoản</option>';
+                  foreach ($accounts as $account) {
+                      $str .= '<option value="'.$account->account_id.'">'.$account->account_number.' - '.$account->account_name.'</option>';
+                  }
+                $str .= '</select>';
+                $str .= '</td>';
+                $str .= '<td class="width-10">';
+                $str .= '<select name="additional_credit[]" class="additional_credit dropchosen" required="required">';
+                $str .= '<option >Tài khoản</option>';
+                  foreach ($accounts as $account) {
+                      $str .= '<option value="'.$account->account_id.'">'.$account->account_number.' - '.$account->account_name.'</option>';
+                  }
+                $str .= '</select>';
+                $str .= '</td>';
+                $str .= '<td class="width-10"><input type="text" name="additional_money[]" class="additional_money numbers text-right" required="required" autocomplete="off"></td>';
+                $str .= '<td><input type="text" name="additional_comment[]" class="additional_comment keep-val" required="required" autocomplete="off"></td>';
+                $str .= '<td class="width-10"><input type="text" name="additional_code[]" class="additional_code keep-val" autocomplete="off"></td>';
+                
+                $str .= '</tr>';
+
+            }
+            
+
+            $arr = array(
+                'hang'=>$str,
+            );
+            echo json_encode($arr);
+        }
+    }
+    public function getPayvoucher(){
+        $daily_model = $this->model->get('dailyModel');
+        $data = array(
+            'where' => 'note LIKE "pc%"',
+            'order_by' => 'daily_date DESC, ABS(SUBSTRING(note, -3)) DESC',
+            'limit' => 1,
+        );
+        $pays = $daily_model->getAllDaily($data);
+        $num = "";
+        foreach ($pays as $pay) {
+            $num = ++$pay->note;
+        }
+        echo $num;
+    }
+    public function getRevoucher(){
+        $daily_model = $this->model->get('dailyModel');
+        $data = array(
+            'where' => 'note LIKE "pt%"',
+            'order_by' => 'daily_date DESC, ABS(SUBSTRING(note, -3)) DESC',
+            'limit' => 1,
+        );
+        $pays = $daily_model->getAllDaily($data);
+        $num = "";
+        foreach ($pays as $pay) {
+            $num = ++$pay->note;
+        }
+        echo $num;
+    }
+
+    public function printpay() {
+        $this->view->disableLayout();
+        $this->view->data['lib'] = $this->lib;
+
+        $daily = $this->registry->router->param_id;
+
+        $daily_model = $this->model->get('dailyModel');
+        $dailys = $daily_model->getDaily($daily);
+
+        $this->view->data['dailys'] = $dailys;
+
+        $info_model = $this->model->get('infoModel');
+        $this->view->data['infos'] = $info_model->getLastInfo();
+
+        $account_model = $this->model->get('accountModel');
+        $additional_model = $this->model->get('additionalModel');
+        
+        $additionals = $additional_model->getAdditionalByWhere(array('daily'=>$daily));
+
+        $debit = $account_model->getAccount($additionals->debit);
+        $credit = $account_model->getAccount($additionals->credit);
+
+        $this->view->data['debit'] = $debit;
+        $this->view->data['credit'] = $credit;
+
+        $this->view->show('daily/printpay');
+    }
+    public function printre() {
+        $this->view->disableLayout();
+        $this->view->data['lib'] = $this->lib;
+
+        $daily = $this->registry->router->param_id;
+
+        $daily_model = $this->model->get('dailyModel');
+        $dailys = $daily_model->getDaily($daily);
+
+        $this->view->data['dailys'] = $dailys;
+
+        $info_model = $this->model->get('infoModel');
+        $this->view->data['infos'] = $info_model->getLastInfo();
+
+        $account_model = $this->model->get('accountModel');
+        $additional_model = $this->model->get('additionalModel');
+        
+        $additionals = $additional_model->getAdditionalByWhere(array('daily'=>$daily));
+
+        $debit = $account_model->getAccount($additionals->debit);
+        $credit = $account_model->getAccount($additionals->credit);
+
+        $this->view->data['debit'] = $debit;
+        $this->view->data['credit'] = $credit;
+
+        $this->view->show('daily/printre');
+    }
    
     public function add(){
         if (!isset($_SESSION['userid_logined'])) {
@@ -942,9 +1657,11 @@ Class dailyController Extends baseController {
                         
                         'service' => trim($_POST['service']),
                         'owner' => trim($_POST['owner']),
+                        'owner_request' => trim($_POST['owner_request']),
+                        'owner_approve' => trim($_POST['owner_approve']),
                         'note' => trim($_POST['note']),
                         'account' => trim($_POST['account']),
-                        'daily_date' => strtotime(trim($_POST['daily_date'])),
+                        'daily_date' => strtotime(str_replace('/','-',$_POST['daily_date'])),
                         'comment' => trim($_POST['comment']),
                         'debit' => trim($_POST['debit']),
                         'credit' => trim($_POST['credit']),
@@ -955,7 +1672,13 @@ Class dailyController Extends baseController {
                         'payable' => trim($_POST['payable']),
                         'deposit' => trim($_POST['deposit']),
                         'customer' => trim($_POST['customer']),
+                        'daily_check_lohang' => trim($_POST['daily_check_lohang']),
+                        'daily_check_cost' => trim($_POST['daily_check_cost']),
                         );
+
+            if ($data['deposit']>0) {
+                $data['service'] = 1;
+            }
             
             $data['clearing'] = null;
             $clearing = "";
@@ -1062,12 +1785,26 @@ Class dailyController Extends baseController {
 
                     $bank = $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id;
 
-                    $data_daily_bank = array(
-                        'daily_bank_date' => $data['daily_date'],
-                        'money' => $data['money_in'] > 0 ? $data['money_in'] : ($data['money_out'] > 0 ? 0-$data['money_out']:null),
-                        'bank' => $bank,
-                    );
-                    $daily_bank_model->updateDaily($data_daily_bank,array('daily' => trim($_POST['yes'])));
+                    $daily_banks = $daily_bank_model->getDailyByWhere(array('daily'=>$_POST['yes']));
+                    if (!$daily_banks) {
+                        $data_daily_bank = array(
+                            'daily_bank_date' => $data['daily_date'],
+                            'money' => $data['money_in'] > 0 ? $data['money_in'] : ($data['money_out'] > 0 ? 0-$data['money_out']:null),
+                            'bank' => $bank,
+                            'daily' => trim($_POST['yes']),
+                        );
+                        $daily_bank_model->createDaily($data_daily_bank);
+                    }
+                    else{
+                        $data_daily_bank = array(
+                            'daily_bank_date' => $data['daily_date'],
+                            'money' => $data['money_in'] > 0 ? $data['money_in'] : ($data['money_out'] > 0 ? 0-$data['money_out']:null),
+                            'bank' => $bank,
+                            'daily' => trim($_POST['yes']),
+                        );
+                        $daily_bank_model->updateDaily($data_daily_bank,array('daily' => trim($_POST['yes'])));
+                    }
+                    
 
                     
                     $week = (int)date('W', $data['daily_date']);
@@ -1132,6 +1869,8 @@ Class dailyController Extends baseController {
                                 'code' => $data['code'],
                                 'check_office' => 1,
                                 'check_other' => 1,
+                                'check_lohang' => $data['daily_check_lohang'],
+                                'check_costs' => $data['daily_check_cost'],
                                 );
 
                             $costs_model->updateCosts($data_costs,array('additional' => $_POST['yes']));
@@ -1174,6 +1913,8 @@ Class dailyController Extends baseController {
                                 'code' => $data['code'],
                                 'check_office' => 1,
                                 'check_other' => 1,
+                                'check_lohang' => $data['daily_check_lohang'],
+                                'check_costs' => $data['daily_check_cost'],
                                 );
                             $costs_model->updateCosts($data_costs,array('additional' => $_POST['yes']));
                             $cost = $costs_model->getCostsByWhere(array('additional' => $_POST['yes']));
@@ -1206,6 +1947,8 @@ Class dailyController Extends baseController {
                                 'check_office' => 1,
                                 'check_other' => 1,
                                 'additional' => $_POST['yes'],
+                                'check_lohang' => $data['daily_check_lohang'],
+                                'check_costs' => $data['daily_check_cost'],
                                 );
 
                             $costs_model->createCosts($data_costs);
@@ -1252,6 +1995,8 @@ Class dailyController Extends baseController {
                                 'check_office' => 1,
                                 'check_other' => 1,
                                 'additional' => $_POST['yes'],
+                                'check_lohang' => $data['daily_check_lohang'],
+                                'check_costs' => $data['daily_check_cost'],
                                 );
                             $costs_model->createCosts($data_costs);
 
@@ -1975,6 +2720,8 @@ Class dailyController Extends baseController {
                                 'check_office' => 1,
                                 'check_other' => 1,
                                 'additional' => $id_daily_last,
+                                'check_lohang' => $data['daily_check_lohang'],
+                                'check_costs' => $data['daily_check_cost'],
                                 );
 
                             $costs_model->createCosts($data_costs);
@@ -2021,6 +2768,8 @@ Class dailyController Extends baseController {
                                 'check_office' => 1,
                                 'check_other' => 1,
                                 'additional' => $id_daily_last,
+                                'check_lohang' => $data['daily_check_lohang'],
+                                'check_costs' => $data['daily_check_cost'],
                                 );
                             $costs_model->createCosts($data_costs);
 
@@ -2471,7 +3220,287 @@ Class dailyController Extends baseController {
                     
                 
             }
+
+            $additionals = $_POST['additional'];
+            $arr_item = "";
+            foreach ($additionals as $v) {
+                $data_additional = array(
+                    'document_date' => $data['daily_date'],
+                    'additional_date' => $data['daily_date'],
+                    'additional_comment' => trim($v['additional_comment']),
+                    'debit' => $v['additional_debit'],
+                    'credit' => $v['additional_credit'],
+                    'money' => str_replace(',','',$v['additional_money']),
+                    'code' => trim($v['additional_code']),
+                    'additional_receive' => $data['owner'],
+                    'additional_request' => $data['owner_request'],
+                    'additional_approve' => $data['owner_approve'],
+                    'daily' => $id_daily_last,
+                );
+
+                if ($v['additional_id'] > 0) {
+                    $additional_id = $v['additional_id'];
+                    $add = $additional_model->getAdditional($additional_id);
+                    $additional_model->updateAdditional($data_additional,array('additional_id'=>$v['additional_id']));
                     
+                }
+                else{
+                    if ($data_additional['money'] > 0 && $data_additional['debit'] > 0 && $data_additional['credit'] > 0) {
+                        $additional_model->createAdditional($data_additional);
+                        $additional_id = $additional_model->getLastAdditional()->additional_id;
+                        $add = $additional_model->getAdditional($additional_id);
+                    }
+                }
+
+                if ($arr_item=="") {
+                    $arr_item .= $additional_id;
+                }
+                else{
+                    $arr_item .= ','.$additional_id;
+                }
+
+                $data_debit = array(
+                    'account_balance_date' => $data_additional['additional_date'],
+                    'account' => $data_additional['debit'],
+                    'money' => $data_additional['money'],
+                    'week' => (int)date('W', $data_additional['additional_date']),
+                    'year' => (int)date('Y', $data_additional['additional_date']),
+                    'additional' => $additional_id,
+                );
+                $data_credit = array(
+                    'account_balance_date' => $data_additional['additional_date'],
+                    'account' => $data_additional['credit'],
+                    'money' => (0-$data_additional['money']),
+                    'week' => (int)date('W', $data_additional['additional_date']),
+                    'year' => (int)date('Y', $data_additional['additional_date']),
+                    'additional' => $additional_id,
+                );
+
+                if($data_debit['week'] == 53){
+                    $data_debit['week'] = 1;
+                    $data_debit['year'] = $data_debit['year']+1;
+
+                    $data_credit['week'] = 1;
+                    $data_credit['year'] = $data_credit['year']+1;
+                }
+                if (((int)date('W', $data_additional['additional_date']) == 1) && ((int)date('m', $data_additional['additional_date']) == 12) ) {
+                    $data_debit['year'] = (int)date('Y', $data_additional['additional_date'])+1;
+                    $data_credit['year'] = (int)date('Y', $data_additional['additional_date'])+1;
+                }
+
+
+                if (!$account_balance_model->getAccountByWhere(array('additional'=>$additional_id))) {
+                    $account_balance_model->createAccount($data_debit);
+                    $account_balance_model->createAccount($data_credit);
+                }
+                else{
+                    
+                    $account_balance_model->updateAccount($data_debit,array('additional'=>$additional_id,'account'=>$add->debit));
+                    $account_balance_model->updateAccount($data_credit,array('additional'=>$additional_id,'account'=>$add->credit));
+                }
+                
+            }
+            $item_olds = $additional_model->queryAdditional('SELECT * FROM additional WHERE daily='.$id_daily_last.' AND additional_id NOT IN ('.$arr_item.')');
+            foreach ($item_olds as $item_old) {
+                $account_balance_model->queryAccount('DELETE FROM account_balance WHERE additional='.$item_old->additional_id);
+                $additional_model->queryAdditional('DELETE FROM additional WHERE additional_id='.$item_old->additional_id);
+            }
+                    
+        }
+    }
+
+    public function addorder(){
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if (isset($_POST['yes'])) {
+            
+            $additional_model = $this->model->get('additionalModel');
+            $account_balance_model = $this->model->get('accountbalanceModel');
+
+            $additional_date = strtotime(str_replace('/', '-', $_POST['additional_date']));
+            $additionals = $_POST['additional'];
+            $type = $_POST['type_order'];
+            $order_tire = null;
+            $tire_sale = null;
+            if ($type==1) {
+                $order_tire = $_POST['yes'];
+            }
+            else {
+                $tire_sale = $_POST['yes'];
+            }
+
+            $arr_item = "";
+            foreach ($additionals as $v) {
+                $data_additional = array(
+                    'document_date' => $additional_date,
+                    'additional_date' => $additional_date,
+                    'additional_comment' => trim($v['additional_comment']),
+                    'debit' => $v['additional_debit'],
+                    'credit' => $v['additional_credit'],
+                    'money' => str_replace(',','',$v['additional_money']),
+                    'code' => trim($v['additional_code']),
+                    'order_tire' => $order_tire,
+                    'tire_sale' => $tire_sale,
+                );
+
+                if ($v['additional_id'] > 0) {
+                    $additional_id = $v['additional_id'];
+                    $add = $additional_model->getAdditional($additional_id);
+                    $additional_model->updateAdditional($data_additional,array('additional_id'=>$v['additional_id']));
+                }
+                else{
+                    if ($data_additional['money'] > 0 && $data_additional['debit'] > 0 && $data_additional['credit'] > 0) {
+                        $additional_model->createAdditional($data_additional);
+                        $additional_id = $additional_model->getLastAdditional()->additional_id;
+                        $add = $additional_model->getAdditional($additional_id);
+                    }
+                }
+
+                if ($arr_item=="") {
+                    $arr_item .= $additional_id;
+                }
+                else{
+                    $arr_item .= ','.$additional_id;
+                }
+
+                $data_debit = array(
+                    'account_balance_date' => $data_additional['additional_date'],
+                    'account' => $data_additional['debit'],
+                    'money' => $data_additional['money'],
+                    'week' => (int)date('W', $data_additional['additional_date']),
+                    'year' => (int)date('Y', $data_additional['additional_date']),
+                    'additional' => $additional_id,
+                );
+                $data_credit = array(
+                    'account_balance_date' => $data_additional['additional_date'],
+                    'account' => $data_additional['credit'],
+                    'money' => (0-$data_additional['money']),
+                    'week' => (int)date('W', $data_additional['additional_date']),
+                    'year' => (int)date('Y', $data_additional['additional_date']),
+                    'additional' => $additional_id,
+                );
+
+                if($data_debit['week'] == 53){
+                    $data_debit['week'] = 1;
+                    $data_debit['year'] = $data_debit['year']+1;
+
+                    $data_credit['week'] = 1;
+                    $data_credit['year'] = $data_credit['year']+1;
+                }
+                if (((int)date('W', $data_additional['additional_date']) == 1) && ((int)date('m', $data_additional['additional_date']) == 12) ) {
+                    $data_debit['year'] = (int)date('Y', $data_additional['additional_date'])+1;
+                    $data_credit['year'] = (int)date('Y', $data_additional['additional_date'])+1;
+                }
+
+
+                if (!$account_balance_model->getAccountByWhere(array('additional'=>$additional_id))) {
+                    $account_balance_model->createAccount($data_debit);
+                    $account_balance_model->createAccount($data_credit);
+                }
+                else{
+                    $account_balance_model->updateAccount($data_debit,array('additional'=>$additional_id,'account'=>$add->debit));
+                    $account_balance_model->updateAccount($data_credit,array('additional'=>$additional_id,'account'=>$add->credit));
+                }
+            }
+
+            if ($type==1) {
+                $item_olds = $additional_model->queryAdditional('SELECT * FROM additional WHERE order_tire='.$order_tire.' AND additional_id NOT IN ('.$arr_item.')');
+                foreach ($item_olds as $item_old) {
+                    $account_balance_model->queryAccount('DELETE FROM account_balance WHERE additional='.$item_old->additional_id);
+                    $additional_model->queryAdditional('DELETE FROM additional WHERE additional_id='.$item_old->additional_id);
+                }
+            }
+            else {
+                $item_olds = $additional_model->queryAdditional('SELECT * FROM additional WHERE tire_sale='.$tire_sale.' AND additional_id NOT IN ('.$arr_item.')');
+                foreach ($item_olds as $item_old) {
+                    $account_balance_model->queryAccount('DELETE FROM account_balance WHERE additional='.$item_old->additional_id);
+                    $additional_model->queryAdditional('DELETE FROM additional WHERE additional_id='.$item_old->additional_id);
+                }
+            }
+            echo "Cập nhật thành công";
+              
+        }
+    }
+    public function getitemaddorder(){
+        if (isset($_POST['yes'])) {
+            $account_model = $this->model->get('accountModel');
+            $additional_model = $this->model->get('additionalModel');
+            
+            $accounts = $account_model->getAllAccount(array('order_by'=>'account_number ASC'));
+
+            $type = $_POST['type_order'];
+            if ($type==1) {
+                $additionals = $additional_model->getAllAdditional(array('where'=>'order_tire='.$_POST['yes']));
+            }
+            else {
+                $additionals = $additional_model->getAllAdditional(array('where'=>'tire_sale='.$_POST['yes']));
+            }
+            
+
+            $str = "";
+            $i = 1;
+            if ($additionals) {
+                foreach ($additionals as $additional) {
+                    $str .= '<tr>';
+                    $str .= '<td class="width-3">'.$i.'</td>';
+                    $str .= '<td class="width-10">';
+                    $str .= '<select name="additional_debit[]" class="additional_debit dropchosen" required="required">';
+                    $str .= '<option >Tài khoản</option>';
+                      foreach ($accounts as $account) {
+                          $str .= '<option '.($account->account_id==$additional->debit?'selected':null).' value="'.$account->account_id.'">'.$account->account_number.' - '.$account->account_name.'</option>';
+                      }
+                    $str .= '</select>';
+                    $str .= '</td>';
+                    $str .= '<td class="width-10">';
+                    $str .= '<select name="additional_credit[]" class="additional_credit dropchosen" required="required">';
+                    $str .= '<option >Tài khoản</option>';
+                      foreach ($accounts as $account) {
+                          $str .= '<option '.($account->account_id==$additional->credit?'selected':null).' value="'.$account->account_id.'">'.$account->account_number.' - '.$account->account_name.'</option>';
+                      }
+                    $str .= '</select>';
+                    $str .= '</td>';
+                    $str .= '<td class="width-10"><input data="'.$additional->additional_id.'" value="'.$this->lib->formatMoney($additional->money).'" type="text" name="additional_money[]" class="additional_money numbers text-right" required="required" autocomplete="off"></td>';
+                    $str .= '<td><input value="'.$additional->additional_comment.'" type="text" name="additional_comment[]" class="additional_comment keep-val" required="required" autocomplete="off"></td>';
+                    $str .= '<td class="width-10"><input value="'.$additional->code.'" type="text" name="additional_code[]" class="additional_code keep-val" autocomplete="off"></td>';
+                    
+                    $str .= '</tr>';
+
+                  $i++;
+                }
+            }
+            else{
+                $str .= '<tr>';
+                $str .= '<td class="width-3">'.$i.'</td>';
+                $str .= '<td class="width-10">';
+                $str .= '<select name="additional_debit[]" class="additional_debit dropchosen" required="required">';
+                $str .= '<option >Tài khoản</option>';
+                  foreach ($accounts as $account) {
+                      $str .= '<option value="'.$account->account_id.'">'.$account->account_number.' - '.$account->account_name.'</option>';
+                  }
+                $str .= '</select>';
+                $str .= '</td>';
+                $str .= '<td class="width-10">';
+                $str .= '<select name="additional_credit[]" class="additional_credit dropchosen" required="required">';
+                $str .= '<option >Tài khoản</option>';
+                  foreach ($accounts as $account) {
+                      $str .= '<option value="'.$account->account_id.'">'.$account->account_number.' - '.$account->account_name.'</option>';
+                  }
+                $str .= '</select>';
+                $str .= '</td>';
+                $str .= '<td class="width-10"><input type="text" name="additional_money[]" class="additional_money numbers text-right" required="required" autocomplete="off"></td>';
+                $str .= '<td><input type="text" name="additional_comment[]" class="additional_comment keep-val" required="required" autocomplete="off"></td>';
+                $str .= '<td class="width-10"><input type="text" name="additional_code[]" class="additional_code keep-val" autocomplete="off"></td>';
+                
+                $str .= '</tr>';
+
+            }
+            
+
+            $arr = array(
+                'hang'=>$str,
+            );
+            echo json_encode($arr);
         }
     }
 

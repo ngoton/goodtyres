@@ -270,12 +270,13 @@ Class tiresalaryController Extends baseController {
                     $doncu[$sale->sale] = isset($doncu[$sale->sale])?$doncu[$sale->sale]+1:1;
                 }
                 else{
-                    if ($arr_number[$sale->order_tire] > 2) {
-                        $donmoi[$sale->sale] = isset($donmoi[$sale->sale])?$donmoi[$sale->sale]+1:1;
-                    }
-                    else{
-                        $doncu[$sale->sale] = isset($doncu[$sale->sale])?$doncu[$sale->sale]+1:1;
-                    }
+                    $donmoi[$sale->sale] = isset($donmoi[$sale->sale])?$donmoi[$sale->sale]+1:1;
+                    // if ($arr_number[$sale->order_tire] > 2) {
+                    //     $donmoi[$sale->sale] = isset($donmoi[$sale->sale])?$donmoi[$sale->sale]+1:1;
+                    // }
+                    // else{
+                    //     $doncu[$sale->sale] = isset($doncu[$sale->sale])?$doncu[$sale->sale]+1:1;
+                    // }
                     
                 }
             }

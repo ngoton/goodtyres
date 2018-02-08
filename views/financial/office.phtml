@@ -106,6 +106,15 @@ elseif ($order_by == 'money')
         <th  class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','money','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','additional_request','<?php echo $url_order ?>')">Đề nghị <?php if ($order_by == 'additional_request'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','additional_approve','<?php echo $url_order ?>')">Duyệt <?php if ($order_by == 'additional_approve'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','additional_receive','<?php echo $url_order ?>')">Người nhận <?php if ($order_by == 'additional_receive'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
     </tr>
     
    </thead>
@@ -130,6 +139,9 @@ elseif ($order_by == 'money')
             <td class="fix" data="<?php echo $additional->debit ?>" id="debit_<?php echo $additional->additional_id; ?>"><?php echo isset($account_data[$additional->debit])?$account_data[$additional->debit]:null; ?></td>
             <td class="fix" data="<?php echo $additional->credit ?>" id="credit_<?php echo $additional->additional_id; ?>"><?php echo isset($account_data[$additional->credit])?$account_data[$additional->credit]:null; ?></td>
             <td class="fix" id="money_<?php echo $additional->additional_id; ?>"><?php echo $lib->formatMoney($additional->money); ?></td>
+            <td class="fix" id="additional_request_<?php echo $additional->additional_id; ?>"><?php echo $additional->additional_request; ?></td>
+            <td class="fix" id="additional_approve_<?php echo $additional->additional_id; ?>"><?php echo $additional->additional_approve; ?></td>
+            <td class="fix" id="additional_receive_<?php echo $additional->additional_id; ?>"><?php echo $additional->additional_receive; ?></td>
         </tr>
 
 
@@ -141,6 +153,9 @@ elseif ($order_by == 'money')
             <td class="fix"></td>
             <td class="fix"></td>
             <td class="fix"><?php echo $lib->formatMoney($tong) ?></td>
+            <td class="fix"></td>
+            <td class="fix"></td>
+            <td class="fix"></td>
         </tr>
      
    </tbody>

@@ -145,7 +145,7 @@ class baseModel {
     /*
     * Lấy tất cả
     */
-    public function fetchAll($table,$data = array('where','order_by','order','limit'),$join = array('table','where')){
+    public function fetchAll($table,$data = array('where','order_by','order','limit'),$join = array('table','where','join')){
         //var_dump($data['order_by']);die();
         $where = null;
         $order_by = null;
@@ -172,14 +172,20 @@ class baseModel {
             //
         }
         if (isset($join['table'])) {
-            if (!isset($data['where'])) {
-                $join_where = $join['where'];
-                $table_join = ', '.$join['table'].' WHERE ';
+            if (isset($join['join'])) {
+                $table_join = ' '.$join['join'].' '.$join['table'].' ON '.$join['where'];
             }
             else{
-                $table_join = ', '.$join['table'];
-                $join_where = ' AND '.$join['where'];
+               if (!isset($data['where'])) {
+                    $join_where = $join['where'];
+                    $table_join = ', '.$join['table'].' WHERE ';
+                }
+                else{
+                    $table_join = ', '.$join['table'];
+                    $join_where = ' AND '.$join['where'];
+                } 
             }
+            
             
             //
         }

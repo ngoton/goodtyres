@@ -1,0 +1,2923 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'import_tire_order_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'import_tire_order_code')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'import_tire_order_date   ')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'import_tire_order_expect_date   ')
+  $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+<section class="content-header">
+    <h1>MUA HÀNG NHẬP KHO</h1>
+</section>
+<div id="content" style="padding:5px;">
+    <div class="add-box">
+          
+          <a class="add_button" onClick="add_click();"><i class="fa fa-plus"></i> Thêm mới</a>
+          <a class="add_button" id="import_excel" class="import_excel" href="<?= $this->url('importtireorder/import')?>"><i class="fa fa-upload"></i> Nhập</a>
+          <a class="add_button" id="btnExport" ><i class="fa fa-download"></i> Xuất</a>
+      </div>
+    <div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+      <div style="clear:both"></div>
+      <div class="add-box">
+          <select id="sl_nv" name="sl_nv" style="width:80px">
+           <option value="1">Quý I</option>
+           <option value="2">Quý II</option>
+           <option value="3">Quý III</option>
+           <option value="4">Quý IV</option>
+          </select>
+          <select id="sl_tha" name="sl_tha" style="width:90px">
+           <?php 
+              for ($k=1; $k < 13; $k++) { 
+                  echo '<option value="'.$k.'">Tháng '.$k.'</option>';
+              }
+           ?>
+          </select>
+          <select id="sl_na" name="sl_na" style="width:100px">
+           <?php 
+              $nam = date('Y');
+              for ($k=($nam-5); $k < ($nam+5); $k++) { 
+                  echo '<option value="'.$k.'">Năm '.$k.'</option>';
+              }
+           ?>
+          </select>
+
+          <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">  
+          
+      </div>
+    </div>
+    <div class="tablenav top">
+      <div style="clear:both"></div>
+      <div class="add-box">
+                
+          Từ  <input style="width:80px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+          Đến  <input style="width:80px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+           <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">  
+          
+      </div>
+
+    </div>
+    <div class="tablenav top">
+        <?php if(!isset($disable_control)){ ?>
+        <div class="alignleft actions">
+            <select name="action" id="action">
+                <option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+        </div>
+        <?php } ?>
+        <div class="alignleft actions">
+        <select name="m" id="chonloc">
+          <option  value="18446744073709">Hiển thị tất cả</option>
+          <option value="50">Hiển thị 50 giá trị</option>
+                <option value="100">Hiển thị 100 giá trị</option>
+                <option value="150">Hiển thị 150 giá trị</option>
+                <option selected="selected" value="200">Hiển thị 200 giá trị</option>
+        </select>
+        <input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">                               
+        </div>
+
+      </div>
+
+</div>
+
+
+<table class="table_data" id="tblExport">
+<thead>
+    <tr>
+        <th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'import_tire_order_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'import_tire_order_code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_date','<?php echo $url_order ?>')">Ngày order <?php if ($order_by == 'import_tire_order_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_port_date','<?php echo $url_order ?>')">Cập cảng <?php if ($order_by == 'import_tire_order_port_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_expect_date','<?php echo $url_order ?>')">Ngày về <?php if ($order_by == 'import_tire_order_expect_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_comment','<?php echo $url_order ?>')">Nội dung <?php if ($order_by == 'import_tire_order_comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_total','<?php echo $url_order ?>')">Số lượng <?php if ($order_by == 'import_tire_order_total'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_sum','<?php echo $url_order ?>')">Giá trị <?php if ($order_by == 'import_tire_order_sum'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_tax','<?php echo $url_order ?>')">Thuế <?php if ($order_by == 'import_tire_order_tax'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_logistics','<?php echo $url_order ?>')">Logistics <?php if ($order_by == 'import_tire_order_logistics'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_stevedore','<?php echo $url_order ?>')">Bốc xếp <?php if ($order_by == 'import_tire_order_stevedore'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_bank_cost','<?php echo $url_order ?>')">Phí khác <?php if ($order_by == 'import_tire_order_bank_cost'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_total','<?php echo $url_order ?>')">Tổng cộng <?php if ($order_by == 'import_tire_order_total'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','import_tire_order_status','<?php echo $url_order ?>')">Trạng thái <?php if ($order_by == 'import_tire_order_status'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <?php if(!isset($disable_control)){ ?>
+        <th class="fix"></th>
+        <?php } ?>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $tongsl=0; $tongtien=0; $tongthue=0; $tonglog=0; $tongboc=0; $tongkhac=0;
+    foreach ($import_tire_orders as $import_tire_order) : 
+      $tongsl += $import_tire_order->import_tire_order_total;
+      $tongtien += $import_tire_order->import_tire_order_sum;
+      $tongthue += $import_tire_order->import_tire_order_tax;
+      $tonglog += $import_tire_order->import_tire_order_logistics;
+      $tongboc += $import_tire_order->import_tire_order_stevedore;
+      $tongkhac += $import_tire_order->import_tire_order_bank_cost;
+      $tongkhac += $import_tire_order->import_tire_order_other_cost;
+    ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $import_tire_order->import_tire_order_id ?>" class="edit_tr" >
+            
+            <td>
+                <input name="check[]" type="checkbox" class="checkbox" value="<?php echo $import_tire_order->import_tire_order_id ?>">
+            </td>
+            
+            <td  class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="import_tire_order_code_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_code; ?></td>
+            <td class="fix" id="import_tire_order_date_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->hien_thi_ngay_thang($import_tire_order->import_tire_order_date); ?></td>
+            <td class="fix" id="import_tire_order_port_date_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->hien_thi_ngay_thang($import_tire_order->import_tire_order_port_date); ?></td>
+            <td class="fix" id="import_tire_order_expect_date_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->hien_thi_ngay_thang($import_tire_order->import_tire_order_expect_date); ?></td>
+            <td class="fix" id="import_tire_order_comment_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_comment; ?></td>
+            <td class="fix text-right" id="import_tire_order_total_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_total; ?></td>
+            <td class="fix text-right" id="import_tire_order_sum_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_sum); ?></td>
+            <td class="fix text-right" id="import_tire_order_tax_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_tax); ?></td>
+            <td class="fix text-right" id="import_tire_order_logistics_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_logistics); ?></td>
+            <td class="fix text-right" id="import_tire_order_stevedore_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_stevedore); ?></td>
+            <td class="fix text-right" id="import_tire_order_cost_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_bank_cost+$import_tire_order->import_tire_order_other_cost); ?></td>
+            <td class="fix text-right" id="tong_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_sum+$import_tire_order->import_tire_order_tax+$import_tire_order->import_tire_order_logistics+$import_tire_order->import_tire_order_bank_cost+$import_tire_order->import_tire_order_other_cost); ?></td>
+            <td class="fix" id="import_tire_order_status_<?php echo $import_tire_order->import_tire_order_id; ?>">
+              <?php echo $import_tire_order->import_tire_order_status==2?'<b class="text-warning">Đang về</b>':($import_tire_order->import_tire_order_status==3?'<b class="text-success">Nhập kho</b>':($import_tire_order->import_tire_order_status==4?'<b class="text-warning">Cập cảng</b>':'<b class="text-danger">Đã order</b>')); ?>
+                
+              </td>
+            <td class="fix" style="display: none;" id="import_tire_order_bill_number_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_bill_number; ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_contract_number_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_contract_number; ?></td>
+            <td class="fix" style="display: none;" data="<?php echo $import_tire_order->import_tire_order_seller; ?>" id="import_tire_order_seller_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $data_vendor['name'][$import_tire_order->import_tire_order_seller]; ?></td>
+            <td class="fix" style="display: none;" data="<?php echo $import_tire_order->import_tire_order_supplier; ?>" id="import_tire_order_supplier_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $data_vendor['name'][$import_tire_order->import_tire_order_supplier]; ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_port_from_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_port_from; ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_port_to_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_port_to; ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_type_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_type; ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_claim_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_claim; ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_bank_rate_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_bank_rate); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_tax_rate_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_tax_rate); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_bank_cost_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_bank_cost); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_other_cost_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_other_cost); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_oceanfreight_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_oceanfreight; ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_lift_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_lift; ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_other_cost_comment_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_other_cost_comment; ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_lift_1cont_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_lift_1cont); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_lift_2cont_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_lift_2cont); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_lift_plus_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_lift_plus); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_truck_1cont_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_truck_1cont); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_truck_2cont_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_truck_2cont); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_truck_plus_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_truck_plus); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_bill_1cont_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_bill_1cont); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_bill_2cont_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_bill_2cont); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_bill_plus_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_bill_plus); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_tthq_1cont_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_tthq_1cont); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_tthq_2cont_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_tthq_2cont); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_tthq_plus_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_tthq_plus); ?></td>
+            <?php if(!isset($disable_control)){ ?>
+            <td class="fix text-right">
+              
+              <i class="fa fa-eye viewdetail" title="Xem chi tiết" data="<?php echo $import_tire_order->import_tire_order_id ?>"></i>
+              <?php
+              if ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 9) {
+                
+                if($import_tire_order->import_tire_order_lock==1){
+              ?>
+                <i class="fa fa-lock lock" title="Mở khóa" value="0" data="<?php echo $import_tire_order->import_tire_order_id ?>"></i>
+              <?php }
+                else{ ?>
+                <i class="fa fa-unlock lock" title="Khóa" value="1" data="<?php echo $import_tire_order->import_tire_order_id ?>"></i>
+              <?php } 
+              }
+
+              if($import_tire_order->import_tire_order_lock!=1 || $_SESSION['role_logined'] == 1){
+              ?>
+                <i class="fa fa-warning updatestatus" title="Cập nhật trạng thái" tabindex="<?php echo $import_tire_order->import_tire_order_status ?>" data="<?php echo $import_tire_order->import_tire_order_id ?>" value="<?php echo date('d-m-Y',$import_tire_order->import_tire_order_expect_date) ?>" alt="<?php echo date('d-m-Y',$import_tire_order->import_tire_order_port_date) ?>" ></i>
+                <i class="fa fa-edit edit_invoice" title="Sửa" data="<?php echo $import_tire_order->import_tire_order_id ?>"></i>
+                <i class="fa fa-trash" onclick="del(<?php echo $import_tire_order->import_tire_order_id ?>)"></i>
+              <?php } ?>
+            </td>
+            <?php } ?>
+        </tr>
+
+
+    <?php endforeach; ?>
+        <tr style="font-weight:bold">
+          <td colspan="7" class="fix">Tổng cộng</td>
+          <td  class="fix text-right"><?php echo $lib->formatMoney($tongsl); ?></td>
+          <td  class="fix text-right"><?php echo $lib->formatMoney($tongtien); ?></td>
+          <td  class="fix text-right"><?php echo $lib->formatMoney($tongthue); ?></td>
+          <td  class="fix text-right"><?php echo $lib->formatMoney($tonglog); ?></td>
+          <td  class="fix text-right"><?php echo $lib->formatMoney($tongboc); ?></td>
+          <td  class="fix text-right"><?php echo $lib->formatMoney($tongkhac); ?></td>
+          <td  class="fix text-right"><?php echo $lib->formatMoney($tongtien+$tongthue+$tonglog+$tongboc+$tongkhac); ?></td>
+          <td  class="fix text-right"></td>
+          <td  class="fix text-right"></td>
+        </tr>
+     
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+<div id="status_order" style="display: none;">
+  <label>Trạng thái</label>
+  <select id="import_status">
+    <option value="1">Đã order</option>
+    <option value="2">Đang về</option>
+    <option value="4">Cập cảng</option>
+    <option value="3">Nhập kho</option>
+  </select>
+  <label>Ngày về</label>
+  <input type="text" name="import_date" id="import_date" class="ngay" value="<?php echo date('d-m-Y') ?>">
+  <input type="hidden" name="i_order" id="i_order">
+</div>
+<div id="import_order" style="display: none;">
+  <form id="import_excel" method="post" enctype="multipart/form-data">
+  <table >
+    <tr>
+      <td>
+        <input type="file" name="import" id="import_file">
+      </td>
+    </tr>
+  </table>
+  
+  
+  </form>
+  <div class="error" id="result_import"></div>
+</div>
+<div class="add-field">
+      <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+          <!-- general form elements -->
+          <div class="box box-primary">
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form id="add_import_tire_order" role="form" method="post" action="" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-8 col-xs-6">
+                  <fieldset class="groupbox">
+                    <legend class="nopadding"><span><h6>Thông tin chung</h3></span></legend>
+                    <div class="box-body nopadding">
+                      <div class="form-group col-xs-3 nopadding">
+                        <label for="import_tire_order_code">Code</label>
+                        <button type="button" style="margin-top: -10px;" class="btn" id="get_code"><i class="fa fa-search"></i></button>
+                        <input style="width:100px" type="text" id="import_tire_order_code"  name="import_tire_order_code" tabindex="1" autocomplete="off" autofocus required="required" >
+                        
+                      </div>
+                      <div class="form-group col-xs-3 nopadding">
+                        <label for="import_tire_order_bill_number">Đơn đặt hàng số</label>
+                        <input style="width:100px" type="text" id="import_tire_order_bill_number"  name="import_tire_order_bill_number" tabindex="2" autocomplete="off" autofocus >
+                        
+                      </div>
+                      <div class="form-group col-xs-3 nopadding">
+                        <label for="import_tire_order_contract_number">Hợp đồng số</label>
+                        <input style="width:100px" type="text" id="import_tire_order_contract_number"  name="import_tire_order_contract_number" tabindex="3" autocomplete="off" >
+                        
+                      </div>
+                    </div>
+                    <div class="box-body nopadding">
+                      <div class="form-group nopadding">
+                        <label for="import_tire_order_comment">Diễn giải </label>
+                        <input style="width:93%" type="text" id="import_tire_order_comment"  name="import_tire_order_comment" tabindex="4"  required="required" autocomplete="off" >
+                      </div>
+                    </div>
+                    <div class="box-body nopadding">
+                      <div class="form-group nopadding">
+                        <label for="import_tire_order_seller">Nhà cung cấp </label>
+                        
+                        <input style="width:93%" type="text" id="import_tire_order_seller"  name="import_tire_order_seller" tabindex="5"  required="required" placeholder="Mã NCC" autocomplete="off" >
+                        <ul id="customer_list_id"></ul>
+                      </div>
+                    </div>
+                    
+                    <div class="box-body nopadding">
+                      <div class="form-group col-xs-6 nopadding">
+                        <label for="import_tire_order_port_from">Cảng đi</label>
+                        <select style="width: 50%" id="import_tire_order_port_from"  name="import_tire_order_port_from" tabindex="6"  required="required">
+                          <option>Vui lòng chọn</option>
+                          <?php foreach ($port_froms as $port) { ?>
+                            <option value="<?php echo $port->import_tire_port_id ?>"><?php echo $port->import_tire_port_name ?></option>
+                          <?php } ?>
+                        </select>
+                      </div>
+                      <div class="form-group col-xs-6 nopadding">
+                        <label for="import_tire_order_port_to">Cảng đến</label>
+                        <select style="width: 50%" id="import_tire_order_port_to"  name="import_tire_order_port_to" tabindex="7"  required="required">
+                          <option>Vui lòng chọn</option>
+                          <?php foreach ($port_tos as $port) { ?>
+                            <option value="<?php echo $port->import_tire_port_id ?>"><?php echo $port->import_tire_port_name ?></option>
+                          <?php } ?>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="box-body nopadding">
+                      <div class="form-group nopadding">
+                        <label for="import_tire_order_supplier">Logistics </label>
+                        
+                        <input style="width:93%" type="text" id="import_tire_order_supplier"  name="import_tire_order_supplier" tabindex="8"  required="required" placeholder="Mã đơn vị" autocomplete="off" >
+                        <ul id="vendor_list_id"></ul>
+                      </div>
+                    </div>
+                    <div class="add-box nopadding right">
+                      <table>
+                        <tr>
+                          <td></td>
+                          <td>1 cont</td>
+                          <td>Từ cont 2</td>
+                          <td>Cộng thêm</td>
+                        </tr>
+                        <tr>
+                          <td>NÂNG-HẠ</td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px"  type="text" name="lift_1cont" id="lift_1cont" value="">
+                          </td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px"  type="text" name="lift_2cont" id="lift_2cont" value="">
+                          </td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px"  type="text" name="lift_plus" id="lift_plus" value="">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>VC</td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px"  type="text" name="truck_1cont" id="truck_1cont" value="" data="" alt="" title="">
+                          </td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px"  type="text" name="truck_2cont" id="truck_2cont" value="" data="" alt="" title="">
+                          </td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px"  type="text" name="truck_plus" id="truck_plus" value="" data="" alt="" title="">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>BILL</td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px" type="text" name="bill_1cont" id="bill_1cont" value="" data="" alt="" title="">
+                          </td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px" type="text" name="bill_2cont" id="bill_2cont" value="" data="" alt="" title="">
+                          </td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px" type="text" name="bill_plus" id="bill_plus" value="" data="" alt="" title="">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>TTHQ</td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px" type="text" name="tthq_1cont" id="tthq_1cont" value="" data="" alt="" title="">
+                          </td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px" type="text" name="tthq_2cont" id="tthq_2cont" value="" data="" alt="" title="">
+                          </td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px" type="text" name="tthq_plus" id="tthq_plus" value="" data="" alt="" title="">
+                          </td>
+                        </tr>
+                          
+                      </table>
+                    </div>
+                  </fieldset>
+                  
+                  <!-- /.box-body -->
+                  
+                </div>
+                <div class="col-md-4 col-xs-6">
+                  <fieldset class="groupbox">
+                    <legend class="nopadding"><span><h6>Chứng từ</h3></span></legend>
+                    <div class="box-body nopadding">
+                      <div class="form-group col-xs-4 nopadding">
+                        <label for="import_tire_order_type">Phương thức </label>
+                      </div>
+                      <div class="form-group col-xs-8 nopadding">
+                        <input type="radio" name="import_tire_order_type" tabindex="9" value="1" checked autocomplete="off" > Về kho
+                        <input type="radio" name="import_tire_order_type" tabindex="9" value="2" autocomplete="off" > Đi thẳng
+                      </div>
+                    </div>
+                    <div class="box-body nopadding">
+                      <div class="form-group col-xs-4 nopadding">
+                        <label for="import_tire_order_date">Ngày order hàng </label>
+                      </div>
+                      <div class="form-group col-xs-8 nopadding">
+                        <input type="text" class="date_mask" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask id="import_tire_order_date"  name="import_tire_order_date" tabindex="10" required="required" autocomplete="off" >
+                      </div>
+                    </div>
+                    <div class="box-body nopadding">
+                      <div class="form-group col-xs-4 nopadding">
+                        <label for="import_tire_order_expect_date">Ngày dự kiến về </label>
+                      </div>
+                      <div class="form-group col-xs-8 nopadding">
+                        <input type="text" class="date_mask" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask id="import_tire_order_expect_date"  name="import_tire_order_expect_date" tabindex="11" required="required" autocomplete="off" >
+                      </div>
+                    </div>
+                    
+                    <div class="box-body nopadding">
+                      <div class="form-group col-xs-4 nopadding">
+                        <label for="import_tire_order_claim">Bảo hiểm-Bồi thường </label>
+                      </div>
+                      <div class="form-group col-xs-8 nopadding">
+                        <input type="text" id="import_tire_order_claim" class="numbers" name="import_tire_order_claim" tabindex="12" autocomplete="off" >
+                      </div>
+                    </div>
+                    
+                  </fieldset>
+                  <!-- /.box-body -->
+                  <div class="col-md-12">
+                    
+                    <div class="box-body col-md-12 ">
+                      <div class="form-group col-xs-6 ">
+                        <label for="import_tire_order_bank_rate">Tỷ giá ngân hàng </label>
+                        <input style="width:100%" type="text" class="numbers" id="import_tire_order_bank_rate"  name="import_tire_order_bank_rate" tabindex="13" required="required" autocomplete="off" >
+                      </div>
+                      <div class="form-group col-xs-6 ">
+                        <label for="import_tire_order_tax_rate">Tỷ giá thuế </label>
+                        <input style="width:100%" type="text" class="numbers" id="import_tire_order_tax_rate"  name="import_tire_order_tax_rate" tabindex="14" required="required" autocomplete="off" >
+                      </div>
+                    </div>
+                    <div class="box-body col-md-12 nopadding">
+                      <div class="form-group col-xs-6 ">
+                        <label for="import_tire_order_bank_cost">Phí chuyển tiền </label>
+                        <input style="width:100%" type="text" class="numbers" id="import_tire_order_bank_cost"  name="import_tire_order_bank_cost" tabindex="15"  autocomplete="off" >
+                      </div>
+                      <div class="form-group col-xs-6 ">
+                        <label for="import_tire_order_other_cost">Chi phí khác </label>
+                        <input style="width:100%" type="text" class="numbers" id="import_tire_order_other_cost"  name="import_tire_order_other_cost" tabindex="16"  autocomplete="off" >
+                      </div>
+                    </div>
+                    <div class="box-body col-md-12 nopadding">
+                      <div class="form-group col-xs-6 "></div>
+                      <div class="form-group col-xs-6 ">
+                        <label for="name="import_tire_order_other_cost_comment"">Ghi chú </label>
+                        <textarea name="import_tire_order_other_cost_comment" id="import_tire_order_other_cost_comment"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+              <div class="col-md-12">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                  <li class="nav-item active">
+                    <a class="nav-link active" data-toggle="tab" href="#item" role="tab">1. Hàng hóa</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#other" role="tab">2. Nhập excel</a>
+                  </li>
+                </ul>
+                
+                <!-- Tab panes -->
+                <div class="tab-content">
+                  <div class="tab-pane active" id="item" role="tabpanel">
+                    <div class="table-container">
+                      <table id="dataTable0" class="dataTable">
+                        <thead>
+                          <tr>
+                            <th class="width-3">STT</th>
+                            <th class="width-10">Thương hiệu</th>
+                            <th class="width-10">Size</th>
+                            <th class="width-7">Mã gai</th>
+                            <th class="width-5">Số lượng</th>
+                            <th class="width-5">Giá</th>
+                            <th class="width-5">Giá giảm</th>
+                            <th class="width-7">PCS/40'</th>
+                            <th class="width-5">Cước tàu</th>
+                            <th class="width-7">Tổng tiền</th>
+                            <th class="width-7">Thuế NK</th>
+                            <th class="width-7">Thuế VAT</th>
+                            <th class="width-7">Thuế</th>
+                            <th class="width-7">Logistics</th>
+                            <th class="width-5">Bốc xếp</th>
+                            <th class="width-7">Phí khác</th>
+                            <th class="width-10">Tổng cộng</th>
+                            <th class="width-7">Giá vốn</th>
+                            <th style="width:5px"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="width-3">1</td>
+                            <td class="width-10">
+                              <input type="text" name="tire_brand[]" class="tire_brand keep-val" required="required" autocomplete="off">
+                              <ul class="name_list_id_2"></ul>
+                            </td>
+                            <td class="width-10">
+                              <input type="text" name="tire_size[]" class="tire_size keep-val" required="required" autocomplete="off">
+                              <ul class="name_list_id_3"></ul>
+                            </td>
+                            <td class="width-7">
+                              <input type="text" name="tire_pattern[]" class="tire_pattern keep-val" required="required" autocomplete="off">
+                              <ul class="name_list_id_3"></ul>
+                            </td>
+                            <td class="width-5"><input type="text" name="tire_number[]" class="tire_number numbers text-right" required="required" autocomplete="off"></td>
+                            <td class="width-5"><input type="text" name="tire_price[]" class="tire_price numbers text-right" required="required" autocomplete="off"></td>
+                            <td class="width-5"><input type="text" name="tire_price_down[]" class="tire_price_down numbers text-right" required="required" autocomplete="off"></td>
+                            <td class="width-7"><input type="text" name="tire_stuff[]" class="tire_stuff numbers text-right" required="required" autocomplete="off"></td>
+                            <td class="width-5"><input type="text" name="tire_ocean_freight[]" class="tire_ocean_freight numbers text-right" required="required" autocomplete="off"></td>
+                            <td class="width-7"><input type="text" name="tire_price_sum[]" class="tire_price_sum numbers text-right" required="required" autocomplete="off"></td>
+                            <td class="width-7">
+                              <input type="text" name="tire_tax_import[]" class="tire_tax_import numbers text-right" required="required" autocomplete="off">
+                            </td>
+                            <td class="width-7">
+                              <input type="text" name="tire_tax_vat[]" class="tire_tax_vat numbers text-right" required="required" autocomplete="off">
+                            </td>
+                            <td class="width-7">
+                              <input type="text" name="tire_tax[]" class="tire_tax numbers text-right" required="required" autocomplete="off">
+                            </td>
+                            <td class="width-7">
+                              <input type="hidden" name="tire_bill[]" class="tire_bill numbers text-right" autocomplete="off">
+                              <input type="hidden" name="tire_tthq[]" class="tire_tthq numbers text-right" autocomplete="off">
+                              <input type="hidden" name="tire_lift[]" class="tire_lift numbers text-right" autocomplete="off">
+                              <input type="hidden" name="tire_trucking[]" class="tire_trucking numbers text-right" autocomplete="off">
+                              <input type="text" name="tire_logistics[]" class="tire_logistics numbers text-right" required="required" autocomplete="off">
+                            </td>
+                            <td class="width-7">
+                              <input type="text" name="tire_stevedore[]" class="tire_stevedore numbers text-right" autocomplete="off">
+                            </td>
+                            <td class="width-7">
+                              <input type="hidden" name="tire_bank_cost[]" class="tire_bank_cost numbers text-right" autocomplete="off">
+                              <input type="hidden" name="tire_other_cost[]" class="tire_other_cost numbers text-right" autocomplete="off">
+                              <input type="text" name="tire_cost[]" class="tire_cost numbers text-right" autocomplete="off">
+                            </td>
+                            <td class="width-10"><input type="text" name="tire_price_total[]" class="tire_price_total numbers text-right" required="required" autocomplete="off"></td>
+                            <td class="width-7"><input type="text" name="tire_price_origin[]" class="tire_price_origin numbers text-right" required="required" autocomplete="off"></td>
+                            
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table id="dataTablesum">
+                        <thead>
+                        </thead>
+                      </table>
+                    </div>
+                    <i class="fa fa-plus" title="Thêm dòng mới"></i> F2: Thêm dòng
+                    <i class="fa fa-minus" title="Xóa dòng cuối cùng"></i> F3: Xóa dòng
+                    
+                  </div>
+                  
+                  <div class="tab-pane" id="other" role="tabpanel">
+                    
+                    <button type="button" class="btn btn-xs" id="find_excel" >Chọn...</button>
+                  </div>
+                </div>
+              </div>
+              <?php if(!isset($disable_control)){ ?>
+              <div class="row">
+                <div class="col-md-12">
+                    <div class="box-footer">
+                    <input type="hidden" readonly id="yes" name="yes" required="required" >
+                    <button type="submit" class="btn btn-primary" tabindex="17"><i class="fa fa-save"></i> Hoàn thành</button>
+                    <button type="reset" class="btn" tabindex="18"><i class="fa fa-undo"></i>  Nhập lại</button>
+                  </div>
+                  <div class="box-footer">
+                    <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+                  </div>
+                </div>
+              </div>
+              <?php } ?>
+            </form>
+          </div>
+          <!-- /.box -->
+
+        </div>
+        <!--/.col (left) -->
+        
+      </div>
+      <!-- /.row -->
+       
+</div>
+<input type="hidden" name="oceanfreight" id="oceanfreight" value="0">
+<input type="hidden" name="lift" id="lift" value="0">
+<input type="hidden" name="bill" id="bill" value="<?php echo $custom_price[1]['1cont'] ?>" data="<?php echo $custom_price[1]['2cont'] ?>" alt="<?php echo $custom_price[1]['plus'] ?>" title="<?php echo $custom_price[1]['vat'] ?>">
+<input type="hidden" name="tthq" id="tthq" value="<?php echo $custom_price[2]['1cont'] ?>" data="<?php echo $custom_price[2]['2cont'] ?>" alt="<?php echo $custom_price[2]['plus'] ?>" title="<?php echo $custom_price[2]['vat'] ?>">
+<input type="hidden" name="truck" id="truck" value="<?php echo $custom_price[3]['1cont'] ?>" data="<?php echo $custom_price[3]['2cont'] ?>" alt="<?php echo $custom_price[3]['plus'] ?>" title="<?php echo $custom_price[3]['vat'] ?>">
+
+<div style="display:none" id="lasted"></div>
+
+<script type="text/javascript">
+$('.add-field').hide();
+$(".date_mask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});  
+
+$('#find_excel').click(function(e) {
+  $( "#import_order" ).dialog( "open" );
+});
+$('.updatestatus').click(function(e) {
+  $('#i_order').val($(this).attr('data'));
+  $('#import_status option[value='+$(this).attr('tabindex')+']').attr('selected','selected');
+  if ($(this).attr('tabindex') == 3 || $(this).attr('tabindex') == 2) {
+    $('#import_date').val($(this).attr('value'));
+  }
+  else if ($(this).attr('tabindex') == 4) {
+    $('#import_date').val($(this).attr('alt'));
+  }
+  
+  $( "#status_order" ).dialog( "open" );
+});
+
+
+$('.lock').click(function(){
+  var val = $(this).attr('value');
+  var data = $(this).attr('data');
+  $.ajax({
+    url: '<?php echo BASE_URL ?>/importtireorder/lock',
+    type: 'POST',
+    data: {data: data, lock: val},
+    success:function(answer){
+      //alert(val);
+      setTimeout(function() {
+        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+      }, 200);
+    }
+  });
+});
+
+$('html').click(function(e) {
+  $('.name_list_id').slideUp(200);
+  $('.name_list_id_2').slideUp(200);
+  $('.name_list_id_3').slideUp(200);
+  $('.name_list_id_4').slideUp(200);
+  $('.name_list_id_5').slideUp(200);
+  $('.name_list_id_6').slideUp(200);
+  $('.name_list_id_7').slideUp(200);
+  $('.name_list_id_8').slideUp(200);
+  $('#customer_list_id').slideUp(200);
+  $('#vendor_list_id').slideUp(200);
+
+  if ($('#customer_list_id').is(':visible')) {
+    if ($('#import_tire_order_seller').val() == "" || $('#import_tire_order_seller').attr('data') == "") {
+        $('#import_tire_order_seller').attr('data',"");
+        $('#import_tire_order_seller').val("");
+    }
+  }
+  if ($('#vendor_list_id').is(':visible')) {
+    if ($('#import_tire_order_supplier').val() == "" || $('#import_tire_order_supplier').attr('data') == "") {
+        $('#import_tire_order_supplier').attr('data',"");
+        $('#import_tire_order_supplier').val("");
+    }
+  }
+
+});
+
+$('.edit_invoice').click(function(e){
+    var id = $(this).attr('data');
+
+    $('.add-field input[name!="import_tire_order_type"]').each(function(){
+      var name = $(this).attr('id');
+      $(this).val($('#'+name+'_'+id).text());
+      $(this).attr('data',$('#'+name+'_'+id).attr('data'));
+    });
+
+    $('.add-field select').each(function(){
+      var name = $(this).attr('id');
+      var sl = $('#'+name+'_'+id).text();
+      $("#"+name+" option[value=" + sl + "]").attr('selected', 'selected');
+    });
+
+    var import_tire_order_type = $('#import_tire_order_type_'+id).text();
+    $('input[name="import_tire_order_type"][value='+import_tire_order_type+']').attr('checked',true);
+    
+    var import_tire_order_oceanfreight = $('#import_tire_order_oceanfreight_'+id).text();
+    var tongsl = $('#import_tire_order_total_'+id).text() || 0;
+    var socont = Math.ceil(parseInt(tongsl.substring(0,1))/2);
+    if (parseInt(tongsl.substring(0,1)) < 2) {
+      socont = 1;
+    }
+    
+    $('#oceanfreight').val(import_tire_order_oceanfreight/socont);
+    var import_tire_order_lift = $('#import_tire_order_lift_'+id).text();
+    $('#lift').val(import_tire_order_lift);
+
+    $('#import_tire_order_other_cost_comment').val($('#import_tire_order_other_cost_comment_'+id).text());
+    $('#lift_1cont').val($('#import_tire_order_lift_1cont_'+id).text());
+    $('#lift_2cont').val($('#import_tire_order_lift_2cont_'+id).text());
+    $('#lift_plus').val($('#import_tire_order_lift_plus_'+id).text());
+    $('#truck_1cont').val($('#import_tire_order_truck_1cont_'+id).text());
+    $('#truck_2cont').val($('#import_tire_order_truck_2cont_'+id).text());
+    $('#truck_plus').val($('#import_tire_order_truck_plus_'+id).text());
+    $('#bill_1cont').val($('#import_tire_order_bill_1cont_'+id).text());
+    $('#bill_2cont').val($('#import_tire_order_bill_2cont_'+id).text());
+    $('#bill_plus').val($('#import_tire_order_bill_plus_'+id).text());
+    $('#tthq_1cont').val($('#import_tire_order_tthq_1cont_'+id).text());
+    $('#tthq_2cont').val($('#import_tire_order_tthq_2cont_'+id).text());
+    $('#tthq_plus').val($('#import_tire_order_tthq_plus_'+id).text());
+
+    
+    //alert(cost_code);
+    $('#yes').val(id);
+
+    $('#dataTablesum thead tr').remove();
+    $('#dataTable0 tbody tr').remove();
+    
+    $.ajax({
+      url: '<?php echo BASE_URL ?>/importtireorder/getitemadd',
+      type: 'POST',
+      data: {order:id},
+      success:function(answer){
+          //alert(answer);
+          var data = JSON.parse(answer);
+          $('#dataTablesum thead').append(data.tong);
+          $('#dataTable0 tbody').append(data.hang);
+
+          $('.tire_number').keyup(function(){
+            var tongsl = 0;
+            var tonggia = 0;
+            $('.tire_number').each(function(){
+              var rowIndex=$(this).closest('tr').index();
+              var sl = parseFloat($(this).val());
+              var gia = parseFloat(get_number('.tire_price:eq('+rowIndex+')')) || 0;
+              tonggia += sl*gia;
+              tongsl += sl;
+            });
+            $('#tongsl').text(tongsl);
+            $('#tonggia').text(tonggia);
+            updateprice();
+          });
+          $('.tire_price').keyup(function(){
+            var tonggia = 0;
+            $('.tire_number').each(function(){
+              var rowIndex=$(this).closest('tr').index();
+              var sl = parseFloat($(this).val());
+              var gia = parseFloat(get_number('.tire_price:eq('+rowIndex+')')) || 0;
+              tonggia += sl*gia;
+            });
+            $('#tonggia').text(tonggia);
+            updateprice();
+          });
+          $('.tire_price_down').keyup(function(){
+            var tonggiagiam = 0;
+            $('.tire_number').each(function(){
+              var rowIndex=$(this).closest('tr').index();
+              var sl = parseFloat($(this).val());
+              var giagiam = parseFloat(get_number('.tire_price_down:eq('+rowIndex+')')) || 0;
+              tonggiagiam += sl*giagiam;
+            });
+            $('#tonggiagiam').text(tonggiagiam);
+            updateprice();
+          });
+          $('.tire_stuff').keyup(function(){
+            var tongphantram = 0;
+            $('.tire_number').each(function(){
+              var rowIndex=$(this).closest('tr').index();
+              var sl = parseFloat($(this).val());
+              var stuff = parseFloat(get_number('.tire_stuff:eq('+rowIndex+')')) || 0;
+              tongphantram += sl/stuff;
+            });
+            $('#tongphantram').text(roundDecimal(tongphantram*100,7));
+            updateprice();
+          });
+          $('.tire_tax_import').keyup(function(){
+            var tongthue = 0;
+            var tongimport = 0;
+            var tongcong = 0;
+            $('.tire_tax_import').each(function(){
+              var rowIndex=$(this).closest('tr').index();
+              var nk = parseFloat(get_number($(this)));
+              var vat = parseFloat(get_number('.tire_tax_vat:eq('+rowIndex+')')) || 0;
+              $('.tire_tax:eq('+rowIndex+')').val(nk+vat);
+              tongthue += nk+vat;
+              tongimport += nk;
+
+              var tire_number = parseFloat(get_number('.tire_number:eq('+rowIndex+')')) || 0;
+              var sumtienmua = parseFloat(get_number('.tire_price_sum:eq('+rowIndex+')')) || 0;
+              var tonglogs = parseFloat(get_number('.tire_logistics:eq('+rowIndex+')')) || 0;
+              var tongbx = parseFloat(get_number('.tire_stevedore:eq('+rowIndex+')')) || 0;
+              var chiphikhac = parseFloat(get_number('.tire_cost:eq('+rowIndex+')')) || 0;
+              var tong = sumtienmua+nk+vat+tonglogs+tongbx+chiphikhac;
+              $('.tire_price_total:eq('+rowIndex+')').val(tong);
+              tongcong += tong;
+
+              var giavon = roundDecimal(tong/tire_number,2);
+              $('.tire_price_origin:eq('+rowIndex+')').val(giavon);
+            });
+            $('#tongthue').text(tongthue);
+            $('#tongthuenk').text(tongimport);
+            $('#tongcong').text(tongcong);
+            //updateprice();
+            $('.numbers').val(function(index, value) {
+              return value
+                .replace(/[^0-9-.]/g, "")
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              ;
+            });
+            $('.numbers').html(function(index, value) {
+                return value
+                  .replace(/[^0-9-.]/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+              });
+          });
+          $('.tire_tax_vat').keyup(function(){
+            var tongthue = 0;
+            var tongvat = 0;
+            var tongcong = 0;
+            $('.tire_tax_vat').each(function(){
+              var rowIndex=$(this).closest('tr').index();
+              var vat = parseFloat(get_number($(this)));
+              var nk = parseFloat(get_number('.tire_tax_import:eq('+rowIndex+')')) || 0;
+              $('.tire_tax:eq('+rowIndex+')').val(nk+vat);
+              tongthue += nk+vat;
+              tongvat += vat;
+
+              var tire_number = parseFloat(get_number('.tire_number:eq('+rowIndex+')')) || 0;
+              var sumtienmua = parseFloat(get_number('.tire_price_sum:eq('+rowIndex+')')) || 0;
+              var tonglogs = parseFloat(get_number('.tire_logistics:eq('+rowIndex+')')) || 0;
+              var tongbx = parseFloat(get_number('.tire_stevedore:eq('+rowIndex+')')) || 0;
+              var chiphikhac = parseFloat(get_number('.tire_cost:eq('+rowIndex+')')) || 0;
+              var tong = sumtienmua+nk+vat+tonglogs+tongbx+chiphikhac;
+              $('.tire_price_total:eq('+rowIndex+')').val(tong);
+              tongcong += tong;
+
+              var giavon = roundDecimal(tong/tire_number,2);
+              $('.tire_price_origin:eq('+rowIndex+')').val(giavon);
+            });
+            $('#tongthue').text(tongthue);
+            $('#tongthuevat').text(tongvat);
+            $('#tongcong').text(tongcong);
+            //updateprice();
+            $('.numbers').val(function(index, value) {
+              return value
+                .replace(/[^0-9-.]/g, "")
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              ;
+            });
+            $('.numbers').html(function(index, value) {
+                return value
+                  .replace(/[^0-9-.]/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+              });
+          });
+          $('.tire_brand').change(function(){
+            var rowIndex=$(this).closest('tr').index();
+            var tire_brand = $(this).val();
+            var tire_size = $('.tire_size:eq('+rowIndex+')').val();
+            var tire_pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+
+            $.ajax({
+                url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+                type: 'GET',
+                data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+                success:function(answer){
+                  var data = JSON.parse(answer);
+                    $('.tire_price:eq('+rowIndex+')').val(data.gia);
+                    $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+                    $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+                    updateprice();
+                }
+            });
+            
+          });
+          $('.tire_size').change(function(){
+            var rowIndex=$(this).closest('tr').index();
+            var tire_size = $(this).val();
+            var tire_brand = $('.tire_brand:eq('+rowIndex+')').val();
+            var tire_pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+
+            $.ajax({
+                url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+                type: 'GET',
+                data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+                success:function(answer){
+                  var data = JSON.parse(answer);
+                    $('.tire_price:eq('+rowIndex+')').val(data.gia);
+                    $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+                    $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+                    updateprice();
+                }
+            });
+            
+          });
+          $('.tire_pattern').change(function(){
+            var rowIndex=$(this).closest('tr').index();
+            var tire_pattern = $(this).val();
+            var tire_size = $('.tire_size:eq('+rowIndex+')').val();
+            var tire_brand = $('.tire_brand:eq('+rowIndex+')').val();
+
+            $.ajax({
+                url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+                type: 'GET',
+                data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+                success:function(answer){
+                  var data = JSON.parse(answer);
+                    $('.tire_price:eq('+rowIndex+')').val(data.gia);
+                    $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+                    $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+                    updateprice();
+                }
+            });
+            
+          });
+
+          $('input').keyup(function (e) {
+              if (e.which == 39) { // right arrow
+                $(this).closest('td').next().find('input').focus();
+
+              } else if (e.which == 37) { // left arrow
+                $(this).closest('td').prev().find('input').focus();
+
+              } else if (e.which == 40) { // down arrow
+                $(this).closest('tr').next().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+
+              } else if (e.which == 38) { // up arrow
+                $(this).closest('tr').prev().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+              }
+            });
+          $('#dataTable0 tbody tr td:nth-child(2) input').keyup(function(){
+            var val = $(this).val();
+            var trIndex = $(this).closest('tr').index();
+            $('#dataTable1 tbody tr:eq('+trIndex+') td:nth-child(2) input').val(val);
+          });
+          $('#dataTable0 tbody tr td:nth-child(3) input').keyup(function(){
+            var val = $(this).val();
+            var trIndex = $(this).closest('tr').index();
+            $('#dataTable1 tbody tr:eq('+trIndex+') td:nth-child(3) input').val(val);
+          });
+
+          $('.numbers').keyup(function(event) {
+              // skip for arrow keys
+            if(event.which >= 37 && event.which <= 40) return;
+            // format number
+            $(this).val(function(index, value) {
+              return value
+                .replace(/[^0-9-.]/g, "")
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              ;
+            });
+          });
+
+          
+        }
+    });
+
+
+    $( ".add-field" ).dialog( "open" );
+      
+});
+
+function add_click(){
+    $('#yes').val("");
+    $('.add-field').slideDown(500);
+     $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
+     
+        $('.add-field input[name!="import_tire_order_type"]').val("");
+        $('.add-field input').attr("data","");
+        $('.add-field input').attr("alt","");
+        $('.add-field .date_mask').val("<?php echo date('d-m-Y') ?>");
+        //$('#import_tire_order_number').val('0000000');
+        $('#import_tire_order_code').val('<?php echo ++$lastID ?>');
+        $('#import_tire_order_bank_rate').val('<?php echo $lib->formatMoney($last_bank_rate) ?>');
+        $('#import_tire_order_tax_rate').val('<?php echo $lib->formatMoney($last_tax_rate) ?>');
+        $("#import_tire_order_port_from option:first").attr('selected','selected');
+        $("#import_tire_order_port_to option:first").attr('selected','selected');
+        $('#ocean_freight').val(0);
+        $('#lift').val(0);
+
+        $('#import_tire_order_bill_number').focus();
+
+        $('#dataTablesum thead tr').remove();
+        $('#dataTable0 tbody tr').remove();
+        
+    
+        $.ajax({
+          url: '<?php echo BASE_URL ?>/importtireorder/getgoing',
+          type: 'GET',
+          data: {},
+          success:function(answer){
+              //console.log(answer);
+              var data = JSON.parse(answer);
+              $('#dataTablesum thead').append(data.tong);
+              $('#dataTable0 tbody').append(data.hang);
+              
+              $('.tire_number').keyup(function(){
+                var tongsl = 0;
+                var tonggia = 0;
+                $('.tire_number').each(function(){
+                  var rowIndex=$(this).closest('tr').index();
+                  var sl = parseFloat($(this).val());
+                  var gia = parseFloat(get_number('.tire_price:eq('+rowIndex+')')) || 0;
+                  tonggia += sl*gia;
+                  tongsl += sl;
+                });
+                $('#tongsl').text(tongsl);
+                $('#tonggia').text(tonggia);
+                updateprice();
+              });
+              $('.tire_price').keyup(function(){
+                var tonggia = 0;
+                $('.tire_number').each(function(){
+                  var rowIndex=$(this).closest('tr').index();
+                  var sl = parseFloat($(this).val());
+                  var gia = parseFloat(get_number('.tire_price:eq('+rowIndex+')')) || 0;
+                  tonggia += sl*gia;
+                });
+                $('#tonggia').text(tonggia);
+                updateprice();
+              });
+              $('.tire_price_down').keyup(function(){
+                var tonggiagiam = 0;
+                $('.tire_number').each(function(){
+                  var rowIndex=$(this).closest('tr').index();
+                  var sl = parseFloat($(this).val());
+                  var giagiam = parseFloat(get_number('.tire_price_down:eq('+rowIndex+')')) || 0;
+                  tonggiagiam += sl*giagiam;
+                });
+                $('#tonggiagiam').text(tonggiagiam);
+                updateprice();
+              });
+              $('.tire_stuff').keyup(function(){
+                var tongphantram = 0;
+                $('.tire_number').each(function(){
+                  var rowIndex=$(this).closest('tr').index();
+                  var sl = parseFloat($(this).val());
+                  var stuff = parseFloat(get_number('.tire_stuff:eq('+rowIndex+')')) || 0;
+                  tongphantram += sl/stuff;
+                });
+                $('#tongphantram').text(roundDecimal(tongphantram*100,7));
+                updateprice();
+              });
+              $('.tire_tax_import').keyup(function(){
+                var tongthue = 0;
+                var tongimport = 0;
+                var tongcong = 0;
+                $('.tire_tax_import').each(function(){
+                  var rowIndex=$(this).closest('tr').index();
+                  var nk = parseFloat(get_number($(this)));
+                  var vat = parseFloat(get_number('.tire_tax_vat:eq('+rowIndex+')')) || 0;
+                  $('.tire_tax:eq('+rowIndex+')').val(nk+vat);
+                  tongthue += nk+vat;
+                  tongimport += nk;
+
+                  var tire_number = parseFloat(get_number('.tire_number:eq('+rowIndex+')')) || 0;
+                  var sumtienmua = parseFloat(get_number('.tire_price_sum:eq('+rowIndex+')')) || 0;
+                  var tonglogs = parseFloat(get_number('.tire_logistics:eq('+rowIndex+')')) || 0;
+                  var tongbx = parseFloat(get_number('.tire_stevedore:eq('+rowIndex+')')) || 0;
+                  var chiphikhac = parseFloat(get_number('.tire_cost:eq('+rowIndex+')')) || 0;
+                  var tong = sumtienmua+nk+vat+tonglogs+tongbx+chiphikhac;
+                  $('.tire_price_total:eq('+rowIndex+')').val(tong);
+                  tongcong += tong;
+
+                  var giavon = roundDecimal(tong/tire_number,2);
+                  $('.tire_price_origin:eq('+rowIndex+')').val(giavon);
+                });
+                $('#tongthue').text(tongthue);
+                $('#tongthuenk').text(tongimport);
+                $('#tongcong').text(tongcong);
+                //updateprice();
+                $('.numbers').val(function(index, value) {
+                  return value
+                    .replace(/[^0-9-.]/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  ;
+                });
+                $('.numbers').html(function(index, value) {
+                    return value
+                      .replace(/[^0-9-.]/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ;
+                  });
+              });
+              $('.tire_tax_vat').keyup(function(){
+                var tongthue = 0;
+                var tongvat = 0;
+                var tongcong = 0;
+                $('.tire_tax_vat').each(function(){
+                  var rowIndex=$(this).closest('tr').index();
+                  var vat = parseFloat(get_number($(this)));
+                  var nk = parseFloat(get_number('.tire_tax_import:eq('+rowIndex+')')) || 0;
+                  $('.tire_tax:eq('+rowIndex+')').val(nk+vat);
+                  tongthue += nk+vat;
+                  tongvat += vat;
+
+                  var tire_number = parseFloat(get_number('.tire_number:eq('+rowIndex+')')) || 0;
+                  var sumtienmua = parseFloat(get_number('.tire_price_sum:eq('+rowIndex+')')) || 0;
+                  var tonglogs = parseFloat(get_number('.tire_logistics:eq('+rowIndex+')')) || 0;
+                  var tongbx = parseFloat(get_number('.tire_stevedore:eq('+rowIndex+')')) || 0;
+                  var chiphikhac = parseFloat(get_number('.tire_cost:eq('+rowIndex+')')) || 0;
+                  var tong = sumtienmua+nk+vat+tonglogs+tongbx+chiphikhac;
+                  $('.tire_price_total:eq('+rowIndex+')').val(tong);
+                  tongcong += tong;
+
+                  var giavon = roundDecimal(tong/tire_number,2);
+                  $('.tire_price_origin:eq('+rowIndex+')').val(giavon);
+                });
+                $('#tongthue').text(tongthue);
+                $('#tongthuevat').text(tongvat);
+                $('#tongcong').text(tongcong);
+                //updateprice();
+                $('.numbers').val(function(index, value) {
+                  return value
+                    .replace(/[^0-9-.]/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  ;
+                });
+                $('.numbers').html(function(index, value) {
+                    return value
+                      .replace(/[^0-9-.]/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ;
+                  });
+              });
+              $('.tire_brand').change(function(){
+                var rowIndex=$(this).closest('tr').index();
+                var tire_brand = $(this).val();
+                var tire_size = $('.tire_size:eq('+rowIndex+')').val();
+                var tire_pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+                    type: 'GET',
+                    data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+                    success:function(answer){
+                      var data = JSON.parse(answer);
+                        $('.tire_price:eq('+rowIndex+')').val(data.gia);
+                        $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+                        $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+                        updateprice();
+                    }
+                });
+                
+              });
+              $('.tire_size').change(function(){
+                var rowIndex=$(this).closest('tr').index();
+                var tire_size = $(this).val();
+                var tire_brand = $('.tire_brand:eq('+rowIndex+')').val();
+                var tire_pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+                    type: 'GET',
+                    data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+                    success:function(answer){
+                      var data = JSON.parse(answer);
+                        $('.tire_price:eq('+rowIndex+')').val(data.gia);
+                        $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+                        $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+                        updateprice();
+                    }
+                });
+                
+              });
+              $('.tire_pattern').change(function(){
+                var rowIndex=$(this).closest('tr').index();
+                var tire_pattern = $(this).val();
+                var tire_size = $('.tire_size:eq('+rowIndex+')').val();
+                var tire_brand = $('.tire_brand:eq('+rowIndex+')').val();
+
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+                    type: 'GET',
+                    data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+                    success:function(answer){
+                      var data = JSON.parse(answer);
+                        $('.tire_price:eq('+rowIndex+')').val(data.gia);
+                        $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+                        $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+                        updateprice();
+                    }
+                });
+                
+              });
+
+              updateprice();
+
+              $('input').keyup(function (e) {
+                  if (e.which == 39) { // right arrow
+                    $(this).closest('td').next().find('input').focus();
+
+                  } else if (e.which == 37) { // left arrow
+                    $(this).closest('td').prev().find('input').focus();
+
+                  } else if (e.which == 40) { // down arrow
+                    $(this).closest('tr').next().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+
+                  } else if (e.which == 38) { // up arrow
+                    $(this).closest('tr').prev().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+                  }
+                });
+              $('#dataTable0 tbody tr td:nth-child(2) input').keyup(function(){
+                var val = $(this).val();
+                var trIndex = $(this).closest('tr').index();
+                $('#dataTable1 tbody tr:eq('+trIndex+') td:nth-child(2) input').val(val);
+              });
+              $('#dataTable0 tbody tr td:nth-child(3) input').keyup(function(){
+                var val = $(this).val();
+                var trIndex = $(this).closest('tr').index();
+                $('#dataTable1 tbody tr:eq('+trIndex+') td:nth-child(3) input').val(val);
+              });
+
+              $('.numbers').keyup(function(event) {
+                  // skip for arrow keys
+                if(event.which >= 37 && event.which <= 40) return;
+                // format number
+                $(this).val(function(index, value) {
+                  return value
+                    .replace(/[^0-9-.]/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  ;
+                });
+              });
+
+              
+            }
+        });
+                
+        $('.numbers').focus(function(){
+            if ( $(this).val() == '0') {
+               $(this).val(""); 
+            };
+            
+        });
+        $('.numbers').blur(function(){
+            if ( $(this).val() == "") {
+                $(this).val(0);
+            };
+            
+        });
+
+    $( ".add-field" ).dialog( "open" );
+}
+
+$(document).ready(function(){
+  // Validate form
+  $("#add_import_tire_order").validate({
+      errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+      rules: {
+
+      },
+      submitHandler: function(form) {
+        var import_tire_order_bill_number = $('#import_tire_order_bill_number').val();
+        var import_tire_order_contract_number = $('#import_tire_order_contract_number').val();
+        var import_tire_order_code = $('#import_tire_order_code').val();
+        var import_tire_order_comment = $('#import_tire_order_comment').val();
+        var import_tire_order_seller_name = $('#import_tire_order_seller').val();
+        var import_tire_order_seller = $('#import_tire_order_seller').attr('data');
+        var import_tire_order_port_from = $('#import_tire_order_port_from').val();
+        var import_tire_order_port_to = $('#import_tire_order_port_to').val();
+        var import_tire_order_supplier_name = $('#import_tire_order_supplier').val();
+        var import_tire_order_supplier = $('#import_tire_order_supplier').attr('data');
+        var import_tire_order_type = $('input[name="import_tire_order_type"]:checked').val();
+        var import_tire_order_date = $('#import_tire_order_date').val();
+        var import_tire_order_expect_date = $('#import_tire_order_expect_date').val();
+        var import_tire_order_claim = $('#import_tire_order_claim').val();
+        var import_tire_order_bank_rate = $('#import_tire_order_bank_rate').val();
+        var import_tire_order_tax_rate = $('#import_tire_order_tax_rate').val();
+        var import_tire_order_bank_cost = $('#import_tire_order_bank_cost').val();
+        var import_tire_order_other_cost = $('#import_tire_order_other_cost').val();
+        var import_tire_order_other_cost_comment = $('#import_tire_order_other_cost_comment').val();
+        var import_tire_order_oceanfreight = $('#tongcuoctau').text();
+        var import_tire_order_lift = $('#lift').val();
+
+        var import_tire_order_lift_1cont = $('#lift_1cont').val();
+        var import_tire_order_lift_2cont = $('#lift_2cont').val();
+        var import_tire_order_lift_plus = $('#lift_plus').val();
+        var import_tire_order_truck_1cont = $('#truck_1cont').val();
+        var import_tire_order_truck_2cont = $('#truck_2cont').val();
+        var import_tire_order_truck_plus = $('#truck_plus').val();
+        var import_tire_order_bill_1cont = $('#bill_1cont').val();
+        var import_tire_order_bill_2cont = $('#bill_2cont').val();
+        var import_tire_order_bill_plus = $('#bill_plus').val();
+        var import_tire_order_tthq_1cont = $('#tthq_1cont').val();
+        var import_tire_order_tthq_2cont = $('#tthq_2cont').val();
+        var import_tire_order_tthq_plus = $('#tthq_plus').val();
+
+
+        var import_tire_order_sum = $('#tongtienhang').text();
+        var import_tire_order_tax = $('#tongthue').text();
+        var import_tire_order_logistics = $('#tonglogs').text();
+        var import_tire_order_stevedore = $('#tongbocxep').text();
+        var import_tire_order_sum_usd = $('#tonggia').text();
+        var import_tire_order_sum_usd_down = $('#tonggiagiam').text();
+        var import_tire_order_total = $('#tongsl').text();
+
+
+        var import_list = [];
+        var tire_list_id = [];
+        var tire_brand = [];
+        var tire_size = [];
+        var tire_pattern = [];
+        var tire_number = [];
+        var tire_price = [];
+        var tire_price_down = [];
+        var tire_stuff = [];
+        var tire_ocean_freight = [];
+        var tire_price_sum = [];
+        var tire_tax_import = [];
+        var tire_tax_vat = [];
+        var tire_bill = [];
+        var tire_tthq = [];
+        var tire_lift = [];
+        var tire_trucking = [];
+        var tire_stevedore = [];
+        var tire_bank_cost = [];
+        var tire_other_cost = [];
+        var tire_price_total = [];
+        var tire_price_origin = [];
+
+        $('.tire_brand').each(function(){
+          tire_brand.push($(this).attr('value'));
+        });
+        $('.tire_size').each(function(){
+          tire_size.push($(this).attr('value'));
+        });
+        $('.tire_pattern').each(function(){
+          tire_pattern.push($(this).attr('value'));
+        });
+        $('.tire_number').each(function(){
+          tire_number.push($(this).attr('value'));
+          tire_list_id.push($(this).attr('data') || 0);
+        });
+        $('.tire_price').each(function(){
+          tire_price.push($(this).attr('value'));
+        });
+        $('.tire_price_down').each(function(){
+          tire_price_down.push($(this).attr('value'));
+        });
+        $('.tire_stuff').each(function(){
+          tire_stuff.push($(this).attr('value'));
+        });
+        $('.tire_ocean_freight').each(function(){
+          tire_ocean_freight.push($(this).attr('value'));
+        });
+        $('.tire_price_sum').each(function(){
+          tire_price_sum.push($(this).attr('value'));
+        });
+        $('.tire_tax_import').each(function(){
+          tire_tax_import.push($(this).attr('value'));
+        });
+        $('.tire_tax_vat').each(function(){
+          tire_tax_vat.push($(this).attr('value'));
+        });
+        $('.tire_bill').each(function(){
+          tire_bill.push($(this).attr('value'));
+        });
+        $('.tire_tthq').each(function(){
+          tire_tthq.push($(this).attr('value'));
+        });
+        $('.tire_lift').each(function(){
+          tire_lift.push($(this).attr('value'));
+        });
+        $('.tire_trucking').each(function(){
+          tire_trucking.push($(this).attr('value'));
+        });
+        $('.tire_stevedore').each(function(){
+          tire_stevedore.push($(this).attr('value'));
+        });
+        $('.tire_bank_cost').each(function(){
+          tire_bank_cost.push($(this).attr('value'));
+        });
+        $('.tire_other_cost').each(function(){
+          tire_other_cost.push($(this).attr('value'));
+        });
+        $('.tire_price_total').each(function(){
+          tire_price_total.push($(this).attr('value'));
+        });
+        $('.tire_price_origin').each(function(){
+          tire_price_origin.push($(this).attr('value'));
+        });
+
+        for (var j = 0; j < tire_number.length; j++) {
+          import_list.push({'tire_list_id':tire_list_id[j],'tire_brand':tire_brand[j],'tire_size':tire_size[j],'tire_pattern':tire_pattern[j],'tire_number':tire_number[j],'tire_price':tire_price[j],'tire_price_down':tire_price_down[j],'tire_stuff':tire_stuff[j],'tire_ocean_freight':tire_ocean_freight[j],'tire_price_sum':tire_price_sum[j],'tire_tax_import':tire_tax_import[j],'tire_tax_vat':tire_tax_vat[j],'tire_bill':tire_bill[j],'tire_tthq':tire_tthq[j],'tire_lift':tire_lift[j],'tire_trucking':tire_trucking[j],'tire_stevedore':tire_stevedore[j],'tire_bank_cost':tire_bank_cost[j],'tire_other_cost':tire_other_cost[j],'tire_price_total':tire_price_total[j],'tire_price_origin':tire_price_origin[j]});
+        }
+
+
+        var yes = $('#yes').val();
+
+        $.ajax({
+          url: '<?php echo BASE_URL ?>/importtireorder/add',
+          type: 'POST',
+          data: {
+            yes: yes,
+            import_tire_order_bill_number: import_tire_order_bill_number,
+            import_tire_order_contract_number: import_tire_order_contract_number,
+            import_tire_order_code: import_tire_order_code,
+            import_tire_order_comment: import_tire_order_comment,
+            import_tire_order_seller: import_tire_order_seller,
+            import_tire_order_seller_name: import_tire_order_seller_name,
+            import_tire_order_port_from: import_tire_order_port_from,
+            import_tire_order_port_to: import_tire_order_port_to,
+            import_tire_order_supplier: import_tire_order_supplier,
+            import_tire_order_supplier_name: import_tire_order_supplier_name,
+            import_tire_order_type: import_tire_order_type,
+            import_tire_order_date: import_tire_order_date,
+            import_tire_order_expect_date: import_tire_order_expect_date,
+            import_tire_order_claim: import_tire_order_claim,
+            import_tire_order_bank_rate: import_tire_order_bank_rate,
+            import_tire_order_tax_rate:import_tire_order_tax_rate,
+            import_tire_order_bank_cost:import_tire_order_bank_cost,
+            import_tire_order_other_cost: import_tire_order_other_cost,
+            import_tire_order_other_cost_comment: import_tire_order_other_cost_comment,
+            import_tire_order_oceanfreight: import_tire_order_oceanfreight,
+            import_tire_order_lift: import_tire_order_lift,
+            import_tire_order_sum: import_tire_order_sum,
+            import_tire_order_tax: import_tire_order_tax,
+            import_tire_order_logistics: import_tire_order_logistics,
+            import_tire_order_sum_usd: import_tire_order_sum_usd,
+            import_tire_order_sum_usd_down: import_tire_order_sum_usd_down,
+            import_tire_order_total: import_tire_order_total,
+            import_tire_order_stevedore: import_tire_order_stevedore,
+            import_tire_order_lift_1cont: import_tire_order_lift_1cont,
+            import_tire_order_lift_2cont: import_tire_order_lift_2cont,
+            import_tire_order_lift_plus: import_tire_order_lift_plus,
+            import_tire_order_truck_1cont: import_tire_order_truck_1cont,
+            import_tire_order_truck_2cont: import_tire_order_truck_2cont,
+            import_tire_order_truck_plus: import_tire_order_truck_plus,
+            import_tire_order_bill_1cont: import_tire_order_bill_1cont,
+            import_tire_order_bill_2cont: import_tire_order_bill_2cont,
+            import_tire_order_bill_plus: import_tire_order_bill_plus,
+            import_tire_order_tthq_1cont: import_tire_order_tthq_1cont,
+            import_tire_order_tthq_2cont: import_tire_order_tthq_2cont,
+            import_tire_order_tthq_plus: import_tire_order_tthq_plus,
+            import_list: import_list,
+          },
+          success:function(answer){
+              //alert(answer);
+              $('#error').hide();
+              $('#error').slideToggle(100); // hiển thị thẻ div success
+              $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+              $('#error').fadeOut(10000);
+
+              if (yes != "") {
+                  if (answer.trim() == "Cập nhật thành công" ) {
+                      setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                      
+                  }
+              }
+              else{
+                  if (answer.trim() == "Thêm thành công" ) {
+                      setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                      
+                  }
+              }
+          }
+        });
+
+      }
+    });
+});
+
+
+$('#import_tire_order_port_from').change(function(){
+    var val = $(this).val();
+
+    $.ajax({
+        url: '<?php echo BASE_URL ?>/importtireorder/getoceanfreight',
+        type: 'GET',
+        data: {port:val},
+        success:function(data){
+            $('#oceanfreight').val(data.trim());
+            $('#tongcuoctau').text(data.trim());
+
+            $('#lift_1cont').val($('#lift').val());
+            $('#truck_1cont').val($('#truck').val());
+            $('#truck_2cont').val($('#truck').attr('data'));
+            $('#truck_plus').val($('#truck').attr('alt'));
+            $('#bill_1cont').val($('#bill').val());
+            $('#bill_2cont').val($('#bill').attr('data'));
+            $('#bill_plus').val($('#bill').attr('alt'));
+            $('#tthq_1cont').val($('#tthq').val());
+            $('#tthq_2cont').val($('#tthq').attr('data'));
+            $('#tthq_plus').val($('#tthq').attr('alt'));
+            updateprice();
+        }
+    });
+
+    
+    
+});
+$('#import_tire_order_port_to').change(function(){
+    var val = $(this).val();
+
+    $.ajax({
+        url: '<?php echo BASE_URL ?>/importtireorder/getlift',
+        type: 'GET',
+        data: {port:val},
+        success:function(data){
+            $('#lift').val(data.trim());
+
+            $('#lift_1cont').val($('#lift').val());
+            $('#truck_1cont').val($('#truck').val());
+            $('#truck_2cont').val($('#truck').attr('data'));
+            $('#truck_plus').val($('#truck').attr('alt'));
+            $('#bill_1cont').val($('#bill').val());
+            $('#bill_2cont').val($('#bill').attr('data'));
+            $('#bill_plus').val($('#bill').attr('alt'));
+            $('#tthq_1cont').val($('#tthq').val());
+            $('#tthq_2cont').val($('#tthq').attr('data'));
+            $('#tthq_plus').val($('#tthq').attr('alt'));
+            updateprice();
+        }
+    });
+    
+});
+
+$('.custom').keyup(function(){
+  $('#lift').val(get_number('#lift_1cont') || 0);
+  $('#truck').val(get_number('#truck_1cont') || 0);
+  $('#truck').attr('data',get_number('#truck_2cont') || 0);
+  $('#truck').attr('alt',get_number('#truck_plus') || 0);
+  $('#bill').val(get_number('#bill_1cont') || 0);
+  $('#bill').attr('data',get_number('#bill_2cont') || 0);
+  $('#bill').attr('alt',get_number('#bill_plus') || 0);
+  $('#tthq').val(get_number('#tthq_1cont') || 0);
+  $('#tthq').attr('data',get_number('#tthq_2cont') || 0);
+  $('#tthq').attr('alt',get_number('#tthq_plus') || 0);
+
+  updateprice();
+});
+
+$('#import_tire_order_bank_cost').keyup(function(){
+  updateprice();
+});
+$('#import_tire_order_other_cost').keyup(function(){
+  updateprice();
+});
+$('#import_tire_order_bank_rate').keyup(function(){
+  updateprice();
+});
+$('#import_tire_order_tax_rate').keyup(function(){
+  updateprice();
+});
+$('.tire_number').keyup(function(){
+  var tongsl = 0;
+  var tonggia = 0;
+  $('.tire_number').each(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var sl = parseFloat($(this).val());
+    var gia = parseFloat(get_number('.tire_price:eq('+rowIndex+')')) || 0;
+    tonggia += sl*gia;
+    tongsl += sl;
+  });
+  $('#tongsl').text(tongsl);
+  $('#tonggia').text(tonggia);
+  updateprice();
+});
+$('.tire_price').keyup(function(){
+  var tonggia = 0;
+  $('.tire_number').each(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var sl = parseFloat($(this).val());
+    var gia = parseFloat(get_number('.tire_price:eq('+rowIndex+')')) || 0;
+    tonggia += sl*gia;
+  });
+  $('#tonggia').text(tonggia);
+  updateprice();
+});
+$('.tire_price_down').keyup(function(){
+  var tonggiagiam = 0;
+  $('.tire_number').each(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var sl = parseFloat($(this).val());
+    var giagiam = parseFloat(get_number('.tire_price_down:eq('+rowIndex+')')) || 0;
+    tonggiagiam += sl*giagiam;
+  });
+  $('#tonggiagiam').text(tonggiagiam);
+  updateprice();
+});
+$('.tire_stuff').keyup(function(){
+  var tongphantram = 0;
+  $('.tire_number').each(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var sl = parseFloat($(this).val());
+    var stuff = parseFloat(get_number('.tire_stuff:eq('+rowIndex+')')) || 0;
+    tongphantram += sl/stuff;
+  });
+  $('#tongphantram').text(roundDecimal(tongphantram*100,7));
+  updateprice();
+});
+$('.tire_tax_import').keyup(function(){
+  var tongthue = 0;
+  var tongimport = 0;
+  var tongcong = 0;
+  $('.tire_tax_import').each(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var nk = parseFloat(get_number($(this)));
+    var vat = parseFloat(get_number('.tire_tax_vat:eq('+rowIndex+')')) || 0;
+    $('.tire_tax:eq('+rowIndex+')').val(nk+vat);
+    tongthue += nk+vat;
+    tongimport += nk;
+
+    var tire_number = parseFloat(get_number('.tire_number:eq('+rowIndex+')')) || 0;
+    var sumtienmua = parseFloat(get_number('.tire_price_sum:eq('+rowIndex+')')) || 0;
+    var tonglogs = parseFloat(get_number('.tire_logistics:eq('+rowIndex+')')) || 0;
+    var tongbx = parseFloat(get_number('.tire_stevedore:eq('+rowIndex+')')) || 0;
+    var chiphikhac = parseFloat(get_number('.tire_cost:eq('+rowIndex+')')) || 0;
+    var tong = sumtienmua+nk+vat+tonglogs+tongbx+chiphikhac;
+    $('.tire_price_total:eq('+rowIndex+')').val(tong);
+    tongcong += tong;
+
+    var giavon = roundDecimal(tong/tire_number,2);
+    $('.tire_price_origin:eq('+rowIndex+')').val(giavon);
+  });
+  $('#tongthue').text(tongthue);
+  $('#tongthuenk').text(tongimport);
+  $('#tongcong').text(tongcong);
+  //updateprice();
+  $('.numbers').val(function(index, value) {
+    return value
+      .replace(/[^0-9-.]/g, "")
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    ;
+  });
+  $('.numbers').html(function(index, value) {
+      return value
+        .replace(/[^0-9-.]/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      ;
+    });
+});
+$('.tire_tax_vat').keyup(function(){
+  var tongthue = 0;
+  var tongvat = 0;
+  var tongcong = 0;
+  $('.tire_tax_vat').each(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var vat = parseFloat(get_number($(this)));
+    var nk = parseFloat(get_number('.tire_tax_import:eq('+rowIndex+')')) || 0;
+    $('.tire_tax:eq('+rowIndex+')').val(nk+vat);
+    tongthue += nk+vat;
+    tongvat += vat;
+
+    var tire_number = parseFloat(get_number('.tire_number:eq('+rowIndex+')')) || 0;
+    var sumtienmua = parseFloat(get_number('.tire_price_sum:eq('+rowIndex+')')) || 0;
+    var tonglogs = parseFloat(get_number('.tire_logistics:eq('+rowIndex+')')) || 0;
+    var tongbx = parseFloat(get_number('.tire_stevedore:eq('+rowIndex+')')) || 0;
+    var chiphikhac = parseFloat(get_number('.tire_cost:eq('+rowIndex+')')) || 0;
+    var tong = sumtienmua+nk+vat+tonglogs+tongbx+chiphikhac;
+    $('.tire_price_total:eq('+rowIndex+')').val(tong);
+    tongcong += tong;
+
+    var giavon = roundDecimal(tong/tire_number,2);
+    $('.tire_price_origin:eq('+rowIndex+')').val(giavon);
+  });
+  $('#tongthue').text(tongthue);
+  $('#tongthuevat').text(tongvat);
+  $('#tongcong').text(tongcong);
+  //updateprice();
+  $('.numbers').val(function(index, value) {
+    return value
+      .replace(/[^0-9-.]/g, "")
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    ;
+  });
+  $('.numbers').html(function(index, value) {
+      return value
+        .replace(/[^0-9-.]/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      ;
+    });
+});
+$('.tire_brand').change(function(){
+  var rowIndex=$(this).closest('tr').index();
+  var tire_brand = $(this).val();
+  var tire_size = $('.tire_size:eq('+rowIndex+')').val();
+  var tire_pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+
+  $.ajax({
+      url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+      type: 'GET',
+      data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+      success:function(answer){
+        var data = JSON.parse(answer);
+          $('.tire_price:eq('+rowIndex+')').val(data.gia);
+          $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+          $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+          updateprice();
+      }
+  });
+  
+});
+$('.tire_size').change(function(){
+  var rowIndex=$(this).closest('tr').index();
+  var tire_size = $(this).val();
+  var tire_brand = $('.tire_brand:eq('+rowIndex+')').val();
+  var tire_pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+
+  $.ajax({
+      url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+      type: 'GET',
+      data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+      success:function(answer){
+        var data = JSON.parse(answer);
+          $('.tire_price:eq('+rowIndex+')').val(data.gia);
+          $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+          $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+          updateprice();
+      }
+  });
+  
+});
+$('.tire_pattern').change(function(){
+  var rowIndex=$(this).closest('tr').index();
+  var tire_pattern = $(this).val();
+  var tire_size = $('.tire_size:eq('+rowIndex+')').val();
+  var tire_brand = $('.tire_brand:eq('+rowIndex+')').val();
+
+  $.ajax({
+      url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+      type: 'GET',
+      data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+      success:function(answer){
+        var data = JSON.parse(answer);
+          $('.tire_price:eq('+rowIndex+')').val(data.gia);
+          $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+          $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+          updateprice();
+      }
+  });
+  
+});
+
+$('#import_tire_order_seller').keyup(function(){
+    var rowIndex = 0;
+
+    var keyword = $(this).val();
+    $.ajax({
+        url: '<?php echo BASE_URL ?>/importtireorder/getseller',
+        type: 'POST',
+        data: {keyword:keyword, offset:rowIndex},
+        success:function(data){
+            $('#customer_list_id:eq('+rowIndex+')').slideDown(200);
+            $('#customer_list_id:eq('+rowIndex+')').html(data);
+        }
+    });
+    if ($('#import_tire_order_seller:eq('+rowIndex+')').val() == "" || $('#import_tire_order_seller:eq('+rowIndex+')').attr('data') == "") {
+        
+        $('#import_tire_order_seller:eq('+rowIndex+')').attr('data',"");
+    }
+
+    
+});
+
+$('#import_tire_order_seller').on('keydown', function() {
+    var rowIndex = 0;
+
+    var key = event.keyCode || event.charCode;
+
+    if( key == 8 || key == 46 ){
+        $('#import_tire_order_seller:eq('+rowIndex+')').attr('data',"");
+    }
+        
+  }); 
+
+  $('#import_tire_order_supplier').keyup(function(){
+    var rowIndex = 0;
+
+    var keyword = $(this).val();
+    $.ajax({
+        url: '<?php echo BASE_URL ?>/importtireorder/getvendor',
+        type: 'POST',
+        data: {keyword:keyword, offset:rowIndex},
+        success:function(data){
+            $('#vendor_list_id:eq('+rowIndex+')').slideDown(200);
+            $('#vendor_list_id:eq('+rowIndex+')').html(data);
+        }
+    });
+    if ($('#import_tire_order_supplier:eq('+rowIndex+')').val() == "" || $('#import_tire_order_supplier:eq('+rowIndex+')').attr('data') == "") {
+        
+        $('#import_tire_order_supplier:eq('+rowIndex+')').attr('data',"");
+    }
+
+    
+});
+
+$('#import_tire_order_supplier').on('keydown', function() {
+    var rowIndex = 0;
+
+    var key = event.keyCode || event.charCode;
+
+    if( key == 8 || key == 46 ){
+        $('#import_tire_order_supplier:eq('+rowIndex+')').attr('data',"");
+    }
+        
+  });  
+
+function set_item_seller(item,value,vitri) {
+// change input value
+$('#import_tire_order_seller:eq('+vitri+')').val(item);
+$('#import_tire_order_seller:eq('+vitri+')').attr("data",value);
+// hide proposition list
+$('#customer_list_id').hide();
+$('#import_tire_order_seller:eq('+vitri+')').focus();
+
+} 
+function set_item_vendor(item,value,vitri) {
+// change input value
+$('#import_tire_order_supplier:eq('+vitri+')').val(item);
+$('#import_tire_order_supplier:eq('+vitri+')').attr("data",value);
+// hide proposition list
+$('#vendor_list_id').hide();
+$('#import_tire_order_supplier:eq('+vitri+')').focus();
+
+} 
+
+function updateprice(){
+  
+  var tongsl = $('#tongsl').text().replace(/\,/g,'') || 0;
+  var socont = Math.ceil(parseInt(tongsl.substring(0,1))/2);
+  if (parseInt(tongsl.substring(0,1)) < 2) {
+    socont = 1;
+  }
+  var tongtienmua = 0;
+  var tongtienthue = 0;
+  var tongtienlogs = 0;
+  var tongtienbocxep = 0;
+  var phick = parseFloat(get_number('#import_tire_order_bank_cost')) || 0;
+  var phikhac = parseFloat(get_number('#import_tire_order_other_cost')) || 0;
+  var tongcong = 0;
+  var tau = parseFloat($('#oceanfreight').val()) || 0;
+
+  $('.tire_number').each(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var tire_number = parseFloat($(this).val()) || 0;
+    var tire_price = parseFloat(get_number('.tire_price:eq('+rowIndex+')')) || 0;
+    var ocean_freight = tau*socont;
+    var tonggia = parseFloat($('#tonggia').text().replace(/\,/g,'')) || 0;
+    var tienmua = tire_number*tire_price;
+    var cuoctau = roundDecimal((ocean_freight*tienmua)/tonggia,6);
+    $('.tire_ocean_freight:eq('+rowIndex+')').val(cuoctau);
+
+    $('#import_tire_order_claim').val(roundDecimal(tonggia*0.005,2));
+
+    var tygia = parseFloat(get_number('#import_tire_order_bank_rate')) || 0;
+    var tygiathue = parseFloat(get_number('#import_tire_order_tax_rate')) || 0;
+    
+    var sumtienmua = roundDecimal((tienmua+cuoctau)*tygia,0);
+    tongtienmua += sumtienmua;
+    $('.tire_price_sum:eq('+rowIndex+')').val(sumtienmua);
+
+    var tire_price_down = parseFloat(get_number('.tire_price_down:eq('+rowIndex+')')) || 0;
+    var giatinhthue = tienmua+cuoctau;
+    var tax_import = roundDecimal(giatinhthue*0.00*tygiathue,0);
+    if (tire_price_down>0) {
+      giatinhthue = tire_price_down*tire_number+cuoctau;
+      tax_import = roundDecimal(giatinhthue*0.25*tygiathue,0);
+    }
+    var tax_vat = roundDecimal((giatinhthue*tygiathue+tax_import)*0.1,0);
+    $('.tire_tax_import:eq('+rowIndex+')').val(tax_import);
+    $('.tire_tax_vat:eq('+rowIndex+')').val(tax_vat);
+    $('.tire_tax:eq('+rowIndex+')').val(tax_import+tax_vat);
+    tongtienthue += tax_import+tax_vat;
+
+    var tongphantram = parseFloat($('#tongphantram').text())/100 || 0;
+    var stuff = parseFloat(get_number('.tire_stuff:eq('+rowIndex+')')) || 0;
+    var bill = parseFloat($('#bill').val()) || 0;
+    var bill_2 = parseFloat($('#bill').attr('data')) || 0;
+    var bill_plus = parseFloat($('#bill').attr('alt')) || 0;
+    var tthq = parseFloat($('#tthq').val()) || 0;
+    var tthq_2 = parseFloat($('#tthq').attr('data')) || 0;
+    var tthq_plus = parseFloat($('#tthq').attr('alt')) || 0;
+    var truck = parseFloat($('#truck').val()) || 0;
+    var truck_2 = parseFloat($('#truck').attr('data')) || 0;
+    var truck_plus = parseFloat($('#truck').attr('alt')) || 0;
+    var lift = parseFloat($('#lift').val()) || 0;
+    var stevedore = parseFloat(get_number('.tire_stevedore:eq('+rowIndex+')')) || 0;
+
+    if (bill_2>0) {
+      bill = bill+(socont-1)*bill_2;
+    }
+    else{
+      bill = bill*socont;
+    }
+    bill = bill+bill_plus;
+
+    if (tthq_2>0) {
+      tthq = tthq+(socont-1)*tthq_2;
+    }
+    else{
+      tthq = tthq*socont;
+    }
+    tthq = tthq+tthq_plus;
+    if (truck_2>0) {
+      truck = truck+(socont-1)*truck_2;
+    }
+    else{
+      truck = truck*socont;
+    }
+    truck = truck+truck_plus;
+
+    
+    lift = lift*socont;
+    
+
+    var tire_bill = roundDecimal(bill/(stuff*tongphantram),2);
+    var tire_tthq = roundDecimal(tthq/(stuff*tongphantram),2);
+    var tire_trucking = roundDecimal(truck/(stuff*tongphantram),2);
+    var tire_lift = roundDecimal(lift/(stuff*tongphantram),2);
+    $('.tire_bill:eq('+rowIndex+')').val(tire_bill);
+    $('.tire_tthq:eq('+rowIndex+')').val(tire_tthq);
+    $('.tire_trucking:eq('+rowIndex+')').val(tire_trucking);
+    $('.tire_lift:eq('+rowIndex+')').val(tire_lift);
+    var tonglogs = roundDecimal((tire_bill+tire_tthq+tire_trucking+tire_lift)*tire_number,0);
+    $('.tire_logistics:eq('+rowIndex+')').val(tonglogs);
+    tongtienlogs += tonglogs;
+    tongtienbocxep += stevedore
+
+    var bankcost = roundDecimal((phick/(stuff*tongphantram))*tire_number,0);
+    var othercost = roundDecimal((phikhac/(stuff*tongphantram))*tire_number,0);
+    var chiphikhac = othercost+bankcost;
+    $('.tire_bank_cost:eq('+rowIndex+')').val(bankcost);
+    $('.tire_other_cost:eq('+rowIndex+')').val(othercost);
+    $('.tire_cost:eq('+rowIndex+')').val(chiphikhac);
+
+    var tong = sumtienmua+tax_import+tax_vat+tonglogs+stevedore+chiphikhac;
+    $('.tire_price_total:eq('+rowIndex+')').val(tong);
+    tongcong += tong;
+
+    var giavon = roundDecimal(tong/tire_number,2);
+    $('.tire_price_origin:eq('+rowIndex+')').val(giavon);
+  });
+
+  $('#tongcuoctau').text(tau*socont);
+  $('#tongtienhang').text(tongtienmua);
+  $('#tongthue').text(tongtienthue);
+  $('#tonglogs').text(tongtienlogs);
+  $('#tongbocxep').text(tongtienbocxep);
+  $('#tongphikhac').text(phikhac+phick);
+  $('#tongcong').text(tongcong);
+
+  $('.numbers').val(function(index, value) {
+    return value
+      .replace(/[^0-9-.]/g, "")
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    ;
+  });
+  $('.numbers').html(function(index, value) {
+    return value
+      .replace(/[^0-9-.]/g, "")
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    ;
+  });
+
+}
+</script>
+
+<script type="text/javascript">
+function roundDecimal(value, decimals) {
+  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
+function get_number(id){
+  return $(id).val().replace(/\,/g,'');
+}
+
+$( ".add-field" ).dialog({
+    autoOpen: false,
+    modal: true,
+    width: "90%",
+    title: "Mua hàng nhập khẩu nhập kho",
+    hide: 'fold',
+    show: 'blind',
+    position: ['center',5],
+});
+$("#import_order").dialog({
+    draggable:true,
+    modal: true,
+    autoOpen: false,
+    height:300,
+    width:400,
+    resizable: false,
+    title:'Import Excel',
+    buttons: {
+        Import: function() {
+            var formData = new FormData();
+            formData.append('import', document.getElementById('import_file').files[0]);
+
+            $.ajax({
+                   url : '<?php echo $this->url('importtireorder/import') ?>',
+                   type : 'POST',
+                   data : formData,
+                   processData: false,  // tell jQuery not to process the data
+                   contentType: false,  // tell jQuery not to set contentType
+                   success : function(data) {
+                       $('#result_import').text(data);
+
+                       $('#dataTablesum thead tr').remove();
+                       $('#dataTable0 tbody tr').remove();
+    
+                      $.ajax({
+                        url: '<?php echo BASE_URL ?>/importtireorder/getgoing',
+                        type: 'GET',
+                        data: {},
+                        success:function(answer){
+                            //alert(data);
+                            var data = JSON.parse(answer);
+                            $('#dataTablesum thead').append(data.tong);
+                            $('#dataTable0 tbody').append(data.hang);
+
+                            $('#tongcuoctau').text($('#oceanfreight').val());
+
+                            $('.tire_number').keyup(function(){
+                              var tongsl = 0;
+                              var tonggia = 0;
+                              $('.tire_number').each(function(){
+                                var rowIndex=$(this).closest('tr').index();
+                                var sl = parseFloat($(this).val());
+                                var gia = parseFloat(get_number('.tire_price:eq('+rowIndex+')')) || 0;
+                                tonggia += sl*gia;
+                                tongsl += sl;
+                              });
+                              $('#tongsl').text(tongsl);
+                              $('#tonggia').text(tonggia);
+                              updateprice();
+                            });
+                            $('.tire_price').keyup(function(){
+                              var tonggia = 0;
+                              $('.tire_number').each(function(){
+                                var rowIndex=$(this).closest('tr').index();
+                                var sl = parseFloat($(this).val());
+                                var gia = parseFloat(get_number('.tire_price:eq('+rowIndex+')')) || 0;
+                                tonggia += sl*gia;
+                              });
+                              $('#tonggia').text(tonggia);
+                              updateprice();
+                            });
+                            $('.tire_price_down').keyup(function(){
+                              var tonggiagiam = 0;
+                              $('.tire_number').each(function(){
+                                var rowIndex=$(this).closest('tr').index();
+                                var sl = parseFloat($(this).val());
+                                var giagiam = parseFloat(get_number('.tire_price_down:eq('+rowIndex+')')) || 0;
+                                tonggiagiam += sl*giagiam;
+                              });
+                              $('#tonggiagiam').text(tonggiagiam);
+                              updateprice();
+                            });
+                            $('.tire_stuff').keyup(function(){
+                              var tongphantram = 0;
+                              $('.tire_number').each(function(){
+                                var rowIndex=$(this).closest('tr').index();
+                                var sl = parseFloat($(this).val());
+                                var stuff = parseFloat(get_number('.tire_stuff:eq('+rowIndex+')')) || 0;
+                                tongphantram += sl/stuff;
+                              });
+                              $('#tongphantram').text(roundDecimal(tongphantram*100,7));
+                              updateprice();
+                            });
+                            $('.tire_tax_import').keyup(function(){
+                              var tongthue = 0;
+                              var tongimport = 0;
+                              var tongcong = 0;
+                              $('.tire_tax_import').each(function(){
+                                var rowIndex=$(this).closest('tr').index();
+                                var nk = parseFloat(get_number($(this)));
+                                var vat = parseFloat(get_number('.tire_tax_vat:eq('+rowIndex+')')) || 0;
+                                $('.tire_tax:eq('+rowIndex+')').val(nk+vat);
+                                tongthue += nk+vat;
+                                tongimport += nk;
+
+                                var tire_number = parseFloat(get_number('.tire_number:eq('+rowIndex+')')) || 0;
+                                var sumtienmua = parseFloat(get_number('.tire_price_sum:eq('+rowIndex+')')) || 0;
+                                var tonglogs = parseFloat(get_number('.tire_logistics:eq('+rowIndex+')')) || 0;
+                                var chiphikhac = parseFloat(get_number('.tire_cost:eq('+rowIndex+')')) || 0;
+                                var tong = sumtienmua+nk+vat+tonglogs+chiphikhac;
+                                $('.tire_price_total:eq('+rowIndex+')').val(tong);
+                                tongcong += tong;
+
+                                var giavon = roundDecimal(tong/tire_number,2);
+                                $('.tire_price_origin:eq('+rowIndex+')').val(giavon);
+                              });
+                              $('#tongthue').text(tongthue);
+                              $('#tongthuenk').text(tongimport);
+                              $('#tongcong').text(tongcong);
+                              //updateprice();
+                              $('.numbers').val(function(index, value) {
+                                return value
+                                  .replace(/[^0-9-.]/g, "")
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                ;
+                              });
+                              $('.numbers').html(function(index, value) {
+                                  return value
+                                    .replace(/[^0-9-.]/g, "")
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                  ;
+                                });
+                            });
+                            $('.tire_tax_vat').keyup(function(){
+                              var tongthue = 0;
+                              var tongvat = 0;
+                              var tongcong = 0;
+                              $('.tire_tax_vat').each(function(){
+                                var rowIndex=$(this).closest('tr').index();
+                                var vat = parseFloat(get_number($(this)));
+                                var nk = parseFloat(get_number('.tire_tax_import:eq('+rowIndex+')')) || 0;
+                                $('.tire_tax:eq('+rowIndex+')').val(nk+vat);
+                                tongthue += nk+vat;
+                                tongvat += vat;
+
+                                var tire_number = parseFloat(get_number('.tire_number:eq('+rowIndex+')')) || 0;
+                                var sumtienmua = parseFloat(get_number('.tire_price_sum:eq('+rowIndex+')')) || 0;
+                                var tonglogs = parseFloat(get_number('.tire_logistics:eq('+rowIndex+')')) || 0;
+                                var chiphikhac = parseFloat(get_number('.tire_cost:eq('+rowIndex+')')) || 0;
+                                var tong = sumtienmua+nk+vat+tonglogs+chiphikhac;
+                                $('.tire_price_total:eq('+rowIndex+')').val(tong);
+                                tongcong += tong;
+
+                                var giavon = roundDecimal(tong/tire_number,2);
+                                $('.tire_price_origin:eq('+rowIndex+')').val(giavon);
+                              });
+                              $('#tongthue').text(tongthue);
+                              $('#tongthuevat').text(tongvat);
+                              $('#tongcong').text(tongcong);
+                              //updateprice();
+                              $('.numbers').val(function(index, value) {
+                                return value
+                                  .replace(/[^0-9-.]/g, "")
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                ;
+                              });
+                              $('.numbers').html(function(index, value) {
+                                  return value
+                                    .replace(/[^0-9-.]/g, "")
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                  ;
+                                });
+                            });
+                            $('.tire_brand').change(function(){
+                              var rowIndex=$(this).closest('tr').index();
+                              var tire_brand = $(this).val();
+                              var tire_size = $('.tire_size:eq('+rowIndex+')').val();
+                              var tire_pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+
+                              $.ajax({
+                                  url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+                                  type: 'GET',
+                                  data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+                                  success:function(answer){
+                                    var data = JSON.parse(answer);
+                                      $('.tire_price:eq('+rowIndex+')').val(data.gia);
+                                      $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+                                      $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+                                      updateprice();
+                                  }
+                              });
+                              
+                            });
+                            $('.tire_size').change(function(){
+                              var rowIndex=$(this).closest('tr').index();
+                              var tire_size = $(this).val();
+                              var tire_brand = $('.tire_brand:eq('+rowIndex+')').val();
+                              var tire_pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+
+                              $.ajax({
+                                  url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+                                  type: 'GET',
+                                  data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+                                  success:function(answer){
+                                    var data = JSON.parse(answer);
+                                      $('.tire_price:eq('+rowIndex+')').val(data.gia);
+                                      $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+                                      $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+                                      updateprice();
+                                  }
+                              });
+                              
+                            });
+                            $('.tire_pattern').change(function(){
+                              var rowIndex=$(this).closest('tr').index();
+                              var tire_pattern = $(this).val();
+                              var tire_size = $('.tire_size:eq('+rowIndex+')').val();
+                              var tire_brand = $('.tire_brand:eq('+rowIndex+')').val();
+
+                              $.ajax({
+                                  url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+                                  type: 'GET',
+                                  data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+                                  success:function(answer){
+                                    var data = JSON.parse(answer);
+                                      $('.tire_price:eq('+rowIndex+')').val(data.gia);
+                                      $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+                                      $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+                                      updateprice();
+                                  }
+                              });
+                              
+                            });
+
+                            updateprice();
+
+                            $('input').keyup(function (e) {
+                                if (e.which == 39) { // right arrow
+                                  $(this).closest('td').next().find('input').focus();
+
+                                } else if (e.which == 37) { // left arrow
+                                  $(this).closest('td').prev().find('input').focus();
+
+                                } else if (e.which == 40) { // down arrow
+                                  $(this).closest('tr').next().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+
+                                } else if (e.which == 38) { // up arrow
+                                  $(this).closest('tr').prev().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+                                }
+                              });
+                            $('#dataTable0 tbody tr td:nth-child(2) input').keyup(function(){
+                              var val = $(this).val();
+                              var trIndex = $(this).closest('tr').index();
+                              $('#dataTable1 tbody tr:eq('+trIndex+') td:nth-child(2) input').val(val);
+                            });
+                            $('#dataTable0 tbody tr td:nth-child(3) input').keyup(function(){
+                              var val = $(this).val();
+                              var trIndex = $(this).closest('tr').index();
+                              $('#dataTable1 tbody tr:eq('+trIndex+') td:nth-child(3) input').val(val);
+                            });
+
+                            $('.numbers').keyup(function(event) {
+                                // skip for arrow keys
+                              if(event.which >= 37 && event.which <= 40) return;
+                              // format number
+                              $(this).val(function(index, value) {
+                                return value
+                                  .replace(/[^0-9-.]/g, "")
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                ;
+                              });
+                            });
+
+                            
+                          }
+                      });
+                   }
+            });
+              
+            //$( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
+$("#status_order").dialog({
+    draggable:true,
+    modal: true,
+    autoOpen: false,
+    height:300,
+    width:400,
+    resizable: false,
+    title:'Cập nhật trạng thái',
+    buttons: {
+        "Cập nhật": function() {
+          var status = $('#import_status').val();
+          var data = $('#i_order').val();
+          var date = $('#import_date').val();
+            $.ajax({
+              url: '<?php echo BASE_URL ?>/importtireorder/updatestatus',
+              type: 'POST',
+              data: {data: data, status: status, date: date},
+              success:function(answer){
+                //alert(answer);
+                setTimeout(function() {
+                  sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                }, 200);
+              }
+            });
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
+$(".import_excel").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:300,
+            width:400,
+            resizable: false,
+            title:'Import Excel',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+
+ 
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+var nv = "<?php echo $nv ?>";
+$('#sl_nv option[value='+nv+']').attr('selected','selected');
+var tha = "<?php echo $tha ?>";
+$('#sl_tha option[value='+tha+']').attr('selected','selected');
+var na = "<?php echo $na ?>";
+$('#sl_na option[value='+na+']').attr('selected','selected');
+
+$('.numbers').keyup(function(event) {
+      // skip for arrow keys
+  if(event.which >= 37 && event.which <= 40) return;
+  // format number
+  $(this).val(function(index, value) {
+    return value
+      .replace(/[^0-9-.]/g, "")
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    ;
+  });
+});
+
+var pickerOpts2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+         
+    };  
+  $(".ngay").datepicker(pickerOpts2);
+
+var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+$('#sl_nv').change(function(){
+      var q = $(this).val();
+      var y = $('#sl_na').val();
+      var m,n;
+      
+      switch(q) {
+        case "1":
+            m=1;
+            n=3;
+            break;
+        case "2":
+            m=4;
+            n=6;
+            break;
+        case "3":
+            m=7;
+            n=9;
+            break;
+        case "4":
+            m=10;
+            n=12;
+            break;
+      }
+
+      var firstDay = new Date(y, m-1, 1);
+      var lastDay = new Date(y, n, 0);
+
+      $('#batdau').datepicker("setDate", firstDay );
+      $('#ketthuc').datepicker("setDate", lastDay );
+
+  });
+
+$('#sl_tha').change(function(){
+      var m = $(this).val();
+      var y = $('#sl_na').val();
+      var firstDay = new Date(y, m-1, 1);
+      var lastDay = new Date(y, m, 0);
+
+      $('#batdau').datepicker("setDate", firstDay );
+      $('#ketthuc').datepicker("setDate", lastDay );
+
+  });
+
+  $('#sl_na').change(function(){
+      var y = $(this).val();
+      var m = $('#sl_tha').val();
+      var firstDay = new Date(y, m-1, 1);
+      var lastDay = new Date(y, m, 0);
+
+      $('#batdau').datepicker("setDate", firstDay );
+      $('#ketthuc').datepicker("setDate", lastDay );
+
+  });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+ 
+      $('input').keyup(function (e) {
+        if (e.which == 39) { // right arrow
+          $(this).closest('td').next().find('input').focus();
+ 
+        } else if (e.which == 37) { // left arrow
+          $(this).closest('td').prev().find('input').focus();
+ 
+        } else if (e.which == 40) { // down arrow
+          $(this).closest('tr').next().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+ 
+        } else if (e.which == 38) { // up arrow
+          $(this).closest('tr').prev().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+        }
+      });
+ 
+    // un-comment to display key code
+    // $("input").keydown(function (e) {
+    //   console.log(e.which);
+    // });
+    });
+
+$('#dataTable0 tbody tr td:nth-child(2) input').keyup(function(){
+  var val = $(this).val();
+  var trIndex = $(this).closest('tr').index();
+  $('#dataTable1 tbody tr:eq('+trIndex+') td:nth-child(2) input').val(val);
+});
+$('#dataTable0 tbody tr td:nth-child(3) input').keyup(function(){
+  var val = $(this).val();
+  var trIndex = $(this).closest('tr').index();
+  $('#dataTable1 tbody tr:eq('+trIndex+') td:nth-child(3) input').val(val);
+});
+
+document.addEventListener("keydown", function(event) {
+  var index = $('.nav-tabs li.active').index();
+  var rowIndex=$('#dataTable'+index+' input:focus').closest('tr').index();
+  if ($('#dataTable'+index+' input').is(':focus')) {
+    if (event.keyCode == 113) { //F8
+      //addRow('dataTable'+index);
+      $('.dataTable').each(function(){
+        addRow($(this).attr('id'));
+      });
+    }
+    if (event.keyCode == 114) { //F9
+      //delRow('dataTable'+index);
+      $('.dataTable').each(function(){
+        delRow($(this).attr('id'),rowIndex);
+      });
+    }
+    if (event.keyCode == 13) {
+        
+        event.preventDefault();
+        return false;
+    }
+  }
+});
+
+function addRow(id){
+  var table=document.getElementById(id);
+  var rowCount=table.rows.length;
+  var row=table.insertRow(rowCount);
+  var colCount=table.rows[1].cells.length;
+  for(var i=0;i<colCount;i++){
+      var newcell=row.insertCell(i);
+      newcell.innerHTML=table.rows[1].cells[i].innerHTML;
+      newcell.className=table.rows[1].cells[i].className;
+      /*switch(newcell.childNodes[0].type){
+          case"text":newcell.childNodes[0].value="";
+          break;
+          case"checkbox":newcell.childNodes[0].checked=false;
+          break;
+          case"select-one":newcell.childNodes[0].selectedIndex=0;
+          break;
+      }*/
+  }
+  $('#'+id+' tr:last td input').val("");
+  $('#'+id+' tr:last td input.keep-val').each(function(){
+    $(this).val($(this).closest('tr').prev().find('td:eq(' + $(this).closest('td').index() + ')').find('input').val());
+  });
+  $('#'+id+' tr:last td input').attr("data","");
+  $('#'+id+' tr:last td input').attr("alt","");
+  $('#'+id+' tr:last td input:first').focus();
+  var i=1;
+  $('#'+id+' tbody tr td:first-child').each(function() {
+    $(this).text(i);
+    i++;
+  });
+
+  $('.tire_number').keyup(function(){
+    var tongsl = 0;
+    var tonggia = 0;
+    $('.tire_number').each(function(){
+      var rowIndex=$(this).closest('tr').index();
+      var sl = parseFloat($(this).val());
+      var gia = parseFloat(get_number('.tire_price:eq('+rowIndex+')')) || 0;
+      tonggia += sl*gia;
+      tongsl += sl;
+    });
+    $('#tongsl').text(tongsl);
+    $('#tonggia').text(tonggia);
+    updateprice();
+  });
+  $('.tire_price').keyup(function(){
+    var tonggia = 0;
+    $('.tire_number').each(function(){
+      var rowIndex=$(this).closest('tr').index();
+      var sl = parseFloat($(this).val());
+      var gia = parseFloat(get_number('.tire_price:eq('+rowIndex+')')) || 0;
+      tonggia += sl*gia;
+    });
+    $('#tonggia').text(tonggia);
+    updateprice();
+  });
+  $('.tire_price_down').keyup(function(){
+    var tonggiagiam = 0;
+    $('.tire_number').each(function(){
+      var rowIndex=$(this).closest('tr').index();
+      var sl = parseFloat($(this).val());
+      var giagiam = parseFloat(get_number('.tire_price_down:eq('+rowIndex+')')) || 0;
+      tonggiagiam += sl*giagiam;
+    });
+    $('#tonggiagiam').text(tonggiagiam);
+    updateprice();
+  });
+  $('.tire_stuff').keyup(function(){
+    var tongphantram = 0;
+    $('.tire_number').each(function(){
+      var rowIndex=$(this).closest('tr').index();
+      var sl = parseFloat($(this).val());
+      var stuff = parseFloat(get_number('.tire_stuff:eq('+rowIndex+')')) || 0;
+      tongphantram += sl/stuff;
+    });
+    $('#tongphantram').text(roundDecimal(tongphantram*100,7));
+    updateprice();
+  });
+  $('.tire_tax_import').keyup(function(){
+    var tongthue = 0;
+    var tongimport = 0;
+    var tongcong = 0;
+    $('.tire_tax_import').each(function(){
+      var rowIndex=$(this).closest('tr').index();
+      var nk = parseFloat(get_number($(this)));
+      var vat = parseFloat(get_number('.tire_tax_vat:eq('+rowIndex+')')) || 0;
+      $('.tire_tax:eq('+rowIndex+')').val(nk+vat);
+      tongthue += nk+vat;
+      tongimport += nk;
+
+      var tire_number = parseFloat(get_number('.tire_number:eq('+rowIndex+')')) || 0;
+      var sumtienmua = parseFloat(get_number('.tire_price_sum:eq('+rowIndex+')')) || 0;
+      var tonglogs = parseFloat(get_number('.tire_logistics:eq('+rowIndex+')')) || 0;
+      var chiphikhac = parseFloat(get_number('.tire_cost:eq('+rowIndex+')')) || 0;
+      var tong = sumtienmua+nk+vat+tonglogs+chiphikhac;
+      $('.tire_price_total:eq('+rowIndex+')').val(tong);
+      tongcong += tong;
+
+      var giavon = roundDecimal(tong/tire_number,2);
+      $('.tire_price_origin:eq('+rowIndex+')').val(giavon);
+    });
+    $('#tongthue').text(tongthue);
+    $('#tongthuenk').text(tongimport);
+    $('#tongcong').text(tongcong);
+    //updateprice();
+    $('.numbers').val(function(index, value) {
+      return value
+        .replace(/[^0-9-.]/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      ;
+    });
+    $('.numbers').html(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+  });
+  $('.tire_tax_vat').keyup(function(){
+    var tongthue = 0;
+    var tongvat = 0;
+    var tongcong = 0;
+    $('.tire_tax_vat').each(function(){
+      var rowIndex=$(this).closest('tr').index();
+      var vat = parseFloat(get_number($(this)));
+      var nk = parseFloat(get_number('.tire_tax_import:eq('+rowIndex+')')) || 0;
+      $('.tire_tax:eq('+rowIndex+')').val(nk+vat);
+      tongthue += nk+vat;
+      tongvat += vat;
+
+      var tire_number = parseFloat(get_number('.tire_number:eq('+rowIndex+')')) || 0;
+      var sumtienmua = parseFloat(get_number('.tire_price_sum:eq('+rowIndex+')')) || 0;
+      var tonglogs = parseFloat(get_number('.tire_logistics:eq('+rowIndex+')')) || 0;
+      var chiphikhac = parseFloat(get_number('.tire_cost:eq('+rowIndex+')')) || 0;
+      var tong = sumtienmua+nk+vat+tonglogs+chiphikhac;
+      $('.tire_price_total:eq('+rowIndex+')').val(tong);
+      tongcong += tong;
+
+      var giavon = roundDecimal(tong/tire_number,2);
+      $('.tire_price_origin:eq('+rowIndex+')').val(giavon);
+    });
+    $('#tongthue').text(tongthue);
+    $('#tongthuevat').text(tongvat);
+    $('#tongcong').text(tongcong);
+    //updateprice();
+    $('.numbers').val(function(index, value) {
+      return value
+        .replace(/[^0-9-.]/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      ;
+    });
+    $('.numbers').html(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+  });
+  $('.tire_brand').change(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var tire_brand = $(this).val();
+    var tire_size = $('.tire_size:eq('+rowIndex+')').val();
+    var tire_pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+
+    $.ajax({
+        url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+        type: 'GET',
+        data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+        success:function(answer){
+          var data = JSON.parse(answer);
+            $('.tire_price:eq('+rowIndex+')').val(data.gia);
+            $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+            $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+            updateprice();
+        }
+    });
+    
+  });
+  $('.tire_size').change(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var tire_size = $(this).val();
+    var tire_brand = $('.tire_brand:eq('+rowIndex+')').val();
+    var tire_pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+
+    $.ajax({
+        url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+        type: 'GET',
+        data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+        success:function(answer){
+          var data = JSON.parse(answer);
+            $('.tire_price:eq('+rowIndex+')').val(data.gia);
+            $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+            $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+            updateprice();
+        }
+    });
+    
+  });
+  $('.tire_pattern').change(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var tire_pattern = $(this).val();
+    var tire_size = $('.tire_size:eq('+rowIndex+')').val();
+    var tire_brand = $('.tire_brand:eq('+rowIndex+')').val();
+
+    $.ajax({
+        url: '<?php echo BASE_URL ?>/importtireorder/getprice',
+        type: 'GET',
+        data: {tire_brand:tire_brand, tire_size: tire_size, tire_pattern:tire_pattern},
+        success:function(answer){
+          var data = JSON.parse(answer);
+            $('.tire_price:eq('+rowIndex+')').val(data.gia);
+            $('.tire_price_down:eq('+rowIndex+')').val(data.giagiam);
+            $('.tire_stuff:eq('+rowIndex+')').val(data.stuff);
+            updateprice();
+        }
+    });
+    
+  });
+
+  $('input').keyup(function (e) {
+      if (e.which == 39) { // right arrow
+        $(this).closest('td').next().find('input').focus();
+
+      } else if (e.which == 37) { // left arrow
+        $(this).closest('td').prev().find('input').focus();
+
+      } else if (e.which == 40) { // down arrow
+        $(this).closest('tr').next().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+
+      } else if (e.which == 38) { // up arrow
+        $(this).closest('tr').prev().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+      }
+    });
+  $('#dataTable0 tbody tr td:nth-child(2) input').keyup(function(){
+    var val = $(this).val();
+    var trIndex = $(this).closest('tr').index();
+    $('#dataTable1 tbody tr:eq('+trIndex+') td:nth-child(2) input').val(val);
+  });
+  $('#dataTable0 tbody tr td:nth-child(3) input').keyup(function(){
+    var val = $(this).val();
+    var trIndex = $(this).closest('tr').index();
+    $('#dataTable1 tbody tr:eq('+trIndex+') td:nth-child(3) input').val(val);
+  });
+
+  $('.numbers').keyup(function(event) {
+      // skip for arrow keys
+    if(event.which >= 37 && event.which <= 40) return;
+    // format number
+    $(this).val(function(index, value) {
+      return value
+        .replace(/[^0-9-.]/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      ;
+    });
+  });
+
+  
+
+}
+function delRow(id,rowIndex){
+  try{
+      var table=document.getElementById(id);
+      var rowCount=table.rows.length;
+      if(rowCount<=2){
+        alert("Cannot delete all the rows.");
+      }
+      else{
+        table.deleteRow(rowIndex+1);
+      }
+      
+      $('#'+id+' tr:last td input:first').focus();
+      var i=1;
+      $('#'+id+' tbody tr td:first-child').each(function() {
+        $(this).text(i);
+        i++;
+      });
+
+      updateprice();
+      
+  }
+  catch(e){
+      alert(e);
+  }
+}
+</script>
+<style type="text/css">
+.table-container {
+    min-height: 5em;
+    font-size: 11px;
+}
+.table-container table {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    width: 100%;
+}
+.table-container table thead {
+    /* head takes the height it requires, 
+    and it's not scaled when table is resized */
+    flex: 0 0 auto;
+    width: calc(100% - 0.9em);
+}
+.table-container table tbody {
+    /* body takes all the remaining available space */
+    flex: 1 1 auto;
+    display: block;
+    overflow-y: scroll;
+}
+.table-container table tbody tr {
+    width: 100%;
+}
+.table-container table thead,
+.table-container table tbody tr {
+    display: table;
+    table-layout: fixed;
+}
+/* decorations */
+
+.table-container table {
+    border: 1px solid lightgrey;
+}
+.table-container table td, .table-container table th {
+    text-align: center;
+    padding: 0;
+    border: 1px solid lightgrey;
+}
+.table-container table th {
+    border: 1px solid grey;
+}
+.width-3 {
+    width: 3%;
+}
+.width-5 {
+    width: 5%;
+}
+.width-7 {
+    width: 7%;
+}
+.width-10 {
+    width: 10%;
+}
+.table-container table td input{
+  width: 90%;
+  margin: 0;
+}
+
+.right {
+    margin-left: -50px;
+    height: auto;
+    width: auto;
+    background: rgba(0, 0, 0, 0.08);
+    border: 0;
+}
+</style>

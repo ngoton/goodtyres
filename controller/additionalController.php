@@ -23,7 +23,7 @@ Class additionalController Extends baseController {
         }
         else{
             $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'additional_date';
-            $order = $this->registry->router->order_by ? $this->registry->router->order : 'DESC';
+            $order = $this->registry->router->order_by ? $this->registry->router->order : 'ASC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
             $limit = 100;
@@ -70,7 +70,7 @@ Class additionalController Extends baseController {
                 $data['where'] .= ' AND (debit = '.$trangthai.' OR credit = '.$trangthai.')';
             }
             else{
-                $data['where'] .= ' AND (debit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') )';
+                $data['where'] .= ' AND ((debit = '.$trangthai.' OR credit = '.$trangthai.') OR (debit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') ))';
             }
         }
         
@@ -113,7 +113,7 @@ Class additionalController Extends baseController {
                 $data['where'] .= ' AND (debit = '.$trangthai.' OR credit = '.$trangthai.')';
             }
             else{
-                $data['where'] .= ' AND (debit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') )';
+                $data['where'] .= ' AND ((debit = '.$trangthai.' OR credit = '.$trangthai.') OR (debit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$trangthai.') ))';
             }
         }
 
@@ -126,6 +126,8 @@ Class additionalController Extends baseController {
                     OR additional_comment LIKE "%'.$keyword.'%" 
                     OR code LIKE "%'.$keyword.'%" 
                     OR money LIKE "%'.$keyword.'%" 
+                    OR debit IN (SELECT account_id FROM account WHERE account_number LIKE "%'.$keyword.'%" ) 
+                    OR credit IN (SELECT account_id FROM account WHERE account_number LIKE "%'.$keyword.'%" ) 
                 )';
             
                 $data['where'] = $data['where'].' AND '.$search;

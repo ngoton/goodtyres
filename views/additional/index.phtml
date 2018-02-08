@@ -149,11 +149,11 @@ elseif ($order_by == 'money')
             <td class="fix" id="document_number_<?php echo $additional->additional_id; ?>"><?php echo $additional->document_number; ?></td>
             <td class="fix" id="document_date_<?php echo $additional->additional_id; ?>"><?php echo $lib->hien_thi_ngay_thang($additional->document_date); ?></td>
             <td class="fix" id="additional_date_<?php echo $additional->additional_id; ?>"><?php echo $lib->hien_thi_ngay_thang($additional->additional_date); ?></td>
-            <td class="fix" id="additional_comment_<?php echo $additional->additional_id; ?>"><?php echo $additional->additional_comment; ?></td>
+            <td class="fix" id="additional_comment_<?php echo $additional->additional_id; ?>"><a target="_blank" href="<?php echo $additional->daily>0?$this->url('daily/index/'.$additional->daily):($additional->order_tire>0?$this->url('ordertire/orderlist/'.$additional->order_tire):null); ?>"><?php echo $additional->additional_comment; ?></a></td>
             <td class="fix" data="<?php echo $additional->debit ?>" id="debit_<?php echo $additional->additional_id; ?>"><?php echo isset($account_data[$additional->debit])?$account_data[$additional->debit]:null; ?></td>
             <td class="fix" data="<?php echo $additional->credit ?>" id="credit_<?php echo $additional->additional_id; ?>"><?php echo isset($account_data[$additional->credit])?$account_data[$additional->credit]:null; ?></td>
             <td class="fix" id="money_<?php echo $additional->additional_id; ?>"><?php echo $lib->formatMoney($additional->money); ?></td>
-            <td class="fix" id="code_<?php echo $additional->additional_id; ?>"><?php echo $additional->code; ?></td>
+            <td class="fix" id="code_<?php echo $additional->additional_id; ?>"><a target="_blank" href="<?php echo $additional->order_tire>0?$this->url('ordertire/orderlist/'.$additional->order_tire):$this->url('ordertire/orderlist/0/0/0/0/'.$additional->code); ?>"><?php echo $additional->code; ?></a></td>
             <td>
                 <button class="error" onclick="del(<?php echo $additional->additional_id ?>)" >Xóa</button>
                 

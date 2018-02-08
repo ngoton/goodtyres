@@ -5,7 +5,7 @@ Class totalsalaryController Extends baseController {
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
         }
-        if ($_SESSION['role_logined'] > 2 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined']!=10 && $_SESSION['role_logined']!=9) {
+        if ($_SESSION['role_logined'] > 3 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined']!=10 && $_SESSION['role_logined']!=9) {
             return $this->view->redirect('user/login');
         }
         $this->view->data['lib'] = $this->lib;
@@ -749,7 +749,7 @@ Class totalsalaryController Extends baseController {
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
         }
-        if ($_SESSION['role_logined'] > 2 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined']!=10 && $_SESSION['role_logined']!=9) {
+        if ($_SESSION['role_logined'] > 3 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined']!=10 && $_SESSION['role_logined']!=9) {
             return $this->view->redirect('user/login');
         }
         $this->view->data['lib'] = $this->lib;

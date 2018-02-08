@@ -1,524 +1,1354 @@
 <?php
+
 $china = isset($stock[1])?$stock[1]:0;
+
 $linglong = isset($stock[2])?$stock[2]:0;
+
 $zhongce = isset($stock[3])?$stock[3]:0;
+
 ?>
+
 <div class="row">
+
     <div class="col-lg-12 ">
+
         <div class="tablenav top">
+
             <div class="add-box">
+
                 Từ tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytao" id="chonngaytao" placeholder="Chọn tháng" <?php if(isset($ngaytao)) echo "value='$ngaytao'"; ?> >    
+
                 Đến tháng <input class="monthPicker" style="width:90px" type="search" name="chonngaytaobatdau" id="chonngaytaobatdau" placeholder="Chọn tháng" <?php if(isset($ngaytaobatdau)) echo "value='$ngaytaobatdau'"; ?> >  
 
+
+
                 <input type="button" name="chon" id="chon" class="button" value="Chọn" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">        
+
                                             
+
             </div>
+
             <div class="add-box">
+
                       
+
                 Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+
                 Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+
                  <input type="button" name="xem" id="xem" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">  
+
                 
+
             </div>
+
             <?php if ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9) { ?>
+
             <div class="add-box">
+
                 <select name="m" id="chonloc" style="width:200px">
+
                     <option value="">Nhân viên</option>
+
                     <?php foreach ($staffs as $staff) { ?>
+
                         <option value="<?php echo $staff->staff_id ?>"><?php echo $staff->staff_name ?></option>
+
                     <?php } ?>
+
                 </select>
+
                 <input type="button" name="" id="post-query-submit" class="button" value="Apply" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">                              
+
             </div>
+
             <?php } ?>
+
         </div>
+
     </div>
+
 </div>
+
 <section class="content">
+
     <!-- Small boxes (Stat box) -->
+
     <div class="row">
+
         <div class="col-lg-3 col-xs-6">
+
           <!-- small box -->
+
           <div class="small-box bg-aqua">
+
             <div class="inner">
+
               <h4><?php echo $donhang ?></h4>
 
+
+
               <p>Đơn hàng</p>
+
             </div>
+
             <div class="icon">
+
               <i class="ion ion-bag"></i>
+
             </div>
+
             <a href="<?php echo $this->url('ordertire/orderlist') ?>" class="small-box-footer">Chi tiết <i class="fa fa-arrow-circle-right"></i></a>
+
           </div>
+
         </div>
+
         <!-- ./col -->
+
         <div class="col-lg-3 col-xs-6">
+
           <!-- small box -->
+
           <div class="small-box bg-green">
+
             <div class="inner">
+
               <h4><?php echo $sanluong ?></h4>
 
+
+
               <p>Sản lượng</p>
+
             </div>
+
             <div class="icon">
+
               <i class="ion ion-stats-bars"></i>
+
             </div>
+
             <a href="<?php echo $this->url('tiresale/sale') ?>" class="small-box-footer">Chi tiết <i class="fa fa-arrow-circle-right"></i></a>
+
           </div>
+
         </div>
+
         <!-- ./col -->
+
         <div class="col-lg-3 col-xs-6">
+
           <!-- small box -->
+
           <div class="small-box bg-yellow">
+
             <div class="inner">
+
               <h4><?php echo $khachhang ?></h4>
 
+
+
               <p>Khách hàng</p>
+
             </div>
+
             <div class="icon">
+
               <i class="ion ion-person-add"></i>
+
             </div>
+
             <a href="<?php echo $this->url('customer') ?>" class="small-box-footer">Chi tiết <i class="fa fa-arrow-circle-right"></i></a>
+
           </div>
+
         </div>
+
         <!-- ./col -->
+
         <div class="col-lg-3 col-xs-6">
+
           <!-- small box -->
+
           <div class="small-box bg-red">
+
             <div class="inner">
+
               <h4><?php echo $lib->formatMoney($doanhthu) ?></h4>
 
+
+
               <p>Doanh thu</p>
+
             </div>
+
             <div class="icon">
+
               <i class="ion ion-pie-graph"></i>
+
             </div>
+
             <a href="<?php echo $this->url('tiresalary') ?>" class="small-box-footer">Chi tiết <i class="fa fa-arrow-circle-right"></i></a>
+
           </div>
+
         </div>
+
         <!-- ./col -->
+
     </div>
+
     <div class="row">
-      <?php foreach ($staff_sales as $s) {?>
+
+      <?php $seo_dh=0;$seo_sl=0;$seo_khmoi=0;$seo_khcu=0;
+      foreach ($staff_sales as $s) {
+        if($s->user_group!=10){
+      ?>
+
       <div class="col-md-2">
+
         <!-- Widget: user widget style 1 -->
+
         <div class="box box-widget widget-user">
+
           <!-- Add the bg color to the header using any of the bg-* classes -->
+
           <div class="widget-user-header bg-gray">
+
             <!-- /.widget-user-image -->
+
             <h3 class="widget-user-username"><?php echo $s->staff_name ?></h3>
+
             <h5 class="widget-user-desc">Sales</h5>
+
           </div>
+
           <div class="box-footer no-padding">
+
             <ul class="nav nav-stacked">
+
               <li><a href="#">Đơn hàng <span class="pull-right badge bg-blue"><?php echo isset($info_staff['dh'][$s->account])?$info_staff['dh'][$s->account]:0 ?></span></a></li>
+
               <li><a href="#">Sản lượng <span class="pull-right badge bg-aqua"><?php echo isset($info_staff['sl'][$s->account])?$info_staff['sl'][$s->account]:0 ?></span></a></li>
+
               <li><a href="#">KH mới <span class="pull-right badge bg-green"><?php echo isset($info_staff['khmoi'][$s->account])?$info_staff['khmoi'][$s->account]:0 ?></span></a></li>
+
               <li><a href="#">KH cũ <span class="pull-right badge bg-red"><?php echo isset($info_staff['kh'][$s->account])?$info_staff['kh'][$s->account]-(isset($info_staff['khmoi'][$s->account])?$info_staff['khmoi'][$s->account]:0):0 ?></span></a></li>
+
             </ul>
+
           </div>
+
         </div>
+
         <!-- /.widget-user -->
+
       </div>
-      <?php } ?>
-      
+
+      <?php } 
+      else{
+        $seo_dh += isset($info_staff['dh'][$s->account])?$info_staff['dh'][$s->account]:0;
+        $seo_sl += isset($info_staff['sl'][$s->account])?$info_staff['sl'][$s->account]:0;
+        $seo_khmoi += isset($info_staff['khmoi'][$s->account])?$info_staff['khmoi'][$s->account]:0;
+        $seo_khcu += isset($info_staff['kh'][$s->account])?$info_staff['kh'][$s->account]-(isset($info_staff['khmoi'][$s->account])?$info_staff['khmoi'][$s->account]:0):0;
+      }
+      } ?>
+
+      <div class="col-md-2">
+
+        <!-- Widget: user widget style 1 -->
+
+        <div class="box box-widget widget-user">
+
+          <!-- Add the bg color to the header using any of the bg-* classes -->
+
+          <div class="widget-user-header bg-gray">
+
+            <!-- /.widget-user-image -->
+
+            <h3 class="widget-user-username">Tư Vấn</h3>
+
+            <h5 class="widget-user-desc">SEO</h5>
+
+          </div>
+
+          <div class="box-footer no-padding">
+
+            <ul class="nav nav-stacked">
+
+              <li><a href="#">Đơn hàng <span class="pull-right badge bg-blue"><?php echo $seo_dh ?></span></a></li>
+
+              <li><a href="#">Sản lượng <span class="pull-right badge bg-aqua"><?php echo $seo_sl ?></span></a></li>
+
+              <li><a href="#">KH mới <span class="pull-right badge bg-green"><?php echo $seo_khmoi ?></span></a></li>
+
+              <li><a href="#">KH cũ <span class="pull-right badge bg-red"><?php echo $seo_khcu ?></span></a></li>
+
+            </ul>
+
+          </div>
+
+        </div>
+
+        <!-- /.widget-user -->
+
+      </div>
+
     </div>
+
     <!-- /.row -->
+
     <div class="row">
+
         <section class="col-lg-12 connectedSortable">
 
+
+
           <!-- solid sales graph -->
+
           <div class="box box-solid">
+
             <div class="box-header">
+
               <i class="fa fa-th"></i>
+
+
 
               <h3 class="box-title">Biểu đồ sản lượng</h3>
 
+
+
               <div class="box-tools pull-right">
+
                 <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+
                 </button>
+
                 <button type="button" class="btn bg-teal btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+
                 </button>
+
               </div>
+
             </div>
+
             <div class="box-body border-radius-none">
+
               <div class="chart" id="line-chart" style="height: 250px;"></div>
+
             </div>
+
             <!-- /.box-body -->
+
             <!-- /.box-footer -->
+
           </div>
+
           <!-- /.box -->
 
+
+
         </section>
+
     </div>
+
     <!-- /.row -->
     <div class="row">
-        <!-- Left col -->
-        <div class="col-md-8">
-        <!-- TABLE: LATEST ORDERS -->
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">Tồn kho</h3>
+
+        <section class="col-lg-12 connectedSortable">
+
+
+
+          <!-- solid sales graph -->
+
+          <div class="box box-solid">
+
+            <div class="box-header">
+
+              <i class="fa fa-th"></i>
+
+
+
+              <h3 class="box-title">Biểu đồ sản lượng</h3>
+
+
 
               <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+
+                <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+
                 </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+
+                <button type="button" class="btn bg-teal btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+
+                </button>
+
               </div>
+
             </div>
+
+            <div class="box-body border-radius-none">
+
+              <div class="chart">
+                <canvas id="lineChart" style="height:250px"></canvas>
+              </div>
+
+            </div>
+
+            <!-- /.box-body -->
+
+            <!-- /.box-footer -->
+
+          </div>
+
+          <!-- /.box -->
+
+
+
+        </section>
+
+    </div>
+
+    <!-- /.row -->
+
+    <div class="row">
+
+        <section class="col-lg-12 connectedSortable">
+
+
+
+          <!-- solid sales graph -->
+
+          <div class="box box-solid">
+
+            <div class="box-header">
+
+              <i class="fa fa-th"></i>
+
+
+
+              <h3 class="box-title">Biểu đồ doanh thu</h3>
+
+
+
+              <div class="box-tools pull-right">
+
+                <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+
+                </button>
+
+                <button type="button" class="btn bg-teal btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+
+                </button>
+
+              </div>
+
+            </div>
+
+            <div class="box-body border-radius-none">
+
+              <div class="chart" id="line-chart2" style="height: 250px;"></div>
+
+            </div>
+
+            <!-- /.box-body -->
+
+            <!-- /.box-footer -->
+
+          </div>
+
+          <!-- /.box -->
+
+
+
+        </section>
+
+    </div>
+
+    <!-- /.row -->
+
+    <div class="row">
+
+        <!-- Left col -->
+
+        <div class="col-md-8">
+
+        <!-- TABLE: LATEST ORDERS -->
+
+          <div class="box box-info">
+
+            <div class="box-header with-border">
+
+              <h3 class="box-title">Tồn kho</h3>
+
+
+
+              <div class="box-tools pull-right">
+
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+
+                </button>
+
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+
+              </div>
+
+            </div>
+
             <!-- /.box-header -->
+
             <div class="box-body">
+
               <div class="table-responsive" style="max-height: 200px;overflow-y: scroll;">
+
                 <table class="table no-margin table_data">
+
                   <thead>
+
                   <tr>
+
                     <th>STT</th>
+
                     <th>Hình ảnh</th>
+
                     <th>Thương hiệu</th>
+
                     <th>Kích cỡ</th>
+
                     <th>Mã gai</th>
+
                     <th>Tồn kho</th>
+
                   </tr>
+
                   </thead>
+
                   <tbody>
+
                   <?php $k=1; $doanhthu=0; $chiphi=0; $loinhuan=0; $soluong = 0; $daban=0; $tonkho=0; ?>
+
                     <?php foreach ($tire_buys as $tire_buy) : ?>
+
                     
+
                     <?php 
+
                         $doanhthu += (isset($tire_buy_data[$tire_buy->tire_buy_id]['revenue'])?$tire_buy_data[$tire_buy->tire_buy_id]['revenue']:0);
+
                         $chiphi += (isset($tire_buy_data[$tire_buy->tire_buy_id]['cost'])?$tire_buy_data[$tire_buy->tire_buy_id]['cost']:0);
+
                         $soluong += $tire_buy->soluong;
+
                         $daban += (isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']:0);
+
+
 
                         $ton = $tire_buy->soluong - (isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']:0);
 
+
+
                         if($ton > 0){
+
                     ?>
+
                         
+
                         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_buy->tire_buy_id ?>" class="edit_tr">
+
                             
+
                             
+
                             <td  class="fix"><?php echo $k++; ?></td>
+
                             <td  class="fix"><img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $link_picture[$tire_buy->tire_buy_id]['image']; ?>" width="50" height="50" /></td>
+
                             <td class="fix" id="tire_buy_brand_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_brand_name; ?></td>
+
                             <td class="fix" id="tire_buy_size_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_size_number; ?></td>
+
                             <td class="fix" data="<?php echo $tire_buy->tire_buy_pattern; ?>" id="tire_buy_pattern_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_pattern_name; ?></td>
+
                             
+
                             <td class="fix" id="conlai_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney($ton ); ?></td>
+
                             
+
                         </tr>
 
+
+
                     <?php } ?>
+
                     <?php endforeach; ?>
 
+
+
                     <tr style="text-align:center; font-weight: bold; color: red;">
+
                         <td class="fix" colspan="5" >Tổng cộng</td>
+
                         <td class="fix"><?php echo $soluong-$daban; ?></td>
+
                     </tr>
+
                   </tbody>
+
                 </table>
+
               </div>
+
               <!-- /.table-responsive -->
+
             </div>
+
             <!-- /.box-body -->
+
             <div class="box-footer clearfix">
+
               <a href="<?php echo $this->url('ordertire') ?>" class="btn btn-sm btn-info btn-flat pull-left">Đặt hàng</a>
+
               <a href="<?php echo $this->url('stock') ?>" class="btn btn-sm btn-default btn-flat pull-right">Xem tồn kho</a>
+
             </div>
+
             <!-- /.box-footer -->
+
           </div>
+
           <!-- /.box -->
+
         </div>
+
         <div class="col-md-4">
+
             <div class="box box-default">
+
             <div class="box-header with-border">
+
               <h3 class="box-title">Chi tiết</h3>
 
+
+
               <div class="box-tools pull-right">
+
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+
                 </button>
+
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+
               </div>
+
             </div>
+
             <!-- /.box-header -->
+
             <div class="box-body">
+
               <div class="row">
+
                 <div class="col-md-8">
+
                   <div class="chart-responsive">
+
                     <canvas id="pieChart" height="150"></canvas>
+
                   </div>
+
                   <!-- ./chart-responsive -->
+
                 </div>
+
                 <!-- /.col -->
+
                 <div class="col-md-4">
+
                   <ul class="chart-legend clearfix">
+
                     <li><i class="fa fa-circle-o text-red"></i> China</li>
+
                     <li><i class="fa fa-circle-o text-green"></i> Linglong</li>
+
                     <li><i class="fa fa-circle-o text-yellow"></i> Zhongce</li>
+
                   </ul>
+
                 </div>
+
                 <!-- /.col -->
+
               </div>
+
               <!-- /.row -->
+
             </div>
+
             <!-- /.box-body -->
+
             <div class="box-footer no-padding">
+
               <ul class="nav nav-pills nav-stacked">
+
                 <li><a href="#">China
+
                     <span class="pull-right text-red"><?php echo round(($china*100)/($china+$linglong+$zhongce),1) ?>%</span></a></li>
+
                 <li><a href="#">Linglong 
+
                     <span class="pull-right text-green"><?php echo round(($linglong*100)/($china+$linglong+$zhongce),1) ?>%</span></a>
+
                 </li>
+
                 <li><a href="#">Zhongce
+
                   <span class="pull-right text-yellow"><?php echo round(($zhongce*100)/($china+$linglong+$zhongce),1) ?>%</span></a></li>
+
               </ul>
+
             </div>
+
             <!-- /.footer -->
+
           </div>
+
           <!-- /.box -->
+
         </div>
+
     </div>
+
     <!-- /.row -->
+
 </section>
+
 <!-- ChartJS 1.0.1 -->
+
 <script src="<?php BASE_URL ?>/public/js/adminbar/plugins/chartjs/Chart.min.js"></script>
+
 <script>
-var y = ['item2','item1'];
-var lb = ['Doanh thu (triệu)','Sản lượng (bộ)'];
-<?php foreach ($staff_datas as $st) { ?>
+
+var y = ['item1'];
+
+var lb = ['Sản lượng'];
+
+var y2 = ['item2'];
+
+var lb2 = ['Doanh thu'];
+
+
+
+<?php foreach ($staff_datas as $st) { 
+  if ($st->user_group!=10) {
+?>
+
   y.push('staff<?php echo $st->staff_id ?>');
+
   lb.push('- <?php echo $st->staff_name ?>');
-<?php } ?>
+
+  y2.push('staff<?php echo $st->staff_id ?>');
+
+  lb2.push('- <?php echo $st->staff_name ?>');
+
+<?php }} ?>
+
+
+  y.push('seo');
+
+  lb.push('- Tư vấn');
+
+  y2.push('seo');
+
+  lb2.push('- Tư vấn');
 
 
   $(function () {
+
     "use strict";
 
 
+
+
+
     // LINE CHART
+
     var line = new Morris.Line({
+
       element: 'line-chart',
+
       resize: true,
+
       data: <?php echo $graph ?>,
+
       xkey: 'y',
+
       ykeys: y,
+
       labels: lb,
+
       lineColors: ['#f39c12','#dd4b39','#00a65a','#269abc','#8226bc','#2D619C','#aabd08'],
+
     });
+
+
 
   });
 
+
+
+  
+
+    $(function () {
+
+      "use strict";
+
+
+
+
+
+      // LINE CHART
+
+      var line = new Morris.Line({
+
+        element: 'line-chart2',
+
+        resize: true,
+
+        data: <?php echo $graph2 ?>,
+
+        xkey: 'y',
+
+        ykeys: y2,
+
+        labels: lb2,
+
+        lineColors: ['#f39c12','#dd4b39','#00a65a','#269abc','#8226bc','#2D619C','#aabd08'],
+
+      });
+
+
+
+    });
+
+
+
   //-------------
+
     //- PIE CHART -
+
     //-------------
+
     // Get context with jQuery - using jQuery's .get() method.
+
     var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+
     var pieChart = new Chart(pieChartCanvas);
+
     var PieData = [
+
       {
+
         value: <?php echo $china; ?>,
+
         color: "#f56954",
+
         highlight: "#f56954",
+
         label: "China"
+
       },
+
       {
+
         value: <?php echo $linglong; ?>,
+
         color: "#00a65a",
+
         highlight: "#00a65a",
+
         label: "Linglong"
+
       },
+
       {
+
         value: <?php echo $zhongce; ?>,
+
         color: "#f39c12",
+
         highlight: "#f39c12",
+
         label: "Zhongce"
+
       }
+
     ];
+
     var pieOptions = {
+
       //Boolean - Whether we should show a stroke on each segment
+
       segmentShowStroke: true,
+
       //String - The colour of each segment stroke
+
       segmentStrokeColor: "#fff",
+
       //Number - The width of each segment stroke
+
       segmentStrokeWidth: 2,
+
       //Number - The percentage of the chart that we cut out of the middle
+
       percentageInnerCutout: 50, // This is 0 for Pie charts
+
       //Number - Amount of animation steps
+
       animationSteps: 100,
+
       //String - Animation easing effect
+
       animationEasing: "easeOutBounce",
+
       //Boolean - Whether we animate the rotation of the Doughnut
+
       animateRotate: true,
+
       //Boolean - Whether we animate scaling the Doughnut from the centre
+
       animateScale: false,
+
       //Boolean - whether to make the chart responsive to window resizing
+
       responsive: true,
+
       // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+
       maintainAspectRatio: true,
+
       //String - A legend template
+
       legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+
     };
+
     //Create pie or douhnut chart
+
     // You can switch between pie and douhnut using the method below.
+
     pieChart.Doughnut(PieData, pieOptions);
 
+    <?php 
+    $datasets = array();
+    $max = date('Y');
+    $k=0;
+    $colors = array("#e65208", "#4179a5", "#91dc5a", "#f38334", "#d1cfbe", "#69547c", "#3eb984");
+    for($i=2015; $i<=$max; $i++){
+      $color = $colors[$k];
+      $datasets[$k]['label'] = "Năm ".$i;
+      $datasets[$k]['fillColor'] = $color;
+      $datasets[$k]['strokeColor'] = $color;
+      $datasets[$k]['pointColor'] = $color;
+      $datasets[$k]['pointStrokeColor'] = $color;
+      $datasets[$k]['pointHighlightFill'] = "#fff";
+      $datasets[$k]['pointHighlightStroke'] = $color;
+      for ($j = 1; $j <= 12; $j++) {
+        $datasets[$k]['data'][] = isset($sl[$j][$i])?$sl[$j][$i]:null;
+      }
+      $k++;
+    }
+    ?>
+    var dataset = <?php echo json_encode($datasets); ?>;
+    
+    
+
+    var areaChartData = {
+      labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+      datasets: dataset
+    };
+
+    var areaChartOptions = {
+      //Boolean - If we should show the scale at all
+      showScale: true,
+      //Boolean - Whether grid lines are shown across the chart
+      scaleShowGridLines: false,
+      //String - Colour of the grid lines
+      scaleGridLineColor: "rgba(0,0,0,.05)",
+      //Number - Width of the grid lines
+      scaleGridLineWidth: 1,
+      //Boolean - Whether to show horizontal lines (except X axis)
+      scaleShowHorizontalLines: true,
+      //Boolean - Whether to show vertical lines (except Y axis)
+      scaleShowVerticalLines: true,
+      //Boolean - Whether the line is curved between points
+      bezierCurve: true,
+      //Number - Tension of the bezier curve between points
+      bezierCurveTension: 0.3,
+      //Boolean - Whether to show a dot for each point
+      pointDot: false,
+      //Number - Radius of each point dot in pixels
+      pointDotRadius: 4,
+      //Number - Pixel width of point dot stroke
+      pointDotStrokeWidth: 1,
+      //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+      pointHitDetectionRadius: 20,
+      //Boolean - Whether to show a stroke for datasets
+      datasetStroke: true,
+      //Number - Pixel width of dataset stroke
+      datasetStrokeWidth: 2,
+      //Boolean - Whether to fill the dataset with a color
+      datasetFill: true,
+      //String - A legend template
+      legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+      //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+      maintainAspectRatio: true,
+      //Boolean - whether to make the chart responsive to window resizing
+      responsive: true,
+
+      title:{
+          display:true,
+          text:'Sản lượng'
+      },
+      tooltips: {
+          mode: 'index',
+          intersect: false,
+      },
+      hover: {
+          mode: 'nearest',
+          intersect: true
+      },
+    };
+
+    //Create the line chart
+    
+
+    //-------------
+    //- LINE CHART -
+    //--------------
+    var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
+    var lineChart = new Chart(lineChartCanvas);
+    var lineChartOptions = areaChartOptions;
+    lineChartOptions.datasetFill = false;
+    lineChart.Line(areaChartData, lineChartOptions);
+
+
   var pickerOpts3 = {
+
         closeText: "Đóng",
+
         currentText: "Hiện tại",
+
         nextText: "Tiếp",
+
         prevText: "Quay lại",
+
         monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+
         "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+
         monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+
         "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+
         dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+
         "Thứ sáu", "Thứ bảy"],
+
         dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+
         "T6", "T7"],
+
         dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+
         "T6", "T7"],
+
         //defaultDate: "+1w",
+
         changeMonth: true,
+
         changeYear: true,
+
         dateFormat: 'dd-mm-yy',
+
         firstDay: 1,
+
         showWeek: true,
+
         weekHeader: 'Tuần',
+
         isRTL: false,
+
         showButtonPanel: true,
+
         onClose: function(selectedDate) {
+
                 
+
                 $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
 
+
+
          },
+
          
+
     };  
+
     $("#batdau").datepicker(pickerOpts3);
 
+
+
     var pickerOpts4 = {
+
         closeText: "Đóng",
+
         currentText: "Hiện tại",
+
         nextText: "Tiếp",
+
         prevText: "Quay lại",
+
         monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+
         "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+
         monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+
         "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+
         dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+
         "Thứ sáu", "Thứ bảy"],
+
         dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+
         "T6", "T7"],
+
         dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+
         "T6", "T7"],
+
         //defaultDate: "+1w",
+
         changeMonth: true,
+
         changeYear: true,
+
         dateFormat: 'dd-mm-yy',
+
         firstDay: 1,
+
         showWeek: true,
+
         weekHeader: 'Tuần',
+
         isRTL: false,
+
         showButtonPanel: true,
+
         onClose: function(selectedDate) {
+
                 
+
                 $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+
                 
+
          },
+
          
+
     };  
+
     $("#ketthuc").datepicker(pickerOpts4);
 
+
+
     var pickerOpts = {
+
         closeText: "Đóng",
+
         currentText: "Hiện tại",
+
         nextText: "Tiếp",
+
         prevText: "Quay lại",
+
         monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+
         "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+
         monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+
         "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+
         dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+
         "Thứ sáu", "Thứ bảy"],
+
         dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+
         "T6", "T7"],
+
         dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+
         "T6", "T7"],
+
         changeMonth: true,
+
         changeYear: true,
+
         dateFormat: 'mm/yy',
+
         firstDay: 1,
+
         isRTL: false,
+
         showButtonPanel: true,
+
         onClose: function() {
+
                 $("#chonngaytao").change();
+
          },
+
          
+
     };  
+
     $("#chonngaytao").datepicker(pickerOpts);
 
+
+
     $("#chonngaytao").change(function(){
+
         var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+
         var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+
         $(this).datepicker('setDate', new Date(year, month, 1));
+
+
 
         var firstDay = new Date(year, month, 1);
 
+
+
         $('#batdau').datepicker("setDate", firstDay );
+
     });
+
+
 
     var pickerOpts5 = {
+
         closeText: "Đóng",
+
         currentText: "Hiện tại",
+
         nextText: "Tiếp",
+
         prevText: "Quay lại",
+
         monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+
         "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+
         monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+
         "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+
         dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+
         "Thứ sáu", "Thứ bảy"],
+
         dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+
         "T6", "T7"],
+
         dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+
         "T6", "T7"],
+
         changeMonth: true,
+
         changeYear: true,
+
         dateFormat: 'mm/yy',
+
         firstDay: 1,
+
         isRTL: false,
+
         showButtonPanel: true,
+
         onClose: function() {
+
                 $("#chonngaytaobatdau").change();
+
          },
+
          
+
     };  
+
     $("#chonngaytaobatdau").datepicker(pickerOpts5);
 
+
+
     $("#chonngaytaobatdau").change(function(){
+
         var month = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+
         var year = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+
         $(this).datepicker('setDate', new Date(year, month, 1));
 
+
+
         var lastDay = new Date(year, month+1, 0);
+
         $('#ketthuc').datepicker("setDate", lastDay );
+
     });
+
+
 
     $(".monthPicker").focus(function () {
+
         $(".ui-datepicker-calendar").hide();
+
         $("#ui-datepicker-div").position({
+
             my: "center top",
+
             at: "center bottom",
+
             of: $(this)
+
         });    
+
     });
 
+
+
 <?php if ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9) { ?>
+
     var x = "<?php echo $limit ?>";
+
     $('#chonloc option[value='+x+']').attr('selected','selected');
+
 <?php } ?>
+
 </script>
+
 <style type="text/css">
+
 .morris-hover.morris-default-style{
+
   text-align: right;
+
 }
+
 </style>

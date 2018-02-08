@@ -17,6 +17,9 @@
         <th  class="fix">
             <a class="sort " >Ngày chi </a>
         </th>
+        <th  class="fix">
+            <a class="sort " >Người đề nghị </a>
+        </th>
     </tr>
     
    </thead>
@@ -31,12 +34,14 @@
             <td class="fix" id="comment_<?php echo $order_tire_cost->order_tire_cost_id; ?>">
                 <?php echo $order_tire_cost->comment; ?>
             </td>
-            <td class="fix"  id="order_tire_cost_date_<?php echo $order_tire_cost->order_tire_cost_id; ?>"><?php echo $lib->hien_thi_ngay_thang($order_tire_cost->order_tire_cost_date); ?></td>
+            <td class="fix"  id="order_tire_cost_date_<?php echo $order_tire_cost->order_tire_cost_id; ?>"><?php echo isset($pay_data[$order_tire_cost->order_tire_cost_id]['date'])?$lib->hien_thi_ngay_thang($pay_data[$order_tire_cost->order_tire_cost_id]['date']):null; ?></td>
+            <td class="fix"  id="order_tire_cost_create_user_<?php echo $order_tire_cost->order_tire_cost_id; ?>"><?php echo $pay_data[$order_tire_cost->order_tire_cost_id]['user']; ?></td>
         </tr>
     <?php endforeach; ?>
     <tr style="text-align:center; font-weight: bold; color: red;">
         <td class="fix" colspan="2" >Tổng cộng</td>
         <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
+        <td class="fix" ></td>
         <td class="fix" ></td>
         <td class="fix" ></td>
     </tr>

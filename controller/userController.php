@@ -217,6 +217,7 @@ Class userController Extends baseController {
         $this->view->data['title'] = 'Cập nhật tài khoản';
         $user = $this->model->get('userModel');
         $user_data = $user->getUser($id);
+        $this->view->data['user_data'] = $user_data;
         
         if (!$user_data) {
             $this->view->redirect('user');

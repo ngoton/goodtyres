@@ -6,6 +6,9 @@ Class ordertireController Extends baseController {
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
         }
+        /*if ($_SESSION['role_logined'] == 4) {
+            return $this->view->redirect('admin');
+        }*/
         $this->view->data['lib'] = $this->lib;
         $this->view->data['title'] = 'Lốp xe';
 
@@ -36,8 +39,144 @@ Class ordertireController Extends baseController {
         $this->view->data['tire_sizes'] = $tire_sizes;
         $this->view->data['tire_patterns'] = $tire_patterns;
 
+        $staff_model = $this->model->get('staffModel');
+        $staffs = $staff_model->getAllStaff(array('where'=>'status=1','order_by'=>'staff_name ASC'));
+        $this->view->data['staffs'] = $staffs;
+
 
         $this->view->show('ordertire/index');
+    }
+    public function printhd() {
+        $this->view->disableLayout();
+        $this->view->data['lib'] = $this->lib;
+
+        $order = $this->registry->router->param_id;
+        $ngay = $this->registry->router->order;
+        $thang = $this->registry->router->order_by;
+        $nam = $this->registry->router->page;
+        $sohd = $this->registry->router->addition;
+
+        $tire_order_model = $this->model->get('ordertireModel');
+        $tire_order_list_model = $this->model->get('ordertirelistModel');
+        $customer_model = $this->model->get('customerModel');
+
+        $orders = $tire_order_model->getTire($order);
+
+        $customers = $customer_model->getCustomer($orders->customer);
+
+        $data = array('where'=>'order_tire = '.$order);
+        $join = array('table'=>'order_tire, tire_pattern, tire_brand, tire_size','where'=> 'order_tire=order_tire_id AND tire_brand_id=tire_brand AND tire_size_id=tire_size AND tire_pattern_id=tire_pattern');
+        $order_lists = $tire_order_list_model->getAllTire($data,$join);
+
+        $items = array();
+        $congtien=0;
+        $tongcong=0;
+        $i=1;
+        foreach ($order_lists as $order_list) {
+            $items['stt'][] = $i++;
+            $items['ten'][] = $order_list->tire_brand_name.' '.$order_list->tire_size_number.' '.$order_list->tire_pattern_name;
+            if (strpos($order_list->tire_size_number, '22.5') !== false) {
+                $items['dvt'][] = 'Cái';
+            }
+            else{
+                $items['dvt'][] = 'Bộ';
+            }
+            $items['sl'][] = $order_list->tire_number;
+            $dg = $order_list->check_price_vat==1?$order_list->tire_price_vat*$order_list->vat_percent*0.1/1.1:$order_list->tire_price*$order_list->vat_percent*0.1;
+            $items['dg'][] = round($dg);
+            $items['tt'][] = round($dg*$order_list->tire_number);
+
+            $congtien += $dg*$order_list->tire_number;
+            //$tongcong += $order_list->tire_price_vat*$order_list->tire_number;
+        }
+
+        $tienthue = round($congtien*0.1);
+        $tongcong = round($congtien+$tienthue);
+        $congtien = round($congtien);
+
+        $ngay = ($ngay=="" || $ngay==NULL)?date('d',$orders->delivery_date):$ngay;
+        $thang = ($thang=="" || $nam==NULL)?date('m',$orders->delivery_date):$thang;
+        $nam = ($nam=="" || $nam==NULL)?date('Y',$orders->delivery_date):$nam;
+        
+        
+        $this->view->data['items'] = $items;
+        $this->view->data['customers'] = $customers;
+
+        $this->view->data['ngay'] = $ngay;
+        $this->view->data['thang'] = $thang;
+        $this->view->data['nam'] = $nam;
+        $this->view->data['sohd'] = $sohd;
+        $this->view->data['congtien'] = $congtien;
+        $this->view->data['tienthue'] = $tienthue;
+        $this->view->data['tongcong'] = $tongcong;
+
+        $this->view->show('ordertire/printhd');
+    }
+    public function printpage() {
+        $this->view->disableLayout();
+        $this->view->data['lib'] = $this->lib;
+
+        $order = $this->registry->router->param_id;
+        $ngay = $this->registry->router->order;
+        $thang = $this->registry->router->order_by;
+        $nam = substr($this->registry->router->page,2);
+        $sohd = $this->registry->router->addition;
+
+        $tire_order_model = $this->model->get('ordertireModel');
+        $tire_order_list_model = $this->model->get('ordertirelistModel');
+        $customer_model = $this->model->get('customerModel');
+
+        $orders = $tire_order_model->getTire($order);
+
+        $customers = $customer_model->getCustomer($orders->customer);
+
+        $data = array('where'=>'order_tire = '.$order);
+        $join = array('table'=>'order_tire, tire_pattern, tire_brand, tire_size','where'=> 'order_tire=order_tire_id AND tire_brand_id=tire_brand AND tire_size_id=tire_size AND tire_pattern_id=tire_pattern');
+        $order_lists = $tire_order_list_model->getAllTire($data,$join);
+
+        $items = array();
+        $congtien=0;
+        $tongcong=0;
+        $i=1;
+        foreach ($order_lists as $order_list) {
+            $items['stt'][] = $i++;
+            $items['ten'][] = $order_list->tire_brand_name.' '.$order_list->tire_size_number.' '.$order_list->tire_pattern_name;
+            if (strpos($order_list->tire_size_number, '22.5') !== false) {
+                $items['dvt'][] = 'Cái';
+            }
+            else{
+                $items['dvt'][] = 'Bộ';
+            }
+            $items['sl'][] = $order_list->tire_number;
+            $dg = $order_list->check_price_vat==1?$order_list->tire_price_vat*$order_list->vat_percent*0.1/1.1:$order_list->tire_price*$order_list->vat_percent*0.1;
+            $items['dg'][] = round($dg);
+            $items['tt'][] = round($dg*$order_list->tire_number);
+
+            $congtien += $dg*$order_list->tire_number;
+            //$tongcong += $order_list->tire_price_vat*$order_list->tire_number;
+        }
+
+        $tienthue = round($congtien*0.1);
+        $tongcong = round($congtien+$tienthue);
+        $congtien = round($congtien);
+
+        $ngay = ($ngay=="" || $ngay==NULL)?date('d',$orders->delivery_date):$ngay;
+        $thang = ($thang=="" || $nam==NULL)?date('m',$orders->delivery_date):$thang;
+        $nam = ($nam=="" || $nam==NULL)?substr(date('Y',$orders->delivery_date),2):$nam;
+        
+        
+        $this->view->data['items'] = $items;
+        $this->view->data['customers'] = $customers;
+
+        $this->view->data['ngay'] = $ngay;
+        $this->view->data['thang'] = $thang;
+        $this->view->data['nam'] = $nam;
+        $this->view->data['sohd'] = $sohd;
+        $this->view->data['congtien'] = $congtien;
+        $this->view->data['tienthue'] = $tienthue;
+        $this->view->data['tongcong'] = $tongcong;
+
+        $this->view->show('ordertire/printpage');
     }
     public function printview() {
         $this->view->disableLayout();
@@ -101,10 +240,16 @@ Class ordertireController Extends baseController {
 
             $tire_buy_model = $this->model->get('tirebuyModel');
             $tire_pattern_model = $this->model->get('tirepatternModel');
+            $tire_going_model = $this->model->get('tiregoingModel');
 
             $tire_buys = $tire_buy_model->queryTire('SELECT tire_buy_pattern FROM tire_buy WHERE tire_buy_brand = '.$brand.' GROUP BY tire_buy_pattern');
             foreach ($tire_buys as $tire_buy) {
                 $tire_patterns = $tire_pattern_model->getTire($tire_buy->tire_buy_pattern);
+                $str .= '<option value="'.$tire_patterns->tire_pattern_id.'">'.$tire_patterns->tire_pattern_name.'</option>';
+            }
+            $tire_goings = $tire_going_model->queryTire('SELECT tire_pattern FROM tire_going WHERE tire_pattern NOT IN (SELECT tire_buy_pattern FROM tire_buy WHERE tire_buy_brand = '.$brand.') AND tire_brand = '.$brand.' GROUP BY tire_pattern');
+            foreach ($tire_goings as $tire_going) {
+                $tire_patterns = $tire_pattern_model->getTire($tire_going->tire_pattern);
                 $str .= '<option value="'.$tire_patterns->tire_pattern_id.'">'.$tire_patterns->tire_pattern_name.'</option>';
             }
 
@@ -328,6 +473,8 @@ Class ordertireController Extends baseController {
         $thang = (int)date('m',strtotime($batdau));
         $nam = date('Y',strtotime($batdau));
 
+        $ngayketthuc = date('d-m-Y', strtotime($ketthuc. ' + 1 days'));
+
         $customer_model = $this->model->get('customerModel');
         $customers = $customer_model->getAllCustomer(array(
             'order_by'=> 'customer_name',
@@ -356,11 +503,11 @@ Class ordertireController Extends baseController {
         $pagination_stages = 2;
         
         $data = array(
-            'where' => ' ( (order_tire_status IS NULL OR order_tire_status = 0) OR (order_tire_status = 1 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc).') )',
+            'where' => ' ( (order_tire_status IS NULL OR order_tire_status = 0) OR (order_tire_status = 1 AND delivery_date >= '.strtotime($batdau).' AND delivery_date < '.strtotime($ngayketthuc).') )',
         );
         if ($nv == 1) {
             $data = array(
-                'where' => 'delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc),
+                'where' => 'delivery_date >= '.strtotime($batdau).' AND delivery_date < '.strtotime($ngayketthuc),
             );
         }
 
@@ -376,7 +523,7 @@ Class ordertireController Extends baseController {
         }
 
         if ($code != "" && $code != "undefined") {
-            $data['where'] .= ' AND order_number = '.$code;
+            $data['where'] = 'order_tire_id = '.$code;
         }
 
         if ($sodonhang != "") {
@@ -408,11 +555,11 @@ Class ordertireController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => ' ( (order_tire_status IS NULL OR order_tire_status = 0) OR (order_tire_status = 1 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc).') )',
+            'where' => ' ( (order_tire_status IS NULL OR order_tire_status = 0) OR (order_tire_status = 1 AND delivery_date >= '.strtotime($batdau).' AND delivery_date < '.strtotime($ngayketthuc).') )',
             );
 
         if ($nv == 1) {
-            $data['where'] = 'delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc);
+            $data['where'] = 'delivery_date >= '.strtotime($batdau).' AND delivery_date < '.strtotime($ngayketthuc);
         }
 
         if ($trangthai > 0) {
@@ -427,7 +574,7 @@ Class ordertireController Extends baseController {
         }
 
         if ($code != "" && $code != "undefined") {
-            $data['where'] .= ' AND order_number = '.$code;
+            $data['where'] = 'order_tire_id = '.$code;
         }
 
         if ($sodonhang != "") {
@@ -454,8 +601,17 @@ Class ordertireController Extends baseController {
             $staff[$st->staff_id] = $st->staff_name;
         }
 
+        $staff_sales = $staff_model->getAllStaff(array('where'=>'status=1','order_by'=>'staff_name ASC'));
+        $this->view->data['staffs'] = $staff_sales;
+
+        $tire_price_discount_model = $this->model->get('tirepricediscountModel');
+        $tire_price_discount_event_model = $this->model->get('tirepricediscounteventModel');
+        $tire_list_model = $this->model->get('ordertirelistModel');
         $lift_model = $this->model->get('liftModel');
         $lift = array();
+
+        $order_tire_discount = array();
+
         foreach ($order_tires as $tire) {
             $lifts = $lift_model->getLiftByWhere(array('order_tire'=>$tire->order_tire_id));
             if ($lifts) {
@@ -468,9 +624,72 @@ Class ordertireController Extends baseController {
                         $lift[$tire->order_tire_id] .= ','.$staff[$key];
                     }
                 }
-            }        
+            }  
+
+            $ngay = $tire->delivery_date>0?$tire->delivery_date:strtotime(date('d-m-Y'));
+
+            $tongchiphi = $tire->order_cost+$tire->discount+$tire->reduce;
+            $tongsoluong = $tire->order_tire_number;      
             
+            $data = array(
+                'where' => 'order_tire = '.$tire->order_tire_id,
+            );
+            $sales = $tire_list_model->getAllTire($data);
+            foreach ($sales as $sale) {
+                if ($sale->tire_price_vat=="" || $sale->tire_price_vat==0) {
+                    $dongia = $sale->tire_price+($sale->tire_price*$tire->vat_percent/100);
+                }
+                else{
+                    if ($tire->check_price_vat==1) {
+                        $dongia = $sale->tire_price_vat;
+                    }
+                    else{
+                        $dongia = $sale->tire_price+($sale->tire_price*$tire->vat_percent/100);
+                    }
+                }
+                $tire_price_origin = $dongia;
+
+                $data_q = array(
+                    'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date <= '.$ngay.' AND (end_date IS NULL OR end_date > '.$ngay.')',
+                    'order_by' => 'start_date',
+                    'order' => 'DESC',
+                    'limit' => 1,
+                );
+                $tire_price_discounts = $tire_price_discount_model->getAllTire($data_q);
+
+                $data_e = array(
+                    'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date <= '.$ngay.' AND (end_date IS NULL OR end_date > '.$ngay.')',
+                    'order_by' => 'start_date',
+                    'order' => 'DESC',
+                    'limit' => 1,
+                );
+
+                $tire_price_discount_events = $tire_price_discount_event_model->getAllTire($data_e);
+
+                foreach ($tire_price_discounts as $price) {
+                    $tire_price_origin = $price->tire_price;
+                    foreach ($tire_price_discount_events as $event) {
+                        if ($event->percent_discount > 0) {
+                            $tire_price_origin = $price->tire_price*((100-$event->percent_discount)/100);
+                        }
+                        else{
+                            $tire_price_origin = $price->tire_price-$event->money_discount;
+                        }
+                    }
+                }
+
+                $chiphi = $tongchiphi/$tongsoluong-77000;
+                $chiphi = $chiphi>0?$chiphi:0;
+                
+                $gia = $dongia-$chiphi;
+
+                $order_tire_discount[$tire->order_tire_id]['thu'] = isset($order_tire_discount[$tire->order_tire_id]['thu'])?$order_tire_discount[$tire->order_tire_id]['thu']+$gia:$gia;
+                $order_tire_discount[$tire->order_tire_id]['gia'] = isset($order_tire_discount[$tire->order_tire_id]['gia'])?$order_tire_discount[$tire->order_tire_id]['gia']+$tire_price_origin:$tire_price_origin;
+            }
         }
+
+        $this->view->data['order_tire_discount'] = $order_tire_discount;
+
         $this->view->data['lift'] = $lift;
 
         $this->view->data['order_tires'] = $order_tires;
@@ -528,7 +747,7 @@ Class ordertireController Extends baseController {
         $tg = $this->registry->router->page;
         $stf = $this->registry->router->order_by;
 
-        
+        $ngayketthuc = date('d-m-Y', strtotime($ketthuc. ' + 1 days'));
 
         $customer_model = $this->model->get('customerModel');
         $customers = $customer_model->getAllCustomer(array(
@@ -555,12 +774,12 @@ Class ordertireController Extends baseController {
         
         
         $data = array(
-            'where' => ' ( (order_tire_status IS NULL OR order_tire_status = 0) OR (order_tire_status = 1 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc).') )',
+            'where' => ' ( (order_tire_status IS NULL OR order_tire_status = 0) OR (order_tire_status = 1 AND delivery_date >= '.strtotime($batdau).' AND delivery_date < '.strtotime($ngayketthuc).') )',
         );
 
         if ($nv == 1) {
             $data = array(
-                'where' => 'delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc),
+                'where' => 'delivery_date >= '.strtotime($batdau).' AND delivery_date < '.strtotime($ngayketthuc),
             );
         }
 
@@ -626,11 +845,11 @@ Class ordertireController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => ' ( (order_tire_status IS NULL OR order_tire_status = 0) OR (order_tire_status = 1 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc).') )',
+            'where' => ' ( (order_tire_status IS NULL OR order_tire_status = 0) OR (order_tire_status = 1 AND delivery_date >= '.strtotime($batdau).' AND delivery_date < '.strtotime($ngayketthuc).') )',
             );
 
         if ($nv == 1) {
-            $data['where'] = 'delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc);
+            $data['where'] = 'delivery_date >= '.strtotime($batdau).' AND delivery_date < '.strtotime($ngayketthuc);
         }
 
         if (isset($tg) && $tg > 0) {
@@ -676,12 +895,14 @@ Class ordertireController Extends baseController {
         $costs = array();
         foreach ($order_tires as $tire) {
             $ngay = $tire->order_tire_status==1?$tire->delivery_date:strtotime(date('d-m-Y'));
+            $ngayketthuc = strtotime(date('d-m-Y', strtotime(date('d-m-Y',$ngay). ' + 1 days')));
             $order_tire_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$tire->order_tire_id));
             foreach ($order_tire_lists as $l) {
+                $gia = 0;
                 $data = array(
-                    'where' => '(order_num = "" OR order_num IS NULL) AND start_date <= '.$ngay.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                    'where' => '(order_num = "" OR order_num IS NULL) AND start_date <= '.$ngayketthuc.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
                     'order_by' => 'start_date',
-                    'order' => 'DESC',
+                    'order' => 'DESC, tire_import_id DESC',
                     'limit' => 1,
                 );
                 $tire_imports = $tire_import_model->getAllTire($data);
@@ -693,7 +914,7 @@ Class ordertireController Extends baseController {
                     $data = array(
                         'where' => 'order_num = "'.$tire->order_number.'" AND start_date <= '.strtotime(date('t-m-Y',$ngay)).' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
                         'order_by' => 'start_date',
-                        'order' => 'DESC',
+                        'order' => 'DESC, tire_import_id DESC',
                         'limit' => 1,
                     );
                     $tire_imports = $tire_import_model->getAllTire($data);
@@ -714,16 +935,17 @@ Class ordertireController Extends baseController {
         $tire_sale_model = $this->model->get('tiresaleModel');
         $join = array('table'=>'customer, user, staff','where'=>'customer.customer_id = tire_sale.customer AND staff_id = sale AND account = user_id');
         $data = array(
-            'where' => 'customer = 169 AND tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc),
+            'where' => 'customer = 169 AND tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date < '.strtotime($ngayketthuc),
         );
         $sales = $tire_sale_model->getAllTire($data,$join);
 
         $costs2 = array();
         foreach ($sales as $tire) {
+            $gia = 0;
             $data = array(
                 'where' => '(order_num = "" OR order_num IS NULL) AND start_date <= '.strtotime(date('t-m-Y',$tire->tire_sale_date)).' AND tire_brand = '.$tire->tire_brand.' AND tire_size = '.$tire->tire_size.' AND tire_pattern = '.$tire->tire_pattern,
                 'order_by' => 'start_date',
-                'order' => 'DESC',
+                'order' => 'DESC, tire_import_id DESC',
                 'limit' => 1,
             );
             $tire_imports = $tire_import_model->getAllTire($data);
@@ -746,7 +968,7 @@ Class ordertireController Extends baseController {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $customer_model = $this->model->get('customerModel');
             $tire_sale_model = $this->model->get('tiresaleModel');
-            if ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==3 || $_SESSION['role_logined']==4) {
+            
                 if ($_POST['keyword'] == "*") {
                     $list = $customer_model->getAllCustomer();
                 }
@@ -783,9 +1005,186 @@ Class ordertireController Extends baseController {
                         $type = 1;
                     }
                     // add new option
-                    echo '<li onclick="set_item(\''.$rs->customer_name.'\',\''.$rs->customer_id.'\',\''.$rs->company_name.'\',\''.$rs->customer_phone.'\',\''.$rs->customer_address.'\',\''.$rs->customer_email.'\',\''.$rs->customer_contact.'\',\''.$expect_date.'\',\''.$rs->mst.'\',\''.$type.'\')">'.$customer_name.'</li>';
+                    echo '<li onclick="set_item(\''.$rs->customer_name.'\',\''.$rs->customer_id.'\',\''.$rs->company_name.'\',\''.$rs->customer_phone.'\',\''.$rs->customer_address.'\',\''.$rs->customer_email.'\',\''.$rs->customer_contact.'\',\''.$rs->customer_create_user.'\',\''.$expect_date.'\',\''.$rs->mst.'\',\''.$type.'\')">'.$customer_name.'</li>';
+                
+            }
+        }
+    }
+    public function getcustomerinfo(){
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $tire_sale_model = $this->model->get('tiresaleModel');
+            $customer_model = $this->model->get('customerModel');
+            $company = $_POST['company'];
+            $mst = $_POST['mst'];
+            $phone = $_POST['phone'];
+            $email = $_POST['email'];
+            $type = $_POST['type'];
+            $staff = $_POST['staff'];
+            $customer_name = $_POST['customer_name'];
+            $customer = $_POST['customer'];
+            $address = $_POST['address'];
+            $contact = $_POST['contact'];
+
+            $arr = array(
+                'company'=>$company,
+                'mst'=>$mst,
+                'phone'=>$phone,
+                'email'=>$email,
+                'type'=>$type,
+                'staff'=>$staff,
+                'customer_name'=>$customer_name,
+                'customer'=>$customer,
+                'address'=>$address,
+                'contact'=>$contact,
+            );
+
+            if ($company != "") {
+                $customers = $customer_model->getCustomerByWhere(array('company_name'=>$company));
+                if ($customers) {
+                    $types = $tire_sale_model->getAllTire(array('where'=>'customer='.$customers->customer_id,'order_by'=>'tire_sale_date','order'=>'DESC','limit'=>1));
+                    if ($types) {
+                        foreach ($types as $t) {
+                            $type = $t->customer_type;
+                        }
+                    }
+                    else{
+                        $type = 1;
+                    }
+
+                    $arr = array(
+                        'company'=>$customers->company_name,
+                        'mst'=>$customers->mst,
+                        'phone'=>$customers->customer_phone,
+                        'email'=>$customers->customer_email,
+                        'type'=>$type,
+                        'staff'=>$customers->customer_create_user,
+                        'customer_name'=>$customers->customer_name,
+                        'customer'=>$customers->customer_id,
+                        'address'=>$customers->customer_address,
+                        'contact'=>$customers->customer_contact,
+                    );
                 }
             }
+            else if ($mst != "") {
+                $customers = $customer_model->getCustomerByWhere(array('mst'=>$mst));
+                if ($customers) {
+                    $types = $tire_sale_model->getAllTire(array('where'=>'customer='.$customers->customer_id,'order_by'=>'tire_sale_date','order'=>'DESC','limit'=>1));
+                    if ($types) {
+                        foreach ($types as $t) {
+                            $type = $t->customer_type;
+                        }
+                    }
+                    else{
+                        $type = 1;
+                    }
+
+                    $arr = array(
+                        'company'=>$customers->company_name,
+                        'mst'=>$customers->mst,
+                        'phone'=>$customers->customer_phone,
+                        'email'=>$customers->customer_email,
+                        'type'=>$type,
+                        'staff'=>$customers->customer_create_user,
+                        'customer_name'=>$customers->customer_name,
+                        'customer'=>$customers->customer_id,
+                        'address'=>$customers->customer_address,
+                        'contact'=>$customers->customer_contact,
+                    );
+                }
+            }
+            else if ($phone != "") {
+                $customers = $customer_model->getCustomerByWhere(array('customer_phone'=>$phone));
+                if ($customers) {
+                    $types = $tire_sale_model->getAllTire(array('where'=>'customer='.$customers->customer_id,'order_by'=>'tire_sale_date','order'=>'DESC','limit'=>1));
+                    if ($types) {
+                        foreach ($types as $t) {
+                            $type = $t->customer_type;
+                        }
+                    }
+                    else{
+                        $type = 1;
+                    }
+
+                    $arr = array(
+                        'company'=>$customers->company_name,
+                        'mst'=>$customers->mst,
+                        'phone'=>$customers->customer_phone,
+                        'email'=>$customers->customer_email,
+                        'type'=>$type,
+                        'staff'=>$customers->customer_create_user,
+                        'customer_name'=>$customers->customer_name,
+                        'customer'=>$customers->customer_id,
+                        'address'=>$customers->customer_address,
+                        'contact'=>$customers->customer_contact,
+                    );
+                }
+            }
+            else if ($email != "") {
+                $customers = $customer_model->getCustomerByWhere(array('customer_email'=>$email));
+                if ($customers) {
+                    $types = $tire_sale_model->getAllTire(array('where'=>'customer='.$customers->customer_id,'order_by'=>'tire_sale_date','order'=>'DESC','limit'=>1));
+                    if ($types) {
+                        foreach ($types as $t) {
+                            $type = $t->customer_type;
+                        }
+                    }
+                    else{
+                        $type = 1;
+                    }
+
+                    $arr = array(
+                        'company'=>$customers->company_name,
+                        'mst'=>$customers->mst,
+                        'phone'=>$customers->customer_phone,
+                        'email'=>$customers->customer_email,
+                        'type'=>$type,
+                        'staff'=>$customers->customer_create_user,
+                        'customer_name'=>$customers->customer_name,
+                        'customer'=>$customers->customer_id,
+                        'address'=>$customers->customer_address,
+                        'contact'=>$customers->customer_contact,
+                    );
+                }
+            }
+
+            echo json_encode($arr);
+        }
+    }
+    public function getcustomertire(){
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $customer_model = $this->model->get('customertireModel');
+            
+                if ($_POST['keyword'] == "*") {
+                    $data = array(
+                    'where'=>'( customer_tire_care = '.$_SESSION['userid_logined'].' )',
+                    );
+                    $list = $customer_model->getAllCustomer();
+                }
+                else{
+                    $data = array(
+                    'where'=>'( customer_tire_company LIKE "%'.$_POST['keyword'].'%" AND customer_tire_care = '.$_SESSION['userid_logined'].')',
+                    );
+                    $list = $customer_model->getAllCustomer($data);
+                }
+                
+                $expect_date = "";
+
+                foreach ($list as $rs) {
+                    // put in bold the written text
+                    $customer_name = $rs->customer_tire_company;
+                    if ($_POST['keyword'] != "*") {
+                        $customer_name = str_replace($_POST['keyword'], '<b>'.$_POST['keyword'].'</b>', $rs->customer_tire_company);
+                    }
+                    // add new option
+                    echo '<li onclick="set_item(\''.$rs->customer_tire_company.'\',\''.$rs->customer_tire_id.'\',\''.$rs->customer_tire_company.'\',\''.$rs->customer_tire_phone.'\',\''.($rs->customer_tire_street.', '.$rs->customer_tire_ward.', '.$rs->customer_tire_district.', '.$rs->customer_tire_city).'\',\''.$rs->customer_tire_email.'\',\''.$rs->customer_tire_contact.'\',\''.$rs->customer_tire_care.'\',\''.$expect_date.'\',\''.$rs->customer_tire_mst.'\',\''.($rs->customer_tire_type==1?1:2).'\')">'.$customer_name.'</li>';
+                }
+            
         }
     }
     public function getoldprice(){
@@ -798,10 +1197,12 @@ Class ordertireController Extends baseController {
             $price = array(
                 'price' => "",
                 'max' => 0,
+                'going' => 0,
                 'date' => null,
                 );
 
             $ton = 0;
+            $dangve = 0;
 
             $old = array();
 
@@ -810,6 +1211,8 @@ Class ordertireController Extends baseController {
 
             $order_tire_model = $this->model->get('ordertireModel');
             $order_tire_list_model = $this->model->get('ordertirelistModel');
+
+            $tire_going_model = $this->model->get('tiregoingModel');
 
             $tire_buys = $tire_buy_model->getAllTire(array('where'=>'tire_buy_brand = '.$brand.' AND tire_buy_size = '.$size.' AND tire_buy_pattern = '.$pattern));
             foreach ($tire_buys as $tire) {
@@ -837,7 +1240,11 @@ Class ordertireController Extends baseController {
             }
             $price['max'] = $ton;
 
-            
+            $tire_goings = $tire_going_model->getAllTire(array('where'=>'(status IS NULL OR status != 1 ) AND tire_brand = '.$brand.' AND tire_size = '.$size.' AND tire_pattern = '.$pattern));
+            foreach ($tire_goings as $going) {
+                $dangve += $going->tire_number;
+            }
+            $price['going'] = $dangve;
 
             $sales = $tire_sale_model->queryTire('SELECT * FROM tire_sale WHERE customer = '.$customer.' AND tire_brand = '.$brand.' AND tire_size = '.$size.' AND tire_pattern = '.$pattern.' ORDER BY tire_sale_date DESC LIMIT 1');
             if ($sales) {
@@ -852,39 +1259,53 @@ Class ordertireController Extends baseController {
                 }
             }
             else{
-                $tire_brand_model = $this->model->get('tirebrandModel');
-                $tire_size_model = $this->model->get('tiresizeModel');
-                $tire_pattern_model = $this->model->get('tirepatternModel');
 
-                $tire_brand = $tire_brand_model->getTire($brand);
-                if ($tire_brand->tire_brand_name == "Aoteli" || $tire_brand->tire_brand_name == "Yatai" || $tire_brand->tire_brand_name == "Yatone" || $tire_brand->tire_brand_name == "Three-A") {
-                    $tire_brand_name = "Shengtai";
-                }
-                else if ($tire_brand->tire_brand_name == "Guangda" || $tire_brand->tire_brand_name == "Qiangwei") {
-                        $tire_brand_name = "Amberstone";
-                    }
-                else{
-                    $tire_brand_name = $tire_brand->tire_brand_name;
-                }
-
-                $tire_size_number = $tire_size_model->getTire($size)->tire_size_number;
-                $pattern_type = $tire_pattern_model->getTire($pattern)->tire_pattern_type;
-
-                $tire_quotation_model = $this->model->get('tirequotationModel');
-                $tire_quotation_brand_model = $this->model->get('tirequotationbrandModel');
-                $tire_quotation_size_model = $this->model->get('tirequotationsizeModel');
-
-                $brand = $tire_quotation_brand_model->getTireByWhere(array('tire_quotation_brand_name'=>$tire_brand_name));
-                $brand = $brand?$brand->tire_quotation_brand_id:null;
-                $size = $tire_quotation_size_model->getTireByWhere(array('tire_quotation_size_number'=>$tire_size_number));
-                $size = $size?$size->tire_quotation_size_id:null;
-              
+                $tire_price_discount_model = $this->model->get('tirepricediscountModel');
                 $data_q = array(
-                    'where' => 'tire_quotation_brand ='.$brand.' AND tire_quotation_size ='.$size.' AND tire_quotation_pattern IN ('.$pattern_type.') AND start_date <= '.strtotime(date('d-m-Y')).' AND (end_date IS NULL OR end_date > '.strtotime(date('d-m-Y')).')',
+                    'where' => 'tire_brand ='.$brand.' AND tire_size ='.$size.' AND tire_pattern ='.$pattern.' AND start_date <= '.strtotime(date('d-m-Y')).' AND (end_date IS NULL OR end_date > '.strtotime(date('d-m-Y')).')',
                 );
-                $prices = $tire_quotation_model->getAllTire($data_q);
+                $prices = $tire_price_discount_model->getAllTire($data_q);
                 foreach ($prices as $p) {
-                    $price['price'] = $p->tire_quotation_price;
+                    $price['price'] = $p->tire_price;
+                }
+
+                if (!$prices) {
+                    
+                    $tire_brand_model = $this->model->get('tirebrandModel');
+                    $tire_size_model = $this->model->get('tiresizeModel');
+                    $tire_pattern_model = $this->model->get('tirepatternModel');
+
+                    $tire_brand = $tire_brand_model->getTire($brand);
+                    if ($tire_brand->tire_brand_name == "Aoteli" || $tire_brand->tire_brand_name == "Yatai" || $tire_brand->tire_brand_name == "Yatone" || $tire_brand->tire_brand_name == "Three-A") {
+                        $tire_brand_name = "Shengtai";
+                    }
+                    else if ($tire_brand->tire_brand_name == "Guangda" || $tire_brand->tire_brand_name == "Qiangwei") {
+                            $tire_brand_name = "Amberstone";
+                        }
+                    else{
+                        $tire_brand_name = $tire_brand->tire_brand_name;
+                    }
+
+                    $tire_size_number = $tire_size_model->getTire($size)->tire_size_number;
+                    $pattern_type = $tire_pattern_model->getTire($pattern)->tire_pattern_type;
+
+                    $tire_quotation_model = $this->model->get('tirequotationModel');
+                    $tire_quotation_brand_model = $this->model->get('tirequotationbrandModel');
+                    $tire_quotation_size_model = $this->model->get('tirequotationsizeModel');
+
+                    $brand = $tire_quotation_brand_model->getTireByWhere(array('tire_quotation_brand_name'=>$tire_brand_name));
+                    $brand = $brand?$brand->tire_quotation_brand_id:null;
+                    $size = $tire_quotation_size_model->getTireByWhere(array('tire_quotation_size_number'=>$tire_size_number));
+                    $size = $size?$size->tire_quotation_size_id:null;
+                  
+                    $data_q = array(
+                        'where' => 'tire_quotation_brand ='.$brand.' AND tire_quotation_size ='.$size.' AND tire_quotation_pattern IN ('.$pattern_type.') AND start_date <= '.strtotime(date('d-m-Y')).' AND (end_date IS NULL OR end_date > '.strtotime(date('d-m-Y')).')',
+                    );
+                    $prices = $tire_quotation_model->getAllTire($data_q);
+                    foreach ($prices as $p) {
+                        $price['price'] = $p->tire_quotation_price;
+                    }
+
                 }
                 
             }
@@ -899,6 +1320,7 @@ Class ordertireController Extends baseController {
             $order_tire_model = $this->model->get('ordertireModel');
             $order_tire_list_model = $this->model->get('ordertirelistModel');
             $customer_model = $this->model->get('customerModel');
+            $customer_tire_model = $this->model->get('customertireModel');
             $tire_desrired_model = $this->model->get('tiredesiredModel');
             $tire_pattern_model = $this->model->get('tirepatternModel');
             $tire_brand_model = $this->model->get('tirebrandModel');
@@ -919,14 +1341,15 @@ Class ordertireController Extends baseController {
             if (trim($_POST['customer']) == "") {
                 if (trim($_POST['customer_name']) != "") {
                     $data_cus = array(
-                        'customer_name' => trim($_POST['customer_name']),
-                        'company_name' => trim($_POST['company']),
+                        'customer_name' => addslashes(trim($_POST['customer_name'])),
+                        'company_name' => addslashes(trim($_POST['company'])),
                         'mst' => trim($_POST['mst']),
-                        'customer_address' => trim($_POST['address']),
+                        'customer_address' => addslashes(trim($_POST['address'])),
                         'customer_phone' => trim($_POST['phone']),
                         'customer_email' => trim($_POST['email']),
                         'customer_contact' => trim($_POST['contact']),
-                        'customer_create_user' => $_SESSION['userid_logined'],
+                        'customer_create_user' => trim($_POST['order_staff']),
+                        'customer_tire_type' => $_POST['customer_type'],
                     );
 
                     $customer_model->createCustomer($data_cus);
@@ -935,18 +1358,49 @@ Class ordertireController Extends baseController {
             }
             else{
                 $id_customer = trim($_POST['customer']);
-                $data_cus = array(
-                        'customer_name' => trim($_POST['customer_name']),
-                        'company_name' => trim($_POST['company']),
+                if ($_POST['customer_tire'] == 0) {
+                    $customer_tire = $customer_tire_model->getCustomer($id_customer);
+
+                    $data_cus = array(
+                        'customer_name' => addslashes(trim($_POST['customer_name'])),
+                        'company_name' => addslashes(trim($_POST['company'])),
                         'mst' => trim($_POST['mst']),
-                        'customer_address' => trim($_POST['address']),
+                        'customer_address' => addslashes(trim($_POST['address'])),
                         'customer_phone' => trim($_POST['phone']),
                         'customer_email' => trim($_POST['email']),
                         'customer_contact' => trim($_POST['contact']),
-                        'customer_create_user' => $_SESSION['userid_logined'],
+                        'customer_create_user' => trim($_POST['order_staff']),
+                        'customer_tire_type' => $_POST['customer_type'],
+                        'customer_tire' => $id_customer,
+                        'director' => $customer_tire->customer_tire_director,
+                        'customer_fax' => $customer_tire->customer_tire_fax,
+                        'customer_province' => $customer_tire->customer_tire_province,
+                        'customer_street' => $customer_tire->customer_tire_street,
+                        'customer_ward' => $customer_tire->customer_tire_ward,
+                        'customer_district' => $customer_tire->customer_tire_district,
+                        'customer_city' => $customer_tire->customer_tire_city,
+                        'customer_ref' => $customer_tire->customer_tire_ref,
+                        'customer_care' => $customer_tire->customer_tire_care,
                     );
 
-                $customer_model->updateCustomer($data_cus,array('customer_id'=>$id_customer));
+                    $customer_model->createCustomer($data_cus);
+                    $id_customer = $customer_model->getLastCustomer()->customer_id;
+                }
+                else{
+                    $data_cus = array(
+                        'customer_name' => addslashes(trim($_POST['customer_name'])),
+                        'company_name' => addslashes(trim($_POST['company'])),
+                        'mst' => trim($_POST['mst']),
+                        'customer_address' => addslashes(trim($_POST['address'])),
+                        'customer_phone' => trim($_POST['phone']),
+                        'customer_email' => trim($_POST['email']),
+                        'customer_contact' => trim($_POST['contact']),
+                        'customer_tire_type' => $_POST['customer_type'],
+                    );
+
+                    $customer_model->updateCustomer($data_cus,array('customer_id'=>$id_customer));
+                }
+                
             }
 
             $order_tire = $_POST['order_tire'];
@@ -954,7 +1408,8 @@ Class ordertireController Extends baseController {
             $data = array(
                 'customer_type' => $_POST['customer_type'],
                 'order_tire_date' => strtotime(date('d-m-Y')),
-                'sale' => $_SESSION['userid_logined'],
+                'sale' => trim($_POST['order_staff']),
+                'sale_cskh' => $_SESSION['userid_logined'],
                 'customer' => $id_customer,
                 'payment' => $_POST['payment'],
                 'debt' => $_POST['debt'],
@@ -975,6 +1430,7 @@ Class ordertireController Extends baseController {
                 'vat_percent' => $_POST['vat_percent'],
                 'vat' => trim(str_replace(',','',$_POST['vat'])),
                 'delivery_date' => strtotime($_POST['delivery_date']),
+                'due_date' => strtotime($_POST['due_date']),
                 'total' => trim(str_replace(',','',$_POST['total'])),
                 'order_tire_number' => $_POST['order_tire_number'],
                 'order_tire_status' => 0,
@@ -990,7 +1446,8 @@ Class ordertireController Extends baseController {
                     'order_tire_waiting_date' => strtotime(date('d-m-Y')),
                     'customer' => $id_customer,
                     'customer_type' => $_POST['customer_type'],
-                    'sale' => $_SESSION['userid_logined'],
+                    'sale' => trim($_POST['order_staff']),
+                    'sale_cskh' => $_SESSION['userid_logined'],
                     'order_tire_waiting_number' => 0,
                 );
 
@@ -1031,7 +1488,8 @@ Class ordertireController Extends baseController {
                             'tire_pattern' => $tire_pattern->tire_pattern_type,
                             'tire_pattern_code' => $v['tire_pattern'],
                             'tire_number' => $v['tire_number'] - $v['max_number'],
-                            'sale' => $_SESSION['userid_logined'],
+                            'sale' => trim($_POST['order_staff']),
+                            'sale_cskh' => $_SESSION['userid_logined'],
                             'tire_desired_date' => strtotime(date('d-m-Y')),
                             'tire_desired_priority' => 1,
                             'order_tire' => $id_order_tire,
@@ -1079,6 +1537,9 @@ Class ordertireController Extends baseController {
             $receive = $this->model->get('receiveModel');
             $pay = $this->model->get('payModel');
             $lift = $this->model->get('liftModel');
+            $invoice_tire_model = $this->model->get('invoicetireModel');
+            $invoice_tire_detail_model = $this->model->get('invoicetiredetailModel');
+            $additional_model = $this->model->get('additionalModel');
             if (isset($_POST['xoa'])) {
                 $data = explode(',', $_POST['xoa']);
                 foreach ($data as $data) {
@@ -1103,6 +1564,9 @@ Class ordertireController Extends baseController {
                         $order_tire_cost_model->queryTire('DELETE FROM order_tire_cost WHERE order_tire = '.$data);
                         $tire_sale_model->queryTire('DELETE FROM tire_sale WHERE order_tire = '.$data);
                         $lift->queryLift('DELETE FROM lift WHERE order_tire = '.$data);
+                        $invoice_tire_model->queryInvoice('DELETE FROM invoice_tire WHERE order_tire = '.$data);
+                        $invoice_tire_detail_model->queryInvoice('DELETE FROM invoice_tire_detail WHERE order_tire = '.$data);
+                        $additional_model->queryAdditional('DELETE FROM additional WHERE order_tire = '.$data);
                         $order_tire_model->deleteTire($data);
                         echo "Xóa thành công";
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
@@ -1139,6 +1603,9 @@ Class ordertireController Extends baseController {
                         $order_tire_cost_model->queryTire('DELETE FROM order_tire_cost WHERE order_tire = '.$_POST['data']);
                         $tire_sale_model->queryTire('DELETE FROM tire_sale WHERE order_tire = '.$_POST['data']);
                         $lift->queryLift('DELETE FROM lift WHERE order_tire = '.$_POST['data']);
+                        $invoice_tire_model->queryInvoice('DELETE FROM invoice_tire WHERE order_tire = '.$_POST['data']);
+                        $invoice_tire_detail_model->queryInvoice('DELETE FROM invoice_tire_detail WHERE order_tire = '.$_POST['data']);
+                        $additional_model->queryAdditional('DELETE FROM additional WHERE order_tire = '.$_POST['data']);
                         $order_tire_model->deleteTire($_POST['data']);
                         echo "Xóa thành công";
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
@@ -1160,6 +1627,7 @@ Class ordertireController Extends baseController {
             $tire_pattern_model = $this->model->get('tirepatternModel');
             $tire_waiting_model = $this->model->get('ordertirewaitingModel');
             $customer_model = $this->model->get('customerModel');
+            $customer_tire_model = $this->model->get('customertireModel');
             $tire_brand_model = $this->model->get('tirebrandModel');
             $tire_brands = $tire_brand_model->getAllTire();
             $data_brand = array();
@@ -1177,10 +1645,10 @@ Class ordertireController Extends baseController {
             if (trim($_POST['customer']) == "") {
                 if (trim($_POST['customer_name']) != "") {
                     $data_cus = array(
-                        'customer_name' => trim($_POST['customer_name']),
-                        'company_name' => trim($_POST['company']),
+                        'customer_name' => addslashes(trim($_POST['customer_name'])),
+                        'company_name' => addslashes(trim($_POST['company'])),
                         'mst' => trim($_POST['mst']),
-                        'customer_address' => trim($_POST['address']),
+                        'customer_address' => addslashes(trim($_POST['address'])),
                         'customer_phone' => trim($_POST['phone']),
                         'customer_email' => trim($_POST['email']),
                         'customer_contact' => trim($_POST['contact']),
@@ -1192,25 +1660,54 @@ Class ordertireController Extends baseController {
             }
             else{
                 $id_customer = trim($_POST['customer']);
-                $data_cus = array(
-                        'customer_name' => trim($_POST['customer_name']),
-                        'company_name' => trim($_POST['company']),
+                if ($_POST['customer_tire'] == 0) {
+                    $customer_tire = $customer_tire_model->getCustomer($id_customer);
+
+                    $data_cus = array(
+                        'customer_name' => addslashes(trim($_POST['customer_name'])),
+                        'company_name' => addslashes(trim($_POST['company'])),
                         'mst' => trim($_POST['mst']),
-                        'customer_address' => trim($_POST['address']),
+                        'customer_address' => addslashes(trim($_POST['address'])),
                         'customer_phone' => trim($_POST['phone']),
                         'customer_email' => trim($_POST['email']),
                         'customer_contact' => trim($_POST['contact']),
-                        'customer_create_user' => $_SESSION['userid_logined'],
+                        'customer_create_user' => trim($_POST['order_staff']),
+                        'customer_tire' => $id_customer,
+                        'director' => $customer_tire->customer_tire_director,
+                        'customer_fax' => $customer_tire->customer_tire_fax,
+                        'customer_province' => $customer_tire->customer_tire_province,
+                        'customer_street' => $customer_tire->customer_tire_street,
+                        'customer_ward' => $customer_tire->customer_tire_ward,
+                        'customer_district' => $customer_tire->customer_tire_district,
+                        'customer_city' => $customer_tire->customer_tire_city,
+                        'customer_ref' => $customer_tire->customer_tire_ref,
+                        'customer_care' => $customer_tire->customer_tire_care,
                     );
 
-                $customer_model->updateCustomer($data_cus,array('customer_id'=>$id_customer));
+                    $customer_model->createCustomer($data_cus);
+                    $id_customer = $customer_model->getLastCustomer()->customer_id;
+                }
+                else{
+                    $data_cus = array(
+                        'customer_name' => addslashes(trim($_POST['customer_name'])),
+                        'company_name' => addslashes(trim($_POST['company'])),
+                        'mst' => trim($_POST['mst']),
+                        'customer_address' => addslashes(trim($_POST['address'])),
+                        'customer_phone' => trim($_POST['phone']),
+                        'customer_email' => trim($_POST['email']),
+                        'customer_contact' => trim($_POST['contact']),
+                    );
+
+                    $customer_model->updateCustomer($data_cus,array('customer_id'=>$id_customer));
+                }
             }
 
             $data_waiting = array(
                 'order_tire_waiting_date' => strtotime(date('d-m-Y')),
                 'customer' => $id_customer,
                 'customer_type' => $_POST['customer_type'],
-                'sale' => $_SESSION['userid_logined'],
+                'sale' => trim($_POST['order_staff']),
+                'sale_cskh' => $_SESSION['userid_logined'],
                 'order_tire_waiting_number' => $_POST['total_number'],
             );
 
@@ -1228,7 +1725,8 @@ Class ordertireController Extends baseController {
                     'tire_pattern' => $tire_pattern->tire_pattern_type,
                     'tire_pattern_code' => $v['tire_pattern'],
                     'tire_number' => $v['tire_number'],
-                    'sale' => $_SESSION['userid_logined'],
+                    'sale' => trim($_POST['order_staff']),
+                    'sale_cskh' => $_SESSION['userid_logined'],
                     'tire_desired_date' => strtotime(date('d-m-Y')),
                     'tire_desired_priority' => 1,
                     'order_tire_waiting' => $id_waiting,
@@ -1354,6 +1852,7 @@ Class ordertireController Extends baseController {
     public function listcost($id){
         $this->view->disableLayout();
         $this->view->data['lib'] = $this->lib;
+        $user_model = $this->model->get('userModel');
         $order_tire_cost_model = $this->model->get('ordertirecostModel');
         $join = array('table'=>'shipment_vendor','where'=>'vendor=shipment_vendor_id');
 
@@ -1362,6 +1861,24 @@ Class ordertireController Extends baseController {
         );
 
         $order_tire_costs = $order_tire_cost_model->getAllTire($data,$join);
+
+        $users = $user_model->getAllUser();
+        $user_data = array();
+        foreach ($users as $user) {
+            $user_data[$user->user_id]['username'] = $user->username;
+        }
+
+        $payable_model = $this->model->get('payableModel');
+
+        $pay_data = array();
+        foreach ($order_tire_costs as $order) {
+            $payables = $payable_model->getCostsByWhere(array('order_tire'=>$order->order_tire,'vendor'=>$order->vendor,'cost_type'=>$order->order_tire_cost_type));
+            $pay_data[$order->order_tire_cost_id]['money'] = $payables->pay_money;
+            $pay_data[$order->order_tire_cost_id]['date'] = $payables->pay_date;
+            $pay_data[$order->order_tire_cost_id]['user'] = $order->order_tire_cost_create_user>0?$user_data[$order->order_tire_cost_create_user]['username']:null;
+        }
+        $this->view->data['pay_data'] = $pay_data;
+
         $this->view->data['order_tire_costs'] = $order_tire_costs;
 
         $this->view->show('ordertire/listcost');
@@ -1372,6 +1889,7 @@ Class ordertireController Extends baseController {
         $order_tire_model = $this->model->get('ordertireModel');
         $order_tires = $order_tire_model->getTire($id);
         $this->view->data['order_tires'] = $order_tires;
+        $this->view->data['lock'] = $this->registry->router->page;
 
         $this->view->show('ordertire/listdiscount');
     }
@@ -1443,7 +1961,7 @@ Class ordertireController Extends baseController {
             $number = trim($_POST['tire_number']);
             $price = trim(str_replace(',','',$_POST['tire_price_vat']));
             $check_price_vat = trim($_POST['check_price_vat']);
-            $price_vat = $check_price_vat==1?trim(str_replace(',','',$_POST['tire_price'])):null;
+            $price_vat = trim(str_replace(',','',$_POST['tire_price']));
             $tire_date = trim($_POST['tire_date']);
 
             $data = array(
@@ -1463,44 +1981,30 @@ Class ordertireController Extends baseController {
 
                 $order_tire_list_model->updateTire($data,array('order_tire_list_id'=>$_POST['yes']));
 
-                $total_number = $order_tire->order_tire_number;
-                $total = $order_tire->total;
-                $total_after = $order_tire_list->tire_number*$order_tire_list->tire_price;
-                $vat = $order_tire->vat;
-                $discount = $order_tire->discount;
+                $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire='.$order_tire_list->order_tire));
+                $total_number = 0;
+                $total = 0;
+                $vat = 0;
+                foreach ($order_lists as $od) {
+                    $total_number += $od->tire_number;
+                    
+                    if ($order_tire->check_price_vat == 1) {
+                        $p = $od->tire_price_vat;
+                        $v = round(($p*$order_tire->vat_percent*0.1)/1.1*0.1);
+                        $n = $p-$v;
 
-                $total_number = $total_number - $order_tire_list->tire_number + $number;
-                $total = $total - $total_after;
-
-                if ($order_tire->ck_ttn==1) {
-                    $discount = $discount - ($total_after*0.02) + (($number*$price)*0.02);
-                    $total = $total + ($total_after*0.02) - (($number*$price)*0.02);
-                }
-                if ($order_tire->ck_kho==1) {
-                    $discount = $discount - ($order_tire_list->tire_number*100000) + ($number*100000);
-                    $total = $total + ($order_tire_list->tire_number*100000) - ($number*100000);
-                }
-                if ($order_tire->ck_sl==1) {
-                    if ($order_tire->order_tire_number >= 20 && $order_tire->order_tire_number < 50) {
-                        $discount = $discount - ($total_after*0.01) + (($number*$price)*0.01);
-                        $total = $total + ($total_after*0.01) - (($number*$price)*0.01);
+                        $vat += $v*$od->tire_number;
+                        $total += $od->tire_number*$od->tire_price_vat;
                     }
-                    else if ($order_tire->order_tire_number >= 50 && $order_tire->order_tire_number < 100) {
-                        $discount = $discount - ($total_after*0.02) + (($number*$price)*0.02);
-                        $total = $total + ($total_after*0.02) - (($number*$price)*0.02);
-                    }
-                    else if ($order_tire->order_tire_number >= 100) {
-                        $discount = $discount - ($total_after*0.03) + (($number*$price)*0.03);
-                        $total = $total + ($total_after*0.03) - (($number*$price)*0.03);
+                    else{
+                        $vat += round($od->tire_number*$od->tire_price*$p*$order_tire->vat_percent/100);
+                        $total += $od->tire_number*$od->tire_price;
                     }
                 }
 
-                if ($order_tire->vat_percent > 0) {
-                    $vat = $vat - (($order_tire_list->tire_price_vat-$order_tire_list->tire_price)*$order_tire_list->tire_number) + (($price_vat-$price)*$number);
-                    $total = $total - (($order_tire_list->tire_price_vat-$order_tire_list->tire_price)*$order_tire_list->tire_number) + (($price_vat-$price)*$number);
-                }
+                $discount = $order_tire->discount+$order_tire->reduce;
+                $total = $total - $discount;
 
-                $total = $total + ($number*$price);
 
                 $data_order = array(
                     'discount'=>$discount,
@@ -1595,43 +2099,29 @@ Class ordertireController Extends baseController {
 
                 $order_tire = $order_tire_model->getTire($order_tire_list->order_tire);
 
-                $total_number = $order_tire->order_tire_number;
-                $total = $order_tire->total;
-                $total_after = $order_tire_list->tire_number*$order_tire_list->tire_price;
-                $vat = $order_tire->vat;
-                $discount = $order_tire->discount;
+                $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire='.$order_tire_list->order_tire));
+                $total_number = 0;
+                $total = 0;
+                $vat = 0;
+                foreach ($order_lists as $od) {
+                    $total_number += $od->tire_number;
+                    
+                    if ($order_tire->check_price_vat == 1) {
+                        $p = $od->tire_price_vat;
+                        $v = round(($p*$order_tire->vat_percent*0.1)/1.1*0.1);
+                        $n = $p-$v;
 
-                $total_number = $total_number + $number;
-
-                if ($order_tire->ck_ttn==1) {
-                    $discount = $discount + (($number*$price)*0.02);
-                    $total = $total - (($number*$price)*0.02);
-                }
-                if ($order_tire->ck_kho==1) {
-                    $discount = $discount + ($number*100000);
-                    $total = $total - ($number*100000);
-                }
-                if ($order_tire->ck_sl==1) {
-                    if ($order_tire_list->tire_number >= 20 && $order_tire_list->tire_number < 50) {
-                        $discount = $discount + (($number*$price)*0.01);
-                        $total = $total - (($number*$price)*0.01);
+                        $vat += $v*$od->tire_number;
+                        $total += $od->tire_number*$od->tire_price_vat;
                     }
-                    else if ($order_tire_list->tire_number >= 50 && $order_tire_list->tire_number < 100) {
-                        $discount = $discount + (($number*$price)*0.02);
-                        $total = $total - (($number*$price)*0.02);
-                    }
-                    else if ($order_tire_list->tire_number >= 100) {
-                        $discount = $discount + (($number*$price)*0.03);
-                        $total = $total - (($number*$price)*0.03);
+                    else{
+                        $vat += round($od->tire_number*$od->tire_price*$p*$order_tire->vat_percent/100);
+                        $total += $od->tire_number*$od->tire_price;
                     }
                 }
 
-                if ($order_tire->vat_percent > 0) {
-                    $vat = $vat + (($price_vat-$price)*$number);
-                    $total = $total + (($price_vat-$price)*$number);
-                }
-
-                $total = $total + ($number*$price);
+                $discount = $order_tire->discount+$order_tire->reduce;
+                $total = $total - $discount;
 
                 $data_order = array(
                     'discount'=>$discount,
@@ -1777,15 +2267,17 @@ Class ordertireController Extends baseController {
 
             $obtain_model->updateObtain($obtain_data,array('order_tire'=>$id,'money'=>$order->total));
 
-            $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire='.$id));
-            foreach ($order_lists as $ord) {
-                $tv = round($ord->tire_price_vat*$vat_percent/110);
-                $dg = $ord->tire_price_vat-$tv;
+            if ($order->check_price_vat==1) {
+                $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire='.$id));
+                foreach ($order_lists as $ord) {
+                    $tv = round($ord->tire_price_vat*$vat_percent/110);
+                    $dg = $ord->tire_price_vat-$tv;
 
-                $tire_sale = $tire_sale_model->getTireByWhere(array('tire_brand'=>$ord->tire_brand,'tire_size'=>$ord->tire_size,'tire_pattern'=>$ord->tire_pattern,'order_tire'=>$id));
-                $tire_sale_model->updateTire(array('sell_price'=>$dg),array('tire_sale_id'=>$tire_sale->tire_sale_id));
+                    $tire_sale = $tire_sale_model->getTireByWhere(array('tire_brand'=>$ord->tire_brand,'tire_size'=>$ord->tire_size,'tire_pattern'=>$ord->tire_pattern,'order_tire'=>$id));
+                    $tire_sale_model->updateTire(array('sell_price'=>$dg),array('tire_sale_id'=>$tire_sale->tire_sale_id));
 
-                $order_tire_list_model->updateTire(array('tire_price'=>$dg),array('order_tire_list_id'=>$ord->order_tire_list_id));
+                    $order_tire_list_model->updateTire(array('tire_price'=>$dg),array('order_tire_list_id'=>$ord->order_tire_list_id));
+                }
             }
 
             echo "Cập nhật thành công";
@@ -1801,6 +2293,115 @@ Class ordertireController Extends baseController {
         }
     }
 
+    public function changedue(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_tire_model = $this->model->get('ordertireModel');
+            
+            $id = trim($_POST['data']);
+
+            $data = array(
+                'due_date'=>strtotime($_POST['due_date']),
+            );
+
+            $order_tire_model->updateTire($data,array('order_tire_id'=>$id));
+
+            echo "Cập nhật thành công";
+
+                        date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                        $filename = "action_logs.txt";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|due_date|".$_POST['data']."|order_tire|"."\n"."\r\n";
+                        
+                        $fh = fopen($filename, "a") or die("Could not open log file.");
+                        fwrite($fh, $text) or die("Could not write file!");
+                        fclose($fh);
+
+        }
+    }
+    public function changestaff(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_tire_model = $this->model->get('ordertireModel');
+            
+            $id = trim($_POST['data']);
+            $order_staff = strtolower(trim($_POST['order_staff']));
+
+            $data = array(
+                'sale'=>$order_staff,
+            );
+
+            $order_tire_model->updateTire($data,array('order_tire_id'=>$id));
+
+            $staff_model = $this->model->get('staffModel');
+            $tire_sale_model = $this->model->get('tiresaleModel');
+            $check_sale_salary_model = $this->model->get('checksalesalaryModel');
+
+            $staffs = $staff_model->getStaffByWhere(array('account'=>$order_staff));
+            
+            $data_sale = array(
+                'sale' => $staffs->staff_id,
+            );
+            $tire_sale_model->updateTire($data_sale,array('order_tire'=>$id));
+
+            $data_salary = array(
+                'staff' => $staffs->staff_id,
+            );
+            $check_sale_salary_model->updateSalary($data_salary,array('order_tire'=>$id));
+            
+            echo "Cập nhật thành công";
+
+                        date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                        $filename = "action_logs.txt";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|staff|".$_POST['data']."|order_tire|"."\n"."\r\n";
+                        
+                        $fh = fopen($filename, "a") or die("Could not open log file.");
+                        fwrite($fh, $text) or die("Could not write file!");
+                        fclose($fh);
+
+        }
+    }
+    public function changecustomer(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_tire_model = $this->model->get('ordertireModel');
+            
+            $id = trim($_POST['data']);
+            $order_customer = strtolower(trim($_POST['order_customer']));
+
+            $data = array(
+                'customer'=>$order_customer,
+            );
+
+            $order_tire_model->updateTire($data,array('order_tire_id'=>$id));
+
+            $receivable_model = $this->model->get('receivableModel');
+            $obtain_model = $this->model->get('obtainModel');
+            $tire_sale_model = $this->model->get('tiresaleModel');
+
+            $data_sale = array(
+                'customer' => $order_customer,
+            );
+            $tire_sale_model->updateTire($data_sale,array('order_tire'=>$id));
+
+            $data_obtain = array(
+                'customer' => $order_customer,
+            );
+            $obtain_model->updateObtain($data_obtain,array('order_tire'=>$id));
+
+            $data_receivable = array(
+                'customer' => $order_customer,
+            );
+            $receivable_model->updateCosts($data_receivable,array('order_tire'=>$id));
+            
+            echo "Cập nhật thành công";
+
+                        date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                        $filename = "action_logs.txt";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|customer|".$_POST['data']."|order_tire|"."\n"."\r\n";
+                        
+                        $fh = fopen($filename, "a") or die("Could not open log file.");
+                        fwrite($fh, $text) or die("Could not write file!");
+                        fclose($fh);
+
+        }
+    }
     public function addordernumber(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $order_tire_model = $this->model->get('ordertireModel');
@@ -1871,6 +2472,56 @@ Class ordertireController Extends baseController {
 
         }
     }
+    public function revert(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_tire_model = $this->model->get('ordertireModel');
+            $tire_sale_model = $this->model->get('tiresaleModel');
+            $owe_model = $this->model->get('oweModel');
+            $payable_model = $this->model->get('payableModel');
+            $obtain_model = $this->model->get('obtainModel');
+            $receivable_model = $this->model->get('receivableModel');
+            $assets = $this->model->get('assetsModel');
+            $receive = $this->model->get('receiveModel');
+            $pay = $this->model->get('payModel');
+            $lift = $this->model->get('liftModel');
+
+            $re = $receivable_model->getAllCosts(array('where'=>'order_tire='.$_POST['data']));
+            foreach ($re as $r) {
+                $assets->queryAssets('DELETE FROM assets WHERE receivable='.$r->receivable_id);
+                $receive->queryCosts('DELETE FROM receive WHERE receivable='.$r->receivable_id);
+            }
+            $pa = $payable_model->getAllCosts(array('where'=>'order_tire='.$_POST['data']));
+            foreach ($pa as $p) {
+                $assets->queryAssets('DELETE FROM assets WHERE payable='.$p->payable_id);
+                $pay->queryCosts('DELETE FROM pay WHERE payable='.$p->payable_id);
+            }
+
+            $receivable_model->queryCosts('DELETE FROM receivable WHERE order_tire = '.$_POST['data']);
+            $payable_model->queryCosts('DELETE FROM payable WHERE order_tire = '.$_POST['data']);
+            $obtain_model->queryObtain('DELETE FROM obtain WHERE order_tire = '.$_POST['data']);
+            $owe_model->queryOwe('DELETE FROM owe WHERE order_tire = '.$_POST['data']);
+            $tire_sale_model->queryTire('DELETE FROM tire_sale WHERE order_tire = '.$_POST['data']);
+            $lift->queryLift('DELETE FROM lift WHERE order_tire = '.$_POST['data']);
+
+            $data = array(
+                'order_tire_status'=>null,
+                'delivery_date'=>null,
+                'sale_lock'=>0,
+            );
+
+            $order_tire_model->updateTire($data,array('order_tire_id'=>$_POST['data']));
+
+            echo "Cập nhật thành công";
+
+                        date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                        $filename = "action_logs.txt";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|revert|".$_POST['data']."|order_tire|"."\n"."\r\n";
+                        
+                        $fh = fopen($filename, "a") or die("Could not open log file.");
+                        fwrite($fh, $text) or die("Could not write file!");
+                        fclose($fh);
+        }
+    }
     public function exstock(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $order_tire_model = $this->model->get('ordertireModel');
@@ -1884,134 +2535,140 @@ Class ordertireController Extends baseController {
 
             $id = trim($_POST['data']);
 
-            $data = array(
-                'order_tire_status'=>1,
-                'delivery_date'=>strtotime($_POST['delivery_date']),
-                'sale_lock'=>1,
-            );
-
-            $order_tire_model->updateTire($data,array('order_tire_id'=>$id));
-
-            $week = (int)date('W',$data['delivery_date']);
-            $year = (int)date('Y',$data['delivery_date']);
-
-            if($week == 53){
-                $week = 1;
-                $year = $year+1;
-            }
-            if (((int)date('W',$data['delivery_date']) == 1) && ((int)date('m',$data['delivery_date']) == 12) ) {
-                $year = (int)date('Y',$data['delivery_date'])+1;
-            }
-
-            $owe_model->updateOwe(array('owe_date'=>$data['delivery_date'],'week'=>$week,'year'=>$year),array('order_tire'=>$id));
-            $payable_model->updateCosts(array('payable_date'=>$data['delivery_date'],'week'=>$week,'year'=>$year),array('order_tire'=>$id));
-
             $order_tire = $order_tire_model->getTire($id);
-            $order_tire_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$id));
-            $staff = $staff_model->getStaffByWhere(array('account'=>$order_tire->sale));
 
-            foreach ($order_tire_lists as $order) {
-                $check_vat = $order_tire->vat>0?1:0;
-                //$vat = $order->tire_price*$order_tire->vat_percent/100;
-                $data_sale = array(
-                        
-                    'code' => $order_tire->order_number,
-                    'volume' => $order->tire_number,
-                    'tire_brand' => $order->tire_brand,
-                    'tire_size' => $order->tire_size,
-                    'sell_price' => $order->tire_price,
-                    'sell_price_vat' => $order->tire_price_vat,
-                    'customer' => $order_tire->customer,
-                    'tire_sale_date' => $order_tire->delivery_date,
-                    //'tire_sale_date_expect' => strtotime($_POST['tire_sale_date_expect']),
-                    'tire_pattern' => $order->tire_pattern,
-                    'check_vat' => $check_vat,
-                    'sale' => $staff->staff_id,
-                    'customer_type' => $order_tire->customer_type,
-                    'order_tire' => $id,
-                    'date_manufacture_sale' => $order->tire_date,
+            if ($order_tire->order_tire_status != 1) {
+                $data = array(
+                    'order_tire_status'=>1,
+                    'delivery_date'=>strtotime($_POST['delivery_date']),
+                    'arrival_date'=>strtotime($_POST['arrival_date']),
+                    'sale_lock'=>1,
                 );
-                $tire_sale_model->createTire($data_sale);
-            }
 
-            $obtain_data = array(
-                'obtain_date' => $order_tire->delivery_date,
-                'customer' => $order_tire->customer,
-                'money' => $order_tire->total,
-                'week' => (int)date('W',$order_tire->delivery_date),
-                'year' => (int)date('Y',$order_tire->delivery_date),
-                'order_tire' => $id,
-            );
-            if($obtain_data['week'] == 53){
-                $obtain_data['week'] = 1;
-                $obtain_data['year'] = $obtain_data['year']+1;
-            }
-            if (((int)date('W',$order_tire->delivery_date) == 1) && ((int)date('m',$order_tire->delivery_date) == 12) ) {
-                $obtain_data['year'] = (int)date('Y',$order_tire->delivery_date)+1;
-            }
-            $obtain_model->createObtain($obtain_data);
+                $order_tire_model->updateTire($data,array('order_tire_id'=>$id));
 
-            $receivable_data = array(
-                'customer' => $order_tire->customer,
-                'money' => $order_tire->total,
-                'receivable_date' => $order_tire->delivery_date,
-                'expect_date' => $order_tire->delivery_date,
-                'week' => (int)date('W',$order_tire->delivery_date),
-                'year' => (int)date('Y',$order_tire->delivery_date),
-                'code' => $order_tire->order_number,
-                'source' => 1,
-                'comment' => $order_tire->order_tire_number.' lốp '.$order_tire->order_number,
-                'create_user' => $_SESSION['userid_logined'],
-                'type' => 4,
-                'order_tire' => $id,
-                'check_vat' => $order_tire->vat>0?1:0,
-            );
+                $week = (int)date('W',$data['delivery_date']);
+                $year = (int)date('Y',$data['delivery_date']);
 
-            
-            if($receivable_data['week'] == 53){
-                $receivable_data['week'] = 1;
-                $receivable_data['year'] = $receivable_data['year']+1;
-            }
-            if (((int)date('W',$order_tire->delivery_date) == 1) && ((int)date('m',$order_tire->delivery_date) == 12) ) {
-                $receivable_data['year'] = (int)date('Y',$order_tire->delivery_date)+1;
-            }
-
-            $receivable_model->createCosts($receivable_data);
-
-
-            $lift_model = $this->model->get('liftModel');
-
-            $contributor = "";
-            if(trim($_POST['lift']) != ""){
-                $support = explode(',', trim($_POST['lift']));
-
-                if ($support) {
-                    foreach ($support as $key) {
-                        $name = $staff_model->getStaffByWhere(array('staff_name'=>trim($key)))->staff_id;
-                        if ($contributor == "")
-                            $contributor .= $name;
-                        else
-                            $contributor .= ','.$name;
-                    }
+                if($week == 53){
+                    $week = 1;
+                    $year = $year+1;
+                }
+                if (((int)date('W',$data['delivery_date']) == 1) && ((int)date('m',$data['delivery_date']) == 12) ) {
+                    $year = (int)date('Y',$data['delivery_date'])+1;
                 }
 
-                $data_lift = array(
-                    'lift_date' => $order_tire->delivery_date,
-                    'staff' => $contributor,
+                $owe_model->updateOwe(array('owe_date'=>$data['delivery_date'],'week'=>$week,'year'=>$year),array('order_tire'=>$id));
+                $payable_model->updateCosts(array('payable_date'=>$data['delivery_date'],'week'=>$week,'year'=>$year),array('order_tire'=>$id));
+
+                
+                $order_tire_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$id));
+                $staff = $staff_model->getStaffByWhere(array('account'=>$order_tire->sale));
+
+                foreach ($order_tire_lists as $order) {
+                    $check_vat = $order_tire->vat>0?1:0;
+                    //$vat = $order->tire_price*$order_tire->vat_percent/100;
+                    $data_sale = array(
+                            
+                        'code' => $order_tire->order_number,
+                        'volume' => $order->tire_number,
+                        'tire_brand' => $order->tire_brand,
+                        'tire_size' => $order->tire_size,
+                        'sell_price' => $order->tire_price,
+                        'sell_price_vat' => $order->tire_price_vat,
+                        'customer' => $order_tire->customer,
+                        'tire_sale_date' => $data['delivery_date'],
+                        //'tire_sale_date_expect' => strtotime($_POST['tire_sale_date_expect']),
+                        'tire_pattern' => $order->tire_pattern,
+                        'check_vat' => $check_vat,
+                        'sale' => $staff->staff_id,
+                        'customer_type' => $order_tire->customer_type,
+                        'order_tire' => $id,
+                        'date_manufacture_sale' => $order->tire_date,
+                    );
+                    $tire_sale_model->createTire($data_sale);
+                }
+
+                $obtain_data = array(
+                    'obtain_date' => $data['delivery_date'],
+                    'customer' => $order_tire->customer,
+                    'money' => $order_tire->total,
+                    'week' => (int)date('W',$data['delivery_date']),
+                    'year' => (int)date('Y',$data['delivery_date']),
                     'order_tire' => $id,
                 );
-                $lift_model->createLift($data_lift);
+                if($obtain_data['week'] == 53){
+                    $obtain_data['week'] = 1;
+                    $obtain_data['year'] = $obtain_data['year']+1;
+                }
+                if (((int)date('W',$data['delivery_date']) == 1) && ((int)date('m',$data['delivery_date']) == 12) ) {
+                    $obtain_data['year'] = (int)date('Y',$data['delivery_date'])+1;
+                }
+                $obtain_model->createObtain($obtain_data);
+
+                $receivable_data = array(
+                    'customer' => $order_tire->customer,
+                    'money' => $order_tire->total,
+                    'receivable_date' => $data['delivery_date'],
+                    'expect_date' => $data['delivery_date'],
+                    'week' => (int)date('W',$data['delivery_date']),
+                    'year' => (int)date('Y',$data['delivery_date']),
+                    'code' => $order_tire->order_number,
+                    'source' => 1,
+                    'comment' => $order_tire->order_tire_number.' lốp '.$order_tire->order_number,
+                    'create_user' => $_SESSION['userid_logined'],
+                    'type' => 4,
+                    'order_tire' => $id,
+                    'check_vat' => $order_tire->vat>0?1:0,
+                );
+
+                
+                if($receivable_data['week'] == 53){
+                    $receivable_data['week'] = 1;
+                    $receivable_data['year'] = $receivable_data['year']+1;
+                }
+                if (((int)date('W',$data['delivery_date']) == 1) && ((int)date('m',$data['delivery_date']) == 12) ) {
+                    $receivable_data['year'] = (int)date('Y',$data['delivery_date'])+1;
+                }
+
+                $receivable_model->createCosts($receivable_data);
+
+
+                $lift_model = $this->model->get('liftModel');
+
+                $contributor = "";
+                if(trim($_POST['lift']) != ""){
+                    $support = explode(',', trim($_POST['lift']));
+
+                    if ($support) {
+                        foreach ($support as $key) {
+                            $name = $staff_model->getStaffByWhere(array('staff_name'=>trim($key)))->staff_id;
+                            if ($contributor == "")
+                                $contributor .= $name;
+                            else
+                                $contributor .= ','.$name;
+                        }
+                    }
+
+                    $data_lift = array(
+                        'lift_date' => $data['delivery_date'],
+                        'staff' => $contributor,
+                        'order_tire' => $id,
+                    );
+                    $lift_model->createLift($data_lift);
+                }
+
+                echo "Cập nhật thành công";
+
+                            date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                            $filename = "action_logs.txt";
+                            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|exstock|".$_POST['data']."|order_tire|"."\n"."\r\n";
+                            
+                            $fh = fopen($filename, "a") or die("Could not open log file.");
+                            fwrite($fh, $text) or die("Could not write file!");
+                            fclose($fh);
             }
-
-            echo "Cập nhật thành công";
-
-                        date_default_timezone_set("Asia/Ho_Chi_Minh"); 
-                        $filename = "action_logs.txt";
-                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|exstock|".$_POST['data']."|order_tire|"."\n"."\r\n";
-                        
-                        $fh = fopen($filename, "a") or die("Could not open log file.");
-                        fwrite($fh, $text) or die("Could not write file!");
-                        fclose($fh);
+            
 
         }
     }
@@ -2032,6 +2689,7 @@ Class ordertireController Extends baseController {
             $data = array(
                 'order_tire_status'=>1,
                 'delivery_date'=>strtotime($_POST['delivery_date']),
+                'arrival_date'=>strtotime($_POST['arrival_date']),
             );
 
             $order_tire_model->updateTire($data,array('order_tire_id'=>$id));
@@ -2257,6 +2915,7 @@ Class ordertireController Extends baseController {
                     'vendor' => $v['vendor'],
                     'comment' => trim($v['comment']),
                     'order_tire_cost_type' => $v['order_tire_cost_type'],
+                    'order_tire_cost_create_user' => $_SESSION['userid_logined'],
                 );
                 $cost += $cost_data['order_tire_cost'];
 
@@ -2320,12 +2979,32 @@ Class ordertireController Extends baseController {
                         
                     }
 
+                    
+
+                    date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                    $filename = "action_logs.txt";
+                    $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."add"."|".$data_order_cost->order_tire_cost_id."|order_tire_cost_|"."\n"."\r\n";
+                    
+                    $fh = fopen($filename, "a") or die("Could not open log file.");
+                    fwrite($fh, $text) or die("Could not write file!");
+                    fclose($fh);
+
                 }
                 else{
                     $order_cost_model->createTire($cost_data);
 
                     $owe_model->createOwe($owe_data);
                     $payable_model->createCosts($payable_data);
+
+                    $last_cost = $order_cost_model->getLastTire()->order_tire_cost_id;
+
+                    date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                    $filename = "action_logs.txt";
+                    $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."add"."|".$last_cost."|order_tire_cost_|"."\n"."\r\n";
+                    
+                    $fh = fopen($filename, "a") or die("Could not open log file.");
+                    fwrite($fh, $text) or die("Could not write file!");
+                    fclose($fh);
                 }
             }
 
@@ -2515,8 +3194,15 @@ Class ordertireController Extends baseController {
 
                      $ten = $vendor_model->getvendor($v->vendor);
 
+                    $lock = null;
+                    if ($_SESSION['role_logined'] != 1) {
+                        if ($v->order_tire_cost_create_user>0 && $v->order_tire_cost_create_user != $_SESSION['userid_logined']) {
+                            $lock = 'disabled';
+                        }
+                    }
+
                     $str .= '<tr class="'.$v->order_tire.'">';
-                    $str .= '<td><input '.$payed.' type="checkbox" name="chk" tabindex="'.$v->order_tire_cost_type.'" data="'.$v->order_tire .'" class="'.$v->vendor.'" title="'.($v->order_tire_cost).'"></td>';
+                    $str .= '<td><input '.$payed.' type="checkbox" name="chk" tabindex="'.$v->order_tire_cost_type.'" data="'.$v->order_tire .'" class="'.$v->vendor.'" title="'.($v->order_tire_cost).'" '.$lock.'></td>';
                     $str .= '<td><table style="width: 100%">';
                     $str .= '<tr class="'.$v->order_tire .'">';
                     $str .= '<td></td><td>Loại chi phí</td>';
@@ -2535,13 +3221,13 @@ Class ordertireController Extends baseController {
                     $str .= '<ul class="customer_list_id"></ul></td>';
                     //$str .= '<td></td><td> Vendor</td><td><select disabled tabindex="2" class="vendor" name="vendor[]" style="width:200px">'.$opt.'</select><a style="font-size: 24px; font-weight: bold; color:red" title="Thêm mới" target="_blank" href="'.$this->view->url('shipmentvendor') .'"> + </a></td>';
                     $str .= '<td>Ngày chi</td>';
-                    $str .= '<td><input tabindex="5" class="order_tire_cost_date" type="date"   name="order_tire_cost_date[]" required="required" value="'.date('Y-m-d',$v->order_tire_cost_date) .'"></td></tr>';
+                    $str .= '<td><input tabindex="5" class="order_tire_cost_date" type="date"   name="order_tire_cost_date[]" required="required" value="'.date('Y-m-d',$v->order_tire_cost_date) .'" '.$lock.'></td></tr>';
                     
                     $str .= '<tr class="'.$v->order_tire.'"><td></td><td>Số tiền </td>'; 
-                    $str .= '<td><input tabindex="3" type="text" style="width:120px" class="numbers order_tire_cost"  name="order_tire_cost[]" value="'.$this->lib->formatMoney($v->order_tire_cost) .'"  ></td>';
+                    $str .= '<td><input tabindex="3" type="text" style="width:120px" class="numbers order_tire_cost"  name="order_tire_cost[]" value="'.$this->lib->formatMoney($v->order_tire_cost) .'"  '.$lock.'></td>';
                                                        
                     $str .= '<td>Nội dung</td>';
-                    $str .= '<td rowspan="2"><textarea tabindex="10" class="comment" name="comment[]"  >'.$v->comment .'</textarea></td></tr></table></td></tr>';                                         
+                    $str .= '<td rowspan="2"><textarea '.$lock.' tabindex="10" class="comment" name="comment[]"  >'.$v->comment .'</textarea></td></tr></table></td></tr>';                                         
                     
                 }
             }
@@ -2553,10 +3239,17 @@ Class ordertireController Extends baseController {
     public function addordervat(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $invoice_tire_model = $this->model->get('invoicetireModel');
+            $invoice_tire_detail_model = $this->model->get('invoicetiredetailModel');
+            $order_tire_list_model = $this->model->get('ordertirelistModel');
+
+            $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire='.$_POST['data']),array('table'=>'order_tire','where'=>'order_tire=order_tire_id'));
+
             
 
             $invoice_tire = $_POST['invoice_tire'];
             foreach ($invoice_tire as $v) {
+                
+
                 $cost_data = array(
                     'order_tire' => $_POST['data'],
                     'invoice_tire_number' => trim($v['invoice_tire_number']),
@@ -2568,9 +3261,55 @@ Class ordertireController Extends baseController {
                     $data_order = $invoice_tire_model->getInvoiceByWhere(array('order_tire'=>$cost_data['order_tire'],'invoice_tire_number'=>$cost_data['invoice_tire_number']));
                     $invoice_tire_model->updateInvoice($cost_data,array('invoice_tire_id'=>$data_order->invoice_tire_id));
 
+                    foreach ($order_lists as $order_list) {
+                    
+                        $dg = $order_list->check_price_vat==1?$order_list->tire_price_vat*$order_list->vat_percent*0.1/1.1:$order_list->tire_price*$order_list->vat_percent*0.1;
+
+                        $data_detail = array(
+                            'order_tire_list'=>$order_list->order_tire_list_id,
+                            'invoice_tire_detail_number' => trim($v['invoice_tire_number']),
+                            'invoice_tire_detail_date' => strtotime(date('d-m-Y',strtotime($v['invoice_tire_date']))),
+                            'invoice_tire_detail_brand'=>$order_list->tire_brand,
+                            'invoice_tire_detail_size'=>$order_list->tire_size,
+                            'invoice_tire_detail_pattern'=>$order_list->tire_pattern,
+                            'invoice_tire_detail_volume'=>$order_list->tire_number,
+                            'invoice_tire_detail_price'=>round($dg),
+                            'invoice_tire_detail_vat'=>round($dg*0.1),
+                            'invoice_tire_detail_create_user'=>$_SESSION['userid_logined'],
+                            'order_tire'=>$_POST['data'],
+                        );
+
+                        $invoice_tire_detail_model->updateInvoice($data_detail,array('order_tire'=>$_POST['data'],'invoice_tire_detail_number'=>$cost_data['invoice_tire_number']));
+
+                        if (!$invoice_tire_detail_model->getInvoiceByWhere(array('order_tire'=>$_POST['data'],'invoice_tire_detail_number'=>$cost_data['invoice_tire_number']))) {
+                            $invoice_tire_detail_model->createInvoice($data_detail);
+                        }
+                    }
                 }
                 else{
                     $invoice_tire_model->createInvoice($cost_data);
+
+                    foreach ($order_lists as $order_list) {
+                    
+                        $dg = $order_list->check_price_vat==1?$order_list->tire_price_vat*$order_list->vat_percent*0.1/1.1:$order_list->tire_price*$order_list->vat_percent*0.1;
+
+                        $data_detail = array(
+                            'order_tire_list'=>$order_list->order_tire_list_id,
+                            'invoice_tire_detail_number' => trim($v['invoice_tire_number']),
+                            'invoice_tire_detail_date' => strtotime(date('d-m-Y',strtotime($v['invoice_tire_date']))),
+                            'invoice_tire_detail_brand'=>$order_list->tire_brand,
+                            'invoice_tire_detail_size'=>$order_list->tire_size,
+                            'invoice_tire_detail_pattern'=>$order_list->tire_pattern,
+                            'invoice_tire_detail_volume'=>$order_list->tire_number,
+                            'invoice_tire_detail_price'=>round($dg),
+                            'invoice_tire_detail_vat'=>round($dg*0.1),
+                            'invoice_tire_detail_create_user'=>$_SESSION['userid_logined'],
+                            'order_tire'=>$_POST['data'],
+                        );
+
+                        $invoice_tire_detail_model->createInvoice($data_detail);
+                    }
+
                 }
             }
         }
@@ -2602,7 +3341,7 @@ Class ordertireController Extends baseController {
 
                 foreach ($invoices as $v) {
                     $str .= '<tr class="'.$v->order_tire.'">';
-                    $str .= '<td><input type="checkbox" name="chk2" data="'.$v->order_tire .'" title="'.($v->invoice_tire_number).'"></td>';
+                    $str .= '<td><input type="checkbox" name="chk2" tabindex="'.$v->invoice_tire_id .'" data="'.$v->order_tire .'" title="'.($v->invoice_tire_number).'"></td>';
                     $str .= '<td><table style="width: 100%">';
                     $str .= '<tr class="'.$v->order_tire .'">';
                     $str .= '<td></td><td>Số hóa đơn</td>';
@@ -2624,6 +3363,8 @@ Class ordertireController Extends baseController {
         if(isset($_POST['data'])){
             $invoice_tire_model = $this->model->get('invoicetireModel');
             $invoice_tire_model->queryInvoice('DELETE FROM invoice_tire WHERE order_tire = '.$_POST['data'].' AND invoice_tire_number = "'.$_POST['number'].'"');
+            $invoice_tire_detail_model = $this->model->get('invoicetiredetailModel');
+            $invoice_tire_detail_model->queryInvoice('DELETE FROM invoice_tire_detail WHERE order_tire = '.$_POST['data'].' AND invoice_tire_detail_number = "'.$_POST['number'].'"');
 
             echo "Xóa thành công";
 
@@ -2655,7 +3396,7 @@ Class ordertireController Extends baseController {
         $this->view->data['company'] = strtoupper($customers->company_name);
         $this->view->data['mst'] = $customers->mst;
         $this->view->data['address'] = $customers->customer_address;
-        $this->view->data['phone'] = $customers->customer_phone;
+        $this->view->data['phone'] = $customers->company_phone;
         $this->view->data['fax'] = $customers->customer_fax;
         $this->view->data['bank_number'] = $customers->account_number;
         $this->view->data['bank'] = $customers->customer_bank_name;
@@ -3309,7 +4050,7 @@ Class ordertireController Extends baseController {
                 ->setCellValue('A8', 'A/ Bên bán: ')
                 ->setCellValue('C8', 'CÔNG TY TNHH VIỆT TRA DE')
                 ->setCellValue('A9', '- Mã số thuế: 3603295302')
-                ->setCellValue('F9', 'Hotline: 083 500 9000')
+                ->setCellValue('F9', 'Hotline: 0283 500 9000')
                 ->setCellValue('A10', '- Địa chỉ: Số 545, Tổ 10, Ấp Hương Phước, Xã Phước Tân, TP.Biên Hòa, Đồng Nai')
                 ->setCellValue('A11', '- Ông/bà: '.$staffs->staff_name)
                 ->setCellValue('E11', 'Chức vụ: ')

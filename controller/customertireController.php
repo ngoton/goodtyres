@@ -1853,6 +1853,7 @@ Class customertireController Extends baseController {
             require("lib/Classes/PHPExcel.php");
 
             $customer = $this->model->get('customertireModel');
+            $vehicle_type = $this->model->get('vehicletypeModel');
 
             $objPHPExcel = new PHPExcel();
             // Set properties
@@ -1893,34 +1894,34 @@ Class customertireController Extends baseController {
                             }
                         }
                         //$val[] = $cell->getValue();
-                        $val[] = is_numeric($cell->getCalculatedValue()) ? round($cell->getCalculatedValue()) : $cell->getCalculatedValue();
+                        $val[] = $cell->getCalculatedValue();
                         //here's my prob..
                         //echo $val;
                     }
                     if ($val[0] != null  ) {
 
-                        
-                            if(!$customer->getCustomerByWhere(array('customer_name'=>trim($val[0])))) {
+                        $type = $vehicle_type->getVehicleByWhere(array('vehicle_type_name' => trim($val[2])));
+
+                            if(!$customer->getCustomerByWhere(array('customer_tire_phone'=>trim($val[1])))) {
                                 $customer_data = array(
-                                'customer_name' => trim($val[0]),
-                                'company_name' => trim($val[1]),
-                                'co_name' => trim($val[0]),
-                                'mst' => trim($val[2]),
-                                'customer_address' => trim($val[3]),
-                                'customer_phone' => trim($val[4]),
+                                'customer_tire_date' => strtotime(date('d-m-Y')),
+                                'customer_tire_sale' => 1,
+                                'customer_tire_company' => trim($val[0]),
+                                'customer_tire_phone' => trim($val[1]),
+                                'vehicle_type' => $type->vehicle_type_id,
                                 );
                                 $customer->createCustomer($customer_data);
                             }
-                            else if($customer->getCustomerByWhere(array('customer_name'=>trim($val[0])))){
-                                $id_customer = $customer->getCustomerByWhere(array('customer_serie'=>trim($val[0])))->customer_id;
+                            else {
+                                $id_customer = $customer->getCustomerByWhere(array('customer_tire_phone'=>trim($val[1])))->customer_tire_id;
                                 $customer_data = array(
-                                'company_name' => trim($val[1]),
-                                'co_name' => trim($val[0]),
-                                'mst' => trim($val[2]),
-                                'customer_address' => trim($val[3]),
-                                'customer_phone' => trim($val[4]),
+                                'customer_tire_date' => strtotime(date('d-m-Y')),
+                                'customer_tire_sale' => 1,
+                                'customer_tire_company' => trim($val[0]),
+                                'customer_tire_phone' => trim($val[1]),
+                                'vehicle_type' => $type->vehicle_type_id,
                                 );
-                                $customer->updateCustomer($customer_data,array('customer_id' => $id_customer));
+                                $customer->updateCustomer($customer_data,array('customer_tire_id' => $id_customer));
                             }
 
 
@@ -1934,7 +1935,7 @@ Class customertireController Extends baseController {
                 }
                 //return $this->view->redirect('transport');
             
-            return $this->view->redirect('customer');
+            return $this->view->redirect('customertire');
         }
         $this->view->show('customertire/import');
 

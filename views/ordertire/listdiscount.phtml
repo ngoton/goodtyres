@@ -1,14 +1,14 @@
 <form id="msform" method="post" action="">
-<input type="checkbox" name="dis" value="1" id="ck_ttn" <?php echo $order_tires->ck_ttn>0?'checked':null ?> > Thanh toán ngay 
-<input type="checkbox" name="dis" value="2" id="ck_kho" <?php echo $order_tires->ck_kho>0?'checked':null ?> > Lấy hàng tại kho 
-<input type="checkbox" name="dis" value="3" id="ck_sl" <?php echo $order_tires->ck_sl>0?'checked':null ?> > Chiết khấu sản lượng <br>
-<input class="iform number" type="text" name="discount" id="discount" placeholder="Chiết khấu" value="<?php echo $lib->formatMoney($order_tires->discount) ?>" /> <br>
-<input class="iform number" type="text" name="reduce" id="reduce"  placeholder="Giảm giá khác" value="<?php echo $lib->formatMoney($order_tires->reduce) ?>" /> <br>
+<input type="checkbox" name="dis" value="1" id="ck_ttn" <?php echo $order_tires->ck_ttn>0?'checked':null ?> <?php echo $lock==1?'disabled':null ?>> Thanh toán ngay 
+<input type="checkbox" name="dis" value="2" id="ck_kho" <?php echo $order_tires->ck_kho>0?'checked':null ?> <?php echo $lock==1?'disabled':null ?>> Lấy hàng tại kho 
+<input type="checkbox" name="dis" value="3" id="ck_sl" <?php echo $order_tires->ck_sl>0?'checked':null ?> <?php echo $lock==1?'disabled':null ?>> Chiết khấu sản lượng <br>
+<input class="iform number" type="text" name="discount" id="discount" placeholder="Chiết khấu" value="<?php echo $lib->formatMoney($order_tires->discount) ?>" <?php echo $lock==1?'disabled':null ?> /> <br>
+<input class="iform number" type="text" name="reduce" id="reduce"  placeholder="Giảm giá khác" value="<?php echo $lib->formatMoney($order_tires->reduce) ?>" <?php echo $lock==1?'disabled':null ?> /> <br>
 <input type="hidden" id="max_discount" value="0">
 <input type="hidden" id="order_tire" value="<?php echo $order_tires->order_tire_id ?>">
 <input type="hidden" id="soluong" value="<?php echo $order_tires->order_tire_number ?>">
 <input type="hidden" id="thanhtien" value="<?php echo $order_tires->total-$order_tires->vat+$order_tires->discount+$order_tires->reduce ?>">
-<input type="submit" name="submit" value="Hoàn tất">
+<input type="submit" name="submit" value="Hoàn tất" <?php echo $lock==1?'disabled':null ?> >
 </form>
 
 <script type="text/javascript">

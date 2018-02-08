@@ -184,6 +184,24 @@ elseif ($order_by == 'cost_type')
                     </tr>
                     
                 <?php endforeach; ?>
+                <?php foreach ($lohang_costs as $cost) : ?>
+                <?php $tong += $cost->money;  ?>
+                    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $cost->costs_id ?>" class="edit_tr" >
+                        <td ><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $cost->costs_id ?>"></td>
+                        <td  class="fix"><?php echo $i++; ?></td>
+                        <td class="fix"  id="pay_date_<?php echo $cost->costs_id; ?>"><?php echo $lib->hien_thi_ngay_thang($cost->pay_date) ?></td>
+                        <td  class="fix" id="code_<?php echo $cost->costs_id; ?>"><?php echo $cost->code; ?></td> 
+                        <td  class="fix"></td> 
+                        <td  class="fix"></td> 
+                        <td  class="fix" id="pay_money_<?php echo $cost->costs_id; ?>"><?php echo $lib->formatMoney($cost->pay_money); ?></td>
+                        <td class="fix" id="source_<?php echo $cost->costs_id; ?>"><?php echo $cost->bank_name; ?></td>
+                        <td  class="fix" id="comment_<?php echo $cost->costs_id; ?>"><?php echo $cost->comment; ?></td> 
+                        
+                        <td  class="fix"></td> 
+                        <td class="fix" id="approve2_cost_<?php echo $cost->costs_id; ?>"><?php echo isset($users['name'][$cost->approve2])?$users['name'][$cost->approve2]:(($_SESSION['role_logined']==8)?'<button alt="'.$cost->check_equipment.$cost->check_energy.'" data="'.$cost->costs_id.'" class="approve2_cost">Duyệt</button>':null); ?></td>  
+                        <td class="fix" id="approve_cost_<?php echo $cost->costs_id; ?>"><?php echo isset($users['name'][$cost->approve])?$users['name'][$cost->approve]:(($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9)?'<button data="'.$cost->costs_id.'" class="approve_cost">Duyệt</button>':null); ?></td>
+                    </tr>
+                <?php endforeach; ?>
                 <tr style="text-align:center; font-weight: bold; color: red;">
                     <td class="fix" colspan="6" >Tổng cộng</td>
                     <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
@@ -343,6 +361,7 @@ $this->helper('slidePaginator');
         onClose: function(selectedDate) {
                 
                 $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+                $("#ketthuc").datepicker('setDate', selectedDate);
 
          },
          

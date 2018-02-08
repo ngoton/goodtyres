@@ -119,7 +119,7 @@ elseif ($order_by == 'order_tire_number')
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_name','<?php echo $url_order ?>')">Khách hàng <?php if ($order_by == 'customer_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th  class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','order_tire_number','<?php echo $url_order ?>')">Sản lượng <?php if ($order_by == 'order_tire_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','order_tire_number','<?php echo $url_order ?>')">SL <?php if ($order_by == 'order_tire_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th  class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','total','<?php echo $url_order ?>')">Thu <?php if ($order_by == 'total'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
@@ -150,12 +150,15 @@ elseif ($order_by == 'order_tire_number')
         <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','delivery_date','<?php echo $url_order ?>')">Ngày giao <?php if ($order_by == 'delivery_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th> 
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','due_date','<?php echo $url_order ?>')">Hạn TT <?php if ($order_by == 'due_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
         <th  class="fix">&nbsp;</th>
     </tr>
     
    </thead>
    <tbody>
-    <?php $tongsl = 0; $tongthu=0; $tongthue=0; $tonggiam=0; $tongtra=0; ?>
+    <?php $tongsl = 0; $tongthu=0; $tongthue=0; $tonggiam=0; $tongtra=0; $tongchiphi=0; ?>
     <?php foreach ($order_tires as $order_tire) : ?>
     <?php
         $tongsl += $order_tire->order_tire_number; 
@@ -163,8 +166,41 @@ elseif ($order_by == 'order_tire_number')
         $tongthue += $order_tire->vat; 
         $tonggiam += $order_tire->discount+$order_tire->reduce; 
         $tongtra += $order_tire->total;
+        $tongchiphi += $order_tire->order_cost;
+
+        $giaban = $order_tire_discount[$order_tire->order_tire_id]['thu'];
+        $giacongkhai = $order_tire_discount[$order_tire->order_tire_id]['gia'];
+        $giam = round((($giacongkhai-$giaban)/$giacongkhai)*100,1);
+
+        if ($order_tire->order_tire_number<20) {
+            $phantram = 10;
+        }
+        else if ($order_tire->order_tire_number>=20 && $order_tire->order_tire_number<50) {
+            $phantram = 12;
+        }
+        else if ($order_tire->order_tire_number>=50 && $order_tire->order_tire_number<100) {
+            $phantram = 16;
+        }
+        else if ($order_tire->order_tire_number>=100 && $order_tire->order_tire_number<150) {
+            $phantram = 20;
+        }
+        else if ($order_tire->order_tire_number>=150 && $order_tire->order_tire_number<200) {
+            $phantram = 22;
+        }
+        else{
+            $phantram = 24;
+        }
+
+        $lech = $giam-$phantram;
+        $color = "";
+        if ($lech>2 && $lech<=4) {
+            $color = "#f7f7bad6";
+        }
+        else if ($lech>4) {
+            $color = "#f94e4e85";
+        }
     ?>
-        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->order_tire_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->order_tire_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>" <?php echo $color!=""?'style="background:'.$color.'"':null ?> >
         	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->order_tire_id ?>"></td>
             <td class="fix"><?php echo $k++; ?></td>
             <td class="fix"  id="order_number_<?php echo $order_tire->order_tire_id; ?>">
@@ -178,38 +214,49 @@ elseif ($order_by == 'order_tire_number')
                     echo '<button class="order_number" data="'.$order_tire->order_tire_id.'">Số ĐH</button>';
                 ?>
             </td>
-            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><a target="_blank" href="<?php echo $this->url('customer/index/'.$order_tire->customer); ?>"><?php echo $order_tire->customer_name; ?></a> 
+            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><a target="_blank" href="<?php echo $this->url('customer/index/'.$order_tire->customer); ?>"><?php echo $order_tire->customer_name; ?></a> <br><a  style="font-weight:bold;text-decoration:underline" data="<?php echo $order_tire->customer ?>" value="1"  class="editButton"><i class="fa fa-file-text-o"></i> Hợp đồng</a> 
+                <?php if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined']==3){ ?>
+                <a title="Chuyển" style="font-weight:bold;text-decoration:underline" data="<?php echo $order_tire->order_tire_id ?>" value="<?php echo $order_tire->customer ?>" class="editCustomer"><i class="fa fa-mail-forward"></i></a>
+                <?php } ?>
             </td>
-            <td class="fix"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
-            <td class="fix" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
-            <td class="fix"  id="vat_<?php echo $order_tire->order_tire_id; ?>">
+            <td class="fix masterTooltip text-right"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>" <?php echo 'title="Giảm giá '.$giam.'%"'; ?> ><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
+            <td class="fix text-right" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
+            <td class="fix text-right"  id="vat_<?php echo $order_tire->order_tire_id; ?>">
                 <b>
-                <a class="order_vat" tabindex="<?php echo $lib->formatMoney($order_tire->vat_percent); ?>" alt="<?php echo $lib->formatMoney($order_tire->check_price_vat>0?($order_tire->total+$order_tire->discount+$order_tire->reduce):($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce)); ?>" title="<?php echo $order_tire->check_price_vat>0?1:0; ?>" data="<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></a>
+                <a class="order_vat" tabindex="<?php echo $lib->formatMoney($order_tire->vat_percent); ?>" alt="<?php echo $lib->formatMoney($order_tire->check_price_vat>0?($order_tire->total+$order_tire->discount+$order_tire->reduce):($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce)); ?>" title="<?php echo $order_tire->check_price_vat>0?1:0; ?>" value="<?php echo $order_tire->sale_lock ?>" data="<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></a>
                 </b>
                 <br>
                 <a style="text-decoration:underline" class="vat_list" data="<?php echo $order_tire->order_tire_id ?>" ><i class="fa fa-file-text-o"></i> HĐ</a>
             </td>
-            <td class="fix"  id="discount_<?php echo $order_tire->order_tire_id; ?>">
-                <a class="order_discount" href="<?php echo $this->url('ordertire/listdiscount/'.$order_tire->order_tire_id); ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></a>
+            <td class="fix text-right"  id="discount_<?php echo $order_tire->order_tire_id; ?>">
+                <a class="order_discount" href="<?php echo $this->url('ordertire/listdiscount/'.$order_tire->order_tire_id.'/'.$order_tire->sale_lock); ?>" ><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></a>
             </td>
-            <td class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?><br>
+            <td class="fix masterTooltip text-right"  id="total_<?php echo $order_tire->order_tire_id; ?>" <?php echo 'title="Giảm giá '.$giam.'%"'; ?> ><?php echo $lib->formatMoney($order_tire->total); ?><br>
                 <a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer.'/'.strtotime(date('d-m-Y'))); ?>"><i class="fa fa-search-plus"></i>Công nợ</a></td>
-            <td class="fix"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
+            <td class="fix text-right"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
                 <?php if($order_tire->order_cost != ""){ ?>
-                <a style="font-weight:bold;text-decoration:underline" class="order_cost" data="<?php echo $order_tire->order_tire_id; ?>">
+                <a style="font-weight:bold;text-decoration:underline" class="order_cost" data="<?php echo $order_tire->order_tire_id; ?>" alt="<?php echo strtotime(date('t-m-Y',$order_tire->delivery_date))+691200; ?>" >
                     <?php echo $lib->formatMoney($order_tire->order_cost); ?>
                 </a>
                 <?php } else{ ?>
-                <button class="order_cost" data="<?php echo $order_tire->order_tire_id ?>">Thêm CP</button>
+                <button class="order_cost" data="<?php echo $order_tire->order_tire_id ?>" alt="<?php echo $order_tire->delivery_date>0?(strtotime(date('t-m-Y',$order_tire->delivery_date))+691200):(strtotime(date('t-m-Y'))+691200); ?>" >Thêm CP</button>
                 <?php } ?>
             </td>
-            <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->username; ?></td> 
-            <td class="fix" id="approve_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($users['name'][$order_tire->approve])?$users['name'][$order_tire->approve]:(($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9)?'<button data="'.$order_tire->order_tire_id.'" class="approve">Duyệt</button>':null); ?></td>  
+            <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>">
+                <?php if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined']==3){ ?>
+                <a data="<?php echo $order_tire->order_tire_id ?>" value="<?php echo $order_tire->sale ?>"  class="change_sale"><?php echo $order_tire->username; ?></a>
+                <?php }
+                else{
+                    echo $order_tire->username;
+                }
+                 ?>
+            </td> 
+            <td class="fix masterTooltip" id="approve_<?php echo $order_tire->order_tire_id; ?>" <?php echo 'title="Giảm giá '.$giam.'%"'; ?> ><?php echo isset($users['name'][$order_tire->approve])?$users['name'][$order_tire->approve]:(($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==3)?'<button data="'.$order_tire->order_tire_id.'" class="approve">Duyệt</button>':null); ?></td>  
             <td class="fix" id="order_tire_status_<?php echo $order_tire->order_tire_id; ?>" data="<?php echo $order_tire->order_tire_status ?>">
                 <?php
                 if ($order_tire->order_tire_status==1) {
                 ?>
-                    <a style="font-weight:bold;text-decoration:underline" class="ex_stock_edit" alt="<?php echo date('d-m-Y',$order_tire->delivery_date); ?>" name="<?php echo isset($lift[$order_tire->order_tire_id])?$lift[$order_tire->order_tire_id]:null; ?>" data="<?php echo $order_tire->order_tire_id; ?>">
+                    <a style="font-weight:bold;text-decoration:underline" class="ex_stock_edit" alt="<?php echo date('d-m-Y',$order_tire->delivery_date); ?>" title="<?php echo date('d-m-Y',$order_tire->arrival_date); ?>" name="<?php echo isset($lift[$order_tire->order_tire_id])?$lift[$order_tire->order_tire_id]:null; ?>" data="<?php echo $order_tire->order_tire_id; ?>">
                         Đã giao
                     </a>
                 <?php
@@ -220,34 +267,44 @@ elseif ($order_by == 'order_tire_number')
                 <?php }  } ?>
             </td> 
             <td class="fix"  id="delivery_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->delivery_date>0?$lib->hien_thi_ngay_thang($order_tire->delivery_date):null; ?></td>
-            <td class="fix">    
-                <button data="<?php echo $order_tire->customer ?>" value="1"  class="editButton">HĐ</button>
+            <td class="fix"  id="due_date_<?php echo $order_tire->order_tire_id; ?>">
+                <?php 
+                $due_date = $order_tire->due_date>0?$lib->hien_thi_ngay_thang($order_tire->due_date):null;
+                if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined']==3){ ?>
+                <a data="<?php echo $order_tire->order_tire_id ?>" value="<?php echo $due_date ?>"  class="change_due"><?php echo $due_date; ?></a>
+                <?php }
+                else{
+                    echo $due_date;
+                }
+                 ?>
+            </td>
+            <td class="fix">  
+            <div  > 
+                <?php if ($order_tire->approve>0) { ?>
                 <button class="bienban" data="<?php echo $order_tire->order_tire_id ?>">BBBG</button>
-                
-                <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/invoice/'.$order_tire->order_tire_id ?>'">Hóa đơn</button>
-                
                 <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/bill/'.$order_tire->order_tire_id ?>'">PGN</button>
-                
-                
-                <?php if($order_tire->sale_lock==1 && $_SESSION['role_logined']==1){ ?>
+                <?php } ?>
+                <?php if($order_tire->sale_lock==1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==3)){ ?>
                 <button data="<?php echo $order_tire->order_tire_id ?>" value="0"  class="unlock">Mở</button>
-                <?php }elseif ($order_tire->sale_lock!=1 && $_SESSION['role_logined']==1) { ?>
+                <?php }elseif ($order_tire->sale_lock!=1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==3)) { ?>
                     <button data="<?php echo $order_tire->order_tire_id ?>" value="1"  class="unlock">Khóa</button>
                 <?php } ?>
-
-                <?php if(($order_tire->sale_lock!=1 && $order_tire->sale==$_SESSION['userid_logined']) || $_SESSION['role_logined']==1){ ?>
+                <?php if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1){ ?>
+                <a class="error revert" data="<?php echo $order_tire->order_tire_id ?>" >Hủy</a>
                 <a class="error del" data="<?php echo $order_tire->order_tire_id ?>" >Xóa</a>
                 <?php } ?>
+            </div>
             </td>
         </tr>
     <?php endforeach; ?>
         <tr style="text-align:center; font-weight: bold; color: red;">
             <td class="fix" colspan="4" >Tổng cộng</td>
-            <td class="fix"><?php echo $lib->formatMoney($tongsl); ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongthu); ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongthue); ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tonggiam); ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongtra); ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongsl); ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongthu); ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongthue); ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tonggiam); ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongtra); ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongchiphi); ?></td>
             <td class="fix" colspan="6" ></td>
         </tr>
 
@@ -311,6 +368,11 @@ $this->helper('slidePaginator');
             <input type="hidden" id="i_order3" name="i_order3" value="" required="required" />
         </label>
         <label>
+            <span class="add-on"><i class="icon-calendar" ></i></span>
+            <span>Ngày nhận hàng: </span>
+            <input type="text" id="i_arrival_date" name="i_arrival_date" class="ngay" value="" required="required" />
+        </label>
+        <label>
             <span class="add-on"><i class="icon-user" ></i></span>
             <span>NV bốc xếp: </span>
             <input type="text" id="i_lift" name="i_lift"  />
@@ -331,6 +393,11 @@ $this->helper('slidePaginator');
             <span>Ngày giao hàng: </span>
             <input type="text" id="i_delivery_date6" name="i_delivery_date6" class="ngay" required="required" />
             <input type="hidden" id="i_order6" name="i_order6"  required="required" />
+        </label>
+        <label>
+            <span class="add-on"><i class="icon-calendar" ></i></span>
+            <span>Ngày nhận hàng: </span>
+            <input type="text" id="i_arrival_date6" name="i_arrival_date6" class="ngay" required="required" />
         </label>
         <label>
             <span class="add-on"><i class="icon-user" ></i></span>
@@ -442,6 +509,8 @@ $this->helper('slidePaginator');
             </tbody>
         </table>
 
+        <input type="hidden" id="check_date">
+
         <input type="button" value="Thêm chi phí khác" onclick="addRow('dataTable')">
 
         <input type="button" value="Xóa chi phí" onclick="deleteRow('dataTable')">
@@ -528,7 +597,36 @@ $this->helper('slidePaginator');
         
     </form>
 </div>
-
+<div id="dialogContent8" title="Nhân viên bán hàng">
+    <form action="#" method="post" id="editForm4">
+        <select name="order_staff" id="order_staff">
+            <?php foreach ($staffs as $staff) { ?>
+                <option value="<?php echo $staff->account ?>"><?php echo $staff->staff_name ?></option>
+            <?php } ?>
+        </select>
+        <input type="hidden" id="i_order8" name="i_order8" value="" required="required" />
+    </form>
+</div>
+<div id="dialogContent9" title="Hạn thanh toán">    
+    <form action="#" method="post" id="editForm5">
+        <label>
+            <span class="add-on"><i class="icon-calendar" ></i></span>
+            <span>Hạn thanh toán: </span>
+            <input type="text" id="i_due_date" name="i_due_date" class="ngay" value="" required="required" />
+            <input type="hidden" id="i_order9" name="i_order9" value="" required="required" />
+        </label> 
+    </form>
+</div>
+<div id="dialogContent10" title="Khách hàng">
+    <form action="#" method="post" id="editForm6">
+        <select name="order_customer" id="order_customer">
+            <?php foreach ($customers as $customer) { ?>
+                <option value="<?php echo $customer->customer_id ?>"><?php echo $customer->customer_name ?></option>
+            <?php } ?>
+        </select>
+        <input type="hidden" id="i_order10" name="i_order10" value="" required="required" />
+    </form>
+</div>
 
 <script type="text/javascript">
 var x = "<?php echo $limit ?>";
@@ -545,6 +643,114 @@ $('#sl_tha option[value='+th+']').attr('selected','selected');
 
 var n = "<?php echo $nam ?>";
 $('#sl_na option[value='+n+']').attr('selected','selected');
+
+$('.change_due')
+    //.button({ icons: { primary: "ui-icon-document" }})
+    .click(function() {
+        
+        $('#i_order9').val($(this).attr('data'));
+        $('#i_due_date').val($(this).attr('value'));
+        $( "#dialogContent9" ).dialog( "open" )
+    });
+
+
+//set up the dialog box.
+$( "#dialogContent9" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var id = $('#i_order9').val();
+            var due_date = $('#i_due_date').val();
+                
+                $.post("<?php echo BASE_URL ?>/ordertire/changedue", {data: id, due_date: due_date},
+                   function(data){
+                    $("html, body").animate({ scrollTop: 0 }, 100);
+                    setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                   
+                   }); 
+              
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
+
+$('.change_sale')
+    //.button({ icons: { primary: "ui-icon-document" }})
+    .click(function() {
+        
+        $('#i_order8').val($(this).attr('data'));
+        $('#order_staff option[value='+$(this).attr('value')+']').attr('selected','selected');
+        $( "#dialogContent8" ).dialog( "open" )
+    });
+
+
+//set up the dialog box.
+$( "#dialogContent8" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var id = $('#i_order8').val();
+            var order_staff = $('#order_staff').val();
+                
+                $.post("<?php echo BASE_URL ?>/ordertire/changestaff", {data: id, order_staff: order_staff},
+                   function(data){
+                    $("html, body").animate({ scrollTop: 0 }, 100);
+                    setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                   
+                   }); 
+              
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
+
+$('.editCustomer')
+    //.button({ icons: { primary: "ui-icon-document" }})
+    .click(function() {
+        
+        $('#i_order10').val($(this).attr('data'));
+        $('#order_customer option[value='+$(this).attr('value')+']').attr('selected','selected');
+        $( "#dialogContent10" ).dialog( "open" )
+    });
+
+
+//set up the dialog box.
+$( "#dialogContent10" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var id = $('#i_order10').val();
+            var order_customer = $('#order_customer').val();
+                
+                $.post("<?php echo BASE_URL ?>/ordertire/changecustomer", {data: id, order_customer: order_customer},
+                   function(data){
+                    $("html, body").animate({ scrollTop: 0 }, 100);
+                    setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                   
+                   }); 
+              
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
 
 
 $('.order_number')
@@ -593,6 +799,15 @@ $('.order_vat')
 
         $('#i_thu').val($(this).attr('alt'));
         $('#i_check_vat').val($(this).attr('title'));
+
+        if ($(this).attr('value') == 1) {
+            $('#i_vat').attr('disabled',true);
+            $('#i_vat_percent').attr('disabled',true);
+        }
+        else{
+            $('#i_vat').attr('disabled',false);
+            $('#i_vat_percent').attr('disabled',false);
+        }
 
         $( "#dialogContent5" ).dialog( "open" );
 
@@ -667,6 +882,8 @@ $('.order_cost')
     .click(function() {
         
         $('#i_order2').val($(this).attr('data'));
+
+        $('#check_date').val($(this).attr('alt'));
 
         $('#dataTable tbody tr').remove();
 
@@ -782,6 +999,17 @@ $('.order_cost')
                         };
                 }
 
+                <?php if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 3  && $_SESSION['role_logined'] != 2  && $_SESSION['role_logined'] != 8) { ?>
+                var today = "<?php echo strtotime(date('d-m-Y')) ?>";
+                if (parseInt(today) > parseInt($('#check_date').val())) {
+                    $('#editForm2 input').attr('disabled',true);
+                    $('.order_tire_cost').attr('disabled',true);
+                }
+                else{
+                    $('#editForm2 input').attr('disabled',false);
+                    $('.order_tire_cost').attr('disabled',false);
+                }
+                <?php } ?>
             
             }
         });
@@ -795,7 +1023,19 @@ $('.order_cost')
             
         });
 
-        $( "#dialogContent2" ).dialog( "open" )
+        $( "#dialogContent2" ).dialog( "open" );
+
+        <?php if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 2  && $_SESSION['role_logined'] != 8) { ?>
+        var today = "<?php echo strtotime(date('d-m-Y')) ?>";
+        if (parseInt(today) > parseInt($('#check_date').val())) {
+            $('#editForm2 input').attr('disabled',true);
+            $('.order_tire_cost').attr('disabled',true);
+        }
+        else{
+            $('#editForm2 input').attr('disabled',false);
+            $('.order_tire_cost').attr('disabled',false);
+        }
+        <?php } ?>
     });
 
 
@@ -815,14 +1055,29 @@ $( "#dialogContent2" ).dialog({
             var comment = [];
             var order_tire_cost_type = [];
             
+            var check = 0;
 
             $('.order_tire_cost_date').each(function() { 
                 order_tire_cost_date.push($(this).val());
             });
 
             $('.vendor').each(function() { 
-                vendor.push($(this).attr('data'));
+                var row = $(this).parent().parent().parent().parent().parent().parent();
+                var rowIndex = row[0].rowIndex;
+                var d = $(this).attr('data') || 0;
+                var money = $('.order_tire_cost:eq('+rowIndex+')').val();
+                vendor.push(d);
+
+                if (d==0 && money!=0 && money!="") {
+                    check++;
+                }
             });
+
+            if (check>0) {
+                alert("Vui lòng chọn 1 vendor!");
+                $('.vendor:last').focus();
+                return;
+            }
 
             $('.order_tire_cost').each(function() { 
                 order_tire_cost.push($(this).val());
@@ -929,6 +1184,93 @@ $( "#dialogContent7" ).dialog({
     autoOpen: false,
     modal: true,
     buttons: {
+        In: function(){
+            var printID = $('#i_order7').val();
+            var number = [];
+            var date = [];
+            var ngay = "";
+
+
+            $('.invoice_tire_number:last').each(function() { 
+                number.push($(this).val());
+            });
+            $('.invoice_tire_date:last').each(function() { 
+                date.push($(this).val());
+            });
+
+            ngay = date[0].replace(/-/g,"/");
+
+            if (parseInt(number[0])<1) {
+                alert('Vui lòng nhập số hóa đơn');
+                $('.invoice_tire_number:last').focus();
+            }
+            else{
+                $("#winpopup").dialog({
+                    position: ['center',5],
+                    draggable:true,
+                    modal: true,
+                    autoOpen: false,
+                    maxHeight: $(window).height()-50,
+                    width:"auto",
+                    resizable: false,
+                    title:'Hóa đơn GTGT',
+                    buttons: [
+                    {
+                        text: "In",
+                        icons: { primary: "ui-icon-print" },
+                        click: function() {
+                            var id = $('#i_order7').val();
+                            var invoice_tire = [];
+                            var invoice_tire_number = [];
+                            var invoice_tire_date = [];
+
+                            $('.invoice_tire_number').each(function() { 
+                                invoice_tire_number.push($(this).val());
+                            });
+                            $('.invoice_tire_date').each(function() { 
+                                invoice_tire_date.push($(this).val());
+                            });
+                            for (var i = 0; i < invoice_tire_number.length; i++) {
+                                invoice_tire.push({'invoice_tire_number':invoice_tire_number[i], 'invoice_tire_date':invoice_tire_date[i]});
+                            };
+                                
+                            $.post("<?php echo BASE_URL ?>/ordertire/addordervat", {data: id, invoice_tire: invoice_tire},
+                               function(data){
+                            }); 
+
+                          $( this ).dialog( "close" );
+                          window.open("<?php echo $this->url('ordertire/printpage/') ?>"+printID+"/"+ngay+"/"+number[0]);
+                        },
+                    },
+                    {
+                        text: "Xem",
+                        icons: { primary: "ui-icon-print" },
+                        click: function() {
+                          $( this ).dialog( "close" );
+                          window.open("<?php echo $this->url('ordertire/printhd/') ?>"+printID+"/"+ngay+"/"+number[0]);
+                        },
+                    },
+                    {
+                        text: "Tải xuống",
+                        icons: { primary: "ui-icon-download" },
+                        click: function() {
+                          window.location.href="<?php echo BASE_URL.'/ordertire/invoice/' ?>"+printID;
+                        },
+                    },
+                    {
+                        text: "Đóng",
+                        icons: { primary: "ui-icon-close" },
+                        click: function() {
+                          $( this ).dialog( "close" );
+                        }   
+                    }
+                    ]
+
+                });
+                $("#winpopup").load("<?php echo $this->url('ordertire/printhd/') ?>"+printID+"/"+ngay+"/"+number[0]);
+                $("#winpopup").dialog("open");
+            }
+        },
         OK: function() {
             var id = $('#i_order7').val();
             
@@ -1038,7 +1380,9 @@ $('.approve').click(function(){
 $('.ex_stock')
     //.button({ icons: { primary: "ui-icon-document" }})
     .click(function() {
-        
+        $('#i_lift').val("Nguyễn Văn Nghị");
+        $('#i_delivery_date').val("<?php echo date('d-m-Y') ?>");
+        $('#i_arrival_date').val("<?php echo date('d-m-Y') ?>");
         $('#i_order3').val($(this).attr('data'));
         $("#i_lift").tagit({
           tagSource: function(search, showChoices) {
@@ -1065,8 +1409,9 @@ $( "#dialogContent3" ).dialog({
             var id = $('#i_order3').val();
             var lift = $('#i_lift').val().trim();
             var delivery_date = $('#i_delivery_date').val();
+            var arrival_date = $('#i_arrival_date').val();
                 
-                $.post("<?php echo BASE_URL ?>/ordertire/exstock", {data: id, delivery_date: delivery_date, lift: lift},
+                $.post("<?php echo BASE_URL ?>/ordertire/exstock", {data: id, delivery_date: delivery_date,arrival_date: arrival_date, lift: lift},
                    function(data){
                     $("html, body").animate({ scrollTop: 0 }, 100);
                     setTimeout(function() {
@@ -1089,6 +1434,7 @@ $('.ex_stock_edit')
         
         $('#i_order6').val($(this).attr('data'));
         $('#i_delivery_date6').val($(this).attr('alt'));
+        $('#i_arrival_date6').val($(this).attr('title'));
 
         if ($('#i_lift6').hasClass('tagit-hidden-field')) {
             $('#i_lift6').tagit('destroy');
@@ -1121,8 +1467,9 @@ $( "#dialogContent6" ).dialog({
             var id = $('#i_order6').val();
             var lift = $('#i_lift6').val().trim();
             var delivery_date = $('#i_delivery_date6').val();
+            var arrival_date = $('#i_arrival_date6').val();
                 
-                $.post("<?php echo BASE_URL ?>/ordertire/exstockedit", {data: id, delivery_date: delivery_date, lift: lift},
+                $.post("<?php echo BASE_URL ?>/ordertire/exstockedit", {data: id, delivery_date: delivery_date,arrival_date: arrival_date, lift: lift},
                    function(data){
                     $("html, body").animate({ scrollTop: 0 }, 100);
                     setTimeout(function() {
@@ -1162,7 +1509,9 @@ function addRow(tableID){
     $('.vendor:last').val("");
     $('.order_tire_cost_type:last').attr('disabled',false);
     $('.order_tire_cost:last').val("");
+    $('.order_tire_cost:last').attr('disabled',false);
     $('.comment:last').val("");
+    $('.comment:last').attr('disabled',false);
     $('input[name="chk"]:last').attr('data',"");
     $('input[name="chk"]:last').attr('tabindex',0);
     $('input[name="chk"]:last').attr('title',"");
@@ -1620,7 +1969,7 @@ var pickerOpay2 = {
 $('.editButton')
     //.button({ icons: { primary: "ui-icon-document" }})
     .click(function() {
-        if ($(this).val()==1) {
+        if ($(this).attr('value')==1) {
             $('#contract_link').val("contract");
         }
         else{
@@ -1781,6 +2130,19 @@ $( "#dialogContent4" ).dialog({
     var r = confirm("Bạn có chắc chắn không?");
     if (r == true){
          $.post("<?php echo BASE_URL ?>/ordertire/delete", {data: data},
+           function(data){
+                setTimeout(function() {
+                    sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                  }, 200);
+           }); 
+    }
+});
+
+  $('.revert').click(function(){
+    var data = $(this).attr('data');
+    var r = confirm("Bạn có chắc chắn không?");
+    if (r == true){
+         $.post("<?php echo BASE_URL ?>/ordertire/revert", {data: data},
            function(data){
                 setTimeout(function() {
                     sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
@@ -2034,4 +2396,51 @@ $('.bienban').click(function(){
     $('#lastID').val($(this).attr('data'));
     $('#hoanthanh').dialog('open');
 });
+
+
+$(document).ready(function() {
+// Tooltip only Text
+$('.masterTooltip').hover(function(){
+        // Hover over code
+        var title = $(this).attr('title');
+        $(this).data('tipText', title).removeAttr('title');
+        if (title != "") {
+            $('<p class="showtooltip"></p>')
+            .text(title)
+            .appendTo('body')
+            .fadeIn('slow');
+        }
+        
+}, function() {
+        // Hover out code
+        $(this).attr('title', $(this).data('tipText'));
+        $('.showtooltip').remove();
+}).mousemove(function(e) {
+        var mousex = e.pageX - 100; //Get X coordinates
+        var mousey = e.pageY + 20; //Get Y coordinates
+        $('.showtooltip')
+        .css({ top: mousey, left: mousex })
+});
+
+
+});
 </script>
+
+<style type="text/css">
+.hide_div{
+    display: none;
+}
+.edit_tr:hover .hide_div{
+    display: block;
+}
+.showtooltip {
+    display:none;
+    position:absolute;
+    border:1px solid #333;
+    background-color:#161616;
+    border-radius:5px;
+    padding:10px;
+    color:#fff;
+    font-size:12px Arial;
+}
+</style>

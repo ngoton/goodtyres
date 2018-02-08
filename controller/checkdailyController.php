@@ -21,6 +21,7 @@ Class checkdailyController Extends baseController {
             $ngaytaobatdau = date('m-Y');
         }
 
+        $ngayketthuc = date('d-m-Y', strtotime($ketthuc. ' + 1 days'));
         
         $daily_bank_model = $this->model->get('dailybankModel');
         $bank_model = $this->model->get('bankModel');
@@ -40,7 +41,7 @@ Class checkdailyController Extends baseController {
         }
 
         $data_bank = array(
-            'where' => 'daily_bank_date >= '.strtotime($batdau).' AND daily_bank_date <= '.strtotime($ketthuc),
+            'where' => 'daily_bank_date >= '.strtotime($batdau).' AND daily_bank_date < '.strtotime($ngayketthuc),
         );
         $bank_ps = $daily_bank_model->getAllDaily($data_bank,$join);
         $thu = array(); $chi = array();
@@ -81,7 +82,7 @@ Class checkdailyController Extends baseController {
         }
 
         $data = array(
-            'where'=>'(account_parent = 1 OR account_parent = 4) AND account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime(date('d-m-Y',strtotime('+1 day',strtotime($ketthuc)))),
+            'where'=>'(account_parent = 1 OR account_parent = 4) AND account_balance_date >= '.strtotime($batdau).' AND account_balance_date < '.strtotime($ngayketthuc),
         );
         $account_balances = $account_balance_model->getAllAccount($data,$join);
         $account_add = array();

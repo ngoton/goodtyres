@@ -1,12 +1,4 @@
-﻿/*
- * jQuery Client Side Excel Export Plugin Library
- * http://www.battatech.com/
- *
- * Copyright (c) 2013 Batta Tech Private Limited
- * Licensed under https://github.com/battatech/battatech_excelexport/blob/master/LICENSE.txt
- */
-
-(function ($) {
+﻿(function ($) {
     var $defaults = {
         containerid: null
         , datatype: 'table'
@@ -92,7 +84,20 @@
         }
 
         function ConvertFromTable() {
-            var result = $('<div>').append($('#' + $settings.containerid).clone()).html();
+          var tb = $('#' + $settings.containerid);
+          tb.addClass('tblChange');
+          $('.tblChange th:hidden, .tblChange td:hidden, .tblChange input').remove();
+          $(".tblChange a").removeAttr("href");
+          $(".tblChange td").each(function () {
+            var new_val = $(this).html().replace(/\,/g,'');
+            if (isNaN(new_val) == false) {
+              $(this).html(new_val);
+            }
+            
+          });
+            
+            var result = $('<div>').append($('.tblChange').clone()).html();
+            
             return result;
         }
 
@@ -101,7 +106,7 @@
 
             result += "<thead><tr>";
             $($settings.columns).each(function (key, value) {
-                if (this.ishidden != true) {
+                if (this.css('display') != 'none') {
                     result += "<th";
                     if (this.width != null) {
                         result += " style='width: " + this.width + "'";
@@ -118,7 +123,7 @@
                 result += "<tr>";
                 $($settings.columns).each(function (k, v) {
                     if (value.hasOwnProperty(this.datafield)) {
-                        if (this.ishidden != true) {
+                        if (this.css('display') != 'none') {
                             result += "<td";
                             if (this.width != null) {
                                 result += " style='width: " + this.width + "'";

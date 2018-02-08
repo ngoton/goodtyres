@@ -69,7 +69,7 @@ Class invoicetireController Extends baseController {
 
         
         $data = array(
-            'where'=>'vat > 0 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc),
+            'where'=>'approve>0 AND vat > 0 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc),
         );
 
         if ($nv == 0) {
@@ -110,7 +110,7 @@ Class invoicetireController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where'=>'vat > 0 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc),
+            'where'=>'approve>0 AND vat > 0 AND delivery_date >= '.strtotime($batdau).' AND delivery_date <= '.strtotime($ketthuc),
             );
 
         if ($nv == 0) {
@@ -125,13 +125,14 @@ Class invoicetireController Extends baseController {
         }
 
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 2) {
             $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
         }
 
         if ($keyword != '') {
             $search = '( order_number LIKE "%'.$keyword.'%" 
-                OR customer_name LIKE "%'.$keyword.'%"   )';
+                OR customer_name LIKE "%'.$keyword.'%"  
+                OR order_tire_id IN (SELECT order_tire FROM invoice_tire WHERE invoice_tire_number LIKE "%'.$keyword.'%" ) )';
             
                 $data['where'] = $data['where'].' AND '.$search;
         }
@@ -142,10 +143,10 @@ Class invoicetireController Extends baseController {
 
         $invoice_data = array();
         foreach ($order_tires as $order) {
-            $invoices = $invoice_tire_model->getInvoiceByWhere(array('order_tire'=>$order->order_tire_id));
-            if ($invoices) {
-                $invoice_data[$order->order_tire_id]['number'] = $invoices->invoice_tire_number;
-                $invoice_data[$order->order_tire_id]['date'] = $invoices->invoice_tire_date;
+            $invoice = $invoice_tire_model->getAllInvoice(array('where'=>'order_tire='.$order->order_tire_id));
+            foreach ($invoice as $invoices) {
+                $invoice_data[$order->order_tire_id]['number'] = isset($invoice_data[$order->order_tire_id]['number'])?$invoice_data[$order->order_tire_id]['number'].' | '.$invoices->invoice_tire_number:$invoices->invoice_tire_number;
+                $invoice_data[$order->order_tire_id]['date'] = isset($invoice_data[$order->order_tire_id]['date'])?$invoice_data[$order->order_tire_id]['date'].' | '.$this->lib->hien_thi_ngay_thang($invoices->invoice_tire_date):$this->lib->hien_thi_ngay_thang($invoices->invoice_tire_date);
             }
             
         }

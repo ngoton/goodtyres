@@ -1,0 +1,468 @@
+<style type="text/css">
+    .table_data tr:hover{cursor: pointer; background: rgba(37, 162, 226, 0.2)}
+    #show {max-height: 500px; z-index: 99999; overflow:auto;}
+</style>
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center><h1> KIỂM TRA KẾT QUẢ HĐKD </h1></center>
+	<div class="search-box">
+        <form id="report" name="report" action="<?php echo $this->url('checking/result') ?>" method="post">
+        <div class="add-box">
+            <select id="sl_tha" name="sl_tha" style="width:90px; margin-left:5px;">
+             <?php 
+                for ($i=1; $i < 13; $i++) { 
+                    echo '<option value="'.$i.'">Tháng '.$i.'</option>';
+                }
+             ?>
+            </select>
+            <select id="sl_na" name="sl_na" style="width:100px">
+             <?php 
+                $nam = date('Y');
+                for ($i=($nam-5); $i < ($nam+5); $i++) { 
+                    echo '<option value="'.$i.'">Năm '.$i.'</option>';
+                }
+             ?>
+            </select> 
+            <input type="submit" name="submit" id="chon" value="Chọn"> 
+        </div>
+        <div class="add-box">
+                  
+            Từ  <input style="width:90px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            đến  <input style="width:90px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >
+            <input type="submit" name="submit" id="xem" value="Xem"> 
+        </div>
+        </form>
+        <div class="add-box">
+            <a class="add_button" id="btnExport" >Export Excel</a>
+        </div>
+    </div>
+    
+
+</div>
+<div style="width:50%; margin:0 auto" id="printarea">
+    <table class="table_data" id="tblExport">
+        <thead>
+            <tr>
+                <th class="fix">
+                    <a>TK </a>
+                </th> 
+                <th class="fix">
+                    <a >Nội dung </a>
+                </th>
+                <th class="fix">
+                    <a>Báo cáo hệ thống </a>
+                </th> 
+                <th class="fix">
+                    <a>Báo cáo tài sản </a>
+                </th> 
+                <th class="fix">
+                    <a >Status </a>
+                </th>
+            </tr>
+            
+        </thead>
+        <tbody>
+            <tr style="background-color:rgba(255, 0, 0, 0.15)">
+                <td class="fix" colspan="2">Doanh thu</td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+            </tr>
+            <tr>
+                <td class="fix"></td>
+                <td class="fix">Sản lượng bán</td>
+                <td class="fix"><?php echo $total_sale ?></td>
+                <td class="fix"><?php echo $total_sale ?> pcx</td>
+                <td class="fix"><span style="font-weight:bold; color:green">OK</span></td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[5111] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix">5111</td>
+                <td class="fix">Doanh thu bán hàng</td>
+                <td class="fix"><?php echo $lib->formatMoney($doanhthu_lopxe) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($dtbh_co_ps = isset($account_add[5111]['co'])?str_replace('-', '', $account_add[5111]['co']):null) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $doanhthu_lopxe == $dtbh_co_ps ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($doanhthu_lopxe - $dtbh_co_ps).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[5112] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix">5112</td>
+                <td class="fix">Doanh thu Logistics</td>
+                <td class="fix"><?php echo $lib->formatMoney($doanhthu_logs) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($dtlogs_co_ps = isset($account_add[5112]['co'])?str_replace('-', '', $account_add[5112]['co']):null) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $doanhthu_logs == $dtlogs_co_ps ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($doanhthu_logs - $dtlogs_co_ps).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[3331] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix">3331</td>
+                <td class="fix">Thuế GTGT Lốp xe</td>
+                <td class="fix"><?php echo $lib->formatMoney($vat_lopxe) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($gtgt_co_ps = isset($account_add[3331]['co'])?str_replace('-', '', $account_add[3331]['co']):null) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $vat_lopxe == $gtgt_co_ps ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($vat_lopxe - $gtgt_co_ps).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[3332] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix">3332</td>
+                <td class="fix">Thuế GTGT Logistics</td>
+                <td class="fix"><?php echo $lib->formatMoney($vat_logs) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($gtgtlogs_co_ps = isset($account_add[3332]['co'])?str_replace('-', '', $account_add[3332]['co']):null) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $vat_logs == $gtgtlogs_co_ps ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($vat_logs - $gtgtlogs_co_ps).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[515] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix">515</td>
+                <td class="fix">Lãi tiền gửi</td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($lai_co_ps = isset($account_add[515]['co'])?str_replace('-', '', $account_add[515]['co']):null) ?></td>
+                <td class="fix"></td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[515] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix"></td>
+                <td class="fix">Khác</td>
+                <td class="fix"><?php echo $lib->formatMoney($doanhthu_khac) ?></td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+            </tr>
+            <tr style="background-color:rgba(255, 0, 0, 0.15)">
+                <td class="fix" colspan="2">Cộng doanh thu</td>
+                <td class="fix"><?php echo $lib->formatMoney($doanhthu_ht = $doanhthu_lopxe+$doanhthu_logs+$vat_lopxe+$vat_logs+$doanhthu_khac) ?></td>
+                
+                <td class="fix"><?php echo $lib->formatMoney($doanhthu = $dtbh_co_ps+$dtlogs_co_ps+$gtgt_co_ps+$gtgtlogs_co_ps+$lai_co_ps) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $doanhthu_ht == $doanhthu ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($doanhthu_ht - $doanhthu).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr style="background-color:rgba(63, 255, 0, 0.15)">
+                <td class="fix" colspan="2">Chi phí bán hàng (1)</td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[6321] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix">6321</td>
+                <td class="fix">Vốn hàng lốp xe</td>
+                <td class="fix"><?php echo $lib->formatMoney($von_lopxe) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($von_co_ps = isset($account_add[6321]['co'])?str_replace('-', '', $account_add[6321]['co']):null) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $von_lopxe == $von_co_ps ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($von_lopxe - $von_co_ps).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[6322] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix">6322</td>
+                <td class="fix">Vốn hàng Logistics</td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($vonlogs_co_ps = isset($account_add[6322]['co'])?str_replace('-', '', $account_add[6322]['co']):null) ?></td>
+                <td class="fix"></td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[641] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix">641</td>
+                <td class="fix">Vận chuyển + bốc xếp + bảo hành</td>
+                <td class="fix"><?php echo $lib->formatMoney($chiphi_lopxe) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($cp_no_ps = isset($account_parent_add[641]['no'])?str_replace('-', '', $account_parent_add[641]['no']):null) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $chiphi_lopxe == $cp_no_ps ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($chiphi_lopxe - $cp_no_ps).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[635] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix">635</td>
+                <td class="fix">Trả lãi vay</td>
+                <td class="fix"><?php echo $lib->formatMoney($tralai) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($laivay_no_ps = isset($account_add[635]['no'])?str_replace('-', '', $account_add[635]['no']):null) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $tralai == $laivay_no_ps ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($tralai - $laivay_no_ps).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr style="background-color:rgba(63, 255, 0, 0.15)">
+                <td class="fix" colspan="2">Cộng chi phí bán hàng</td>
+                <td class="fix"><?php echo $lib->formatMoney($chiphibanhang_ht = $von_lopxe+$chiphi_lopxe+$tralai) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($chiphibanhang = $von_co_ps+$vonlogs_co_ps+$cp_no_ps+$laivay_no_ps) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $chiphibanhang_ht == $chiphibanhang ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($chiphibanhang_ht - $chiphibanhang).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr style="background-color:rgba(0, 173, 255, 0.15)">
+                <td class="fix" colspan="2">Chi phí quản lý (2)</td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[6421] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix">6421</td>
+                <td class="fix">Tiền lương + Cơm + Bảo hiểm</td>
+                <td class="fix"><?php echo $lib->formatMoney($luong) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($luong_no_ps = isset($account_add[6421]['no'])?str_replace('-', '', $account_add[6421]['no']):null) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $luong == $luong_no_ps ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($luong - $luong_no_ps).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[6426] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix">6426</td>
+                <td class="fix">Thuê kho bãi</td>
+                <td class="fix"><?php echo $lib->formatMoney($thuekho) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($khobai_no_ps = isset($account_add[6426]['no'])?str_replace('-', '', $account_add[6426]['no']):null) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $thuekho == $khobai_no_ps ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($thuekho - $khobai_no_ps).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[642] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix">642</td>
+                <td class="fix">Chi phí Quản lý hành chính</td>
+                <td class="fix"><?php echo $lib->formatMoney($chiphi_khac) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($hanhchinh_no_ps = (isset($account_parent_add[642]['no'])?str_replace('-', '', $account_parent_add[642]['no']):null) - $luong_no_ps - $khobai_no_ps ) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $chiphi_khac == $hanhchinh_no_ps ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($chiphi_khac - $hanhchinh_no_ps).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr style="background-color:rgba(0, 173, 255, 0.15)">
+                <td class="fix" colspan="2">Cộng chi phí quản lý</td>
+                <td class="fix"><?php echo $lib->formatMoney($chiphiquanly_ht = $chiphi_khac+$luong+$thuekho) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($chiphiquanly = $luong_no_ps+$khobai_no_ps+$hanhchinh_no_ps) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $chiphiquanly_ht == $chiphiquanly ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($chiphiquanly_ht - $chiphiquanly).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr style="background-color:rgba(185, 38, 38, 0.15)">
+                <td class="fix" colspan="2">Tổng cộng chi phí (1) + (2)</td>
+                <td class="fix"><?php echo $lib->formatMoney($chiphi_ht = $chiphibanhang_ht+$chiphiquanly_ht) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($chiphi = $chiphibanhang+$chiphiquanly) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $chiphi_ht == $chiphi ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($chiphi_ht - $chiphi).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="fix" colspan="2">Lợi nhuận trước thuế (DT - CP)</td>
+                <td class="fix"><?php echo $lib->formatMoney($loinhuan_ht = $doanhthu_ht-$chiphi_ht) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($loinhuan = $doanhthu-$chiphi) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $loinhuan_ht == $loinhuan ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($loinhuan_ht - $loinhuan).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="fix" colspan="2">Trừ thuế + Cân đối hóa đơn</td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($thue = 0) ?></td>
+                <td class="fix"></td>
+            </tr>
+            <tr>
+                <td class="fix" colspan="2">Lợi nhuận sau thuế</td>
+                <td class="fix"><?php echo $lib->formatMoney($loinhuansauthue_ht = $loinhuan_ht) ?></td>
+                <td class="fix"><?php echo $lib->formatMoney($loinhuansauthue = $loinhuan-$thue) ?></td>
+                <td class="fix">
+                    <?php 
+                        echo $loinhuansauthue_ht == $loinhuansauthue ? '<span style="font-weight:bold; color:green">OK</span>' : '<span style="font-weight:bold; color:red">'.$lib->formatMoney($loinhuansauthue_ht - $loinhuansauthue).'</span>';
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="fix" colspan="2">Phân bổ lợi nhuận</td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+                <td class="fix"></td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[4111] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix"></td>
+                <td class="fix"> - Tăng vốn chủ sở hữu</td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($von_co_ps = isset($account_add[4111]['co'])?str_replace('-', '', $account_add[4111]['co']):null) ?></td>
+                <td class="fix"></td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[3521] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix"></td>
+                <td class="fix"> - Quỹ lương dự phòng</td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($quyluong_co_ps = isset($account_add[3521]['co'])?str_replace('-', '', $account_add[3521]['co']):null) ?></td>
+                <td class="fix"></td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[3522] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix"></td>
+                <td class="fix"> - Dự phòng khác</td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($duphong_co_ps = isset($account_add[3522]['co'])?str_replace('-', '', $account_add[3522]['co']):null) ?></td>
+                <td class="fix"></td>
+            </tr>
+            <tr class="bank" data="<?php echo $account_num[411] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
+                <td class="fix" colspan="2">Vốn đầu tháng</td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($vondauthang = (isset($account_parent_before[411]) && $account_parent_before[411]<0 )?str_replace('-', '', $account_parent_before[411]):null) ?></td>
+                <td class="fix"></td>
+            </tr>
+            <tr>
+                <td class="fix" colspan="2">Vốn cuối tháng</td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo $lib->formatMoney($voncuoithang = $vondauthang+(isset($account_parent_add[411]['co'])?str_replace('-', '', $account_parent_add[411]['co']):null) ) ?></td>
+                <td class="fix"></td>
+            </tr>
+            <tr style="background-color:rgba(38, 144, 185, 0.15)">
+                <td class="fix" colspan="2">Tỉ lệ lợi nhuận trên vốn</td>
+                <td class="fix"></td>
+                <td class="fix"><?php echo round($tile = $vondauthang>0?$loinhuansauthue*100/$vondauthang:$loinhuansauthue*100/1,2).'%' ?></td>
+                <td class="fix"></td>
+            </tr>
+        </tbody>
+   </table>
+</div>
+<div id="show" style="position:absolute; box-shadow: 0px 0px 5px rgb(145, 217, 244);"></div>
+
+<script type="text/javascript">
+
+var tha = "<?php echo $tha ?>";
+$('#sl_tha option[value='+tha+']').attr('selected','selected');
+var na = "<?php echo $na ?>";
+$('#sl_na option[value='+na+']').attr('selected','selected');
+
+$('#sl_tha').change(function(){
+        var m = $(this).val();
+        var y = $('#sl_na').val();
+        var firstDay = new Date(y, m-1, 1);
+        var lastDay = new Date(y, m, 0);
+
+        $('#batdau').datepicker("setDate", firstDay );
+        $('#ketthuc').datepicker("setDate", lastDay );
+        
+
+    });
+
+    $('#sl_na').change(function(){
+        var y = $(this).val();
+        var m = $('#sl_tha').val();
+        var firstDay = new Date(y, m-1, 1);
+        var lastDay = new Date(y, m, 0);
+
+        $('#batdau').datepicker("setDate", firstDay );
+        $('#ketthuc').datepicker("setDate", lastDay );
+
+    });
+
+   var pickerOpts3 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts3);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+    $('.bank').toggle(function(){
+        var val = $(this).attr('data');
+        var batdau = $(this).attr('alt');
+        var ketthuc = $(this).attr('name');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/financial/getAdditional',
+            type: 'POST',
+            data: {account:val, batdau:batdau, ketthuc:ketthuc},
+            success:function(data){
+               
+                $('#show').html(data);
+                //$('#dataTable tbody').append(data);
+            }
+        });
+    },function(){
+        $('#show').html("");
+    });
+
+$('.table_data').on('mousedown', function(e){
+    $('#show').css({
+       left:  e.pageX-200,
+       top:   e.pageY-100
+    });
+});
+
+
+$(document).keyup(function(e) {
+  
+  if (e.keyCode == 27){   // esc
+    $('#show').html("");
+  }
+});
+</script>

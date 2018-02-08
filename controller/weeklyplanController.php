@@ -71,11 +71,11 @@ Class weeklyplanController Extends baseController {
 
         $working = count($work_model->getAllWork(array('where' => '(work_plan_complete != 1 AND start_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).')'.$and),$join));
         $complete = count($work_model->getAllWork(array('where' => 'work_plan_complete = 1  AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).$and),$join));
-        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).'))'.$and),$join));
+        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).'))'.$and),$join));
         $worktotal = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') OR (start_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND end_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') )'.$and),$join));
         $todayworking = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime($ketthuc).') OR (work_plan_complete!=1 AND start_date >= '.strtotime($batdau).' AND start_date <= '.strtotime($ketthuc).') )'.$and),$join));
         $todaycomplete = count($work_model->getAllWork(array('where' => '(work_plan_complete = 1  AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).')'.$and),$join));
-        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).'))'.$and),$join));
+        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).'))'.$and),$join));
 
         $this->view->data['working'] = $working;
         $this->view->data['complete'] = $complete;
@@ -229,11 +229,11 @@ Class weeklyplanController Extends baseController {
 
         $working = count($work_model->getAllWork(array('where' => '(work_plan_complete != 1 AND start_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).')'.$and),$join));
         $complete = count($work_model->getAllWork(array('where' => 'work_plan_complete = 1  AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).$and),$join));
-        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).'))'.$and),$join));
+        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).'))'.$and),$join));
         $worktotal = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') OR (start_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND end_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') )'.$and),$join));
         $todayworking = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime($ketthuc).') OR (work_plan_complete!=1 AND start_date >= '.strtotime($batdau).' AND start_date <= '.strtotime($ketthuc).') )'.$and),$join));
         $todaycomplete = count($work_model->getAllWork(array('where' => '(work_plan_complete = 1  AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).')'.$and),$join));
-        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).'))'.$and),$join));
+        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).'))'.$and),$join));
 
         $this->view->data['working'] = $working;
         $this->view->data['complete'] = $complete;
@@ -387,11 +387,11 @@ Class weeklyplanController Extends baseController {
 
         $working = count($work_model->getAllWork(array('where' => '(work_plan_complete != 1 AND start_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).')'.$and),$join));
         $complete = count($work_model->getAllWork(array('where' => 'work_plan_complete = 1  AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).$and),$join));
-        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).'))'.$and),$join));
+        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).'))'.$and),$join));
         $worktotal = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') OR (start_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND end_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') )'.$and),$join));
         $todayworking = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime($ketthuc).') OR (work_plan_complete!=1 AND start_date >= '.strtotime($batdau).' AND start_date <= '.strtotime($ketthuc).') )'.$and),$join));
         $todaycomplete = count($work_model->getAllWork(array('where' => '(work_plan_complete = 1  AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).')'.$and),$join));
-        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).'))'.$and),$join));
+        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).'))'.$and),$join));
 
         $this->view->data['working'] = $working;
         $this->view->data['complete'] = $complete;
@@ -406,7 +406,7 @@ Class weeklyplanController Extends baseController {
         $pagination_stages = 2;
         
         $data = array(
-            'where' => '((work_plan_complete != 1 AND end_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).'))',
+            'where' => '((work_plan_complete != 1 AND start_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).'))',
         );
 
         if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
@@ -443,7 +443,7 @@ Class weeklyplanController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => '((work_plan_complete != 1 AND end_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).'))',
+            'where' => '((work_plan_complete != 1 AND start_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime($batdau)).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime($batdau)).'))',
             );
 
         if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
@@ -598,7 +598,7 @@ Class weeklyplanController Extends baseController {
         $worktotal = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime($ketthuc).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).') OR (start_date >= '.strtotime($batdau).' AND end_date <= '.strtotime($ketthuc).') )'.$and),$join));
         $working = count($work_model->getAllWork(array('where' => '(work_plan_complete != 1 AND start_date <= '.strtotime($ketthuc).')'.$and),$join));
         $complete = count($work_model->getAllWork(array('where' => 'work_plan_complete = 1  AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).$and),$join));
-        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).'))'.$and),$join));
+        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).'))'.$and),$join));
 
         $this->view->data['working'] = $working;
         $this->view->data['complete'] = $complete;
@@ -607,7 +607,7 @@ Class weeklyplanController Extends baseController {
 
         $todayworking = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date('d-m-Y')).') OR (work_plan_complete!=1 AND start_date >= '.strtotime(date('d-m-Y')).' AND start_date <= '.strtotime(date('d-m-Y')).') )'.$and),$join));
         $todaycomplete = count($work_model->getAllWork(array('where' => '(work_plan_complete = 1  AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).')'.$and),$join));
-        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
+        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
 
         $this->view->data['todayworking'] = $todayworking;
         $this->view->data['todaycomplete'] = $todaycomplete;
@@ -750,7 +750,7 @@ Class weeklyplanController Extends baseController {
         $worktotal = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime($ketthuc).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).') OR (start_date >= '.strtotime($batdau).' AND end_date <= '.strtotime($ketthuc).') )'.$and),$join));
         $working = count($work_model->getAllWork(array('where' => '(work_plan_complete != 1 AND start_date <= '.strtotime($ketthuc).')'.$and),$join));
         $complete = count($work_model->getAllWork(array('where' => 'work_plan_complete = 1  AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).$and),$join));
-        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).'))'.$and),$join));
+        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).'))'.$and),$join));
 
         $this->view->data['working'] = $working;
         $this->view->data['complete'] = $complete;
@@ -759,7 +759,7 @@ Class weeklyplanController Extends baseController {
 
         $todayworking = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date('d-m-Y')).') OR (work_plan_complete!=1 AND start_date >= '.strtotime(date('d-m-Y')).' AND start_date <= '.strtotime(date('d-m-Y')).') )'.$and),$join));
         $todaycomplete = count($work_model->getAllWork(array('where' => '(work_plan_complete = 1  AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).')'.$and),$join));
-        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
+        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
 
         $this->view->data['todayworking'] = $todayworking;
         $this->view->data['todaycomplete'] = $todaycomplete;
@@ -902,7 +902,7 @@ Class weeklyplanController Extends baseController {
         $worktotal = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime($ketthuc).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).') OR (start_date >= '.strtotime($batdau).' AND end_date <= '.strtotime($ketthuc).') )'.$and),$join));
         $working = count($work_model->getAllWork(array('where' => '(work_plan_complete != 1 AND start_date <= '.strtotime($ketthuc).')'.$and),$join));
         $complete = count($work_model->getAllWork(array('where' => 'work_plan_complete = 1  AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).$and),$join));
-        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).'))'.$and),$join));
+        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).'))'.$and),$join));
 
         $this->view->data['working'] = $working;
         $this->view->data['complete'] = $complete;
@@ -911,7 +911,7 @@ Class weeklyplanController Extends baseController {
 
         $todayworking = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date('d-m-Y')).') OR (work_plan_complete!=1 AND start_date >= '.strtotime(date('d-m-Y')).' AND start_date <= '.strtotime(date('d-m-Y')).') )'.$and),$join));
         $todaycomplete = count($work_model->getAllWork(array('where' => '(work_plan_complete = 1  AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).')'.$and),$join));
-        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
+        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
 
         $this->view->data['todayworking'] = $todayworking;
         $this->view->data['todaycomplete'] = $todaycomplete;
@@ -1054,7 +1054,7 @@ Class weeklyplanController Extends baseController {
         $worktotal = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime($ketthuc).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).') OR (start_date >= '.strtotime($batdau).' AND end_date <= '.strtotime($ketthuc).') )'.$and),$join));
         $working = count($work_model->getAllWork(array('where' => '(work_plan_complete != 1 AND start_date <= '.strtotime($ketthuc).')'.$and),$join));
         $complete = count($work_model->getAllWork(array('where' => 'work_plan_complete = 1  AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).$and),$join));
-        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).'))'.$and),$join));
+        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).'))'.$and),$join));
 
         $this->view->data['working'] = $working;
         $this->view->data['complete'] = $complete;
@@ -1063,7 +1063,7 @@ Class weeklyplanController Extends baseController {
 
         $todayworking = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date('d-m-Y')).') OR (work_plan_complete!=1 AND start_date >= '.strtotime(date('d-m-Y')).' AND start_date <= '.strtotime(date('d-m-Y')).') )'.$and),$join));
         $todaycomplete = count($work_model->getAllWork(array('where' => '(work_plan_complete = 1  AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).')'.$and),$join));
-        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
+        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
 
         $this->view->data['todayworking'] = $todayworking;
         $this->view->data['todaycomplete'] = $todaycomplete;
@@ -1074,7 +1074,7 @@ Class weeklyplanController Extends baseController {
         $pagination_stages = 2;
         
         $data = array(
-            'where' => '((work_plan_complete != 1 AND end_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).'))',
+            'where' => '((work_plan_complete != 1 AND start_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).'))',
         );
 
         if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
@@ -1111,7 +1111,7 @@ Class weeklyplanController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => '((work_plan_complete != 1 AND end_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).'))',
+            'where' => '((work_plan_complete != 1 AND start_date < '.strtotime($batdau).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date >= '.strtotime($batdau).' AND work_plan_complete_date <= '.strtotime($ketthuc).'))',
             );
 
         if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
@@ -1210,7 +1210,7 @@ Class weeklyplanController Extends baseController {
         $worktotal = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') OR (start_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND end_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') )'.$and),$join));
         $working = count($work_model->getAllWork(array('where' => '(work_plan_complete != 1 AND start_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).')'.$and),$join));
         $complete = count($work_model->getAllWork(array('where' => 'work_plan_complete = 1  AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).$and),$join));
-        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).'))'.$and),$join));
+        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).'))'.$and),$join));
 
         $this->view->data['working'] = $working;
         $this->view->data['complete'] = $complete;
@@ -1219,7 +1219,7 @@ Class weeklyplanController Extends baseController {
 
         $todayworking = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date('d-m-Y')).') OR (work_plan_complete!=1 AND start_date >= '.strtotime(date('d-m-Y')).' AND start_date <= '.strtotime(date('d-m-Y')).') )'.$and),$join));
         $todaycomplete = count($work_model->getAllWork(array('where' => '(work_plan_complete = 1  AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).')'.$and),$join));
-        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
+        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
 
         $this->view->data['todayworking'] = $todayworking;
         $this->view->data['todaycomplete'] = $todaycomplete;
@@ -1368,7 +1368,7 @@ Class weeklyplanController Extends baseController {
         $worktotal = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') OR (start_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND end_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') )'.$and),$join));
         $working = count($work_model->getAllWork(array('where' => '(work_plan_complete != 1 AND start_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).')'.$and),$join));
         $complete = count($work_model->getAllWork(array('where' => 'work_plan_complete = 1  AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).$and),$join));
-        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).'))'.$and),$join));
+        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).'))'.$and),$join));
 
         $this->view->data['working'] = $working;
         $this->view->data['complete'] = $complete;
@@ -1377,7 +1377,7 @@ Class weeklyplanController Extends baseController {
 
         $todayworking = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date('d-m-Y')).') OR (work_plan_complete!=1 AND start_date >= '.strtotime(date('d-m-Y')).' AND start_date <= '.strtotime(date('d-m-Y')).') )'.$and),$join));
         $todaycomplete = count($work_model->getAllWork(array('where' => '(work_plan_complete = 1  AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).')'.$and),$join));
-        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
+        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
 
         $this->view->data['todayworking'] = $todayworking;
         $this->view->data['todaycomplete'] = $todaycomplete;
@@ -1526,7 +1526,7 @@ Class weeklyplanController Extends baseController {
         $worktotal = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') OR (start_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND end_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).') )'.$and),$join));
         $working = count($work_model->getAllWork(array('where' => '(work_plan_complete != 1 AND start_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).')'.$and),$join));
         $complete = count($work_model->getAllWork(array('where' => 'work_plan_complete = 1  AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).$and),$join));
-        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).'))'.$and),$join));
+        $deadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date >= '.strtotime(date( 'd-m-Y', strtotime( 'monday this week' ) )).' AND work_plan_complete_date <= '.strtotime(date( 'd-m-Y', strtotime( 'sunday this week' ) )).'))'.$and),$join));
 
         $this->view->data['working'] = $working;
         $this->view->data['complete'] = $complete;
@@ -1535,7 +1535,7 @@ Class weeklyplanController Extends baseController {
 
         $todayworking = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date <= '.strtotime(date('d-m-Y')).') OR (work_plan_complete!=1 AND start_date >= '.strtotime(date('d-m-Y')).' AND start_date <= '.strtotime(date('d-m-Y')).') )'.$and),$join));
         $todaycomplete = count($work_model->getAllWork(array('where' => '(work_plan_complete = 1  AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).')'.$and),$join));
-        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND end_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
+        $todaydeadline = count($work_model->getAllWork(array('where' => '((work_plan_complete != 1 AND start_date < '.strtotime(date('d-m-Y')).') OR (work_plan_complete=1 AND work_plan_complete_date > start_date AND work_plan_complete_date > '.strtotime('-1 day',strtotime(date('d-m-Y'))).' AND work_plan_complete_date < '.strtotime('+1 day',strtotime(date('d-m-Y'))).'))'.$and),$join));
 
         $this->view->data['todayworking'] = $todayworking;
         $this->view->data['todaycomplete'] = $todaycomplete;
@@ -1632,7 +1632,6 @@ Class weeklyplanController Extends baseController {
             $work_plan_code_model = $this->model->get('workplancodeModel');
             $attachment_model = $this->model->get('attachmentModel');
 
-            $time = explode('-', trim($_POST['work_plan_time']));
 
             $data = array(
                         'work_plan_code' => trim($_POST['work_plan_code_id']),
@@ -1642,8 +1641,7 @@ Class weeklyplanController Extends baseController {
                         'work_plan_complete' => trim($_POST['work_plan_complete']),
                         'work_plan_number' => trim($_POST['work_plan_number']),
                         'work_plan_unit' => trim($_POST['work_plan_unit']),
-                        'start_date' => strtotime(str_replace('/', '-', $time[0])),
-                        'end_date' => strtotime(str_replace('/', '-', $time[1])),
+                        'end_date' => strtotime(str_replace('/', '-', $_POST['work_plan_time'])),
                         'work_plan_complete_date' => strtotime(str_replace('/', '-', $_POST['work_plan_complete_date'])),
                         'work_plan_result' => trim($_POST['work_plan_result']),
                         );
@@ -1747,7 +1745,20 @@ Class weeklyplanController Extends baseController {
 
             if ($_POST['yes'] != "") {
                                     
-                
+                $old = $work_plan_model->getWork($_POST['yes']);
+
+                $alls = $work_plan_model->queryWork('SELECT * FROM work_plan WHERE work_plan_owner="'.$data['work_plan_owner'].'" AND end_date >= '.strtotime('monday this week', $data['end_date']).' AND end_date <= '.strtotime('monday this week', $data['end_date']));
+                $num = 0;
+                foreach ($alls as $a) {
+                    $num += $a->work_plan_point;
+                }
+
+                if (($num-$old->work_plan_point+$data['work_plan_point']) > 44) {
+                    echo "Vượt quá số giờ tối đa trong tuần";
+                    return false;
+                }
+                else{
+
                     $work_plan_model->updateWork($data,array('work_plan_id' => trim($_POST['yes'])));
                     echo "Cập nhật thành công";
 
@@ -1761,11 +1772,28 @@ Class weeklyplanController Extends baseController {
                         fwrite($fh, $text) or die("Could not write file!");
                         fclose($fh);
                 
-                
+                }
             }
             else{
 
                 $data['create_user'] = $_SESSION['userid_logined'];
+                $data['start_date'] = $data['end_date'];
+
+                $alls = $work_plan_model->queryWork('SELECT * FROM work_plan WHERE work_plan_owner="'.$data['work_plan_owner'].'" AND end_date >= '.strtotime('monday this week', $data['end_date']).' AND end_date <= '.strtotime('monday this week', $data['end_date']));
+                $num = 0;
+                foreach ($alls as $a) {
+                    $num += $a->work_plan_point;
+                }
+
+                if (($num+$data['work_plan_point']) > 44) {
+                    echo "Vượt quá số giờ tối đa trong tuần";
+                    return false;
+                }
+                elseif ($work_plan_model->queryWork('SELECT * FROM work_plan WHERE work_plan_owner="'.$data['work_plan_owner'].'" AND (work_plan_complete IS NULL OR work_plan_complete != 1) AND end_date < '.strtotime('monday this week', $data['end_date']))) {
+                    echo "Vui lòng hoàn tất báo cáo tuần trước hoặc cập nhật lại Deadline";
+                    return false;
+                }
+                else{
                 
                     $work_plan_model->createWork($data);
 
@@ -1781,7 +1809,7 @@ Class weeklyplanController Extends baseController {
                         $fh = fopen($filename, "a") or die("Could not open log file.");
                         fwrite($fh, $text) or die("Could not write file!");
                         fclose($fh);
-                
+                }
                 
             }
 
@@ -1923,14 +1951,14 @@ Class weeklyplanController Extends baseController {
             $data = array(
             'order_by'=>'start_date',
             'order'=>'ASC',
-            'where' => '((work_plan_complete != 1 AND end_date < '.$batdau.') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.$batdau.' AND work_plan_complete_date <= '.$ketthuc.'))',
+            'where' => '((work_plan_complete != 1 AND start_date < '.$batdau.') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.$batdau.' AND work_plan_complete_date <= '.$ketthuc.'))',
             );
         }
         else{
             $data = array(
             'order_by'=>'start_date',
             'order'=>'ASC',
-            'where' => '((work_plan_complete != 1 AND start_date <= '.$ketthuc.') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.$batdau.' AND work_plan_complete_date <= '.$ketthuc.') OR (start_date >= '.$batdau.' AND end_date <= '.$ketthuc.') )',
+            'where' => '((work_plan_complete != 1 AND start_date <= '.$ketthuc.') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.$batdau.' AND work_plan_complete_date <= '.$ketthuc.') OR (end_date >= '.$batdau.' AND end_date <= '.$ketthuc.') )',
             );
         }
         
@@ -1979,25 +2007,21 @@ Class weeklyplanController Extends baseController {
 
                ->setCellValue('E4', 'ĐVT')
 
-               ->setCellValue('F4', 'Ngày thực hiện')
+               ->setCellValue('F4', 'Deadline')
 
-               ->setCellValue('F5', 'Từ ngày')
+               ->setCellValue('G4', 'PIC')
 
-               ->setCellValue('G5', 'Đến ngày')
+               ->setCellValue('G5', 'Giao')
 
-               ->setCellValue('H4', 'PIC')
+               ->setCellValue('H5', 'Thực hiện')
 
-               ->setCellValue('H5', 'Giao')
+               ->setCellValue('I4', 'Ghi chú')
 
-               ->setCellValue('I5', 'Thực hiện')
+               ->setCellValue('J4', 'Thời gian')
 
-               ->setCellValue('J4', 'Ghi chú')
+               ->setCellValue('K4', 'Hoàn thành')
 
-               ->setCellValue('K4', 'Thời gian')
-
-               ->setCellValue('L4', 'Hoàn thành')
-
-               ->setCellValue('M4', 'Kết quả');
+               ->setCellValue('L4', 'Kết quả');
 
             
             
@@ -2045,19 +2069,17 @@ Class weeklyplanController Extends baseController {
 
                             ->setCellValue('F' . $hang, date('d/m/Y',$row->start_date))
 
-                            ->setCellValue('G' . $hang, ($row->start_date!=$row->end_date?date('d/m/Y',$row->end_date):null))
+                            ->setCellValue('G' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
 
-                            ->setCellValue('H' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
+                            ->setCellValue('H' . $hang, $str)
 
-                            ->setCellValue('I' . $hang, $str)
+                            ->setCellValue('I' . $hang, $row->work_plan_comment)
 
-                            ->setCellValue('J' . $hang, $row->work_plan_comment)
+                            ->setCellValue('J' . $hang, $row->work_plan_point)
 
-                            ->setCellValue('K' . $hang, $row->work_plan_point)
+                            ->setCellValue('K' . $hang, $this->lib->hien_thi_ngay_thang($row->work_plan_complete_date))
 
-                            ->setCellValue('L' . $hang, $this->lib->hien_thi_ngay_thang($row->work_plan_complete_date))
-
-                            ->setCellValue('M' . $hang, $row->work_plan_result);
+                            ->setCellValue('L' . $hang, $row->work_plan_result);
 
 
                      $hang++; 
@@ -2068,13 +2090,13 @@ Class weeklyplanController Extends baseController {
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
                         ->setCellValue('A' . $hang, 'Tổng thời gian làm việc')
-                        ->setCellValue('K' . $hang, '=SUM(K6:K'.($hang-1).')');
+                        ->setCellValue('J' . $hang, '=SUM(J6:J'.($hang-1).')');
 
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':C'.$hang);
-            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':M'.$hang)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':L'.$hang)->getFont()->setBold(true);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A4:M'.$hang)->applyFromArray(
+            $objPHPExcel->getActiveSheet()->getStyle('A4:L'.$hang)->applyFromArray(
 
                 array(
 
@@ -2110,21 +2132,21 @@ Class weeklyplanController Extends baseController {
             $objPHPExcel->getActiveSheet()->mergeCells('C4:C5');
             $objPHPExcel->getActiveSheet()->mergeCells('D4:D5');
             $objPHPExcel->getActiveSheet()->mergeCells('E4:E5');
-            $objPHPExcel->getActiveSheet()->mergeCells('F4:G4');
-            $objPHPExcel->getActiveSheet()->mergeCells('H4:I4');
+            $objPHPExcel->getActiveSheet()->mergeCells('F4:F5');
+            $objPHPExcel->getActiveSheet()->mergeCells('G4:H4');
+            $objPHPExcel->getActiveSheet()->mergeCells('I4:I5');
             $objPHPExcel->getActiveSheet()->mergeCells('J4:J5');
             $objPHPExcel->getActiveSheet()->mergeCells('K4:K5');
             $objPHPExcel->getActiveSheet()->mergeCells('L4:L5');
-            $objPHPExcel->getActiveSheet()->mergeCells('M4:M5');
 
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M4')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L4')->getFont()->setBold(true);
 
             $objPHPExcel->getActiveSheet()->getDefaultColumnDimension()->setWidth(14);
 
@@ -2135,8 +2157,8 @@ Class weeklyplanController Extends baseController {
             $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(7);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getFont()->setName('Times New Roman');
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getFont()->setSize(12);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getFont()->setName('Times New Roman');
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getFont()->setSize(12);
 
             $objPHPExcel->getActiveSheet()->getStyle("A2")->getFont()->setSize(16);
 
@@ -2212,7 +2234,7 @@ Class weeklyplanController Extends baseController {
         $data = array(
             'order_by'=>'start_date',
             'order'=>'ASC',
-            'where' => '((work_plan_complete != 1 AND end_date < '.$batdau.') OR (work_plan_complete != 1 AND start_date > '.strtotime('-1 day', $batdau).' AND start_date < '.strtotime('+1 day', $batdau).') )',
+            'where' => '((work_plan_complete != 1 AND start_date < '.$batdau.') OR (work_plan_complete != 1 AND end_date > '.strtotime('-1 day', $batdau).' AND end_date < '.strtotime('+1 day', $batdau).') )',
             );
 
         $add = "";
@@ -2253,35 +2275,28 @@ Class weeklyplanController Extends baseController {
 
                ->setCellValue('E4', 'ĐVT')
 
-               ->setCellValue('F4', 'Ngày thực hiện')
+               ->setCellValue('F4', 'Deadline')
 
-               ->setCellValue('F5', 'Từ ngày')
+               ->setCellValue('G4', 'PIC')
 
-               ->setCellValue('G5', 'Đến ngày')
+               ->setCellValue('G5', 'Giao')
 
-               ->setCellValue('H4', 'PIC')
+               ->setCellValue('H5', 'Thực hiện')
 
-               ->setCellValue('H5', 'Giao')
+               ->setCellValue('I4', 'Ghi chú')
 
-               ->setCellValue('I5', 'Thực hiện')
+               ->setCellValue('J4', 'Thời gian')
 
-               ->setCellValue('J4', 'Ghi chú')
+               ->setCellValue('K4', 'Hoàn thành')
 
-               ->setCellValue('K4', 'Thời gian')
-
-               ->setCellValue('L4', 'Hoàn thành')
-
-               ->setCellValue('M4', 'Kết quả');
+               ->setCellValue('L4', 'Kết quả');
 
             
-            
+            $hang = 6;
 
 
             if ($works) {
 
-
-
-                $hang = 6;
 
                 $i=1;
 
@@ -2319,19 +2334,17 @@ Class weeklyplanController Extends baseController {
 
                             ->setCellValue('F' . $hang, date('d/m/Y',$row->start_date))
 
-                            ->setCellValue('G' . $hang, ($row->start_date!=$row->end_date?date('d/m/Y',$row->end_date):null))
+                            ->setCellValue('G' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
 
-                            ->setCellValue('H' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
+                            ->setCellValue('H' . $hang, $str)
 
-                            ->setCellValue('I' . $hang, $str)
+                            ->setCellValue('I' . $hang, $row->work_plan_comment)
 
-                            ->setCellValue('J' . $hang, $row->work_plan_comment)
+                            ->setCellValue('J' . $hang, $row->work_plan_point)
 
-                            ->setCellValue('K' . $hang, $row->work_plan_point)
+                            ->setCellValue('K' . $hang, $this->lib->hien_thi_ngay_thang($row->work_plan_complete_date))
 
-                            ->setCellValue('L' . $hang, $this->lib->hien_thi_ngay_thang($row->work_plan_complete_date))
-
-                            ->setCellValue('M' . $hang, $row->work_plan_result);
+                            ->setCellValue('L' . $hang, $row->work_plan_result);
 
 
                      $hang++; 
@@ -2342,13 +2355,13 @@ Class weeklyplanController Extends baseController {
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
                         ->setCellValue('A' . $hang, 'Tổng thời gian làm việc')
-                        ->setCellValue('K' . $hang, '=SUM(K6:K'.($hang-1).')');
+                        ->setCellValue('J' . $hang, '=SUM(J6:J'.($hang-1).')');
 
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':C'.$hang);
-            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':M'.$hang)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':L'.$hang)->getFont()->setBold(true);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A4:M'.$hang)->applyFromArray(
+            $objPHPExcel->getActiveSheet()->getStyle('A4:L'.$hang)->applyFromArray(
 
                 array(
 
@@ -2384,21 +2397,21 @@ Class weeklyplanController Extends baseController {
             $objPHPExcel->getActiveSheet()->mergeCells('C4:C5');
             $objPHPExcel->getActiveSheet()->mergeCells('D4:D5');
             $objPHPExcel->getActiveSheet()->mergeCells('E4:E5');
-            $objPHPExcel->getActiveSheet()->mergeCells('F4:G4');
-            $objPHPExcel->getActiveSheet()->mergeCells('H4:I4');
+            $objPHPExcel->getActiveSheet()->mergeCells('F4:F5');
+            $objPHPExcel->getActiveSheet()->mergeCells('G4:H4');
+            $objPHPExcel->getActiveSheet()->mergeCells('I4:I5');
             $objPHPExcel->getActiveSheet()->mergeCells('J4:J5');
             $objPHPExcel->getActiveSheet()->mergeCells('K4:K5');
             $objPHPExcel->getActiveSheet()->mergeCells('L4:L5');
-            $objPHPExcel->getActiveSheet()->mergeCells('M4:M5');
 
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M4')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L4')->getFont()->setBold(true);
 
             $objPHPExcel->getActiveSheet()->getDefaultColumnDimension()->setWidth(14);
 
@@ -2409,8 +2422,8 @@ Class weeklyplanController Extends baseController {
             $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(7);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getFont()->setName('Times New Roman');
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getFont()->setSize(12);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getFont()->setName('Times New Roman');
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getFont()->setSize(12);
 
             $objPHPExcel->getActiveSheet()->getStyle("A2")->getFont()->setSize(16);
 
@@ -2499,7 +2512,7 @@ Class weeklyplanController Extends baseController {
                 $tre = "";
                 $homnay = "";
                 foreach ($works as $w) {
-                    if($w->end_date < $batdau){
+                    if($w->start_date < $batdau){
                         $tre .= '<p> - '.$w->work_plan_name.' | Deadline: '.date('d/m/Y',$w->end_date).'</p>';
                     }
                     else{
@@ -2609,7 +2622,7 @@ Class weeklyplanController Extends baseController {
             $data = array(
                 'order_by'=>'start_date',
                 'order'=>'ASC',
-                'where' => 'work_plan_owner = '.$stf->staff_id.' AND ((work_plan_complete != 1 AND start_date <= '.$ketthuc.') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.$batdau.' AND work_plan_complete_date <= '.$ketthuc.') OR (start_date >= '.$batdau.' AND end_date <= '.$ketthuc.') )',
+                'where' => 'work_plan_owner = '.$stf->staff_id.' AND ((work_plan_complete != 1 AND start_date <= '.$ketthuc.') OR (work_plan_complete=1 AND work_plan_complete_date > end_date AND work_plan_complete_date >= '.$batdau.' AND work_plan_complete_date <= '.$ketthuc.') OR (end_date >= '.$batdau.' AND end_date <= '.$ketthuc.') )',
                 );
 
             $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
@@ -2637,35 +2650,28 @@ Class weeklyplanController Extends baseController {
 
                ->setCellValue('E4', 'ĐVT')
 
-               ->setCellValue('F4', 'Ngày thực hiện')
+               ->setCellValue('F4', 'Deadline')
 
-               ->setCellValue('F5', 'Từ ngày')
+               ->setCellValue('G4', 'PIC')
 
-               ->setCellValue('G5', 'Đến ngày')
+               ->setCellValue('G5', 'Giao')
 
-               ->setCellValue('H4', 'PIC')
+               ->setCellValue('H5', 'Thực hiện')
 
-               ->setCellValue('H5', 'Giao')
+               ->setCellValue('I4', 'Ghi chú')
 
-               ->setCellValue('I5', 'Thực hiện')
+               ->setCellValue('J4', 'Thời gian')
 
-               ->setCellValue('J4', 'Ghi chú')
+               ->setCellValue('K4', 'Hoàn thành')
 
-               ->setCellValue('K4', 'Thời gian')
-
-               ->setCellValue('L4', 'Hoàn thành')
-
-               ->setCellValue('M4', 'Kết quả');
+               ->setCellValue('L4', 'Kết quả');
 
             
             
-
+            $hang = 6;
 
             if ($works) {
 
-
-
-                $hang = 6;
 
                 $i=1;
 
@@ -2703,19 +2709,17 @@ Class weeklyplanController Extends baseController {
 
                             ->setCellValue('F' . $hang, date('d/m/Y',$row->start_date))
 
-                            ->setCellValue('G' . $hang, ($row->start_date!=$row->end_date?date('d/m/Y',$row->end_date):null))
+                            ->setCellValue('G' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
 
-                            ->setCellValue('H' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
+                            ->setCellValue('H' . $hang, $str)
 
-                            ->setCellValue('I' . $hang, $str)
+                            ->setCellValue('I' . $hang, $row->work_plan_comment)
 
-                            ->setCellValue('J' . $hang, $row->work_plan_comment)
+                            ->setCellValue('J' . $hang, $row->work_plan_point)
 
-                            ->setCellValue('K' . $hang, $row->work_plan_point)
+                            ->setCellValue('K' . $hang, $this->lib->hien_thi_ngay_thang($row->work_plan_complete_date))
 
-                            ->setCellValue('L' . $hang, $this->lib->hien_thi_ngay_thang($row->work_plan_complete_date))
-
-                            ->setCellValue('M' . $hang, $row->work_plan_result);
+                            ->setCellValue('L' . $hang, $row->work_plan_result);
 
 
                      $hang++; 
@@ -2726,13 +2730,13 @@ Class weeklyplanController Extends baseController {
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
                         ->setCellValue('A' . $hang, 'Tổng thời gian làm việc')
-                        ->setCellValue('K' . $hang, '=SUM(K6:K'.($hang-1).')');
+                        ->setCellValue('J' . $hang, '=SUM(J6:J'.($hang-1).')');
 
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':C'.$hang);
-            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':M'.$hang)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':L'.$hang)->getFont()->setBold(true);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A4:M'.$hang)->applyFromArray(
+            $objPHPExcel->getActiveSheet()->getStyle('A4:L'.$hang)->applyFromArray(
 
                 array(
 
@@ -2768,21 +2772,21 @@ Class weeklyplanController Extends baseController {
             $objPHPExcel->getActiveSheet()->mergeCells('C4:C5');
             $objPHPExcel->getActiveSheet()->mergeCells('D4:D5');
             $objPHPExcel->getActiveSheet()->mergeCells('E4:E5');
-            $objPHPExcel->getActiveSheet()->mergeCells('F4:G4');
-            $objPHPExcel->getActiveSheet()->mergeCells('H4:I4');
+            $objPHPExcel->getActiveSheet()->mergeCells('F4:F5');
+            $objPHPExcel->getActiveSheet()->mergeCells('G4:H4');
+            $objPHPExcel->getActiveSheet()->mergeCells('I4:I5');
             $objPHPExcel->getActiveSheet()->mergeCells('J4:J5');
             $objPHPExcel->getActiveSheet()->mergeCells('K4:K5');
             $objPHPExcel->getActiveSheet()->mergeCells('L4:L5');
-            $objPHPExcel->getActiveSheet()->mergeCells('M4:M5');
 
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M4')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L4')->getFont()->setBold(true);
 
             $objPHPExcel->getActiveSheet()->getDefaultColumnDimension()->setWidth(14);
 
@@ -2793,8 +2797,8 @@ Class weeklyplanController Extends baseController {
             $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(7);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getFont()->setName('Times New Roman');
-            $objPHPExcel->getActiveSheet()->getStyle('A1:M'.$highestRow)->getFont()->setSize(12);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getFont()->setName('Times New Roman');
+            $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getFont()->setSize(12);
 
             $objPHPExcel->getActiveSheet()->getStyle("A2")->getFont()->setSize(16);
 
@@ -2979,7 +2983,7 @@ Class weeklyplanController Extends baseController {
             $data = array(
                 'order_by'=>'start_date',
                 'order'=>'ASC',
-                'where' => 'work_plan_owner = '.$stf->staff_id.' AND  (start_date >= '.$batdau.' AND end_date <= '.$ketthuc.') )',
+                'where' => 'work_plan_owner = '.$stf->staff_id.' AND  (end_date >= '.$batdau.' AND end_date <= '.$ketthuc.') )',
                 );
 
             $join = array('table'=>'work_plan_code','where'=>'work_plan_code = work_plan_code_id');
@@ -3007,31 +3011,24 @@ Class weeklyplanController Extends baseController {
 
                ->setCellValue('E4', 'ĐVT')
 
-               ->setCellValue('F4', 'Ngày thực hiện')
+               ->setCellValue('F4', 'Deadline')
 
-               ->setCellValue('F5', 'Từ ngày')
+               ->setCellValue('G4', 'PIC')
 
-               ->setCellValue('G5', 'Đến ngày')
+               ->setCellValue('G5', 'Giao')
 
-               ->setCellValue('H4', 'PIC')
+               ->setCellValue('H5', 'Thực hiện')
 
-               ->setCellValue('H5', 'Giao')
+               ->setCellValue('I4', 'Ghi chú')
 
-               ->setCellValue('I5', 'Thực hiện')
-
-               ->setCellValue('J4', 'Ghi chú')
-
-               ->setCellValue('K4', 'Thời gian');
+               ->setCellValue('J4', 'Thời gian');
 
             
             
-
+            $hang = 6;
 
             if ($works) {
 
-
-
-                $hang = 6;
 
                 $i=1;
 
@@ -3069,15 +3066,13 @@ Class weeklyplanController Extends baseController {
 
                             ->setCellValue('F' . $hang, date('d/m/Y',$row->start_date))
 
-                            ->setCellValue('G' . $hang, ($row->start_date!=$row->end_date?date('d/m/Y',$row->end_date):null))
+                            ->setCellValue('G' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
 
-                            ->setCellValue('H' . $hang, ($staff->staff_id!=$row->work_plan_owner?$staff->staff_name:null))
+                            ->setCellValue('H' . $hang, $str)
 
-                            ->setCellValue('I' . $hang, $str)
+                            ->setCellValue('I' . $hang, $row->work_plan_comment)
 
-                            ->setCellValue('J' . $hang, $row->work_plan_comment)
-
-                            ->setCellValue('K' . $hang, $row->work_plan_point);
+                            ->setCellValue('J' . $hang, $row->work_plan_point);
 
 
                      $hang++; 
@@ -3088,13 +3083,13 @@ Class weeklyplanController Extends baseController {
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
                         ->setCellValue('A' . $hang, 'Tổng thời gian làm việc')
-                        ->setCellValue('K' . $hang, '=SUM(K6:K'.($hang-1).')');
+                        ->setCellValue('J' . $hang, '=SUM(J6:J'.($hang-1).')');
 
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':C'.$hang);
-            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':K'.$hang)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$hang.':J'.$hang)->getFont()->setBold(true);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A4:K'.$hang)->applyFromArray(
+            $objPHPExcel->getActiveSheet()->getStyle('A4:J'.$hang)->applyFromArray(
 
                 array(
 
@@ -3130,19 +3125,19 @@ Class weeklyplanController Extends baseController {
             $objPHPExcel->getActiveSheet()->mergeCells('C4:C5');
             $objPHPExcel->getActiveSheet()->mergeCells('D4:D5');
             $objPHPExcel->getActiveSheet()->mergeCells('E4:E5');
-            $objPHPExcel->getActiveSheet()->mergeCells('F4:G4');
-            $objPHPExcel->getActiveSheet()->mergeCells('H4:I4');
+            $objPHPExcel->getActiveSheet()->mergeCells('F4:F5');
+            $objPHPExcel->getActiveSheet()->mergeCells('G4:H4');
+            $objPHPExcel->getActiveSheet()->mergeCells('I4:I5');
             $objPHPExcel->getActiveSheet()->mergeCells('J4:J5');
-            $objPHPExcel->getActiveSheet()->mergeCells('K4:K5');
 
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:J'.$highestRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:J'.$highestRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K4')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:J4')->getFont()->setBold(true);
 
             $objPHPExcel->getActiveSheet()->getDefaultColumnDimension()->setWidth(14);
 
@@ -3153,8 +3148,8 @@ Class weeklyplanController Extends baseController {
             $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(7);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getFont()->setName('Times New Roman');
-            $objPHPExcel->getActiveSheet()->getStyle('A1:K'.$highestRow)->getFont()->setSize(12);
+            $objPHPExcel->getActiveSheet()->getStyle('A1:J'.$highestRow)->getFont()->setName('Times New Roman');
+            $objPHPExcel->getActiveSheet()->getStyle('A1:J'.$highestRow)->getFont()->setSize(12);
 
             $objPHPExcel->getActiveSheet()->getStyle("A2")->getFont()->setSize(16);
 

@@ -193,6 +193,23 @@ elseif ($order_by == 'vendor')
                         
                     </tr>
                 <?php endforeach; ?>
+                <?php foreach ($lohang_costs as $cost) : ?>
+                <?php $tong += $cost->money_in;  ?>
+                    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $cost->costs_id ?>" class="edit_tr" >
+                        <td ><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $cost->costs_id ?>"></td>
+                        <td  class="fix"><?php echo $i++; ?></td>
+                        <td class="fix"  id="pay_date_<?php echo $cost->costs_id; ?>"><?php echo $lib->hien_thi_ngay_thang($cost->pay_date) ?></td>
+                        <td  class="fix" id="code_<?php echo $cost->costs_id; ?>"><?php echo $cost->code; ?></td> 
+                        <td class="fix" ></td>
+                        <td class="fix" ></td>
+                        <td  class="fix" id="money_in_<?php echo $cost->costs_id; ?>"><?php echo $lib->formatMoney($cost->money_in); ?></td>
+                        
+                        
+                        <td class="fix" id="source_in_<?php echo $cost->costs_id; ?>"><?php echo $cost->bank_name; ?></td>
+                        <td  class="fix" id="comment_<?php echo $cost->costs_id; ?>"><?php echo $cost->comment; ?></td> 
+                        
+                    </tr>
+                <?php endforeach; ?>
                 <tr style="text-align:center; font-weight: bold; color: red;">
                     <td class="fix" colspan="6" >Tổng cộng</td>
                     <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
@@ -419,6 +436,7 @@ $this->helper('slidePaginator');
         onClose: function(selectedDate) {
                 
                 $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+                $("#ketthuc").datepicker('setDate', selectedDate);
 
          },
          

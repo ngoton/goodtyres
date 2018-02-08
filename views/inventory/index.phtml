@@ -6,7 +6,7 @@
 
     $k=1;
 ?>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> -->
 <div id="loading"></div>
 <div id="winpopup"></div>
 
@@ -104,7 +104,9 @@
         <th  class="fix">
             <a class="sort" >Ngày SX </a>
         </th>
-        
+        <th  class="fix">
+            <a class="sort" >Đang về </a>
+        </th>
     </tr>
     
    </thead>
@@ -141,7 +143,7 @@
             
             <td class="fix" id="conlai_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney($ton ); ?></td>
             <td class="fix" id="date_manufacture_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->date_manufacture>0?date('m/Y',$tire_buy->date_manufacture):null; ?></td>
-            
+            <td class="fix" id="dangve_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo isset($going[$tire_buy->tire_buy_id])?$lib->formatMoney($going[$tire_buy->tire_buy_id]):null; ?></td>
         </tr>
 
     <?php } ?>
@@ -150,6 +152,7 @@
     <tr style="text-align:center; font-weight: bold; color: red;">
         <td class="fix" colspan="5" >Tổng cộng</td>
         <td class="fix"><?php echo $soluong-$daban; ?></td>
+        <td class="fix" ></td>
         <td class="fix" ></td>
     </tr>
      
@@ -173,7 +176,7 @@ $('#kichco option[value='+s+']').attr('selected','selected');
 var p = "<?php echo $magai ?>";
 $('#magai option[value='+p+']').attr('selected','selected');
 
-        //load the Google Visualization API and the chart
+/*        //load the Google Visualization API and the chart
     google.load('visualization', '1', {'packages':['corechart']});
  
     //set callback
@@ -259,7 +262,7 @@ $('#magai option[value='+p+']').attr('selected','selected');
         })
         }).responseText;
     }
-
+*/
 
 var pickerOpay2 = {
         closeText: "Đóng",

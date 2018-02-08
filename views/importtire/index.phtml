@@ -1,6 +1,8 @@
 <?php
 if ($order_by == 'import_tire_id')
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'import_tire_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
 elseif ($order_by == 'code')
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
 elseif ($order_by == 'comment')
@@ -182,7 +184,10 @@ $this->helper('slidePaginator');
                             <td colspan="7">
                                 <fieldset class="groupbox"><legend><span><h3>Chi phí mua lốp</h3></span></legend>
                                     <div id="tire_going" style="font-weight:bold;" >
-                                        <a data="<?php echo $this->url('importtire/going/') ?>" title="Thêm mới" id="add_new_list" href="#"> <img style="vertical-align:middle" src="<?php echo BASE_URL ?>/public/images/attachment.png"> Chi tiết hàng nhập </a>
+                                        <a data="<?php echo $this->url('importtire/goingorder/') ?>" title="Thêm mới" id="add_new_list_order" href="#"> <img style="vertical-align:middle" src="<?php echo BASE_URL ?>/public/images/attachment.png"> Hàng order </a>
+                                        <a data="<?php echo $this->url('importtire/going/') ?>" title="Thêm mới" id="add_new_list" href="#"> 
+                                            <i class="fa fa-file-text-o"></i> Chi tiết hàng nhập 
+                                        </a>
                                         <a data="<?php echo $this->url('importtire/viewcost/') ?>" id="view_tire_cost" class="btn btn-sm">
                                             <i class="fa fa-dollar"></i> Chi phí dự kiến
                                         </a>
@@ -1622,6 +1627,33 @@ $('#add_new_list').click(function(){
     }
     return false;
 });
+$('#add_new_list_order').click(function(){
+    var code = $('#code').attr("value");
+    var date = $('#import_tire_date').attr("value");
+    if (code == "") {
+        alert('Vui lòng nhập code lô hàng!');
+        $('#code').focus();
+    }
+    else if (date == "") {
+        alert('Vui lòng nhập ngày!');
+        $('#import_tire_date').focus();
+    }
+    else{
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:600,
+            width:600,
+            resizable: false,
+            title:'Hàng order',
+            
+        });
+        $("#winpopup").load($(this).attr('data')+code+'/1/'+date);
+        $("#winpopup").dialog("open");
+    }
+    return false;
+});
 $('#view_tire_cost').click(function(){
     var code = $('#code').attr("value");
     if (code == "") {
@@ -1875,6 +1907,7 @@ function deleteRow(tableID){
                             $.post("<?php echo BASE_URL ?>/importtire/deletevendor", {data: data, vendor: vendor, type: type},
                                function(data){
                                 //alert(data);
+                                //console.log(data);
                                }); 
                         
                     }
@@ -2100,9 +2133,10 @@ function deleteRow2(tableID){
                             var data = chkbox.getAttribute("data");
                             var type = chkbox.getAttribute("tabindex");
                             var vendor = chkbox.className;
-                            $.post("<?php echo BASE_URL ?>/importtire/deletevendor", {data: data, vendor: vendor, type: type},
+                            $.post("<?php echo BASE_URL ?>/importtire/deletevendor2", {data: data, vendor: vendor, type: type},
                                function(data){
                                 //alert(data);
+                                //console.log(data);
                                }); 
                         
                     }
@@ -2331,6 +2365,7 @@ function deleteRow4(tableID){
                             $.post("<?php echo BASE_URL ?>/importtire/deletevendor4", {data: data, vendor: vendor, type: type},
                                function(data){
                                 //alert(data);
+                                //console.log(data);
                                }); 
                         
                     }

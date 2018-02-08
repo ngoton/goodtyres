@@ -36,10 +36,10 @@ Class tiredebitController Extends baseController {
         $this->view->data['customer'] = $customer;
 
         $data = array(
-            'where' => 'customer_id IN (SELECT customer FROM tire_sale)',
+            'where' => '(customer_id IN (SELECT customer FROM tire_sale) OR customer_id IN (SELECT customer FROM deposit_tire))',
         );
         if ($nv > 0) {
-            $data['where'] = 'customer_id IN (SELECT customer FROM tire_sale WHERE sale = '.$nv.' )';
+            $data['where'] = '(customer_id IN (SELECT customer FROM tire_sale WHERE sale = '.$nv.' ) )';
         }
 
         $sonews = $limit;
@@ -67,11 +67,11 @@ Class tiredebitController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where'=>'customer_id IN (SELECT customer FROM tire_sale)',
+            'where'=>'(customer_id IN (SELECT customer FROM tire_sale) OR customer_id IN (SELECT customer FROM deposit_tire))',
             );
 
         if ($nv > 0) {
-            $data['where'] = 'customer_id IN (SELECT customer FROM tire_sale WHERE sale  = '.$nv.' )';
+            $data['where'] = '(customer_id IN (SELECT customer FROM tire_sale WHERE sale  = '.$nv.' ) )';
         }
 
         if ($trangthai > 0) {
@@ -188,7 +188,7 @@ Class tiredebitController Extends baseController {
             $sales = $tire_sale_model->getAllTire($data,$join);
             foreach ($sales as $sale) {
                 $data_customer['number'][$order->customer] = isset($data_customer['number'][$order->customer])?$data_customer['number'][$order->customer]+$sale->volume:$sale->volume;
-                $data_customer['sale'][$order->customer] = $sale->username;
+                $data_customer['sale'][$order->customer] = isset($data_customer['sale'][$order->customer])?$data_customer['sale'][$order->customer]:$sale->username;
             }
 
             if (!$sales) {
@@ -202,7 +202,7 @@ Class tiredebitController Extends baseController {
                 $sales = $tire_sale_model->getAllTire($data,$join);
                 foreach ($sales as $sale) {
                     $data_customer['number'][$order->customer] = isset($data_customer['number'][$order->customer])?$data_customer['number'][$order->customer]+$sale->volume:$sale->volume;
-                    $data_customer['sale'][$order->customer] = $sale->username;
+                    $data_customer['sale'][$order->customer] = isset($data_customer['sale'][$order->customer])?$data_customer['sale'][$order->customer]:$sale->username;
                 }
             }
 
@@ -1206,7 +1206,7 @@ Class tiredebitController Extends baseController {
             $sales = $tire_sale_model->getAllTire($data,$join);
             foreach ($sales as $sale) {
                 $data_customer['number'][$order->customer] = isset($data_customer['number'][$order->customer])?$data_customer['number'][$order->customer]+$sale->volume:$sale->volume;
-                $data_customer['sale'][$order->customer] = $sale->username;
+                $data_customer['sale'][$order->customer] = isset($data_customer['sale'][$order->customer])?$data_customer['sale'][$order->customer]:$sale->username;
             }
 
             if (!$sales) {
@@ -1221,7 +1221,7 @@ Class tiredebitController Extends baseController {
                 $sales = $tire_sale_model->getAllTire($data,$join);
                 foreach ($sales as $sale) {
                     $data_customer['number'][$order->customer] = isset($data_customer['number'][$order->customer])?$data_customer['number'][$order->customer]+$sale->volume:$sale->volume;
-                    $data_customer['sale'][$order->customer] = $sale->username;
+                    $data_customer['sale'][$order->customer] = isset($data_customer['sale'][$order->customer])?$data_customer['sale'][$order->customer]:$sale->username;
                 }
             }
             
@@ -1316,6 +1316,9 @@ Class tiredebitController Extends baseController {
 
                 $k=0;
                 foreach ($customers as $order_tire) {
+                    if (!isset($data_customer['money'][$order_tire->customer_id])) {
+                        $data_customer['money'][$order_tire->customer_id] = 0;
+                    }
                     if (isset($data_customer['money'][$order_tire->customer_id]) && ( ($data_customer['money'][$order_tire->customer_id]-$data_customer['pay_money'][$order_tire->customer_id]>0) || ($data_customer['pay_money'][$order_tire->customer_id]-$data_customer['money'][$order_tire->customer_id]>0)) ) {
 
                         $sohang = $hang;
@@ -1470,8 +1473,8 @@ Class tiredebitController Extends baseController {
                         $objPHPExcel->getActiveSheet()->getStyle('B'.$sohang)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
                         
-                        $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':G'.$hang);
-                        $hang++;
+                        //$objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':G'.$hang);
+                        //$hang++;
 
                       }
 

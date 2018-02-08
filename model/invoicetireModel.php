@@ -46,7 +46,7 @@ Class invoicetireModel Extends baseModel {
     }
     public function deleteInvoice($id){
     	if ($this->getInvoice($id)) {
-    		return $this->delete($this->table,array('invoice_id'=>$id));
+    		return $this->delete($this->table,array('invoice_tire_id'=>$id));
     	}
     }
     public function getInvoice($id){

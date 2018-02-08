@@ -24,6 +24,8 @@ Class inventoryController Extends baseController {
         }
         $this->view->data['ngay'] = $ngay;
 
+        $ngayketthuc = date('d-m-Y', strtotime($ngay. ' + 1 days'));
+
         $tire_order_model = $this->model->get('tireorderModel');
         $tire_sale_model = $this->model->get('tiresaleModel');
         $tire_buy_model = $this->model->get('tirebuyModel');
@@ -40,7 +42,7 @@ Class inventoryController Extends baseController {
         $this->view->data['tire_sizes'] = $tire_sizes;
         $this->view->data['tire_patterns'] = $tire_patterns;
 
-        $query = "SELECT t2.soluong, t1.*, t2.tire_brand_name, t2.tire_size_number, t2.tire_pattern_name FROM tire_buy t1 JOIN (SELECT sum(tire_buy_volume) as soluong, tire_buy_brand, tire_buy_size, tire_buy_pattern, MAX(tire_buy_id) as lonnhat, tire_brand_name, tire_size_number, tire_pattern_name, tire_buy_id FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_buy_date <= ".strtotime($ngay)." AND tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern GROUP BY tire_buy_brand, tire_buy_size, tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC) t2 ON t1.tire_buy_id = t2.lonnhat AND t1.tire_buy_brand = t2.tire_buy_brand AND t1.tire_buy_size = t2.tire_buy_size AND t1.tire_buy_pattern = t2.tire_buy_pattern";
+        $query = "SELECT t2.soluong, t1.*, t2.tire_brand_name, t2.tire_size_number, t2.tire_pattern_name FROM tire_buy t1 JOIN (SELECT sum(tire_buy_volume) as soluong, tire_buy_brand, tire_buy_size, tire_buy_pattern, MAX(tire_buy_id) as lonnhat, tire_brand_name, tire_size_number, tire_pattern_name, tire_buy_id FROM tire_buy, tire_brand, tire_size, tire_pattern WHERE tire_buy_date < ".strtotime($ngayketthuc)." AND tire_brand.tire_brand_id = tire_buy.tire_buy_brand AND tire_size.tire_size_id = tire_buy.tire_buy_size AND tire_pattern.tire_pattern_id = tire_buy.tire_buy_pattern GROUP BY tire_buy_brand, tire_buy_size, tire_buy_pattern ORDER BY tire_brand_name ASC, tire_size_number ASC, tire_pattern_name ASC) t2 ON t1.tire_buy_id = t2.lonnhat AND t1.tire_buy_brand = t2.tire_buy_brand AND t1.tire_buy_size = t2.tire_buy_size AND t1.tire_buy_pattern = t2.tire_buy_pattern";
         if ($thuonghieu > 0) {
             $query .= " AND t1.tire_buy_brand = ".$thuonghieu;
         }
@@ -54,14 +56,16 @@ Class inventoryController Extends baseController {
         $tire_buys = $tire_buy_model->queryTire($query);
         $this->view->data['tire_buys'] = $tire_buys;
 
-        $link_picture = array();
+        $tire_going_model = $this->model->get('tiregoingModel');
 
+        $link_picture = array();
+        $going = array();
         $sell = array();
         foreach ($tire_buys as $tire_buy) {
             $link_picture[$tire_buy->tire_buy_id]['image'] = $tire_buy->tire_pattern_name.'.jpg';
 
             $data_sale = array(
-                'where'=>'tire_sale_date <= '.strtotime($ngay).' AND tire_brand='.$tire_buy->tire_buy_brand.' AND tire_size='.$tire_buy->tire_buy_size.' AND tire_pattern='.$tire_buy->tire_buy_pattern,
+                'where'=>'tire_sale_date < '.strtotime($ngayketthuc).' AND tire_brand='.$tire_buy->tire_buy_brand.' AND tire_size='.$tire_buy->tire_buy_size.' AND tire_pattern='.$tire_buy->tire_buy_pattern,
             );
             $tire_sales = $tire_sale_model->getAllTire($data_sale);
 
@@ -72,12 +76,21 @@ Class inventoryController Extends baseController {
                 }
                 
             }
+
+            $data_going = array(
+                'where'=>'tire_brand='.$tire_buy->tire_buy_brand.' AND tire_size='.$tire_buy->tire_buy_size.' AND tire_pattern='.$tire_buy->tire_buy_pattern.' AND (status IS NULL OR status=0)',
+            );
+            $tire_goings = $tire_going_model->getAllTire($data_going);
+            foreach ($tire_goings as $tire_going) {
+                $going[$tire_buy->tire_buy_id] = isset($going[$tire_buy->tire_buy_id])?$going[$tire_buy->tire_buy_id]+$tire_going->tire_number:$tire_going->tire_number;
+            }
         }
 
         $this->view->data['link_picture'] = $link_picture;
 
         $this->view->data['tire_buys'] = $tire_buys;
         $this->view->data['sell'] = $sell;
+        $this->view->data['going'] = $going;
         $this->view->data['page'] = NULL;
         $this->view->data['order_by'] = NULL;
         $this->view->data['order'] = NULL;

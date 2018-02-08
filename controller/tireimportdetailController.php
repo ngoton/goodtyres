@@ -276,10 +276,17 @@ Class tireimportdetailController Extends baseController {
 
             $cell_date = $objWorksheet->getCellByColumnAndRow(1, 1);
             $start_date = $cell_date->getCalculatedValue();
-            $date = str_replace('/', '-', $start_date);
-            $start_date = strtotime($date);
 
-            $dauthang = strtotime('01-'.date('m-Y',$start_date));
+            if (is_numeric($start_date)) {
+                $start_date = PHPExcel_Shared_Date::ExcelToPHP($start_date);
+                $dauthang = strtotime(date('d-m-Y',$start_date));
+            }
+            else{
+                $date = str_replace('/', '-', $start_date);
+                $dauthang = strtotime($date);
+            }
+            //$date = str_replace('/', '-', $start_date);
+            //$start_date = strtotime($date);
 
                 for ($row = 3; $row <= $highestRow; ++ $row) {
                     $val = array();
@@ -344,7 +351,7 @@ Class tireimportdetailController Extends baseController {
                                 if($tireimportdetail->getTireByWhere(array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern))) {
                                     $ton = 0;
 
-                                    $tire_buys = $tire_buy_model->getAllTire(array('where'=>'tire_buy_date < '.$dauthang.' AND tire_buy_brand = '.$id_brand.' AND tire_buy_size = '.$id_size.' AND tire_buy_pattern = '.$id_pattern));
+                                    $tire_buys = $tire_buy_model->getAllTire(array('where'=>'code != '.$code.' AND tire_buy_date <= '.$dauthang.' AND tire_buy_brand = '.$id_brand.' AND tire_buy_size = '.$id_size.' AND tire_buy_pattern = '.$id_pattern));
                                     foreach ($tire_buys as $tire) {
                                         $ton += $tire->tire_buy_volume;
                                     }
@@ -355,9 +362,9 @@ Class tireimportdetailController Extends baseController {
                                     }
 
                                     $data = array(
-                                        'where' => 'tire_brand = '.$id_brand.' AND tire_size = '.$id_size.' AND tire_pattern = '.$id_pattern,
+                                        'where' => 'tire_brand = '.$id_brand.' AND tire_size = '.$id_size.' AND tire_pattern = '.$id_pattern.' AND start_date <= '.$dauthang,
                                         'order_by' => 'start_date',
-                                        'order' => 'DESC',
+                                        'order' => 'DESC, tire_import_id DESC',
                                         'limit' => 1,
                                     );
                                     $tire_imports = $tireimport->getAllTire($data);
@@ -366,6 +373,7 @@ Class tireimportdetailController Extends baseController {
                                         $soluong = $ton;
                                         $gia = $ton*$tire->tire_price;
                                     }
+
                                     $soluong += trim($val[5]);
                                     $gia += trim($val[4])*trim($val[5]);
 
@@ -388,7 +396,7 @@ Class tireimportdetailController Extends baseController {
                                     'tire_pattern' => $id_pattern,
                                     'tire_price' => $gia/$soluong,
                                     'code' => $code,
-                                    'start_date' => $start_date,
+                                    'start_date' => $dauthang,
                                     );
                                     $tireimport->createTire($tire_import_data);
                                 }
@@ -410,7 +418,7 @@ Class tireimportdetailController Extends baseController {
                                     'tire_pattern' => $id_pattern,
                                     'tire_price' => trim($val[4]),
                                     'code' => $code,
-                                    'start_date' => $start_date,
+                                    'start_date' => $dauthang,
                                     );
                                     $tireimport->createTire($tire_import_data);
                                 }
@@ -484,10 +492,17 @@ Class tireimportdetailController Extends baseController {
 
             $cell_date = $objWorksheet->getCellByColumnAndRow(1, 1);
             $start_date = $cell_date->getCalculatedValue();
-            $date = str_replace('/', '-', $start_date);
-            $start_date = strtotime($date);
-
-            $dauthang = strtotime('01-'.date('m-Y',$start_date));
+            if (is_numeric($start_date)) {
+                $start_date = PHPExcel_Shared_Date::ExcelToPHP($start_date);
+                $dauthang = strtotime(date('d-m-Y',$start_date));
+            }
+            else{
+                $date = str_replace('/', '-', $start_date);
+                $dauthang = strtotime($date);
+            }
+            //$date = str_replace('/', '-', $start_date);
+            //$start_date = strtotime($date);
+            
 
                 for ($row = 3; $row <= $highestRow; ++ $row) {
                     $val = array();
@@ -567,7 +582,7 @@ Class tireimportdetailController Extends baseController {
                                     'tire_pattern' => $id_pattern,
                                     'tire_price' => trim($val[4]),
                                     'code' => $code,
-                                    'start_date' => $start_date,
+                                    'start_date' => $dauthang,
                                     'order_num' => $order,
                                     );
                                     $tireimport->createTire($tire_import_data);

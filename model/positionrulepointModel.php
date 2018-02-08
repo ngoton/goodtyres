@@ -1,7 +1,7 @@
 <?php
 
-Class salaryModel Extends baseModel {
-	protected $table = "salary";
+Class positionrulepointModel Extends baseModel {
+	protected $table = "position_rule_point";
 
 	public function getAllSalary($data = null,$join = null) 
     {
@@ -23,7 +23,7 @@ Class salaryModel Extends baseModel {
     }
     public function deleteSalary($id){
     	if ($this->getSalary($id)) {
-    		return $this->delete($this->table,array('salary_id'=>$id));
+    		return $this->delete($this->table,array('position_rule_point_id'=>$id));
     	}
     }
     public function getSalary($id){
@@ -34,6 +34,9 @@ Class salaryModel Extends baseModel {
     }
     public function getLastSalary(){
         return $this->getLast($this->table);
+    }
+    public function querySalary($sql){
+        return $this->query($sql);
     }
 }
 ?>

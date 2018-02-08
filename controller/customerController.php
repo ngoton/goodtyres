@@ -48,7 +48,7 @@ Class customerController Extends baseController {
             'where' => '1=1',
         );
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 9) {
             $data['where'] .= ' AND customer_create_user = '.$_SESSION['userid_logined'];
         }
 
@@ -75,7 +75,7 @@ Class customerController Extends baseController {
             'limit'=>$x.','.$sonews,
             'where' => '1=1',
             );
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 9) {
             $data['where'] .= ' AND customer_create_user = '.$_SESSION['userid_logined'];
         }
 
@@ -88,6 +88,8 @@ Class customerController Extends baseController {
                             OR mst LIKE "%'.$keyword.'%" 
                             OR customer_code LIKE "%'.$keyword.'%" 
                             OR customer_address LIKE "%'.$keyword.'%" 
+                            OR customer_phone LIKE "%'.$keyword.'%" 
+                            OR customer_email LIKE "%'.$keyword.'%" 
                             )';
             $data['where'] .= $search;
         }
@@ -130,6 +132,7 @@ Class customerController Extends baseController {
                         'customer_province' => trim($_POST['customer_province']),
                         'customer_code' => trim($_POST['customer_code']),
                         'customer_contact' => trim($_POST['customer_contact']),
+                        'company_phone' => trim($_POST['company_phone']),
                         
                         );
             if ($_POST['yes'] != "") {

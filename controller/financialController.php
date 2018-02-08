@@ -30,10 +30,10 @@ Class financialController Extends baseController {
 
         $account_model = $this->model->get('accountModel');
         $account_balance_model = $this->model->get('accountbalanceModel');
-        $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0)'),array('order_by'=>'account_number','order'=>'ASC'));
+        $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0)','order_by'=>'account_number','order'=>'ASC'));
         $account_parents = array();
         foreach ($accounts as $account) {
-            $account_parents[$account->account_id] = $account_model->getAllAccount(array('where'=>'account_parent='.$account->account_id),array('order_by'=>'account_number','order'=>'ASC'));
+            $account_parents[$account->account_id] = $account_model->getAllAccount(array('where'=>'account_parent='.$account->account_id,'order_by'=>'account_number','order'=>'ASC'));
         }
 
         $this->view->data['accounts'] = $accounts;
@@ -58,7 +58,7 @@ Class financialController Extends baseController {
         }
 
         $data = array(
-            'where'=>'account_balance_date >= '.strtotime($batdau).' AND account_balance_date < '.strtotime($kt),
+            'where'=>'account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime($ketthuc),
         );
         $account_balances = $account_balance_model->getAllAccount($data,$join);
         $account_add = array();
@@ -126,10 +126,10 @@ Class financialController Extends baseController {
 
         $account_model = $this->model->get('accountModel');
         $account_balance_model = $this->model->get('accountbalanceModel');
-        $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0)'),array('order_by'=>'account_number','order'=>'ASC'));
+        $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0)','order_by'=>'account_number','order'=>'ASC'));
         $account_parents = array();
         foreach ($accounts as $account) {
-            $account_parents[$account->account_id] = $account_model->getAllAccount(array('where'=>'account_parent='.$account->account_id),array('order_by'=>'account_number','order'=>'ASC'));
+            $account_parents[$account->account_id] = $account_model->getAllAccount(array('where'=>'account_parent='.$account->account_id,'order_by'=>'account_number','order'=>'ASC'));
         }
 
         $this->view->data['accounts'] = $accounts;
@@ -165,7 +165,7 @@ Class financialController Extends baseController {
             $n = ($tuan+$i)>52?($nam+1):$nam;
 
             $data = array(
-                'where' => 'account_balance_date >= '.strtotime($batdau).' AND account_balance_date < '.strtotime($kt).' AND week = '.$t.' AND year = '.$n,
+                'where' => 'account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime($ketthuc).' AND week = '.$t.' AND year = '.$n,
             );
             $account_balances = $account_balance_model->getAllAccount($data,$join);
             
@@ -241,10 +241,10 @@ Class financialController Extends baseController {
 
         $account_model = $this->model->get('accountModel');
         $account_balance_model = $this->model->get('accountbalanceModel');
-        $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0)'),array('order_by'=>'account_number','order'=>'ASC'));
+        $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0)','order_by'=>'account_number','order'=>'ASC'));
         $account_parents = array();
         foreach ($accounts as $account) {
-            $account_parents[$account->account_id] = $account_model->getAllAccount(array('where'=>'account_parent='.$account->account_id),array('order_by'=>'account_number','order'=>'ASC'));
+            $account_parents[$account->account_id] = $account_model->getAllAccount(array('where'=>'account_parent='.$account->account_id,'order_by'=>'account_number','order'=>'ASC'));
         }
 
         $this->view->data['accounts'] = $accounts;
@@ -382,7 +382,7 @@ Class financialController Extends baseController {
         $this->view->data['na'] = $na;
 
         $tire_sale_model = $this->model->get('tiresaleModel');
-        $sales = $tire_sale_model->queryTire('SELECT SUM(volume) AS soluong FROM tire_sale WHERE tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date < '.strtotime($kt));
+        $sales = $tire_sale_model->queryTire('SELECT SUM(volume) AS soluong FROM tire_sale WHERE tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc));
         $total_sale = 0;
         foreach ($sales as $sale) {
             $total_sale = $sale->soluong;
@@ -391,7 +391,7 @@ Class financialController Extends baseController {
 
         $account_model = $this->model->get('accountModel');
 
-        $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0)'),array('order_by'=>'account_number','order'=>'ASC'));
+        $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0)','order_by'=>'account_number','order'=>'ASC'));
         $account_parents = array();
         foreach ($accounts as $account) {
             $account_parents[$account->account_id] = $account->account_number;
@@ -418,7 +418,7 @@ Class financialController Extends baseController {
         }
 
         $data = array(
-            'where'=>'account_balance_date >= '.strtotime($batdau).' AND account_balance_date < '.strtotime($kt),
+            'where'=>'account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime($ketthuc),
         );
         $account_balances = $account_balance_model->getAllAccount($data,$join);
         $account_add = array();
@@ -503,10 +503,10 @@ Class financialController Extends baseController {
 
         $account_model = $this->model->get('accountModel');
         $account_balance_model = $this->model->get('accountbalanceModel');
-        $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0) AND account_number < 511'),array('order_by'=>'account_number','order'=>'ASC'));
+        $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0) AND account_number < 511','order_by'=>'account_number','order'=>'ASC'));
         $account_parents = array();
         foreach ($accounts as $account) {
-            $account_parents[$account->account_id] = $account_model->getAllAccount(array('where'=>'account_parent='.$account->account_id),array('order_by'=>'account_number','order'=>'ASC'));
+            $account_parents[$account->account_id] = $account_model->getAllAccount(array('where'=>'account_parent='.$account->account_id,'order_by'=>'account_number','order'=>'ASC'));
         }
 
         $this->view->data['accounts'] = $accounts;
@@ -514,7 +514,7 @@ Class financialController Extends baseController {
 
         $join = array('table'=>'account','where'=>'account=account_id');
         $data = array(
-            'where'=>'account_balance_date < '.strtotime($kt),
+            'where'=>'account_balance_date <= '.strtotime($ketthuc),
         );
         $account_balance_afters = $account_balance_model->getAllAccount($data,$join);
         $account_after = array();
@@ -579,10 +579,10 @@ Class financialController Extends baseController {
 
         $account_model = $this->model->get('accountModel');
         $account_balance_model = $this->model->get('accountbalanceModel');
-        $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0) AND account_number < 352'),array('order_by'=>'account_number','order'=>'ASC'));
+        $accounts = $account_model->getAllAccount(array('where'=>'(account_parent IS NULL OR account_parent = 0) AND account_number < 352','order_by'=>'account_number','order'=>'ASC'));
         $account_parents = array();
         foreach ($accounts as $account) {
-            $account_parents[$account->account_id] = $account_model->getAllAccount(array('where'=>'account_parent='.$account->account_id),array('order_by'=>'account_number','order'=>'ASC'));
+            $account_parents[$account->account_id] = $account_model->getAllAccount(array('where'=>'account_parent='.$account->account_id,'order_by'=>'account_number','order'=>'ASC'));
         }
 
         $this->view->data['accounts'] = $accounts;
@@ -590,7 +590,7 @@ Class financialController Extends baseController {
 
         $join = array('table'=>'account','where'=>'account=account_id');
         $data = array(
-            'where'=>'account_balance_date < '.strtotime($kt),
+            'where'=>'account_balance_date <= '.strtotime($ketthuc),
         );
         $account_balance_afters = $account_balance_model->getAllAccount($data,$join);
         $account_after = array();
@@ -677,7 +677,7 @@ Class financialController Extends baseController {
         $pagination_stages = 2;
         
         $data = array(
-            'where' => '(debit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.')) AND additional_date >= '.strtotime($batdau).' AND additional_date < '.strtotime($kt),
+            'where' => 'debit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.')  AND additional_date >= '.strtotime($batdau).' AND additional_date <= '.strtotime($ketthuc),
         );
 
         if ($id>0) {
@@ -704,7 +704,7 @@ Class financialController Extends baseController {
             'order_by'=>$order_by,
             'order'=>$order,
             'limit'=>$x.','.$sonews,
-            'where' => '(debit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.')) AND additional_date >= '.strtotime($batdau).' AND additional_date < '.strtotime($kt),
+            'where' => 'debit IN (SELECT account_id FROM account WHERE account_parent = '.$id_office.')  AND additional_date >= '.strtotime($batdau).' AND additional_date <= '.strtotime($ketthuc),
             );
         
         if ($id>0) {
@@ -744,7 +744,7 @@ Class financialController Extends baseController {
             $additional_model = $this->model->get('additionalModel');
 
             $data = array(
-                'where' => '(debit = '.$account.' OR credit = '.$account.') AND additional_date >= '.strtotime($batdau).' AND additional_date < '.strtotime($kt),
+                'where' => 'debit NOT IN (SELECT account_id FROM account WHERE account_number="911") AND credit NOT IN (SELECT account_id FROM account WHERE account_number="911") AND (debit = '.$account.' OR credit = '.$account.') AND additional_date >= '.strtotime($batdau).' AND additional_date <= '.strtotime($ketthuc),
                 'order_by' => 'additional_date',
                 'order' => 'ASC',
             );
@@ -769,7 +769,7 @@ Class financialController Extends baseController {
             }
             else{
                 $data = array(
-                    'where' => '( debit IN (SELECT account_id FROM account WHERE account_parent = '.$account.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$account.') ) AND additional_date >= '.strtotime($batdau).' AND additional_date < '.strtotime($kt),
+                    'where' => '( debit IN (SELECT account_id FROM account WHERE account_parent = '.$account.') OR credit IN (SELECT account_id FROM account WHERE account_parent = '.$account.') ) AND additional_date >= '.strtotime($batdau).' AND additional_date <= '.strtotime($ketthuc),
                     'order_by' => 'additional_date',
                     'order' => 'ASC',
                 );
