@@ -1,7 +1,7 @@
 <?php
 
-Class paymentrequestModel Extends baseModel {
-	protected $table = "payment_request";
+Class paymentrequestdetailModel Extends baseModel {
+	protected $table = "payment_request_detail";
 
 	public function getAllPayment($data = null,$join = null) 
     {
@@ -46,7 +46,7 @@ Class paymentrequestModel Extends baseModel {
     }
     public function deletePayment($id){
     	if ($this->getPayment($id)) {
-    		return $this->delete($this->table,array('payment_request_id'=>$id));
+    		return $this->delete($this->table,array('payment_request_detail_id'=>$id));
     	}
     }
     public function getPayment($id){
@@ -56,7 +56,7 @@ Class paymentrequestModel Extends baseModel {
     	return $this->getByWhere($this->table,$where);
     }
     public function getAllPaymentByWhere($id){
-        return $this->query('SELECT * FROM payment_request WHERE payment_request_id != '.$id);
+        return $this->query('SELECT * FROM payment_request_detail WHERE payment_request_detail_id != '.$id);
     }
     public function getLastPayment(){
         return $this->getLast($this->table);

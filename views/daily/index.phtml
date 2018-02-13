@@ -40,7 +40,7 @@ elseif ($order_by == 'money')
       
       <a class="add_button" onClick="add_click();"><i class="fa fa-plus"></i> Thêm mới</a>
       <a class="add_button" id="import_excel" href="<?= $this->url('daily/import')?>"><i class="fa fa-upload"></i> Nhập</a>
-      <a class="add_button" id="btnExport" ><i class="fa fa-download"></i> Xuất</a>
+      <a class="add_button" href="<?= $this->url('daily/export/'.strtotime($batdau).'/'.strtotime($ketthuc))?>" ><i class="fa fa-download"></i> Xuất</a>
     </div>
     <?php } ?>
     <div class="search-box">
@@ -184,6 +184,9 @@ elseif ($order_by == 'money')
             <td class="fix" id="note_<?php echo $daily->daily_id; ?>"><?php echo $daily->note; ?></td>
             <td class="fix" id="account_<?php echo $daily->daily_id; ?>"><?php echo $daily->account; ?></td>
             
+            <td class="fix" style="display:none" id="account_out_<?php echo $daily->daily_id; ?>"><?php echo $daily->account_out; ?></td>
+            <td class="fix" style="display:none" id="internal_transfer_<?php echo $daily->daily_id; ?>"><?php echo $daily->internal_transfer; ?></td>
+            <td class="fix" style="display:none" data="<?php echo $daily->payment_request; ?>" id="payment_request_<?php echo $daily->daily_id; ?>"><?php echo isset($request_data[$daily->payment_request])?$request_data[$daily->payment_request]:null; ?></td>
             <td class="fix" style="display:none" id="service_<?php echo $daily->daily_id; ?>"><?php echo $daily->service; ?></td>
             <td class="fix" style="display:none" id="receivable_<?php echo $daily->daily_id; ?>"><?php echo $daily->receivable; ?></td>
             <td class="fix" style="display:none" id="payable_<?php echo $daily->daily_id; ?>"><?php echo $daily->payable; ?></td>
@@ -293,6 +296,9 @@ $this->helper('slidePaginator');
                     
                     <div class="box-body nopadding">
                       <div class="form-group nopadding">
+                        <input type="text" name="payment_request" id="payment_request" placeholder="Giấy đề nghị thanh toán số :">
+                        <button type="button" style="margin-top: -10px;" class="btn" id="get_code" title="Giấy đề nghị thanh toán"><i class="fa fa-search"></i></button>
+                          <ul id="customer_list_id"></ul>
                         <label for="comment">Nội dung </label>
                         <input style="width:93%" type="text" id="comment"  name="comment" tabindex="1"  required="required" autocomplete="off" placeholder="Nhập vào Nội dung" >
                       </div>
@@ -308,33 +314,36 @@ $this->helper('slidePaginator');
                         <div class="form-group nopadding">
                           <label for="money_out">Chi </label>
                           <input style="width:85%" type="text" id="money_out"  name="money_out" tabindex="3" autocomplete="off" class="numbers text-right" required="required" >
+
                         </div>
+
                       </div>
                     </div>
                     <div class="box-body nopadding">
                       
-                      <div class="col-md-6 col-xs-6 nopadding">
+                      <div class="col-md-4 col-xs-6 nopadding">
                         <div class="form-group nopadding">
                           <label for="owner_request">Người đề nghị </label>
                           <input type="text" id="owner_request"  name="owner_request" tabindex="4"  autocomplete="off" >
                         </div>
                       </div>
-                      <div class="col-md-6 col-xs-6 nopadding">
+                      <div class="col-md-4 col-xs-6 nopadding">
                         <div class="form-group nopadding">
                           <label for="owner">Người nhận </label>
                           <input type="text" id="owner"  name="owner" tabindex="5"  autocomplete="off" >
                         </div>
                       </div>
-                    </div>
-                    <div class="box-body nopadding">
-                      <div class="col-md-6 col-xs-6 nopadding">
+                      <div class="col-md-4 col-xs-6 nopadding">
                         <div class="form-group nopadding">
                           <div class="form-group nopadding">
-                          <label for="owner_approve">Người duyệt </label>
-                          <input type="text" id="owner_approve"  name="owner_approve" tabindex="6"  autocomplete="off" >
+                            <label for="owner_approve">Người duyệt </label>
+                            <input type="text" id="owner_approve"  name="owner_approve" tabindex="6"  autocomplete="off" >
+                          </div>
                         </div>
                       </div>
                     </div>
+                    
+                      
                   </fieldset>
                   
                   <!-- /.box-body -->
@@ -363,33 +372,36 @@ $this->helper('slidePaginator');
                     </div>
                     <div class="box-body nopadding">
                       <div class="form-group col-xs-4 nopadding">
-                        <label for="account">Tài khoản </label>
+                        <label for="internal_transfer"></label>
                       </div>
                       <div class="form-group col-xs-8 nopadding">
-                        <select name="account" id="account" tabindex="9" class="selectpicker" data-show-subtext="true" data-live-search="true">
-                          <?php foreach ($banks as $bank) { ?>
-                              <option value="<?php echo $bank->symbol ?>"><?php echo $bank->bank_name ?></option>
-                          <?php } ?>
-                        </select>
+                        <input type="checkbox" name="internal_transfer" id="internal_transfer" value="1"> Chuyển nội bộ 
                       </div>
                     </div>
                     <div class="box-body nopadding">
                       <div class="form-group col-xs-4 nopadding">
-                        <label for="daily_check_cost">Loại tài khoản </label>
+                        <label for="account">Tài khoản </label>
                       </div>
                       <div class="form-group col-xs-8 nopadding">
-                        <select id="daily_check_cost" name="daily_check_cost" tabindex="10" style="width: 200px">
-                            <option value="0">Lô hàng</option>
-                            <option value="1">Hành chính</option>
-                            <option value="2">Cơm, lương, đt, bh</option>
-                            <option value="3">Vay vốn</option>
-                            <option value="4">Trả lãi vay</option>
-                            <option value="5">Thuê kho bãi</option>
-                            <option value="6">Tạm ứng</option>
-                            <option value="7">Khác</option>
-                        </select>
+                        <div class="col-xs-6 nopadding">
+                          <select name="account" id="account" tabindex="9">
+                            <?php foreach ($banks as $bank) { ?>
+                                <option value="<?php echo $bank->symbol ?>"><?php echo $bank->bank_name ?></option>
+                            <?php } ?>
+                          </select>
+                        </div>
+                        <div class="col-xs-6 nopadding">
+                          <select name="account_out" id="account_out" tabindex="9" class="internal_transfer"  style="display: none;">
+                            <option value="">Tài khoản chi</option>
+                            <?php foreach ($banks as $bank) { ?>
+                                <option value="<?php echo $bank->symbol ?>"><?php echo $bank->bank_name ?></option>
+                            <?php } ?>
+                          </select>
+                        </div>
                       </div>
                     </div>
+                    
+                    
                     <div class="box-body nopadding">
                       <div class="form-group col-xs-4 nopadding">
                         <label for="service">Dịch vụ </label>
@@ -399,11 +411,27 @@ $this->helper('slidePaginator');
                               <option value="1">Hành chính</option>
                               <option value="2">Lốp xe</option>
                               <option value="3">Logistics</option>
-                          </select><br>
-                          <input  type="checkbox" id="daily_check_lohang"  name="daily_check_lohang" tabindex="11" value="1" > Xem như lô hàng
+                          </select>
                       </div>
                     </div>
-                    
+                    <div class="box-body nopadding">
+                      <div class="form-group col-xs-4 nopadding">
+                        <label for="daily_check_cost">Loại tài khoản </label>
+                      </div>
+                      <div class="form-group col-xs-8 nopadding">
+                        <select id="daily_check_cost" name="daily_check_cost" tabindex="11" style="width: 200px">
+                            <option value="0">Lô hàng</option>
+                            <option value="1">Hành chính</option>
+                            <option value="2">Cơm, lương, đt, bh</option>
+                            <option value="3">Vay vốn</option>
+                            <option value="4">Trả lãi vay</option>
+                            <option value="5">Thuê kho bãi</option>
+                            <option value="6">Tạm ứng</option>
+                            <option value="7">Khác</option>
+                        </select><br>
+                          <input  type="checkbox" id="daily_check_lohang"  name="daily_check_lohang" tabindex="10" value="1" > Xem như lô hàng
+                      </div>
+                    </div>
                   </fieldset>
                   <!-- /.box-body -->
                 </div>
@@ -415,7 +443,7 @@ $this->helper('slidePaginator');
                   <legend class="nopadding"><span><h6>Thông tin lô hàng</h6></span></legend>
                   
                   <div class="box-body nopadding">
-                    <div class="form-group col-xs-4 nopadding">
+                    <div class="form-group col-xs-4 nopadding" style="display: none;">
                       <label for="code">Code </label>
                       <input type="text" id="code"  name="code" tabindex="12"  autocomplete="off" placeholder="Nhập vào Code lô hàng" >
                       <ul id="code_list_id"></ul>
@@ -433,10 +461,10 @@ $this->helper('slidePaginator');
                       <input  type="checkbox" id="deposit"  name="deposit" tabindex="14" value="1" > Đặt cọc
                     </div>
                   </div>
-                  <div class="box-body nopadding">
+                  <div class="box-body nopadding" style="display: none;">
                     <div class="form-group nopadding">
                       <label for="clearing">Chọn nhiều code / Cấn trừ đặt cọc </label>
-                      <input style="width:93%" type="text" id="clearing"  name="clearing" tabindex="15"  >
+                      <input style="width:93%" type="text" id="clearing"  name="clearing" tabindex="15" disabled="disabled" >
                                 <ul id="mytags"></ul>
                     </div>
                   </div>
@@ -457,17 +485,26 @@ $this->helper('slidePaginator');
                         <thead>
                           <tr>
                             <th class="width-3">STT</th>
-                            <th class="width-10">TK nợ</th>
-                            <th class="width-10">TK có</th>
+                            
+                            <th class="width-10">Code</th>
                             <th class="width-10">Số tiền</th>
                             <th>Nội dung</th>
-                            <th class="width-10">Code</th>
+                            <th class="width-10">TK nợ</th>
+                            <th class="width-10">TK có</th>
+                            <th class="width-10">Dịch vụ</th>
                             <th style="width:8px"></th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
                             <td class="width-3">1</td>
+                            
+                            <td class="width-10">
+                              <input type="text" name="additional_code[]" class="additional_code keep-val" autocomplete="off">
+                              <ul class="customer_list_id"></ul>
+                            </td>
+                            <td class="width-10"><input type="text" name="additional_money[]" class="additional_money numbers text-right" autocomplete="off" required="required"></td>
+                            <td><input type="text" name="additional_comment[]" class="additional_comment keep-val" autocomplete="off" required="required"></td>
                             <td class="width-10">
                               <select name="additional_debit[]" class="additional_debit dropchosen" required="required">
                                   <option value="">Tài khoản</option>
@@ -484,10 +521,13 @@ $this->helper('slidePaginator');
                                   <?php } ?>
                               </select>
                             </td>
-                            <td class="width-10"><input type="text" name="additional_money[]" class="additional_money numbers text-right" autocomplete="off" required="required"></td>
-                            <td><input type="text" name="additional_comment[]" class="additional_comment keep-val" autocomplete="off" required="required"></td>
-                            
-                            <td class="width-10"><input type="text" name="additional_code[]" class="additional_code keep-val" autocomplete="off"></td>
+                            <td class="width-10">
+                              <select name="additional_service[]" class="additional_service" required="required">
+                                  <option value="1">Hành chính</option>
+                                  <option value="2">Lốp xe</option>
+                                  <option value="3">Logistics</option>
+                              </select>
+                            </td>
                           </tr>
                         </tbody>
                       </table>
@@ -548,6 +588,7 @@ $('html').click(function(e) {
   $('.name_list_id_2').slideUp(200);
   $('.name_list_id_3').slideUp(200);
   $('.name_list_id_4').slideUp(200);
+  $('#customer_list_id').slideUp(200);
 
   if ($('#code_list_id').is(':visible')) {
     if ($('#code').val() == "" || $('#code').attr('data') == "") {
@@ -558,6 +599,23 @@ $('html').click(function(e) {
     }
   }
   $('#code_list_id').slideUp(200);
+
+  $('.customer_list_id').slideUp(200);
+  $('.additional_code').each(function(){
+      if ($(this).attr('data')=="") {
+          $(this).val("");
+      }
+  });
+});
+
+$('#internal_transfer').click(function(){
+  if ($(this).is(':checked')) {
+    $('.internal_transfer').show();
+    $('#money_out').val($('#money_in').val());
+  }
+  else{
+    $('.internal_transfer').hide();
+  }
 });
 
 $('#getPC').click(function(){
@@ -583,9 +641,29 @@ $('#getPT').click(function(){
 
 $('#money_in').change(function(){
   $('.additional_money:first').val($(this).val());
+  var money_in = parseFloat(get_number('#money_in')) || 0;
+  var money_out = parseFloat(get_number('#money_out')) || 0;
+  if (money_out>0) {
+    $('#internal_transfer').attr('checked',true);
+    $('.internal_transfer').show();
+  }
+  if ($('#internal_transfer').is(':checked')) {
+    $('#money_out').val($(this).val());
+  }
+
 });
 $('#money_out').change(function(){
   $('.additional_money:first').val($(this).val());
+  var money_in = parseFloat(get_number('#money_in')) || 0;
+  var money_out = parseFloat(get_number('#money_out')) || 0;
+  if (money_in>0) {
+    $('#internal_transfer').attr('checked',true);
+    $('.internal_transfer').show();
+  }
+  if ($('#internal_transfer').is(':checked')) {
+    $('#money_in').val($(this).val());
+  }
+
 });
 $('#comment').change(function(){
   $('.additional_comment:first').val($(this).val());
@@ -597,13 +675,57 @@ $('.additional_money').keyup(function(){
 
   var total = 0;
   $('.additional_money').each(function(){
+    var v = parseFloat(get_number($(this))) || 0;
+    var data_max = parseFloat($(this).attr('data-max') || 0);
+
+    if (data_max>0 && v>data_max) {
+      $(this).val(data_max);
+    }
     total += parseFloat(get_number($(this))) || 0;
   });
 
-  if (total > (money_in+money_out)) {
+  if (money_in>0) {
+    $('#money_in').val(total);
+  }
+  else if (money_out>0) {
+    $('#money_out').val(total);
+  }
+
+  /*if (total > (money_in+money_out)) {
     $(this).val("");
+  }*/
+
+  $('.numbers').val(function(index, value) {
+      return value
+        .replace(/[^0-9-.]/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      ;
+    });
+});
+$('.additional_money').change(function(){
+  var rowIndex=$(this).closest('tr').index();
+  var p = $('.additional_code:eq('+rowIndex+')').attr('data').trim() || "";
+  if (p=="" || p==0) {
+    $('.additional_service:eq('+rowIndex+') option[value=1]').attr('selected',true);
   }
 });
+
+$('#payment_request').keyup(function(){
+      var keyword = $(this).val();
+      $.ajax({
+          url: '<?php echo BASE_URL ?>/daily/getpayment',
+          type: 'POST',
+          data: {keyword:keyword},
+          success:function(data){
+              $('#customer_list_id').slideDown(200);
+              $('#customer_list_id').html(data);
+          }
+      });
+      if ($('#payment_request').val() == "" || $('#payment_request').attr('data') == "") {
+          $('#payment_request').attr('data',"");
+      };
+
+ });
 
 $('#code').keyup(function(){
       var keyword = $(this).val();
@@ -621,6 +743,27 @@ $('#code').keyup(function(){
       };
 
  });
+
+$('.additional_code').keyup(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var customer = $('#customer').val();
+    var keyword = $(this).val();
+    $.ajax({
+        url: '<?php echo BASE_URL ?>/daily/getlistcode',
+        type: 'POST',
+        data: {keyword:keyword, in: $('#money_in').val(), out: $('#money_out').val(), offset:rowIndex, customer:customer},
+        success:function(data){
+            $('.customer_list_id:eq('+rowIndex+')').slideDown(200);
+            $('.customer_list_id:eq('+rowIndex+')').html(data);
+        }
+    });
+    if ($('.additional_code:eq('+rowIndex+')').val() == "" || $('.additional_code:eq('+rowIndex+')').attr('data') == "") {
+        
+        $('.additional_code:eq('+rowIndex+')').attr('data',"");
+    }
+    
+});
+
 function set_item(item,name) {
     // change input value
     $('#code').val(item);
@@ -639,6 +782,188 @@ function set_item(item,name) {
     
     $('#code_list_id').hide();
     $('#code').focus();
+}
+function set_item_code(item,value,vitri,money,max) {
+    // change input value
+    $('.additional_money:eq('+vitri+')').val(money);
+    $('.additional_money:eq('+vitri+')').attr('data-max',max);
+    $('.additional_service:eq('+vitri+') option[value=2]').attr('selected',true);
+    
+    $('.additional_code:eq('+vitri+')').val(item);
+    $('.additional_code:eq('+vitri+')').attr("data",value);
+    // hide proposition list
+    $('.customer_list_id').hide();
+    $('.additional_code:eq('+vitri+')').focus();
+
+    $('#service option[value=2]').attr('selected',true);
+
+    var check_vendor = 0;
+    var val = value;
+        $('.additional_code').each(function() { 
+            if (val == $(this).attr('data')) {
+                check_vendor ++;
+            }
+        });
+
+
+        if (check_vendor >= 2) {
+            alert('Vui lòng chọn loại phí khác cho vendor này!');
+            //$(".vendor:last").val($(".vendor:last option:first").val());
+            $('.additional_code:last').attr('data','');
+            $('.additional_code:last').val("");
+            $('.additional_money:last').val("");
+            $('.additional_money:last').attr('data-max','');
+        }
+        else{
+          //$('#clearing').tagit('createTag', item+'~'+value);
+        }
+
+    var money_in = parseFloat(get_number('#money_in')) || 0;
+    var money_out = parseFloat(get_number('#money_out')) || 0;
+    var total = 0;
+    $('.additional_money').each(function(){
+      total += parseFloat(get_number($(this))) || 0;
+    });
+
+    if (money_in>0) {
+      if (total>money_in) {
+        $('.additional_money:eq('+vitri+')').val(max-(total-money_in));
+      }
+    }
+    else if(money_out>0){
+      if (total>money_out) {
+        $('.additional_money:eq('+vitri+')').val(max-(total-money_out));
+      }
+    }
+
+    $('.numbers').val(function(index, value) {
+      return value
+        .replace(/[^0-9-.]/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      ;
+    });
+}
+function set_item_payment(item,name,comment,money,receive,request,approve) {
+    // change input value
+    $('#payment_request').val(item);
+    $("#payment_request").attr("data",name);
+    $('#comment').val(comment);
+    $('#money_out').val(money);
+    $('#owner').val(receive);
+    $('#owner_request').val(request);
+    $('#owner_approve').val(approve);
+
+    $.ajax({
+        url: '<?php echo BASE_URL ?>/daily/getpaymentdetail',
+        type: 'GET',
+        data: {payment:name},
+        success:function(answer){
+          //console.log(answer);
+          $('#dataTable0 tbody tr').remove();
+            var data = JSON.parse(answer);
+            $('#dataTable0 tbody').append(data.hang);
+
+            $('.additional_comment').val(comment);
+
+            $(".date_mask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+            $('.dropchosen').chosen();
+
+            $('input').keyup(function (e) {
+                if (e.which == 39) { // right arrow
+                  $(this).closest('td').next().find('input').focus();
+
+                } else if (e.which == 37) { // left arrow
+                  $(this).closest('td').prev().find('input').focus();
+
+                } else if (e.which == 40) { // down arrow
+                  $(this).closest('tr').next().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+
+                } else if (e.which == 38) { // up arrow
+                  $(this).closest('tr').prev().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+                }
+              });
+
+            $('.additional_money').keyup(function(){
+              var money_in = parseFloat(get_number('#money_in')) || 0;
+              var money_out = parseFloat(get_number('#money_out')) || 0;
+
+              var total = 0;
+              $('.additional_money').each(function(){
+                var v = parseFloat(get_number($(this))) || 0;
+                var data_max = parseFloat($(this).attr('data-max') || 0);
+                if (data_max>0 && v>data_max) {
+                  $(this).val(data_max);
+                }
+                total += parseFloat(get_number($(this))) || 0;
+              });
+
+              if (money_in>0) {
+                $('#money_in').val(total);
+              }
+              else if (money_out>0) {
+                $('#money_out').val(total);
+              }
+
+              /*if (total > (money_in+money_out)) {
+                $(this).val("");
+              }*/
+
+              $('.numbers').val(function(index, value) {
+                return value
+                  .replace(/[^0-9-.]/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+              });
+            });
+
+            $('.additional_money').change(function(){
+              var rowIndex=$(this).closest('tr').index();
+              var p = $('.additional_code:eq('+rowIndex+')').attr('data').trim() || "";
+              if (p=="" || p==0) {
+                $('.additional_service:eq('+rowIndex+') option[value=1]').attr('selected',true);
+              }
+            });
+
+            $('.additional_code').keyup(function(){
+                var rowIndex=$(this).closest('tr').index();
+                var customer = $('#customer').val();
+                var keyword = $(this).val();
+                $.ajax({
+                    url: '<?php echo BASE_URL ?>/daily/getlistcode',
+                    type: 'POST',
+                    data: {keyword:keyword, in: $('#money_in').val(), out: $('#money_out').val(), offset:rowIndex, customer:customer},
+                    success:function(data){
+                        $('.customer_list_id:eq('+rowIndex+')').slideDown(200);
+                        $('.customer_list_id:eq('+rowIndex+')').html(data);
+                    }
+                });
+                if ($('.additional_code:eq('+rowIndex+')').val() == "" || $('.additional_code:eq('+rowIndex+')').attr('data') == "") {
+                    
+                    $('.additional_code:eq('+rowIndex+')').attr('data',"");
+                }
+                
+            });
+
+            $('#service option[value='+$('.additional_service').val()+']').attr('selected',true);
+
+            $('.numbers').keyup(function(event) {
+                // skip for arrow keys
+              if(event.which >= 37 && event.which <= 40) return;
+              // format number
+              $(this).val(function(index, value) {
+                return value
+                  .replace(/[^0-9-.]/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+              });
+            });
+        }
+    });
+
+    
+
+    $('#customer_list_id').hide();
+    $('#payment_request').focus();
 }
 
 $('.edit_daily').click(function(e){
@@ -667,6 +992,17 @@ $('.edit_daily').click(function(e){
         $('#daily_check_lohang').attr('checked',true);
     else
         $('#daily_check_lohang').attr('checked',false);
+
+    if ($("#internal_transfer_"+id).text()==1){
+      $('#internal_transfer').attr('checked',true);
+      $('.internal_transfer').show();
+    }
+        
+    else{
+      $('#internal_transfer').attr('checked',false);
+      $('.internal_transfer').hide();
+    }
+        
 
     $('.selectpicker').selectpicker('refresh');
 
@@ -751,12 +1087,58 @@ $('.edit_daily').click(function(e){
 
             var total = 0;
             $('.additional_money').each(function(){
+              var v = parseFloat(get_number($(this))) || 0;
+              var data_max = parseFloat($(this).attr('data-max') || 0);
+              if (data_max>0 && v>data_max) {
+                $(this).val(data_max);
+              }
               total += parseFloat(get_number($(this))) || 0;
             });
 
-            if (total > (money_in+money_out)) {
-              $(this).val("");
+            if (money_in>0) {
+              $('#money_in').val(total);
             }
+            else if (money_out>0) {
+              $('#money_out').val(total);
+            }
+
+            /*if (total > (money_in+money_out)) {
+              $(this).val("");
+            }*/
+
+            $('.numbers').val(function(index, value) {
+              return value
+                .replace(/[^0-9-.]/g, "")
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              ;
+            });
+          });
+          $('.additional_money').change(function(){
+              var rowIndex=$(this).closest('tr').index();
+              var p = $('.additional_code:eq('+rowIndex+')').attr('data').trim() || "";
+              if (p=="" || p==0) {
+                $('.additional_service:eq('+rowIndex+') option[value=1]').attr('selected',true);
+              }
+            });
+
+          $('.additional_code').keyup(function(){
+              var rowIndex=$(this).closest('tr').index();
+              var customer = $('#customer').val();
+              var keyword = $(this).val();
+              $.ajax({
+                  url: '<?php echo BASE_URL ?>/daily/getlistcode',
+                  type: 'POST',
+                  data: {keyword:keyword, in: $('#money_in').val(), out: $('#money_out').val(), offset:rowIndex, customer:customer},
+                  success:function(data){
+                      $('.customer_list_id:eq('+rowIndex+')').slideDown(200);
+                      $('.customer_list_id:eq('+rowIndex+')').html(data);
+                  }
+              });
+              if ($('.additional_code:eq('+rowIndex+')').val() == "" || $('.additional_code:eq('+rowIndex+')').attr('data') == "") {
+                  
+                  $('.additional_code:eq('+rowIndex+')').attr('data',"");
+              }
+              
           });
 
           $('.numbers').keyup(function(event) {
@@ -792,12 +1174,18 @@ function add_click(){
      
         $('.add-field input').val("");
         $('.add-field input').attr("data","");
+        $('.add-field input').attr("data-max","");
         $('.add-field input').attr("alt","");
 
         $('#daily_date').val("<?php echo date('d/m/Y') ?>");
         $('#deposit').attr('checked',false);
         $('#daily_check_lohang').attr('checked',false);
         $("#daily_check_cost option[value=1]").attr('selected', 'selected');
+        $('#internal_transfer').attr('checked',false);
+        $("#account_out option[value='']").attr('selected', 'selected');
+        $('.internal_transfer').hide();
+        $('#money_in').val(0);
+        $('#money_out').val(0);
 
         if ($('#clearing').hasClass('tagit-hidden-field')) {
             $('#clearing').tagit('destroy');
@@ -874,12 +1262,58 @@ function add_click(){
 
                 var total = 0;
                 $('.additional_money').each(function(){
+                  var v = parseFloat(get_number($(this))) || 0;
+                  var data_max = parseFloat($(this).attr('data-max') || 0);
+                  if (data_max>0 && v>data_max) {
+                    $(this).val(data_max);
+                  }
                   total += parseFloat(get_number($(this))) || 0;
                 });
 
-                if (total > (money_in+money_out)) {
-                  $(this).val("");
+                if (money_in>0) {
+                  $('#money_in').val(total);
                 }
+                else if (money_out>0) {
+                  $('#money_out').val(total);
+                }
+
+                /*if (total > (money_in+money_out)) {
+                  $(this).val("");
+                }*/
+
+                $('.numbers').val(function(index, value) {
+                  return value
+                    .replace(/[^0-9-.]/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  ;
+                });
+              });
+              $('.additional_money').change(function(){
+                var rowIndex=$(this).closest('tr').index();
+                var p = $('.additional_code:eq('+rowIndex+')').attr('data').trim() || "";
+                if (p=="" || p==0) {
+                  $('.additional_service:eq('+rowIndex+') option[value=1]').attr('selected',true);
+                }
+              });
+
+              $('.additional_code').keyup(function(){
+                  var rowIndex=$(this).closest('tr').index();
+                  var customer = $('#customer').val();
+                  var keyword = $(this).val();
+                  $.ajax({
+                      url: '<?php echo BASE_URL ?>/daily/getlistcode',
+                      type: 'POST',
+                      data: {keyword:keyword, in: $('#money_in').val(), out: $('#money_out').val(), offset:rowIndex, customer:customer},
+                      success:function(data){
+                          $('.customer_list_id:eq('+rowIndex+')').slideDown(200);
+                          $('.customer_list_id:eq('+rowIndex+')').html(data);
+                      }
+                  });
+                  if ($('.additional_code:eq('+rowIndex+')').val() == "" || $('.additional_code:eq('+rowIndex+')').attr('data') == "") {
+                      
+                      $('.additional_code:eq('+rowIndex+')').attr('data',"");
+                  }
+                  
               });
 
               $('.numbers').keyup(function(event) {
@@ -948,6 +1382,8 @@ $(document).ready(function(){
         var clearing = $('#clearing').val().trim();
         
         var customer = $('#customer').attr('value');
+
+        var account_out = $('#account_out').attr('value');
         
         if ($('#deposit').is(':checked')) {
             var deposit = 1;
@@ -964,6 +1400,22 @@ $(document).ready(function(){
         }
 
         var daily_check_cost = $('#daily_check_cost').attr('value');
+
+        if ($('#internal_transfer').is(':checked')) {
+            var internal_transfer = 1;
+        }
+        else{
+            var internal_transfer = 0;
+        }
+
+        if (internal_transfer==1 && account_out=="") {
+          alert('Vui lòng chọn tài khoản chi!');
+          $('#account_out').focus();
+          return false;
+        }
+        
+        var payment_request_number = $('#payment_request').attr('value');
+        var payment_request = $('#payment_request').attr('data');
 
         var yes = $('#yes').attr('value');
 
@@ -988,7 +1440,15 @@ $(document).ready(function(){
         }*/
 
         $('.additional_money').each(function(){
-          total += parseFloat(get_number($(this))) || 0;
+          var rowIndex=$(this).closest('tr').index();
+          var val = parseFloat(get_number($(this))) || 0;
+          total += val;
+          if (val>0) {
+            if ($('select.additional_debit:eq('+rowIndex+')').val().trim()=="Tài khoản" || $('select.additional_credit:eq('+rowIndex+')').val().trim()=="Tài khoản") {
+              alert("Vui lòng chọn tài khoản hạch toán!");
+              return false;
+            }
+          }
         });
 
         if(money_in1 != money_out1){
@@ -1012,6 +1472,9 @@ $(document).ready(function(){
         var additional_money = [];
         var additional_comment = [];
         var additional_code = [];
+        var additional_payable = [];
+        var additional_data_max = [];
+        var additional_service = [];
 
         $('select.additional_debit').each(function(){
           additional_debit.push($(this).val());
@@ -1022,16 +1485,21 @@ $(document).ready(function(){
         $('.additional_money').each(function(){
           additional_money.push($(this).val());
           additional_id.push($(this).attr('data') || "");
+          additional_data_max.push($(this).attr('data-max') || "");
         });
         $('.additional_comment').each(function(){
           additional_comment.push($(this).val());
         });
         $('.additional_code').each(function(){
           additional_code.push($(this).val());
+          additional_payable.push($(this).attr('data') || "");
+        });
+        $('select.additional_service').each(function(){
+          additional_service.push($(this).val());
         });
 
         for (var i = 0; i < additional_money.length; i++) {
-          additional.push({'additional_id':additional_id[i], 'additional_debit':additional_debit[i],'additional_credit':additional_credit[i], 'additional_money':additional_money[i], 'additional_comment':additional_comment[i], 'additional_code':additional_code[i]});
+          additional.push({'additional_id':additional_id[i], 'additional_debit':additional_debit[i],'additional_credit':additional_credit[i], 'additional_money':additional_money[i], 'additional_comment':additional_comment[i], 'additional_code':additional_code[i], 'additional_payable':additional_payable[i], 'additional_data_max':additional_data_max[i], 'additional_service':additional_service[i]});
                 
         };
 
@@ -1062,6 +1530,10 @@ $(document).ready(function(){
                 daily_check_cost: daily_check_cost,
                 customer: customer,
                 additional: additional,
+                internal_transfer: internal_transfer,
+                account_out: account_out,
+                payment_request: payment_request,
+                payment_request_number: payment_request_number,
                 yes: yes,
 
                 }, // giá trị post
@@ -1351,7 +1823,9 @@ function addRow(id){
     $(this).val($(this).closest('tr').prev().find('td:eq(' + $(this).closest('td').index() + ')').find('input').val());
   });
   $('#'+id+' tr:last td input').attr("data","");
+  $('#'+id+' tr:last td input').attr("data-max","");
   $('#'+id+' tr:last td input').attr("alt","");
+  $('#'+id+' tr:last td input').attr("disabled",false);
   $('#'+id+' tr:last td input:first').focus();
   var i=1;
   $('#'+id+' tbody tr td:first-child').each(function() {
@@ -1383,12 +1857,58 @@ function addRow(id){
 
     var total = 0;
     $('.additional_money').each(function(){
+      var v = parseFloat(get_number($(this))) || 0;
+      var data_max = parseFloat($(this).attr('data-max') || 0);
+      if (data_max>0 && v>data_max) {
+        $(this).val(data_max);
+      }
       total += parseFloat(get_number($(this))) || 0;
     });
 
-    if (total > (money_in+money_out)) {
-      $(this).val("");
+    if (money_in>0) {
+      $('#money_in').val(total);
     }
+    else if (money_out>0) {
+      $('#money_out').val(total);
+    }
+
+    /*if (total > (money_in+money_out)) {
+      $(this).val("");
+    }*/
+    $('.numbers').val(function(index, value) {
+      return value
+        .replace(/[^0-9-.]/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      ;
+    });
+
+  });
+  $('.additional_money').change(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var p = $('.additional_code:eq('+rowIndex+')').attr('data').trim() || "";
+    if (p=="" || p==0) {
+      $('.additional_service:eq('+rowIndex+') option[value=1]').attr('selected',true);
+    }
+  });
+
+  $('.additional_code').keyup(function(){
+    var rowIndex=$(this).closest('tr').index();
+    var customer = $('#customer').val();
+    var keyword = $(this).val();
+    $.ajax({
+        url: '<?php echo BASE_URL ?>/daily/getlistcode',
+        type: 'POST',
+        data: {keyword:keyword, in: $('#money_in').val(), out: $('#money_out').val(), offset:rowIndex, customer:customer},
+        success:function(data){
+            $('.customer_list_id:eq('+rowIndex+')').slideDown(200);
+            $('.customer_list_id:eq('+rowIndex+')').html(data);
+        }
+    });
+    if ($('.additional_code:eq('+rowIndex+')').val() == "" || $('.additional_code:eq('+rowIndex+')').attr('data') == "") {
+        
+        $('.additional_code:eq('+rowIndex+')').attr('data',"");
+    }
+    
   });
 
   $('.numbers').keyup(function(event) {
@@ -1413,6 +1933,11 @@ function delRow(id,rowIndex){
         alert("Cannot delete all the rows.");
       }
       else{
+        var code = $('.additional_code:eq('+(rowIndex)+')').val();
+        var data = $('.additional_code:eq('+(rowIndex)+')').attr('data');
+        //console.log(code);
+        //$('#clearing').tagit('removeTagByLabel', code+'~'+data);
+
         table.deleteRow(rowIndex+1);
       }
       

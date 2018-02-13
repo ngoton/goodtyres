@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link href="<?php echo BASE_URL ?>/public/js/editor/contents.css" type="text/css" rel="stylesheet" _cktemp="true">
+        <style type="text/css">
+        @media print {
+          @page { margin: 0; size: A5 landscape;}
+          body { margin: 0.8cm 0.8cm 0cm 0.8cm; width: 21cm; height: 14cm; -webkit-print-color-adjust: exact; font-size: 10pt; font-family: Arial, sans-serif;}
+          u {    
+            text-decoration: underline dotted ;
+            }
+            span{
+                border-bottom: 2px solid white;
+            }
+            .underline{
+                border-bottom: 1px dotted #000;
+                width: 93%;
+                display: list-item;
+                color: #ffffff00;
+            }
+        }
+        u {    
+            text-decoration: underline dotted ;
+        }
+        span{
+            border-bottom: 2px solid white;
+        }
+        .underline{
+            border-bottom: 1px dotted #000;
+            width: 93%;
+            display: list-item;
+            color: #ffffff00;
+        }
+        page {
+          background: white;
+          display: block;
+          margin: 0 auto;
+          margin-bottom: 0.5cm;
+          box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+        }
+        page[size="A4"] {  
+          width: 21cm;
+          height: 29.7cm; 
+        }
+        page[size="A4"][layout="landscape"] {
+          width: 29.7cm;
+          height: 21cm;  
+        }
+        page[size="A3"] {
+          width: 29.7cm;
+          height: 42cm;
+        }
+        page[size="A3"][layout="landscape"] {
+          width: 42cm;
+          height: 29.7cm;  
+        }
+        page[size="A5"] {
+          width: 14.8cm;
+          height: 21cm;
+        }
+        page[size="A5"][layout="landscape"] {
+          width: 21cm;
+          height: 14.8cm;  
+        }
+        #wrap{
+            background: url('/public/img/watermarkA5.png') no-repeat;
+        }
+        </style>
+        <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+           window.print();
+        });
+        </script>
+    </head>
+    <body class="skin-blue sidebar-mini  pace-done">
+        <div id="wrap">
+            <table border="0" cellpadding="0" cellspacing="0" class="MsoTableGrid" style="width:100.0%;" width="100%">
+                <tbody>
+                    <tr>
+                        <td style="width:48.64%;padding:0in 5.4pt 0in 5.4pt" valign="top" width="48%">
+                            <p class="MsoNormal" style="margin-top:6.0pt">
+                                <b><span lang="VI">Đơn vị: <u><?php echo mb_strtoupper($infos->info_company,"UTF-8") ?></u></span></b>
+                            </p>
+                            <p class="MsoNormal" style="margin-top:6.0pt">
+                                <b><span lang="VI" >Số: <u><?php echo $payment_requests->payment_request_number ?></u></span></b>
+                            </p>
+                        </td>
+                        <td style="width:51.36%;padding:0in 5.4pt 0in 5.4pt" valign="top" width="51%">
+                            <p align="center" class="MsoNormal" style="margin-top:6.0pt;text-align:center">
+                                <b><span lang="VI" >Mẫu số 05 - TT<br />
+                                </span></b><span lang="VI" >(Ban hành theo Thông tư số 133/2016/TT-BTC ngày 26/8/2016 của Bộ Tài chính)</span>
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="MsoNormal" style="margin-top:6.0pt">
+            </p>
+            <table border="0" cellpadding="0" cellspacing="0" class="MsoTableGrid" style="width:100.0%;" width="100%">
+                <tbody>
+                    <tr>
+                        <td style="width:25%;padding:0in 5.4pt 0in 5.4pt" valign="top" width="25%">
+                            <p class="MsoNormal" style="margin-top:6.0pt">
+                            </p>
+                        </td>
+                        <td style="width:50%;padding:0in 5.4pt 0in 5.4pt" valign="top" width="50%">
+                            <p align="center" class="MsoNormal" style="margin-top:6.0pt;text-align:center;font-size: 18pt">
+                                <b><span lang="VI" >GIẤY ĐỀ NGHỊ THANH TOÁN</span></b>
+                            </p>
+                            <p align="center" class="MsoNormal" style="margin-top:6.0pt;text-align:center">
+                                <i><span lang="VI" >Ngày <u><?php echo date('d',$payment_requests->payment_request_date) ?></u> tháng <u><?php echo date('m',$payment_requests->payment_request_date) ?></u> năm <u><?php echo date('Y',$payment_requests->payment_request_date) ?></u></span></i>
+                            </p>
+                        </td>
+                        <td style="width:25%;padding:0in 5.4pt 0in 5.4pt" valign="top" width="25%">
+                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="MsoNormal" style="margin-top:6.0pt;tab-stops:dotted 5.75in">
+                <span lang="VI" style="float:left">Kính gửi: </span>
+                <span class="underline"><font style="color:#000"> &nbsp;&nbsp;&nbsp;&nbsp; <?php echo $payment_requests->payment_request_destination ?></font></span>
+            </p>
+            <p class="MsoNormal" style="margin-top:6.0pt;tab-stops:dotted 5.75in">
+                <span lang="VI" style="float:left">Họ & tên người đề nghị thanh toán:</span>
+                <span class="underline"><font style="color:#000"> &nbsp;&nbsp;&nbsp;&nbsp; <?php echo $staff_data[$payment_requests->payment_request_user] ?></font></span>
+            </p>
+            <p class="MsoNormal" style="margin-top:6.0pt;tab-stops:dotted 5.75in">
+                <span lang="VI" style="float:left">Bộ phận (hoặc địa chỉ):</span>
+                <span class="underline"><font style="color:#000"> &nbsp;&nbsp;&nbsp;&nbsp; <?php echo $payment_requests->payment_request_address ?></font></span>
+            </p>
+            <p class="MsoNormal" style="margin-top:6.0pt;tab-stops:dotted 5.75in">
+                <span lang="VI" style="float:left">Nội dung thanh toán:</span>
+                <span class="underline"><font style="color:#000"> &nbsp;&nbsp;&nbsp;&nbsp; <?php echo $payment_requests->payment_request_comment ?></font></span>
+            </p>
+            <p class="MsoNormal" style="margin-top:6.0pt;tab-stops:dotted 5.75in">
+                <span lang="VI" style="float:left">Số tiền: </span>
+                <span style="float:left;"><u> &nbsp;&nbsp;&nbsp;&nbsp; <?php echo $lib->formatMoney(str_replace('.', '', $payment_requests->payment_request_money)) ?> &nbsp;&nbsp;&nbsp;&nbsp; </u></span>
+                <span style="float:left">(Viết bằng chữ):</span>
+                <span class="underline"><font style="color:#000"></span>
+            </p>
+            <p class="MsoNormal" style="margin-top:6.0pt;tab-stops:dotted 5.75in">
+                <span class="underline"><font style="color:#000"><font style="color:#000"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $lib->convert_number_to_words(str_replace('.', '', $payment_requests->payment_request_money)) ?> đồng &nbsp;&nbsp;&nbsp;&nbsp; </font></span>
+            </p>
+            <p class="MsoNormal" style="margin-top:6.0pt;tab-stops:dotted 5.75in">
+                <span lang="VI" style="float:left;">Kèm theo: </span>
+                <span style="float:left;"><u> &nbsp;&nbsp;&nbsp;<?php echo $payment_requests->payment_request_origin ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </u></span>
+                <span style="float:left;">Chứng từ gốc:</span>
+            </p>
+            <p class="MsoNormal" style="margin-top:6.0pt">
+            </p>
+            
+            <table border="0" cellpadding="0" cellspacing="0" class="MsoTableGrid" style="width:100%">
+                <tbody>
+                    <tr>
+                        <td style="width:20%;padding:0in 5.4pt 0in 5.4pt" valign="top" width="33%">
+                            <p align="center" class="MsoNormal" style="margin-top:6.0pt;text-align:center">
+                                <b><span lang="VI" >Người đề nghị thanh toán<br />
+                                </span></b><i><span lang="VI" >(Ký, họ tên)</span></i>
+                            </p>
+
+                            <p align="center" class="MsoNormal" style="margin-top:50.0pt;text-align:center">
+                                <b><span lang="VI" ><?php echo $staff_data[$payment_requests->payment_request_user] ?></span></b>
+                            </p>
+                        </td>
+                        <td style="width:20%;padding:0in 5.4pt 0in 5.4pt" valign="top" width="33%">
+                            <p align="center" class="MsoNormal" style="margin-top:6.0pt;text-align:center">
+                                <b><span lang="VI" >Người duyệt<br />
+                                </span></b><i><span lang="VI" >(Ký, họ tên)</span></i>
+                            </p>
+                            <p align="center" class="MsoNormal" style="margin-top:50.0pt;text-align:center">
+                                <b><span lang="VI" ><?php echo $staff_data[$payment_requests->payment_request_user_approve] ?></span></b>
+                            </p>
+                        </td>
+                        <td style="width:20%;padding:0in 5.4pt 0in 5.4pt" valign="top" width="33%">
+                            <p align="center" class="MsoNormal" style="margin-top:6.0pt;text-align:center">
+                                <b><span lang="VI" >Giám đốc<br />
+                                </span></b><span lang="VI" >(Ký, họ tên)</span>
+                            </p>
+                            <p align="center" class="MsoNormal" style="margin-top:50.0pt;text-align:center">
+                                <b><span lang="VI" ><?php echo $infos->info_director ?></span></b>
+                            </p>
+                        </td>
+                        
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
