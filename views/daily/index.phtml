@@ -203,12 +203,22 @@ elseif ($order_by == 'money')
             </td>
             <?php if(!isset($disable_control)){ 
 
-              if ($daily->money_in>0) {
+              if($daily->money_in==$daily->money_out){
+                if ($daily->account=="tm") {
+                  $pr = "printre";
+                }
+                else{
+                  $pr = "printpay";
+                }
+                
+              }
+              else if ($daily->money_in>0) {
                 $pr = "printre";
               }
               else if ($daily->money_out>0) {
                 $pr = "printpay";
               }
+              
             ?>
             <td class="fix text-right">
                 <i class="fa fa-print print_daily" title="In" onClick="javascript:window.open('<?php echo $this->url('daily/'.$pr.'/'.$daily->daily_id) ?>','_blank')"></i>
@@ -640,7 +650,10 @@ $('#getPT').click(function(){
  });
 
 $('#money_in').change(function(){
-  $('.additional_money:first').val($(this).val());
+  if ($('.additional_money:first').val() == "") {
+    $('.additional_money:first').val($(this).val());
+  }
+  
   var money_in = parseFloat(get_number('#money_in')) || 0;
   var money_out = parseFloat(get_number('#money_out')) || 0;
   if (money_out>0) {
@@ -653,7 +666,10 @@ $('#money_in').change(function(){
 
 });
 $('#money_out').change(function(){
-  $('.additional_money:first').val($(this).val());
+  if ($('.additional_money:first').val() == "") {
+    $('.additional_money:first').val($(this).val());
+  }
+  
   var money_in = parseFloat(get_number('#money_in')) || 0;
   var money_out = parseFloat(get_number('#money_out')) || 0;
   if (money_in>0) {
@@ -666,7 +682,10 @@ $('#money_out').change(function(){
 
 });
 $('#comment').change(function(){
-  $('.additional_comment:first').val($(this).val());
+  if ($('.additional_comment:first').val() == "") {
+    $('.additional_comment:first').val($(this).val());
+  }
+  
 });
 
 $('.additional_money').keyup(function(){
@@ -863,7 +882,7 @@ function set_item_payment(item,name,comment,money,receive,request,approve) {
             var data = JSON.parse(answer);
             $('#dataTable0 tbody').append(data.hang);
 
-            $('.additional_comment').val(comment);
+            //$('.additional_comment').val(comment);
 
             $(".date_mask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
             $('.dropchosen').chosen();

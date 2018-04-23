@@ -86,13 +86,13 @@ margin-bottom:3.0pt;margin-left:14.2pt;text-indent:7.1pt">
 
 ES;mso-bidi-font-style:italic">Hôm nay, ngày <span ><?php echo $contract_date[0] ?></span> tháng <span ><?php echo $contract_date[1] ?></span> năm <span ><?php echo $contract_date[2] ?></span>, tại trụ sở </span><span lang="DE" style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;
 
-mso-ansi-language:DE">C&ocirc;ng ty TNHH Việt Tra de ch&uacute;ng t&ocirc;i gồm:</span><span style="font-size:13.0pt;mso-bidi-font-family:&quot;Times New Roman&quot;"><o:p></o:p></span></p>
+mso-ansi-language:DE"><?php echo $infos->info_company ?> ch&uacute;ng t&ocirc;i gồm:</span><span style="font-size:13.0pt;mso-bidi-font-family:&quot;Times New Roman&quot;"><o:p></o:p></span></p>
 
 <p class="MsoNormal" style="margin-top:6.0pt;margin-right:0in;margin-bottom:6.0pt;
 
 margin-left:7.1pt;text-align:justify;tab-stops:dotted 462.0pt">
 
-    <b><span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;">B&Ecirc;N A (B&ecirc;n b&aacute;n): C&Ocirc;NG TY TNHH VIỆT TRA DE</b><span style="font-size:13.0pt;mso-bidi-font-family:
+    <b><span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;">B&Ecirc;N A (B&ecirc;n b&aacute;n): <?php echo mb_strtoupper($infos->info_company,"UTF-8") ?></b><span style="font-size:13.0pt;mso-bidi-font-family:
 
 &quot;Times New Roman&quot;"><o:p></o:p></span></p>
 
@@ -102,7 +102,7 @@ margin-left:7.1pt;margin-bottom:.0001pt;text-align:justify;tab-stops:1.0in">
 
     <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;layout-grid-mode:
 
-line">Địa chỉ:&nbsp; Số 545, tổ 10, ấp Hương Phước, x&atilde; Phước T&acirc;n, Bi&ecirc;n H&ograve;a, Đồng Nai.</span><span style="font-size:13.0pt;mso-bidi-font-family:&quot;Times New Roman&quot;"><o:p></o:p></span></p>
+line">Địa chỉ:&nbsp; <?php echo $infos->info_address ?>.</span><span style="font-size:13.0pt;mso-bidi-font-family:&quot;Times New Roman&quot;"><o:p></o:p></span></p>
 
 <p class="MsoNormal" style="margin-top:3.0pt;margin-right:0in;margin-bottom:0in;
 
@@ -110,7 +110,7 @@ margin-left:7.1pt;margin-bottom:.0001pt;text-align:justify;tab-stops:1.0in">
 
     <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;layout-grid-mode:
 
-line">Điện thoại&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;02513 937 677&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fax : 02513 937 677</span><span style="font-size:13.0pt;mso-bidi-font-family:
+line">Điện thoại&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;<?php echo $infos->info_phone ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fax : </span><span style="font-size:13.0pt;mso-bidi-font-family:
 
 &quot;Times New Roman&quot;"><o:p></o:p></span></p>
 
@@ -120,7 +120,7 @@ margin-left:7.1pt;margin-bottom:.0001pt;text-align:justify;tab-stops:1.0in">
 
     <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;layout-grid-mode:
 
-line">M&atilde; số thuế&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp; 3603295302.</span><span style="font-size:13.0pt;mso-bidi-font-family:&quot;Times New Roman&quot;"><o:p></o:p></span></p>
+line">M&atilde; số thuế&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp; <?php echo $infos->info_mst ?>.</span><span style="font-size:13.0pt;mso-bidi-font-family:&quot;Times New Roman&quot;"><o:p></o:p></span></p>
 
 <p class="MsoNormal" style="margin-top:3.0pt;margin-right:0in;margin-bottom:0in;
 
@@ -128,11 +128,11 @@ margin-left:7.1pt;margin-bottom:.0001pt;text-align:justify;tab-stops:1.0in">
 
     <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;layout-grid-mode:
 
-line">T&agrave;i khoản&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp; 67210000476025&nbsp; Ng&acirc;n h&agrave;ng BIDV</span><span style="font-size:13.0pt;
+line">T&agrave;i khoản&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp; </span><span style="font-size:13.0pt;
 
 mso-bidi-font-family:&quot;Times New Roman&quot;;letter-spacing:-.3pt"> - </span><span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;layout-grid-mode:
 
-line">CN Nam Đồng Nai.&nbsp; </span><span style="font-size:13.0pt;mso-bidi-font-family:
+line">&nbsp; </span><span style="font-size:13.0pt;mso-bidi-font-family:
 
 &quot;Times New Roman&quot;"><o:p></o:p></span></p>
 
@@ -142,7 +142,7 @@ margin-left:7.1pt;margin-bottom:.0001pt;text-align:justify;tab-stops:1.0in">
 
     <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;layout-grid-mode:
 
-line">Đại diện &ocirc;ng&nbsp;&nbsp; :&nbsp;&nbsp; Cao Huy Đồng&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; Chức vụ: Gi&aacute;m Đốc</span><span style="font-size:13.0pt;mso-bidi-font-family:
+line">Đại diện ông/bà&nbsp;&nbsp; :&nbsp;&nbsp; <?php echo $infos->info_director ?>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; Chức vụ: Gi&aacute;m Đốc</span><span style="font-size:13.0pt;mso-bidi-font-family:
 
 &quot;Times New Roman&quot;"><o:p></o:p></span></p>
 

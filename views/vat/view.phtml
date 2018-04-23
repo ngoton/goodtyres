@@ -1,0 +1,2011 @@
+Số hóa đơn <input type="text" name="batdau" id="batdau" value="">
+
+<button type="button" class="btn" id="find_item"><i class="fa fa-caret-down"></i> Xem</button>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link href="<?php echo BASE_URL ?>/public/js/editor/contents.css" type="text/css" rel="stylesheet" _cktemp="true">
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
+        <style type="text/css">
+        @media print {
+          @page { margin: 0; size: A4;}
+          body { margin: 2.78cm 2.0cm 0cm 1.9cm; width: 21cm; height: 29.6cm; -webkit-print-color-adjust: exact; font-size: 10pt; font-family: Arial, sans-serif;}
+        }
+        page {
+          background: red;
+          display: block;
+          margin: 0 auto;
+          margin-bottom: 0.5cm;
+          box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+        }
+        page[size="A4"] {  
+          width: 21cm;
+          height: 29.7cm; 
+        }
+        page[size="A4"][layout="landscape"] {
+          width: 29.7cm;
+          height: 21cm;  
+        }
+        page[size="A3"] {
+          width: 29.7cm;
+          height: 42cm;
+        }
+        page[size="A3"][layout="landscape"] {
+          width: 42cm;
+          height: 29.7cm;  
+        }
+        page[size="A5"] {
+          width: 14.8cm;
+          height: 21cm;
+        }
+        page[size="A5"][layout="landscape"] {
+          width: 21cm;
+          height: 14.8cm;  
+        }
+        </style>
+        
+    </head>
+    <body class="skin-blue sidebar-mini  pace-done">
+      <form id="printhd" action="<?php echo $this->url('vat/printview') ?>" method="get">
+        <table align="left" border="1" cellpadding="0" cellspacing="0" class="MsoTableGrid" style="width:6.45in;border-collapse:collapse;border:none;mso-border-alt:
+ solid red .5pt;mso-yfti-tbllook:1184;mso-table-lspace:9.0pt;margin-left:6.75pt;
+ mso-table-rspace:9.0pt;margin-right:6.75pt;mso-table-anchor-vertical:page;
+ mso-table-anchor-horizontal:margin;mso-table-left:left;mso-table-top:16.55pt;
+ mso-padding-alt:2pt 5.4pt 0in 5.4pt;mso-border-insideh:.5pt solid red;
+ mso-border-insidev:.5pt solid red" width="660">
+  <tbody>
+    <tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes;height:57.95pt">
+      <td colspan="15" style="width:6.45in;border:solid red 1.0pt;
+  mso-border-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:57.95pt" valign="top" width="619">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><span style="font-size:
+  18.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">CÔNG TY TNHH  VIỆT TRA DE</span></b><b><span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"> <br />
+          </span></b><span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;
+  color:red">Địa chỉ: Số 545, Tổ 10, Ấp Hương Phước, Xã Phước Tân, TP. Biên Hòa, T. Đồng Nai  <br />
+          Số TK: 200970509 Ngân Hàng ACB CN Long Bình Tân, Biên Hòa, Đồng Nai<br />
+          Điện thoại: 0163.937.677 - Fax: 0613.937.677<br />
+          Mã số thuế: <b>3 6 0 3 2 9 5 3 0 2<o:p></o:p></b></span></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="77" style="height:57.95pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:1;height:12.05pt">
+      <td colspan="13" nowrap="nowrap" style="width:344.15pt;border:none;
+  border-left:solid red 1.0pt;mso-border-top-alt:solid red .5pt;mso-border-top-alt:
+  solid red .5pt;mso-border-left-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;
+  height:12.05pt" valign="top" width="459">
+        <p align="center" class="MsoNormal" style="margin-top:6.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:1.0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><span style="font-size:
+  18.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">HÓA ĐƠN GIÁ TRỊ GIA TĂNG</span></b><span style="font-size:18.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;
+  color:red"><o:p></o:p></span></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:120.25pt;border:none;
+  border-right:solid red 1.0pt;mso-border-top-alt:solid red .5pt;mso-border-top-alt:
+  solid red .5pt;mso-border-right-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;
+  height:12.05pt" valign="top" width="160">
+        <p class="MsoNormal" style="margin-top:6.0pt;margin-right:-7.9pt;margin-bottom:
+  2.0pt;margin-left:-6.65pt;line-height:normal;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Mẫu số: 01GTKT3/001<o:p></o:p></span></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="16" style="height:12.05pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:2;height:11.95pt">
+      <td colspan="13" nowrap="nowrap" style="width:344.15pt;border:none;
+  border-left:solid red 1.0pt;mso-border-left-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;
+  height:11.95pt" valign="top" width="459">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:1.0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;Liên 2 : Giao cho người mua</span></i><span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><o:p></o:p></span></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:120.25pt;border:none;
+  border-right:solid red 1.0pt;mso-border-right-alt:solid red .5pt;padding:
+  2pt 5.4pt 0in 5.4pt;height:11.95pt" valign="top" width="160">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:-6.65pt;line-height:normal;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Ký hiệu: VT/17P<o:p></o:p></span></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="16" style="height:11.95pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:3;height:25.0pt">
+      <td colspan="13" nowrap="nowrap" style="width:344.15pt;border:none;
+  border-left:solid red 1.0pt;mso-border-left-alt:solid red .5pt;padding:4pt 5.4pt 0in 5.4pt;
+  height:25.0pt" valign="top" width="459">
+        <p align="center" class="MsoNormal" style="margin-top:-2pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:1.0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;Ngày&nbsp; </span></i><i><span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="ngay" id="ngay" value="" style="width:30px"><span style="color:red">&nbsp; tháng&nbsp; </span><input type="text" name="thang" id="thang" value="" style="width:30px"><span style="color:red">&nbsp; năm&nbsp;20 </span><input type="text" name="nam" id="nam" value="" style="width:30px"></span></i><span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><o:p></o:p></span></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:120.25pt;border:none;
+  border-right:solid red 1.0pt;mso-border-right-alt:solid red .5pt;padding:
+  0pt 5.4pt 0in 5.4pt;height:25.0pt" valign="top" width="160">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:-6.65pt;line-height:normal;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+  
+          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Số: <b><input type="text" name="sohd" id="sohd" value=""></b><o:p></o:p></span></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="33" style="height:25.0pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:4;height:6.65pt">
+      <td colspan="7" nowrap="nowrap" style="width:135.95pt;border:none;
+  border-left:solid red 1.0pt;mso-border-left-alt:solid red .5pt;padding:4pt 5.4pt 0in 5.4pt;
+  height:6.65pt" valign="top" width="181">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-8.65pt;margin-bottom:
+  2.0pt;margin-left:0in;line-height:115%;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;
+  color:red">Họ tên người mua hàng:<o:p></o:p></span></p>
+      </td>
+      <td colspan="8" nowrap="nowrap" style="width:328.45pt;border:none;
+  border-right:solid red 1.0pt;mso-border-right-alt:solid red .5pt;padding:
+  4pt 5.4pt 0in 5.4pt;height:6.65pt" valign="top" width="438">
+        <p class="MsoNormal" style="margin-top:0.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:0in;line-height:115%;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;
+  color:red"><input type="text" name="tennguoimua" id="tennguoimua" style="width: 400px"><o:p></o:p></span></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="9" style="height:6.65pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:5;height:3.2pt">
+      <td colspan="3" nowrap="nowrap" style="width:.95in;border:none;
+  border-left:solid red 1.0pt;mso-border-left-alt:solid red .5pt;padding:4pt 5.4pt 0in 5.4pt;
+  height:3.2pt" valign="top" width="91">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-5.25pt;margin-bottom:
+  2.0pt;margin-left:0in;line-height:115%;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;
+  color:red">Tên đơn vị:<o:p></o:p></span></p>
+      </td>
+      <td colspan="12" nowrap="nowrap" style="width:5.5in;border:none;
+  border-right:solid red 1.0pt;mso-border-right-alt:solid red .5pt;padding:
+  4pt 0in 0in 0in;height:3.2pt" valign="top" width="528">
+        <p class="MsoNormal" style="margin-top:0.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:-25.6pt;line-height:115%;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"> <input type="text" name="tendv" id="tendv" style="width: 500px"> <o:p></o:p></span></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:6;height:3.2pt">
+      <td colspan="3" nowrap="nowrap" style="width:.95in;border:none;
+  border-left:solid red 1.0pt;mso-border-left-alt:solid red .5pt;padding:4pt 5.4pt 0in 5.4pt;
+  height:3.2pt" valign="top" width="91">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-5.25pt;margin-bottom:
+  2.0pt;margin-left:0in;line-height:115%;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;
+  color:red">Mã số thuế:<o:p></o:p></span></p>
+      </td>
+      <td colspan="12" style="width:5.5in;border:none;
+  border-right:solid red 1.0pt;mso-border-right-alt:solid red .5pt;padding:
+  4pt 5.4pt 0in 0in;height:3.2pt" valign="top" width="528">
+        <p class="MsoNormal" style="margin-top:0.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:-25.6pt;line-height:115%;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"> <input type="text" name="mst" id="mst"><o:p></o:p></span></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:7;height:4.95pt">
+      <td colspan="2" nowrap="nowrap" style="width:.7in;border:none;
+  border-left:solid red 1.0pt;mso-border-left-alt:solid red .5pt;padding:4pt 5.4pt 0in 5.4pt;
+  height:4.95pt" valign="top" width="67">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-4.75pt;margin-bottom:
+  2.0pt;margin-left:0in;line-height:115%;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;
+  color:red">Địa chỉ:<o:p></o:p></span></p>
+      </td>
+      <td colspan="13" style="min-width:5.75in;border:none;
+  border-right:solid red 1.0pt;mso-border-right-alt:solid red .5pt;padding:
+  4pt 5.4pt 0in 0in;height:4.95pt" valign="top" width="552">
+        <p class="MsoNormal" style="margin-top:0.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:-18.05pt;line-height:115%;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"> <input type="text" name="diachi" id="diachi" style="width: 650px"><o:p></o:p></span></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:8;height:3.2pt">
+      <td colspan="5" nowrap="nowrap" style="width:122.9pt;border-top:
+  none;border-left:solid red 1.0pt;border-bottom:solid red 1.0pt;border-right:
+  none;mso-border-left-alt:solid red .5pt;mso-border-bottom-alt:solid red .5pt;
+  padding:4pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="164">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-8.25pt;margin-bottom:
+  2.0pt;margin-left:0in;line-height:115%;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;
+  color:red">Hình thức thanh toán:<o:p></o:p></span></p>
+      </td>
+      <td colspan="4" nowrap="nowrap" style="width:58.65pt;border:none;
+  border-bottom:solid red 1.0pt;mso-border-bottom-alt:solid red .5pt;
+  padding:0pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="78">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:0in;line-height:115%;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="thanhtoan" id="thanhtoan" style="width: 50px" value="TM/CK"><o:p></o:p></span></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:86.15pt;border:none;
+  border-bottom:solid red 1.0pt;mso-border-bottom-alt:solid red .5pt;
+  padding:4pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="115">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:0in;line-height:115%;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;
+  color:red">Số tài khoản:<o:p></o:p></span></p>
+      </td>
+      <td colspan="4" nowrap="nowrap" style="width:196.7pt;border-top:
+  none;border-left:none;border-bottom:solid red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-bottom-alt:solid red .5pt;mso-border-right-alt:solid red .5pt;
+  padding:4pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="262">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:0in;line-height:115%;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;
+  color:red">&nbsp;<o:p></o:p></span></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:9;height:16.95pt">
+      <td nowrap="nowrap" rowspan="2" style="width:24.05pt;border:solid red 1.0pt;
+  border-top:none;mso-border-top-alt:solid red .5pt;mso-border-alt:solid red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:16.95pt" valign="top" width="32">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:-6.85pt;
+  margin-bottom:2.0pt;margin-left:-4.5pt;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">STT<o:p></o:p></span></b></p>
+      </td>
+      <td colspan="9" nowrap="nowrap" rowspan="2" style="width:207.75pt;
+  border-top:none;border-left:none;border-bottom:solid red 1.0pt;border-right:
+  solid red 1.0pt;mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:16.95pt" valign="top" width="277">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Tên hàng hóa, dịch vụ<o:p></o:p></span></b></p>
+      </td>
+      <td rowspan="2" style="width:35.9pt;border-top:none;
+  border-left:none;border-bottom:solid red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:16.95pt" valign="top" width="48">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:-5.4pt;
+  margin-bottom:2.0pt;margin-left:-5.9pt;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Đơn vị tính<o:p></o:p></span></b></p>
+      </td>
+      <td rowspan="2" style="width:33.0pt;border-top:none;
+  border-left:none;border-bottom:solid red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:16.95pt" valign="top" width="44">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:-9.7pt;
+  margin-bottom:2.0pt;margin-left:-9.9pt;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Số lượng<o:p></o:p></span></b></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" rowspan="2" style="width:68.25pt;
+  border-top:none;border-left:none;border-bottom:solid red 1.0pt;border-right:
+  solid red 1.0pt;mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:16.95pt" valign="top" width="91">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Đơn giá<o:p></o:p></span></b></p>
+      </td>
+      <td nowrap="nowrap" rowspan="2" style="width:95.45pt;border-top:
+  none;border-left:none;border-bottom:solid red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:16.95pt" valign="top" width="127">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Thành tiền<o:p></o:p></span></b></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="23" style="height:16.95pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:10;height:8.95pt">
+      <!--[if !supportMisalignedRows]-->
+      <td height="25" style="height:8.95pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:11;height:3.2pt">
+      <td nowrap="nowrap" style="width:24.05pt;border:solid red 1.0pt;
+  border-top:none;mso-border-top-alt:solid red .5pt;mso-border-alt:solid red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="32">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:-6.85pt;
+  margin-bottom:2.0pt;margin-left:-4.5pt;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:12.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">1<o:p></o:p></span></p>
+      </td>
+      <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
+  none;border-left:none;border-bottom:solid red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="277">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:12.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">2<o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:35.9pt;border-top:none;
+  border-left:none;border-bottom:solid red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="48">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:12.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">3<o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:33.0pt;border-top:none;
+  border-left:none;border-bottom:solid red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="44">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:12.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">4<o:p></o:p></span></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:68.25pt;border-top:
+  none;border-left:none;border-bottom:solid red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="91">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:12.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">5<o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:solid red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:12.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">6 = 4x5<o:p></o:p></span></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:12;height:3.2pt">
+      <td nowrap="nowrap" style="width:24.05pt;border-top:none;
+  border-left:solid red 1.0pt;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-alt:solid red .5pt;mso-border-bottom-alt:
+  dotted red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="32">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="0"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
+      </td>
+      <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="277">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:0pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="ten" class="ten" style="width: 90%" value="Lốp xe bố kẽm:"><o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:35.9pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="48">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dvt" class="dvt" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:33.0pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="44">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="sl" class="sl" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:68.25pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="91">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dg" class="dg numbers text-right" style="width:90px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><input type="text" name="tt" class="tt numbers text-right" > <o:p></o:p></span></i></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:12;height:3.2pt">
+      <td nowrap="nowrap" style="width:24.05pt;border-top:none;
+  border-left:solid red 1.0pt;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-alt:solid red .5pt;mso-border-bottom-alt:
+  dotted red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="32">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="1"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
+      </td>
+      <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="277">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:0pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="ten" class="ten" style="width: 90%"><o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:35.9pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="48">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dvt" class="dvt" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:33.0pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="44">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="sl" class="sl" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:68.25pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="91">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dg" class="dg numbers text-right" style="width:90px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><input type="text" name="tt" class="tt numbers text-right" > <o:p></o:p></span></i></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr><tr style="mso-yfti-irow:12;height:3.2pt">
+      <td nowrap="nowrap" style="width:24.05pt;border-top:none;
+  border-left:solid red 1.0pt;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-alt:solid red .5pt;mso-border-bottom-alt:
+  dotted red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="32">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="2"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
+      </td>
+      <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="277">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:0pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="ten" class="ten" style="width: 90%"><o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:35.9pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="48">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dvt" class="dvt" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:33.0pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="44">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="sl" class="sl" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:68.25pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="91">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dg" class="dg numbers text-right" style="width:90px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><input type="text" name="tt" class="tt numbers text-right" > <o:p></o:p></span></i></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr><tr style="mso-yfti-irow:12;height:3.2pt">
+      <td nowrap="nowrap" style="width:24.05pt;border-top:none;
+  border-left:solid red 1.0pt;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-alt:solid red .5pt;mso-border-bottom-alt:
+  dotted red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="32">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="3"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
+      </td>
+      <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="277">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:0pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="ten" class="ten" style="width: 90%"><o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:35.9pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="48">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dvt" class="dvt" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:33.0pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="44">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="sl" class="sl" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:68.25pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="91">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dg" class="dg numbers text-right" style="width:90px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><input type="text" name="tt" class="tt numbers text-right" > <o:p></o:p></span></i></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr><tr style="mso-yfti-irow:12;height:3.2pt">
+      <td nowrap="nowrap" style="width:24.05pt;border-top:none;
+  border-left:solid red 1.0pt;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-alt:solid red .5pt;mso-border-bottom-alt:
+  dotted red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="32">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="4"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
+      </td>
+      <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="277">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:0pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="ten" class="ten" style="width: 90%"><o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:35.9pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="48">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dvt" class="dvt" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:33.0pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="44">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="sl" class="sl" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:68.25pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="91">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dg" class="dg numbers text-right" style="width:90px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><input type="text" name="tt" class="tt numbers text-right" > <o:p></o:p></span></i></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr><tr style="mso-yfti-irow:12;height:3.2pt">
+      <td nowrap="nowrap" style="width:24.05pt;border-top:none;
+  border-left:solid red 1.0pt;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-alt:solid red .5pt;mso-border-bottom-alt:
+  dotted red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="32">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="5"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
+      </td>
+      <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="277">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:0pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="ten" class="ten" style="width: 90%"><o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:35.9pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="48">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dvt" class="dvt" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:33.0pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="44">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="sl" class="sl" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:68.25pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="91">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dg" class="dg numbers text-right" style="width:90px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><input type="text" name="tt" class="tt numbers text-right" > <o:p></o:p></span></i></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr><tr style="mso-yfti-irow:12;height:3.2pt">
+      <td nowrap="nowrap" style="width:24.05pt;border-top:none;
+  border-left:solid red 1.0pt;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-alt:solid red .5pt;mso-border-bottom-alt:
+  dotted red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="32">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="6"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
+      </td>
+      <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="277">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:0pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="ten" class="ten" style="width: 90%"><o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:35.9pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="48">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dvt" class="dvt" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:33.0pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="44">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="sl" class="sl" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:68.25pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="91">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dg" class="dg numbers text-right" style="width:90px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><input type="text" name="tt" class="tt numbers text-right" > <o:p></o:p></span></i></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr><tr style="mso-yfti-irow:12;height:3.2pt">
+      <td nowrap="nowrap" style="width:24.05pt;border-top:none;
+  border-left:solid red 1.0pt;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-alt:solid red .5pt;mso-border-bottom-alt:
+  dotted red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="32">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="7"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
+      </td>
+      <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="277">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:0pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="ten" class="ten" style="width: 90%"><o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:35.9pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="48">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dvt" class="dvt" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:33.0pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="44">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="sl" class="sl" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:68.25pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="91">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dg" class="dg numbers text-right" style="width:90px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><input type="text" name="tt" class="tt numbers text-right" > <o:p></o:p></span></i></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr><tr style="mso-yfti-irow:12;height:3.2pt">
+      <td nowrap="nowrap" style="width:24.05pt;border-top:none;
+  border-left:solid red 1.0pt;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-alt:solid red .5pt;mso-border-bottom-alt:
+  dotted red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="32">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="8"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
+      </td>
+      <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="277">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:0pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="ten" class="ten" style="width: 90%"><o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:35.9pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="48">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dvt" class="dvt" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:33.0pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="44">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="sl" class="sl" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:68.25pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="91">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dg" class="dg numbers text-right" style="width:90px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><input type="text" name="tt" class="tt numbers text-right" > <o:p></o:p></span></i></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr><tr style="mso-yfti-irow:12;height:3.2pt">
+      <td nowrap="nowrap" style="width:24.05pt;border-top:none;
+  border-left:solid red 1.0pt;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-alt:solid red .5pt;mso-border-bottom-alt:
+  dotted red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="32">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="9"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
+      </td>
+      <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="277">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:0pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="ten" class="ten" style="width: 90%"><o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:35.9pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="48">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dvt" class="dvt" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:33.0pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="44">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="sl" class="sl" style="width:30px"><o:p></o:p></span></i></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:68.25pt;border-top:
+  none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="91">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="dg" class="dg numbers text-right" style="width:90px"><o:p></o:p></span></i></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-left-alt:solid red .5pt;
+  mso-border-alt:solid red .5pt;mso-border-bottom-alt:dotted red .5pt;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-.1in;margin-bottom:
+  3.45pt;margin-left:-4.3pt;mso-para-margin-top:2.0pt;mso-para-margin-right:
+  -.1in;mso-para-margin-bottom:.29gd;mso-para-margin-left:-4.3pt;line-height:
+  normal;mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:
+  around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><input type="text" name="tt" class="tt numbers text-right" > <o:p></o:p></span></i></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:22;height:3.2pt">
+      <td colspan="14" nowrap="nowrap" style="width:368.95pt;border-top:
+  solid red 1.0pt;border-left:solid red 1.0pt;border-bottom:solid red 1.0pt;border-right:
+  none;mso-border-top-alt:solid red .5pt;mso-border-top-alt:solid red .5pt;
+  mso-border-left-alt:solid red .5pt;mso-border-bottom-alt:solid red .5pt;
+  padding:0in 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="492">
+        <p align="right" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:right;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">&nbsp; Cộng tiền hàng: <o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:solid red 1.0pt;
+  border-left:none;border-bottom:solid red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-top-alt:solid red .5pt;
+  mso-border-bottom-alt:solid red .5pt;mso-border-right-alt:solid red .5pt;
+  padding:0in 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p align="right" class="MsoNormal" style="margin-top:0.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:right;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;mso-bidi-font-style:italic"><input type="text" name="congtien" id="congtien" class="numbers  text-right"> <o:p></o:p></span></b></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:23;height:3.2pt">
+      <td colspan="4" nowrap="nowrap" style="width:1.45in;border-top:
+  none;border-left:solid red 1.0pt;border-bottom:solid red 1.0pt;border-right:
+  none;mso-border-top-alt:solid red .5pt;mso-border-top-alt:solid red .5pt;
+  mso-border-left-alt:solid red .5pt;mso-border-bottom-alt:solid red .5pt;
+  padding:0in 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="139">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-5.8pt;margin-bottom:
+  2.0pt;margin-left:0in;line-height:normal;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">&nbsp;Thuế suất GTGT: <o:p></o:p></span></p>
+      </td>
+      <td colspan="2" nowrap="nowrap" style="width:26.75pt;border:none;
+  border-bottom:solid red 1.0pt;mso-border-top-alt:solid red .5pt;mso-border-top-alt:
+  solid red .5pt;mso-border-bottom-alt:solid red .5pt;padding:0in 5.4pt 0in 5.4pt;
+  height:3.2pt;color:red" valign="top" width="36">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:0in;line-height:normal;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><i><span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:black">10<o:p></o:p></span></i></b>&nbsp;&nbsp;&nbsp;%</p>
+      </td>
+      <td colspan="8" nowrap="nowrap" style="width:237.8pt;border:none;
+  border-bottom:solid red 1.0pt;mso-border-top-alt:solid red .5pt;mso-border-top-alt:
+  solid red .5pt;mso-border-bottom-alt:solid red .5pt;padding:0in 5.4pt 0in 5.4pt;
+  height:3.2pt" valign="top" width="317">
+        <p align="right" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:right;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">&nbsp;Tiền thuế GTGT: <o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:solid red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-top-alt:solid red .5pt;
+  mso-border-bottom-alt:solid red .5pt;mso-border-right-alt:solid red .5pt;
+  padding:0in 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p align="right" class="MsoNormal" style="margin-top:0.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:right;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;mso-bidi-font-style:italic"><input type="text" name="tienthue" id="tienthue" class="numbers text-right"> <o:p></o:p></span></b></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:24;height:3.2pt">
+      <td colspan="14" nowrap="nowrap" style="width:368.95pt;border-top:
+  none;border-left:solid red 1.0pt;border-bottom:solid red 1.0pt;border-right:
+  none;mso-border-top-alt:solid red .5pt;mso-border-top-alt:solid red .5pt;
+  mso-border-left-alt:solid red .5pt;mso-border-bottom-alt:solid red .5pt;
+  padding:0in 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="492">
+        <p align="right" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:right;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">&nbsp; Tổng cộng tiền thanh toán: <o:p></o:p></span></p>
+      </td>
+      <td nowrap="nowrap" style="width:95.45pt;border-top:none;
+  border-left:none;border-bottom:solid red 1.0pt;border-right:solid red 1.0pt;
+  mso-border-top-alt:solid red .5pt;mso-border-top-alt:solid red .5pt;
+  mso-border-bottom-alt:solid red .5pt;mso-border-right-alt:solid red .5pt;
+  padding:0in 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="127">
+        <p align="right" class="MsoNormal" style="margin-top:0.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:right;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;mso-bidi-font-style:italic"><input type="text" name="tongcong" id="tongcong" class="numbers text-right"> <o:p></o:p></span></b></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:25;height:3.2pt">
+      <td colspan="5" nowrap="nowrap" style="width:122.9pt;border:none;
+  border-left:solid red 1.0pt;mso-border-top-alt:solid red .5pt;mso-border-top-alt:
+  solid red .5pt;mso-border-left-alt:solid red .5pt;padding:0in 5.4pt 0in 5.4pt;
+  height:3.2pt" valign="top" width="164">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:-8.05pt;margin-bottom:
+  2.0pt;margin-left:0in;line-height:normal;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">&nbsp;Số tiền viết bằng chữ: <o:p></o:p></span></p>
+      </td>
+      <td colspan="10" style="width:341.5pt;border:none;
+  border-right:solid red 1.0pt;mso-border-top-alt:solid red .5pt;mso-border-top-alt:
+  solid red .5pt;mso-border-right-alt:solid red .5pt;padding:0in 5.4pt 0in 5.4pt;
+  height:3.2pt" valign="top" width="455">
+        <p class="MsoNormal" style="margin-top:0.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:-5.75pt;line-height:normal;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="tongcongchu" id="tongcongchu" style="width:550px"><o:p></o:p></span></i></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:26;height:12.05pt">
+      <td colspan="15" nowrap="nowrap" style="width:6.45in;border:solid red 1.0pt;
+  border-top:none;mso-border-left-alt:solid red .5pt;mso-border-bottom-alt:
+  solid red .5pt;mso-border-right-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;
+  height:12.05pt" valign="top" width="619">
+        &nbsp;</td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="16" style="height:12.05pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:27;height:3.2pt">
+      <td colspan="8" nowrap="nowrap" style="width:153.0pt;border:none;
+  border-left:solid red 1.0pt;mso-border-top-alt:solid red .5pt;mso-border-top-alt:
+  solid red .5pt;mso-border-left-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;
+  height:3.2pt" valign="top" width="204">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Người mua hàng<o:p></o:p></span></p>
+      </td>
+      <td colspan="4" nowrap="nowrap" style="width:147.7pt;border:none;
+  mso-border-top-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="197">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Người bán hàng<o:p></o:p></span></p>
+      </td>
+      <td colspan="3" nowrap="nowrap" style="width:163.7pt;border:none;
+  border-right:solid red 1.0pt;mso-border-top-alt:solid red .5pt;mso-border-top-alt:
+  solid red .5pt;mso-border-right-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;
+  height:3.2pt" valign="top" width="218">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Thủ trưởng đơn vị<o:p></o:p></span></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:28;height:3.2pt">
+      <td colspan="8" nowrap="nowrap" style="width:153.0pt;border:none;
+  border-left:solid red 1.0pt;mso-border-left-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;
+  height:3.2pt" valign="top" width="204">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">(Ký, ghi rõ họ tên)<o:p></o:p></span></i></p>
+      </td>
+      <td colspan="4" nowrap="nowrap" style="width:147.7pt;border:none;
+  padding:2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="197">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">(Ký, ghi rõ họ tên)</span></i><span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red"><o:p></o:p></span></p>
+      </td>
+      <td colspan="3" nowrap="nowrap" style="width:163.7pt;border:none;
+  border-right:solid red 1.0pt;mso-border-right-alt:solid red .5pt;padding:
+  2pt 5.4pt 0in 5.4pt;height:3.2pt" valign="top" width="218">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <i><span style="font-size:
+  13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">(Ký, đóng dấu, ghi rõ họ tên)<o:p></o:p></span></i></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="4" style="height:3.2pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:29;height:91.3pt">
+      <td colspan="8" nowrap="nowrap" style="width:153.0pt;border:none;
+  border-left:solid red 1.0pt;mso-border-left-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;
+  height:91.3pt" valign="top" width="204">
+        &nbsp;</td>
+      <td colspan="4" nowrap="nowrap" style="width:147.7pt;border:none;
+  padding:2pt 5.4pt 0in 5.4pt;height:91.3pt" valign="top" width="197">
+        &nbsp;</td>
+      <td colspan="3" nowrap="nowrap" style="width:163.7pt;border:none;
+  border-right:solid red 1.0pt;mso-border-right-alt:solid red .5pt;padding:
+  2pt 5.4pt 0in 5.4pt;height:91.3pt" valign="top" width="218">
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:0in;line-height:normal;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">&nbsp;<o:p></o:p></span></p>
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:0in;line-height:normal;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">&nbsp;<o:p></o:p></span></p>
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:0in;line-height:normal;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">&nbsp;<o:p></o:p></span></p>
+        <p class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;margin-bottom:
+  2.0pt;margin-left:0in;line-height:normal;mso-element:frame;mso-element-frame-hspace:
+  9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
+  margin;mso-element-top:16.55pt;mso-height-rule:exactly">
+          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">&nbsp;<o:p></o:p></span></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="122" style="height:91.3pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+    <tr style="mso-yfti-irow:30;mso-yfti-lastrow:yes;height:9.7pt">
+      <td colspan="15" nowrap="nowrap" style="width:6.45in;border:solid red 1.0pt;
+  border-top:none;mso-border-left-alt:solid red .5pt;mso-border-bottom-alt:
+  solid red .5pt;mso-border-right-alt:solid red .5pt;padding:2pt 5.4pt 0in 5.4pt;
+  height:9.7pt" valign="top" width="619">
+        <p align="center" class="MsoNormal" style="margin-top:2.0pt;margin-right:0in;
+  margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:normal;
+  mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
+  mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
+  mso-element-top:16.55pt;mso-height-rule:exactly">
+          <b><i><span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">(Cần kiểm tra đối chiếu khi lập, giao, nhận hóa đơn)<o:p></o:p></span></i></b></p>
+      </td>
+      <!--[if !supportMisalignedRows]-->
+      <td height="13" style="height:9.7pt;border:none" width="0">
+        &nbsp;</td>
+      <!--[endif]-->
+    </tr>
+  </tbody>
+</table>
+<h4><button type="button" class="btn" title="In" id="print"><i class="fa fa-print" ></i></button> <button id="remove" type="button" class="btn"><i class="fa fa-times" title="Hủy hóa đơn"></i></button> <button id="refresh" type="button" class="btn"><i class="fa fa-refresh" title="Nhập lại"></i></button></h4>
+</form>
+<i class="error"><u><b>Lưu ý trước khi in:</b></u> Bằng việc bấm <b>"In"</b> là bạn đã xác nhận các thông tin là đúng.</i>
+<div id="show_item"></div>
+
+<script type="text/javascript">
+  $('#sohd').keyup(function(){
+      var val = $(this).val();
+      $(this).val(val.substring(1, val.length));
+
+      var val_new = $(this).val();
+      if (val_new.length<7) {
+          $(this).val("0"+val_new);
+      }
+  });
+
+  $('.numbers').keyup(function(event) {
+
+        // skip for arrow keys
+    if(event.which >= 37 && event.which <= 40) return;
+
+    // format number
+    $(this).val(function(index, value) {
+      return value
+        .replace(/[^0-9-.]/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      ;
+    });
+  });
+
+$("#find_item").click(function(){
+  var sohoadon = $('#batdau').val();
+    $.ajax({
+        url: '<?php echo BASE_URL ?>/vat/getItemAdd',
+        type: 'GET',
+        data: {sohoadon:sohoadon},
+        success:function(answer){
+          var data = JSON.parse(answer);
+
+          $('#ngay').val(data.ngay);
+          $('#thang').val(data.thang);
+          $('#nam').val(data.nam);
+          $('#sohd').val(data.sohd);
+          $('#tennguoimua').val(data.tennguoimua);
+          $('#tendv').val(data.tendv);
+          $('#mst').val(data.mst);
+          $('#diachi').val(data.diachi);
+
+          var i=1;
+          var j=1;
+          var k=0;
+          var tong = 0;
+
+          while(i<data.total){
+            var brand = data.brand[k];
+            var size = data.size[k];
+            var pattern = data.pattern[k];
+
+            
+            $('.order:eq('+i+')').val(data.order[k]);
+            $('.orderlist:eq('+i+')').val(data.orderlist[k]);
+            $('.brand:eq('+i+')').val(brand);
+            $('.size:eq('+i+')').val(size);
+            $('.pattern:eq('+i+')').val(pattern);
+            $('.check:eq('+i+')').val(brand+'~'+size+'~'+pattern);
+
+            var sl = data.sl[k];
+            var tt = data.tt[k];
+            var to = data.total_hide[k];
+
+            var check=0;
+            var rowIndex = 0;
+            $('.check').each(function(){
+              if ($(this).val()==(brand+'~'+size+'~'+pattern) && $(this).attr('data')!=i) {
+                $('.sl:eq('+rowIndex+')').val((parseFloat($('.sl:eq('+rowIndex+')').val())+parseFloat(sl)) || "");
+                $('.tt:eq('+rowIndex+')').val((parseFloat($('.tt:eq('+rowIndex+')').val())+parseFloat(tt)) || "");
+                $('.tt:eq('+rowIndex+')').attr('data',(parseFloat($('.tt:eq('+rowIndex+')').attr('data'))+parseFloat(to)) || "");
+                $('.total_hide:eq('+rowIndex+')').val((parseFloat($('.tt:eq('+rowIndex+')').attr('data'))+parseFloat(to)) || "");
+                check=1;
+              }
+              rowIndex++;
+            });
+
+            if (check==0) {
+              $('.stt:eq('+i+')').val(j);
+              $('.ten:eq('+i+')').val(data.ten[k]);
+              $('.dvt:eq('+i+')').val(data.dvt[k]);
+              $('.sl:eq('+i+')').val(data.sl[k]);
+              $('.dg:eq('+i+')').val(data.dg[k]);
+              $('.dg:eq('+i+')').attr('data',data.price_hide[k]);
+              $('.tt:eq('+i+')').val(data.tt[k]);
+              $('.tt:eq('+i+')').attr('data',data.total_hide[k]);
+              $('.price_hide:eq('+i+')').val(data.price_hide[k]);
+              $('.total_hide:eq('+i+')').val(data.total_hide[k]);
+
+              j++;
+            }
+            
+
+            tong += parseFloat(data.total_hide[k]);
+
+            i++;
+            k++;
+          }
+
+          var k=1;
+          var temp_stt="";
+          var temp_ten="";
+          var temp_dvt="";
+          var temp_sl="";
+          var temp_dg="";
+          var temp_dg1="";
+          var temp_tt="";
+          var temp_to="";
+          var temp_order="";
+          var temp_orderlist="";
+          var temp_brand="";
+          var temp_size="";
+          var temp_pattern="";
+          var temp_check="";
+          while(k<10){
+            
+            if ($('.stt:eq('+k+')').val()=="") {
+              var l=k+1;
+              while(l<10){
+                if ($('.stt:eq('+l+')').val()!="") {
+                  temp_stt = $('.stt:eq('+l+')').val();
+                  temp_ten = $('.ten:eq('+l+')').val();
+                  temp_dvt = $('.dvt:eq('+l+')').val();
+                  temp_sl = $('.sl:eq('+l+')').val();
+                  temp_dg = $('.dg:eq('+l+')').val();
+                  temp_dg1 = $('.dg:eq('+l+')').attr('data');
+                  temp_tt = $('.tt:eq('+l+')').val();
+                  temp_to = $('.tt:eq('+l+')').attr('data');
+                  temp_order = $('.order:eq('+l+')').val();
+                  temp_orderlist=$('.orderlist:eq('+l+')').val();
+                  temp_brand=$('.brand:eq('+l+')').val();
+                  temp_size=$('.size:eq('+l+')').val();
+                  temp_pattern=$('.pattern:eq('+l+')').val();
+                  temp_check=$('.check:eq('+l+')').val();
+
+                  $('.stt:eq('+l+')').val($('.stt:eq('+k+')').val());
+                  $('.ten:eq('+l+')').val($('.ten:eq('+k+')').val());
+                  $('.dvt:eq('+l+')').val($('.dvt:eq('+k+')').val());
+                  $('.sl:eq('+l+')').val($('.sl:eq('+k+')').val());
+                  $('.dg:eq('+l+')').val($('.dg:eq('+k+')').val());
+                  $('.dg:eq('+l+')').attr('data',$('.dg:eq('+k+')').attr('data'));
+                  $('.tt:eq('+l+')').val($('.tt:eq('+k+')').val());
+                  $('.tt:eq('+l+')').attr('data',$('.tt:eq('+k+')').attr('data'));
+                  $('.order:eq('+l+')').val($('.order:eq('+k+')').val());
+                  $('.orderlist:eq('+l+')').val($('.orderlist:eq('+k+')').val());
+                  $('.brand:eq('+l+')').val($('.brand:eq('+k+')').val());
+                  $('.size:eq('+l+')').val($('.size:eq('+k+')').val());
+                  $('.pattern:eq('+l+')').val($('.pattern:eq('+k+')').val());
+                  $('.check:eq('+l+')').val($('.check:eq('+k+')').val());
+
+                  $('.price_hide:eq('+l+')').val($('.dg:eq('+k+')').attr('data'));
+                  $('.total_hide:eq('+l+')').val($('.tt:eq('+k+')').attr('data'));
+
+                  $('.stt:eq('+k+')').val(temp_stt);
+                  $('.ten:eq('+k+')').val(temp_ten);
+                  $('.dvt:eq('+k+')').val(temp_dvt);
+                  $('.sl:eq('+k+')').val(temp_sl);
+                  $('.dg:eq('+k+')').val(temp_dg);
+                  $('.dg:eq('+k+')').attr('data',temp_dg1);
+                  $('.tt:eq('+k+')').val(temp_tt);
+                  $('.tt:eq('+k+')').attr('data',temp_to);
+                  $('.order:eq('+k+')').val(temp_order);
+                  $('.orderlist:eq('+k+')').val(temp_orderlist);
+                  $('.brand:eq('+k+')').val(temp_brand);
+                  $('.size:eq('+k+')').val(temp_size);
+                  $('.pattern:eq('+k+')').val(temp_pattern);
+                  $('.check:eq('+k+')').val(temp_check);
+
+                  $('.price_hide:eq('+k+')').val(temp_dg1);
+                  $('.total_hide:eq('+k+')').val(temp_to);
+
+                  break;
+                }
+                l++;
+              }
+            }
+            k++;
+          }
+          
+
+          var tienthue = parseFloat(Math.round(tong*0.1));
+          var tongcong = Math.round(tong+tienthue);
+          var congtien = Math.round(tong);
+
+          $('#tienthue').val(tienthue);
+          $('#tongcong').val(tongcong);
+          $('#congtien').val(congtien);
+
+          $.ajax({
+            url: '<?php echo BASE_URL ?>/vat/getMoney',
+            type: 'GET',
+            data: {data:tongcong},
+            success:function(data){
+              $('#tongcongchu').val(data.trim());
+            },
+          });
+
+          $('.numbers').val(function(index, value) {
+            return value
+              .replace(/[^0-9-.]/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+
+
+          $('.sl').keyup(function(){
+              var rowIndex=$(this).closest('tr').index()-12;
+              
+              var sl = parseInt($(this).val()) || 0;
+              var dg = parseFloat($('.dg:eq('+rowIndex+')').attr('data').replace(/\,/g,'')) || 0;
+              var tt = sl*dg;
+
+              if (tt>0) {
+                $('.tt:eq('+rowIndex+')').val(Math.round(tt));
+                $('.tt:eq('+rowIndex+')').attr('data',tt);
+
+                $('.total_hide:eq('+rowIndex+')').val(tt);
+
+                var tong = 0;
+                $('.tt').each(function(){
+                  if ($(this).val() != "") {
+                    tong += parseFloat($(this).attr('data') || 0);
+                  }
+                  
+                });
+
+                var tienthue = parseFloat(Math.round(tong*0.1));
+                var tongcong = Math.round(tong+tienthue);
+                var congtien = Math.round(tong);
+
+                $('#tienthue').val(tienthue);
+                $('#tongcong').val(tongcong);
+                $('#congtien').val(congtien);
+
+                $.ajax({
+                  url: '<?php echo BASE_URL ?>/vat/getMoney',
+                  type: 'GET',
+                  data: {data:tongcong},
+                  success:function(data){
+                    $('#tongcongchu').val(data.trim());
+                  },
+                });
+
+                $('.numbers').val(function(index, value) {
+                  return value
+                    .replace(/[^0-9-.]/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  ;
+                });
+              }
+
+            });
+
+            $('.dg').keyup(function(){
+              var rowIndex=$(this).closest('tr').index()-12;
+              
+              var dg = parseFloat($(this).val().replace(/\,/g,'')) || 0;
+              var sl = parseInt($('.sl:eq('+rowIndex+')').val()) || 0;
+              var tt = sl*dg;
+
+              $(this).attr('data',dg);
+              $('.price_hide:eq('+rowIndex+')').val(dg);
+
+              if (tt>0) {
+                $('.tt:eq('+rowIndex+')').val(Math.round(tt));
+                $('.tt:eq('+rowIndex+')').attr('data',tt);
+
+                $('.total_hide:eq('+rowIndex+')').val(tt);
+
+                var tong = 0;
+                $('.tt').each(function(){
+                  if ($(this).val() != "") {
+                    tong += parseFloat($(this).attr('data') || 0);
+                  }
+                  
+                });
+
+                var tienthue = parseFloat(Math.round(tong*0.1));
+                var tongcong = Math.round(tong+tienthue);
+                var congtien = Math.round(tong);
+
+                $('#tienthue').val(tienthue);
+                $('#tongcong').val(tongcong);
+                $('#congtien').val(congtien);
+
+                $.ajax({
+                  url: '<?php echo BASE_URL ?>/vat/getMoney',
+                  type: 'GET',
+                  data: {data:tongcong},
+                  success:function(data){
+                    $('#tongcongchu').val(data.trim());
+                  },
+                });
+
+                $('.numbers').val(function(index, value) {
+                  return value
+                    .replace(/[^0-9-.]/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  ;
+                });
+              }
+
+            });
+
+          //console.log(data);
+        }
+
+    });
+});
+
+
+$('#refresh').click(function(){
+  $('input[name!="batdau"][name!="ketthuc"][name!="ngay"][name!="thang"][name!="nam"][name!="sohd"][name!="thanhtoan"]').val("");
+  $('.tt').attr('data',"");
+  $('.dg').attr('data',"");
+  $('.ten:eq(0)').val("Lốp xe bố kẽm:");
+  $('.selectpicker').selectpicker('refresh');
+});
+
+$('#remove').click(function(){
+  var r = confirm("Bạn có chắc chắn không?");
+    if (r == true){
+      var sohd = $('#sohd').val().trim();
+      $.ajax({
+        url: '<?php echo BASE_URL ?>/vat/delete',
+        type: 'POST',
+        data: {data:sohd},
+        success:function(data){
+          $('input[name!="batdau"][name!="ketthuc"][name!="ngay"][name!="thang"][name!="nam"][name!="sohd"][name!="thanhtoan"]').val("");
+          $('.tt').attr('data',"");
+          $('.dg').attr('data',"");
+          $('.ten:eq(0)').val("Lốp xe bố kẽm:");
+          $('.selectpicker').selectpicker('refresh');
+        },
+      });
+    }
+});
+
+$('#print').click(function(){
+  var ngay = $('#ngay').val().trim();
+  var thang = $('#thang').val().trim();
+  var nam = $('#nam').val().trim();
+  var sohd = $('#sohd').val().trim();
+
+  if (ngay=="" || thang=="" || nam=="") {
+    alert('Vui lòng nhập vào ngày tháng!');
+    return;
+  }
+  else if (sohd=="" || sohd=="0000000" || sohd==0) {
+    alert('Vui lòng nhập vào số hóa đơn!');
+    return;
+  }
+  else{
+    var r = confirm("Bạn có chắc chắn không?");
+    if (r == true){
+      $('#printhd').submit();
+    }
+  }
+
+});
+
+
+</script>
+  
+    </body>
+</html>

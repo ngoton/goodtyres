@@ -157,7 +157,7 @@ elseif ($order_by == 'payment_request_date   ')
                 echo $user_data[$payment_request->payment_request_user_approve];
               }
               else{
-                if($_SESSION['role_logined']==1 || $_SESSION['role_logined']==3 || $_SESSION['role_logined']==9){
+                if($_SESSION['role_logined']==1 || ($_SESSION['role_logined']==3 && $payment_request->payment_request_user!=$_SESSION['userid_logined']) || $_SESSION['role_logined']==9){
                   echo '<button class="approve" data="'.$payment_request->payment_request_id.'">Duyệt</button>';
                 }
               }
@@ -173,8 +173,9 @@ elseif ($order_by == 'payment_request_date   ')
             <?php if(!isset($disable_control)){ ?>
             <td class="fix text-right">
               <i class="fa fa-print print_pay" title="In" onClick="javascript:window.open('<?php echo $this->url('paymentrequest/printpay/'.$payment_request->payment_request_id) ?>','_blank')"></i>
+              <i class="fa fa-eye" title="Chi tiết" onClick="javascript:window.open('<?php echo $this->url('paymentrequestdetail/index/'.$payment_request->payment_request_id) ?>','_blank')"></i>
               <?php 
-              if($payment_request->payment_request_pay_date=="" || $payment_request->payment_request_pay_date<=0 || $_SESSION['role_logined'] == 1){
+              if($payment_request->payment_request_pay_money<$payment_request->payment_request_money || $_SESSION['role_logined'] == 1){
               ?>
                 <i class="fa fa-edit edit_invoice" title="Sửa" data="<?php echo $payment_request->payment_request_id ?>"></i>
                 <i class="fa fa-trash" onclick="del(<?php echo $payment_request->payment_request_id ?>)"></i>
@@ -460,6 +461,22 @@ $('.edit_invoice').click(function(e){
             var val = $(this).val();
             var trIndex = $(this).closest('tr').index();
             $('#dataTable1 tbody tr:eq('+trIndex+') td:nth-child(3) input').val(val);
+          });
+
+          $('.money').keyup(function(){
+            var total = 0;
+            $('.money').each(function(){
+              total += parseFloat(get_number($(this))) || 0;
+            });
+
+            $('#payment_request_money').val(total);
+
+            $('.numbers').val(function(index, value) {
+                return value
+                  .replace(/[^0-9-.]/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+              });
           });
 
           $('.numbers').keyup(function(event) {

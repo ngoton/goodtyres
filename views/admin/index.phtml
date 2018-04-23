@@ -693,17 +693,17 @@ $zhongce = isset($stock[3])?$stock[3]:0;
 
                 <li><a href="#">China
 
-                    <span class="pull-right text-red"><?php echo round(($china*100)/($china+$linglong+$zhongce),1) ?>%</span></a></li>
+                    <span class="pull-right text-red"><?php echo ($china+$linglong+$zhongce)>0?round(($china*100)/($china+$linglong+$zhongce),1):0 ?>%</span></a></li>
 
                 <li><a href="#">Linglong 
 
-                    <span class="pull-right text-green"><?php echo round(($linglong*100)/($china+$linglong+$zhongce),1) ?>%</span></a>
+                    <span class="pull-right text-green"><?php echo ($china+$linglong+$zhongce)>0?round(($linglong*100)/($china+$linglong+$zhongce),1):0 ?>%</span></a>
 
                 </li>
 
                 <li><a href="#">Zhongce
 
-                  <span class="pull-right text-yellow"><?php echo round(($zhongce*100)/($china+$linglong+$zhongce),1) ?>%</span></a></li>
+                  <span class="pull-right text-yellow"><?php echo ($china+$linglong+$zhongce)>0?round(($zhongce*100)/($china+$linglong+$zhongce),1):0 ?>%</span></a></li>
 
               </ul>
 

@@ -141,7 +141,6 @@ elseif ($order_by == 'vendor')
         
         <th style="width:90px" class="fix" rowspan="2">Còn lại</th>  
 
-        <th  class="fix" rowspan="2">Action</th>
     </tr>
     <tr>
         <th  class="fix">
@@ -219,16 +218,7 @@ elseif ($order_by == 'vendor')
              
             <td class="fix" id="conlai_<?php echo $receivable->receivable_id; ?>"><?php echo $lib->formatMoney($receivable->money-$receivable->pay_money); ?></td>
             <td class="fix" style="display:none" id="type_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->type; ?></td>
-            <td class="fix" style="display:none" id="invoice_number_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->invoice_number; ?></td>             
-            <td >
-                <?php if($_SESSION['role_logined'] != 10){ ?>
-                <?php if($receivable->pay_money != $receivable->money || $receivable->pay_date == null  && ($_SESSION['role_logined'] <= 2 || $_SESSION['role_logined']==7 || $_SESSION['role_logined']==8)){ ?>
-                
-                <button alt="<?php echo date('d-m-Y') ?>"  name="<?php echo $lib->formatMoney($receivable->money-$receivable->pay_money) ?>" data="<?php echo $receivable->source ?>" value="<?php echo $receivable->receivable_id ?>" class="editButton">Thu</button>
-                 
-                <?php } ?>
-                <?php } ?>
-            </td>
+            <td class="fix" style="display:none" id="invoice_number_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->invoice_number; ?></td>     
         </tr>
         
     <?php endforeach; ?>
@@ -354,7 +344,7 @@ $this->helper('slidePaginator');
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="12"></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="12" disabled></td>
                             <td ><input type="reset" name="reset" value="Nhập lại" tabindex="13"></td>
                             <td></td>
                             <td></td>

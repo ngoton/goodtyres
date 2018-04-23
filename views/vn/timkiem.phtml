@@ -1,0 +1,215 @@
+<?php if(isset($tire_products)){ ?>
+
+<div class="main-content-box">
+
+
+
+    <h2>Kết quả tìm kiếm: <?php echo $keyword.' '.(isset($producer_name->tire_producer_name)?$producer_name->tire_producer_name:null).' '.$pattern.' '.$width.' '.$rimSize.' '.$position ?></h2>
+
+    <div class="view-more">
+        <select name="sort_select" id="sort_select">
+            <option value="0">Hiển thị ngẫu nhiên</option>
+            <option value="1">Hiển thị giá từ thấp đến cao</option>
+            <option value="2">Hiển thị giá từ cao đến thấp</option>
+        </select>
+    </div>
+
+    <div class="items-list-prod">
+
+
+
+        <?php foreach ($tire_products as $tire_product) { ?>
+
+
+
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 items">
+
+
+
+            <div class="img-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product->tire_product_link ?>" title="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>">
+
+                    <?php
+                    $filename = BASE_URL."/public/images/upload/".$tire_product->tire_product_thumb;
+                    if (@getimagesize($filename)) {
+                    ?>
+
+                        <img src="<?php echo $filename ?>" alt="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>" />
+                    <?php }
+                    else{
+                    ?>
+                        <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>" />
+                    <?php } ?>
+
+
+
+                </a>
+
+
+
+            </div>
+
+
+
+            <div class="title-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product->tire_product_link ?>" title="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>">Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?></a>
+
+
+
+            </div>
+
+
+
+            <div class="price-prod">
+
+
+
+                <div class="price-old-prod"><?php echo $lib->formatMoney(round($tire_product->tire_retail*1.07)) ?> đ</div>
+
+
+
+                <div class="price-new-prod"><?php echo $lib->formatMoney($tire_product->tire_retail) ?> đ</div>
+
+
+
+                <div class="clearFix"></div>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <?php } ?>
+
+        <div class="view_all">
+
+            <?php
+
+            isset($tongsotrang)?$this->helper('slidePaginator'):null;
+
+            ?>
+
+
+
+            <a class="view_all_link" id="view_all_search">
+
+
+
+                Xem tất cả <i class="fa fa-caret-right"></i>
+
+
+
+            </a>
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+</div>
+
+<script type="text/javascript">
+var x = "<?php echo $sort_select ?>";
+$('#sort_select option[value='+x+']').attr('selected','selected');
+
+$('#sort_select').change(function(){
+    var sort = $(this).val();
+    var page = "<?php echo $page ?>";
+    var limit = "<?php echo $limit ?>";
+    var keyword = "<?php echo $keyword ?>";
+    var brand = "<?php echo isset($producer_name->tire_producer_name)?$producer_name->tire_producer_id:null ?>";
+    var pattern = "<?php echo $pattern ?>";
+    var width = "<?php echo $width ?>";
+    var rimSize = "<?php echo $rimSize ?>";
+    var position = "<?php echo $position ?>";
+    var min_price = "<?php echo $min_price ?>";
+    var max_price = "<?php echo $max_price ?>";
+
+    if (keyword != "") {
+        $("#sort_select2").val(sort);
+        $("#page_select2").val(page);
+        $("#limit_select2").val(limit);
+        document.getElementById('search-keyword-form').submit();
+    }
+    else{
+        $("#sort_select1").val(sort);
+        $("#page_select1").val(page);
+        $("#limit_select1").val(limit);
+        $("#price_range").val(min_price+";"+max_price);
+        document.getElementById('search-form').submit();
+    }
+});
+function sapxep(page,cot,sapxep){
+    var page = page;
+    var sort = $('#sort_select').val();
+    var limit = "<?php echo $limit ?>";
+    var keyword = "<?php echo $keyword ?>";
+    var brand = "<?php echo isset($producer_name->tire_producer_name)?$producer_name->tire_producer_id:null ?>";
+    var pattern = "<?php echo $pattern ?>";
+    var width = "<?php echo $width ?>";
+    var rimSize = "<?php echo $rimSize ?>";
+    var position = "<?php echo $position ?>";
+    var min_price = "<?php echo $min_price ?>";
+    var max_price = "<?php echo $max_price ?>";
+
+    if (keyword != "") {
+        $("#sort_select2").val(sort);
+        $("#page_select2").val(page);
+        $("#limit_select2").val(limit);
+        document.getElementById('search-keyword-form').submit();
+    }
+    else{
+        $("#sort_select1").val(sort);
+        $("#page_select1").val(page);
+        $("#limit_select1").val(limit);
+        $("#price_range").val(min_price+";"+max_price);
+        document.getElementById('search-form').submit();
+    }
+}
+
+$('#view_all_search').click(function(){
+    var limit = 18446744073709;
+    var page = "<?php echo $page ?>";
+    var sort = $('#sort_select').val();
+    var keyword = "<?php echo $keyword ?>";
+    var brand = "<?php echo isset($producer_name->tire_producer_name)?$producer_name->tire_producer_id:null ?>";
+    var pattern = "<?php echo $pattern ?>";
+    var width = "<?php echo $width ?>";
+    var rimSize = "<?php echo $rimSize ?>";
+    var position = "<?php echo $position ?>";
+    var min_price = "<?php echo $min_price ?>";
+    var max_price = "<?php echo $max_price ?>";
+
+    if (keyword != "") {
+        $("#sort_select2").val(sort);
+        $("#page_select2").val(page);
+        $("#limit_select2").val(limit);
+        document.getElementById('search-keyword-form').submit();
+    }
+    else{
+        $("#sort_select1").val(sort);
+        $("#page_select1").val(page);
+        $("#limit_select1").val(limit);
+        $("#price_range").val(min_price+";"+max_price);
+        document.getElementById('search-form').submit();
+    }
+});
+</script>
+
+
+<?php } ?>

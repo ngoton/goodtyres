@@ -1,0 +1,350 @@
+<?php
+$url_order = 'ASC';
+if ($order_by == 'invoice_tire_detail_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'invoice_tire_detail_date')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'company_hide')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'invoice_tire_detail_number')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $j = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> BẢNG KÊ HÓA ĐƠN BÁN HÀNG </h1></center>
+
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="add-box">
+        <div >
+            <select id="sl_tha" name="sl_tha" style="width:90px; margin-left:5px;">
+             <?php 
+                for ($i=1; $i < 13; $i++) { 
+                    echo '<option value="'.$i.'">Tháng '.$i.'</option>';
+                }
+             ?>
+            </select>
+            <select id="sl_na" name="sl_na" style="width:100px">
+             <?php 
+                $nam = date('Y');
+                for ($i=($nam-5); $i < ($nam+5); $i++) { 
+                    echo '<option value="'.$i.'">Năm '.$i.'</option>';
+                }
+             ?>
+            </select>
+            <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+        </div>
+        <div >
+    
+            Từ  <input style="width:100px" type="search" name="batdau" id="batdau" placeholder="Chọn ngày" <?php if(isset($batdau)) echo "value='$batdau'"; ?> >  
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');"> 
+                                    
+        </div>
+        
+
+      </div>
+      <div class="tablenav top">
+        <div class="alignleft actions">
+        <select name="m" id="chonloc">
+            <option  value="18446744073709">Hiển thị tất cả</option>
+            <option selected="selected" value="10">Hiển thị 10 giá trị</option>
+            <option value="20">Hiển thị 20 giá trị</option>
+            <option value="30">Hiển thị 30 giá trị</option>
+            <option value="50">Hiển thị 50 giá trị</option>
+            
+        </select>
+        <input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">                               
+        </div>
+
+        <div class="add-box">
+            <a class="add_button" id="btnExport" >Export Excel</a>
+        </div>
+
+      </div>
+    
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','invoice_tire_detail_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'invoice_tire_detail_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','invoice_tire_detail_number','<?php echo $url_order ?>')">Số HĐ <?php if ($order_by == 'invoice_tire_detail_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','invoice_tire_detail_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'invoice_tire_detail_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','company_hide','<?php echo $url_order ?>')">Khách hàng <?php if ($order_by == 'company_hide'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_brand_name','<?php echo $url_order ?>')">Thương hiệu <?php if ($order_by == 'tire_brand_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_size_number','<?php echo $url_order ?>')">Size <?php if ($order_by == 'tire_size_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_pattern_name','<?php echo $url_order ?>')">Mã gai <?php if ($order_by == 'tire_pattern_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','invoice_tire_detail_volume','<?php echo $url_order ?>')">Số lượng <?php if ($order_by == 'invoice_tire_detail_volume'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','invoice_tire_detail_price','<?php echo $url_order ?>')">Đơn giá <?php if ($order_by == 'invoice_tire_detail_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','invoice_tire_detail_vat','<?php echo $url_order ?>')">VAT <?php if ($order_by == 'invoice_tire_detail_vat'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','order_tire','<?php echo $url_order ?>')">Đơn hàng <?php if ($order_by == 'order_tire'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $tongsl = 0; $tongthu=0; $tongthue=0;  ?>
+    <?php foreach ($invoice_tires as $invoice_tire_detail) : ?>
+    <?php
+        $tongsl += $invoice_tire_detail->invoice_tire_detail_volume; 
+        $tongthu += $invoice_tire_detail->invoice_tire_detail_price*$invoice_tire_detail->invoice_tire_detail_volume; 
+        $tongthue += $invoice_tire_detail->invoice_tire_detail_vat*$invoice_tire_detail->invoice_tire_detail_volume; 
+    ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $invoice_tire_detail->invoice_tire_detail_id ?>" class="edit_tr" >
+        	
+            <td class="fix"><?php echo $j++; ?></td>
+            <td class="fix"  id="invoice_tire_detail_number_<?php echo $invoice_tire_detail->invoice_tire_detail_id; ?>">
+                <?php echo $invoice_tire_detail->invoice_tire_detail_number;  ?>
+            </td>
+            <td class="fix"  id="invoice_tire_detail_date_<?php echo $invoice_tire_detail->invoice_tire_detail_id; ?>">
+                <?php echo $lib->hien_thi_ngay_thang($invoice_tire_detail->invoice_tire_detail_date);  ?>
+            </td>
+            <td class="fix" id="customer_<?php echo $invoice_tire_detail->invoice_tire_detail_id; ?>"><?php echo $invoice_tire_detail->company_hide; ?></td>
+            
+            <td class="fix" id="tire_brand_<?php echo $invoice_tire_detail->invoice_tire_detail_id; ?>"><?php echo $invoice_tire_detail->tire_brand_name; ?></td>
+            <td class="fix" id="tire_size_<?php echo $invoice_tire_detail->invoice_tire_detail_id; ?>"><?php echo $invoice_tire_detail->tire_size_number; ?></td>
+            <td class="fix" id="tire_pattern_<?php echo $invoice_tire_detail->invoice_tire_detail_id; ?>"><?php echo $invoice_tire_detail->tire_pattern_name; ?></td> 
+            <td class="fix" id="invoice_tire_detail_volume_<?php echo $invoice_tire_detail->invoice_tire_detail_id; ?>"><?php echo $invoice_tire_detail->invoice_tire_detail_volume; ?></td>
+            <td class="fix" id="invoice_tire_detail_price_<?php echo $invoice_tire_detail->invoice_tire_detail_id; ?>"><?php echo $lib->formatMoney($invoice_tire_detail->invoice_tire_detail_price); ?></td>
+            <td class="fix" id="invoice_tire_detail_vat_<?php echo $invoice_tire_detail->invoice_tire_detail_id; ?>"><?php echo $lib->formatMoney($invoice_tire_detail->invoice_tire_detail_vat); ?></td>
+            <td class="fix" id="order_tire_<?php echo $invoice_tire_detail->invoice_tire_detail_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order" href="<?php echo $this->url('ordertire/orderlist/'.$invoice_tire_detail->order_tire); ?>"><?php echo $invoice_data[$invoice_tire_detail->invoice_tire_detail_id]; ?></a></td> 
+            
+            
+        </tr>
+    <?php endforeach; ?>
+    
+        <tr style="text-align:center; font-weight: bold; color: red;">
+            <td class="fix" colspan="7" >Tổng cộng</td>
+            <td class="fix"><?php echo $lib->formatMoney($tongsl); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongthu); ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongthue); ?></td>
+            <td class="fix" ></td>
+        </tr>
+
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+
+
+<script type="text/javascript">
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+var c = "<?php echo $trangthai ?>";
+$('#sl_status option[value='+c+']').attr('selected','selected');
+
+var s = "<?php echo $nv ?>";
+$('#sl_nv option[value='+s+']').attr('selected','selected');
+
+var th = "<?php echo $thang ?>";
+$('#sl_tha option[value='+th+']').attr('selected','selected');
+
+var n = "<?php echo $nam ?>";
+$('#sl_na option[value='+n+']').attr('selected','selected');
+
+
+
+
+
+
+$(".order_list").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:600,
+            resizable: false,
+            title:'Thông tin',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+$('.order_vat')
+    //.button({ icons: { primary: "ui-icon-document" }})
+    .click(function() {
+        
+        $('#i_order5').val($(this).attr('data'));
+        $('#i_vat').val($(this).text());
+        $('#i_vat_percent').val($(this).attr('tabindex'));
+
+        $('#i_thu').val($(this).attr('alt'));
+
+        $( "#dialogContent5" ).dialog( "open" );
+
+
+    });
+
+
+//set up the dialog box.
+$( "#dialogContent5" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+              
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
+
+
+
+var pickerOpay2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $(".ngay").datepicker(pickerOpay2);
+
+
+
+</script>
+<script type="text/javascript">
+    
+    $('#sl_tha').change(function(){
+        var m = $(this).val();
+        var y = $('#sl_na').val();
+        var firstDay = new Date(y, m-1, 1);
+        var lastDay = new Date(y, m, 0);
+
+        $('#batdau').datepicker("setDate", firstDay );
+        $('#ketthuc').datepicker("setDate", lastDay );
+
+    });
+
+    $('#sl_na').change(function(){
+        var y = $(this).val();
+        var m = $('#sl_tha').val();
+        var firstDay = new Date(y, m-1, 1);
+        var lastDay = new Date(y, m, 0);
+
+        $('#batdau').datepicker("setDate", firstDay );
+        $('#ketthuc').datepicker("setDate", lastDay );
+
+    });
+
+
+    var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+              
+
+</script>

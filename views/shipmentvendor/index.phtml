@@ -199,7 +199,7 @@ $this->helper('slidePaginator');
                                 <input type="text" style="width:90px" id="vendor_bank_name"  name="vendor_bank_name" tabindex="10" >
                                 <input type="text" style="width:150px" id="account_number"  name="account_number" tabindex="11" >
                             </td>
-                            <td>Tài khoản ngân hàng CMG </td>
+                            <td>Tài khoản giao dịch </td>
                             <td>
                                 
                                 <select  style="width:100px" class="source" id="cmg_bank"  name="cmg_bank">
@@ -212,8 +212,8 @@ $this->helper('slidePaginator');
                             <td>Công nợ </td>
                             <td>
                                 
-                                <input type="text" style="width:30px" class="number" id="shipment_vendor_expect_date" name="shipment_vendor_expect_date" tabindex="12" placeholder="Ngày" > hàng tháng <br>
-                                <input type="text" style="width:30px" class="number" id="shipment_vendor_after_date" name="shipment_vendor_after_date" tabindex="13" placeholder="Số" > ngày sau xuất HĐ
+                                <input type="text" style="width:30px" class="number" id="vendor_expect_date" name="vendor_expect_date" tabindex="12" placeholder="Ngày" > hàng tháng <br>
+                                <input type="text" style="width:30px" class="number" id="vendor_after_date" name="vendor_after_date" tabindex="13" placeholder="Số" > ngày sau xuất HĐ
                             </td>
                         </tr>
                         <tr>
@@ -313,8 +313,8 @@ $('html').click(function(e) {
        $('#mst').val(mst);
        $('#vendor_bank_name').val(vendor_bank_name);
        $('#account_number').val(account_number);
-       $('#vendor_expect_date').val(shipment_vendor_expect_date);
-       $('#vendor_after_date').val(shipment_vendor_after_date);
+       $('#vendor_expect_date').val(vendor_expect_date);
+       $('#vendor_after_date').val(vendor_after_date);
        $("#cmg_bank option[value=" + cmg_bank + "]").attr('selected', 'selected');
        $("#vendor_type option:contains(" + vendor_type + ")").attr('selected', 'selected');
        $('#loc_from').val(loc_from);

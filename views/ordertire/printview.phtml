@@ -37,7 +37,7 @@
             <tbody>
                 <tr height="22" style="height:16.5pt">
                     <td class="xl63" colspan="3" height="22" style="height: 16.5pt; width: 216pt; text-align: center;" width="287">
-                        <span style="font-size:14px;"><strong>CÔNG TY TNHH VIỆT TRA DE</strong></span></td>
+                        <span style="font-size:14px;"><strong><?php echo mb_strtoupper($infos->info_company, "UTF-8") ?></strong></span></td>
                     <td class="xl63" style="width:26pt" width="35">
                         <span style="font-size:14px;"><strong><br>
                         </strong></span></td>
@@ -109,17 +109,17 @@
                 </tr>
                 <tr height="22" style="height:16.5pt">
                     <td class="xl77" colspan="7" height="22" style="height:16.5pt;width:527pt" width="700">
-                        <span style="font-size:14px;">Hôm nay, ngày <?php echo $ngay ?> tháng <?php echo $thang ?> năm <?php echo $nam ?> tại kho lốp công ty Việt Tra de đã tiến hành bàn giao tài sản giữa:</span></td>
+                        <span style="font-size:14px;">Hôm nay, ngày <?php echo $ngay ?> tháng <?php echo $thang ?> năm <?php echo $nam ?> tại kho lốp công ty đã tiến hành bàn giao tài sản giữa:</span></td>
                 </tr>
                 <tr height="22" style="height:16.5pt">
                     <td class="xl75" colspan="2" height="22" style="height:16.5pt">
                         <span style="font-size:14px;"><u><strong>A/ Bên bán:</strong></u></span></td>
                     <td class="xl76" colspan="5">
-                        <span style="font-size:14px;"><strong>CÔNG TY TNHH VIỆT TRA DE</strong></span></td>
+                        <span style="font-size:14px;"><strong><?php echo mb_strtoupper($infos->info_company, "UTF-8") ?></strong></span></td>
                 </tr>
                 <tr height="22" style="height:16.5pt">
                     <td class="xl65" colspan="3" height="22" style="height:16.5pt;mso-ignore:colspan">
-                        <span style="font-size:14px;">- Mã số thuế: 3603295302</span></td>
+                        <span style="font-size:14px;">- Mã số thuế: <?php echo $infos->info_mst ?></span></td>
                     <td class="xl65">
                         <span style="font-size:14px;"><br>
                         </span></td>
@@ -127,11 +127,11 @@
                         <span style="font-size:14px;"><br>
                         </span></td>
                     <td class="xl65" colspan="2">
-                        <span style="font-size:14px;">Hotline: 0283 500 9000</span></td>
+                        <span style="font-size:14px;">Hotline: <?php echo $infos->info_phone ?></span></td>
                 </tr>
                 <tr height="22" style="height:16.5pt">
                     <td class="xl65" colspan="6" height="22" style="height:16.5pt;mso-ignore:colspan">
-                        <span style="font-size:14px;">- Địa chỉ: Số 545, Tổ 10, Ấp Hương Phước, Xã Phước Tân, TP.Biên Hòa, Đồng Nai</span></td>
+                        <span style="font-size:14px;">- Địa chỉ: <?php echo $infos->info_address ?></span></td>
                     <td class="xl65">
                         <span style="font-size:14px;"><br>
                         </span></td>
@@ -343,17 +343,7 @@
                         <span style="font-size:14px;"><br>
                         </span></td>
                     <td class="xl65" colspan="6">
-                        <span style="font-size:14px;">TK1: CONG TY TNHH VIET TRA DE&nbsp; -&nbsp; 67210000476025&nbsp; BIDV Nam Đồng Nai.</span></td>
-                </tr>
-                <tr height="22" style="height:16.5pt">
-                    <td class="xl65" height="22" style="height:16.5pt">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl65" colspan="5">
-                        <span style="font-size:14px;">TK2: PHUNG THI PHUONG&nbsp;&nbsp; -&nbsp; 67210000476326&nbsp; BIDV Nam Đồng Nai.</span></td>
-                    <td class="xl65">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
+                        <span style="font-size:14px;">TK: CONG TY TNHH THUONG MAI TONG HOP VINA&nbsp; -&nbsp; 19132409999799&nbsp; Techcombank Quy Nhơn.</span></td>
                 </tr>
                 <tr height="22" style="height:16.5pt">
                     <td class="xl78" colspan="7" height="22" style="height:16.5pt;width:527pt" width="700">
@@ -541,7 +531,7 @@
                 </tr>
             </tbody>
         </table>
-        <div class="footer"><i>Please visit our website to view the status of your order. https://www.viet-trade.org</i><img height="50" src="<?php echo BASE_URL.'/'.$img ?>" /></div>
+        <div class="footer"><i>Please visit our website to view the status of your order. <?php echo BASE_URL ?></i><img height="50" src="<?php echo BASE_URL.'/'.$img ?>" /></div>
     </div>
     </body>
 </html>

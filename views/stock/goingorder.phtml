@@ -1,0 +1,63 @@
+<table>
+          <tr>
+            <td>
+              <span class="add-on"><i class="icon-company" ></i></span>
+              <span>Thương hiệu: </span>
+            </td>
+            <td><input type="text" id="brand" name="brand" disabled required="required" value="<?php echo $tire_brand ?>" /></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="add-on"><i class="icon-resize-full" ></i></span>
+              <span>Kích cỡ: </span>
+            </td>
+            <td><input type="text" id="size" name="size" disabled required="required" value="<?php echo $tire_size ?>" /></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="add-on"><i class="icon-barcode" ></i></span>
+              <span>Mã gai: </span>
+            </td>
+            <td><input type="text" id="pattern" name="pattern" disabled required="required" value="<?php echo $tire_pattern ?>" /></td>
+          </tr>
+          <?php
+          foreach ($tire_goings as $tire_going) {
+          ?>
+            <tr style="font-weight:bold">
+              <td>
+                <span class="add-on"><i class="icon-info-sign" ></i></span>
+                <span>Code:  </span>
+              </td>
+              <td><?php echo $tire_going->import_tire_order_code." - ".$lib->hien_thi_ngay_thang($tire_going->import_tire_order_date) ?></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="add-on"><i class="icon-th-list" ></i></span>
+                <span>Brand:  </span>
+              </td>
+              <td><?php echo $tire_going->tire_brand_name ?></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="add-on"><i class="icon-th-list" ></i></span>
+                <span>Size:  </span>
+              </td>
+              <td><?php echo $tire_going->tire_size_number ?></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="add-on"><i class="icon-th-list" ></i></span>
+                <span>Pattern:  </span>
+              </td>
+              <td><?php echo $tire_going->tire_pattern_name ?></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="add-on"><i class="icon-th-list" ></i></span>
+                <span>Số lượng:  </span>
+              </td>
+              <td><?php echo $tire_going->tire_number ?></td>
+            </tr>
+          <?php } ?>
+        </table>
+        <div id="error" class="error"></div>

@@ -1,0 +1,1642 @@
+<?php if(isset($tire_product_tbrs)){ ?>
+
+<div class="main-content-box">
+
+
+
+    <h2>Lốp xe bố kẽm</h2>
+
+
+
+    <div class="items-list-prod">
+
+
+
+        <?php foreach ($tire_product_tbrs as $tire_product_tbr) { ?>
+
+
+
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 items">
+
+
+
+            <div class="img-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_tbr->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_tbr->tire_producer_name.' '.$tire_product_tbr->tire_product_size_number.' '.$tire_product_tbr->tire_product_name ?>">
+
+                    <?php
+                    $filename = BASE_URL."/public/images/upload/".$tire_product_tbr->tire_product_thumb;
+                    if (@getimagesize($filename)) {
+                    ?>
+
+                        <img src="<?php echo $filename ?>" alt="Lốp xe <?php echo $tire_product_tbr->tire_producer_name.' '.$tire_product_tbr->tire_product_size_number.' '.$tire_product_tbr->tire_product_name ?>" />
+                    <?php }
+                    else{
+                    ?>
+                        <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product_tbr->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_product_tbr->tire_producer_name.' '.$tire_product_tbr->tire_product_size_number.' '.$tire_product_tbr->tire_product_name ?>" />
+                    <?php } ?>
+
+
+
+                </a>
+
+
+
+            </div>
+
+
+
+            <div class="title-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_tbr->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_tbr->tire_producer_name.' '.$tire_product_tbr->tire_product_size_number.' '.$tire_product_tbr->tire_product_name ?>">Lốp xe <?php echo $tire_product_tbr->tire_producer_name.' '.$tire_product_tbr->tire_product_size_number.' '.$tire_product_tbr->tire_product_name ?></a>
+
+
+
+            </div>
+
+
+
+            <div class="price-prod">
+
+
+
+                <div class="price-old-prod"><?php echo $lib->formatMoney(round($tire_product_tbr->tire_retail*1.07)) ?> đ</div>
+
+
+
+                <div class="price-new-prod"><?php echo $lib->formatMoney($tire_product_tbr->tire_retail) ?> đ</div>
+
+                
+
+                <div class="clearFix"></div>
+
+
+
+            </div>
+
+            <div class="row">
+
+                <button type="button" class="btn btn-primary add-to-cart" data="<?php echo $tire_product_tbr->tire_product_id ?>" ><i class="fa fa-cart-plus"></i> MUA NGAY</button>
+                <button type="button" class="btn btn-primary" onClick="javascript:window.location.href='<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_tbr->tire_product_link ?>'" ><i class="fa fa-info-circle"></i> CHI TIẾT</button>
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <?php } ?>
+
+
+
+        <div class="view_all">
+
+
+
+            <?php
+
+            isset($tongsotrang)?$this->helper('slidePaginator'):null;
+
+            ?>
+
+
+
+            <a class="view_all_link" href="<?php echo BASE_URL ?>/vn/lop-xe-bo-kem" title="Lốp xe bố kẽm">
+
+
+
+                Xem tất cả <i class="fa fa-caret-right"></i>
+
+
+
+            </a>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+<script type="text/javascript">
+function sapxep(page,cot,sapxep){
+  window.location.href = "<?php echo $this->url('vn/lop-xe-bo-kem/page/') ?>"+page+"/"+cot+"/"+sapxep;
+}
+</script>
+<style type="text/css">
+.items .row{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+.items button {
+   display: none;
+   width: 50%;
+   float: left;
+   border: 1px solid white;
+}
+.items:hover button {
+   display: block; /* On :hover of div show button */
+}
+.img-prod:after {
+    content:'\A';
+    position:absolute;
+    width:100%; height:100%;
+    top:0; left:0;
+    background:rgba(0,0,0,0.8);
+    opacity:0;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+}
+.items:hover .img-prod:after{
+  opacity:1;
+}
+</style>
+
+<?php } ?>
+
+
+
+<?php if(isset($tire_product_nylons)){ ?>
+
+<div class="main-content-box">
+
+
+
+    <h2>Lốp xe bố nylon</h2>
+
+
+
+    <div class="items-list-prod">
+
+
+
+                            
+
+        <?php foreach ($tire_product_nylons as $tire_product_nylon) { ?>
+
+
+
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 items">
+
+
+
+            <div class="img-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_nylon->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_nylon->tire_producer_name.' '.$tire_product_nylon->tire_product_size_number.' '.$tire_product_nylon->tire_product_name ?>">
+
+                    <?php
+                    $filename = BASE_URL."/public/images/upload/".$tire_product_nylon->tire_product_thumb;
+                    if (@getimagesize($filename)) {
+                    ?>
+
+                        <img src="<?php echo $filename ?>" alt="Lốp xe <?php echo $tire_product_nylon->tire_producer_name.' '.$tire_product_nylon->tire_product_size_number.' '.$tire_product_nylon->tire_product_name ?>" />
+                    <?php }
+                    else{
+                    ?>
+                        <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product_nylon->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_product_nylon->tire_producer_name.' '.$tire_product_nylon->tire_product_size_number.' '.$tire_product_nylon->tire_product_name ?>" />
+                    <?php } ?>
+
+
+
+                </a>
+
+
+
+            </div>
+
+
+
+            <div class="title-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_nylon->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_nylon->tire_producer_name.' '.$tire_product_nylon->tire_product_size_number.' '.$tire_product_nylon->tire_product_name ?>">Lốp xe <?php echo $tire_product_nylon->tire_producer_name.' '.$tire_product_nylon->tire_product_size_number.' '.$tire_product_nylon->tire_product_name ?></a>
+
+
+
+            </div>
+
+
+
+            <div class="price-prod">
+
+
+
+                <div class="price-old-prod"><?php echo $lib->formatMoney(round($tire_product_nylon->tire_retail*1.07)) ?> đ</div>
+
+
+
+                <div class="price-new-prod"><?php echo $lib->formatMoney($tire_product_nylon->tire_retail) ?> đ</div>
+
+
+
+                <div class="clearFix"></div>
+
+
+
+            </div>
+
+            <div class="row">
+
+                <button type="button" class="btn btn-primary add-to-cart" data="<?php echo $tire_product_nylon->tire_product_id ?>" ><i class="fa fa-cart-plus"></i> MUA NGAY</button>
+                <button type="button" class="btn btn-primary" onClick="javascript:window.location.href='<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_nylon->tire_product_link ?>'" ><i class="fa fa-info-circle"></i> CHI TIẾT</button>
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <?php } ?>
+
+        
+
+
+
+        
+
+
+
+        <div class="view_all">
+
+            <?php
+
+            isset($tongsotrang)?$this->helper('slidePaginator'):null;
+
+            ?>
+
+
+
+            <a class="view_all_link" href="<?php echo BASE_URL ?>/vn/lop-xe-bo-nylon" title="Lốp xe bố nylon">
+
+
+
+                Xem tất cả <i class="fa fa-caret-right"></i>
+
+
+
+            </a>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+<script type="text/javascript">
+function sapxep(page,cot,sapxep){
+  window.location.href = "<?php echo $this->url('vn/lop-xe-bo-nylon/page/') ?>"+page+"/"+cot+"/"+sapxep;
+}
+</script>
+<style type="text/css">
+.items .row{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+.items button {
+   display: none;
+   width: 50%;
+   float: left;
+   border: 1px solid white;
+}
+.items:hover button {
+   display: block; /* On :hover of div show button */
+}
+.img-prod:after {
+    content:'\A';
+    position:absolute;
+    width:100%; height:100%;
+    top:0; left:0;
+    background:rgba(0,0,0,0.8);
+    opacity:0;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+}
+.items:hover .img-prod:after{
+  opacity:1;
+}
+</style>
+
+<?php } ?>
+
+
+
+<?php if(isset($tire_producers)){ ?>
+
+<?php if(isset($tire_brand_products) && count($tire_brand_products) > 0){ ?>
+
+
+<div class="main-content-box">
+
+
+    <h2>
+      <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo strtolower(str_replace(' ', '-', $tire_brand_name)) ?>.jpg" width="20%" height="100%">
+      <a href="<?php echo BASE_URL ?>/vn/brand/<?php echo strtolower(str_replace(' ', '-', $tire_brand_name)) ?>" title="Lốp xe <?php echo $tire_brand_name.' '.$tire_pattern_name->tire_product_pattern_name ?>">
+        Lốp xe <?php echo $tire_brand_name.' '.$tire_pattern_name->tire_product_pattern_name ?>
+      </a>
+    </h2>
+
+
+
+    <div class="items-list-prod">
+
+      <?php foreach ($tire_brand_products as $tire_product) { ?>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 items">
+
+
+
+            <div class="img-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product->tire_product_link ?>" title="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>">
+
+                    <?php
+                    $filename = BASE_URL."/public/images/upload/".$tire_product->tire_product_thumb;
+                    if (@getimagesize($filename)) {
+                    ?>
+
+                        <img src="<?php echo $filename ?>" alt="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>" />
+                    <?php }
+                    else{
+                    ?>
+                        <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>" />
+                    <?php } ?>
+
+
+
+
+                </a>
+
+
+
+            </div>
+
+
+
+            <div class="title-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product->tire_product_link ?>" title="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>">Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?></a>
+
+
+
+            </div>
+
+
+
+            <div class="price-prod">
+
+
+
+                <div class="price-old-prod"><?php echo $lib->formatMoney(round($tire_product->tire_retail*1.07)) ?> đ</div>
+
+
+
+                <div class="price-new-prod"><?php echo $lib->formatMoney($tire_product->tire_retail) ?> đ</div>
+
+
+
+                <div class="clearFix"></div>
+
+
+
+            </div>
+
+            <div class="row">
+
+                <button type="button" class="btn btn-primary add-to-cart" data="<?php echo $tire_product->tire_product_id ?>" ><i class="fa fa-cart-plus"></i> MUA NGAY</button>
+                <button type="button" class="btn btn-primary" onClick="javascript:window.location.href='<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product->tire_product_link ?>'" ><i class="fa fa-info-circle"></i> CHI TIẾT</button>
+
+            </div>
+
+
+
+        </div>
+      <?php } ?>
+
+      
+
+
+
+    </div>
+
+
+
+</div>
+
+<script type="text/javascript">
+function sapxep(page,cot,sapxep){
+          var sapxep        = sapxep;
+        if(page==""){
+          if($('.sort').attr('class') == "sort DESC"){
+            $('.sort').removeClass('DESC');
+            $('.sort').addClass('ASC');
+            sapxep = "ASC";
+          }
+          else if($('.sort').attr('class') == "sort ASC"){
+            $('.sort').removeClass('ASC');
+            $('.sort').addClass('DESC');
+            sapxep = "DESC";
+          }
+          else if($('.sort').attr('class') == "sort"){
+            
+            $('.sort').addClass('DESC');
+            sapxep = "DESC";
+          }
+        }
+          $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+          var cot        = cot;
+          var keyword = $('#search-input').val();
+          var ngaytao = "";
+          var loc =    $('#chonloc').val();
+
+          if($('#chonngaytao') !== null)
+          {
+            var ngaytao = $('#chonngaytao').val();
+          }
+          if($('#chonngaytaobatdau') != null)
+          {
+            var ngaytaobatdau = $('#chonngaytaobatdau').val();
+          }
+          if($('#batdau') != null)
+          {
+            var batdau = $('#batdau').val();
+          }
+          if($('#ketthuc') != null)
+          {
+            var ketthuc = $('#ketthuc').val();
+          }
+          if($('#sl_status') != null)
+          {
+            var trangthai = $('#sl_status').val();
+          }
+
+          var href = window.location.href;
+            var brand = href.substr(href.lastIndexOf('/') + 1);
+            brand = brand.replace("-"," ");
+          
+          
+          $.ajax({
+            type: "POST", // phương thức gởi đi
+            url: "<?php echo $this->url('vn/lop-xe-co-ruot') ?>", // nơi mà dữ liệu sẽ chuyển đến khi submit
+            data: "page="+ page +"&order_by="+ cot +"&order="+ sapxep+"&limit=<?php echo $limit ?>&keyword="+ keyword+"&ngaytao="+ ngaytao+"&ngaytaobatdau="+ ngaytaobatdau+"&batdau="+ batdau+"&ketthuc="+ ketthuc+"&trangthai="+ trangthai+"&brand="+ brand, // giá trị post
+            success: function(answer){ // if everything goes well
+              //alert(answer);
+              $('body').html(answer); // đặt kết quả trả về từ test.php vào thẻ div success
+              $('#loading').fadeOut(500);
+            }
+          });
+}
+</script>
+<style type="text/css">
+.items .row{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+.items button {
+   display: none;
+   width: 50%;
+   float: left;
+   border: 1px solid white;
+}
+.items:hover button {
+   display: block; /* On :hover of div show button */
+}
+.img-prod:after {
+    content:'\A';
+    position:absolute;
+    width:100%; height:100%;
+    top:0; left:0;
+    background:rgba(0,0,0,0.8);
+    opacity:0;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+}
+.items:hover .img-prod:after{
+  opacity:1;
+}
+
+</style>
+
+<?php } else{ ?>
+
+<?php foreach ($tire_producers as $tire_producer) { ?>
+
+
+
+<div class="main-content-box">
+
+
+    <h2>
+      <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo strtolower(str_replace(' ', '-', $tire_producer->tire_producer_name)) ?>.jpg" width="20%" height="100%">
+      <a href="<?php echo BASE_URL ?>/vn/brand/<?php echo strtolower(str_replace(' ', '-', $tire_producer->tire_producer_name)) ?>" title="Lốp xe <?php echo $tire_producer->tire_producer_name ?>">
+        Lốp xe <?php echo $tire_producer->tire_producer_name ?>
+      </a>
+    </h2>
+
+
+
+    <div class="items-list-prod">
+
+      <?php foreach ($tire_patterns[$tire_producer->tire_producer_id] as $tire_product) { ?>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 items">
+
+
+
+            <div class="img-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/brand/<?php echo strtolower(str_replace(' ', '-', $tire_producer->tire_producer_name)).'/'.$tire_product->tire_product_pattern_id ?>" title="Lốp xe <?php echo $tire_producer->tire_producer_name.' '.$tire_product->tire_product_pattern_name ?>">
+
+                    <?php
+                    $filename = BASE_URL."/public/images/upload/".$tire_product->tire_product_pattern_name.'.jpg';
+                    if (@getimagesize($filename)) {
+                    ?>
+
+                        <img src="<?php echo $filename ?>" alt="Lốp xe <?php echo $tire_producer->tire_producer_name.' '.$tire_product->tire_product_pattern_name ?>" />
+                    <?php }
+                    else{
+                    ?>
+                        <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_producer->tire_producer_name.' '.$tire_product->tire_product_pattern_name ?>" />
+                    <?php } ?>
+
+
+
+                </a>
+
+
+
+            </div>
+
+
+
+            <div class="title-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/brand/<?php echo strtolower(str_replace(' ', '-', $tire_producer->tire_producer_name)).'/'.$tire_product->tire_product_pattern_id ?>" title="Lốp xe <?php echo $tire_producer->tire_producer_name.' '.$tire_product->tire_product_pattern_name ?>"> Mã gai <?php echo $tire_product->tire_product_pattern_name ?></a>
+
+
+
+            </div>
+
+
+
+        </div>
+      <?php } ?>
+
+      
+
+
+
+    </div>
+ 
+
+
+</div>
+
+<script type="text/javascript">
+function sapxep(page,cot,sapxep){
+          var sapxep        = sapxep;
+        if(page==""){
+          if($('.sort').attr('class') == "sort DESC"){
+            $('.sort').removeClass('DESC');
+            $('.sort').addClass('ASC');
+            sapxep = "ASC";
+          }
+          else if($('.sort').attr('class') == "sort ASC"){
+            $('.sort').removeClass('ASC');
+            $('.sort').addClass('DESC');
+            sapxep = "DESC";
+          }
+          else if($('.sort').attr('class') == "sort"){
+            
+            $('.sort').addClass('DESC');
+            sapxep = "DESC";
+          }
+        }
+          $('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
+          var cot        = cot;
+          var keyword = $('#search-input').val();
+          var ngaytao = "";
+          var loc =    $('#chonloc').val();
+
+          if($('#chonngaytao') !== null)
+          {
+            var ngaytao = $('#chonngaytao').val();
+          }
+          if($('#chonngaytaobatdau') != null)
+          {
+            var ngaytaobatdau = $('#chonngaytaobatdau').val();
+          }
+          if($('#batdau') != null)
+          {
+            var batdau = $('#batdau').val();
+          }
+          if($('#ketthuc') != null)
+          {
+            var ketthuc = $('#ketthuc').val();
+          }
+          if($('#sl_status') != null)
+          {
+            var trangthai = $('#sl_status').val();
+          }
+
+          var href = window.location.href;
+            var brand = href.substr(href.lastIndexOf('/') + 1);
+            brand = brand.replace("-"," ");
+          
+          
+          $.ajax({
+            type: "POST", // phương thức gởi đi
+            url: "<?php echo $this->url('vn/brand') ?>", // nơi mà dữ liệu sẽ chuyển đến khi submit
+            data: "page="+ page +"&order_by="+ cot +"&order="+ sapxep+"&limit=<?php echo $limit ?>&keyword="+ keyword+"&ngaytao="+ ngaytao+"&ngaytaobatdau="+ ngaytaobatdau+"&batdau="+ batdau+"&ketthuc="+ ketthuc+"&trangthai="+ trangthai+"&brand="+ brand, // giá trị post
+            success: function(answer){ // if everything goes well
+              //alert(answer);
+              $('body').html(answer); // đặt kết quả trả về từ test.php vào thẻ div success
+              $('#loading').fadeOut(500);
+            }
+          });
+}
+</script>
+
+
+<?php } ?>
+<?php } ?>
+
+<?php } ?>
+
+
+
+<?php if(isset($tire_product_tubes)){ ?>
+
+<div class="main-content-box">
+
+
+
+    <h2>Lốp xe có ruột</h2>
+
+
+
+    <div class="items-list-prod">
+
+
+
+                            
+
+        <?php foreach ($tire_product_tubes as $tire_product_tube) { ?>
+
+
+
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 items">
+
+
+
+            <div class="img-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_tube->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_tube->tire_producer_name.' '.$tire_product_tube->tire_product_size_number.' '.$tire_product_tube->tire_product_name ?>">
+
+                    <?php
+                    $filename = BASE_URL."/public/images/upload/".$tire_product_tube->tire_product_thumb;
+                    if (@getimagesize($filename)) {
+                    ?>
+
+                        <img src="<?php echo $filename ?>" alt="Lốp xe <?php echo $tire_product_tube->tire_producer_name.' '.$tire_product_tube->tire_product_size_number.' '.$tire_product_tube->tire_product_name ?>" />
+                    <?php }
+                    else{
+                    ?>
+                        <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product_tube->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_product_tube->tire_producer_name.' '.$tire_product_tube->tire_product_size_number.' '.$tire_product_tube->tire_product_name ?>" />
+                    <?php } ?>
+
+
+
+
+                </a>
+
+
+
+            </div>
+
+
+
+            <div class="title-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_tube->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_tube->tire_producer_name.' '.$tire_product_tube->tire_product_size_number.' '.$tire_product_tube->tire_product_name ?>">Lốp xe <?php echo $tire_product_tube->tire_producer_name.' '.$tire_product_tube->tire_product_size_number.' '.$tire_product_tube->tire_product_name ?></a>
+
+
+
+            </div>
+
+
+
+            <div class="price-prod">
+
+
+
+                <div class="price-old-prod"><?php echo $lib->formatMoney(round($tire_product_tube->tire_retail*1.07)) ?> đ</div>
+
+
+
+                <div class="price-new-prod"><?php echo $lib->formatMoney($tire_product_tube->tire_retail) ?> đ</div>
+
+
+
+                <div class="clearFix"></div>
+
+
+
+            </div>
+
+            <div class="row">
+
+                <button type="button" class="btn btn-primary add-to-cart" data="<?php echo $tire_product_tube->tire_product_id ?>" ><i class="fa fa-cart-plus"></i> MUA NGAY</button>
+                <button type="button" class="btn btn-primary" onClick="javascript:window.location.href='<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_tube->tire_product_link ?>'" ><i class="fa fa-info-circle"></i> CHI TIẾT</button>
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <?php } ?>
+
+        
+
+
+
+        
+
+
+
+        <div class="view_all">
+
+            <?php
+
+            isset($tongsotrang)?$this->helper('slidePaginator'):null;
+
+            ?>
+
+
+
+            <a class="view_all_link" href="<?php echo BASE_URL ?>/vn/lop-xe-co-ruot" title="Lốp xe có ruột">
+
+
+
+                Xem tất cả <i class="fa fa-caret-right"></i>
+
+
+
+            </a>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+<script type="text/javascript">
+function sapxep(page,cot,sapxep){
+  window.location.href = "<?php echo $this->url('vn/lop-xe-co-ruot/page/') ?>"+page+"/"+cot+"/"+sapxep;
+}
+</script>
+<style type="text/css">
+.items .row{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+.items button {
+   display: none;
+   width: 50%;
+   float: left;
+   border: 1px solid white;
+}
+.items:hover button {
+   display: block; /* On :hover of div show button */
+}
+.img-prod:after {
+    content:'\A';
+    position:absolute;
+    width:100%; height:100%;
+    top:0; left:0;
+    background:rgba(0,0,0,0.8);
+    opacity:0;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+}
+.items:hover .img-prod:after{
+  opacity:1;
+}
+</style>
+
+<?php } ?>
+
+
+
+<?php if(isset($tire_product_tubeless)){ ?>
+
+<div class="main-content-box">
+
+
+
+    <h2>Lốp xe không ruột</h2>
+
+
+
+    <div class="items-list-prod">
+
+
+
+                            
+
+        <?php foreach ($tire_product_tubeless as $tire_product_tubeles) { ?>
+
+
+
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 items">
+
+
+
+            <div class="img-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_tubeles->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_tubeles->tire_producer_name.' '.$tire_product_tubeles->tire_product_size_number.' '.$tire_product_tubeles->tire_product_name ?>">
+
+                    <?php
+                    $filename = BASE_URL."/public/images/upload/".$tire_product_tubeles->tire_product_thumb;
+                    if (@getimagesize($filename)) {
+                    ?>
+
+                        <img src="<?php echo $filename ?>" alt="Lốp xe <?php echo $tire_product_tubeles->tire_producer_name.' '.$tire_product_tubeles->tire_product_size_number.' '.$tire_product_tubeles->tire_product_name ?>" />
+                    <?php }
+                    else{
+                    ?>
+                        <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product_tubeles->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_product_tubeles->tire_producer_name.' '.$tire_product_tubeles->tire_product_size_number.' '.$tire_product_tubeles->tire_product_name ?>" />
+                    <?php } ?>
+
+
+
+                </a>
+
+
+
+            </div>
+
+
+
+            <div class="title-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_tubeles->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_tubeles->tire_producer_name.' '.$tire_product_tubeles->tire_product_size_number.' '.$tire_product_tubeles->tire_product_name ?>">Lốp xe <?php echo $tire_product_tubeles->tire_producer_name.' '.$tire_product_tubeles->tire_product_size_number.' '.$tire_product_tubeles->tire_product_name ?></a>
+
+
+
+            </div>
+
+
+
+            <div class="price-prod">
+
+
+
+                <div class="price-old-prod"><?php echo $lib->formatMoney(round($tire_product_tubeles->tire_retail*1.07)) ?> đ</div>
+
+
+
+                <div class="price-new-prod"><?php echo $lib->formatMoney($tire_product_tubeles->tire_retail) ?> đ</div>
+
+
+
+                <div class="clearFix"></div>
+
+
+
+            </div>
+
+            <div class="row">
+
+                <button type="button" class="btn btn-primary add-to-cart" data="<?php echo $tire_product_tubeles->tire_product_id ?>" ><i class="fa fa-cart-plus"></i> MUA NGAY</button>
+                <button type="button" class="btn btn-primary" onClick="javascript:window.location.href='<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_tubeles->tire_product_link ?>'" ><i class="fa fa-info-circle"></i> CHI TIẾT</button>
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <?php } ?>
+
+        
+
+
+
+        
+
+
+
+        <div class="view_all">
+
+            <?php
+
+            isset($tongsotrang)?$this->helper('slidePaginator'):null;
+
+            ?>
+
+
+
+            <a class="view_all_link" href="<?php echo BASE_URL ?>/vn/lop-xe-khong-ruot" title="Lốp xe không ruột">
+
+
+
+                Xem tất cả <i class="fa fa-caret-right"></i>
+
+
+
+            </a>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+<script type="text/javascript">
+function sapxep(page,cot,sapxep){
+  window.location.href = "<?php echo $this->url('vn/lop-xe-khong-ruot/page/') ?>"+page+"/"+cot+"/"+sapxep;
+}
+</script>
+<style type="text/css">
+.items .row{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+.items button {
+   display: none;
+   width: 50%;
+   float: left;
+   border: 1px solid white;
+}
+.items:hover button {
+   display: block; /* On :hover of div show button */
+}
+.img-prod:after {
+    content:'\A';
+    position:absolute;
+    width:100%; height:100%;
+    top:0; left:0;
+    background:rgba(0,0,0,0.8);
+    opacity:0;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+}
+.items:hover .img-prod:after{
+  opacity:1;
+}
+</style>
+
+<?php } ?>
+
+
+
+<?php if(isset($tire_product_trucks)){ ?>
+
+<div class="main-content-box">
+
+
+
+    <h2><?php echo $param ?></h2>
+
+
+
+    <div class="items-list-prod">
+
+
+
+                            
+
+        <?php foreach ($tire_product_trucks as $tire_product_truck) { ?>
+
+
+
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 items">
+
+
+
+            <div class="img-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_truck->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_truck->tire_producer_name.' '.$tire_product_truck->tire_product_size_number.' '.$tire_product_truck->tire_product_name ?>">
+
+                    <?php
+                    $filename = BASE_URL."/public/images/upload/".$tire_product_truck->tire_product_thumb;
+                    if (@getimagesize($filename)) {
+                    ?>
+
+                        <img src="<?php echo $filename ?>" alt="Lốp xe <?php echo $tire_product_truck->tire_producer_name.' '.$tire_product_truck->tire_product_size_number.' '.$tire_product_truck->tire_product_name ?>" />
+                    <?php }
+                    else{
+                    ?>
+                        <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product_truck->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_product_truck->tire_producer_name.' '.$tire_product_truck->tire_product_size_number.' '.$tire_product_truck->tire_product_name ?>" />
+                    <?php } ?>
+
+
+
+                </a>
+
+
+
+            </div>
+
+
+
+            <div class="title-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_truck->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_truck->tire_producer_name.' '.$tire_product_truck->tire_product_size_number.' '.$tire_product_truck->tire_product_name ?>">Lốp xe <?php echo $tire_product_truck->tire_producer_name.' '.$tire_product_truck->tire_product_size_number.' '.$tire_product_truck->tire_product_name ?></a>
+
+
+
+            </div>
+
+
+
+            <div class="price-prod">
+
+
+
+                <div class="price-old-prod"><?php echo $lib->formatMoney(round($tire_product_truck->tire_retail*1.07)) ?> đ</div>
+
+
+
+                <div class="price-new-prod"><?php echo $lib->formatMoney($tire_product_truck->tire_retail) ?> đ</div>
+
+
+
+                <div class="clearFix"></div>
+
+
+
+            </div>
+
+            <div class="row">
+
+                <button type="button" class="btn btn-primary add-to-cart" data="<?php echo $tire_product_truck->tire_product_id ?>" ><i class="fa fa-cart-plus"></i> MUA NGAY</button>
+                <button type="button" class="btn btn-primary" onClick="javascript:window.location.href='<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_truck->tire_product_link ?>'" ><i class="fa fa-info-circle"></i> CHI TIẾT</button>
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <?php } ?>
+
+        
+
+
+
+        
+
+
+
+        <div class="view_all">
+
+            <?php
+
+            isset($tongsotrang)?$this->helper('slidePaginator'):null;
+
+            ?>
+
+
+
+            <a class="view_all_link" href="<?php echo BASE_URL ?>/vn/lop-xe-tai" title="Lốp xe tải & bus">
+
+
+
+                Xem tất cả <i class="fa fa-caret-right"></i>
+
+
+
+            </a>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+<script type="text/javascript">
+function sapxep(page,cot,sapxep){
+  window.location.href = "<?php echo $this->url('vn/lop-xe-tai/'.$param.'/') ?>"+page+"/"+cot+"/"+sapxep;
+}
+</script>
+<style type="text/css">
+.items .row{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+.items button {
+   display: none;
+   width: 50%;
+   float: left;
+   border: 1px solid white;
+}
+.items:hover button {
+   display: block; /* On :hover of div show button */
+}
+.img-prod:after {
+    content:'\A';
+    position:absolute;
+    width:100%; height:100%;
+    top:0; left:0;
+    background:rgba(0,0,0,0.8);
+    opacity:0;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+}
+.items:hover .img-prod:after{
+  opacity:1;
+}
+</style>
+
+<?php } ?>
+
+
+
+<?php if(isset($tire_product_cars)){ ?>
+
+<div class="main-content-box">
+
+
+
+    <h2><?php echo $param ?></h2>
+
+
+
+    <div class="items-list-prod">
+
+
+
+                            
+
+        <?php foreach ($tire_product_cars as $tire_product_car) { ?>
+
+
+
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 items">
+
+
+
+            <div class="img-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_car->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_car->tire_producer_name.' '.$tire_product_car->tire_product_size_number.' '.$tire_product_car->tire_product_name ?>">
+
+                    <?php
+                    $filename = BASE_URL."/public/images/upload/".$tire_product_car->tire_product_thumb;
+                    if (@getimagesize($filename)) {
+                    ?>
+
+                        <img src="<?php echo $filename ?>" alt="Lốp xe <?php echo $tire_product_car->tire_producer_name.' '.$tire_product_car->tire_product_size_number.' '.$tire_product_car->tire_product_name ?>" />
+                    <?php }
+                    else{
+                    ?>
+                        <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product_car->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_product_car->tire_producer_name.' '.$tire_product_car->tire_product_size_number.' '.$tire_product_car->tire_product_name ?>" />
+                    <?php } ?>
+
+
+
+                </a>
+
+
+
+            </div>
+
+
+
+            <div class="title-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_car->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_car->tire_producer_name.' '.$tire_product_car->tire_product_size_number.' '.$tire_product_car->tire_product_name ?>">Lốp xe <?php echo $tire_product_car->tire_producer_name.' '.$tire_product_car->tire_product_size_number.' '.$tire_product_car->tire_product_name ?></a>
+
+
+
+            </div>
+
+
+
+            <div class="price-prod">
+
+
+
+                <div class="price-old-prod"><?php echo $lib->formatMoney(round($tire_product_car->tire_retail*1.07)) ?> đ</div>
+
+
+
+                <div class="price-new-prod"><?php echo $lib->formatMoney($tire_product_car->tire_retail) ?> đ</div>
+
+
+
+                <div class="clearFix"></div>
+
+
+
+            </div>
+
+            <div class="row">
+
+                <button type="button" class="btn btn-primary add-to-cart" data="<?php echo $tire_product_car->tire_product_id ?>" ><i class="fa fa-cart-plus"></i> MUA NGAY</button>
+                <button type="button" class="btn btn-primary" onClick="javascript:window.location.href='<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_car->tire_product_link ?>'" ><i class="fa fa-info-circle"></i> CHI TIẾT</button>
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <?php } ?>
+
+        
+
+
+
+        
+
+
+
+        <div class="view_all">
+
+            <?php
+
+            isset($tongsotrang)?$this->helper('slidePaginator'):null;
+
+            ?>
+
+
+
+            <a class="view_all_link" href="<?php echo BASE_URL ?>/vn/lop-xe-du-lich" title="Lốp xe du lịch">
+
+
+
+                Xem tất cả <i class="fa fa-caret-right"></i>
+
+
+
+            </a>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+<script type="text/javascript">
+function sapxep(page,cot,sapxep){
+  window.location.href = "<?php echo $this->url('vn/lop-xe-du-lich/'.$param.'/') ?>"+page+"/"+cot+"/"+sapxep;
+}
+</script>
+<style type="text/css">
+.items .row{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+.items button {
+   display: none;
+   width: 50%;
+   float: left;
+   border: 1px solid white;
+}
+.items:hover button {
+   display: block; /* On :hover of div show button */
+}
+.img-prod:after {
+    content:'\A';
+    position:absolute;
+    width:100%; height:100%;
+    top:0; left:0;
+    background:rgba(0,0,0,0.8);
+    opacity:0;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+}
+.items:hover .img-prod:after{
+  opacity:1;
+}
+</style>
+<?php } ?>
+
+
+
+<?php if(isset($tire_product_otrs)){ ?>
+
+<div class="main-content-box">
+
+
+
+    <h2><?php echo $param ?></h2>
+
+
+
+    <div class="items-list-prod">
+
+
+
+                            
+
+        <?php foreach ($tire_product_otrs as $tire_product_otr) { ?>
+
+
+
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 items">
+
+
+
+            <div class="img-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_otr->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_otr->tire_producer_name.' '.$tire_product_otr->tire_product_size_number.' '.$tire_product_otr->tire_product_name ?>">
+
+                    <?php
+                    $filename = BASE_URL."/public/images/upload/".$tire_product_otr->tire_product_thumb;
+                    if (@getimagesize($filename)) {
+                    ?>
+
+                        <img src="<?php echo $filename ?>" alt="Lốp xe <?php echo $tire_product_otr->tire_producer_name.' '.$tire_product_otr->tire_product_size_number.' '.$tire_product_otr->tire_product_name ?>" />
+                    <?php }
+                    else{
+                    ?>
+                        <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product_otr->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_product_otr->tire_producer_name.' '.$tire_product_otr->tire_product_size_number.' '.$tire_product_otr->tire_product_name ?>" />
+                    <?php } ?>
+
+
+
+                </a>
+
+
+
+            </div>
+
+
+
+            <div class="title-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_otr->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_otr->tire_producer_name.' '.$tire_product_otr->tire_product_size_number.' '.$tire_product_otr->tire_product_name ?>">Lốp xe <?php echo $tire_product_otr->tire_producer_name.' '.$tire_product_otr->tire_product_size_number.' '.$tire_product_otr->tire_product_name ?></a>
+
+
+
+            </div>
+
+
+
+            <div class="price-prod">
+
+
+
+                <div class="price-old-prod"><?php echo $lib->formatMoney(round($tire_product_otr->tire_retail*1.07)) ?> đ</div>
+
+
+
+                <div class="price-new-prod"><?php echo $lib->formatMoney($tire_product_otr->tire_retail) ?> đ</div>
+
+
+
+                <div class="clearFix"></div>
+
+
+
+            </div>
+
+            <div class="row">
+
+                <button type="button" class="btn btn-primary add-to-cart" data="<?php echo $tire_product_otr->tire_product_id ?>" ><i class="fa fa-cart-plus"></i> MUA NGAY</button>
+                <button type="button" class="btn btn-primary" onClick="javascript:window.location.href='<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_otr->tire_product_link ?>'" ><i class="fa fa-info-circle"></i> CHI TIẾT</button>
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <?php } ?>
+
+        
+
+
+
+        
+
+
+
+        <div class="view_all">
+
+            <?php
+
+            isset($tongsotrang)?$this->helper('slidePaginator'):null;
+
+            ?>
+
+
+
+            <a class="view_all_link" href="<?php echo BASE_URL ?>/vn/lop-xe-dac-chung" title="Lốp xe đặc chủng">
+
+
+
+                Xem tất cả <i class="fa fa-caret-right"></i>
+
+
+
+            </a>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+<script type="text/javascript">
+function sapxep(page,cot,sapxep){
+  window.location.href = "<?php echo $this->url('vn/lop-xe-dac-chung/'.$param.'/') ?>"+page+"/"+cot+"/"+sapxep;
+}
+</script>
+<style type="text/css">
+.items .row{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+.items button {
+   display: none;
+   width: 50%;
+   float: left;
+   border: 1px solid white;
+}
+.items:hover button {
+   display: block; /* On :hover of div show button */
+}
+.img-prod:after {
+    content:'\A';
+    position:absolute;
+    width:100%; height:100%;
+    top:0; left:0;
+    background:rgba(0,0,0,0.8);
+    opacity:0;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+}
+.items:hover .img-prod:after{
+  opacity:1;
+}
+</style>
+<?php } ?>
+
+<script type="text/javascript">
+$('.add-to-cart').click(function(){
+  var val = $(this).attr('data');
+
+  $.ajax({
+    type: "POST", // phương thức gởi đi
+    url: "<?php echo $this->url('vn/add-to-cart') ?>", // nơi mà dữ liệu sẽ chuyển đến khi submit
+    data: "data="+ val, // giá trị post
+    success: function(answer){ 
+      $('.cartTopRightQuantity').html(answer);
+      $.ajax({
+        type: "GET", // phương thức gởi đi
+        url: "<?php echo $this->url('vn/show-cart') ?>", // nơi mà dữ liệu sẽ chuyển đến khi submit
+        data: "data=1", // giá trị post
+        success: function(answer){ 
+          $('.item-cart').html(answer);
+        }
+      });
+
+      $('.cart-top').toggleClass('open');
+      $('.cart-fixed').toggleClass('open');
+    }
+  });
+
+});
+</script>
+
+<style type="text/css">
+.img-prod img {
+    width: 100%;
+    min-height: 180px;
+}
+.img-prod {
+    overflow: hidden;
+    border: 1px solid #fff;
+    border-bottom: none;
+    height: 180px;
+    transition: all 0.5s ease 0s;
+}
+.price-old-prod {
+    float: right;
+    color: #777;
+    text-decoration: line-through;
+    font-size: 12px;
+}
+.price-new-prod {
+    float: left;
+    color: #FF8244;
+    font-size: 14px;
+    font-weight: bold;
+}
+</style>

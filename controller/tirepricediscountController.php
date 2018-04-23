@@ -33,9 +33,9 @@ Class tirepricediscountController Extends baseController {
 
         else{
 
-            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'start_date';
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'tire_brand_name ASC, start_date';
 
-            $order = $this->registry->router->order ? $this->registry->router->order : 'ASC';
+            $order = $this->registry->router->order ? $this->registry->router->order : 'ASC, tire_price_discount_id ASC';
 
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
 
@@ -176,11 +176,19 @@ Class tirepricediscountController Extends baseController {
 
                         'tire_20' => trim(str_replace(',', '', $_POST['tire_20'])),
 
-                        'tire_50' => trim(str_replace(',', '', $_POST['tire_50'])),
+                        'tire_40' => trim(str_replace(',', '', $_POST['tire_40'])),
+
+                        'tire_60' => trim(str_replace(',', '', $_POST['tire_60'])),
+
+                        'tire_80' => trim(str_replace(',', '', $_POST['tire_80'])),
 
                         'tire_100' => trim(str_replace(',', '', $_POST['tire_100'])),
 
+                        'tire_120' => trim(str_replace(',', '', $_POST['tire_120'])),
+
                         'tire_150' => trim(str_replace(',', '', $_POST['tire_150'])),
+
+                        'tire_180' => trim(str_replace(',', '', $_POST['tire_180'])),
 
                         'tire_cont' => trim(str_replace(',', '', $_POST['tire_cont'])),
 
@@ -256,9 +264,13 @@ Class tirepricediscountController Extends baseController {
                                     'tire_price' => $row->tire_price,
                                     'tire_retail' => $row->tire_retail,
                                     'tire_20' => $row->tire_20,
-                                    'tire_50' => $row->tire_50,
+                                    'tire_40' => $row->tire_40,
+                                    'tire_60' => $row->tire_60,
+                                    'tire_80' => $row->tire_80,
                                     'tire_100' => $row->tire_100,
+                                    'tire_120' => $row->tire_120,
                                     'tire_150' => $row->tire_150,
+                                    'tire_180' => $row->tire_180,
                                     'tire_cont' => $row->tire_cont,
                                     'start_date' => strtotime(date('d-m-Y',strtotime($_POST['end_date'].' +1 day'))),
                                     'end_date' => $row->end_date,
@@ -471,7 +483,7 @@ Class tirepricediscountController Extends baseController {
             }
             
 
-            $cell_ngay = $objWorksheet->getCellByColumnAndRow(10, 1);
+            $cell_ngay = $objWorksheet->getCellByColumnAndRow(14, 1);
             $ngay = $cell_ngay->getCalculatedValue();
             $ngaythang = PHPExcel_Shared_Date::ExcelToPHP($ngay);
 
@@ -529,10 +541,14 @@ Class tirepricediscountController Extends baseController {
                                     'tire_price' => $val[3],
                                     'tire_retail' => $val[4],
                                     'tire_20' => $val[5],
-                                    'tire_50' => $val[6],
-                                    'tire_100' => $val[7],
-                                    'tire_150' => $val[8],
-                                    'tire_cont' => $val[9],
+                                    'tire_40' => $val[6],
+                                    'tire_60' => $val[7],
+                                    'tire_80' => $val[8],
+                                    'tire_100' => $val[9],
+                                    'tire_120' => $val[10],
+                                    'tire_150' => $val[11],
+                                    'tire_180' => $val[12],
+                                    'tire_cont' => $val[13],
                                 );
                                 $tirepricediscount->createTire($data);
                             }
@@ -545,12 +561,16 @@ Class tirepricediscountController Extends baseController {
                                     'tire_price' => $val[3],
                                     'tire_retail' => $val[4],
                                     'tire_20' => $val[5],
-                                    'tire_50' => $val[6],
-                                    'tire_100' => $val[7],
-                                    'tire_150' => $val[8],
-                                    'tire_cont' => $val[9],
+                                    'tire_40' => $val[6],
+                                    'tire_60' => $val[7],
+                                    'tire_80' => $val[8],
+                                    'tire_100' => $val[9],
+                                    'tire_120' => $val[10],
+                                    'tire_150' => $val[11],
+                                    'tire_180' => $val[12],
+                                    'tire_cont' => $val[13],
                                 );
-                                $tirepricediscount->updateTire($data,array('tire_quotation_id'=>$id_quotation));
+                                $tirepricediscount->updateTire($data,array('tire_price_discount_id'=>$id_quotation));
                             }
 
 

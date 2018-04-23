@@ -47,9 +47,6 @@ $tong = array();
             <th colspan="2" class="fix">Sản lượng bán</th>
             <th colspan="2" class="fix">Đơn hàng</th>
             <th rowspan="2" class="fix">Lương sản phẩm</th>
-            <th rowspan="2" class="fix">Lương bán vượt giá</th>
-            <th rowspan="2" class="fix">KPI năng lực</th>
-            <th rowspan="2" class="fix">Tổng lương</th>
             <th rowspan="2" class="fix">Doanh thu</th>
         </tr>
         <tr>
@@ -105,9 +102,6 @@ $tong = array();
                 <td class="fix"><a href="<?php echo BASE_URL ?>/ordertire/report/0/<?php echo strtotime($batdau).'/'.$user->user_id ?>"><?php echo $donmoi; ?></a></td>
                 <td class="fix"><a href="<?php echo BASE_URL ?>/ordertire/report/0/<?php echo strtotime($batdau).'/'.$user->user_id ?>"><?php echo $doncu; ?></a></td>
                 <td class="fix"><?php echo $lib->formatMoney($luongsp); ?></td>
-                <td class="fix"><?php echo $lib->formatMoney($luongvuotgia); ?></td>
-                <td class="fix"><?php echo $lib->formatMoney($kpi); ?></td>
-                <td class="fix"><?php echo $lib->formatMoney($luongsp+$luongvuotgia+$kpi); ?></td>
                 <td class="fix"><?php echo $lib->formatMoney($dt); ?></td>
                 
             </tr>
@@ -124,9 +118,6 @@ $tong = array();
             <td class="fix"><?php echo $tongdoncu ?></td>
             <td class="fix"></td>
             <td class="fix"></td>
-            <td class="fix"></td>
-            <td class="fix"></td>
-            <td class="fix"></td>
         </tr>
         <tr style=" color:rgb(211, 11, 57); text-align: center; font-weight:bold;">
             <td class="fix">Tổng cộng</td>
@@ -135,9 +126,6 @@ $tong = array();
             <td class="fix" colspan="2"><?php echo $tongdl+$tongtt ?></td>
             <td class="fix" colspan="2"><?php echo $tongdonmoi+$tongdoncu ?></td>
             <td class="fix"><?php echo $lib->formatMoney($tongluongsp) ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongluongvuotgia) ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongkpi) ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongluongsp+$tongluongvuotgia+$tongkpi) ?></td>
             <td class="fix"><?php echo $lib->formatMoney($tongdoanhthu) ?></td>
             
         </tr>

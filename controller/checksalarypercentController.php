@@ -82,7 +82,7 @@ Class checksalarypercentController Extends baseController {
         if (isset($_POST['yes'])) {
             $checksalarypercent = $this->model->get('checksalarypercentModel');
             $data = array(
-                        
+                        'order_percent' => trim(str_replace(',', '', $_POST['order_percent'])),
                         'order_number' => trim(str_replace(',', '', $_POST['order_number'])),
                         'order_new' => trim(str_replace(',', '', $_POST['order_new'])),
                         'order_old' => trim(str_replace(',', '', $_POST['order_old'])),

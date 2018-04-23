@@ -213,11 +213,14 @@ Class adminController Extends baseController {
 
             $info_staff['dh'][$tire->sale] = isset($info_staff['dh'][$tire->sale])?$info_staff['dh'][$tire->sale]+1:1;
 
-            if(!in_array($tire->customer,$c[$tire->sale])){
+            if (isset($c[$tire->sale])) {
+                if(!in_array($tire->customer,$c[$tire->sale])){
 
-                $info_staff['kh'][$tire->sale] = isset($info_staff['kh'][$tire->sale])?$info_staff['kh'][$tire->sale]+1:1;
+                    $info_staff['kh'][$tire->sale] = isset($info_staff['kh'][$tire->sale])?$info_staff['kh'][$tire->sale]+1:1;
 
+                }
             }
+            
 
             $c[$tire->sale][] = $tire->customer;
 
@@ -337,7 +340,7 @@ Class adminController Extends baseController {
 
         if ($limit != "") {
 
-            $orders = $tire_sale_model->queryTire('SELECT order_tire,sale,tire_sale_date,volume,sell_price,sell_price_vat FROM tire_sale WHERE sale='.$limit.' AND tire_sale_date >= '.strtotime('01-01-2015').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
+            $orders = $tire_sale_model->queryTire('SELECT order_tire,sale,tire_sale_date,volume,sell_price,sell_price_vat FROM tire_sale WHERE sale='.$limit.' AND tire_sale_date >= '.strtotime('01-01-2018').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
 
             
 
@@ -345,7 +348,7 @@ Class adminController Extends baseController {
 
         else{
 
-            $orders = $tire_sale_model->queryTire('SELECT order_tire,sale,tire_sale_date,volume,sell_price,sell_price_vat FROM tire_sale WHERE tire_sale_date >= '.strtotime('01-01-2015').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
+            $orders = $tire_sale_model->queryTire('SELECT order_tire,sale,tire_sale_date,volume,sell_price,sell_price_vat FROM tire_sale WHERE tire_sale_date >= '.strtotime('01-01-2018').' AND tire_sale_date <= '.strtotime(date('t-m-Y')));
 
         }
 
@@ -391,13 +394,13 @@ Class adminController Extends baseController {
 
 
         $join = array('table'=>'user','where'=>'account=user_id');
-        $staff_datas = $staff_model->getAllStaff(array('where'=>'(staff_id=67 OR staff_id=66 OR staff_id=65 OR staff_id=64 OR staff_id=63 OR staff_id=14 OR staff_id=12 OR staff_id=2)'),$join);
+        $staff_datas = $staff_model->getAllStaff(array('where'=>''),$join);
 
         $this->view->data['staff_datas'] = $staff_datas;
 
 
 
-        $start = $month = strtotime('01-01-2015');
+        $start = $month = strtotime('01-01-2018');
 
         $end = strtotime(date('t-m-Y'));
 

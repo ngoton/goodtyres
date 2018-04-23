@@ -249,7 +249,7 @@ function del(id)
     //$('#loading').html("<img src='public/images/loading.gif'/>").fadeIn(500);
     $.post(window.location.href+"/delete", {data: id},
        function(data){
-        //alert(data);
+        console.log(data);
         if (data.trim() != 'Bạn không có quyền thực hiện thao tác này') {
           $('tr#'+id).remove(); 
           //$('#loading').fadeOut(500); 

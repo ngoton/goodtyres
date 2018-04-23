@@ -37,7 +37,7 @@ Class tirebrandController Extends baseController {
         }
         $this->view->data['group_data'] = $group_data;
 
-        $join = array('table'=>'tire_brand_region','where'=>'tire_brand_region=tire_brand_region_id');
+        $join = array('table'=>'tire_brand_region','where'=>'tire_brand_region=tire_brand_region_id','join'=>'LEFT JOIN');
 
         $tire_brand_model = $this->model->get('tirebrandModel');
         $sonews = $limit;

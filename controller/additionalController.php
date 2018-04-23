@@ -61,7 +61,7 @@ Class additionalController Extends baseController {
         );
 
         if ($id>0) {
-            $trangthai = $id;
+            $data['where'] = 'additional_id = '.$id;
         }
 
         if ($trangthai > 0) {
@@ -104,7 +104,7 @@ Class additionalController Extends baseController {
             );
         
         if ($id>0) {
-            $trangthai = $id;
+            $data['where'] = 'additional_id = '.$id;
         }
 
         if ($trangthai > 0) {
@@ -133,10 +133,24 @@ Class additionalController Extends baseController {
                 $data['where'] = $data['where'].' AND '.$search;
         }
 
-        
+        $additionals = $additional_model->getAllAdditional($data);
 
         
-        $this->view->data['additionals'] = $additional_model->getAllAdditional($data);
+        $this->view->data['additionals'] = $additionals;
+
+        $order_model = $this->model->get('ordertireModel');
+        $customer_model = $this->model->get('customerModel');
+        $cus = array();
+        foreach ($additionals as $add) {
+            if ($add->code!="") {
+                if ($order_model->getTireByWhere(array('order_number'=>$add->code))) {
+                    $cus[$add->additional_id] = $customer_model->getCustomer($order_model->getTireByWhere(array('order_number'=>$add->code))->customer)->customer_name;
+                }
+            }
+            
+        }
+        $this->view->data['cus'] = $cus;
+
         $this->view->data['lastID'] = isset($additional_model->getLastAdditional()->additional_id)?$additional_model->getLastAdditional()->additional_id:0;
 
         /* Lấy tổng doanh thu*/

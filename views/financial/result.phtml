@@ -75,32 +75,32 @@
             <tr class="bank" data="<?php echo $account_num[5111] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">5111</td>
                 <td class="fix">Doanh thu bán hàng</td>
-                <td class="fix"><?php echo $lib->formatMoney($dtbh_co_ps = isset($account_add[5111]['co'])?str_replace('-', '', $account_add[5111]['co']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($dtbh_co_ps = isset($account_add[5111]['co'])?str_replace('-', '', $account_add[5111]['co']):null) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[5112] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">5112</td>
                 <td class="fix">Doanh thu Logistics</td>
-                <td class="fix"><?php echo $lib->formatMoney($dtlogs_co_ps = isset($account_add[5112]['co'])?str_replace('-', '', $account_add[5112]['co']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($dtlogs_co_ps = isset($account_add[5112]['co'])?str_replace('-', '', $account_add[5112]['co']):null) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[3331] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">3331</td>
                 <td class="fix">Thuế GTGT Lốp xe</td>
-                <td class="fix"><?php echo $lib->formatMoney($gtgt_co_ps = isset($account_add[3331]['co'])?str_replace('-', '', $account_add[3331]['co']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($gtgt_co_ps = isset($account_add[3331]['co'])?str_replace('-', '', $account_add[3331]['co']):null) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[3332] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">3332</td>
                 <td class="fix">Thuế GTGT Logistics</td>
-                <td class="fix"><?php echo $lib->formatMoney($gtgtlogs_co_ps = isset($account_add[3332]['co'])?str_replace('-', '', $account_add[3332]['co']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($gtgtlogs_co_ps = isset($account_add[3332]['co'])?str_replace('-', '', $account_add[3332]['co']):null) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[515] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">515</td>
                 <td class="fix">Lãi tiền gửi</td>
-                <td class="fix"><?php echo $lib->formatMoney($lai_co_ps = isset($account_add[515]['co'])?str_replace('-', '', $account_add[515]['co']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($lai_co_ps = isset($account_add[515]['co'])?str_replace('-', '', $account_add[515]['co']):null) ?></td>
             </tr>
             <tr style="background-color:rgba(255, 0, 0, 0.15)">
                 <td class="fix"></td>
                 <td class="fix">Cộng doanh thu</td>
-                <td class="fix"><?php echo $lib->formatMoney($doanhthu = $dtbh_co_ps+$dtlogs_co_ps+$gtgt_co_ps+$gtgtlogs_co_ps+$lai_co_ps) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($doanhthu = $dtbh_co_ps+$dtlogs_co_ps+$gtgt_co_ps+$gtgtlogs_co_ps+$lai_co_ps) ?></td>
             </tr>
             <tr style="background-color:rgba(63, 255, 0, 0.15)">
                 <td class="fix"></td>
@@ -110,27 +110,27 @@
             <tr class="bank" data="<?php echo $account_num[6321] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">6321</td>
                 <td class="fix">Vốn hàng lốp xe</td>
-                <td class="fix"><?php echo $lib->formatMoney($von_co_ps = isset($account_add[6321]['no'])?str_replace('-', '', $account_add[6321]['no']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($von_co_ps = isset($account_add[6321]['no'])?str_replace('-', '', $account_add[6321]['no']):null) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[6322] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">6322</td>
                 <td class="fix">Vốn hàng Logistics</td>
-                <td class="fix"><?php echo $lib->formatMoney($vonlogs_co_ps = isset($account_add[6322]['no'])?str_replace('-', '', $account_add[6322]['no']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($vonlogs_co_ps = isset($account_add[6322]['no'])?str_replace('-', '', $account_add[6322]['no']):null) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[641] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">641</td>
                 <td class="fix">Vận chuyển + bốc xếp + bảo hành</td>
-                <td class="fix"><?php echo $lib->formatMoney($cp_no_ps = isset($account_parent_add[641]['no'])?str_replace('-', '', $account_parent_add[641]['no']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($cp_no_ps = isset($account_parent_add[641]['no'])?str_replace('-', '', $account_parent_add[641]['no']):null) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[635] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">635</td>
                 <td class="fix">Trả lãi vay</td>
-                <td class="fix"><?php echo $lib->formatMoney($laivay_no_ps = isset($account_add[635]['no'])?str_replace('-', '', $account_add[635]['no']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($laivay_no_ps = isset($account_add[635]['no'])?str_replace('-', '', $account_add[635]['no']):null) ?></td>
             </tr>
             <tr style="background-color:rgba(63, 255, 0, 0.15)">
                 <td class="fix"></td>
                 <td class="fix">Cộng chi phí bán hàng</td>
-                <td class="fix"><?php echo $lib->formatMoney($chiphibanhang = $von_co_ps+$vonlogs_co_ps+$cp_no_ps+$laivay_no_ps) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($chiphibanhang = $von_co_ps+$vonlogs_co_ps+$cp_no_ps+$laivay_no_ps) ?></td>
             </tr>
             <tr style="background-color:rgba(0, 173, 255, 0.15)">
                 <td class="fix"></td>
@@ -140,42 +140,42 @@
             <tr class="bank" data="<?php echo $account_num[6421] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">6421</td>
                 <td class="fix">Tiền lương + Cơm + Bảo hiểm</td>
-                <td class="fix"><?php echo $lib->formatMoney($luong_no_ps = isset($account_add[6421]['no'])?str_replace('-', '', $account_add[6421]['no']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($luong_no_ps = isset($account_add[6421]['no'])?str_replace('-', '', $account_add[6421]['no']):null) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[6426] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">6426</td>
                 <td class="fix">Thuê kho bãi</td>
-                <td class="fix"><?php echo $lib->formatMoney($khobai_no_ps = isset($account_add[6426]['no'])?str_replace('-', '', $account_add[6426]['no']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($khobai_no_ps = isset($account_add[6426]['no'])?str_replace('-', '', $account_add[6426]['no']):null) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[642] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">642</td>
                 <td class="fix">Chi phí Quản lý hành chính</td>
-                <td class="fix"><?php echo $lib->formatMoney($hanhchinh_no_ps = (isset($account_parent_add[642]['no'])?str_replace('-', '', $account_parent_add[642]['no']):null) - $luong_no_ps - $khobai_no_ps ) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($hanhchinh_no_ps = (isset($account_parent_add[642]['no'])?str_replace('-', '', $account_parent_add[642]['no']):null) - $luong_no_ps - $khobai_no_ps ) ?></td>
             </tr>
             <tr style="background-color:rgba(0, 173, 255, 0.15)">
                 <td class="fix"></td>
                 <td class="fix">Cộng chi phí quản lý</td>
-                <td class="fix"><?php echo $lib->formatMoney($chiphiquanly = $luong_no_ps+$khobai_no_ps+$hanhchinh_no_ps) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($chiphiquanly = $luong_no_ps+$khobai_no_ps+$hanhchinh_no_ps) ?></td>
             </tr>
             <tr style="background-color:rgba(185, 38, 38, 0.15)">
                 <td class="fix"></td>
                 <td class="fix">Tổng cộng chi phí (1) + (2)</td>
-                <td class="fix"><?php echo $lib->formatMoney($chiphi = $chiphibanhang+$chiphiquanly) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($chiphi = $chiphibanhang+$chiphiquanly) ?></td>
             </tr>
             <tr>
                 <td class="fix"></td>
                 <td class="fix">Lợi nhuận trước thuế (DT - CP)</td>
-                <td class="fix"><?php echo $lib->formatMoney($loinhuan = $doanhthu-$chiphi) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($loinhuan = $doanhthu-$chiphi) ?></td>
             </tr>
             <tr>
                 <td class="fix"></td>
                 <td class="fix">Trừ thuế + Cân đối hóa đơn</td>
-                <td class="fix"><?php echo $lib->formatMoney($thue = 0) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($thue = 0) ?></td>
             </tr>
             <tr>
                 <td class="fix"></td>
                 <td class="fix">Lợi nhuận sau thuế</td>
-                <td class="fix"><?php echo $lib->formatMoney($loinhuansauthue = $loinhuan-$thue) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($loinhuansauthue = $loinhuan-$thue) ?></td>
             </tr>
             <tr>
                 <td class="fix"></td>
@@ -185,32 +185,32 @@
             <tr class="bank" data="<?php echo $account_num[4111] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix"></td>
                 <td class="fix"> - Tăng vốn chủ sở hữu</td>
-                <td class="fix"><?php echo $lib->formatMoney($von_co_ps = isset($account_add[4111]['co'])?str_replace('-', '', $account_add[4111]['co']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($von_co_ps = isset($account_add[4111]['co'])?str_replace('-', '', $account_add[4111]['co']):null) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[3521] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix"></td>
                 <td class="fix"> - Quỹ lương dự phòng</td>
-                <td class="fix"><?php echo $lib->formatMoney($quyluong_co_ps = isset($account_add[3521]['co'])?str_replace('-', '', $account_add[3521]['co']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($quyluong_co_ps = isset($account_add[3521]['co'])?str_replace('-', '', $account_add[3521]['co']):null) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[3522] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix"></td>
                 <td class="fix"> - Dự phòng khác</td>
-                <td class="fix"><?php echo $lib->formatMoney($duphong_co_ps = isset($account_add[3522]['co'])?str_replace('-', '', $account_add[3522]['co']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($duphong_co_ps = isset($account_add[3522]['co'])?str_replace('-', '', $account_add[3522]['co']):null) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[411] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix"></td>
                 <td class="fix">Vốn đầu tháng</td>
-                <td class="fix"><?php echo $lib->formatMoney($vondauthang = (isset($account_parent_before[411]) && $account_parent_before[411]<0 )?str_replace('-', '', $account_parent_before[411]):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($vondauthang = (isset($account_parent_before[411]) && $account_parent_before[411]<0 )?str_replace('-', '', $account_parent_before[411]):null) ?></td>
             </tr>
             <tr>
                 <td class="fix"></td>
                 <td class="fix">Vốn cuối tháng</td>
-                <td class="fix"><?php echo $lib->formatMoney($voncuoithang = $vondauthang+(isset($account_parent_add[411]['co'])?str_replace('-', '', $account_parent_add[411]['co']):null)-(isset($account_parent_add[411]['no'])?str_replace('-', '', $account_parent_add[411]['no']):null) ) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($voncuoithang = $vondauthang+(isset($account_parent_add[411]['co'])?str_replace('-', '', $account_parent_add[411]['co']):null)-(isset($account_parent_add[411]['no'])?str_replace('-', '', $account_parent_add[411]['no']):null) ) ?></td>
             </tr>
             <tr style="background-color:rgba(38, 144, 185, 0.15)">
                 <td class="fix"></td>
                 <td class="fix">Tỉ lệ lợi nhuận trên vốn</td>
-                <td class="fix"><?php echo round($tile = $vondauthang>0?$loinhuansauthue*100/$vondauthang:$loinhuansauthue*100/1,2).'%' ?></td>
+                <td class="fix text-right"><?php echo round($tile = $vondauthang>0?$loinhuansauthue*100/$vondauthang:$loinhuansauthue*100/1,2).'%' ?></td>
             </tr>
         </tbody>
    </table>

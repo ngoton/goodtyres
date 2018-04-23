@@ -6993,3 +6993,2731 @@ bxep: 6x14 = 84k-5-4--1484000
 
 13/02/2018 16:52:22|admincmg|add|4819|daily|1-----oanh-1518476400-a----1-0---0--0-1-0--
 
+06/03/2018 08:01:09|admincmg|edit|1|import_tire_order|--1-nhập-281-2-3-203-1-1517180400-1517180400-13.69-22600-22800-200000-1000000--200-1260000-66376201-6696362-9530005-2737-0-16-101000-1260000-0-0-2420000-0-0-4000000-0-750000-1100000-500000-0-6000-7000
+
+09/03/2018 09:15:33|admincmg|edit|1|import_tire_order|--1-nhập-281-2-3-203-1-1517180400-1517180400-13.69-22600-22800-200000-1000000--200-1260000.00-66376201-6696362-9530005-2737-0-16-101000-1260000.00-0-0-2420000-0-0-4000000-0-750000-1100000-500000-0-6000-7000
+
+09/03/2018 09:21:47|admincmg|edit|1|import_tire_order|--1-nhập-281-2-3-203-1-1517180400-1520550000-13.69-22600-22800-200000-10000000--200-1260000.00-66376201-6696362-9530005-2737-0-16-101000-1260000-0-0-2420000-0-0-4000000-0-750000-1100000-500000-0-6000-7000
+
+09/03/2018 10:52:12|admincmg|edit|1|import_tire_order|--1-nhập-281-2-3-203-1-1517180400-1520550000-13.69-1000000-22600-22800-200000-10000000--200-1260000.00-66376201-6696362-9530005-2737-0-16-101000-1260000-0-0-2420000-0-0-4000000-0-750000-1100000-500000-0-6000-7000
+
+09/03/2018 10:59:48|admincmg|edit|1|import_tire_order|--1-nhập-281-2-3-203-1-1517180400-1520550000-13.69-1000000-22600-22800-200000-10000000--200-1260000.00-66376201-6696362-9530005-2737-0-16-101000-1260000-0-0-2420000-0-0-4000000-0-750000-1100000-500000-0-6000-7000
+
+09/03/2018 11:02:05|admincmg|edit|1|import_tire_order|--1-nhập-281-2-3-203-1-1517180400-1520550000-13.69--1000000-22600-22800-200000-10000000--200-1260000.00-66376201-6696362-9530005-2737-0-16-101000-1260000-0-0-2420000-0-0-4000000-0-750000-1100000-500000-0-6000-7000
+
+09/03/2018 11:11:56|admincmg|edit|1|import_tire_order|--1-nhập-281-2-3-203-1-1517180400-1520550000-13.69--2000000-22600-22800-200000-10000000--200-1260000.00-66376201-6696362-9530005-2737-0-16-101000-1260000-0-0-2420000-0-0-4000000-0-750000-1100000-500000-0-6000-7000
+
+13/03/2018 09:28:57|admincmg|edit|1|import_tire_order|--1-nhập-281-2-3-203-1-1517180400-1520895600-13.69--2000000-22600-22800-200000-10000000--200-1260000-66376201-6696362-19430001-2737-0-16-101000-1260000-0-0-2420000-0-0-4000000-0-750000-11000000-500000-0-6000-7000
+
+13/03/2018 09:35:09|admincmg|edit|1|import_tire_order|--1-nhập-281-2-3-203-1-1517180400-1520895600-13.69--2000000-22600-22800-200000-10000000--200-1260000-66376201-6696362-9530005-2737-0-16-101000-1260000-0-0-2420000-0-0-4000000-0-750000-1100000-500000-0-6000-7000
+
+13/03/2018 09:40:06|admincmg|edit|1|import_tire_order|--1-nhập-281-2-3-203-1-1517180400-1520895600-13.69--2000000-22600-22800-200000-10000000--200-1260000-66376201-6696362-19430001-2737-0-16-101000-1260000-0-0-2420000-0-0-4000000-0-750000-11000000-500000-0-6000-7000
+
+13/03/2018 13:12:48|admincmg|edit|1|import_tire_order|--1-nhập-281-2-3-203-1-1517180400-1520895600-13.69--2000000-22600-22800-200000-10000000--200-1260000.00-66376200-6696360-19430000-2737-0-16-101000-1260000-0-0-2420000-0-0-4000000-0-750000-11000000-500000-0-6000-7000
+
+13/03/2018 13:32:46|admincmg|edit|1|import_tire_order|--1-nhập-281-2-3-203-1-1517180400-1520895600-13.69--2000000-22600-22800-200000-10000000--200-1260000.00-66376200-6696360-19430000-2737-0-16-101000-1260000-0-0-2420000-0-0-4000000-0-750000-11000000-500000-0-6000-7000
+
+15/03/2018 10:36:39|admin|add|1|tire_brand_group|Thailand
+
+15/03/2018 10:39:38|admin|edit|8|tire_pattern|AS668-8
+
+15/03/2018 10:41:10|admin|edit|10|tire_pattern|CB919-5
+
+15/03/2018 10:42:10|admin|edit|6|tire_pattern|CB995-4
+
+15/03/2018 10:42:15|admin|edit|5|tire_pattern|CM913A-4
+
+15/03/2018 10:43:12|admin|edit|7|tire_pattern|CM958-2
+
+15/03/2018 10:43:26|admin|edit|13|tire_pattern|CM960A-7
+
+15/03/2018 10:43:40|admin|edit|9|tire_pattern|CM983-9
+
+15/03/2018 10:43:53|admin|edit|3|tire_pattern|CM987-10
+
+15/03/2018 10:44:11|admin|edit|11|tire_pattern|CM988-2
+
+15/03/2018 10:44:16|admin|edit|1|tire_pattern|CR926-1
+
+15/03/2018 10:44:37|admin|edit|2|tire_pattern|CR976A-8
+
+15/03/2018 10:44:42|admin|edit|4|tire_pattern|EZ356-6
+
+15/03/2018 10:44:47|admin|edit|12|tire_pattern|MD738-10
+
+15/03/2018 11:24:06|admin|edit|1|tire_pattern|CR926-1,6
+
+15/03/2018 11:24:24|admin|edit|2|tire_pattern|CR976A-3,8
+
+19/03/2018 11:20:38|admin|add|313|vendor|Việt Trade-Karl-028 350 09000-it@viet-trade.org-Số 545, Tổ 10, Ấp Hương Phước, Xã Phước Tân, TP. Biên Hòa, Tỉnh Đồng Nai-Công ty TNHH Việt Trade-VT-3603295302---null---8---Cao Huy Đồng-VT
+
+19/03/2018 13:31:46|admin|edit|313|vendor|Việt Trade-Karl-028 350 09000-it@viet-trade.org-Số 545, Tổ 10, Ấp Hương Phước, Xã Phước Tân, TP. Biên Hòa, Tỉnh Đồng Nai-Công ty TNHH Việt Trade-VT-3603295302---null---8-0-0-Cao Huy Đồng-https://viet-trade.org-57-1521441106
+
+20/03/2018 15:25:28|admin|edit|313|vendor|Việt Trade-Karl-028 350 09000-it@viet-trade.org-Số 545, Tổ 10, Ấp Hương Phước, Xã Phước Tân, TP. Biên Hòa, Tỉnh Đồng Nai-Công ty TNHH Việt Trade-VT-3603295302---null---8-0-0-Cao Huy Đồng-http://caimeptrading.local-57-1521534328
+
+20/03/2018 15:28:52|admin|add|1|staff|NV01-Karl-12/06/1983-0------58-1-Cố vấn-2-1519858800--57-03/2018
+
+20/03/2018 15:29:51|admin|add|1|order_tire|2-1521500400-58-57-1-1-1----------0-0-0---10-7884182-1521500400-1521500400-86726000-0-0-1
+
+20/03/2018 15:49:21|admin|delete|1|order_tire|
+
+20/03/2018 15:51:26|admin|add|2|order_tire|1-1521500400-58-57-1-1-1----------0-0-0---10-6655673-1521500400-1521500400-73212400-12-0-1
+
+20/03/2018 16:04:12|admin|delete|2|order_tire|
+
+20/03/2018 16:04:51|admin|add|3|order_tire|1-1521500400-58-57-1-1-1----------0-0-0---10-5318546-1521500400-1521500400-58504001-10-0-1
+
+20/03/2018 16:11:55|admin|delete|3|order_tire|
+
+20/03/2018 16:12:47|admin|add|4|order_tire|1-1521500400-58-57-1-1-1----------0-0-0---10-5140637-1521500400-1521500400-56547001-10-0-1
+
+20/03/2018 16:13:16|admin|delete|4|order_tire|
+
+20/03/2018 16:14:24|admin|add|5|order_tire|1-1521500400-58-57-1-1-1----------0-0-0---10-6578892-1521500400-1521500400-72367801-13-0-1
+
+20/03/2018 16:38:42|admin|delete|5|order_tire|
+
+20/03/2018 16:39:30|admin|add|6|order_tire|1-1521500400-58-57-1-1-1----------0-0-0---10-3895855--1521500400-42854401-7-0-1
+
+20/03/2018 16:44:33|admin|delete|6|order_tire|
+
+20/03/2018 16:45:11|admin|add|7|order_tire|1-1521500400-58-57-1-1-1----------0-0-0---10-2535673--1521586800-27892400-5-0-1
+
+20/03/2018 16:46:39|admin|delete|7|order_tire|
+
+20/03/2018 16:47:10|admin|add|8|order_tire|1-1521500400-58-57-1-1-1----------0-0-0---10-3479527--1521500400-38274800-7-0-1
+
+20/03/2018 16:49:30|admin|delete|8|order_tire|
+
+20/03/2018 16:50:08|admin|add|9|order_tire|1-1521500400-58-57-1-1-1----------0-0-0---10-4650919--1521500400-51160101-8-0-1
+
+20/03/2018 16:53:03|admin|delete|9|order_tire|
+
+20/03/2018 16:54:02|admin|add|10|order_tire|1-1521500400-58-57-1-1-1----------0-0-0---10-5213673--1521500400-57350400-10-0-1
+
+20/03/2018 17:06:51|admin|delete|10|order_tire|
+
+20/03/2018 17:08:04|admin|add|11|order_tire|1-1521500400-58-57-1-1-1----------0-0-0---10-4248282--1521500400-46731101-7-0-1
+
+21/03/2018 07:52:27|admin|delete|11|order_tire|
+
+21/03/2018 07:58:46|admin|add|12|order_tire|1-1521586800-58-57-1-1-1----------0-0-0---10-6399110--1521586800-70390201-11-0-1-1-313
+
+21/03/2018 07:59:28|admin|delete|12|order_tire|
+
+21/03/2018 08:02:06|admin|add|13|order_tire|1-1521586800-58-57-1-1-1----------0-0-0---10-2397091--1521586800-26368000-5-0-1-1-313
+
+21/03/2018 08:02:45|admin|delete|13|order_tire|
+
+21/03/2018 08:06:26|admin|add|14|order_tire|1-1521586800-58-57-1-1-1----------0-0-0---0---1521673200-10547200-2-0-0-1-313
+
+21/03/2018 08:06:40|admin|delete|14|order_tire|
+
+21/03/2018 08:47:31|admin|add|15|order_tire|1-1521586800-58-57-1-1-1----------0-0-0------1521586800-6427200-1-0-0-1-313
+
+21/03/2018 08:52:35|admin|edit|27|1-3-2-2-6427200-6427200-Chọn|order_tire_list|
+
+21/03/2018 09:02:07|admin|delete|15|order_tire|
+
+21/03/2018 09:02:30|admin|add|16|order_tire|1-1521586800-58-57-1-1-1----------0-0-0------1521586800-6035800-1-0-0-1-313
+
+21/03/2018 09:02:52|admin|edit|vat|16|order_tire|
+
+21/03/2018 09:03:17|admin|edit|28|1-1-2-2-6035800-6035800-Chọn|order_tire_list|
+
+21/03/2018 09:06:24|admin|edit|28|1-1-2-3-6035800-6035800-Chọn|order_tire_list|
+
+21/03/2018 09:09:59|admin|edit|28|1-1-2-4-6035800-6035800-Chọn|order_tire_list|
+
+21/03/2018 09:11:02|admin|edit|28|1-1-2-5-6035800-6035800-Chọn|order_tire_list|
+
+21/03/2018 09:12:19|admin|edit|28|1-1-2-6-6035800-6035800-Chọn|order_tire_list|
+
+21/03/2018 09:17:50|admin|edit|28|1-1-2-7-6035800-6035800-Chọn|order_tire_list|
+
+21/03/2018 09:19:07|admin|edit|28|1-1-2-5-6035800-6035800-Chọn|order_tire_list|
+
+21/03/2018 09:20:14|admin|edit|28|1-1-2-6-6035800-6035800-Chọn|order_tire_list|
+
+21/03/2018 09:20:30|admin|edit|28|1-1-2-6-6035800-6035800-Chọn|order_tire_list|
+
+21/03/2018 09:21:39|admin|edit|28|1-1-2-5-6035800-6035800-Chọn|order_tire_list|
+
+21/03/2018 09:22:35|admin|edit|28|1-1-2-6-6035800-6035800-Chọn|order_tire_list|
+
+21/03/2018 09:37:21|admin|add|1-1-3-4-7000000-7000000-Chọn-16|order_tire_list|
+
+21/03/2018 09:39:26|admin|delete|29|order_tire_list|
+
+21/03/2018 09:39:57|admin|add|1-1-3-4-7000000-7000000-Chọn-16|order_tire_list|
+
+21/03/2018 09:42:33|admin|add|1-4-3-2-8000000-8000000-Chọn-16|order_tire_list|
+
+21/03/2018 09:45:01|admin|delete|16|order_tire|
+
+21/03/2018 09:45:26|admin|add|17|order_tire|1-1521586800-58-57-1-1-1----------0-0-0---10-1386380--1521673200-15250180-2-0-0-1-313
+
+21/03/2018 09:45:54|admin|add|1-1-1-5-4000000-4000000-Chọn-17|order_tire_list|
+
+21/03/2018 09:46:47|admin|edit|33|1-1-1-4-4000000-4000000-Chọn|order_tire_list|
+
+21/03/2018 09:57:59|admin|edit|33|1-1-2-6-4000000-4000000-Chọn|order_tire_list|
+
+21/03/2018 09:58:52|admin|edit|33|1-13-6-5-8000000-8000000-Chọn|order_tire_list|
+
+21/03/2018 11:08:11|admin|delete|17|order_tire|
+
+21/03/2018 11:09:04|admin|add|18|order_tire|1-1521586800-58-57-1-1-1----------0-0-0---10-3912128--1521586800-43033401-7-0-1-1-313
+
+21/03/2018 11:19:12|admin|delete|18|order_tire|
+
+21/03/2018 11:19:49|admin|add|19|order_tire|1-1521586800-58-57-1-1-1----------0-0-0------1521673200-51108600-8-0-0-1-313
+
+21/03/2018 16:09:40|admin|add|20|order_tire|1-1521586800-58-57-1-1-1----------0-0-0---10-548709--1521673200-6035800-1-0-1-1-313
+
+22/03/2018 09:32:46|admin|edit|38|1-1-2-2-5487090-6035800-Chọn|order_tire_list|
+
+22/03/2018 09:39:31|admin|edit|38|1-1-2-3-5487090-6035800-Chọn|order_tire_list|
+
+22/03/2018 09:39:53|admin|edit|38|1-1-2-4-5487090-6035800-Chọn|order_tire_list|
+
+22/03/2018 09:40:38|admin|add|1-1-3-2-4545455-5000000-Chọn-20|order_tire_list|
+
+22/03/2018 09:43:57|admin|edit|39|1-1-3-2-4545455-5000000-Chọn|order_tire_list|
+
+22/03/2018 09:44:33|admin|add|1-8-4-4-4545455-5000000-Chọn-20|order_tire_list|
+
+22/03/2018 09:50:38|admin|edit|40|1-8-4-2-4545455-5000000-Chọn|order_tire_list|
+
+22/03/2018 09:51:15|admin|add|1-1-1-2-626262-688888-Chọn-20|order_tire_list|
+
+22/03/2018 09:53:28|admin|add|1-2-3-4-3636364-4000000-Chọn-20|order_tire_list|
+
+22/03/2018 10:36:33|admin|add|1-4-3-2-1-1-Chọn-20|order_tire_list|
+
+22/03/2018 10:37:40|admin|add|1-2-4-1-1-1-Chọn-20|order_tire_list|
+
+22/03/2018 10:38:16|admin|add|1-2-4-1-1-1-Chọn-20|order_tire_list|
+
+22/03/2018 10:38:29|admin|delete|45|order_tire_list|
+
+22/03/2018 10:39:30|admin|add|1-2-2-1-1-1-Chọn-20|order_tire_list|
+
+22/03/2018 10:39:49|admin|add|1-2-2-1-1-1-Chọn-20|order_tire_list|
+
+22/03/2018 10:40:55|admin|add|1-2-2-1-1-1-Chọn-20|order_tire_list|
+
+22/03/2018 10:41:02|admin|delete|20|order_tire|
+
+22/03/2018 10:41:07|admin|delete|19|order_tire|
+
+22/03/2018 10:41:33|admin|add|21|order_tire|1-1521673200-58-57-1-1-1----------0-0-0------1521673200-6427200-1-0-0-1-313
+
+22/03/2018 10:42:10|admin|add|1-2-2-1-1-1-Chọn-21|order_tire_list|
+
+22/03/2018 10:50:38|admin|delete|21|order_tire|
+
+22/03/2018 10:54:44|admin|add|22|order_tire|1-1521673200-58-57-1-1-1----------0-0-0------1521673200-5953400-1-0-0-1-313
+
+22/03/2018 10:55:07|admin|add|1-2-2-1-1-1-Chọn-22|order_tire_list|
+
+22/03/2018 10:57:23|admin|delete|22|order_tire|
+
+22/03/2018 10:57:49|admin|add|23|order_tire|1-1521673200-58-57-1-1-1----------0-0-0------1521673200-10578100-2-0-0-1-313
+
+22/03/2018 11:03:35|admin|delete|23|order_tire|
+
+22/03/2018 11:04:00|admin|add|24|order_tire|1-1521673200-58-57-1-1-1----------0-0-0------1521673200-12205500-2-0-0-1-313
+
+22/03/2018 11:04:17|admin|delete|56|order_tire_list|
+
+22/03/2018 13:11:50|admin|edit|13|tire_pattern|CR960A-7
+
+22/03/2018 16:09:33|admin|delete|12|account|
+
+22/03/2018 16:09:33|admin|delete|14|account|
+
+22/03/2018 16:09:33|admin|delete|6|account|
+
+22/03/2018 16:09:33|admin|delete|5|account|
+
+22/03/2018 16:09:33|admin|delete|211|account|
+
+22/03/2018 16:09:33|admin|delete|13|account|
+
+22/03/2018 16:09:33|admin|delete|11|account|
+
+22/03/2018 16:09:33|admin|delete|296|account|
+
+22/03/2018 16:09:33|admin|delete|7|account|
+
+22/03/2018 16:09:33|admin|delete|8|account|
+
+22/03/2018 16:09:33|admin|delete|9|account|
+
+22/03/2018 16:09:34|admin|delete|10|account|
+
+22/03/2018 16:09:34|admin|delete|431|account|
+
+22/03/2018 16:09:34|admin|delete|477|account|
+
+22/03/2018 16:09:34|admin|delete|451|account|
+
+22/03/2018 16:09:34|admin|delete|247|account|
+
+22/03/2018 16:09:34|admin|delete|462|account|
+
+22/03/2018 16:09:34|admin|delete|182|account|
+
+22/03/2018 16:09:34|admin|delete|400|account|
+
+22/03/2018 16:09:34|admin|delete|374|account|
+
+22/03/2018 16:09:34|admin|delete|485|account|
+
+22/03/2018 16:09:34|admin|delete|177|account|
+
+22/03/2018 16:09:34|admin|delete|289|account|
+
+22/03/2018 16:09:34|admin|delete|453|account|
+
+22/03/2018 16:09:34|admin|delete|346|account|
+
+22/03/2018 16:09:34|admin|delete|196|account|
+
+22/03/2018 16:09:34|admin|delete|28|account|
+
+22/03/2018 16:09:34|admin|delete|239|account|
+
+22/03/2018 16:09:34|admin|delete|446|account|
+
+22/03/2018 16:09:34|admin|delete|413|account|
+
+22/03/2018 16:09:34|admin|delete|411|account|
+
+22/03/2018 16:09:34|admin|delete|145|account|
+
+22/03/2018 16:09:34|admin|delete|278|account|
+
+22/03/2018 16:09:34|admin|delete|155|account|
+
+22/03/2018 16:09:34|admin|delete|363|account|
+
+22/03/2018 16:09:34|admin|delete|156|account|
+
+22/03/2018 16:09:34|admin|delete|16|account|
+
+22/03/2018 16:09:34|admin|delete|168|account|
+
+22/03/2018 16:09:34|admin|delete|425|account|
+
+22/03/2018 16:09:34|admin|delete|210|account|
+
+22/03/2018 16:09:34|admin|delete|417|account|
+
+22/03/2018 16:09:34|admin|delete|467|account|
+
+22/03/2018 16:09:34|admin|delete|489|account|
+
+22/03/2018 16:09:34|admin|delete|306|account|
+
+22/03/2018 16:09:35|admin|delete|311|account|
+
+22/03/2018 16:09:35|admin|delete|250|account|
+
+22/03/2018 16:09:35|admin|delete|409|account|
+
+22/03/2018 16:09:35|admin|delete|192|account|
+
+22/03/2018 16:09:35|admin|delete|170|account|
+
+22/03/2018 16:09:35|admin|delete|381|account|
+
+22/03/2018 16:09:35|admin|delete|490|account|
+
+22/03/2018 16:09:35|admin|delete|495|account|
+
+22/03/2018 16:09:35|admin|delete|348|account|
+
+22/03/2018 16:09:35|admin|delete|491|account|
+
+22/03/2018 16:09:35|admin|delete|448|account|
+
+22/03/2018 16:09:35|admin|delete|204|account|
+
+22/03/2018 16:09:35|admin|delete|148|account|
+
+22/03/2018 16:09:35|admin|delete|237|account|
+
+22/03/2018 16:09:35|admin|delete|437|account|
+
+22/03/2018 16:09:35|admin|delete|356|account|
+
+22/03/2018 16:09:35|admin|delete|251|account|
+
+22/03/2018 16:09:35|admin|delete|387|account|
+
+22/03/2018 16:09:35|admin|delete|398|account|
+
+22/03/2018 16:09:35|admin|delete|17|account|
+
+22/03/2018 16:09:35|admin|delete|142|account|
+
+22/03/2018 16:09:35|admin|delete|29|account|
+
+22/03/2018 16:09:35|admin|delete|180|account|
+
+22/03/2018 16:09:35|admin|delete|140|account|
+
+22/03/2018 16:09:35|admin|delete|207|account|
+
+22/03/2018 16:09:35|admin|delete|30|account|
+
+22/03/2018 16:09:35|admin|delete|31|account|
+
+22/03/2018 16:09:35|admin|delete|223|account|
+
+22/03/2018 16:09:35|admin|delete|478|account|
+
+22/03/2018 16:09:35|admin|delete|213|account|
+
+22/03/2018 16:09:35|admin|delete|340|account|
+
+22/03/2018 16:09:35|admin|delete|194|account|
+
+22/03/2018 16:09:35|admin|delete|176|account|
+
+22/03/2018 16:09:35|admin|delete|444|account|
+
+22/03/2018 16:09:35|admin|delete|347|account|
+
+22/03/2018 16:09:35|admin|delete|32|account|
+
+22/03/2018 16:09:35|admin|delete|484|account|
+
+22/03/2018 16:09:35|admin|delete|465|account|
+
+22/03/2018 16:09:35|admin|delete|300|account|
+
+22/03/2018 16:09:35|admin|delete|208|account|
+
+22/03/2018 16:09:36|admin|delete|412|account|
+
+22/03/2018 16:09:36|admin|delete|325|account|
+
+22/03/2018 16:09:36|admin|delete|227|account|
+
+22/03/2018 16:09:36|admin|delete|33|account|
+
+22/03/2018 16:09:36|admin|delete|365|account|
+
+22/03/2018 16:09:36|admin|delete|188|account|
+
+22/03/2018 16:09:36|admin|delete|470|account|
+
+22/03/2018 16:09:36|admin|delete|367|account|
+
+22/03/2018 16:09:36|admin|delete|183|account|
+
+22/03/2018 16:09:36|admin|delete|450|account|
+
+22/03/2018 16:09:36|admin|delete|151|account|
+
+22/03/2018 16:09:36|admin|delete|261|account|
+
+22/03/2018 16:09:36|admin|delete|285|account|
+
+22/03/2018 16:09:36|admin|delete|337|account|
+
+22/03/2018 16:09:36|admin|delete|234|account|
+
+22/03/2018 16:09:36|admin|delete|505|account|
+
+22/03/2018 16:09:36|admin|delete|172|account|
+
+22/03/2018 16:09:36|admin|delete|34|account|
+
+22/03/2018 16:09:36|admin|delete|246|account|
+
+22/03/2018 16:09:36|admin|delete|305|account|
+
+22/03/2018 16:09:36|admin|delete|368|account|
+
+22/03/2018 16:09:36|admin|delete|147|account|
+
+22/03/2018 16:09:36|admin|delete|402|account|
+
+22/03/2018 16:09:36|admin|delete|35|account|
+
+22/03/2018 16:09:36|admin|delete|159|account|
+
+22/03/2018 16:09:36|admin|delete|286|account|
+
+22/03/2018 16:09:36|admin|delete|212|account|
+
+22/03/2018 16:09:36|admin|delete|360|account|
+
+22/03/2018 16:09:36|admin|delete|241|account|
+
+22/03/2018 16:09:36|admin|delete|358|account|
+
+22/03/2018 16:09:36|admin|delete|186|account|
+
+22/03/2018 16:09:36|admin|delete|407|account|
+
+22/03/2018 16:09:36|admin|delete|382|account|
+
+22/03/2018 16:09:36|admin|delete|429|account|
+
+22/03/2018 16:09:36|admin|delete|195|account|
+
+22/03/2018 16:09:36|admin|delete|242|account|
+
+22/03/2018 16:09:36|admin|delete|460|account|
+
+22/03/2018 16:09:36|admin|delete|24|account|
+
+22/03/2018 16:09:36|admin|delete|258|account|
+
+22/03/2018 16:09:36|admin|delete|464|account|
+
+22/03/2018 16:09:36|admin|delete|469|account|
+
+22/03/2018 16:09:36|admin|delete|262|account|
+
+22/03/2018 16:09:36|admin|delete|267|account|
+
+22/03/2018 16:09:37|admin|delete|313|account|
+
+22/03/2018 16:09:37|admin|delete|312|account|
+
+22/03/2018 16:09:37|admin|delete|393|account|
+
+22/03/2018 16:09:37|admin|delete|350|account|
+
+22/03/2018 16:09:37|admin|delete|274|account|
+
+22/03/2018 16:09:37|admin|delete|432|account|
+
+22/03/2018 16:09:37|admin|delete|263|account|
+
+22/03/2018 16:09:37|admin|delete|266|account|
+
+22/03/2018 16:09:37|admin|delete|408|account|
+
+22/03/2018 16:09:37|admin|delete|440|account|
+
+22/03/2018 16:09:37|admin|delete|283|account|
+
+22/03/2018 16:09:37|admin|delete|271|account|
+
+22/03/2018 16:09:37|admin|delete|410|account|
+
+22/03/2018 16:09:37|admin|delete|268|account|
+
+22/03/2018 16:09:37|admin|delete|353|account|
+
+22/03/2018 16:09:37|admin|delete|372|account|
+
+22/03/2018 16:09:37|admin|delete|404|account|
+
+22/03/2018 16:09:37|admin|delete|390|account|
+
+22/03/2018 16:09:37|admin|delete|320|account|
+
+22/03/2018 16:09:37|admin|delete|378|account|
+
+22/03/2018 16:09:37|admin|delete|259|account|
+
+22/03/2018 16:09:37|admin|delete|260|account|
+
+22/03/2018 16:09:37|admin|delete|276|account|
+
+22/03/2018 16:09:37|admin|delete|191|account|
+
+22/03/2018 16:09:37|admin|delete|190|account|
+
+22/03/2018 16:09:37|admin|delete|352|account|
+
+22/03/2018 16:09:37|admin|delete|193|account|
+
+22/03/2018 16:09:37|admin|delete|449|account|
+
+22/03/2018 16:09:37|admin|delete|18|account|
+
+22/03/2018 16:09:37|admin|delete|373|account|
+
+22/03/2018 16:09:37|admin|delete|362|account|
+
+22/03/2018 16:09:37|admin|delete|281|account|
+
+22/03/2018 16:09:37|admin|delete|201|account|
+
+22/03/2018 16:09:37|admin|delete|336|account|
+
+22/03/2018 16:09:37|admin|delete|327|account|
+
+22/03/2018 16:09:37|admin|delete|231|account|
+
+22/03/2018 16:09:37|admin|delete|308|account|
+
+22/03/2018 16:09:37|admin|delete|309|account|
+
+22/03/2018 16:09:37|admin|delete|167|account|
+
+22/03/2018 16:09:37|admin|delete|341|account|
+
+22/03/2018 16:09:37|admin|delete|496|account|
+
+22/03/2018 16:09:37|admin|delete|454|account|
+
+22/03/2018 16:09:37|admin|delete|220|account|
+
+22/03/2018 16:09:38|admin|delete|280|account|
+
+22/03/2018 16:09:38|admin|delete|36|account|
+
+22/03/2018 16:09:38|admin|delete|45|account|
+
+22/03/2018 16:09:38|admin|delete|163|account|
+
+22/03/2018 16:09:38|admin|delete|288|account|
+
+22/03/2018 16:09:38|admin|delete|162|account|
+
+22/03/2018 16:09:38|admin|delete|456|account|
+
+22/03/2018 16:09:38|admin|delete|37|account|
+
+22/03/2018 16:09:38|admin|delete|38|account|
+
+22/03/2018 16:09:38|admin|delete|275|account|
+
+22/03/2018 16:09:38|admin|delete|240|account|
+
+22/03/2018 16:09:38|admin|delete|154|account|
+
+22/03/2018 16:09:38|admin|delete|384|account|
+
+22/03/2018 16:09:38|admin|delete|332|account|
+
+22/03/2018 16:09:38|admin|delete|27|account|
+
+22/03/2018 16:09:38|admin|delete|203|account|
+
+22/03/2018 16:09:38|admin|delete|230|account|
+
+22/03/2018 16:09:38|admin|delete|19|account|
+
+22/03/2018 16:09:38|admin|delete|165|account|
+
+22/03/2018 16:09:38|admin|delete|166|account|
+
+22/03/2018 16:09:38|admin|delete|486|account|
+
+22/03/2018 16:09:38|admin|delete|355|account|
+
+22/03/2018 16:09:38|admin|delete|175|account|
+
+22/03/2018 16:09:38|admin|delete|279|account|
+
+22/03/2018 16:09:38|admin|delete|287|account|
+
+22/03/2018 16:09:38|admin|delete|161|account|
+
+22/03/2018 16:09:38|admin|delete|25|account|
+
+22/03/2018 16:09:38|admin|delete|328|account|
+
+22/03/2018 16:09:38|admin|delete|46|account|
+
+22/03/2018 16:09:38|admin|delete|20|account|
+
+22/03/2018 16:09:38|admin|delete|39|account|
+
+22/03/2018 16:09:38|admin|delete|391|account|
+
+22/03/2018 16:09:38|admin|delete|44|account|
+
+22/03/2018 16:09:38|admin|delete|178|account|
+
+22/03/2018 16:09:38|admin|delete|455|account|
+
+22/03/2018 16:09:38|admin|delete|214|account|
+
+22/03/2018 16:09:38|admin|delete|424|account|
+
+22/03/2018 16:09:38|admin|delete|157|account|
+
+22/03/2018 16:09:38|admin|delete|219|account|
+
+22/03/2018 16:09:38|admin|delete|173|account|
+
+22/03/2018 16:09:38|admin|delete|297|account|
+
+22/03/2018 16:09:38|admin|delete|299|account|
+
+22/03/2018 16:09:38|admin|delete|277|account|
+
+22/03/2018 16:09:39|admin|delete|447|account|
+
+22/03/2018 16:09:39|admin|delete|330|account|
+
+22/03/2018 16:09:39|admin|delete|224|account|
+
+22/03/2018 16:09:39|admin|delete|334|account|
+
+22/03/2018 16:09:39|admin|delete|225|account|
+
+22/03/2018 16:09:39|admin|delete|396|account|
+
+22/03/2018 16:09:39|admin|delete|397|account|
+
+22/03/2018 16:09:39|admin|delete|189|account|
+
+22/03/2018 16:09:39|admin|delete|385|account|
+
+22/03/2018 16:09:39|admin|delete|185|account|
+
+22/03/2018 16:09:39|admin|delete|476|account|
+
+22/03/2018 16:09:39|admin|delete|383|account|
+
+22/03/2018 16:09:39|admin|delete|141|account|
+
+22/03/2018 16:09:39|admin|delete|226|account|
+
+22/03/2018 16:09:39|admin|delete|202|account|
+
+22/03/2018 16:09:39|admin|delete|238|account|
+
+22/03/2018 16:09:39|admin|delete|389|account|
+
+22/03/2018 16:09:39|admin|delete|380|account|
+
+22/03/2018 16:09:39|admin|delete|149|account|
+
+22/03/2018 16:09:39|admin|delete|290|account|
+
+22/03/2018 16:09:39|admin|delete|254|account|
+
+22/03/2018 16:09:39|admin|delete|357|account|
+
+22/03/2018 16:09:39|admin|delete|174|account|
+
+22/03/2018 16:09:39|admin|delete|160|account|
+
+22/03/2018 16:09:39|admin|delete|342|account|
+
+22/03/2018 16:09:39|admin|delete|43|account|
+
+22/03/2018 16:09:39|admin|delete|351|account|
+
+22/03/2018 16:09:39|admin|delete|354|account|
+
+22/03/2018 16:09:39|admin|delete|158|account|
+
+22/03/2018 16:09:39|admin|delete|235|account|
+
+22/03/2018 16:09:39|admin|delete|26|account|
+
+22/03/2018 16:09:39|admin|delete|179|account|
+
+22/03/2018 16:09:39|admin|delete|197|account|
+
+22/03/2018 16:09:39|admin|delete|21|account|
+
+22/03/2018 16:09:39|admin|delete|218|account|
+
+22/03/2018 16:09:39|admin|delete|187|account|
+
+22/03/2018 16:09:39|admin|delete|146|account|
+
+22/03/2018 16:09:39|admin|delete|40|account|
+
+22/03/2018 16:09:39|admin|delete|181|account|
+
+22/03/2018 16:09:39|admin|delete|22|account|
+
+22/03/2018 16:09:39|admin|delete|468|account|
+
+22/03/2018 16:09:39|admin|delete|42|account|
+
+22/03/2018 16:09:39|admin|delete|184|account|
+
+22/03/2018 16:09:39|admin|delete|369|account|
+
+22/03/2018 16:09:40|admin|delete|272|account|
+
+22/03/2018 16:09:40|admin|delete|497|account|
+
+22/03/2018 16:09:40|admin|delete|420|account|
+
+22/03/2018 16:09:40|admin|delete|436|account|
+
+22/03/2018 16:09:40|admin|delete|487|account|
+
+22/03/2018 16:09:40|admin|delete|441|account|
+
+22/03/2018 16:09:40|admin|delete|427|account|
+
+22/03/2018 16:09:40|admin|delete|498|account|
+
+22/03/2018 16:09:40|admin|delete|430|account|
+
+22/03/2018 16:09:40|admin|delete|435|account|
+
+22/03/2018 16:09:40|admin|delete|295|account|
+
+22/03/2018 16:09:40|admin|delete|439|account|
+
+22/03/2018 16:09:40|admin|delete|438|account|
+
+22/03/2018 16:09:40|admin|delete|445|account|
+
+22/03/2018 16:09:40|admin|delete|442|account|
+
+22/03/2018 16:09:40|admin|delete|499|account|
+
+22/03/2018 16:09:40|admin|delete|443|account|
+
+22/03/2018 16:09:40|admin|delete|452|account|
+
+22/03/2018 16:09:40|admin|delete|419|account|
+
+22/03/2018 16:09:40|admin|delete|41|account|
+
+22/03/2018 16:09:40|admin|delete|143|account|
+
+22/03/2018 16:09:40|admin|delete|144|account|
+
+22/03/2018 16:09:40|admin|delete|23|account|
+
+22/03/2018 16:09:40|admin|delete|47|account|
+
+22/03/2018 16:09:40|admin|delete|50|account|
+
+22/03/2018 16:09:40|admin|delete|48|account|
+
+22/03/2018 16:09:40|admin|delete|49|account|
+
+22/03/2018 16:09:40|admin|delete|51|account|
+
+22/03/2018 16:09:40|admin|delete|60|account|
+
+22/03/2018 16:09:40|admin|delete|55|account|
+
+22/03/2018 16:09:40|admin|delete|61|account|
+
+22/03/2018 16:09:40|admin|delete|273|account|
+
+22/03/2018 16:09:40|admin|delete|59|account|
+
+22/03/2018 16:09:40|admin|delete|54|account|
+
+22/03/2018 16:09:40|admin|delete|56|account|
+
+22/03/2018 16:09:40|admin|delete|57|account|
+
+22/03/2018 16:09:40|admin|delete|58|account|
+
+22/03/2018 16:09:40|admin|delete|53|account|
+
+22/03/2018 16:09:40|admin|delete|466|account|
+
+22/03/2018 16:09:40|admin|delete|236|account|
+
+22/03/2018 16:09:40|admin|delete|153|account|
+
+22/03/2018 16:09:40|admin|delete|298|account|
+
+22/03/2018 16:09:40|admin|delete|270|account|
+
+22/03/2018 16:09:40|admin|delete|335|account|
+
+22/03/2018 16:09:41|admin|delete|294|account|
+
+22/03/2018 16:09:41|admin|delete|322|account|
+
+22/03/2018 16:09:41|admin|delete|316|account|
+
+22/03/2018 16:09:41|admin|delete|388|account|
+
+22/03/2018 16:09:41|admin|delete|324|account|
+
+22/03/2018 16:09:41|admin|delete|416|account|
+
+22/03/2018 16:09:41|admin|delete|314|account|
+
+22/03/2018 16:09:41|admin|delete|371|account|
+
+22/03/2018 16:09:41|admin|delete|376|account|
+
+22/03/2018 16:09:41|admin|delete|265|account|
+
+22/03/2018 16:09:41|admin|delete|171|account|
+
+22/03/2018 16:09:41|admin|delete|205|account|
+
+22/03/2018 16:09:41|admin|delete|198|account|
+
+22/03/2018 16:09:41|admin|delete|199|account|
+
+22/03/2018 16:09:41|admin|delete|200|account|
+
+22/03/2018 16:09:41|admin|delete|206|account|
+
+22/03/2018 16:09:41|admin|delete|209|account|
+
+22/03/2018 16:09:41|admin|delete|215|account|
+
+22/03/2018 16:09:41|admin|delete|216|account|
+
+22/03/2018 16:09:41|admin|delete|217|account|
+
+22/03/2018 16:09:41|admin|delete|221|account|
+
+22/03/2018 16:09:41|admin|delete|222|account|
+
+22/03/2018 16:09:41|admin|delete|232|account|
+
+22/03/2018 16:09:41|admin|delete|233|account|
+
+22/03/2018 16:09:41|admin|delete|244|account|
+
+22/03/2018 16:09:41|admin|delete|245|account|
+
+22/03/2018 16:09:41|admin|delete|248|account|
+
+22/03/2018 16:09:41|admin|delete|252|account|
+
+22/03/2018 16:09:41|admin|delete|253|account|
+
+22/03/2018 16:09:41|admin|delete|264|account|
+
+22/03/2018 16:09:41|admin|delete|269|account|
+
+22/03/2018 16:09:41|admin|delete|282|account|
+
+22/03/2018 16:09:41|admin|delete|284|account|
+
+22/03/2018 16:09:41|admin|delete|307|account|
+
+22/03/2018 16:09:41|admin|delete|301|account|
+
+22/03/2018 16:09:41|admin|delete|302|account|
+
+22/03/2018 16:09:41|admin|delete|303|account|
+
+22/03/2018 16:09:41|admin|delete|304|account|
+
+22/03/2018 16:09:41|admin|delete|321|account|
+
+22/03/2018 16:09:41|admin|delete|323|account|
+
+22/03/2018 16:09:42|admin|delete|326|account|
+
+22/03/2018 16:09:42|admin|delete|329|account|
+
+22/03/2018 16:09:42|admin|delete|339|account|
+
+22/03/2018 16:09:42|admin|delete|338|account|
+
+22/03/2018 16:09:42|admin|delete|349|account|
+
+22/03/2018 16:09:42|admin|delete|361|account|
+
+22/03/2018 16:09:42|admin|delete|343|account|
+
+22/03/2018 16:09:42|admin|delete|344|account|
+
+22/03/2018 16:09:42|admin|delete|345|account|
+
+22/03/2018 16:09:42|admin|delete|359|account|
+
+22/03/2018 16:09:42|admin|delete|377|account|
+
+22/03/2018 16:09:42|admin|delete|364|account|
+
+22/03/2018 16:09:42|admin|delete|366|account|
+
+22/03/2018 16:09:42|admin|delete|375|account|
+
+22/03/2018 16:09:42|admin|delete|394|account|
+
+22/03/2018 16:09:42|admin|delete|386|account|
+
+22/03/2018 16:09:42|admin|delete|379|account|
+
+22/03/2018 16:09:42|admin|delete|395|account|
+
+22/03/2018 16:09:42|admin|delete|403|account|
+
+22/03/2018 16:09:42|admin|delete|406|account|
+
+22/03/2018 16:09:42|admin|delete|414|account|
+
+22/03/2018 16:09:42|admin|delete|426|account|
+
+22/03/2018 16:09:42|admin|delete|418|account|
+
+22/03/2018 16:09:42|admin|delete|415|account|
+
+22/03/2018 16:09:42|admin|delete|428|account|
+
+22/03/2018 16:09:42|admin|delete|433|account|
+
+22/03/2018 16:09:42|admin|delete|423|account|
+
+22/03/2018 16:09:42|admin|delete|459|account|
+
+22/03/2018 16:09:42|admin|delete|461|account|
+
+22/03/2018 16:09:42|admin|delete|457|account|
+
+22/03/2018 16:09:42|admin|delete|472|account|
+
+22/03/2018 16:09:42|admin|delete|475|account|
+
+22/03/2018 16:09:42|admin|delete|493|account|
+
+22/03/2018 16:09:42|admin|delete|488|account|
+
+22/03/2018 16:09:42|admin|delete|500|account|
+
+22/03/2018 16:09:42|admin|delete|503|account|
+
+22/03/2018 16:09:42|admin|delete|458|account|
+
+22/03/2018 16:09:42|admin|delete|71|account|
+
+22/03/2018 16:09:42|admin|delete|331|account|
+
+22/03/2018 16:09:42|admin|delete|399|account|
+
+22/03/2018 16:09:42|admin|delete|256|account|
+
+22/03/2018 16:09:42|admin|delete|70|account|
+
+22/03/2018 16:09:43|admin|delete|422|account|
+
+22/03/2018 16:09:43|admin|delete|310|account|
+
+22/03/2018 16:09:43|admin|delete|257|account|
+
+22/03/2018 16:09:43|admin|delete|69|account|
+
+22/03/2018 16:09:43|admin|delete|405|account|
+
+22/03/2018 16:09:43|admin|delete|169|account|
+
+22/03/2018 16:09:43|admin|delete|317|account|
+
+22/03/2018 16:09:43|admin|delete|483|account|
+
+22/03/2018 16:09:43|admin|delete|291|account|
+
+22/03/2018 16:09:43|admin|delete|492|account|
+
+22/03/2018 16:09:43|admin|delete|84|account|
+
+22/03/2018 16:09:43|admin|delete|292|account|
+
+22/03/2018 16:09:43|admin|delete|73|account|
+
+22/03/2018 16:09:43|admin|delete|502|account|
+
+22/03/2018 16:09:43|admin|delete|90|account|
+
+22/03/2018 16:09:43|admin|delete|91|account|
+
+22/03/2018 16:09:43|admin|delete|164|account|
+
+22/03/2018 16:09:43|admin|delete|86|account|
+
+22/03/2018 16:09:43|admin|delete|74|account|
+
+22/03/2018 16:09:43|admin|delete|249|account|
+
+22/03/2018 16:09:43|admin|delete|92|account|
+
+22/03/2018 16:09:43|admin|delete|75|account|
+
+22/03/2018 16:09:43|admin|delete|87|account|
+
+22/03/2018 16:09:43|admin|delete|506|account|
+
+22/03/2018 16:09:43|admin|delete|76|account|
+
+22/03/2018 16:09:43|admin|delete|315|account|
+
+22/03/2018 16:09:43|admin|delete|77|account|
+
+22/03/2018 16:09:43|admin|delete|85|account|
+
+22/03/2018 16:09:43|admin|delete|494|account|
+
+22/03/2018 16:09:43|admin|delete|333|account|
+
+22/03/2018 16:09:43|admin|delete|474|account|
+
+22/03/2018 16:09:43|admin|delete|93|account|
+
+22/03/2018 16:09:43|admin|delete|152|account|
+
+22/03/2018 16:09:43|admin|delete|94|account|
+
+22/03/2018 16:09:43|admin|delete|78|account|
+
+22/03/2018 16:09:43|admin|delete|95|account|
+
+22/03/2018 16:09:43|admin|delete|96|account|
+
+22/03/2018 16:09:43|admin|delete|501|account|
+
+22/03/2018 16:09:43|admin|delete|79|account|
+
+22/03/2018 16:09:43|admin|delete|80|account|
+
+22/03/2018 16:09:43|admin|delete|88|account|
+
+22/03/2018 16:09:43|admin|delete|150|account|
+
+22/03/2018 16:09:43|admin|delete|370|account|
+
+22/03/2018 16:09:43|admin|delete|473|account|
+
+22/03/2018 16:09:43|admin|delete|82|account|
+
+22/03/2018 16:09:44|admin|delete|293|account|
+
+22/03/2018 16:09:44|admin|delete|81|account|
+
+22/03/2018 16:09:44|admin|delete|89|account|
+
+22/03/2018 16:09:44|admin|delete|100|account|
+
+22/03/2018 16:09:44|admin|delete|97|account|
+
+22/03/2018 16:09:44|admin|delete|504|account|
+
+22/03/2018 16:09:44|admin|delete|98|account|
+
+22/03/2018 16:09:44|admin|delete|83|account|
+
+22/03/2018 16:09:44|admin|delete|471|account|
+
+22/03/2018 16:09:44|admin|delete|101|account|
+
+22/03/2018 16:09:44|admin|delete|102|account|
+
+22/03/2018 16:09:44|admin|delete|103|account|
+
+22/03/2018 16:09:44|admin|delete|104|account|
+
+22/03/2018 16:09:44|admin|delete|105|account|
+
+22/03/2018 16:09:44|admin|delete|228|account|
+
+22/03/2018 16:09:44|admin|delete|107|account|
+
+22/03/2018 16:09:44|admin|delete|392|account|
+
+22/03/2018 16:09:44|admin|delete|108|account|
+
+22/03/2018 16:09:44|admin|delete|480|account|
+
+22/03/2018 16:09:44|admin|delete|481|account|
+
+22/03/2018 16:09:44|admin|delete|482|account|
+
+22/03/2018 16:09:44|admin|delete|479|account|
+
+22/03/2018 16:09:44|admin|delete|229|account|
+
+23/03/2018 09:20:17|admin|edit|approve|24|order_tire|
+
+23/03/2018 09:20:23|admin|edit|exstock|24|order_tire|
+
+23/03/2018 09:23:39|admin|edit|revert|24|order_tire|
+
+23/03/2018 09:23:44|admin|edit|exstock|24|order_tire|
+
+23/03/2018 09:30:56|admin|add|1|check_salary_percent|15-9000---1519858800
+
+26/03/2018 16:10:10|admin|edit|revert|24|order_tire|
+
+26/03/2018 16:17:02|admin|delete|24|order_tire|
+
+27/03/2018 09:03:41|admin|add|59|user|ltthuan
+
+27/03/2018 09:03:52|admin|add|60|user|tnpthao
+
+27/03/2018 09:04:01|admin|add|61|user|dqanh
+
+27/03/2018 09:05:08|admin|add|2|staff|NV02-Lê Trung Thuận-01/03/2018-0------59-1---1519858800--57-03/2018
+
+27/03/2018 09:05:28|admin|add|3|staff|NV03-Trần Ngọc Phương Thảo-01/03/2018-1------60-1---1519858800--57-03/2018
+
+27/03/2018 09:05:44|admin|add|4|staff|NV04-Dương Quế Anh-01/03/2018-1------61-1---1519858800--57-03/2018
+
+27/03/2018 11:07:01|admin|delete|1|tire_buy|
+
+27/03/2018 11:07:06|admin|delete|1|tire_import|
+
+27/03/2018 11:10:14|admin|add|1|order_tire|2-1522101600-61-57-2-1-1----------0-0-0---10-6792727--1522101600-74720000-16-0-1-1-313
+
+27/03/2018 11:11:47|admin|add|2|order_tire|2-1522101600-61-57-3-1-1----------0-0-0---10-121909093--1522101600-1341000001-237-0-1-1-313
+
+27/03/2018 11:13:50|admin|add|3|order_tire|2-1522101600-61-57-4-1-1----------0-0-0---0---1522101600-210240000-42-0-0-1-313
+
+27/03/2018 11:14:50|admin|add|4|order_tire|1-1522101600-61-57-2-1-1----------0-0-0---10-9549090--1522101600-105040000-20-0-1-1-313
+
+27/03/2018 11:15:53|admin|add|5|order_tire|2-1522101600-61-57-5-1-1----------0-0-0---10-18363637--1522101600-202000000-40-0-1-1-313
+
+27/03/2018 11:16:33|admin|add|6|order_tire|2-1522101600-61-57-6-1-1----------0-0-0------1522101600-18800000-4-0-0-1-313
+
+27/03/2018 11:17:16|admin|add|7|order_tire|2-1522101600-61-57-7-1-1----------0-0-0------1522101600-9400000-2-0-0-1-313
+
+27/03/2018 11:18:28|admin|add|8|order_tire|2-1522101600-61-57-8-1-1----------0-0-0---10-34899998--1522101600-383900000-80-0-1-1-313
+
+27/03/2018 11:20:21|admin|add|9|order_tire|2-1522101600-59-57-9-1-1----------0-0-0---10-1036364--1522101600-11400000-2-0-1-1-313
+
+27/03/2018 11:21:50|admin|add|10|order_tire|2-1522101600-59-57-10-1-1----------0-0-0---10-11654545--1522101600-128200000-26-0-1-1-313
+
+27/03/2018 11:22:52|admin|add|11|order_tire|2-1522101600-59-57-11-1-1----------0-0-0---10-8045454--1522101600-88500000-20-0-1-1-313
+
+27/03/2018 11:23:42|admin|add|12|order_tire|2-1522101600-61-57-12-1-1----------0-0-0---10-1000000--1522101600-11000000-2-0-1-1-313
+
+27/03/2018 11:24:26|admin|add|13|order_tire|2-1522101600-59-57-13-1-1----------0-0-0------1522101600-10400000-2-0-0-1-313
+
+27/03/2018 11:25:21|admin|add|14|order_tire|2-1522101600-59-57-14-1-1----------0-0-0---10-5890909--1522101600-64800000-12-0-1-1-313
+
+27/03/2018 11:26:40|admin|add|15|order_tire|2-1522101600-60-57-15-1-1----------0-0-0---10-876364--1522101600-9640000-2-0-1-1-313
+
+27/03/2018 11:27:38|admin|add|16|order_tire|2-1522101600-60-57-16-1-1----------0-0-0------1522101600-11200000-2-0-0-1-313
+
+27/03/2018 11:28:34|admin|add|17|order_tire|2-1522101600-60-57-17-1-1----------0-0-0------1522101600-9240000-2-0-0-1-313
+
+27/03/2018 11:29:35|admin|add|18|order_tire|2-1522101600-60-57-18-1-1----------0-0-0---10-2629091--1522101600-28920000-6-0-1-1-313
+
+27/03/2018 11:30:23|admin|add|19|order_tire|2-1522101600-60-57-19-1-1----------0-0-0---10-681818--1522101600-7500000-1-0-1-1-313
+
+27/03/2018 11:30:51|admin|add|20|order_tire|1-1522101600-60-57-18-1-1----------0-0-0---10-3614546--1522101600-39760000-8-0-1-1-313
+
+27/03/2018 11:31:56|admin|add|21|order_tire|2-1522101600-60-57-20-1-1----------0-0-0---10-1890909--1522101600-20800000-4-0-1-1-313
+
+27/03/2018 13:22:27|admin|edit|vat|2|order_tire|
+
+27/03/2018 13:22:37|admin|edit|5|1-5-3-47-5454545-6000000-Chọn|order_tire_list|
+
+27/03/2018 13:47:44|admin|edit|code|21|order_tire|
+
+27/03/2018 13:48:24|admin|edit|code|18|order_tire|
+
+27/03/2018 13:48:45|admin|edit|code|20|order_tire|
+
+27/03/2018 13:49:04|admin|edit|code|19|order_tire|
+
+27/03/2018 13:49:23|admin|edit|code|18|order_tire|
+
+27/03/2018 13:49:36|admin|edit|code|17|order_tire|
+
+27/03/2018 13:49:49|admin|edit|code|16|order_tire|
+
+27/03/2018 13:50:07|admin|edit|code|15|order_tire|
+
+27/03/2018 14:13:06|admin|edit|code|14|order_tire|
+
+27/03/2018 14:13:19|admin|edit|code|13|order_tire|
+
+27/03/2018 14:13:33|admin|edit|code|12|order_tire|
+
+27/03/2018 14:13:44|admin|edit|code|11|order_tire|
+
+27/03/2018 14:13:54|admin|edit|code|10|order_tire|
+
+27/03/2018 14:14:04|admin|edit|code|9|order_tire|
+
+27/03/2018 14:14:36|admin|edit|code|8|order_tire|
+
+27/03/2018 14:14:45|admin|edit|code|7|order_tire|
+
+27/03/2018 14:14:55|admin|edit|code|5|order_tire|
+
+27/03/2018 14:15:07|admin|edit|code|4|order_tire|
+
+27/03/2018 14:15:15|admin|edit|code|3|order_tire|
+
+27/03/2018 14:15:23|admin|edit|code|2|order_tire|
+
+27/03/2018 14:16:25|admin|edit|code|1|order_tire|
+
+27/03/2018 14:17:40|admin|edit|code|6|order_tire|
+
+27/03/2018 16:56:35|8
+
+27/03/2018 16:58:49|Array
+
+27/03/2018 17:00:45|8
+
+27/03/2018 17:00:45|8
+
+28/03/2018 07:53:27|admin|add|314|vendor|Vận chuyển-----Vận chuyển-----null---2----
+
+28/03/2018 07:53:37|admin|add|315|vendor|Bốc xếp-----Bốc xếp-----null---2----
+
+28/03/2018 07:53:58|admin|add|1|order_tire_cost_|
+
+28/03/2018 07:53:58|admin|add|2|order_tire_cost_|
+
+28/03/2018 07:54:29|admin|add|3|order_tire_cost_|
+
+28/03/2018 08:09:23|admin|add|4|order_tire_cost_|
+
+28/03/2018 08:09:23|admin|add|5|order_tire_cost_|
+
+28/03/2018 08:10:31|admin|add|6|order_tire_cost_|
+
+28/03/2018 08:10:31|admin|add|7|order_tire_cost_|
+
+28/03/2018 08:11:02|admin|add|8|order_tire_cost_|
+
+28/03/2018 08:11:02|admin|add|9|order_tire_cost_|
+
+28/03/2018 08:11:54|admin|add|10|order_tire_cost_|
+
+28/03/2018 08:11:55|admin|add|11|order_tire_cost_|
+
+28/03/2018 08:12:36|admin|add|12|order_tire_cost_|
+
+28/03/2018 08:12:36|admin|add|13|order_tire_cost_|
+
+28/03/2018 08:13:35|admin|add|14|order_tire_cost_|
+
+28/03/2018 08:13:35|admin|add|15|order_tire_cost_|
+
+28/03/2018 08:14:13|admin|add|16|order_tire_cost_|
+
+28/03/2018 08:14:13|admin|add|17|order_tire_cost_|
+
+28/03/2018 08:14:44|admin|add|18|order_tire_cost_|
+
+28/03/2018 08:14:44|admin|add|19|order_tire_cost_|
+
+28/03/2018 08:16:07|admin|add|20|order_tire_cost_|
+
+28/03/2018 08:16:07|admin|add|21|order_tire_cost_|
+
+28/03/2018 08:18:20|admin|add|22|order_tire_cost_|
+
+28/03/2018 08:18:20|admin|add|23|order_tire_cost_|
+
+28/03/2018 08:19:16|admin|add|24|order_tire_cost_|
+
+28/03/2018 08:19:16|admin|add|25|order_tire_cost_|
+
+28/03/2018 08:20:08|admin|add|26|order_tire_cost_|
+
+28/03/2018 08:20:08|admin|add|27|order_tire_cost_|
+
+28/03/2018 08:20:38|admin|add|28|order_tire_cost_|
+
+28/03/2018 08:20:38|admin|add|29|order_tire_cost_|
+
+28/03/2018 08:22:21|admin|add|30|order_tire_cost_|
+
+28/03/2018 08:22:21|admin|add|31|order_tire_cost_|
+
+28/03/2018 08:23:38|admin|add|32|order_tire_cost_|
+
+28/03/2018 08:24:15|admin|add|33|order_tire_cost_|
+
+28/03/2018 08:24:45|admin|add|34|order_tire_cost_|
+
+28/03/2018 08:27:10|admin|add|22|order_tire|2-1522188000-60-57-21-1-1----------0-0-0------1522188000-45000000-10-0-0-1-313
+
+28/03/2018 08:28:42|admin|add|23|order_tire|2-1522188000-59-57-22-1-1----------0-0-0---10-9490908--1522188000-104400000-24-0-1-1-313
+
+28/03/2018 08:29:38|admin|add|24|order_tire|2-1522188000-59-57-22-1-1----------0-0-0---10-7534546--1522188000-82880000-16-0-1-1-313
+
+28/03/2018 08:30:28|admin|add|25|order_tire|1-1522188000-61-57-8-1-1----------0-0-0---10-8454546--1522188000-93000000-20-0-1-1-313
+
+28/03/2018 08:32:02|admin|add|26|order_tire|2-1522188000-61-57-23-1-1----------0-0-0---10-845455--1522188000-9299999-2-0-1-1-313
+
+28/03/2018 08:33:50|admin|add|27|order_tire|2-1522188000-60-57-24-1-1----------0-0-0------1522188000-9000000-2-0-0-1-313
+
+28/03/2018 08:33:59|admin|edit|41|1-2-4-2-4227272-4650000-1519858800|order_tire_list|
+
+28/03/2018 08:36:07|admin|edit|code|22|order_tire|
+
+28/03/2018 08:36:22|admin|edit|code|23|order_tire|
+
+28/03/2018 08:36:30|admin|edit|code|24|order_tire|
+
+28/03/2018 08:36:52|admin|edit|code|25|order_tire|
+
+28/03/2018 08:37:01|admin|edit|code|26|order_tire|
+
+28/03/2018 08:37:09|admin|edit|code|27|order_tire|
+
+28/03/2018 08:37:43|admin|add|35|order_tire_cost_|
+
+28/03/2018 08:37:43|admin|add|36|order_tire_cost_|
+
+28/03/2018 08:38:15|admin|add|37|order_tire_cost_|
+
+28/03/2018 08:38:15|admin|add|38|order_tire_cost_|
+
+28/03/2018 08:38:43|admin|add|39|order_tire_cost_|
+
+28/03/2018 08:39:01|admin|add|40|order_tire_cost_|
+
+28/03/2018 08:39:21|admin|add|41|order_tire_cost_|
+
+28/03/2018 08:39:32|admin|add|42|order_tire_cost_|
+
+28/03/2018 08:44:56|admin|edit|approve|27|order_tire|
+
+28/03/2018 08:44:59|admin|edit|approve|26|order_tire|
+
+28/03/2018 08:45:02|admin|edit|approve|25|order_tire|
+
+28/03/2018 08:45:04|admin|edit|approve|24|order_tire|
+
+28/03/2018 08:45:07|admin|edit|approve|23|order_tire|
+
+28/03/2018 08:45:10|admin|edit|approve|22|order_tire|
+
+28/03/2018 08:45:13|admin|edit|approve|19|order_tire|
+
+28/03/2018 08:45:16|admin|edit|approve|13|order_tire|
+
+28/03/2018 08:45:20|admin|edit|approve|3|order_tire|
+
+28/03/2018 08:45:23|admin|edit|approve|2|order_tire|
+
+28/03/2018 08:45:34|admin|edit|approve|20|order_tire|
+
+28/03/2018 08:45:38|admin|edit|approve|12|order_tire|
+
+28/03/2018 08:45:41|admin|edit|approve|7|order_tire|
+
+28/03/2018 08:45:45|admin|edit|approve|17|order_tire|
+
+28/03/2018 08:45:55|admin|edit|approve|1|order_tire|
+
+28/03/2018 08:45:59|admin|edit|approve|10|order_tire|
+
+28/03/2018 08:46:02|admin|edit|approve|14|order_tire|
+
+28/03/2018 08:46:07|admin|edit|approve|21|order_tire|
+
+28/03/2018 08:46:11|admin|edit|approve|18|order_tire|
+
+28/03/2018 08:46:16|admin|edit|approve|15|order_tire|
+
+28/03/2018 08:46:20|admin|edit|approve|6|order_tire|
+
+28/03/2018 08:46:24|admin|edit|approve|11|order_tire|
+
+28/03/2018 08:46:28|admin|edit|approve|16|order_tire|
+
+28/03/2018 08:46:32|admin|edit|approve|5|order_tire|
+
+28/03/2018 08:46:36|admin|edit|approve|9|order_tire|
+
+28/03/2018 08:46:40|admin|edit|approve|8|order_tire|
+
+28/03/2018 08:46:44|admin|edit|approve|4|order_tire|
+
+28/03/2018 08:47:12|admin|edit|exstock|4|order_tire|
+
+28/03/2018 08:47:27|admin|edit|exstock|8|order_tire|
+
+28/03/2018 08:47:57|admin|edit|exstock|9|order_tire|
+
+28/03/2018 08:48:28|admin|edit|exstock|5|order_tire|
+
+28/03/2018 08:48:45|admin|edit|exstock|16|order_tire|
+
+28/03/2018 08:48:59|admin|edit|exstock|11|order_tire|
+
+28/03/2018 08:49:14|admin|edit|exstock|6|order_tire|
+
+28/03/2018 08:49:29|admin|edit|exstock|15|order_tire|
+
+28/03/2018 08:49:51|admin|edit|exstock|18|order_tire|
+
+28/03/2018 08:49:59|admin|edit|exstock|21|order_tire|
+
+28/03/2018 08:50:09|admin|edit|exstock|14|order_tire|
+
+28/03/2018 08:50:16|admin|edit|exstock|10|order_tire|
+
+28/03/2018 08:50:36|admin|edit|exstock|1|order_tire|
+
+28/03/2018 08:50:44|admin|edit|exstock|17|order_tire|
+
+28/03/2018 08:50:58|admin|edit|exstock|7|order_tire|
+
+28/03/2018 08:51:06|admin|edit|exstock|12|order_tire|
+
+28/03/2018 08:51:24|admin|edit|exstock|20|order_tire|
+
+28/03/2018 08:51:33|admin|edit|exstock|2|order_tire|
+
+28/03/2018 08:51:40|admin|edit|exstock|3|order_tire|
+
+28/03/2018 08:51:55|admin|edit|exstock|13|order_tire|
+
+28/03/2018 08:52:03|admin|edit|exstock|19|order_tire|
+
+28/03/2018 08:52:18|admin|edit|exstock|22|order_tire|
+
+28/03/2018 08:52:24|admin|edit|exstock|23|order_tire|
+
+28/03/2018 08:52:30|admin|edit|exstock|24|order_tire|
+
+28/03/2018 08:52:36|admin|edit|exstock|25|order_tire|
+
+28/03/2018 08:52:41|admin|edit|exstock|26|order_tire|
+
+28/03/2018 08:52:47|admin|edit|exstock|27|order_tire|
+
+28/03/2018 16:25:40|admin|add|1|tire_price_discount_event|1514761200-1530309600-1-2-2-5-
+
+29/03/2018 07:44:56|admin|add|2|tire_price_discount_event|1514761200-1530309600-1-3-5--200000
+
+29/03/2018 09:08:11|admin|add|28|order_tire|1-1522274400-58-57-25-1-1----------0-0-0---10-41970910--1522274400-461680000-90-0-1-1-313
+
+29/03/2018 09:08:57|admin|add|1-14-2-10-5272727-5800000-Chọn-28|order_tire_list|
+
+29/03/2018 09:09:19|admin|edit|discount|28|order_tire|
+
+29/03/2018 09:11:47|admin|add|29|order_tire|1-1522274400-58-57-26-1-1----------0-0-0------1522274400-9400000-2-0-0-1-313
+
+29/03/2018 09:29:11|admin|add|30|order_tire|1-1522274400-58-57-26-1-1----------0-0-0---10-22703638--1522274400-249740000-50-0-1-1-313
+
+29/03/2018 09:33:51|admin|add|31|order_tire|1-1522274400-58-57-27-1-1----------0-0-0---10-3615600--1522274400-39771600-8-0-0-1-313
+
+29/03/2018 09:49:57|admin|add|32|order_tire|1-1522274400-58-57-25-1-1----------0-0-0---10-19089091--1522274400-209980000-50-0-1-1-313
+
+29/03/2018 09:50:50|admin|edit|discount|30|order_tire|
+
+29/03/2018 09:50:58|admin|edit|discount|30|order_tire|
+
+29/03/2018 09:51:04|admin|edit|discount|32|order_tire|
+
+29/03/2018 09:53:30|admin|add|33|order_tire|1-1522274400-58-57-28-1-1----------0-0-0---10-28683640--1522274400-315520000-80-0-1-1-313
+
+29/03/2018 09:57:41|admin|add|34|order_tire|1-1522274400-58-57-29-1-1----------0-0-0---10-10786364--1522274400-118650000-30-0-1-1-313
+
+29/03/2018 09:57:59|admin|edit|code|33|order_tire|
+
+29/03/2018 09:58:11|admin|edit|code|28|order_tire|
+
+29/03/2018 09:58:20|admin|edit|code|30|order_tire|
+
+29/03/2018 09:59:06|admin|edit|code|30|order_tire|
+
+29/03/2018 09:59:15|admin|edit|code|32|order_tire|
+
+29/03/2018 09:59:28|admin|edit|code|34|order_tire|
+
+29/03/2018 09:59:38|admin|edit|code|29|order_tire|
+
+29/03/2018 09:59:53|admin|edit|code|31|order_tire|
+
+29/03/2018 10:01:30|admin|add|35|order_tire|1-1522274400-58-57-27-1-1----------0-0-0---10-30651600--1522274400-337167600-68-0-0-1-313
+
+29/03/2018 10:01:41|admin|edit|code|35|order_tire|
+
+29/03/2018 10:07:59|admin|add|43|order_tire_cost_|
+
+29/03/2018 10:07:59|admin|add|44|order_tire_cost_|
+
+29/03/2018 10:08:22|admin|add|45|order_tire_cost_|
+
+29/03/2018 10:14:20|admin|add|46|order_tire_cost_|
+
+29/03/2018 10:14:20|admin|add|47|order_tire_cost_|
+
+29/03/2018 10:14:56|admin|add|48|order_tire_cost_|
+
+29/03/2018 10:15:26|admin|add|49|order_tire_cost_|
+
+29/03/2018 10:15:26|admin|add|50|order_tire_cost_|
+
+29/03/2018 10:15:41|admin|add|48|order_tire_cost_|
+
+29/03/2018 10:15:42|admin|add|51|order_tire_cost_|
+
+29/03/2018 10:16:30|admin|add|52|order_tire_cost_|
+
+29/03/2018 10:17:08|admin|add|53|order_tire_cost_|
+
+29/03/2018 10:17:30|admin|add|54|order_tire_cost_|
+
+29/03/2018 11:11:39|admin|edit|approve|34|order_tire|
+
+29/03/2018 11:11:42|admin|edit|approve|32|order_tire|
+
+29/03/2018 11:11:45|admin|edit|approve|35|order_tire|
+
+29/03/2018 11:11:48|admin|edit|approve|28|order_tire|
+
+29/03/2018 11:11:51|admin|edit|approve|29|order_tire|
+
+29/03/2018 11:11:53|admin|edit|approve|33|order_tire|
+
+29/03/2018 11:11:56|admin|edit|approve|30|order_tire|
+
+29/03/2018 11:11:58|admin|edit|approve|31|order_tire|
+
+29/03/2018 11:12:34|admin|edit|exstock|31|order_tire|
+
+29/03/2018 11:12:54|admin|edit|exstock|30|order_tire|
+
+29/03/2018 11:13:03|admin|edit|exstock|33|order_tire|
+
+29/03/2018 11:13:22|admin|edit|exstock|29|order_tire|
+
+29/03/2018 11:13:28|admin|edit|exstock|28|order_tire|
+
+29/03/2018 11:13:35|admin|edit|exstock|35|order_tire|
+
+29/03/2018 11:13:41|admin|edit|exstock|32|order_tire|
+
+29/03/2018 11:13:48|admin|edit|exstock|34|order_tire|
+
+02/04/2018 15:05:54|admin|add|36|order_tire|2-1522620000-59-57-30-1-1----------0-0-0------1522274400-10600000-2-0-0-1-313
+
+02/04/2018 15:06:49|admin|edit|approve|36|order_tire|
+
+02/04/2018 15:07:01|admin|edit|exstock|36|order_tire|
+
+02/04/2018 15:07:15|admin|edit|code|36|order_tire|
+
+02/04/2018 15:07:46|admin|add|55|order_tire_cost_|
+
+02/04/2018 15:07:46|admin|add|56|order_tire_cost_|
+
+02/04/2018 15:11:32|admin|add|37|order_tire|1-1522620000-58-57-25-1-1----------0-0-0---10-51950906--1522360800-571460000-140-0-1-1-313
+
+02/04/2018 15:12:10|admin|edit|code|37|order_tire|
+
+02/04/2018 15:12:16|admin|edit|approve|37|order_tire|
+
+02/04/2018 15:12:26|admin|edit|exstock|37|order_tire|
+
+02/04/2018 15:13:26|admin|add|57|order_tire_cost_|
+
+02/04/2018 15:29:38|admin|add|38|order_tire|1-1522620000-58-57-26-1-1----------0-0-0---10-13348000--1522447200-146828000-28-0-1-1-313
+
+02/04/2018 15:30:12|admin|edit|code|38|order_tire|
+
+02/04/2018 15:30:15|admin|edit|approve|38|order_tire|
+
+02/04/2018 15:30:24|admin|edit|exstock|38|order_tire|
+
+02/04/2018 15:30:55|admin|add|58|order_tire_cost_|
+
+03/04/2018 08:15:14|admin|add|54|order_tire_cost_|
+
+03/04/2018 08:15:14|admin|add|59|order_tire_cost_|
+
+03/04/2018 09:49:14|admin|add|60|order_tire_cost_|
+
+03/04/2018 09:50:20|admin|add|58|order_tire_cost_|
+
+03/04/2018 09:50:21|admin|add|61|order_tire_cost_|
+
+03/04/2018 10:03:00|admin|add|48|order_tire_cost_|
+
+03/04/2018 10:03:00|admin|add|51|order_tire_cost_|
+
+03/04/2018 10:03:56|admin|add|54|order_tire_cost_|
+
+03/04/2018 10:03:56|admin|add|59|order_tire_cost_|
+
+03/04/2018 10:03:56|admin|add|62|order_tire_cost_|
+
+03/04/2018 10:25:48|admin|add|53|order_tire_cost_|
+
+03/04/2018 10:25:49|admin|add|63|order_tire_cost_|
+
+03/04/2018 10:25:49|admin|add|64|order_tire_cost_|
+
+03/04/2018 10:28:33|admin|add|65|order_tire_cost_|
+
+03/04/2018 10:28:33|admin|add|66|order_tire_cost_|
+
+03/04/2018 11:05:14|admin|add|39|order_tire|2-1522706400-59-57-11-1-1----------0-0-0---10-7909090--1522015200-87000000-20-0-1-1-313
+
+03/04/2018 11:07:36|admin|edit|approve|39|order_tire|
+
+03/04/2018 11:07:54|admin|edit|code|39|order_tire|
+
+03/04/2018 11:08:03|admin|edit|exstock|39|order_tire|
+
+03/04/2018 11:08:33|admin|add|67|order_tire_cost_|
+
+03/04/2018 11:08:33|admin|add|68|order_tire_cost_|
+
+03/04/2018 11:11:47|admin|add|40|order_tire|2-1522706400-59-57-12-1-1----------0-0-0---10-1000000--1522188000-11000000-2-0-1-1-313
+
+03/04/2018 11:13:56|admin|delete|40|order_tire|
+
+04/04/2018 17:20:02|admin|add|40|order_tire|1-1522792800-58-57-1-1-1----------0-0-0------1523484000-5953400-1-0-0-1-313
+
+04/04/2018 17:20:39|admin|delete|40|order_tire|
+
+05/04/2018 16:33:51|admin|delete|1|tire_price_discount|
+
+05/04/2018 16:33:51|admin|delete|2|tire_price_discount|
+
+05/04/2018 16:33:51|admin|delete|3|tire_price_discount|
+
+05/04/2018 16:33:51|admin|delete|4|tire_price_discount|
+
+05/04/2018 16:33:51|admin|delete|5|tire_price_discount|
+
+05/04/2018 16:33:51|admin|delete|6|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|7|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|8|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|9|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|10|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|11|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|12|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|13|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|14|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|15|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|16|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|17|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|18|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|19|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|20|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|21|tire_price_discount|
+
+05/04/2018 16:33:52|admin|delete|22|tire_price_discount|
+
+05/04/2018 16:34:41|admin|delete|23|tire_price_discount|
+
+05/04/2018 16:34:41|admin|delete|24|tire_price_discount|
+
+05/04/2018 16:34:41|admin|delete|25|tire_price_discount|
+
+05/04/2018 16:34:41|admin|delete|26|tire_price_discount|
+
+05/04/2018 16:34:41|admin|delete|27|tire_price_discount|
+
+05/04/2018 16:34:41|admin|delete|28|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|29|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|30|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|31|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|32|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|33|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|34|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|35|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|36|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|37|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|38|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|39|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|40|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|41|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|42|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|43|tire_price_discount|
+
+05/04/2018 16:34:42|admin|delete|44|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|45|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|46|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|47|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|48|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|49|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|50|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|51|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|52|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|53|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|54|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|55|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|56|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|57|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|58|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|59|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|60|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|61|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|62|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|63|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|64|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|65|tire_price_discount|
+
+05/04/2018 16:35:47|admin|delete|66|tire_price_discount|
+
+05/04/2018 16:36:10|admin|delete|67|tire_price_discount|
+
+05/04/2018 16:36:10|admin|delete|68|tire_price_discount|
+
+05/04/2018 16:36:10|admin|delete|69|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|70|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|71|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|72|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|73|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|74|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|75|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|76|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|77|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|78|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|79|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|80|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|81|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|82|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|83|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|84|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|85|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|86|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|87|tire_price_discount|
+
+05/04/2018 16:36:11|admin|delete|88|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|89|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|90|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|91|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|92|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|93|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|94|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|95|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|96|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|97|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|98|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|99|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|100|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|101|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|102|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|103|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|104|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|105|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|106|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|107|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|108|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|109|tire_price_discount|
+
+05/04/2018 16:36:59|admin|delete|110|tire_price_discount|
+
+06/04/2018 07:39:54|admin|delete|58|order_tire_cost_|
+
+06/04/2018 07:39:55|admin|add|61|order_tire_cost_|
+
+06/04/2018 07:41:11|admin|delete|54|order_tire_cost_|
+
+06/04/2018 07:41:14|admin|add|59|order_tire_cost_|
+
+06/04/2018 07:41:14|admin|add|62|order_tire_cost_|
+
+06/04/2018 07:41:33|admin|delete|56|order_tire_cost_|
+
+06/04/2018 07:41:33|admin|add|55|order_tire_cost_|
+
+06/04/2018 07:41:43|admin|delete|42|order_tire_cost_|
+
+06/04/2018 07:41:44|admin|add|69|order_tire_cost_|
+
+06/04/2018 07:41:50|admin|delete|41|order_tire_cost_|
+
+06/04/2018 07:41:51|admin|add|70|order_tire_cost_|
+
+06/04/2018 07:42:39|admin|delete|40|order_tire_cost_|
+
+06/04/2018 07:42:41|admin|add|71|order_tire_cost_|
+
+06/04/2018 07:42:54|admin|delete|39|order_tire_cost_|
+
+06/04/2018 07:42:55|admin|add|72|order_tire_cost_|
+
+06/04/2018 07:43:03|admin|delete|38|order_tire_cost_|
+
+06/04/2018 07:43:04|admin|add|37|order_tire_cost_|
+
+06/04/2018 07:43:14|admin|delete|36|order_tire_cost_|
+
+06/04/2018 07:43:17|admin|add|35|order_tire_cost_|
+
+06/04/2018 07:45:57|admin|delete|68|order_tire_cost_|
+
+06/04/2018 07:45:58|admin|add|67|order_tire_cost_|
+
+06/04/2018 07:46:10|admin|delete|34|order_tire_cost_|
+
+06/04/2018 07:46:11|admin|add|73|order_tire_cost_|
+
+06/04/2018 07:46:25|admin|delete|45|order_tire_cost_|
+
+06/04/2018 07:46:26|admin|add|74|order_tire_cost_|
+
+06/04/2018 07:46:47|admin|delete|53|order_tire_cost_|
+
+06/04/2018 07:46:54|admin|add|63|order_tire_cost_|
+
+06/04/2018 07:46:54|admin|add|64|order_tire_cost_|
+
+06/04/2018 07:47:06|admin|delete|33|order_tire_cost_|
+
+06/04/2018 07:47:07|admin|add|75|order_tire_cost_|
+
+06/04/2018 07:47:44|admin|delete|32|order_tire_cost_|
+
+06/04/2018 07:47:44|admin|add|76|order_tire_cost_|
+
+06/04/2018 07:48:08|admin|delete|52|order_tire_cost_|
+
+06/04/2018 07:48:09|admin|add|77|order_tire_cost_|
+
+06/04/2018 07:48:56|admin|delete|60|order_tire_cost_|
+
+06/04/2018 07:48:58|admin|add|78|order_tire_cost_|
+
+06/04/2018 07:49:08|admin|delete|31|order_tire_cost_|
+
+06/04/2018 07:49:10|admin|add|30|order_tire_cost_|
+
+06/04/2018 07:49:22|admin|delete|29|order_tire_cost_|
+
+06/04/2018 07:49:23|admin|add|28|order_tire_cost_|
+
+06/04/2018 07:49:38|admin|delete|27|order_tire_cost_|
+
+06/04/2018 07:49:39|admin|add|26|order_tire_cost_|
+
+06/04/2018 07:49:59|admin|delete|25|order_tire_cost_|
+
+06/04/2018 07:50:00|admin|add|24|order_tire_cost_|
+
+06/04/2018 07:50:27|admin|add|79|order_tire_cost_|
+
+06/04/2018 07:50:50|admin|delete|65|order_tire_cost_|
+
+06/04/2018 07:50:51|admin|add|66|order_tire_cost_|
+
+06/04/2018 07:51:05|admin|delete|50|order_tire_cost_|
+
+06/04/2018 07:51:05|admin|add|49|order_tire_cost_|
+
+06/04/2018 07:51:16|admin|delete|23|order_tire_cost_|
+
+06/04/2018 07:51:17|admin|add|22|order_tire_cost_|
+
+06/04/2018 07:51:28|admin|delete|21|order_tire_cost_|
+
+06/04/2018 07:51:29|admin|add|20|order_tire_cost_|
+
+06/04/2018 07:51:41|admin|delete|19|order_tire_cost_|
+
+06/04/2018 07:51:42|admin|add|18|order_tire_cost_|
+
+06/04/2018 07:51:52|admin|delete|17|order_tire_cost_|
+
+06/04/2018 07:51:53|admin|add|16|order_tire_cost_|
+
+06/04/2018 07:52:09|admin|delete|15|order_tire_cost_|
+
+06/04/2018 07:52:10|admin|add|14|order_tire_cost_|
+
+06/04/2018 07:52:20|admin|delete|13|order_tire_cost_|
+
+06/04/2018 07:52:21|admin|add|12|order_tire_cost_|
+
+06/04/2018 07:52:36|admin|delete|44|order_tire_cost_|
+
+06/04/2018 07:52:37|admin|add|43|order_tire_cost_|
+
+06/04/2018 07:52:53|admin|delete|51|order_tire_cost_|
+
+06/04/2018 07:52:54|admin|add|48|order_tire_cost_|
+
+06/04/2018 07:53:10|admin|delete|11|order_tire_cost_|
+
+06/04/2018 07:53:11|admin|add|10|order_tire_cost_|
+
+06/04/2018 07:53:21|admin|delete|9|order_tire_cost_|
+
+06/04/2018 07:53:22|admin|add|8|order_tire_cost_|
+
+06/04/2018 07:53:32|admin|delete|7|order_tire_cost_|
+
+06/04/2018 07:53:33|admin|add|6|order_tire_cost_|
+
+06/04/2018 07:53:42|admin|delete|5|order_tire_cost_|
+
+06/04/2018 07:53:43|admin|add|4|order_tire_cost_|
+
+06/04/2018 07:53:52|admin|delete|3|order_tire_cost_|
+
+06/04/2018 07:53:53|admin|add|80|order_tire_cost_|
+
+06/04/2018 07:54:02|admin|delete|46|order_tire_cost_|
+
+06/04/2018 07:54:03|admin|add|47|order_tire_cost_|
+
+06/04/2018 07:54:12|admin|delete|2|order_tire_cost_|
+
+06/04/2018 07:54:14|admin|add|1|order_tire_cost_|
+
+06/04/2018 07:54:50|admin|delete|57|order_tire_cost_|
+
+06/04/2018 07:54:51|admin|add|81|order_tire_cost_|
+
+06/04/2018 08:16:07|admin|edit|18|customer|Long Thành Phát-TP HCM-093 877 8871-------null---------1--Hiền--2--57-1522977367
+
+10/04/2018 08:31:03|admin|edit|9|staff|NV05-Nguyễn Thị Thanh Thủy-10/04/2018-1------0-1-Kế toán--1519858800--57-1523323863
+
+10/04/2018 08:38:12|admin|delete|1|attendance|
+
+10/04/2018 08:38:12|admin|delete|2|attendance|
+
+10/04/2018 08:38:12|admin|delete|3|attendance|
+
+10/04/2018 08:38:12|admin|delete|4|attendance|
+
+10/04/2018 08:38:12|admin|delete|5|attendance|
+
+10/04/2018 08:38:12|admin|delete|6|attendance|
+
+10/04/2018 08:38:12|admin|delete|7|attendance|
+
+10/04/2018 08:38:12|admin|delete|8|attendance|
+
+10/04/2018 08:38:12|admin|delete|9|attendance|
+
+10/04/2018 08:38:12|admin|delete|10|attendance|
+
+10/04/2018 08:38:12|admin|delete|11|attendance|
+
+10/04/2018 08:38:12|admin|delete|12|attendance|
+
+10/04/2018 08:38:12|admin|delete|13|attendance|
+
+10/04/2018 08:38:12|admin|delete|14|attendance|
+
+10/04/2018 08:38:12|admin|delete|15|attendance|
+
+10/04/2018 08:38:12|admin|delete|16|attendance|
+
+10/04/2018 08:38:12|admin|delete|17|attendance|
+
+10/04/2018 08:38:12|admin|delete|18|attendance|
+
+10/04/2018 08:38:12|admin|delete|19|attendance|
+
+10/04/2018 08:38:12|admin|delete|20|attendance|
+
+10/04/2018 08:38:13|admin|delete|21|attendance|
+
+10/04/2018 08:38:13|admin|delete|22|attendance|
+
+10/04/2018 08:38:13|admin|delete|23|attendance|
+
+10/04/2018 08:38:13|admin|delete|24|attendance|
+
+10/04/2018 08:38:13|admin|delete|25|attendance|
+
+10/04/2018 08:38:13|admin|delete|26|attendance|
+
+10/04/2018 08:38:13|admin|delete|27|attendance|
+
+10/04/2018 08:38:13|admin|delete|28|attendance|
+
+10/04/2018 08:38:13|admin|delete|29|attendance|
+
+10/04/2018 08:38:13|admin|delete|30|attendance|
+
+10/04/2018 08:38:13|admin|delete|31|attendance|
+
+10/04/2018 08:38:13|admin|delete|32|attendance|
+
+10/04/2018 08:38:13|admin|delete|33|attendance|
+
+10/04/2018 08:38:13|admin|delete|34|attendance|
+
+10/04/2018 08:38:13|admin|delete|35|attendance|
+
+10/04/2018 08:38:13|admin|delete|36|attendance|
+
+10/04/2018 08:38:13|admin|delete|37|attendance|
+
+10/04/2018 08:38:13|admin|delete|38|attendance|
+
+10/04/2018 08:38:13|admin|delete|39|attendance|
+
+10/04/2018 08:38:13|admin|delete|40|attendance|
+
+10/04/2018 08:38:13|admin|delete|41|attendance|
+
+10/04/2018 08:38:13|admin|delete|42|attendance|
+
+10/04/2018 08:38:13|admin|delete|43|attendance|
+
+10/04/2018 08:38:13|admin|delete|44|attendance|
+
+10/04/2018 08:38:13|admin|delete|45|attendance|
+
+10/04/2018 08:38:13|admin|delete|46|attendance|
+
+10/04/2018 08:38:14|admin|delete|47|attendance|
+
+10/04/2018 08:38:14|admin|delete|48|attendance|
+
+10/04/2018 08:38:14|admin|delete|49|attendance|
+
+10/04/2018 08:38:14|admin|delete|50|attendance|
+
+10/04/2018 08:38:14|admin|delete|51|attendance|
+
+10/04/2018 08:38:14|admin|delete|52|attendance|
+
+10/04/2018 08:38:14|admin|delete|53|attendance|
+
+10/04/2018 08:38:14|admin|delete|54|attendance|
+
+10/04/2018 08:38:14|admin|delete|55|attendance|
+
+10/04/2018 08:38:14|admin|delete|56|attendance|
+
+10/04/2018 08:38:14|admin|delete|57|attendance|
+
+10/04/2018 08:38:14|admin|delete|58|attendance|
+
+10/04/2018 08:38:14|admin|delete|59|attendance|
+
+10/04/2018 08:38:14|admin|delete|60|attendance|
+
+10/04/2018 08:38:14|admin|delete|61|attendance|
+
+10/04/2018 08:38:14|admin|delete|62|attendance|
+
+10/04/2018 08:38:14|admin|delete|63|attendance|
+
+10/04/2018 08:38:14|admin|delete|64|attendance|
+
+10/04/2018 08:38:14|admin|delete|65|attendance|
+
+10/04/2018 08:38:14|admin|delete|66|attendance|
+
+10/04/2018 08:38:14|admin|delete|67|attendance|
+
+10/04/2018 08:38:14|admin|delete|68|attendance|
+
+10/04/2018 08:38:14|admin|delete|69|attendance|
+
+10/04/2018 08:38:14|admin|delete|70|attendance|
+
+10/04/2018 08:38:14|admin|delete|71|attendance|
+
+10/04/2018 08:38:14|admin|delete|72|attendance|
+
+10/04/2018 08:38:14|admin|delete|73|attendance|
+
+10/04/2018 08:38:14|admin|delete|74|attendance|
+
+10/04/2018 08:38:14|admin|delete|75|attendance|
+
+10/04/2018 08:38:14|admin|delete|76|attendance|
+
+10/04/2018 08:38:14|admin|delete|77|attendance|
+
+10/04/2018 08:38:14|admin|delete|78|attendance|
+
+10/04/2018 08:38:14|admin|delete|79|attendance|
+
+10/04/2018 08:38:14|admin|delete|80|attendance|
+
+10/04/2018 08:38:14|admin|delete|81|attendance|
+
+10/04/2018 08:38:14|admin|delete|82|attendance|
+
+10/04/2018 08:38:14|admin|delete|83|attendance|
+
+10/04/2018 08:38:14|admin|delete|84|attendance|
+
+10/04/2018 08:38:14|admin|delete|85|attendance|
+
+10/04/2018 08:38:14|admin|delete|86|attendance|
+
+10/04/2018 08:38:14|admin|delete|87|attendance|
+
+10/04/2018 08:38:14|admin|delete|88|attendance|
+
+10/04/2018 08:38:15|admin|delete|89|attendance|
+
+10/04/2018 08:38:15|admin|delete|90|attendance|
+
+10/04/2018 08:38:15|admin|delete|91|attendance|
+
+10/04/2018 08:38:15|admin|delete|92|attendance|
+
+10/04/2018 08:38:15|admin|delete|93|attendance|
+
+10/04/2018 08:38:15|admin|delete|94|attendance|
+
+10/04/2018 08:38:15|admin|delete|95|attendance|
+
+10/04/2018 08:38:15|admin|delete|96|attendance|
+
+10/04/2018 08:38:15|admin|delete|97|attendance|
+
+10/04/2018 08:38:15|admin|delete|98|attendance|
+
+10/04/2018 08:38:15|admin|delete|99|attendance|
+
+10/04/2018 08:38:15|admin|delete|100|attendance|
+
+10/04/2018 08:38:15|admin|delete|101|attendance|
+
+10/04/2018 08:38:15|admin|delete|102|attendance|
+
+10/04/2018 08:38:15|admin|delete|103|attendance|
+
+10/04/2018 08:38:15|admin|delete|104|attendance|
+
+10/04/2018 08:38:15|admin|delete|105|attendance|
+
+10/04/2018 08:38:15|admin|delete|106|attendance|
+
+10/04/2018 08:38:15|admin|delete|107|attendance|
+
+10/04/2018 08:38:15|admin|delete|108|attendance|
+
+10/04/2018 08:38:15|admin|delete|109|attendance|
+
+10/04/2018 08:38:15|admin|delete|110|attendance|
+
+10/04/2018 08:38:15|admin|delete|111|attendance|
+
+10/04/2018 08:38:15|admin|delete|112|attendance|
+
+10/04/2018 08:38:15|admin|delete|113|attendance|
+
+10/04/2018 08:38:15|admin|delete|114|attendance|
+
+10/04/2018 08:38:15|admin|delete|115|attendance|
+
+10/04/2018 08:38:15|admin|delete|116|attendance|
+
+10/04/2018 08:38:15|admin|delete|117|attendance|
+
+10/04/2018 08:38:15|admin|delete|118|attendance|
+
+10/04/2018 08:38:15|admin|delete|119|attendance|
+
+10/04/2018 08:38:15|admin|delete|120|attendance|
+
+10/04/2018 08:38:15|admin|delete|121|attendance|
+
+10/04/2018 08:38:15|admin|delete|122|attendance|
+
+10/04/2018 08:38:15|admin|delete|123|attendance|
+
+10/04/2018 08:38:15|admin|delete|124|attendance|
+
+10/04/2018 08:38:15|admin|delete|125|attendance|
+
+10/04/2018 08:38:15|admin|delete|126|attendance|
+
+10/04/2018 08:38:15|admin|delete|127|attendance|
+
+10/04/2018 08:38:15|admin|delete|128|attendance|
+
+10/04/2018 08:38:15|admin|delete|129|attendance|
+
+10/04/2018 08:38:15|admin|delete|130|attendance|
+
+10/04/2018 08:38:15|admin|delete|131|attendance|
+
+10/04/2018 08:38:15|admin|delete|132|attendance|
+
+10/04/2018 08:38:15|admin|delete|133|attendance|
+
+10/04/2018 08:38:16|admin|delete|134|attendance|
+
+10/04/2018 08:38:16|admin|delete|135|attendance|
+
+10/04/2018 08:38:16|admin|delete|136|attendance|
+
+10/04/2018 08:38:16|admin|delete|137|attendance|
+
+10/04/2018 08:38:16|admin|delete|138|attendance|
+
+10/04/2018 08:38:16|admin|delete|139|attendance|
+
+10/04/2018 08:38:16|admin|delete|140|attendance|
+
+10/04/2018 08:38:16|admin|delete|141|attendance|
+
+10/04/2018 08:38:16|admin|delete|142|attendance|
+
+10/04/2018 08:38:16|admin|delete|143|attendance|
+
+10/04/2018 08:38:16|admin|delete|144|attendance|
+
+10/04/2018 08:38:16|admin|delete|145|attendance|
+
+10/04/2018 08:38:16|admin|delete|146|attendance|
+
+10/04/2018 08:38:16|admin|delete|147|attendance|
+
+10/04/2018 08:38:16|admin|delete|148|attendance|
+
+10/04/2018 08:38:16|admin|delete|149|attendance|
+
+10/04/2018 08:38:16|admin|delete|150|attendance|
+
+10/04/2018 08:38:16|admin|delete|151|attendance|
+
+10/04/2018 08:38:16|admin|delete|152|attendance|
+
+10/04/2018 08:38:16|admin|delete|153|attendance|
+
+10/04/2018 08:38:16|admin|delete|154|attendance|
+
+10/04/2018 08:38:16|admin|delete|155|attendance|
+
+10/04/2018 08:38:16|admin|delete|156|attendance|
+
+10/04/2018 08:38:16|admin|delete|157|attendance|
+
+10/04/2018 08:38:16|admin|delete|158|attendance|
+
+10/04/2018 08:38:16|admin|delete|159|attendance|
+
+10/04/2018 08:38:16|admin|delete|160|attendance|
+
+10/04/2018 08:38:16|admin|delete|161|attendance|
+
+10/04/2018 08:38:16|admin|delete|162|attendance|
+
+10/04/2018 08:38:16|admin|delete|163|attendance|
+
+10/04/2018 08:38:16|admin|delete|164|attendance|
+
+10/04/2018 08:38:16|admin|delete|165|attendance|
+
+10/04/2018 08:38:16|admin|delete|166|attendance|
+
+10/04/2018 08:38:16|admin|delete|167|attendance|
+
+10/04/2018 08:38:16|admin|delete|168|attendance|
+
+10/04/2018 08:38:16|admin|delete|169|attendance|
+
+10/04/2018 08:38:16|admin|delete|170|attendance|
+
+10/04/2018 08:38:16|admin|delete|171|attendance|
+
+10/04/2018 08:38:16|admin|delete|172|attendance|
+
+10/04/2018 08:38:16|admin|delete|173|attendance|
+
+10/04/2018 08:38:16|admin|delete|174|attendance|
+
+10/04/2018 08:38:16|admin|delete|175|attendance|
+
+10/04/2018 08:38:16|admin|delete|176|attendance|
+
+10/04/2018 08:38:16|admin|delete|177|attendance|
+
+10/04/2018 08:38:16|admin|delete|178|attendance|
+
+10/04/2018 08:38:16|admin|delete|179|attendance|
+
+10/04/2018 08:38:16|admin|delete|180|attendance|
+
+10/04/2018 08:38:17|admin|delete|181|attendance|
+
+10/04/2018 08:38:17|admin|delete|182|attendance|
+
+10/04/2018 08:38:17|admin|delete|183|attendance|
+
+10/04/2018 08:38:17|admin|delete|184|attendance|
+
+10/04/2018 08:38:17|admin|delete|185|attendance|
+
+10/04/2018 08:38:17|admin|delete|186|attendance|
+
+10/04/2018 08:38:17|admin|delete|187|attendance|
+
+10/04/2018 08:38:17|admin|delete|188|attendance|
+
+10/04/2018 08:38:17|admin|delete|189|attendance|
+
+10/04/2018 08:38:17|admin|delete|190|attendance|
+
+10/04/2018 08:38:17|admin|delete|191|attendance|
+
+10/04/2018 08:38:17|admin|delete|192|attendance|
+
+10/04/2018 08:38:17|admin|delete|193|attendance|
+
+10/04/2018 08:38:17|admin|delete|194|attendance|
+
+10/04/2018 08:38:17|admin|delete|195|attendance|
+
+10/04/2018 08:38:17|admin|delete|196|attendance|
+
+10/04/2018 08:38:17|admin|delete|197|attendance|
+
+10/04/2018 08:38:17|admin|delete|198|attendance|
+
+10/04/2018 08:38:17|admin|delete|199|attendance|
+
+10/04/2018 08:38:17|admin|delete|200|attendance|
+
+10/04/2018 08:38:17|admin|delete|201|attendance|
+
+10/04/2018 08:38:17|admin|delete|202|attendance|
+
+10/04/2018 08:38:17|admin|delete|203|attendance|
+
+10/04/2018 08:38:17|admin|delete|204|attendance|
+
+10/04/2018 08:38:17|admin|delete|205|attendance|
+
+10/04/2018 08:38:17|admin|delete|206|attendance|
+
+10/04/2018 08:38:17|admin|delete|207|attendance|
+
+10/04/2018 08:38:17|admin|delete|208|attendance|
+
+10/04/2018 08:38:17|admin|delete|209|attendance|
+
+10/04/2018 08:38:17|admin|delete|210|attendance|
+
+10/04/2018 08:38:17|admin|delete|211|attendance|
+
+10/04/2018 08:38:17|admin|delete|212|attendance|
+
+10/04/2018 08:38:17|admin|delete|213|attendance|
+
+10/04/2018 08:38:17|admin|delete|214|attendance|
+
+10/04/2018 08:38:17|admin|delete|215|attendance|
+
+10/04/2018 08:38:17|admin|delete|216|attendance|
+
+10/04/2018 08:38:17|admin|delete|217|attendance|
+
+10/04/2018 08:38:17|admin|delete|218|attendance|
+
+10/04/2018 08:38:17|admin|delete|219|attendance|
+
+10/04/2018 08:38:17|admin|delete|220|attendance|
+
+10/04/2018 08:38:17|admin|delete|221|attendance|
+
+10/04/2018 08:38:17|admin|delete|222|attendance|
+
+10/04/2018 08:38:17|admin|delete|223|attendance|
+
+10/04/2018 08:38:18|admin|delete|224|attendance|
+
+10/04/2018 08:38:18|admin|delete|225|attendance|
+
+10/04/2018 08:38:18|admin|delete|226|attendance|
+
+10/04/2018 08:38:18|admin|delete|227|attendance|
+
+10/04/2018 08:38:18|admin|delete|228|attendance|
+
+10/04/2018 08:38:18|admin|delete|229|attendance|
+
+10/04/2018 08:38:18|admin|delete|230|attendance|
+
+10/04/2018 08:38:18|admin|delete|231|attendance|
+
+10/04/2018 08:38:18|admin|delete|232|attendance|
+
+10/04/2018 08:38:18|admin|delete|233|attendance|
+
+10/04/2018 08:38:18|admin|delete|234|attendance|
+
+10/04/2018 08:38:18|admin|delete|235|attendance|
+
+10/04/2018 08:38:18|admin|delete|236|attendance|
+
+10/04/2018 08:38:18|admin|delete|237|attendance|
+
+10/04/2018 08:38:18|admin|delete|238|attendance|
+
+10/04/2018 08:38:18|admin|delete|239|attendance|
+
+10/04/2018 08:38:18|admin|delete|240|attendance|
+
+10/04/2018 08:38:18|admin|delete|241|attendance|
+
+10/04/2018 08:38:18|admin|delete|242|attendance|
+
+10/04/2018 08:38:18|admin|delete|243|attendance|
+
+10/04/2018 08:38:18|admin|delete|244|attendance|
+
+10/04/2018 08:38:18|admin|delete|245|attendance|
+
+10/04/2018 08:38:18|admin|delete|246|attendance|
+
+10/04/2018 08:38:18|admin|delete|247|attendance|
+
+10/04/2018 08:38:18|admin|delete|248|attendance|
+
+10/04/2018 08:38:18|admin|delete|249|attendance|
+
+10/04/2018 08:38:18|admin|delete|250|attendance|
+
+10/04/2018 08:38:18|admin|delete|251|attendance|
+
+10/04/2018 08:38:18|admin|delete|252|attendance|
+
+10/04/2018 08:38:18|admin|delete|253|attendance|
+
+10/04/2018 08:38:18|admin|delete|254|attendance|
+
+10/04/2018 08:38:18|admin|delete|255|attendance|
+
+10/04/2018 08:38:18|admin|delete|256|attendance|
+
+10/04/2018 08:38:18|admin|delete|257|attendance|
+
+10/04/2018 08:38:18|admin|delete|258|attendance|
+
+10/04/2018 08:38:18|admin|delete|259|attendance|
+
+10/04/2018 08:38:18|admin|delete|260|attendance|
+
+10/04/2018 08:38:18|admin|delete|261|attendance|
+
+10/04/2018 08:38:18|admin|delete|262|attendance|
+
+10/04/2018 08:38:18|admin|delete|263|attendance|
+
+10/04/2018 08:38:18|admin|delete|264|attendance|
+
+10/04/2018 08:38:18|admin|delete|265|attendance|
+
+10/04/2018 08:38:18|admin|delete|266|attendance|
+
+10/04/2018 08:38:18|admin|delete|267|attendance|
+
+10/04/2018 08:38:18|admin|delete|268|attendance|
+
+10/04/2018 08:38:18|admin|delete|269|attendance|
+
+10/04/2018 08:38:18|admin|delete|270|attendance|
+
+10/04/2018 08:38:19|admin|delete|271|attendance|
+
+10/04/2018 08:38:19|admin|delete|272|attendance|
+
+10/04/2018 08:38:19|admin|delete|273|attendance|
+
+10/04/2018 08:38:19|admin|delete|274|attendance|
+
+10/04/2018 08:38:19|admin|delete|275|attendance|
+
+10/04/2018 08:38:19|admin|delete|276|attendance|
+
+10/04/2018 08:38:19|admin|delete|277|attendance|
+
+10/04/2018 08:38:19|admin|delete|278|attendance|
+
+10/04/2018 08:38:19|admin|delete|279|attendance|
+
+10/04/2018 08:38:19|admin|delete|280|attendance|
+
+10/04/2018 08:38:19|admin|delete|281|attendance|
+
+10/04/2018 08:38:19|admin|delete|282|attendance|
+
+10/04/2018 08:38:19|admin|delete|283|attendance|
+
+10/04/2018 08:38:19|admin|delete|284|attendance|
+
+10/04/2018 08:38:19|admin|delete|285|attendance|
+
+10/04/2018 08:38:19|admin|delete|286|attendance|
+
+10/04/2018 08:38:19|admin|delete|287|attendance|
+
+10/04/2018 08:38:19|admin|delete|288|attendance|
+
+10/04/2018 08:38:19|admin|delete|289|attendance|
+
+10/04/2018 08:38:19|admin|delete|290|attendance|
+
+10/04/2018 08:38:19|admin|delete|291|attendance|
+
+10/04/2018 08:38:19|admin|delete|292|attendance|
+
+10/04/2018 08:38:19|admin|delete|293|attendance|
+
+10/04/2018 08:38:19|admin|delete|294|attendance|
+
+10/04/2018 08:38:19|admin|delete|295|attendance|
+
+10/04/2018 08:38:19|admin|delete|296|attendance|
+
+10/04/2018 08:38:19|admin|delete|297|attendance|
+
+10/04/2018 08:38:19|admin|delete|298|attendance|
+
+10/04/2018 08:38:19|admin|delete|299|attendance|
+
+10/04/2018 08:38:19|admin|delete|300|attendance|
+
+10/04/2018 08:38:19|admin|delete|301|attendance|
+
+10/04/2018 08:38:19|admin|delete|302|attendance|
+
+10/04/2018 08:38:19|admin|delete|303|attendance|
+
+10/04/2018 08:38:19|admin|delete|304|attendance|
+
+10/04/2018 08:38:19|admin|delete|305|attendance|
+
+10/04/2018 08:38:19|admin|delete|306|attendance|
+
+10/04/2018 08:38:19|admin|delete|307|attendance|
+
+10/04/2018 08:38:19|admin|delete|308|attendance|
+
+10/04/2018 08:38:19|admin|delete|309|attendance|
+
+10/04/2018 08:38:19|admin|delete|310|attendance|
+
+10/04/2018 08:38:19|admin|delete|311|attendance|
+
+10/04/2018 08:38:19|admin|delete|312|attendance|
+
+10/04/2018 08:38:19|admin|delete|313|attendance|
+
+10/04/2018 08:38:19|admin|delete|314|attendance|
+
+10/04/2018 08:38:19|admin|delete|315|attendance|
+
+10/04/2018 08:38:19|admin|delete|316|attendance|
+
+10/04/2018 08:38:20|admin|delete|317|attendance|
+
+10/04/2018 08:38:20|admin|delete|318|attendance|
+
+10/04/2018 08:38:20|admin|delete|319|attendance|
+
+10/04/2018 08:38:20|admin|delete|320|attendance|
+
+10/04/2018 08:38:20|admin|delete|321|attendance|
+
+10/04/2018 08:38:20|admin|delete|322|attendance|
+
+10/04/2018 08:38:20|admin|delete|323|attendance|
+
+10/04/2018 08:38:20|admin|delete|324|attendance|
+
+13/04/2018 16:06:13|admin|edit|staff|27|order_tire|
+
+13/04/2018 16:06:24|admin|edit|staff|12|order_tire|
+
+16/04/2018 09:41:27|admin|edit|revert|1|order_tire|
+
+16/04/2018 09:42:00|admin|edit|2|1-2-5-8-4409090-4850000-Chọn|order_tire_list|
+
+16/04/2018 09:44:02|admin|edit|2|1-2-5-8-4409090-4850000-Chọn|order_tire_list|
+
+16/04/2018 09:45:01|admin|edit|2|1-2-5-8-4409090-4850000-Chọn|order_tire_list|
+
+16/04/2018 09:47:03|admin|edit|exstock|1|order_tire|
+

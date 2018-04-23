@@ -1,0 +1,106 @@
+
+
+<?php $l=1 ; $tong=0; ?>
+<table class="table_data" id="or">
+<thead>
+    <tr>
+        <th class="fix">
+            <a class="sort">STT</a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Thương hiệu </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Kích cỡ </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Mã gai </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Số lượng </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Giá </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Tỉ lệ % </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >VAT </a>
+        </th>
+        <th  class="fix">
+            <a class="sort " >Giá bao VAT</a>
+        </th>
+           
+        <th  class="fix">&nbsp;</th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php foreach ($order_tire_lists as $order_tire_list) : 
+        $tong += $order_tire_list->tire_number;
+    ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire_list->order_tire_list_id ?>" class="edit_tr" data="<?php echo $order_tire->sale_lock ?>" >
+            <td class="fix"><?php echo $l++; ?></td>
+            <td class="fix" data="<?php echo $order_tire_list->tire_brand; ?>"  id="tire_brand_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire_list->tire_brand_name; ?></td>
+            <td class="fix" data="<?php echo $order_tire_list->tire_size; ?>" id="tire_size_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire_list->tire_size_number; ?></td>
+            <td class="fix" data="<?php echo $order_tire_list->tire_pattern; ?>" id="tire_pattern_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire_list->tire_pattern_name; ?></td>
+            <td class="fix"  id="tire_number_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire_list->tire_number; ?></td>
+            <td class="fix"  id="tire_price_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire->check_price_vat==1?$lib->formatMoney($order_tire_list->tire_price_vat):$lib->formatMoney($order_tire_list->tire_price); ?></td>
+            <td class="fix"  id="price_<?php echo $order_tire_list->order_tire_list_id; ?>">
+              <?php echo isset($price[$order_tire_list->order_tire_list_id])?round((($order_tire_list->tire_price_vat>0?$order_tire_list->tire_price_vat-(($order_tire_list->tire_number*($order_tire->discount+$order_tire->reduce))/$order_tire->order_tire_number)/$order_tire_list->tire_number:$order_tire_list->tire_price-(($order_tire_list->tire_number*($order_tire->discount+$order_tire->reduce))/$order_tire->order_tire_number)/$order_tire_list->tire_number)*100)/$price[$order_tire_list->order_tire_list_id],1)."%":null; ?>
+            </td>
+            <td class="fix"  id="vat_<?php echo $order_tire_list->order_tire_list_id; ?>">
+              <?php echo $order_tire->vat_percent>0?$order_tire->vat_percent.'%':null; ?>
+            </td>
+            <td class="fix"  id="vat_<?php echo $order_tire_list->order_tire_list_id; ?>">
+              <input disabled="disabled" type="checkbox" name="check_price_vat_<?php echo $order_tire_list->order_tire_list_id; ?>" id="check_price_vat_<?php echo $order_tire_list->order_tire_list_id; ?>" <?php echo $order_tire->check_price_vat==1?'checked="checked"':null ?> >
+            </td>
+            <td class="fix" style="display:none" data="<?php echo $order_tire_list->tire_date>0?$order_tire_list->tire_date:null; ?>" id="tire_date_<?php echo $order_tire_list->order_tire_list_id; ?>">
+              <?php echo $order_tire_list->tire_date>0?date('m/Y',$order_tire_list->tire_date):null; ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    <tr style="text-align:center; font-weight: bold; color: red;">
+        <td class="fix" colspan="4" >Tổng cộng</td>
+        <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
+        <td class="fix" colspan="5" ></td>
+    </tr>
+   </tbody>
+</table>
+
+
+<table>
+  <tr>
+    <td>Ngày đặt hàng:</td>
+    <td><?php echo $lib->hien_thi_ngay_thang($order_tire->order_tire_date); ?></td>
+  </tr>
+  <tr>
+    <td>KH:</td>
+    <td><?php echo $customers->customer_name ?></td>
+  </tr>
+  <tr>
+    <td>Công ty:</td>
+    <td><?php echo $customers->company_name ?></td>
+  </tr>
+  <tr>
+    <td>MST:</td>
+    <td><?php echo $customers->mst ?></td>
+  </tr>
+  <tr>
+    <td>ĐC:</td>
+    <td><?php echo $customers->customer_address ?></td>
+  </tr>
+  <tr>
+    <td>SĐT:</td>
+    <td><?php echo $customers->customer_phone ?></td>
+  </tr>
+  <tr>
+    <td>LH:</td>
+    <td><?php echo $customers->customer_contact ?></td>
+  </tr>
+  <tr>
+    <td>Sale:</td>
+    <td><?php echo $sale ?></td>
+  </tr>
+</table>

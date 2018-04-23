@@ -1,5 +1,5 @@
 <?php
-define('DB_DATABASE','caimeptrading');// Database name
+define('DB_DATABASE','goodtyres');// Database name
 define('DB_USERNAME','root');// User database
 define('DB_PASSWORD','');// Password database
 define('DB_SERVER','localhost');// IP host

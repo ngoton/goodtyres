@@ -1253,7 +1253,7 @@ Class dailyController Extends baseController {
             foreach ($order_tire_lists as $l) {
                 $gia = 0;
                 $data = array(
-                    'where' => '(order_num = "" OR order_num IS NULL) AND start_date <= '.$ngayketthuc.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                    'where' => '(order_num = "" OR order_num IS NULL) AND start_date < '.$ngayketthuc.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
                     'order_by' => 'start_date',
                     'order' => 'DESC, tire_import_id DESC',
                     'limit' => 1,
@@ -1914,10 +1914,22 @@ Class dailyController Extends baseController {
         $account_model = $this->model->get('accountModel');
         $additional_model = $this->model->get('additionalModel');
         
-        $additionals = $additional_model->getAdditionalByWhere(array('daily'=>$daily));
+        $additionals = $additional_model->getAllAdditional(array('where'=>'daily='.$daily));
 
-        $debit = $account_model->getAccount($additionals->debit);
-        $credit = $account_model->getAccount($additionals->credit);
+        $code = "";
+        foreach ($additionals as $add) {
+            $debit = $account_model->getAccount($add->debit);
+            $credit = $account_model->getAccount($add->credit);
+
+            if ($code=="") {
+                $code = $add->code;
+            }
+            else{
+                $code .= ','.$add->code;
+            }
+        }
+
+        $this->view->data['code'] = $code;
 
         $this->view->data['debit'] = $debit;
         $this->view->data['credit'] = $credit;
@@ -1941,10 +1953,22 @@ Class dailyController Extends baseController {
         $account_model = $this->model->get('accountModel');
         $additional_model = $this->model->get('additionalModel');
         
-        $additionals = $additional_model->getAdditionalByWhere(array('daily'=>$daily));
+        $additionals = $additional_model->getAllAdditional(array('where'=>'daily='.$daily));
 
-        $debit = $account_model->getAccount($additionals->debit);
-        $credit = $account_model->getAccount($additionals->credit);
+        $code = "";
+        foreach ($additionals as $add) {
+            $debit = $account_model->getAccount($add->debit);
+            $credit = $account_model->getAccount($add->credit);
+
+            if ($code=="") {
+                $code = $add->code;
+            }
+            else{
+                $code .= ','.$add->code;
+            }
+        }
+
+        $this->view->data['code'] = $code;
 
         $this->view->data['debit'] = $debit;
         $this->view->data['credit'] = $credit;
@@ -2122,56 +2146,120 @@ Class dailyController Extends baseController {
                             $daily_bank_model->updateDaily($data_daily_bank,array('daily_bank_id' => $daily_banks->daily_bank_id));
                         }
 
-                        $data_costs = array(
-                            'costs_create_date' => $data['daily_date'],
-                            'costs_date' => $data['daily_date'],
-                            'comment' => $data['comment'],
-                            'expect_date' => $data['daily_date'],
-                            'week' => $week,
-                            'create_user' => $_SESSION['userid_logined'],
-                            'source_in' => $bank,
-                            'source' => $bank_out,
-                            'year' => $year,
-                            'pay_money' => $data['money_out'],
-                            'money' => $data['money_out'],
-                            'pay_date' => $data['daily_date'],
-                            'money_in' => $data['money_in'],
-                            'code' => $data['code'],
-                            'check_office' => 1,
-                            'check_other' => 1,
-                            'check_lohang' => $data['daily_check_lohang'],
-                            'check_costs' => $data['daily_check_cost'],
-                            );
-                        $costs_model->updateCosts($data_costs,array('additional' => $_POST['yes']));
-                        $cost = $costs_model->getCostsByWhere(array('additional' => $_POST['yes']));
-
-                        $data_asset = array(
-                                    'bank' => $bank,
-                                    'total' => $data['money_in'],
-                                    'assets_date' => $data['daily_date'],
-                                    'week' => $week,
-                                    'year' => $year,
+                        $d_costs = $costs_model->getCostsByWhere(array('additional'=>$_POST['yes']));
+                        if (!$d_costs) {
+                            $data_costs = array(
+                                'costs_create_date' => $data['daily_date'],
+                                'costs_date' => $data['daily_date'],
+                                'comment' => $data['comment'],
+                                'expect_date' => $data['daily_date'],
+                                'week' => $week,
+                                'create_user' => $_SESSION['userid_logined'],
+                                'source_in' => $bank,
+                                'source' => $bank_out,
+                                'year' => $year,
+                                'pay_money' => $data['money_out'],
+                                'pay_date' => $data['daily_date'],
+                                'money_in' => $data['money_in'],
+                                'money' => $data['money_out'],
+                                'code' => $data['code'],
+                                'check_office' => 1,
+                                'check_other' => 1,
+                                'additional' => $_POST['yes'],
+                                'check_lohang' => $data['daily_check_lohang'],
+                                'check_costs' => $data['daily_check_cost'],
                                 );
-                        $assets_model->updateAssets($data_asset,array('additional' => $_POST['yes'],'costs'=>$cost->costs_id,'bank'=>$daily->account));
+                            $costs_model->createCosts($data_costs);
 
-                        $data_asset = array(
-                                    'bank' => $bank_out,
-                                    'total' => 0 - $data['money_out'],
-                                    'assets_date' => $data['daily_date'],
-                                    'week' => $week,
-                                    'year' => $year,
+                            $cost_id = $costs_model->getLastCosts()->costs_id;
+
+                            $data_asset = array(
+                                        'bank' => $bank,
+                                        'total' => $data['money_in'],
+                                        'assets_date' => $data['daily_date'],
+                                        'costs' => $cost_id,
+                                        'week' => $week,
+                                        'year' => $year,
+                                        'additional' => $id_daily_last,
+                                    );
+                            $assets_model->createAssets($data_asset);
+
+                            $data_asset = array(
+                                        'bank' => $bank_out,
+                                        'total' => 0-$data['money_out'],
+                                        'assets_date' => $data['daily_date'],
+                                        'costs' => $cost_id,
+                                        'week' => $week,
+                                        'year' => $year,
+                                        'additional' => $id_daily_last,
+                                    );
+                            $assets_model->createAssets($data_asset);
+
+                            $data_pay = array(
+                                        'source' => $bank_out,
+                                        'money' => $data['money_out'],
+                                        'pay_date' => $data['daily_date'],
+                                        'costs' => $cost_id,
+                                        'week' => $week,
+                                        'year' => $year,
+                                        'additional' => $id_daily_last,
+                                    );
+                            $pay_model->createCosts($data_pay);
+                        }
+                        else{
+                            $data_costs = array(
+                                'costs_create_date' => $data['daily_date'],
+                                'costs_date' => $data['daily_date'],
+                                'comment' => $data['comment'],
+                                'expect_date' => $data['daily_date'],
+                                'week' => $week,
+                                'create_user' => $_SESSION['userid_logined'],
+                                'source_in' => $bank,
+                                'source' => $bank_out,
+                                'year' => $year,
+                                'pay_money' => $data['money_out'],
+                                'money' => $data['money_out'],
+                                'pay_date' => $data['daily_date'],
+                                'money_in' => $data['money_in'],
+                                'code' => $data['code'],
+                                'check_office' => 1,
+                                'check_other' => 1,
+                                'check_lohang' => $data['daily_check_lohang'],
+                                'check_costs' => $data['daily_check_cost'],
                                 );
-                        $assets_model->updateAssets($data_asset,array('additional' => $_POST['yes'],'costs'=>$cost->costs_id,'bank'=>$daily->account_out));
+                            $costs_model->updateCosts($data_costs,array('additional' => $_POST['yes']));
+                            $cost = $costs_model->getCostsByWhere(array('additional' => $_POST['yes']));
+
+                            $data_asset = array(
+                                        'bank' => $bank,
+                                        'total' => $data['money_in'],
+                                        'assets_date' => $data['daily_date'],
+                                        'week' => $week,
+                                        'year' => $year,
+                                    );
+                            $assets_model->updateAssets($data_asset,array('additional' => $_POST['yes'],'costs'=>$cost->costs_id,'bank'=>$daily->account));
+
+                            $data_asset = array(
+                                        'bank' => $bank_out,
+                                        'total' => 0 - $data['money_out'],
+                                        'assets_date' => $data['daily_date'],
+                                        'week' => $week,
+                                        'year' => $year,
+                                    );
+                            $assets_model->updateAssets($data_asset,array('additional' => $_POST['yes'],'costs'=>$cost->costs_id,'bank'=>$daily->account_out));
 
 
-                        $data_pay = array(
-                                    'source' => $bank_out,
-                                    'money' => $data['money_out'],
-                                    'pay_date' => $data['daily_date'],
-                                    'week' => $week,
-                                    'year' => $year,
-                                );
-                        $pay_model->updateCosts($data_pay,array('additional' => $_POST['yes'],'costs'=>$cost->costs_id));
+                            $data_pay = array(
+                                        'source' => $bank_out,
+                                        'money' => $data['money_out'],
+                                        'pay_date' => $data['daily_date'],
+                                        'week' => $week,
+                                        'year' => $year,
+                                    );
+                            $pay_model->updateCosts($data_pay,array('additional' => $_POST['yes'],'costs'=>$cost->costs_id));
+                        }
+
+                        
                     }
                     else{
                         $bank = $bank_model->getBankByWhere(array('symbol'=>$data['account']))->bank_id;

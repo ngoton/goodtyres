@@ -142,16 +142,7 @@ elseif ($order_by == 'cost_type')
         
         
         <th style="width:90px" class="fix" rowspan="2">Còn lại</th>
-        <th class="fix" rowspan="2" >
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','username','<?php echo $url_order ?>')">Sale <?php if ($order_by == 'username'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-        </th> 
-        <th class="fix" rowspan="2" >
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','username','<?php echo $url_order ?>')">Kế toán <?php if ($order_by == 'username'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-        </th> 
-        <th class="fix" rowspan="2" >
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','username','<?php echo $url_order ?>')">Duyệt <?php if ($order_by == 'username'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-        </th> 
-        <th  class="fix" rowspan="2">Action</th>
+        
     </tr>
     <tr>
         <th  class="fix">
@@ -217,28 +208,7 @@ elseif ($order_by == 'cost_type')
             <td class="fix" id="conlai_<?php echo $payable->payable_id; ?>"><?php echo $lib->formatMoney($payable->money-$payable->pay_money); ?></td>
             <td class="fix" style="display:none" id="type_<?php echo $payable->payable_id; ?>"><?php echo $payable->type; ?></td>         
             <td class="fix" style="display:none" id="invoice_number_<?php echo $payable->payable_id; ?>"><?php echo $payable->invoice_number; ?></td> 
-            <td class="fix" id="approve3_<?php echo $payable->payable_id; ?>"><?php echo isset($users['name'][$payable->approve3])?$users['name'][$payable->approve3]:(($_SESSION['role_logined']==3)?'<button data="'.$payable->payable_id.'" class="approve3">Duyệt</button>':null); ?></td>         
             
-            <td class="fix" id="approve2_<?php echo $payable->payable_id; ?>"><?php echo isset($users['name'][$payable->approve2])?$users['name'][$payable->approve2]:(($_SESSION['role_logined']==8)?'<button data="'.$payable->payable_id.'" class="approve2">Duyệt</button>':null); ?></td>         
-            
-            <td class="fix" id="approve_<?php echo $payable->payable_id; ?>"><?php echo isset($users['name'][$payable->approve])?$users['name'][$payable->approve]:(($_SESSION['role_logined']==1)?'<button data="'.$payable->payable_id.'" class="approve">Duyệt</button>':null); ?></td>  
-
-            
-
-            <td>
-                <?php if($_SESSION['role_logined'] != 10){ ?>
-                <?php if(($payable->pay_money != $payable->money || $payable->pay_date == null) && isset($users['name'][$payable->approve])  && ($_SESSION['role_logined'] <= 2 || $_SESSION['role_logined']==7 || $_SESSION['role_logined']==8)){ ?>
-                
-                <button alt="<?php echo date('d-m-Y') ?>"  name="<?php echo $lib->formatMoney($payable->money-$payable->pay_money) ?>" data="<?php echo $payable->source ?>" value="<?php echo $payable->payable_id ?>" class="editButton">Chi</button>
-                 
-                <?php } 
-                if($payable->approve == ""){
-                    echo '<span class="error">Chờ duyệt</span>';
-                }
-
-                ?>
-                <?php } ?>
-            </td>
         </tr>
         
     <?php endforeach; ?>
@@ -248,8 +218,6 @@ elseif ($order_by == 'cost_type')
         <td class="fix" colspan="4" ></td>
         <td class="fix"><?php echo $lib->formatMoney($tongtt); ?></td>
         <td class="fix"><?php echo $lib->formatMoney($tongcon); ?></td>
-        <td class="fix" ></td>
-        <td class="fix" ></td>
     </tr>
    </tbody>
 </table>
@@ -370,7 +338,7 @@ $this->helper('slidePaginator');
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="10"></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="10" disabled></td>
                             <td ><input type="reset" name="reset" value="Nhập lại" tabindex="11"></td>
                             <td></td>
                             <td></td>

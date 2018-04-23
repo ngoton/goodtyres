@@ -148,6 +148,7 @@
                             <td>
                               <input type="hidden" readonly id="tire_price_vat" name="tire_price_vat" required="required" value="0" >
                               <input type="hidden" readonly id="max_number" name="max_number" required="required" value="0" >
+                              <input type="hidden" readonly id="vt_max_number" name="vt_max_number" required="required" value="0" >
                               <input type="hidden" readonly id="yes" name="yes" required="required" >
                               <input type="hidden" readonly id="order" name="order" required="required" value="<?php echo $order ?>" >
                               <input type="hidden" readonly id="check_price_vat" name="check_price_vat" required="required" value="<?php echo $order_tire->check_price_vat ?>" >
@@ -231,7 +232,7 @@ $('html').click(function(e) {
                     var data = jQuery.parseJSON(data);
                     var ton = parseInt(tire_number)+parseInt(data.max)+parseInt(data.going);
                     $('#max_number').val(ton);
-                    
+                    $('#vt_max_number').val(parseInt(tire_number)+parseInt(data.max_vt));
                 }
             });
 
@@ -272,11 +273,19 @@ function add_click(){
 $('#tire_number').keyup(function(){
   var val = parseInt($(this).val());
   var max = parseInt($('#max_number').val());
+  var max_vt = parseInt($('#vt_max_number').val());
 
+  <?php if($order_tire->check_purchase!=1){ ?>
   if (val > max) {
       alert('Vượt quá số lượng tồn!');
       $(this).val(max);
   }
+  <?php }else{ ?>
+  if (val > max_vt) {
+      alert('Vượt quá số lượng tồn!');
+      $(this).val(max_vt);
+  }
+  <?php } ?>
 });
 
 $('#tire_price').keyup(function(){
@@ -425,6 +434,7 @@ $('#tire_brand').change(function(){
                 var data = jQuery.parseJSON(data);
                 var ton = parseInt(data.max)+parseInt(data.going);
                 $('#max_number').val(ton);
+                $('#vt_max_number').val(data.max_vt);
                 $('#tire_date').html("<option>Chọn</option>"+data.date);
             }
         });
@@ -446,6 +456,7 @@ $('#tire_size').change(function(){
                 var data = jQuery.parseJSON(data);
                 var ton = parseInt(data.max)+parseInt(data.going);
                 $('#max_number').val(ton);
+                $('#vt_max_number').val(data.max_vt);
                 $('#tire_date').html("<option>Chọn</option>"+data.date);
             }
         });
@@ -469,6 +480,7 @@ $('#tire_pattern').change(function(){
                 var data = jQuery.parseJSON(data);
                 var ton = parseInt(data.max)+parseInt(data.going);
                 $('#max_number').val(ton);
+                $('#vt_max_number').val(data.max_vt);
                 $('#tire_date').html("<option>Chọn</option>"+data.date);
             }
         });
@@ -596,6 +608,7 @@ $('.tire_brand').keyup(function(){
                         var data = jQuery.parseJSON(data);
                         var ton = parseInt(data.max)+parseInt(data.going);
                         $('#max_number').val(ton);
+                        $('#vt_max_number').val(data.max_vt);
                         $('#tire_date').html("<option>Chọn</option>"+data.date);
                     }
                 });
@@ -627,6 +640,7 @@ $('.tire_brand').keyup(function(){
                         var data = jQuery.parseJSON(data);
                         var ton = parseInt(data.max)+parseInt(data.going);
                         $('#max_number').val(ton);
+                        $('#vt_max_number').val(data.max_vt);
                         $('#tire_date').html("<option>Chọn</option>"+data.date);
                     }
                 });
@@ -658,6 +672,7 @@ $('.tire_brand').keyup(function(){
                         var data = jQuery.parseJSON(data);
                         var ton = parseInt(data.max)+parseInt(data.going);
                         $('#max_number').val(ton);
+                        $('#vt_max_number').val(data.max_vt);
                         $('#tire_date').html("<option>Chọn</option>"+data.date);
                     }
                 });

@@ -1,0 +1,131 @@
+<?php
+$url_order = 'ASC';
+if ($order_by == 'payment_request_detail_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'payment_request_detail_number')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'payment_request_detail_date   ')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+    $i = $sonews*$page-($sonews-1);
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+<section class="content-header">
+    <h1>CHI TIẾT ĐỀ NGHỊ THANH TOÁN</h1>
+</section>
+<div id="content" style="padding:5px;">
+    <div class="add-box">
+          <a class="add_button" id="btnExport" ><i class="fa fa-download"></i> Xuất</a>
+      </div>
+    <div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">
+        <?php if(!isset($disable_control)){ ?>
+        <div class="alignleft actions">
+            <select name="action" id="action">
+                <option value="-1" selected="selected">Chọn</option>
+                
+                <option value="delete">Xóa</option>
+            </select>
+            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
+        </div>
+        <?php } ?>
+        <div class="alignleft actions">
+        <select name="m" id="chonloc">
+          <option  value="18446744073709">Hiển thị tất cả</option>
+          <option value="50">Hiển thị 50 giá trị</option>
+                <option value="100">Hiển thị 100 giá trị</option>
+                <option value="150">Hiển thị 150 giá trị</option>
+                <option selected="selected" value="200">Hiển thị 200 giá trị</option>
+        </select>
+        <input type="button" name="" id="post-query-submit" class="button" value="Chọn lọc" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">                               
+        </div>
+
+      </div>
+
+</div>
+
+
+<table class="table_data" id="tblExport">
+<thead>
+    <tr>
+        <th  class="fix" >
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payment_request_detail_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'payment_request_detail_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payment_request_number','<?php echo $url_order ?>')">Số <?php if ($order_by == 'payment_request_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payment_request_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'payment_request_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payment_request_detail_comment','<?php echo $url_order ?>')">Nội dung <?php if ($order_by == 'payment_request_detail_comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payment_request_detail_money','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'payment_request_detail_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payment_request_detail_code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'payment_request_detail_code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payment_request_detail_code','<?php echo $url_order ?>')">KH <?php if ($order_by == 'payment_request_detail_code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payment_request_detail_code','<?php echo $url_order ?>')">SL <?php if ($order_by == 'payment_request_detail_code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payment_request_detail_user','<?php echo $url_order ?>')">Đề nghị <?php if ($order_by == 'payment_request_detail_user'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $tongtien=0; 
+    foreach ($payment_request_details as $payment_request_detail) : 
+      $tongtien += $payment_request_detail->payment_request_detail_money;
+    ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $payment_request_detail->payment_request_detail_id ?>" class="edit_tr" >
+            
+            <td  class="fix"><?php echo $i++; ?></td>
+            <td class="fix" id="payment_request_number_<?php echo $payment_request_detail->payment_request_detail_id; ?>"><?php echo $payment_request_detail->payment_request_number; ?></td>
+            <td class="fix" id="payment_request_date_<?php echo $payment_request_detail->payment_request_detail_id; ?>"><?php echo $lib->hien_thi_ngay_thang($payment_request_detail->payment_request_date); ?></td>
+            <td class="fix" id="payment_request_detail_comment_<?php echo $payment_request_detail->payment_request_detail_id; ?>"><?php echo $payment_request_detail->payment_request_detail_comment; ?></td>
+            <td class="fix text-right" id="payment_request_detail_money_<?php echo $payment_request_detail->payment_request_detail_id; ?>"><?php echo $lib->formatMoney($payment_request_detail->payment_request_detail_money); ?></td>
+            <td class="fix" id="payment_request_detail_code_<?php echo $payment_request_detail->payment_request_detail_id; ?>"><a target="_blank" href="<?php echo $this->url('ordertire/orderlist/0/0/0/0/'.$payment_request_detail->payment_request_detail_code) ?>"><?php echo $payment_request_detail->payment_request_detail_code; ?></a></td>
+            <td class="fix" id="kh_<?php echo $payment_request_detail->payment_request_detail_id; ?>"><?php echo isset($order_data[$payment_request_detail->payment_request_detail_id]['kh'])?$order_data[$payment_request_detail->payment_request_detail_id]['kh']:null; ?></td>
+            <td class="fix" id="sl_<?php echo $payment_request_detail->payment_request_detail_id; ?>"><?php echo isset($order_data[$payment_request_detail->payment_request_detail_id]['sl'])?$order_data[$payment_request_detail->payment_request_detail_id]['sl']:null; ?></td>
+            <td class="fix" id="payment_request_detail_user_<?php echo $payment_request_detail->payment_request_detail_id; ?>"><?php echo $payment_request_detail->username; ?></td>
+            
+        </tr>
+
+
+    <?php endforeach; ?>
+        <tr style="font-weight:bold">
+          <td colspan="4" class="fix">Tổng cộng</td>
+          <td  class="fix text-right"><?php echo $lib->formatMoney($tongtien); ?></td>
+          <td  class="fix text-right"></td>
+          <td  class="fix text-right"></td>
+          <td  class="fix text-right"></td>
+          <td  class="fix text-right"></td>
+        </tr>
+     
+   </tbody>
+</table>
+<?php
+$this->helper('slidePaginator');
+?>
+
+<script type="text/javascript">
+
+var x = "<?php echo $limit ?>";
+$('#chonloc option[value='+x+']').attr('selected','selected');
+
+$('body').addClass('sidebar-collapse');
+</script>

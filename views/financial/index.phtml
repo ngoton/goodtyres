@@ -102,14 +102,14 @@
                     <td class="fix"><?php echo $account->account_number ?></td>
                     <td class="fix" colspan="2"><?php echo $account->account_name ?></td>
 
-                    <td class="fix"><?php echo $lib->formatMoney($no_dk_parent) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($co_dk_parent) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($no_dk_parent) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($co_dk_parent) ?></td>
 
-                    <td class="fix"><?php echo $lib->formatMoney($no_ps_parent) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($co_ps_parent) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($no_ps_parent) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($co_ps_parent) ?></td>
                     
-                    <td class="fix"><?php echo $lib->formatMoney($tong_parent>0?$tong_parent:null) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($tong_parent<0?str_replace('-', '', $tong_parent):null) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($tong_parent>0?$tong_parent:null) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($tong_parent<0?str_replace('-', '', $tong_parent):null) ?></td>
                 </tr>
                 <?php 
                // }
@@ -119,14 +119,14 @@
                         <td class="fix"><?php echo $account->account_number ?></td>
                         <td class="fix"><?php echo $account->account_name ?></td>
 
-                        <td class="fix"><?php echo $lib->formatMoney($no_dk_parent) ?></td>
-                        <td class="fix"><?php echo $lib->formatMoney($co_dk_parent) ?></td>
+                        <td class="fix text-right"><?php echo $lib->formatMoney($no_dk_parent) ?></td>
+                        <td class="fix text-right"><?php echo $lib->formatMoney($co_dk_parent) ?></td>
 
-                        <td class="fix"><?php echo $lib->formatMoney($no_ps_parent) ?></td>
-                        <td class="fix"><?php echo $lib->formatMoney($co_ps_parent) ?></td>
+                        <td class="fix text-right"><?php echo $lib->formatMoney($no_ps_parent) ?></td>
+                        <td class="fix text-right"><?php echo $lib->formatMoney($co_ps_parent) ?></td>
                         
-                        <td class="fix"><?php echo $lib->formatMoney($tong_parent>0?$tong_parent:null) ?></td>
-                        <td class="fix"><?php echo $lib->formatMoney($tong_parent<0?str_replace('-', '', $tong_parent):null) ?></td>
+                        <td class="fix text-right"><?php echo $lib->formatMoney($tong_parent>0?$tong_parent:null) ?></td>
+                        <td class="fix text-right"><?php echo $lib->formatMoney($tong_parent<0?str_replace('-', '', $tong_parent):null) ?></td>
                     </tr>
                 <?php
                 }
@@ -147,33 +147,33 @@
                     <td class="fix"><?php echo $acc->account_number ?></td>
                     <td class="fix"><?php echo $acc->account_name ?></td>
 
-                    <td class="fix"><?php echo $lib->formatMoney($no_dk) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($co_dk) ?></td>
+                    <td class="fix  text-right"><?php echo $lib->formatMoney($no_dk) ?></td>
+                    <td class="fix  text-right"><?php echo $lib->formatMoney($co_dk) ?></td>
 
-                    <td class="fix"><?php echo $lib->formatMoney($no_ps) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($co_ps) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($no_ps) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($co_ps) ?></td>
                     
-                    <td class="fix"><?php echo $lib->formatMoney($tong>0?$tong:null) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($tong<0?str_replace('-', '', $tong):null) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($tong>0?$tong:null) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($tong<0?str_replace('-', '', $tong):null) ?></td>
                 </tr>   
          <?php } }
             } ?>
             <tr style="background-color:rgba(50, 121, 171, 0.32); font-weight:bold" >
                 <td class="fix"></td>
                 <td class="fix" colspan="2">Tổng cộng</td>
-                <td class="fix"><?php echo $lib->formatMoney($tong_no_dk) ?></td>
-                <td class="fix"><?php echo $lib->formatMoney($tong_co_dk) ?></td>
-                <td class="fix"><?php echo $lib->formatMoney($tong_no_ps) ?></td>
-                <td class="fix"><?php echo $lib->formatMoney($tong_co_ps) ?></td>
-                <td class="fix"><?php echo $lib->formatMoney($tong_no_ck) ?></td>
-                <td class="fix"><?php echo $lib->formatMoney($tong_co_ck) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tong_no_dk) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tong_co_dk) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tong_no_ps) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tong_co_ps) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tong_no_ck) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tong_co_ck) ?></td>
             </tr>
             <tr style="font-weight:bold; color:red" >
                 <td class="fix"></td>
                 <td class="fix" colspan="2">Total</td>
-                <td class="fix" colspan="2"><?php echo $lib->formatMoney($tong_co_dk-$tong_no_dk) ?></td>
-                <td class="fix" colspan="2"><?php echo $lib->formatMoney($tong_co_ps-$tong_no_ps) ?></td>
-                <td class="fix" colspan="2"><?php echo $lib->formatMoney($tong_co_ck-$tong_no_ck) ?></td>
+                <td class="fix text-right" colspan="2"><?php echo $lib->formatMoney($tong_co_dk-$tong_no_dk) ?></td>
+                <td class="fix text-right" colspan="2"><?php echo $lib->formatMoney($tong_co_ps-$tong_no_ps) ?></td>
+                <td class="fix text-right" colspan="2"><?php echo $lib->formatMoney($tong_co_ck-$tong_no_ck) ?></td>
             </tr>
         </tbody>
    </table>

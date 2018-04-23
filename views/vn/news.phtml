@@ -1,0 +1,199 @@
+<?php
+if (isset($lists)) {
+?>
+<div class="top-detail">
+<?php
+
+    foreach ($lists as $post) {
+        $link_picture = BASE_URL.'/public/images/img-blank.png';
+        if ($post->post_picture != "") {
+            $picture = explode(',', $post->post_picture);
+            $link_picture = BASE_URL.'/'.$photo_data['link'][$picture[0]];
+        
+?>
+    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 slide-detail">
+        <img itemprop="image" src="<?php echo $link_picture ?>" width="95%" />
+    </div>
+    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 right-detail">
+        <h2 itemprop="name" ><a href="<?php echo BASE_URL ?>/vn/tin-tuc/<?php echo $post->post_link ?>"><?php echo $post->post_title ?></a></h2>
+        <div class="description-detail" itemprop="datePublished" >
+            <i class="fa fa-user"></i> <a href="<?php echo BASE_URL ?>">Lốp xe Việt Trade</a> &nbsp;
+            <i class="fa fa-clock-o"></i> <?php echo $lib->hien_thi_ngay_thang($post->post_date) ?> &nbsp;
+            <i class="fa fa-tags"></i> 
+            <?php 
+            $tags = explode(',', $post->post_tag);
+                foreach ($tags as $tag) {
+                    echo '<a href="'.BASE_URL.'/vn/tag/'.str_replace(" ", "-", $tag).'">'.$tag.'</a>, ';
+                }
+            ?>
+        </div>
+
+        <div class="info-detail" itemprop="description" >
+
+            <?php echo $post->post_desc ?>
+
+        </div>
+    </div>
+    <?php }else{ ?>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 right-detail">
+        <h2 itemprop="name" ><a href="<?php echo BASE_URL ?>/vn/tin-tuc/<?php echo $post->post_link ?>"><?php echo $post->post_title ?></a></h2>
+        <div class="description-detail" itemprop="datePublished" >
+            <i class="fa fa-user"></i> <a href="<?php echo BASE_URL ?>">Lốp xe Việt Trade</a> &nbsp;
+            <i class="fa fa-clock-o"></i> <?php echo $lib->hien_thi_ngay_thang($post->post_date) ?> &nbsp;
+            <i class="fa fa-tags"></i> 
+            <?php 
+            $tags = explode(',', $post->post_tag);
+                foreach ($tags as $tag) {
+                    echo '<a href="'.BASE_URL.'/vn/tag/'.str_replace(" ", "-", $tag).'">'.$tag.'</a>, ';
+                }
+            ?>
+        </div>
+
+        <div class="info-detail" itemprop="description" >
+
+            <?php echo $post->post_desc ?>
+
+        </div>
+    </div>
+
+    <?php } ?>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 right-detail">
+        <hr style="color: #dadde2; height: 1px">
+    </div>
+
+<?php
+    }
+
+$this->helper('slidePaginator');
+?>
+</div>
+<?php
+
+}else{
+
+ foreach ($posts as $post) { 
+    $tags = explode(',', $post->post_tag);
+?>
+
+<div class="top-detail">
+
+    
+    
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 right-detail">
+
+        <h1 itemprop="name" ><?php echo mb_strtoupper($post->post_title, "UTF-8") ?></h1>
+        <div class="description-detail" itemprop="datePublished" >
+            <i class="fa fa-user"></i> <a href="<?php echo BASE_URL ?>">Lốp xe Việt Trade</a> &nbsp;
+            <i class="fa fa-clock-o"></i> <?php echo $lib->hien_thi_ngay_thang($post->post_date) ?> &nbsp;
+            <i class="fa fa-tags"></i> 
+            <?php 
+                foreach ($tags as $tag) {
+                    echo '<a href="'.BASE_URL.'/vn/tag/'.str_replace(" ", "-", $tag).'">'.$tag.'</a>, ';
+                }
+            ?>
+        </div>
+
+        <div class="info-detail" itemprop="description" >
+            <?php echo $post->post_desc ?>
+        </div>
+
+        <!-- <div class="info-detail" itemprop="description" >
+                
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-8303573181078043"
+                     data-ad-slot="9801576216"
+                     data-ad-format="auto"></ins>
+                <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+        </div> -->
+
+        <div class="external">
+
+            <?php echo $post->post_content ?>
+
+        </div>
+
+
+        <div class="like-btn">
+
+            <div class="fb-like" data-href="" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+            <!-- Đặt thẻ này vào phần đầu hoặc ngay trước thẻ đóng phần nội dung của bạn. -->
+            <script src="https://apis.google.com/js/platform.js" async defer>
+              {lang: 'vi'}
+            </script>
+
+            <!-- Đặt thẻ này vào nơi bạn muốn Nút +1 kết xuất. -->
+            <div class="g-plusone" data-annotation="inline" data-width="300"></div>
+
+        </div>
+
+        <div class="clearFix"></div>
+
+    </div>
+
+
+</div>
+
+  
+<div class="main-content-box">
+
+    <h2>Xem thêm</h2>
+
+    <?php foreach ($post_others as $post_other) { ?>
+    <div style="margin:0; padding:0;" class="sub-menu-list tag-link">
+        <a href="<?php echo BASE_URL ?>/vn/tin-tuc/<?php echo $post_other->post_link ?>">
+
+        <?php echo $post_other->post_title ?>
+
+        </a>  
+    </div> 
+
+    <?php } ?>
+</div>
+
+
+<div class="main-content-box">
+
+    <h2>Nhận xét</h2>
+
+    <div class="items-list-prod comment-detail">
+
+        <div class="fb-comments" id="comment-box">
+
+                <div class="comment_fb"> <div class="fb-comments" data-href="<?php echo BASE_URL.$_SERVER['REQUEST_URI'] ?>" data-width="100%" data-numposts="10" data-colorscheme="light"></div> </div>
+
+        </div>   
+
+    </div>
+
+</div>
+
+<?php } ?>
+
+<?php } ?>
+
+<script type="text/javascript">
+function sapxep(page,cot,sapxep){
+  window.location.href = "<?php echo $this->url('vn/tin-tuc/page/') ?>"+page+"/"+cot+"/"+sapxep;
+}
+/*function sapxep(page,cot,sapxep){
+          var sapxep = sapxep;
+          var cot = cot;
+          var page = page;
+          
+          $.ajax({
+            type: "POST", // phương thức gởi đi
+            url: "<?php echo BASE_URL ?>/vn/tin-tuc", // nơi mà dữ liệu sẽ chuyển đến khi submit
+            data: "page="+ page +"&order_by="+ cot +"&order="+ sapxep+"&limit=<?php echo $limit ?>", // giá trị post
+            success: function(answer){ // if everything goes well
+              
+              $('body').html(answer); // đặt kết quả trả về từ test.php vào thẻ div success
+              $('#loading').fadeOut(500);
+            }
+          });
+}*/
+</script>

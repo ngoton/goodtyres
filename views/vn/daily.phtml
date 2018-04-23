@@ -1,0 +1,356 @@
+<script type="text/javascript">
+ $(document).ready(function() {
+    $('.heading0').click(function() {
+            $('.body0').slideToggle("fast");
+    });
+
+    $("#loginForm").validate({
+        errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+        rules: {
+            
+        },
+        submitHandler: function(form) {
+            
+            var company_name = $('#company_name').val();
+            var company_phone = $('#company_phone').val();
+            var company_email = $('#company_email').val();
+            var company_mst = $('#company_mst').val();
+            var company_address = $('#company_address').val();
+            var company_contact = $('#company_contact').val();
+            var place = "<?php echo $ten ?>";
+            
+            $.ajax({
+                type: "POST", // phương thức gởi đi
+                url: "<?php echo BASE_URL ?>/vn/agent/", // nơi mà dữ liệu sẽ chuyển đến khi submit
+                data: {
+                    company_name: company_name,
+                    company_phone: company_phone,
+                    company_email: company_email,
+                    company_mst: company_mst,
+                    company_address: company_address,
+                    company_contact: company_contact,
+                    place: place,
+                    }, // giá trị post
+                success: function(answer){ // if everything goes well
+                    //alert(answer);
+                    $('#error').hide();
+                    $('#error').slideToggle(100); // hiển thị thẻ div success
+                    $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
+                    $('#error').fadeOut(10000);
+
+                    
+                }
+            });
+            return false;
+             
+         }
+    });
+
+  $('.upper').keyup(function(evt){
+
+    // force: true to lower case all letter except first
+    var cp_value= ucfirst($(this).val(),true) ;
+
+    // to capitalize all words  
+    //var cp_value= ucwords($(this).val(),true) ;
+
+
+    $(this).val(cp_value );
+
+  });
+
+  function ucfirst(str,force){
+        str=force ? str.toLowerCase() : str;
+        return str.replace(/(\b)([a-zA-Z])/,
+                 function(firstLetter){
+                    return   firstLetter.toUpperCase();
+                 });
+   }
+
+   $('.numbers').keyup(function(event) {
+
+        // skip for arrow keys
+    if(event.which >= 37 && event.which <= 40) return;
+
+    // format number
+    $(this).val(function(index, value) {
+      return value
+        .replace(/[^0-9]/g, "")
+        .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+      ;
+    });
+  });
+
+   $('input[rel="txtTooltip"]').tooltip();
+
+});
+
+</script>
+<style type="text/css">
+.panel{
+    margin-bottom: 20px;
+}
+.panel-heading:hover{
+    cursor: pointer;
+}
+.error{
+    color: red;
+}
+</style>
+<div class="main-content-box">
+
+
+
+    <h2><?php echo $title ?></h2>
+
+    <div class="items-list-prod">
+
+        <div class="top-detail">
+
+            <p>Chào mừng quý khách đến với Công ty TNHH Việt Trade!</p>
+            <p>Công ty Việt Trade là nhà nhập khẩu và phân phối các nhãn hiệu Lốp ô tô nổi tiếng thế giới, hiện đang cung cấp tại thị trường <?php echo $ten ?>. Chúng tôi mong muốn mang đến cho khách hàng và đối tác sự hợp tác kinh doanh bền vững và lâu dài trên thị trường lốp xe tại Việt Nam.</p>
+            <p>Việt Trade đã thiết lập được một hệ thống phân phối và mạng lưới khách hàng rộng khắp trên toàn quốc, xây dựng nên một tên tuổi và uy tín lớn, là niềm tin vững chắc của bạn hàng trong nước và quốc tế. Cung cấp hàng trăm chủng loại lốp cho tất cả các dòng xe như du lịch, thương mại, cao cấp, vận tải, công trình, chuyên dụng, từ xe ô tô, xe tải, xe container, xe khách cho tới xe ben.</p>
+            <p>Vì vậy chúng tôi mong muốn được HỢP TÁC VỚI CÁC ĐẠI LÝ SĂM LỐP Ô TÔ <?php echo $ten!=""?"TẠI ".mb_strtoupper($ten, "UTF-8"):"TRÊN TOÀN QUỐC" ?>.</p>
+            <p>Thông tin liên hệ:<br>
+            HOTLINE: 083 500 9000<br>
+            ĐỊA CHỈ: 29 - QL 51, Phước Tân, Biên Hòa, Đồng Nai<br>
+            SĐT: 0931 55 99 09 - 0931 55 77 75<br>
+            EMAIL: it@viet-trade.org</p>
+
+            <div class="panel panel-info">
+              <div class="panel-heading heading0">
+                  <div class="panel-title"><i class="fa fa-paper-plane"></i> Đăng ký làm đại lý</div>
+              </div> 
+              <div class="panel-body body0" <?php echo !isset($error) ? 'style="display:none"' : null; ?> >
+                  <form id="loginForm" method="post" action="">
+                  <div class="row omb_row-sm-offset-3">
+                      <div class="col-xs-12 col-sm-6">    
+                              <div class="input-group">
+                                  <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
+                                  <input type="text" class="form-control upper" id="company_name" name="company_name" placeholder="Tên công ty" tabindex="1" autofocus required="required" title="Tên công ty" data-toggle="tooltip" data-placement="top" rel="txtTooltip">
+                              </div>
+                              <span class="help-block"></span>
+                              <div class="input-group">
+                                  <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                  <input type="number" class="form-control" id="company_mst" name="company_mst" placeholder="Mã số thuế" tabindex="2" required="required" title="Mã số thuế" data-toggle="tooltip" data-placement="top" rel="txtTooltip">
+                              </div>
+                              <span class="help-block"></span>
+                              <div class="input-group">
+                                  <span class="input-group-addon"><i class="fa fa-home"></i></span>
+                                  <input type="text" class="form-control upper" id="company_address" name="company_address" placeholder="Địa chỉ" tabindex="3" required="required" title="Địa chỉ" data-toggle="tooltip" data-placement="top" rel="txtTooltip">
+                              </div>
+                              <span class="help-block"></span>
+                              <div class="input-group">
+                                  <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                                  <input type="text" class="form-control numbers" id="company_phone" name="company_phone" min="10" placeholder="Số điện thoại" tabindex="4" required="required" title="Số điện thoại" data-toggle="tooltip" data-placement="top" rel="txtTooltip">
+                              </div>
+                              <span class="help-block"></span>
+                              <div class="input-group">
+                                  <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                  <input type="email" class="form-control" id="company_email" name="company_email" placeholder="Email" tabindex="5" required="required" title="Email" data-toggle="tooltip" data-placement="top" rel="txtTooltip">
+                              </div>
+                              <span class="help-block"></span>
+                              <div class="input-group">
+                                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                  <input type="text" class="form-control upper" id="company_contact" name="company_contact" placeholder="Người liên hệ" tabindex="6" required="required" title="Người liên hệ" data-toggle="tooltip" data-placement="top" rel="txtTooltip">
+                              </div>
+                              <span class="help-block"></span>
+
+                              <input class="btn btn-lg btn-primary btn-block" type="submit" name="submit" value="Đăng ký">
+                          
+                      </div>
+                      <div class="col-xs-12 col-sm-6">
+                          <p>
+                            <img src="<?php echo BASE_URL ?>/public/img/mapvn.png" height="300px" align="right">
+                            Quý khách hãy điền đầy đủ thông tin để đăng ký làm đại lý phân phối lốp xe của Việt Trade, lợi ích khi làm đại lý:
+                            <ul>
+                                <li>Hưởng ưu đãi về giá</li>
+                                <li>Chính sách về giao nhận</li>
+                                <li>Các chính sách độc quyền dành cho đại lý</li>
+                            </ul>
+                          </p>
+                      </div>
+                  </div>   
+                  <div class="row omb_row-sm-offset-3">
+                      <div class="col-xs-12 col-sm-12" style="color:#a94442">  
+                          <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+                      </div>
+                  </div>
+                  </form>
+              </div>
+              
+          </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+<div class="main-content-box">
+
+    <h2>Hệ thống đại lý</h2>
+
+    <div class="items-list-prod">
+
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 footer-link">
+
+
+
+        <ul>
+
+
+
+          <li class="header-fl"><h3><a style="color:#3485BD" href="<?php echo BASE_URL ?>/vn/dai-ly/mien-bac" title="Đại lý lốp xe tại Miền Bắc">ĐẠI LÝ MIỀN BẮC</a></h3></li>
+
+
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/dong-bac-bo" title="Đại lý lốp xe tại Đông Bắc Bộ"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Đông Bắc Bộ</a></li>
+
+
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/tay-bac-bo" title="Đại lý lốp xe tại Tây Bắc Bộ"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Tây Bắc Bộ</a></li>
+
+
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/ha-noi" title="Đại lý lốp xe tại Hà Nội"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Hà Nội</a></li>
+
+
+
+        </ul>
+
+
+
+        <div class="clearFix"></div>
+
+
+
+      </div>
+
+
+
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 footer-link">
+
+
+
+        <ul>
+
+
+
+          <li class="header-fl"><h3><a style="color:#3485BD" href="<?php echo BASE_URL ?>/vn/dai-ly/mien-trung" title="Đại lý lốp xe tại Miền Trung">ĐẠI LÝ MIỀN TRUNG</a></h3></li>
+
+
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/bac-trung-bo" title="Đại lý lốp xe tại Bắc Trung Bộ"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Bắc Trung Bộ</a></li>
+
+
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/da-nang" title="Đại lý lốp xe tại Đà Nẵng"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Đà Nẵng</a></li>
+
+
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/quang-nam" title="Đại lý lốp xe tại Quảng Nam"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Quảng Nam</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/quang-ngai" title="Đại lý lốp xe tại Quảng Ngãi"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Quảng Ngãi</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/binh-dinh" title="Đại lý lốp xe tại Bình Định"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Bình Định</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/phu-yen" title="Đại lý lốp xe tại Phú Yên"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Phú Yên</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/khanh-hoa" title="Đại lý lốp xe tại Khánh Hòa"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Khánh Hòa</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/ninh-thuan" title="Đại lý lốp xe tại Ninh Thuận"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Ninh Thuận</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/binh-thuan" title="Đại lý lốp xe tại Bình Thuận"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Bình Thuận</a></li>
+
+
+
+        </ul>
+
+
+
+        <div class="clearFix"></div>
+
+
+
+      </div>
+
+
+
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 footer-link">
+
+
+
+        <ul>
+
+
+
+          <li class="header-fl"><h3><a style="color:#3485BD" href="<?php echo BASE_URL ?>/vn/dai-ly/tay-nguyen" title="Đại lý lốp xe tại Tây Nguyên">ĐẠI LÝ TÂY NGUYÊN</a></h3></li>
+
+
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/gia-lai" title="Đại lý lốp xe tại Gia Lai"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Gia Lai</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/kon-tum" title="Đại lý lốp xe tại Kon Tum"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Kon Tum</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/dak-lak" title="Đại lý lốp xe tại Đắk Lắk"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Đắk Lắk</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/lam-dong" title="Đại lý lốp xe tại Lâm Đồng"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Lâm Đồng</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/dak-nong" title="Đại lý lốp xe tại Đắk Nông"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Đắk Nông</a></li>
+
+
+
+        </ul>
+
+
+
+        <div class="clearFix"></div>
+
+
+
+      </div>
+
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 footer-link">
+
+
+
+        <ul>
+
+
+
+          <li class="header-fl"><h3><a style="color:#3485BD" href="<?php echo BASE_URL ?>/vn/dai-ly/mien-nam" title="Đại lý lốp xe tại Miền Nam">ĐẠI LÝ MIỀN NAM</a></h3></li>
+
+
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/ho-chi-minh" title="Đại lý lốp xe tại Hồ Chí Minh"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Hồ Chí Minh</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/dong-nai" title="Đại lý lốp xe tại Đồng Nai"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Đồng Nai</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/binh-duong" title="Đại lý lốp xe tại Bình Dương"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Bình Dương</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/ba-ria-vung-tau" title="Đại lý lốp xe tại Bà Rịa Vũng Tàu"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Bà Rịa Vũng Tàu</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/tay-ninh" title="Đại lý lốp xe tại Tây Ninh"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Tây Ninh</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/binh-phuoc" title="Đại lý lốp xe tại Bình Phước"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Bình Phước</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/long-an" title="Đại lý lốp xe tại Long An"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Long An</a></li>
+
+          <li><a href="<?php echo BASE_URL ?>/vn/dai-ly/can-tho" title="Đại lý lốp xe tại Cần Thơ"><i class="fa fa-caret-right"></i>Đại lý lốp xe tại Cần Thơ</a></li>
+
+
+
+        </ul>
+
+
+
+        <div class="clearFix"></div>
+
+    </div>
+
+
+
+    </div>
+
+</div>

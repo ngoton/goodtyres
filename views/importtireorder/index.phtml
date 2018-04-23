@@ -211,10 +211,13 @@ elseif ($order_by == 'import_tire_order_expect_date   ')
             <td class="fix" style="display: none;" id="import_tire_order_tthq_1cont_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_tthq_1cont); ?></td>
             <td class="fix" style="display: none;" id="import_tire_order_tthq_2cont_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_tthq_2cont); ?></td>
             <td class="fix" style="display: none;" id="import_tire_order_tthq_plus_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_tthq_plus); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_stevedore_small_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_stevedore_small); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_stevedore_large_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_stevedore_large); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_rate_diff_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_rate_diff); ?></td>
             <?php if(!isset($disable_control)){ ?>
             <td class="fix text-right">
               
-              <i class="fa fa-eye viewdetail" title="Xem chi tiết" data="<?php echo $import_tire_order->import_tire_order_id ?>"></i>
+              <i class="fa fa-eye edit_invoice viewdetail" title="Xem chi tiết" data="<?php echo $import_tire_order->import_tire_order_id ?>"></i>
               <?php
               if ($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 9) {
                 
@@ -413,7 +416,28 @@ $this->helper('slidePaginator');
                             <input class="text-right numbers custom" style="width: 80px" type="text" name="tthq_plus" id="tthq_plus" value="" data="" alt="" title="">
                           </td>
                         </tr>
-                          
+                         <tr>
+                          <td></td>
+                          <td>
+                            Lốp nhỏ
+                          </td>
+                          <td>
+                            Lốp lớn
+                          </td>
+                          <td>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Bốc xếp</td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px" type="text" name="stevedore_small" id="stevedore_small" value="" data="" alt="" title="">
+                          </td>
+                          <td>
+                            <input class="text-right numbers custom" style="width: 80px" type="text" name="stevedore_large" id="stevedore_large" value="" data="" alt="" title="">
+                          </td>
+                          <td>
+                          </td>
+                        </tr>
                       </table>
                     </div>
                   </fieldset>
@@ -456,6 +480,14 @@ $this->helper('slidePaginator');
                       </div>
                       <div class="form-group col-xs-8 nopadding">
                         <input type="text" id="import_tire_order_claim" class="numbers" name="import_tire_order_claim" tabindex="12" autocomplete="off" >
+                      </div>
+                    </div>
+                    <div class="box-body nopadding">
+                      <div class="form-group col-xs-4 nopadding">
+                        <label for="import_tire_order_rate_diff">Chênh lệch tỷ giá </label>
+                      </div>
+                      <div class="form-group col-xs-8 nopadding">
+                        <input type="text" id="import_tire_order_rate_diff" class="numbers" name="import_tire_order_rate_diff" tabindex="12" autocomplete="off" >
                       </div>
                     </div>
                     
@@ -717,7 +749,7 @@ $('.edit_invoice').click(function(e){
     
     var import_tire_order_oceanfreight = $('#import_tire_order_oceanfreight_'+id).text();
     var tongsl = $('#import_tire_order_total_'+id).text() || 0;
-    var socont = Math.ceil(parseInt(tongsl.substring(0,1))/2);
+    var socont = Math.floor(parseInt(tongsl.substring(0,1))/2);
     if (parseInt(tongsl.substring(0,1)) < 2) {
       socont = 1;
     }
@@ -739,6 +771,27 @@ $('.edit_invoice').click(function(e){
     $('#tthq_1cont').val($('#import_tire_order_tthq_1cont_'+id).text());
     $('#tthq_2cont').val($('#import_tire_order_tthq_2cont_'+id).text());
     $('#tthq_plus').val($('#import_tire_order_tthq_plus_'+id).text());
+
+    var lopnho = $('#import_tire_order_stevedore_small_'+id).text();
+    var loplon = $('#import_tire_order_stevedore_large_'+id).text();
+
+    $('#stevedore_small').val(lopnho);
+    $('#stevedore_large').val(loplon);
+
+    /*if (lopnho != "" && lopnho != 0) {
+    	$('#stevedore_small').val(lopnho);
+    }
+    else{
+    	$('#stevedore_small').val(6000);
+    }
+
+    if (loplon != "" && loplon != 0) {
+    	$('#stevedore_large').val(loplon);
+    }
+    else{
+    	$('#stevedore_large').val(7000);
+    }*/
+    
 
     
     //alert(cost_code);
@@ -972,6 +1025,76 @@ $('.edit_invoice').click(function(e){
             $('#dataTable1 tbody tr:eq('+trIndex+') td:nth-child(3) input').val(val);
           });
 
+
+          $('.editable').dblclick(function(e){  
+              var i=0;
+              var id=$(this).attr('id');
+              e.stopPropagation();      //<-------stop the bubbling of the event here
+              var value = $('#'+id).html();
+
+              updateVal('#'+id, value);
+              
+          });
+          function updateVal(currentEle, value, data) {
+              var id = currentEle.substr(currentEle.indexOf("_") + 1);
+              $(currentEle).html('<input class="thVal numbers" style="width:'+$(currentEle).width()+'px" type="text" value="'+value+'" />');
+              $(".thVal").focus();
+              $(".thVal").keyup(function (event) {
+                  var keyword = $(".thVal").val().trim();
+
+                  if (event.keyCode == 13) {
+                      $(currentEle).html(keyword);
+
+                      var tongtienhang = parseFloat($("#tongtienhang").text().replace(/\,/g,'') || 0);
+                      var tongthuenk = parseFloat($("#tongthuenk").text().replace(/\,/g,'') || 0);
+                      var tongthuevat = parseFloat($("#tongthuevat").text().replace(/\,/g,'') || 0);
+                      var tonglogs = parseFloat($("#tonglogs").text().replace(/\,/g,'') || 0);
+                      var tongbocxep = parseFloat($("#tongbocxep").text().replace(/\,/g,'') || 0);
+                      var tongphikhac = parseFloat($("#tongphikhac").text().replace(/\,/g,'') || 0);
+
+                      var tongthue = tongthuenk+tongthuevat;
+
+                      var tongcong = tongtienhang+tongthue+tonglogs+tongbocxep+tongphikhac;
+
+                      $("#tongthue").text(tongthue);
+                      $("#tongcong").text(tongcong);
+
+                      $('.numbers').html(function(index, value) {
+                        return value
+                          .replace(/[^0-9-.]/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                      });
+                  }
+              });
+              
+              $(".thVal").focusout(function () { // you can use $('html')
+                  var keyword = $(".thVal").val().trim();
+                  $(currentEle).html(keyword);
+
+                  var tongtienhang = parseFloat($("#tongtienhang").text().replace(/\,/g,'') || 0);
+                  var tongthuenk = parseFloat($("#tongthuenk").text().replace(/\,/g,'') || 0);
+                  var tongthuevat = parseFloat($("#tongthuevat").text().replace(/\,/g,'') || 0);
+                  var tonglogs = parseFloat($("#tonglogs").text().replace(/\,/g,'') || 0);
+                  var tongbocxep = parseFloat($("#tongbocxep").text().replace(/\,/g,'') || 0);
+                  var tongphikhac = parseFloat($("#tongphikhac").text().replace(/\,/g,'') || 0);
+
+                  var tongthue = tongthuenk+tongthuevat;
+
+                  var tongcong = tongtienhang+tongthue+tonglogs+tongbocxep+tongphikhac;
+
+                  $("#tongthue").text(tongthue);
+                  $("#tongcong").text(tongcong);
+
+                  $('.numbers').html(function(index, value) {
+                    return value
+                      .replace(/[^0-9-.]/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ;
+                  });
+              });
+          }
+
           $('.numbers').keyup(function(event) {
               // skip for arrow keys
             if(event.which >= 37 && event.which <= 40) return;
@@ -988,9 +1111,18 @@ $('.edit_invoice').click(function(e){
         }
     });
 
+	$( document ).ajaxComplete(function() {
+		$('.add-field button').attr("disabled",false);
+	});
 
     $( ".add-field" ).dialog( "open" );
       
+});
+
+$('.viewdetail').click(function(e){
+	$( document ).ajaxComplete(function() {
+		$('.add-field button').attr("disabled",true);
+	});
 });
 
 function add_click(){
@@ -1010,6 +1142,8 @@ function add_click(){
         $("#import_tire_order_port_to option:first").attr('selected','selected');
         $('#ocean_freight').val(0);
         $('#lift').val(0);
+        $('#stevedore_small').val(<?php echo $stevedore_small ?>);
+        $('#stevedore_large').val(<?php echo $stevedore_large ?>);
 
         $('#import_tire_order_bill_number').focus();
 
@@ -1298,6 +1432,7 @@ $(document).ready(function(){
         var import_tire_order_date = $('#import_tire_order_date').val();
         var import_tire_order_expect_date = $('#import_tire_order_expect_date').val();
         var import_tire_order_claim = $('#import_tire_order_claim').val();
+        var import_tire_order_rate_diff = $('#import_tire_order_rate_diff').val();
         var import_tire_order_bank_rate = $('#import_tire_order_bank_rate').val();
         var import_tire_order_tax_rate = $('#import_tire_order_tax_rate').val();
         var import_tire_order_bank_cost = $('#import_tire_order_bank_cost').val();
@@ -1318,6 +1453,9 @@ $(document).ready(function(){
         var import_tire_order_tthq_1cont = $('#tthq_1cont').val();
         var import_tire_order_tthq_2cont = $('#tthq_2cont').val();
         var import_tire_order_tthq_plus = $('#tthq_plus').val();
+
+        var import_tire_order_stevedore_small = $('#stevedore_small').val();
+        var import_tire_order_stevedore_large = $('#stevedore_large').val();
 
 
         var import_tire_order_sum = $('#tongtienhang').text();
@@ -1440,6 +1578,7 @@ $(document).ready(function(){
             import_tire_order_date: import_tire_order_date,
             import_tire_order_expect_date: import_tire_order_expect_date,
             import_tire_order_claim: import_tire_order_claim,
+            import_tire_order_rate_diff: import_tire_order_rate_diff,
             import_tire_order_bank_rate: import_tire_order_bank_rate,
             import_tire_order_tax_rate:import_tire_order_tax_rate,
             import_tire_order_bank_cost:import_tire_order_bank_cost,
@@ -1466,6 +1605,8 @@ $(document).ready(function(){
             import_tire_order_tthq_1cont: import_tire_order_tthq_1cont,
             import_tire_order_tthq_2cont: import_tire_order_tthq_2cont,
             import_tire_order_tthq_plus: import_tire_order_tthq_plus,
+            import_tire_order_stevedore_small: import_tire_order_stevedore_small,
+            import_tire_order_stevedore_large: import_tire_order_stevedore_large,
             import_list: import_list,
           },
           success:function(answer){
@@ -1856,7 +1997,7 @@ $('#import_tire_order_supplier:eq('+vitri+')').focus();
 function updateprice(){
   
   var tongsl = $('#tongsl').text().replace(/\,/g,'') || 0;
-  var socont = Math.ceil(parseInt(tongsl.substring(0,1))/2);
+  var socont = Math.floor(parseInt(tongsl.substring(0,1))/2);
   if (parseInt(tongsl.substring(0,1)) < 2) {
     socont = 1;
   }
@@ -1913,6 +2054,17 @@ function updateprice(){
     var truck_2 = parseFloat($('#truck').attr('data')) || 0;
     var truck_plus = parseFloat($('#truck').attr('alt')) || 0;
     var lift = parseFloat($('#lift').val()) || 0;
+
+    var nho = parseFloat(get_number('#stevedore_small')) || 0;
+    var lon = parseFloat(get_number('#stevedore_large')) || 0;
+
+    if ($('.tire_size:eq('+rowIndex+')').val().trim()=="12.00R20") {
+    	$('.tire_stevedore:eq('+rowIndex+')').val(tire_number*lon);
+    }
+    else{
+    	$('.tire_stevedore:eq('+rowIndex+')').val(tire_number*nho);
+    }
+
     var stevedore = parseFloat(get_number('.tire_stevedore:eq('+rowIndex+')')) || 0;
 
     if (bill_2>0) {

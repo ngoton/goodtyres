@@ -137,22 +137,14 @@ elseif ($order_by == 'order_tire_number')
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','username','<?php echo $url_order ?>')">Sale <?php if ($order_by == 'username'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th> 
         <th class="fix">
-            <a class="sort" >% DS</a>
+            <a class="sort" >Giá bán</a>
         </th> 
+        <th class="fix">
+            <a class="sort" >Giá giảm 25%</a>
+        </th> 
+        
         <th class="fix">
             <a class="sort" >Lương DS</a>
-        </th> 
-        <th class="fix">
-            <a class="sort" >Vượt giá</a>
-        </th> 
-        <th class="fix">
-            <a class="sort" >KH mới</a>
-        </th> 
-        <th class="fix">
-            <a class="sort" >KH cũ</a>
-        </th> 
-        <th class="fix">
-            <a class="sort" >KPI</a>
         </th> 
         <th class="fix">
             <a class="sort" >Tháng lương</a>
@@ -164,7 +156,7 @@ elseif ($order_by == 'order_tire_number')
     
    </thead>
    <tbody>
-    <?php $tongsl = 0; $tongthu=0; $tongthue=0; $tonggiam=0; $tongtra=0; $tongchiphi=0; $tongsp=0; $tongvuot=0; $tongmoi=0; $tongcu=0; $tongkpi=0; ?>
+    <?php $tongsl = 0; $tongthu=0; $tongthue=0; $tonggiam=0; $tongtra=0; $tongchiphi=0; $tongsp=0;  ?>
     <?php foreach ($order_tires as $order_tire) : ?>
     <?php
         $tongsl += $order_tire->order_tire_number; 
@@ -173,11 +165,31 @@ elseif ($order_by == 'order_tire_number')
         $tonggiam += $order_tire->discount+$order_tire->reduce; 
         $tongtra += $order_tire->total;
         $tongchiphi += $order_tire->order_cost;
-        $tongsp += (round((isset($info['bonus'][$order_tire->order_tire_id])?$info['bonus'][$order_tire->order_tire_id]:(isset($info['percent'][$order_tire->order_tire_id])?$order_tire->total*($info['percent'][$order_tire->order_tire_id]/100):null))/1000)*1000);
-        $tongvuot += (isset($info['vuotgia'][$order_tire->order_tire_id])?$info['vuotgia'][$order_tire->order_tire_id]:0);
-        $tongmoi += $info['khmoi'][$order_tire->order_tire_id]==1?1:0;
-        $tongcu += $info['khcu'][$order_tire->order_tire_id]==0?1:0;
-        $tongkpi += $info['kpi'][$order_tire->order_tire_id];
+
+        $tru = $order_tire->order_cost;
+
+        if ($order_tire->order_tire_number>49) {
+            // if ($order_tire->order_tire_number*70000 > $order_tire->order_cost) {
+            //     $tru = $tru-$order_tire->order_cost;
+            // }
+            // else{
+            //     $tru = $tru-$order_tire->order_tire_number*70000;
+            // }
+            $tru = $tru-$order_tire->order_cost;
+        }
+
+        $sp = round((isset($info['bonus'][$order_tire->order_tire_id])?$info['bonus'][$order_tire->order_tire_id]:null)/1000)*1000;
+        $sp = $sp-$tru;
+        if ($sp<$arr_salary['sanluong']*$order_tire->order_tire_number) {
+            $sp = $arr_salary['sanluong']*$order_tire->order_tire_number;
+        }
+        $tongsp += $sp;
+
+        $giaban = $order_tire_discount[$order_tire->order_tire_id]['thu'];
+        $giacongkhai = $order_tire_discount[$order_tire->order_tire_id]['gia'];
+        $giam = round((($giacongkhai-$giaban)/$giacongkhai)*100,1);
+
+        
     ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->order_tire_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
         	
@@ -187,17 +199,17 @@ elseif ($order_by == 'order_tire_number')
             </td>
             <td class="fix"  id="delivery_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->hien_thi_ngay_thang($order_tire->delivery_date); ?></td>
             <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->customer_name; ?></td>
-            <td class="fix"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
-            <td class="fix" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
-            <td class="fix"  id="vat_<?php echo $order_tire->order_tire_id; ?>">
+            <td class="fix masterTooltip text-right" title="<?php echo 'Tháng trước: '.$last_month[$order_tire->order_tire_id].' - Tháng này: '.$this_month[$order_tire->order_tire_id].' - Giá giảm: '.$giam ?>"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
+            <td class="fix text-right" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
+            <td class="fix text-right"  id="vat_<?php echo $order_tire->order_tire_id; ?>">
                 <a class="order_vat" tabindex="<?php echo $lib->formatMoney($order_tire->vat_percent); ?>" alt="<?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?>" data="<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></a>
             </td>
-            <td class="fix"  id="discount_<?php echo $order_tire->order_tire_id; ?>">
+            <td class="fix text-right"  id="discount_<?php echo $order_tire->order_tire_id; ?>">
                 <a class="order_discount" href="<?php echo $this->url('ordertire/listdiscount/'.$order_tire->order_tire_id); ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></a>
             </td>
-            <td class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?></td>
-            <td class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"></td>
-            <td class="fix"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
+            <td class="fix text-right"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?></td>
+            <td class="fix text-right"  id="total_<?php echo $order_tire->order_tire_id; ?>"></td>
+            <td class="fix text-right"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
                 <?php if($order_tire->order_cost != ""){ ?>
                 <a style="font-weight:bold;text-decoration:underline" class="order_cost" data="<?php echo $order_tire->order_tire_id; ?>">
                     <?php echo $lib->formatMoney($order_tire->order_cost); ?>
@@ -207,17 +219,16 @@ elseif ($order_by == 'order_tire_number')
                  } ?>
             </td>
             <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->username; ?></td> 
-            <td class="fix editable" data="percent" id="percent_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info['percent'][$order_tire->order_tire_id])?$info['percent'][$order_tire->order_tire_id].'%':null; ?></td> 
-            <td class="fix editable" id="doanhso_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney(round((isset($info['bonus'][$order_tire->order_tire_id])?$info['bonus'][$order_tire->order_tire_id]:(isset($info['percent'][$order_tire->order_tire_id])?$order_tire->total*($info['percent'][$order_tire->order_tire_id]/100):null))/1000)*1000) ?></td> 
-            <td class="fix editable" id="vuotgia_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney(isset($info['vuotgia'][$order_tire->order_tire_id])?$info['vuotgia'][$order_tire->order_tire_id]:0); ?></td> 
-            <td class="fix editable" id="khmoi_<?php echo $order_tire->order_tire_id; ?>"><?php echo $info['khmoi'][$order_tire->order_tire_id]==1?"x":null; ?></td> 
-            <td class="fix editable" id="khcu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $info['khcu'][$order_tire->order_tire_id]==0?"x":null; ?></td> 
-            <td class="fix editable"  id="kpi_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($info['kpi'][$order_tire->order_tire_id]); ?></td>
+            <td class="fix text-right"  id="giaban_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($giaban); ?></td>
+            <td class="fix"  id="peri_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info['price'][$order_tire->order_tire_id])?$lib->formatMoney($info['price'][$order_tire->order_tire_id]):null; ?></td>
+
+            <td class="fix editable text-right" id="doanhso_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($sp) ?></td> 
+            
             <td class="fix editable" id="thangluong_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info['thangluong'][$order_tire->order_tire_id])?date('m/Y',$info['thangluong'][$order_tire->order_tire_id]):date('m/Y',strtotime($batdau)); ?></td> 
 
             <td class="fix"><input <?php echo $order_tire->check_salary==1?'checked="checked"':null ?> id="check_salary_<?php echo $order_tire->order_tire_id; ?>" type="checkbox" class="checkbox" value="<?php echo $order_tire->order_tire_id ?>" data-toggle="modal" data-target="#confirm"></td>
             <td class="fix" style="display:none" id="staff_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->staff_id ?></td> 
-            <td class="fix" style="display:none" id="debit_<?php echo $order_tire->order_tire_id; ?>">0</td> 
+            <td class="fix text-right" style="display:none" id="debit_<?php echo $order_tire->order_tire_id; ?>">0</td> 
             
         </tr>
     <?php endforeach; ?>
@@ -229,11 +240,29 @@ elseif ($order_by == 'order_tire_number')
         $tonggiam += $order_tire->discount+$order_tire->reduce; 
         $tongtra += $order_tire->total;
         $tongchiphi += $order_tire->order_cost;
-        $tongsp += (round((isset($info2['bonus'][$order_tire->order_tire_id])?$info2['bonus'][$order_tire->order_tire_id]:(isset($info2['percent'][$order_tire->order_tire_id])?$order_tire->total*($info2['percent'][$order_tire->order_tire_id]/100):null))/1000)*1000);
-        $tongvuot += (isset($info2['vuotgia'][$order_tire->order_tire_id])?$info2['vuotgia'][$order_tire->order_tire_id]:0);
-        $tongmoi += $info2['khmoi'][$order_tire->order_tire_id]==1?1:0;
-        $tongcu += $info2['khcu'][$order_tire->order_tire_id]==0?1:0;
-        $tongkpi += $info2['kpi'][$order_tire->order_tire_id];
+
+        $tru = $order_tire->order_cost;
+
+        if ($order_tire->order_tire_number>49) {
+            // if ($order_tire->order_tire_number*70000 > $order_tire->order_cost) {
+            //     $tru = $tru-$order_tire->order_cost;
+            // }
+            // else{
+            //     $tru = $tru-$order_tire->order_tire_number*70000;
+            // }
+            $tru = $tru-$order_tire->order_cost;
+        }
+
+        $sp = round((isset($info2['bonus'][$order_tire->order_tire_id])?$info2['bonus'][$order_tire->order_tire_id]:null)/1000)*1000;
+        $sp = $sp-$tru;
+        if ($sp<$arr_salary['sanluong']*$order_tire->order_tire_number) {
+            $sp = $arr_salary['sanluong']*$order_tire->order_tire_number;
+        }
+        $tongsp += $sp;
+
+        $giaban = $order_tire_discount2[$order_tire->order_tire_id]['thu'];
+        $giacongkhai = $order_tire_discount2[$order_tire->order_tire_id]['gia'];
+        $giam = round((($giacongkhai-$giaban)/$giacongkhai)*100,1);
     ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->order_tire_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
             
@@ -243,17 +272,17 @@ elseif ($order_by == 'order_tire_number')
             </td>
             <td class="fix"  id="delivery_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->hien_thi_ngay_thang($order_tire->delivery_date); ?></td>
             <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->customer_name; ?></td>
-            <td class="fix"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
-            <td class="fix" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
-            <td class="fix"  id="vat_<?php echo $order_tire->order_tire_id; ?>">
+            <td class="fix masterTooltip text-right" title="<?php echo 'Tháng trước: '.$last_month2[$order_tire->order_tire_id].' - Tháng này: '.$this_month2[$order_tire->order_tire_id].' - Giá giảm: '.$giam ?>"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
+            <td class="fix text-right" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
+            <td class="fix text-right"  id="vat_<?php echo $order_tire->order_tire_id; ?>">
                 <a class="order_vat" tabindex="<?php echo $lib->formatMoney($order_tire->vat_percent); ?>" alt="<?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?>" data="<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></a>
             </td>
-            <td class="fix"  id="discount_<?php echo $order_tire->order_tire_id; ?>">
+            <td class="fix text-right"  id="discount_<?php echo $order_tire->order_tire_id; ?>">
                 <a class="order_discount" href="<?php echo $this->url('ordertire/listdiscount/'.$order_tire->order_tire_id); ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></a>
             </td>
-            <td class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?></td>
-            <td class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($info2['congno'][$order_tire->order_tire_id]); ?></td>
-            <td class="fix"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
+            <td class="fix text-right"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?></td>
+            <td class="fix text-right"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($info2['congno'][$order_tire->order_tire_id]); ?></td>
+            <td class="fix text-right"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
                 <?php if($order_tire->order_cost != ""){ ?>
                 <a style="font-weight:bold;text-decoration:underline" class="order_cost" data="<?php echo $order_tire->order_tire_id; ?>">
                     <?php echo $lib->formatMoney($order_tire->order_cost); ?>
@@ -263,35 +292,29 @@ elseif ($order_by == 'order_tire_number')
                  } ?>
             </td>
             <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->username; ?></td> 
-            <td class="fix editable" data="percent" id="percent_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info2['percent'][$order_tire->order_tire_id])?$info2['percent'][$order_tire->order_tire_id].'%':null; ?></td> 
-            <td class="fix editable" id="doanhso_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney(round((isset($info2['bonus'][$order_tire->order_tire_id])?$info2['bonus'][$order_tire->order_tire_id]:(isset($info2['percent'][$order_tire->order_tire_id])?$order_tire->total*($info2['percent'][$order_tire->order_tire_id]/100):null))/1000)*1000) ?></td> 
-            <td class="fix editable" id="vuotgia_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney(isset($info2['vuotgia'][$order_tire->order_tire_id])?$info2['vuotgia'][$order_tire->order_tire_id]:0); ?></td> 
-            <td class="fix editable" id="khmoi_<?php echo $order_tire->order_tire_id; ?>"><?php echo $info2['khmoi'][$order_tire->order_tire_id]==1?"x":null; ?></td> 
-            <td class="fix editable" id="khcu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $info2['khcu'][$order_tire->order_tire_id]==0?"x":null; ?></td> 
-            <td class="fix editable"  id="kpi_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($info2['kpi'][$order_tire->order_tire_id]); ?></td>
+            <td class="fix text-right"  id="giaban_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($giaban); ?></td>
+            <td class="fix"  id="pri_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info2['price'][$order_tire->order_tire_id])?$lib->formatMoney($info2['price'][$order_tire->order_tire_id]):null; ?></td> 
+
+            <td class="fix editable text-right" id="doanhso_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($sp) ?></td> 
             <td class="fix editable" id="thangluong_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($info2['thangluong'][$order_tire->order_tire_id])?date('m/Y',$info2['thangluong'][$order_tire->order_tire_id]):date('m/Y',strtotime($batdau)); ?></td> 
 
             <td class="fix"><input <?php echo $order_tire->check_salary==1?'checked="checked"':null ?> id="check_salary_<?php echo $order_tire->order_tire_id; ?>" type="checkbox" class="checkbox" value="<?php echo $order_tire->order_tire_id ?>" data-toggle="modal" data-target="#confirm"></td>
             <td class="fix" style="display:none" id="staff_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->staff_id ?></td> 
-            <td class="fix" style="display:none" id="debit_<?php echo $order_tire->order_tire_id; ?>"><?php echo $info2['congno'][$order_tire->order_tire_id]>0?1:0 ?></td> 
+            <td class="fix text-right" style="display:none" id="debit_<?php echo $order_tire->order_tire_id; ?>"><?php echo $info2['congno'][$order_tire->order_tire_id]>0?1:0 ?></td> 
             
         </tr>
     <?php endforeach; ?>
         <tr style="text-align:center; font-weight: bold; color: red;">
             <td class="fix" colspan="4" >Tổng cộng</td>
-            <td class="fix"><?php echo $lib->formatMoney($tongsl); ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongthu); ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongthue); ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tonggiam); ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongtra); ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongsl); ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongthu); ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongthue); ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tonggiam); ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongtra); ?></td>
             <td class="fix"></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongchiphi); ?></td>
-            <td class="fix" colspan="2" ></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongsp); ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongvuot); ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongmoi); ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongcu); ?></td>
-            <td class="fix"><?php echo $lib->formatMoney($tongkpi); ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongchiphi); ?></td>
+            <td class="fix" colspan="3" ></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tongsp); ?></td>
             <td class="fix" colspan="2" ></td>
         </tr>
 
@@ -956,17 +979,12 @@ var pickerOpay2 = {
 $('.checkbox').click(function(){
     
         var id = $(this).val();
-        var percent = $('#percent_'+id).text();
         var doanhso = $('#doanhso_'+id).text();
-        var khmoi = $('#khmoi_'+id).text();
-        var khcu = $('#khcu_'+id).text();
-        var kpi = $('#kpi_'+id).text();
-        var vuotgia = $('#vuotgia_'+id).text();
         var thangluong = $('#thangluong_'+id).text();
         var staff = $('#staff_'+id).text();
         var debit = $('#debit_'+id).text();
 
-        $.post("<?php echo BASE_URL ?>/checksalary/check", {data: id, percent: percent, doanhso: doanhso, vuotgia: vuotgia, khmoi: khmoi, khcu: khcu, kpi: kpi, thangluong: thangluong, staff: staff, debit: debit},
+        $.post("<?php echo BASE_URL ?>/checksalary/check", {data: id, doanhso: doanhso, thangluong: thangluong, staff: staff, debit: debit},
            function(data){
             var $check = $('#check_salary_'+id);
             if ($check.is(':checked')) {
@@ -995,36 +1013,18 @@ function updateVal(currentEle, value, data) {
     $(".thVal").focus();
     $(".thVal").keyup(function (event) {
         var keyword = $(".thVal").val().trim();
-        if (data == "percent") {
-            var percent = parseFloat(keyword.replace("%",""));
-            var total = $('#total_'+id).text();
-            total = parseFloat(total.replace(/\,/g,''));
-            var ds = Math.round(total*(percent/100));
-
-            $('#doanhso_'+id).text(ds);
-            $('#doanhso_'+id).text(function(index, value) {
-                return value
-                  .replace(/\D/g, "")
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                ;
-            });
-        }
+        
         if (event.keyCode == 13) {
             $(currentEle).html(keyword);
 
             var $check = $('#check_salary_'+id);
             if ($check.is(':checked')) {
-                var percent = $('#percent_'+id).text();
                 var doanhso = $('#doanhso_'+id).text();
-                var khmoi = $('#khmoi_'+id).text();
-                var khcu = $('#khcu_'+id).text();
-                var kpi = $('#kpi_'+id).text();
-                var vuotgia = $('#vuotgia_'+id).text();
                 var thangluong = $('#thangluong_'+id).text();
                 var staff = $('#staff_'+id).text();
                 var debit = $('#debit_'+id).text();
                 var update = 1;
-                $.post("<?php echo BASE_URL ?>/checksalary/check", {data: id, percent: percent, doanhso: doanhso, vuotgia: vuotgia, khmoi: khmoi, khcu: khcu, kpi: kpi, thangluong: thangluong, staff: staff, update: update, debit: debit},
+                $.post("<?php echo BASE_URL ?>/checksalary/check", {data: id, doanhso: doanhso, thangluong: thangluong, staff: staff, update: update, debit: debit},
                    function(data){
                    });
             }
@@ -1037,21 +1037,54 @@ function updateVal(currentEle, value, data) {
 
         var $check = $('#check_salary_'+id);
         if ($check.is(':checked')) {
-            var percent = $('#percent_'+id).text();
             var doanhso = $('#doanhso_'+id).text();
-            var khmoi = $('#khmoi_'+id).text();
-            var khcu = $('#khcu_'+id).text();
-            var kpi = $('#kpi_'+id).text();
-            var vuotgia = $('#vuotgia_'+id).text();
             var thangluong = $('#thangluong_'+id).text();
             var staff = $('#staff_'+id).text();
             var debit = $('#debit_'+id).text();
             var update = 1;
-            $.post("<?php echo BASE_URL ?>/checksalary/check", {data: id, percent: percent, doanhso: doanhso, vuotgia: vuotgia, khmoi: khmoi, khcu: khcu, kpi: kpi, thangluong: thangluong, staff: staff, update: update, debit: debit},
+            $.post("<?php echo BASE_URL ?>/checksalary/check", {data: id, doanhso: doanhso, thangluong: thangluong, staff: staff, update: update, debit: debit},
                function(data){
                });
         }
     });
 }
 
+$(document).ready(function() {
+// Tooltip only Text
+$('.masterTooltip').hover(function(){
+        // Hover over code
+        var title = $(this).attr('title');
+        $(this).data('tipText', title).removeAttr('title');
+        if (title != "") {
+            $('<p class="showtooltip"></p>')
+            .text(title)
+            .appendTo('body')
+            .fadeIn('slow');
+        }
+        
+}, function() {
+        // Hover out code
+        $(this).attr('title', $(this).data('tipText'));
+        $('.showtooltip').remove();
+}).mousemove(function(e) {
+        var mousex = e.pageX - 100; //Get X coordinates
+        var mousey = e.pageY + 20; //Get Y coordinates
+        $('.showtooltip')
+        .css({ top: mousey, left: mousex })
+});
+
+
+});
 </script>
+<style type="text/css">
+.showtooltip {
+    display:none;
+    position:absolute;
+    border:1px solid #333;
+    background-color:#161616;
+    border-radius:5px;
+    padding:10px;
+    color:#fff;
+    font-size:12px Arial;
+}
+</style>

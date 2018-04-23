@@ -912,6 +912,8 @@ Class tiresaleController Extends baseController {
 
         $this->view->data['staffs'] = $staffs;
 
+        $staff_data = array();
+
         foreach ($staffs as $staff) {
 
             $staff_data[$staff->staff_id]['name'] = $staff->staff_name;
@@ -1166,6 +1168,8 @@ Class tiresaleController Extends baseController {
 
         $this->view->data['staffs'] = $staffs;
 
+        $staff_data = array();
+        
         foreach ($staffs as $staff) {
 
             $staff_data[$staff->staff_id]['name'] = $staff->staff_name;
@@ -1461,15 +1465,37 @@ Class tiresaleController Extends baseController {
 
         
 
-
+        $sales = $tire_sale_model->getAllTire($data,$join);
 
         
 
-        $this->view->data['tire_sales'] = $tire_sale_model->getAllTire($data,$join);
+        $this->view->data['tire_sales'] = $sales;
 
         $this->view->data['lastID'] = isset($tire_sale_model->getLastTire()->tire_sale_id)?$tire_sale_model->getLastTire()->tire_sale_id:0;
 
+        $order_tire_model = $this->model->get('ordertireModel');
 
+        $order_data = array();
+        foreach ($sales as $sale) {
+            if ($sale->order_tire>0) {
+                $order_tire = $order_tire_model->getTire($sale->order_tire);
+                if ($sale->sell_price_vat=="" || $sale->sell_price_vat==0) {
+                    $order_data[$sale->tire_sale_id] = $sale->sell_price+($sale->sell_price*$order_tire->vat_percent/100);
+                }
+                else{
+                    if ($order_tire->check_price_vat==1) {
+                        $order_data[$sale->tire_sale_id] = $sale->sell_price_vat;
+                    }
+                    else{
+                        $order_data[$sale->tire_sale_id] = $sale->sell_price+($sale->sell_price*$order_tire->vat_percent/100);
+                    }
+                }
+            }
+            
+            
+        }
+
+        $this->view->data['order_data'] = $order_data;
 
         /* Lấy tổng doanh thu*/
 

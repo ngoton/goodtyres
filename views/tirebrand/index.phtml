@@ -15,7 +15,9 @@ elseif ($order_by == 'tire_brand_name')
 <div id="content" style="padding:5px;">
     <center style="clear:both;margin-bottom: -30px;"><h1> THƯƠNG HỆU LỐP</h1></center>
 <div class="add-box">
+    <?php if($_SESSION['role_logined']==1){ ?>
     <a class="add_button" onClick="add_click();">Nhập mới</a>
+    <?php } ?>
     <a class="add_button" id="btnExport" >Export Excel</a>
 </div>
 	<div class="search-box">
@@ -86,8 +88,9 @@ elseif ($order_by == 'tire_brand_name')
             <td class="fix" data="<?php echo $tire_brand->tire_brand_group; ?>" id="tire_brand_group_<?php echo $tire_brand->tire_brand_id; ?>"><?php echo isset($group_data[$tire_brand->tire_brand_group])?$group_data[$tire_brand->tire_brand_group]:null; ?></td>
             <td class="fix" id="tire_brand_region_name_<?php echo $tire_brand->tire_brand_id; ?>"><?php echo $tire_brand->tire_brand_region_name; ?></td>
             <td>
+                <?php if($_SESSION['role_logined']==1){ ?>
                 <button class="error" onclick="del(<?php echo $tire_brand->tire_brand_id ?>)" >Xóa</button>
-                
+                <?php } ?>
                
             </td>
         </tr>
@@ -151,7 +154,7 @@ $this->helper('slidePaginator');
                          <tr>
                             <td>&nbsp;</td>
                             <td>
-                                <input type="submit" name="submit" value="Submit" tabindex="3">
+                                <input type="submit" name="submit" value="Submit" tabindex="3" <?php echo $_SESSION['role_logined']!=1?'disabled':null ?> >
                                 
                             </td>
                             <td>
@@ -196,8 +199,14 @@ $('html').click(function(e) {
             $('#yes').val($(this).attr('id'));
             
             $('#tire_brand_name').val(tire_brand_name);
-            $("#tire_brand_group option[value=" + tire_brand_group + "]").attr('selected', 'selected');
-            $("#tire_brand_region option:contains(" + tire_brand_region + ")").attr('selected', 'selected');
+
+            if (tire_brand_group!="") {
+                $("#tire_brand_group option[value=" + tire_brand_group + "]").attr('selected', 'selected');
+            }
+            if (tire_brand_region!="") {
+                $("#tire_brand_region option:contains(" + tire_brand_region + ")").attr('selected', 'selected');
+            }
+            
             
 
             $( ".add-field" ).dialog( "open" );

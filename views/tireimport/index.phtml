@@ -21,8 +21,7 @@ elseif ($order_by == 'code')
 <div id="content" style="padding:5px;">
     <center style="clear:both;margin-bottom: -30px;"><h1> BẢNG GIÁ LỐP XE</h1></center>
 <div class="add-box">
-    <a class="add_button" onClick="add_click();">Nhập giá mới</a>
-    <a class="add_button" id="import_excel" href="<?= $this->url('tireimport/import')?>">Import Excel</a>
+    <a class="add_button" id="btnExport" >Export Excel</a>
 </div>
 	<div class="search-box">
         
@@ -84,7 +83,7 @@ elseif ($order_by == 'code')
 
 </div>
 
-<table class="table_data">
+<table class="table_data" id="tblExport">
 <thead>
     <tr>
         <th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
@@ -131,8 +130,9 @@ elseif ($order_by == 'code')
             <td class="fix" id="code_<?php echo $tire_import->tire_import_id; ?>"><?php echo $tire_import->code; ?></td>
             <td class="fix" id="start_date_<?php echo $tire_import->tire_import_id; ?>"><?php echo $lib->hien_thi_ngay_thang($tire_import->start_date); ?></td>
             <td>
+                <?php if($_SESSION['role_logined']==1){ ?>
                 <button class="error" onclick="del(<?php echo $tire_import->tire_import_id ?>)" >Xóa</button>
-                
+                <?php } ?>
             </td>
         </tr>
 
@@ -217,7 +217,7 @@ $this->helper('slidePaginator');
                          <tr>
                             <td>&nbsp;</td>
                             <td>
-                                <input type="submit" name="submit" value="Submit" tabindex="9">
+                                <input type="submit" name="submit" value="Submit" tabindex="9" <?php echo $_SESSION['role_logined']!=1?'disabled':null ?> >
                                 
                             </td>
                             <td>

@@ -49,14 +49,6 @@ elseif ($order_by == 'vendor')
     </div>
     <div class="tablenav top">
         <div style="clear:both"></div>
-    	<div class="alignleft actions">
-			<select name="action" id="action">
-            	<option value="-1" selected="selected">Chọn</option>
-                
-                <option value="delete">Xóa</option>
-            </select>
-            <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
-		</div>
 		<div class="alignleft actions">
 		<select name="m" id="chonloc">
 			<option  value="18446744073709">Hiển thị tất cả</option>
@@ -102,7 +94,6 @@ elseif ($order_by == 'vendor')
         <th style="width:200px" class="fix" rowspan="2">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','receive_comment','<?php echo $url_order ?>')">Ghi chú<?php if ($order_by == 'receive_comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
-        <th  class="fix" rowspan="2">Action</th>
         
     </tr>
     <tr>
@@ -153,20 +144,14 @@ elseif ($order_by == 'vendor')
             
             <td class="fix" id="source_<?php echo $receive->receive_id; ?>"><?php echo $receive->bank_name; ?></td>
             <td class="fix" id="receive_comment_<?php echo $receive->receive_id; ?>"><?php echo $receive->receive_comment; ?></td> 
-                       
-            <td >
-                <?php if($_SESSION['userid_logined'] == $receive->create_user){ ?>
-                
-                <button class="error" onclick="del(<?php echo $receive->receive_id ?>)" >Xóa</button>
-                <?php } ?>
-            </td>
+                 
         </tr>
         
     <?php endforeach; ?>
     <tr style="text-align:center; font-weight: bold; color: red;">
         <td class="fix" colspan="3" >Tổng cộng</td>
         <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
-        <td class="fix" colspan="7" ></td>
+        <td class="fix" colspan="6" ></td>
     </tr>
    </tbody>
 </table>
@@ -228,7 +213,7 @@ $this->helper('slidePaginator');
                         
                          <tr>
                             <td></td>
-                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="5"></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="5" disabled></td>
                             <td ><input type="reset" name="reset" value="Nhập lại" tabindex="6"></td>
                             <td></td>
                              

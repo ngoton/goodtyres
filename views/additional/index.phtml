@@ -73,10 +73,10 @@ elseif ($order_by == 'money')
 		<input type="button" name="" id="post-query-submit" class="button" value="Apply" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">						 		
         </div>
 
-        <div class="add-box">
+        <div >
              
         
-            <select style="width: 150px;" name="sl_status" id="sl_status">
+            <select style="width: 150px;" name="sl_status" id="sl_status" class="dropchosen">
                 <option value="">Tài khoản</option>
                 <?php foreach ($account_parents as $account_parent) { ?>
                     <option value="<?php echo $account_parent->account_id ?>">
@@ -126,7 +126,7 @@ elseif ($order_by == 'money')
         <th  class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','code','<?php echo $url_order ?>')">Code <?php if ($order_by == 'code'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
-        
+        <th class="fix">KH</th>
         <th class="fix"></th>
     </tr>
     
@@ -154,6 +154,7 @@ elseif ($order_by == 'money')
             <td class="fix" data="<?php echo $additional->credit ?>" id="credit_<?php echo $additional->additional_id; ?>"><?php echo isset($account_data[$additional->credit])?$account_data[$additional->credit]:null; ?></td>
             <td class="fix" id="money_<?php echo $additional->additional_id; ?>"><?php echo $lib->formatMoney($additional->money); ?></td>
             <td class="fix" id="code_<?php echo $additional->additional_id; ?>"><a target="_blank" href="<?php echo $additional->order_tire>0?$this->url('ordertire/orderlist/'.$additional->order_tire):$this->url('ordertire/orderlist/0/0/0/0/'.$additional->code); ?>"><?php echo $additional->code; ?></a></td>
+            <td class="fix" id="code_<?php echo $additional->additional_id; ?>"><?php echo isset($cus[$additional->additional_id])?$cus[$additional->additional_id]:null ?></td>
             <td>
                 <button class="error" onclick="del(<?php echo $additional->additional_id ?>)" >Xóa</button>
                 
@@ -171,6 +172,7 @@ elseif ($order_by == 'money')
                 <td class="fix"></td>
                 <td class="fix"></td>
                 <td class="fix" colspan="2"><?php echo $lib->formatMoney($tong) ?></td>
+                <td class="fix"></td>
                 <td class="fix"></td>
             </tr>
      
@@ -195,7 +197,7 @@ $this->helper('slidePaginator');
                             
                             <td>Số chứng từ</td>
                             <td>
-                                <input style="width:80px"  type="text" id="document_number"  name="document_number" tabindex="1"  required="required" >
+                                <input style="width:80px"  type="text" id="document_number"  name="document_number" tabindex="1"  >
                                 
                             </td>
                             <td>Ngày chứng từ</td>
@@ -743,5 +745,9 @@ var pickerOpts3 = {
             of: $(this)
         });    
     });
+
+$(document).ready(function () { 
+    $('.dropchosen').chosen();
+  });
 </script>
 

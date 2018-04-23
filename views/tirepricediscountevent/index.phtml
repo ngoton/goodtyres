@@ -19,8 +19,10 @@ elseif ($order_by == 'tire_pattern_name')
 <div id="content" style="padding:5px;">
     <center style="clear:both;margin-bottom: -30px;"><h1> GIẢM GIÁ</h1></center>
 <div class="add-box">
+    <?php if($_SESSION['role_logined']==1){ ?>
     <a class="add_button" onClick="add_click();">Nhập mới</a>
     <a class="add_button" id="import_excel" href="<?= $this->url('tirepricediscountevent/import')?>">Import Excel</a>
+    <?php } ?>
     <a class="add_button" id="btnExport" >Export Excel</a>
 </div>
 	<div class="search-box">
@@ -112,8 +114,9 @@ elseif ($order_by == 'tire_pattern_name')
             <td class="fix" id="start_date_<?php echo $tire->tire_price_discount_event_id; ?>"><?php echo $lib->hien_thi_ngay_thang($tire->start_date); ?></td>
             <td class="fix" id="end_date_<?php echo $tire->tire_price_discount_event_id; ?>"><?php echo $lib->hien_thi_ngay_thang($tire->end_date); ?></td>
             <td>
+                <?php if($_SESSION['role_logined']==1){ ?>
                 <button class="error" onclick="del(<?php echo $tire->tire_price_discount_event_id ?>)" >Xóa</button>
-                
+                <?php } ?>
                
             </td>
         </tr>
@@ -194,7 +197,7 @@ $this->helper('slidePaginator');
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>
-                                <input type="submit" name="submit" value="Submit" tabindex="8">
+                                <input type="submit" name="submit" value="Submit" tabindex="8" <?php echo $_SESSION['role_logined']!=1?'disabled':null ?> >
                                 
                             </td>
                             <td>

@@ -117,7 +117,12 @@ elseif ($order_by == 'code')
     
    </thead>
    <tbody>
-    <?php foreach ($tire_imports as $tire_import) : ?>
+    <?php 
+        $tongsl=0; $tonggia=0;
+    foreach ($tire_imports as $tire_import) : 
+    $tongsl += $tire_import->tire_number;
+    $tonggia += ($tire_import->tire_number*$tire_import->tire_price);
+    ?>
     
         
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_import->tire_import_detail_id ?>" class="edit_tr">
@@ -141,7 +146,13 @@ elseif ($order_by == 'code')
 
 
     <?php endforeach; ?>
-     
+        <tr style="font-weight:bold">
+          <td colspan="5" class="fix">Tổng cộng</td>
+          <td  class="fix text-right"><?php echo $lib->formatMoney($tonggia); ?></td>
+          <td  class="fix text-right"></td>
+          <td  class="fix text-right"><?php echo $lib->formatMoney($tongsl); ?></td>
+          <td  class="fix text-right"></td>
+        </tr>
    </tbody>
 </table>
 <?php

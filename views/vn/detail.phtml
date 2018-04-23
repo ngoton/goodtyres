@@ -1,0 +1,409 @@
+
+
+<?php foreach ($tire_product_s as $tire_products) { ?>
+
+<div class="top-detail">
+
+    <?php
+    $filename = BASE_URL."/public/images/upload/".$tire_products->tire_product_thumb;
+    if (@getimagesize($filename)) {
+    ?>
+
+    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 slide-detail">
+
+        <div class="picZoomer">
+
+            
+            <img itemprop="image" src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_products->tire_product_thumb ?>" alt="Lốp xe <?php echo $tire_products->tire_producer_name.' '.$tire_products->tire_product_size_number.' '.$tire_products->tire_product_name ?>" width="330px" height="330px" />
+
+        </div>
+
+        <ul class="piclist thumbnails-carousel clearfix">
+
+            <li>
+
+                <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_products->tire_product_thumb ?>" alt="Lốp xe <?php echo $tire_products->tire_producer_name.' '.$tire_products->tire_product_size_number.' '.$tire_products->tire_product_name ?>">
+
+            </li>
+
+            <li>
+
+                <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_products->tire_product_thumb ?>" alt="Lốp xe <?php echo $tire_products->tire_producer_name.' '.$tire_products->tire_product_size_number.' '.$tire_products->tire_product_name ?>">
+
+            </li>
+
+            <li>
+
+                <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_products->tire_product_thumb ?>" alt="Lốp xe <?php echo $tire_products->tire_producer_name.' '.$tire_products->tire_product_size_number.' '.$tire_products->tire_product_name ?>">
+
+            </li>
+
+        </ul>
+
+    </div>
+    <?php }
+    else{ 
+    ?>
+    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 slide-detail">
+
+        <div class="picZoomer">
+
+            
+            <img itemprop="image" src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_products->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_products->tire_producer_name.' '.$tire_products->tire_product_size_number.' '.$tire_products->tire_product_name ?>" width="330px" height="330px" />
+
+        </div>
+
+        <ul class="piclist thumbnails-carousel clearfix">
+
+            <li>
+
+                <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_products->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_products->tire_producer_name.' '.$tire_products->tire_product_size_number.' '.$tire_products->tire_product_name ?>">
+
+            </li>
+
+            <li>
+
+                <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_products->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_products->tire_producer_name.' '.$tire_products->tire_product_size_number.' '.$tire_products->tire_product_name ?>">
+
+            </li>
+
+            <li>
+
+                <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_products->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_products->tire_producer_name.' '.$tire_products->tire_product_size_number.' '.$tire_products->tire_product_name ?>">
+
+            </li>
+
+        </ul>
+
+    </div>
+
+    <?php } ?>
+    
+
+    <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 right-detail">
+
+        <h1 itemprop="name" >Lốp xe <?php echo $tire_products->tire_producer_name.' '.$tire_products->tire_product_size_number.' '.$tire_products->tire_product_name ?></h1>
+
+        <div class="description-detail" itemprop="description" >
+
+            <?php echo $tire_products->tire_product_desc ?>
+
+        </div>
+
+        <div class="external">
+
+            <span>Dùng cho dòng xe:</span>
+
+            <?php 
+
+            $arr = explode(',', $tire_products->tire_product_vehicle);
+
+            foreach ($arr as $key) {
+
+                $lik = $data_vehicle[$key]['type']==1?"lop-xe-tai":($data_vehicle[$key]['type']==2?"lop-xe-du-lich":($data_vehicle[$key]['type']==3?"lop-xe-dac-chung":"lop-xe"));
+
+                echo '<a href="'.BASE_URL.'/vn/'.$lik.'">'.$data_vehicle[$key]['name'].'</a>, ';
+
+            }
+
+             ?>
+
+        </div>
+
+        <div class="info-detail">
+
+            <div class="price">
+
+                Giá: <span><?php echo $lib->formatMoney($tire_products->tire_retail) ?> đ</span>
+
+                <span class="old-price"><?php echo $lib->formatMoney(round($tire_products->tire_retail*1.07)) ?> đ</span>    
+
+                <span class="pro_unit">Đơn vị: <?php echo $tire_products->tire_product_tube==1?"Bộ":"Cái" ?></span>
+
+            </div>
+
+        </div>
+
+        <div class="status-detail">
+
+            <i class="fa fa-check-circle"></i>Còn hàng
+
+        </div>
+
+                                                                                            
+
+        <div class="quantity-detail">
+
+            <div class="title-qt">Số lượng</div>
+
+            <div class="num-qt">
+
+                <div class="input-group number-spinner">
+
+                    <span class="input-group-btn data-dwn">
+
+                        <button class="btn btn-default" data-dir="dwn">
+
+                            <span class="glyphicon glyphicon-minus"></span>
+
+                        </button>
+
+                    </span>
+
+                    <input id="quantityBuy" class="form-control text-center" value="1" min="1" type="text">
+
+                    <span class="input-group-btn data-up">
+
+                        <button class="btn btn-default" data-dir="up">
+
+                            <span class="glyphicon glyphicon-plus"></span>
+
+                        </button>
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="buy-btn">
+
+            <button rel="12" class="btn btn-danger btn-lg buy-btn-detail" id="addToCart" data="<?php echo $tire_products->tire_product_id ?>" >MUA NGAY</button>
+
+        </div>
+        <div class="external">
+            <h5><strong>Để được hỗ trợ và có giá ưu đãi nhất, hãy liên hệ <span style="color:red">0931 557 775</span> hoặc <span style="color:red">0931 55 99 09</span></strong></h5>
+        </div>
+
+        <div class="like-btn">
+
+            <div class="fb-like" data-href="" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+            <!-- Đặt thẻ này vào phần đầu hoặc ngay trước thẻ đóng phần nội dung của bạn. -->
+            <script src="https://apis.google.com/js/platform.js" async defer>
+              {lang: 'vi'}
+            </script>
+
+            <!-- Đặt thẻ này vào nơi bạn muốn Nút +1 kết xuất. -->
+            <div class="g-plusone" data-annotation="inline" data-width="300"></div>
+
+        </div>
+
+        <div class="clearFix"></div>
+
+    </div>
+
+</div>
+
+
+
+
+
+<div class="main-content-box content-pages"><!-- begin main-content-box 01 -->
+
+    <h2>Thông tin chi tiết</h2>
+
+    <a class="move-link" href="<?php echo BASE_URL.$_SERVER['REQUEST_URI'] ?>#comment-box">Nhận xét</a>
+
+    <div class="items-list-prod content-detail">
+
+        <div style="text-align:justify">
+
+            <?php echo $tire_products->tire_product_content ?>
+
+        </div>                             
+
+    </div>
+
+</div>
+
+        
+
+<div class="sub-menu-list tag-link">
+
+    <span>Xem thêm:</span> 
+
+    <?php foreach ($tire_product_other_s as $tire_product_others) { ?>
+
+        <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product_others->tire_product_link ?>" title="Lốp xe <?php echo $tire_product_others->tire_producer_name.' '.$tire_product_others->tire_product_size_number.' '.$tire_product_others->tire_product_name ?>">
+
+        Lốp xe <?php echo $tire_product_others->tire_producer_name.' '.$tire_product_others->tire_product_size_number.' '.$tire_product_others->tire_product_name ?>
+
+    </a>   
+
+    <?php } ?>
+
+                                
+
+</div>
+
+<div class="main-content-box">
+
+    <h2>Nhận xét</h2>
+
+    <div class="items-list-prod comment-detail">
+
+        <div class="fb-comments" id="comment-box">
+
+                <div class="comment_fb"> <div class="fb-comments" data-href="<?php echo BASE_URL.$_SERVER['REQUEST_URI'] ?>" data-width="100%" data-numposts="10" data-colorscheme="light"></div> </div>
+
+        </div>   
+
+    </div>
+
+</div>
+
+<div class="main-content-box">
+
+    <h2>Sản phẩm cùng loại</h2> 
+
+    <div class="view-more">
+
+        <?php 
+
+            $alls = $vehicle->tire_vehicle_type==1?"lop-xe-tai":($vehicle->tire_vehicle_type==2?"lop-xe-du-lich":($vehicle->tire_vehicle_type==3?"lop-xe-dac-chung":"lop-xe"));
+
+        ?>
+
+        <a href="<?php echo BASE_URL.'/vn/'.$alls ?>">Xem tất cả »</a>
+
+    </div>
+
+    <div class="items-list-prod">
+
+        <?php foreach ($tire_product_relatives as $tire_product) { ?>
+
+
+
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 items">
+
+
+
+            <div class="img-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product->tire_product_link ?>" title="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>">
+
+                    <?php
+                    $filename = BASE_URL."/public/images/upload/".$tire_product->tire_product_thumb;
+                    if (@getimagesize($filename)) {
+                    ?>
+
+                    <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product->tire_product_thumb ?>" alt="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>" />
+                    <?php }
+                    else{
+                    ?>
+                    <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>" />
+                    <?php } ?>
+
+
+
+                </a>
+
+
+
+            </div>
+
+
+
+            <div class="title-prod">
+
+
+
+                <a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product->tire_product_link ?>" title="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>">Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?></a>
+
+
+
+            </div>
+
+
+
+            <div class="price-prod">
+
+
+
+                <div class="price-old-prod"><?php echo $lib->formatMoney(round($tire_product->tire_retail*1.07)) ?> đ</div>
+
+
+
+                <div class="price-new-prod"><?php echo $lib->formatMoney($tire_product->tire_retail) ?> đ</div>
+
+
+
+                <div class="clearFix"></div>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <?php } ?>
+
+                                
+
+    </div>
+
+</div>
+
+
+<?php } ?>
+
+<script type="text/javascript">
+$('#addToCart').click(function(){
+  var val = $(this).attr('data');
+  var number = $("#quantityBuy").val();
+
+  $.ajax({
+    type: "POST", // phương thức gởi đi
+    url: "<?php echo $this->url('vn/add-to-cart') ?>", // nơi mà dữ liệu sẽ chuyển đến khi submit
+    data: "data="+ val +"&num="+number, // giá trị post
+    success: function(answer){ 
+      $('.cartTopRightQuantity').html(answer);
+      $.ajax({
+        type: "GET", // phương thức gởi đi
+        url: "<?php echo $this->url('vn/show-cart') ?>", // nơi mà dữ liệu sẽ chuyển đến khi submit
+        data: "data=1", // giá trị post
+        success: function(answer){ 
+          $('.item-cart').html(answer);
+        }
+      });
+
+      $('.cart-top').toggleClass('open');
+      $('.cart-fixed').toggleClass('open');
+    }
+  });
+
+});
+</script>
+<style type="text/css">
+.img-prod img {
+    width: 100%;
+    min-height: 180px;
+}
+.img-prod {
+    overflow: hidden;
+    border: 1px solid #fff;
+    border-bottom: none;
+    height: 180px;
+    transition: all 0.5s ease 0s;
+}
+.price-old-prod {
+    float: right;
+    color: #777;
+    text-decoration: line-through;
+    font-size: 12px;
+}
+.price-new-prod {
+    float: left;
+    color: #FF8244;
+    font-size: 14px;
+    font-weight: bold;
+}
+</style>

@@ -138,7 +138,7 @@ elseif ($order_by == 'money')
             <td class="fix" id="additional_comment_<?php echo $additional->additional_id; ?>"><?php echo $additional->additional_comment; ?></td>
             <td class="fix" data="<?php echo $additional->debit ?>" id="debit_<?php echo $additional->additional_id; ?>"><?php echo isset($account_data[$additional->debit])?$account_data[$additional->debit]:null; ?></td>
             <td class="fix" data="<?php echo $additional->credit ?>" id="credit_<?php echo $additional->additional_id; ?>"><?php echo isset($account_data[$additional->credit])?$account_data[$additional->credit]:null; ?></td>
-            <td class="fix" id="money_<?php echo $additional->additional_id; ?>"><?php echo $lib->formatMoney($additional->money); ?></td>
+            <td class="fix text-right" id="money_<?php echo $additional->additional_id; ?>"><?php echo $lib->formatMoney($additional->money); ?></td>
             <td class="fix" id="additional_request_<?php echo $additional->additional_id; ?>"><?php echo $additional->additional_request; ?></td>
             <td class="fix" id="additional_approve_<?php echo $additional->additional_id; ?>"><?php echo $additional->additional_approve; ?></td>
             <td class="fix" id="additional_receive_<?php echo $additional->additional_id; ?>"><?php echo $additional->additional_receive; ?></td>
@@ -152,7 +152,7 @@ elseif ($order_by == 'money')
             <td class="fix"></td>
             <td class="fix"></td>
             <td class="fix"></td>
-            <td class="fix"><?php echo $lib->formatMoney($tong) ?></td>
+            <td class="fix text-right"><?php echo $lib->formatMoney($tong) ?></td>
             <td class="fix"></td>
             <td class="fix"></td>
             <td class="fix"></td>

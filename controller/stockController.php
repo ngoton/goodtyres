@@ -12,6 +12,7 @@ Class stockController Extends baseController {
 
         $tire_brand_group_model = $this->model->get('tirebrandgroupModel');
         $tire_going_model = $this->model->get('tiregoingModel');
+        $import_tire_list_model = $this->model->get('importtirelistModel');
 
         $tire_buy_model = $this->model->get('tirebuyModel');
         $tire_sale_model = $this->model->get('tiresaleModel');
@@ -60,11 +61,13 @@ Class stockController Extends baseController {
         $ban = array();
         $dathang = array();
         $dangve = array();
+        $dangorder = array();
         $kho_brand = array();
         $ban_brand = array();
         $dathang_brand = array();
         $nhaphang_brand = array();
         $dangve_brand = array();
+        $dangorder_brand = array();
 
         $order_tires = $order_tire_model->getAllTire(array('where'=>'(order_tire_status IS NULL OR order_tire_status = 0)'));
         foreach ($order_tires as $order) {
@@ -77,6 +80,7 @@ Class stockController Extends baseController {
             }
         }
         $tire_goings = $tire_going_model->getAllTire(null,array('table'=>'tire_size, tire_pattern, tire_brand','where'=>'tire_brand=tire_brand_id AND tire_pattern=tire_pattern_id AND tire_size=tire_size_id AND (status IS NULL OR status=0)')); //tire_brand thay tire_brand_group
+        $tire_orders = $import_tire_list_model->getAllImport(null,array('table'=>'tire_size, tire_pattern, tire_brand','where'=>'tire_brand=tire_brand_id AND tire_pattern=tire_pattern_id AND tire_size=tire_size_id AND import_tire_list_id NOT IN (SELECT import_tire_list FROM tire_going WHERE import_tire_list IS NOT NULL)')); //tire_brand thay tire_brand_group
         $tire_desireds = $tire_desired_model->getAllTire(null,array('table'=>'tire_size','where'=>'tire_size=tire_size_id AND (tire_desired_status IS NULL OR tire_desired_status=0)')); //tire_brand thay tire_brand_group
         $tire_buys = $tire_buy_model->getAllTire(null,array('table'=>'tire_pattern, tire_size, tire_brand','where'=>'tire_buy_pattern=tire_pattern_id and tire_buy_size=tire_size_id AND tire_buy_brand=tire_brand_id'));
         $tire_sales = $tire_sale_model->getAllTire(null,array('table'=>'tire_pattern, tire_size, tire_brand','where'=>'tire_pattern=tire_pattern_id and tire_size=tire_size_id AND tire_brand=tire_brand_id'));
@@ -91,6 +95,14 @@ Class stockController Extends baseController {
             }
             
             $last_code = $last_code==0?$going->code:$last_code;
+        }
+
+        foreach ($tire_orders as $order) {
+            $pt_type = explode(',', $order->tire_pattern_type);
+            for ($l=0; $l < count($pt_type); $l++) {
+                $dangorder[$order->tire_brand_group][$pt_type[$l]][$order->tire_size_number] = isset($dangorder[$order->tire_brand_group][$pt_type[$l]][$order->tire_size_number])?$dangorder[$order->tire_brand_group][$pt_type[$l]][$order->tire_size_number]+$order->tire_number:$order->tire_number;
+            }
+            
         }
 
         foreach ($tire_desireds as $desired) {
@@ -158,6 +170,13 @@ Class stockController Extends baseController {
                 $nhaphang_brand[$brand->tire_brand_group_id]['name'] = $brand->tire_brand_group_name;
                 $nhaphang_brand[$brand->tire_brand_group_id]['id'] = $brand->tire_brand_group_id;
             }
+            if (isset($dangorder[$brand->tire_brand_group_id])) {
+                $dangorder_brand[$brand->tire_brand_group_id]['id'] = $brand->tire_brand_group_id;
+                $dangorder_brand[$brand->tire_brand_group_id]['name'] = $brand->tire_brand_group_name;
+
+                $nhaphang_brand[$brand->tire_brand_group_id]['name'] = $brand->tire_brand_group_name;
+                $nhaphang_brand[$brand->tire_brand_group_id]['id'] = $brand->tire_brand_group_id;
+            }
         }
 
         $this->view->data['last_code'] = $last_code;
@@ -166,11 +185,13 @@ Class stockController Extends baseController {
         $this->view->data['orders'] = $ban;
         $this->view->data['dathangs'] = $dathang;
         $this->view->data['dangves'] = $dangve;
+        $this->view->data['dangorders'] = $dangorder;
         $this->view->data['brand_tonkhos'] = $kho_brand;
         $this->view->data['brand_orders'] = $ban_brand;
         $this->view->data['brand_dathangs'] = $dathang_brand;
         $this->view->data['brand_nhaphangs'] = $nhaphang_brand;
         $this->view->data['brand_dangves'] = $dangve_brand;
+        $this->view->data['brand_dangorders'] = $dangorder_brand;
         
         /* Lấy tổng doanh thu*/
         
@@ -582,11 +603,32 @@ Class stockController Extends baseController {
         $goings = $tire_going_model->getAllTire($data,$join);
         $this->view->data['tire_goings'] = $goings;
 
-        $this->view->data['tire_brand'] = $this->registry->router->param_id==1?"DR":($this->registry->router->param_id==2?"ST":($this->registry->router->param_id==3?"AN":($this->registry->router->param_id==4?"GS":"LL")));
+        $this->view->data['tire_brand'] = $this->registry->router->param_id==1?"DR":($this->registry->router->param_id==2?"ST":($this->registry->router->param_id==3?"AN":($this->registry->router->param_id==4?"GS":($this->registry->router->param_id==5?"LL":"ZC"))));
         $this->view->data['tire_size'] = $this->registry->router->order_by;
         $this->view->data['tire_pattern'] = $this->registry->router->order==1?"DC01":($this->registry->router->order==2?"DC02":($this->registry->router->order==3?"DC03":($this->registry->router->order==4?"NC01":($this->registry->router->order==5?"BC01":($this->registry->router->order==6?"BC02":($this->registry->router->order==7?"DK01":($this->registry->router->order==8?"DK02":($this->registry->router->order==9?"NK01":"NK02"))))))));
 
         $this->view->show('stock/going');
+    }
+    public function goingorder(){
+        $this->view->disableLayout();
+        $this->view->data['lib'] = $this->lib;
+        $tire_size_model = $this->model->get('tiresizeModel');
+        $tire_size = $tire_size_model->getTireByWhere(array('tire_size_number'=>str_replace('~', '/', $this->registry->router->order_by)));
+        $tire_going_model = $this->model->get('importtirelistModel');
+        $join = array('table'=>'import_tire_order,tire_brand,tire_size,tire_pattern','where'=>'import_tire_order=import_tire_order_id AND tire_brand=tire_brand_id AND tire_pattern=tire_pattern_id AND tire_size=tire_size_id AND import_tire_list_id NOT IN (SELECT import_tire_list FROM tire_going WHERE import_tire_list IS NOT NULL)');
+
+        $data = array(
+            'where' => 'tire_brand_group='.$this->registry->router->param_id.' AND tire_size='.$tire_size->tire_size_id.' AND (tire_pattern_type LIKE "'.$this->registry->router->order.'" OR tire_pattern_type LIKE "%,'.$this->registry->router->order.',%" OR tire_pattern_type LIKE "'.$this->registry->router->order.',%" OR tire_pattern_type LIKE "%,'.$this->registry->router->order.'")',
+        );
+
+        $goings = $tire_going_model->getAllImport($data,$join);
+        $this->view->data['tire_goings'] = $goings;
+
+        $this->view->data['tire_brand'] = $this->registry->router->param_id==1?"DR":($this->registry->router->param_id==2?"ST":($this->registry->router->param_id==3?"AN":($this->registry->router->param_id==4?"GS":($this->registry->router->param_id==5?"LL":"ZC"))));
+        $this->view->data['tire_size'] = $this->registry->router->order_by;
+        $this->view->data['tire_pattern'] = $this->registry->router->order==1?"DC01":($this->registry->router->order==2?"DC02":($this->registry->router->order==3?"DC03":($this->registry->router->order==4?"NC01":($this->registry->router->order==5?"BC01":($this->registry->router->order==6?"BC02":($this->registry->router->order==7?"DK01":($this->registry->router->order==8?"DK02":($this->registry->router->order==9?"NK01":"NK02"))))))));
+
+        $this->view->show('stock/goingorder');
     }
 
     public function desired(){

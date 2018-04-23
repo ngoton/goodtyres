@@ -15,7 +15,9 @@ elseif ($order_by == 'tire_size_number')
 <div id="content" style="padding:5px;">
     <center style="clear:both;margin-bottom: -30px;"><h1> KÍCH CỠ</h1></center>
 <div class="add-box">
+    <?php if($_SESSION['role_logined']==1){ ?>
     <a class="add_button" onClick="add_click();">Nhập mới</a>
+    <?php } ?>
     <a class="add_button" id="btnExport" >Export Excel</a>
 </div>
 	<div class="search-box">
@@ -78,8 +80,9 @@ elseif ($order_by == 'tire_size_number')
             <td  class="fix"><?php echo $i++; ?></td>
             <td class="fix" id="tire_size_number_<?php echo $tire_size->tire_size_id; ?>"><?php echo $tire_size->tire_size_number; ?></td>
             <td>
+                <?php if($_SESSION['role_logined']==1){ ?>
                 <button class="error" onclick="del(<?php echo $tire_size->tire_size_id ?>)" >Xóa</button>
-                
+                <?php } ?>
                
             </td>
         </tr>
@@ -123,7 +126,7 @@ $this->helper('slidePaginator');
                          <tr>
                             <td>&nbsp;</td>
                             <td>
-                                <input type="submit" name="submit" value="Submit" tabindex="2">
+                                <input type="submit" name="submit" value="Submit" tabindex="2" <?php echo $_SESSION['role_logined']!=1?'disabled':null ?> >
                                 
                             </td>
                             <td>

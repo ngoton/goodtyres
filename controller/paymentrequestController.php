@@ -21,8 +21,8 @@ Class paymentrequestController Extends baseController {
             $na = isset($_POST['na']) ? $_POST['na'] : null;
         }
         else{
-            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'payment_request_number';
-            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC';
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'payment_request_date';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC, payment_request_number ASC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
             $limit = 18446744073709;
@@ -53,7 +53,7 @@ Class paymentrequestController Extends baseController {
             'where' => 'payment_request_date >= '.strtotime($batdau).' AND payment_request_date < '.strtotime($ngayketthuc),
         );
 
-        if ($_SESSION['role_logined'] != 1 || $_SESSION['role_logined'] != 2 || $_SESSION['role_logined'] != 8 || $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 9) {
             $data['where'] .= ' AND payment_request_user='.$_SESSION['userid_logined'];
         }
         
@@ -82,7 +82,7 @@ Class paymentrequestController Extends baseController {
             'where' => 'payment_request_date >= '.strtotime($batdau).' AND payment_request_date < '.strtotime($ngayketthuc),
             );
 
-        if ($_SESSION['role_logined'] != 1 || $_SESSION['role_logined'] != 2 || $_SESSION['role_logined'] != 8 || $_SESSION['role_logined'] != 9) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 9) {
             $data['where'] .= ' AND payment_request_user='.$_SESSION['userid_logined'];
         }
         
@@ -118,20 +118,30 @@ Class paymentrequestController Extends baseController {
     public function getItem(){
         $payable_model = $this->model->get('payableModel');
         $shipment_vendor_model = $this->model->get('shipmentvendorModel');
+        $customer_model = $this->model->get('customerModel');
+        $order_model = $this->model->get('ordertireModel');
         $vendor_data = array();
         $vendors = $shipment_vendor_model->getAllVendor();
         foreach ($vendors as $vendor) {
             $vendor_data[$vendor->shipment_vendor_id] = $vendor->shipment_vendor_name;
         }
 
-        $items = $payable_model->getAllCosts(array('where'=>'vendor>0 AND ( pay_money IS NULL OR pay_money=0 OR pay_money<money )','order_by'=>'payable_date DESC'));
+        $items = $payable_model->getAllCosts(array('where'=>'money>0 AND vendor>0 AND ( pay_money IS NULL OR pay_money=0 OR pay_money<money )','order_by'=>'payable_date DESC'));
         
         $str = '<table class="table_data" id="tblExport2">';
         $str .= '<thead><tr><th class="fix"><input type="checkbox" onclick="checkall(\'checkbox2\', this)" name="checkall"/></th><th class="fix">Code</th><th class="fix">Phải trả</th><th class="fix">Nội dung</th><th class="fix">Số tiền</th><th class="fix">Đã trả</th><th class="fix">Còn lại</th></tr></thead>';
         $str .= '<tbody>';
 
         foreach ($items as $item) {
-            $str .= '<tr style="font-style:italic" class="tr"><td><input name="check_i[]" type="checkbox" class="checkbox2" value="'.$item->payable_id.'" data="'.$item->payable_id.'" data-code="'.$item->code.'" data-comment="'.$item->comment.'" data-money="'.$this->lib->formatMoney($item->money-$item->pay_money).'" ></td><td class="fix">'.$item->code.'</td><td class="fix">'.$vendor_data[$item->vendor].'</td><td class="fix">'.$item->comment.'</td><td class="fix">'.$this->lib->formatMoney($item->money).'</td><td class="fix">'.$this->lib->formatMoney($item->pay_money).'</td><td class="fix">'.$this->lib->formatMoney($item->money-$item->pay_money).'</td></tr>';
+            if ($item->order_tire>0) {
+                $cus = $customer_model->getCustomer($order_model->getTire($item->order_tire)->customer);
+
+                $str .= '<tr style="font-style:italic" class="tr"><td><input name="check_i[]" type="checkbox" class="checkbox2" value="'.$item->payable_id.'" data="'.$item->payable_id.'" data-code="'.$item->code.'" data-comment="'.str_replace($item->code.'-', '', $item->comment).' '.$cus->customer_name.'" data-money="'.$this->lib->formatMoney($item->money-$item->pay_money).'" ></td><td class="fix">'.$item->code.'</td><td class="fix">'.$vendor_data[$item->vendor].'</td><td class="fix">'.$item->comment.' '.$cus->customer_name.'</td><td class="fix">'.$this->lib->formatMoney($item->money).'</td><td class="fix">'.$this->lib->formatMoney($item->pay_money).'</td><td class="fix">'.$this->lib->formatMoney($item->money-$item->pay_money).'</td></tr>';
+            }
+            else{
+                $str .= '<tr style="font-style:italic" class="tr"><td><input name="check_i[]" type="checkbox" class="checkbox2" value="'.$item->payable_id.'" data="'.$item->payable_id.'" data-code="'.$item->code.'" data-comment="'.str_replace($item->code.'-', '', $item->comment).'" data-money="'.$this->lib->formatMoney($item->money-$item->pay_money).'" ></td><td class="fix">'.$item->code.'</td><td class="fix">'.$vendor_data[$item->vendor].'</td><td class="fix">'.$item->comment.'</td><td class="fix">'.$this->lib->formatMoney($item->money).'</td><td class="fix">'.$this->lib->formatMoney($item->pay_money).'</td><td class="fix">'.$this->lib->formatMoney($item->money-$item->pay_money).'</td></tr>';
+            }
+            
             
         }
         
@@ -174,6 +184,16 @@ Class paymentrequestController Extends baseController {
 
         $payment = $this->registry->router->param_id;
 
+        include('lib/phpqrcode/qrlib.php'); 
+
+        $tempDir = "public/images/qr/"; 
+        array_map('unlink', glob($tempDir."*"));
+        $codeContents = 'https://www.viet-trade.org/paymentrequestdetail/index/'.$payment;
+        $fileName = 'qr_'.md5($codeContents).'.png'; 
+        $pngAbsoluteFilePath = $tempDir.$fileName; 
+        QRcode::png($codeContents, $pngAbsoluteFilePath); 
+        $this->view->data['img'] = $pngAbsoluteFilePath;
+
         $payment_request_model = $this->model->get('paymentrequestModel');
         $payments = $payment_request_model->getPayment($payment);
 
@@ -211,7 +231,6 @@ Class paymentrequestController Extends baseController {
                 'payment_request_money' => str_replace(',', '', $_POST['payment_request_money']),
                 'payment_request_origin' => trim($_POST['payment_request_origin']),
                 'payment_request_type' => trim($_POST['payment_request_type']),
-                'payment_request_user' => $_SESSION['userid_logined'],
             );
             
             if ($_POST['yes'] != "") {        
@@ -231,7 +250,7 @@ Class paymentrequestController Extends baseController {
                 
             }
             else{
-                
+                $data['payment_request_user'] = $_SESSION['userid_logined'];
                 
                     $payment_request_model->createPayment($data);
                     $id_payment = $payment_request_model->getLastPayment()->payment_request_id;
@@ -282,10 +301,7 @@ Class paymentrequestController Extends baseController {
                         $arr_item .= ','.$id_list;
                     }
 
-                    $item_olds = $payment_request_detail_model->queryPayment('SELECT * FROM payment_request_detail WHERE payment_request='.$id_payment.' AND payment_request_detail_id NOT IN ('.$arr_item.')');
-                    foreach ($item_olds as $item_old) {
-                        $payment_request_detail_model->queryPayment('DELETE FROM payment_request_detail WHERE payment_request_detail_id='.$item_old->payment_request_detail_id);
-                    }
+                    
 
                     if ($data_payable=="") {
                         $data_payable .= $data_detail['payable'];
@@ -293,14 +309,17 @@ Class paymentrequestController Extends baseController {
                     else{
                         $data_payable .= ','.$data_detail['payable'];
                     }
-                    $payment_request_model->updatePayment(array('payable'=>$data_payable),array('payment_request_id'=>$id_payment));
+                    
                 }
 
                 
             }
 
-
-     
+            $item_olds = $payment_request_detail_model->queryPayment('SELECT * FROM payment_request_detail WHERE payment_request='.$id_payment.' AND payment_request_detail_id NOT IN ('.$arr_item.')');
+                    foreach ($item_olds as $item_old) {
+                        $payment_request_detail_model->queryPayment('DELETE FROM payment_request_detail WHERE payment_request_detail_id='.$item_old->payment_request_detail_id);
+                    }
+            $payment_request_model->updatePayment(array('payable'=>$data_payable),array('payment_request_id'=>$id_payment));
         }
     }
 

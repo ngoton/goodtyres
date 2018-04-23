@@ -76,8 +76,6 @@ elseif ($order_by == 'vendor')
     <ul class="tab-links">
         <li class="active" ><a href="#tab1">Lô hàng</a></li>
         <li ><a href="#tab2">Hành chính</a></li>
-        <li ><a href="#tab3">Nhân viên</a></li>
-        <li ><a href="#tab4">Vay vốn</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab active" id="tab1" >
@@ -269,136 +267,7 @@ elseif ($order_by == 'vendor')
                </tbody>
             </table>
         </div>
-        <div class="tab" id="tab3" >
-            <div class="add-box">
-                <a class="add_button" id="btnExport3">Export Excel</a>
-            </div>
-            <table id="tblExport3" class="table_data">
-            <thead>
-                <tr>
-                    <th style="width:20px" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
-                    <th style="width:40px"  class="fix">
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','receivable_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'receivable_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th>
-                    <th class="fix" >
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','receive_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'receive_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th>
-                    <th class="fix">
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','staff','<?php echo $url_order ?>')">Nhân viên <?php if ($order_by == 'staff'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th>
-                    <th style="width:90px" class="fix" >
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','money','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th>   
-                      
-                    
-                    <th class="fix" >
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','bank_name','<?php echo $url_order ?>')">Tài khoản <?php if ($order_by == 'bank_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th> 
-                    <th style="width:200px" class="fix" >
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','receive_comment','<?php echo $url_order ?>')">Ghi chú<?php if ($order_by == 'receive_comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th>
-
-                </tr>
-                
-               </thead>
-               <tbody>
-                <?php $tong = 0; $tongcon = 0; $tongtt = 0; ?>
-                <?php foreach ($staffs as $receivable) : ?>
-                <?php $tong += $receivable->money; ?>
-                <?php $tongcon += ($receivable->money-$receivable->pay_money); ?>
-                <?php $tongtt += $receivable->pay_money; ?>
-                <?php 
-                    $timeDiff = strtotime(date('d-m-Y')) - $receivable->expect_date;
-
-                    $numberDays = $timeDiff/86400;  // 86400 seconds in one day
-
-                    // and you might want to convert to integer
-                    $numberDays = intval($numberDays); 
-                ?>
-                <?php if($_SESSION['role_logined'] == 10){ $link = "#"; } ?>
-                    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $receivable->receivable_id ?>" class="edit_tr masterTooltip" <?php echo $numberDays>90?'title="Vui lòng cập nhật ngày dự kiến thu"':null ?>>
-                        <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $receivable->receivable_id ?>"></td>
-                        <td class="fix"><?php echo $i++; ?></td>
-                        <td class="fix"  style="color:<?php echo $numberDays>90?'red':null; ?>"  id="receive_date_<?php echo $receivable->receivable_id; ?>"><?php echo $lib->hien_thi_ngay_thang($receivable->receive_date) ?></td>
-                        <td class="fix" data="<?php echo $receivable->staff; ?>" id="staff_<?php echo $receivable->receivable_id; ?>"><a style="text-decoration: underline;" href="<?php echo $this->url('staffdebts/index/'.$receivable->staff) ?>"><?php echo $receivable->staff_name; ?></a></td>
-                        <td class="fix" id="money_<?php echo $receivable->receivable_id; ?>"><?php echo $lib->formatMoney($receivable->money); ?></td>
-                        
-                        <td class="fix" id="source_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->bank_name; ?></td>
-                        <td class="fix" id="receive_comment_<?php echo $receivable->receivable_id; ?>"><?php echo $receivable->receive_comment; ?></td>
-                        
-                        
-                    </tr>
-                    
-                <?php endforeach; ?>
-                <tr style="text-align:center; font-weight: bold; color: red;">
-                    <td class="fix" colspan="4" >Tổng cộng</td>
-                    <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
-                    <td class="fix" colspan="2" ></td>
-                </tr>
-               </tbody>
-            </table>
-        </div>
-
-        <div class="tab" id="tab4" >
-            <div class="add-box">
-                <a class="add_button" id="btnExport4">Export Excel</a>
-            </div>
-            <table id="tblExport4" class="table_data">
-            <thead>
-                <tr>
-                    <th style="width:20px" class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
-                    <th style="width:40px"  class="fix">
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lender_cost_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'lender_cost_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th>
-                    <th class="fix" >
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lender_cost_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'lender_cost_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th>
-                    <th class="fix">
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lender_name','<?php echo $url_order ?>')">Người vay <?php if ($order_by == 'lender_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th>
-                    <th style="width:90px" class="fix" >
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','money','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th>   
-                      
-                    
-                    <th class="fix" >
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','bank_name','<?php echo $url_order ?>')">Tài khoản <?php if ($order_by == 'bank_name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th> 
-                    <th style="width:200px" class="fix" >
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','comment','<?php echo $url_order ?>')">Ghi chú<?php if ($order_by == 'comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th>
-
-                </tr>
-                
-               </thead>
-               <tbody>
-                <?php $tong = 0; ?>
-                <?php foreach ($lendercosts as $receivable) : ?>
-                <?php $tong += $receivable->money; ?>
-                
-                <?php if($_SESSION['role_logined'] == 10){ $link = "#"; } ?>
-                    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $receivable->lender_cost_id ?>" class="edit_tr masterTooltip" >
-                        <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $receivable->lender_cost_id ?>"></td>
-                        <td class="fix"><?php echo $i++; ?></td>
-                        <td class="fix" id="lender_cost_date_<?php echo $receivable->lender_cost_id; ?>"><?php echo $lib->hien_thi_ngay_thang($receivable->lender_cost_date) ?></td>
-                        <td class="fix" data="<?php echo $receivable->lender; ?>" id="lender_<?php echo $receivable->lender_cost_id; ?>"><?php echo $receivable->lender_name; ?></td>
-                        <td class="fix" id="money_<?php echo $receivable->lender_cost_id; ?>"><?php echo $lib->formatMoney($receivable->money); ?></td>
-                        
-                        <td class="fix" id="source_<?php echo $receivable->lender_cost_id; ?>"><?php echo $receivable->bank_name; ?></td>
-                        <td class="fix" id="comment_<?php echo $receivable->lender_cost_id; ?>"><?php echo $receivable->comment; ?></td>
-                        
-                        
-                    </tr>
-                    
-                <?php endforeach; ?>
-                <tr style="text-align:center; font-weight: bold; color: red;">
-                    <td class="fix" colspan="4" >Tổng cộng</td>
-                    <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
-                    <td class="fix" colspan="2" ></td>
-                </tr>
-               </tbody>
-            </table>
-        </div>
+        
     </div>
 </div>
 <?php

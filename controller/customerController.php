@@ -25,6 +25,11 @@ Class customerController Extends baseController {
 
         $id = $this->registry->router->param_id;
 
+        $staff_model = $this->model->get('staffModel');
+        $staffs = $staff_model->getAllStaff(array('order_by'=>'staff_name ASC'));
+
+        $this->view->data['staffs'] = $staffs;
+
         $district_model = $this->model->get('districtModel');
         $districts = $district_model->getAllDistrict();
 
@@ -109,6 +114,10 @@ Class customerController Extends baseController {
         }
         if (isset($_POST['yes'])) {
             $customer = $this->model->get('customerModel');
+            $contact_person_model = $this->model->get('contactpersonModel');
+            $order_tire_model = $this->model->get('ordertireModel');
+            $tire_sale_model = $this->model->get('tiresaleModel');
+
             $data = array(
                         
                         'customer_name' => trim($_POST['customer_name']),
@@ -133,12 +142,21 @@ Class customerController Extends baseController {
                         'customer_code' => trim($_POST['customer_code']),
                         'customer_contact' => trim($_POST['customer_contact']),
                         'company_phone' => trim($_POST['company_phone']),
+                        'customer_tire_type' => trim($_POST['customer_tire_type']),
+                        'customer_agent_link' => trim($_POST['customer_agent_link']),
+                        'customer_create_user' => trim($_POST['customer_create_user']),
                         
                         );
             if ($_POST['yes'] != "") {
                 $data['customer_update_user'] = $_SESSION['userid_logined'];
                 $data['customer_update_time'] = time();
                 //var_dump($data);
+                if ($data['mst'] != "" && $data['mst'] > 0) {
+                    if ($customer->getAllCustomerByWhere($_POST['yes'].' AND mst = '.trim($_POST['mst']))) {
+                        echo "Thông tin khách hàng đã tồn tại";
+                        return false;
+                    }
+                }
                 if ($customer->getAllCustomerByWhere($_POST['yes'].' AND customer_code = '.trim($_POST['customer_code']))) {
                     echo "Thông tin khách hàng đã tồn tại";
                     return false;
@@ -152,6 +170,11 @@ Class customerController Extends baseController {
                         if ($customer->getCustomerByWhere(array('customer_id'=>$_POST['yes'],'customer_create_user'=>$_SESSION['userid_logined']))) {
                             $customer->updateCustomer($data,array('customer_id' => $_POST['yes']));
                             echo "Cập nhật thành công";
+
+                            $id_customer = $_POST['yes'];
+
+                            $order_tire_model->updateTire(array('customer_type'=>$data['customer_tire_type']),array('customer'=>$id_customer));
+                            $tire_sale_model->updateTire(array('customer_type'=>$data['customer_tire_type']),array('customer'=>$id_customer));
 
                             date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                             $filename = "action_logs.txt";
@@ -168,7 +191,12 @@ Class customerController Extends baseController {
                     }
                     else{
                         $customer->updateCustomer($data,array('customer_id' => $_POST['yes']));
+
+                        $id_customer = $_POST['yes'];
                         echo "Cập nhật thành công";
+
+                        $order_tire_model->updateTire(array('customer_type'=>$data['customer_tire_type']),array('customer'=>$id_customer));
+                        $tire_sale_model->updateTire(array('customer_type'=>$data['customer_tire_type']),array('customer'=>$id_customer));
 
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
@@ -183,10 +211,16 @@ Class customerController Extends baseController {
                 
             }
             else{
-                $data['customer_create_user'] = $_SESSION['userid_logined'];
+                //$data['customer_create_user'] = $_SESSION['userid_logined'];
                 $data['customer_create_time'] = date('m/Y');
                 //$data['customer'] = $_POST['customer'];
                 //var_dump($data);
+                if ($data['mst'] != "" && $data['mst'] > 0) {
+                    if ($customer->getCustomerByWhere(array('mst'=>trim($_POST['mst'])))) {
+                        echo "Thông tin khách hàng đã tồn tại";
+                        return false;
+                    }
+                }
                 if ($customer->getCustomerByWhere(array('customer_code'=>trim($_POST['customer_code'])))) {
                     echo "Thông tin khách hàng đã tồn tại";
                     return false;
@@ -197,11 +231,13 @@ Class customerController Extends baseController {
                 }
                 else{
                     $customer->createCustomer($data);
+
+                    $id_customer = $customer->getLastCustomer()->customer_id;
                     echo "Thêm thành công";
 
                     date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
-                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."add"."|".$customer->getLastCustomer()->customer_id."|customer|".implode("-",$data)."\n"."\r\n";
+                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."add"."|".$id_customer."|customer|".implode("-",$data)."\n"."\r\n";
                         
                         $fh = fopen($filename, "a") or die("Could not open log file.");
                         fwrite($fh, $text) or die("Could not write file!");
@@ -209,7 +245,42 @@ Class customerController Extends baseController {
                 }
                 
             }
+
+            $contact_person = $_POST['contact_person'];
+            if (isset($id_customer)) {
+                foreach ($contact_person as $v) {
+                    $data_contact_person = array(
+                        'contact_person_name' => trim($v['contact_person_name']),
+                        'contact_person_phone' => trim($v['contact_person_phone']),
+                        'contact_person_mobile' => trim($v['contact_person_mobile']),
+                        'contact_person_email' => trim($v['contact_person_email']),
+                        'contact_person_birthday' => strtotime($v['contact_person_birthday']),
+                        'contact_person_address' => trim($v['contact_person_address']),
+                        'contact_person_position' => trim($v['contact_person_position']),
+                        'contact_person_department' => trim($v['contact_person_department']),
+                        'customer' => $id_customer,
+                    );
+
+                    if ($v['id_contact_person']>0) {
+                        $contact_person_model->updateCustomer($data_contact_person,array('contact_person_id'=>$v['id_contact_person']));
+                    }
+                    else{
+                        if ($data_contact_person['contact_person_name']!="") {
+                            $contact_person_model->createCustomer($data_contact_person);
+                        }
+                        
+                    }
+
+                }
+            }
                     
+        }
+    }
+    public function deletecontact(){
+        if (isset($_POST['data'])) {
+            $contact_person = $this->model->get('contactpersonModel');
+
+            $contact_person->queryCustomer('DELETE FROM contact_person WHERE contact_person_id='.$_POST['data'].' AND customer='.$_POST['customer']);
         }
     }
     public function delete(){
@@ -218,11 +289,13 @@ Class customerController Extends baseController {
         }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $customer = $this->model->get('customerModel');
+            $contact_person_model = $this->model->get('contactpersonModel');
             if (isset($_POST['xoa'])) {
                 $data = explode(',', $_POST['xoa']);
                 foreach ($data as $data) {
                     if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
                         if ($customer->getCustomerByWhere(array('customer_id'=>$data,'customer_create_user'=>$_SESSION['userid_logined']))) {
+                            $contact_person_model->queryCustomer('DELETE FROM contact_person WHERE customer='.$data);
                             $customer->deleteCustomer($data);
                             echo "Xóa thành công";
 
@@ -240,6 +313,7 @@ Class customerController Extends baseController {
                         }
                     }
                     else{
+                        $contact_person_model->queryCustomer('DELETE FROM contact_person WHERE customer='.$data);
                         $customer->deleteCustomer($data);
                         echo "Xóa thành công";
 
@@ -258,6 +332,7 @@ Class customerController Extends baseController {
             else{
                     if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
                         if ($customer->getCustomerByWhere(array('customer_id'=>$_POST['data'],'customer_create_user'=>$_SESSION['userid_logined']))) {
+                            $contact_person_model->queryCustomer('DELETE FROM contact_person WHERE customer='.$_POST['data']);
                             $customer->deleteCustomer($_POST['data']);
                             echo "Xóa thành công";
 
@@ -275,6 +350,7 @@ Class customerController Extends baseController {
                         }
                     }
                     else{
+                        $contact_person_model->queryCustomer('DELETE FROM contact_person WHERE customer='.$_POST['data']);
                         $customer->deleteCustomer($_POST['data']);
                         echo "Xóa thành công";
 
@@ -389,13 +465,281 @@ Class customerController Extends baseController {
         $this->view->show('customer/import');
 
     }
+    public function getcontact(){
+        if(isset($_POST['customer'])){
 
+            $contact_person_model = $this->model->get('contactpersonModel');
+            $contacts = $contact_person_model->getAllCustomer(array('where'=>'customer='.$_POST['customer']));
+            
+
+            $str = "";
+
+            if (!$contacts) {
+                $str .= '<tr>
+                  <td><input type="checkbox" name="chk"></td>
+                  <td>
+                      <table style="width:100%">
+                          <tr>
+                              <td>Họ tên</td>
+                              <td>
+                                  <input type="text" class="contact_person_name" name="contact_person_name[]"  tabindex="22">
+                              </td>
+                              <td>
+                                  Di động
+                              </td>
+                              <td>
+                                  <input type="text" class="contact_person_mobile numbers" name="contact_person_mobile[]" tabindex="23" >
+                              </td>
+                              <td>
+                                  SĐT
+                              </td>
+                              <td>
+                                  <input type="text" class="contact_person_phone numbers" name="contact_person_phone[]" tabindex="24" >
+                              </td>
+                            </tr>
+                            <tr>
+                              
+                              <td>
+                                  Email
+                              </td>
+                              <td>
+                                  <input type="text" class="contact_person_email" name="contact_person_email[]" tabindex="25" >
+                              </td>
+                              <td>
+                                  Ngày sinh
+                              </td>
+                              <td>
+                                  <input type="text" class="contact_person_birthday ngay" name="contact_person_birthday[]" tabindex="26" >
+                              </td>
+                              <td>Địa chỉ</td>
+                              <td>
+                                  <input type="text" class="contact_person_address" name="contact_person_address[]" tabindex="27" >
+                              </td>
+                          </tr>
+                          <tr>
+                            
+                              <td>Chức vụ</td>
+                              <td>
+                                  <input type="text" class="contact_person_position" name="contact_person_position[]" tabindex="28" >
+                              </td>
+                            
+                              <td>Bộ phận</td>
+                              <td>
+                                  <input type="text" class="contact_person_department" name="contact_person_department[]" tabindex="29" >
+                              </td>
+                          </tr>
+                      </table>
+                  </td>
+              </tr>';
+            }
+            else{
+                foreach ($contacts as $contact) {
+                    $str .= '<tr>
+                      <td><input type="checkbox" name="chk" data="'.$contact->contact_person_id.'" title="'.$contact->customer.'"></td>
+                      <td>
+                          <table style="width:100%">
+                              <tr>
+                                  <td>Họ tên</td>
+                                  <td>
+                                      <input type="text" class="contact_person_name" name="contact_person_name[]"  tabindex="22" data="'.$contact->contact_person_id.'" value="'.$contact->contact_person_name.'">
+                                  </td>
+                                  <td>
+                                      Di động
+                                  </td>
+                                  <td>
+                                      <input type="text" class="contact_person_mobile numbers" name="contact_person_mobile[]" tabindex="23" value="'.$contact->contact_person_mobile.'" >
+                                  </td>
+                                  <td>
+                                      SĐT
+                                  </td>
+                                  <td>
+                                      <input type="text" class="contact_person_phone numbers" name="contact_person_phone[]" tabindex="24" value="'.$contact->contact_person_phone.'" >
+                                  </td>
+                                </tr>
+                                <tr>
+                                  
+                                  <td>
+                                      Email
+                                  </td>
+                                  <td>
+                                      <input type="text" class="contact_person_email" name="contact_person_email[]" tabindex="25" value="'.$contact->contact_person_email.'" >
+                                  </td>
+                                  <td>
+                                      Ngày sinh
+                                  </td>
+                                  <td>
+                                      <input type="text" class="contact_person_birthday ngay" name="contact_person_birthday[]" tabindex="26" value="'.date('d-m-Y',$contact->contact_person_birthday).'" >
+                                  </td>
+                                  <td>Địa chỉ</td>
+                                  <td>
+                                      <input type="text" class="contact_person_address" name="contact_person_address[]" tabindex="27" value="'.$contact->contact_person_address.'" >
+                                  </td>
+                              </tr>
+                              <tr>
+                                
+                                  <td>Chức vụ</td>
+                                  <td>
+                                      <input type="text" class="contact_person_position" name="contact_person_position[]" tabindex="28" value="'.$contact->contact_person_position.'" >
+                                  </td>
+                                
+                                  <td>Bộ phận</td>
+                                  <td>
+                                      <input type="text" class="contact_person_department" name="contact_person_department[]" tabindex="29" value="'.$contact->contact_person_department.'" >
+                                  </td>
+                              </tr>
+                          </table>
+                      </td>
+                  </tr>';
+              }
+            }
+
+            echo $str;
+        }
+    }
     public function getCustomer($id){
         return $this->getByID($this->table,$id);
     }
 
-    private function getUrl(){
+    public function getcustomerinfo(){
+        
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $tire_sale_model = $this->model->get('tiresaleModel');
+            $customer_model = $this->model->get('customerModel');
+            $company = trim($_POST['company']);
+            $mst = trim($_POST['mst']);
+            $phone = trim($_POST['phone']);
+            $email = trim($_POST['email']);
+            $type = trim($_POST['type']);
+            $staff = trim($_POST['staff']);
+            $customer_name = trim($_POST['customer_name']);
+            $customer = trim($_POST['customer']);
+            $address = trim($_POST['address']);
+            $contact = trim($_POST['contact']);
 
+            $arr = array(
+                'company'=>$company,
+                'mst'=>$mst,
+                'phone'=>$phone,
+                'email'=>$email,
+                'type'=>$type,
+                'staff'=>$staff,
+                'customer_name'=>$customer_name,
+                'customer'=>$customer,
+                'address'=>$address,
+                'contact'=>$contact,
+            );
+
+            if ($company != "") {
+                $customers = $customer_model->getCustomerByWhere(array('company_name'=>$company));
+                if ($customers) {
+                    $types = $tire_sale_model->getAllTire(array('where'=>'customer='.$customers->customer_id,'order_by'=>'tire_sale_date','order'=>'DESC','limit'=>1));
+                    if ($types) {
+                        foreach ($types as $t) {
+                            $type = $t->customer_type;
+                        }
+                    }
+                    else{
+                        $type = 1;
+                    }
+
+                    $arr = array(
+                        'company'=>$customers->company_name,
+                        'mst'=>$customers->mst,
+                        'phone'=>$customers->customer_phone,
+                        'email'=>$customers->customer_email,
+                        'type'=>$type,
+                        'staff'=>$customers->customer_create_user,
+                        'customer_name'=>$customers->customer_name,
+                        'customer'=>$customers->customer_id,
+                        'address'=>$customers->customer_address,
+                        'contact'=>$customers->customer_contact,
+                    );
+                }
+            }
+            else if ($mst != "") {
+                $customers = $customer_model->getCustomerByWhere(array('mst'=>$mst));
+                if ($customers) {
+                    $types = $tire_sale_model->getAllTire(array('where'=>'customer='.$customers->customer_id,'order_by'=>'tire_sale_date','order'=>'DESC','limit'=>1));
+                    if ($types) {
+                        foreach ($types as $t) {
+                            $type = $t->customer_type;
+                        }
+                    }
+                    else{
+                        $type = 1;
+                    }
+
+                    $arr = array(
+                        'company'=>$customers->company_name,
+                        'mst'=>$customers->mst,
+                        'phone'=>$customers->customer_phone,
+                        'email'=>$customers->customer_email,
+                        'type'=>$type,
+                        'staff'=>$customers->customer_create_user,
+                        'customer_name'=>$customers->customer_name,
+                        'customer'=>$customers->customer_id,
+                        'address'=>$customers->customer_address,
+                        'contact'=>$customers->customer_contact,
+                    );
+                }
+            }
+            else if ($phone != "") {
+                $customers = $customer_model->getCustomerByWhere(array('customer_phone'=>$phone));
+                if ($customers) {
+                    $types = $tire_sale_model->getAllTire(array('where'=>'customer='.$customers->customer_id,'order_by'=>'tire_sale_date','order'=>'DESC','limit'=>1));
+                    if ($types) {
+                        foreach ($types as $t) {
+                            $type = $t->customer_type;
+                        }
+                    }
+                    else{
+                        $type = 1;
+                    }
+
+                    $arr = array(
+                        'company'=>$customers->company_name,
+                        'mst'=>$customers->mst,
+                        'phone'=>$customers->customer_phone,
+                        'email'=>$customers->customer_email,
+                        'type'=>$type,
+                        'staff'=>$customers->customer_create_user,
+                        'customer_name'=>$customers->customer_name,
+                        'customer'=>$customers->customer_id,
+                        'address'=>$customers->customer_address,
+                        'contact'=>$customers->customer_contact,
+                    );
+                }
+            }
+            else if ($email != "") {
+                $customers = $customer_model->getCustomerByWhere(array('customer_email'=>$email));
+                if ($customers) {
+                    $types = $tire_sale_model->getAllTire(array('where'=>'customer='.$customers->customer_id,'order_by'=>'tire_sale_date','order'=>'DESC','limit'=>1));
+                    if ($types) {
+                        foreach ($types as $t) {
+                            $type = $t->customer_type;
+                        }
+                    }
+                    else{
+                        $type = 1;
+                    }
+
+                    $arr = array(
+                        'company'=>$customers->company_name,
+                        'mst'=>$customers->mst,
+                        'phone'=>$customers->customer_phone,
+                        'email'=>$customers->customer_email,
+                        'type'=>$type,
+                        'staff'=>$customers->customer_create_user,
+                        'customer_name'=>$customers->customer_name,
+                        'customer'=>$customers->customer_id,
+                        'address'=>$customers->customer_address,
+                        'contact'=>$customers->customer_contact,
+                    );
+                }
+            }
+
+            echo json_encode($arr);
+        }
     }
 
 

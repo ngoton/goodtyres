@@ -452,6 +452,12 @@ var i_index=0;
                     var tong = parseFloat($('#tong').text().replace(/\,/g,'')) || 0;
                     tong += parseFloat($('#von').text().replace(/\,/g,'')) || 0;
 
+                    var giam = parseFloat($('#trugiam').text().replace(/\,/g,'')) || 0;
+
+                    if(giam>0){
+                        tong += giam+giam;
+                    }
+
                     var total = 0;
                     $('.additional_money').each(function(){
                       total += parseFloat(get_number($(this))) || 0;
@@ -514,15 +520,24 @@ $(document).ready(function(){
         var tong = parseFloat($('#tong').text().replace(/\,/g,'')) || 0;
         tong += parseFloat($('#von').text().replace(/\,/g,'')) || 0;
 
+        var giam = parseFloat($('#trugiam').text().replace(/\,/g,'')) || 0;
+
+        if(giam>0){
+            tong += giam+giam;
+        }
+        
+
         $('.additional_money').each(function(){
           total += parseFloat(get_number($(this))) || 0;
         });
+
 
         if (total != tong) {
           alert("Vui lòng hạch toán đúng số tiền!");
           return false;
         }
         
+
         var additional = [];
         var additional_id = [];
         var additional_debit = [];

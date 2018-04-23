@@ -77,7 +77,6 @@ elseif ($order_by == 'cost_type')
     <ul class="tab-links">
         <li class="active" ><a href="#tab1">Lô hàng</a></li>
         <li ><a href="#tab2">Hành chính</a></li>
-        <li ><a href="#tab3">Vay vốn</a></li>
     </ul>
     <div class="tab-content">
         <div class="add-box">
@@ -273,57 +272,7 @@ elseif ($order_by == 'cost_type')
             </table>
         </div>
 
-        <div class="tab" id="tab3" >
-            <div class="add-box">
-                <a class="add_button" id="btnExport3">Export Excel</a>
-            </div>
-            <table id="tblExport3" class="table_data">
-                <thead>
-                <tr>
-                    <th style="width:20px"  class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
-                    <th style="width:40px"  class="fix">
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lender_pay_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'lender_pay_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th>
-                    <th style="width:75px" class="fix" >
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','assets_date','<?php echo $url_order ?>')">Ngày <?php if ($order_by == 'assets_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th> 
-                    <th  class="fix" >
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','lender_money','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'lender_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th> 
-                      
-                    <th class="fix" >
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','comment','<?php echo $url_order ?>')">Nội dung<?php if ($order_by == 'comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th>
-                    
-                    <th class="fix" >
-                        <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','source','<?php echo $url_order ?>')">Tài khoản <?php if ($order_by == 'source'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-                    </th> 
-                </tr>
-                
-               </thead>
-                    <tbody>
-                <?php $tong = 0;  ?>
-                <?php foreach ($lenderpays as $cost) : ?>
-                <?php $tong += $cost->total;  ?>
-                    <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $cost->lender_pay_id ?>" class="edit_tr" >
-                        <td ><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $cost->lender_pay_id ?>"></td>
-                        <td  class="fix"><?php echo $i++; ?></td>
-                        <td class="fix"  id="assets_date_<?php echo $cost->lender_pay_id; ?>"><?php echo $lib->hien_thi_ngay_thang($cost->assets_date) ?></td>
-                        <td  class="fix" id="total_<?php echo $cost->lender_pay_id; ?>"><?php echo $lib->formatMoney($cost->total); ?></td>
-                        <td  class="fix" id="comment_<?php echo $cost->lender_pay_id; ?>"><?php echo $cost->comment; ?></td> 
-                        
-                        <td class="fix" id="source_<?php echo $cost->lender_pay_id; ?>"><?php echo $cost->bank_name; ?></td>
-                        
-                    </tr>
-                <?php endforeach; ?>
-                <tr style="text-align:center; font-weight: bold; color: red;">
-                    <td class="fix" colspan="3" >Tổng cộng</td>
-                    <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
-                    <td class="fix" colspan="2" ></td>
-                </tr>
-               </tbody>
-            </table>
-        </div>
+        
     </div>
 </div>
 <?php

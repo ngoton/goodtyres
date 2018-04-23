@@ -168,9 +168,9 @@ elseif ($order_by == 'tire_sale_volume')
    </thead>
    <tbody>
     <?php $tongtt=0; $tong=0; ?>
-    <?php foreach ($tire_sales as $tire_sale) : ?>
-    
-        <?php $tong += $tire_sale->volume; $tongtt += $tire_sale->volume*$tire_sale->sell_price_vat; 
+    <?php foreach ($tire_sales as $tire_sale) : 
+    	$giavat = isset($order_data[$tire_sale->tire_sale_id])?$order_data[$tire_sale->tire_sale_id]:$tire_sale->sell_price_vat;
+    	$tong += $tire_sale->volume; $tongtt += $tire_sale->volume*$giavat; 
             $link = 'ordertire/orderlist/'.$tire_sale->code;
         ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_sale->tire_sale_id ?>" class="edit_tr">
@@ -187,9 +187,9 @@ elseif ($order_by == 'tire_sale_volume')
             <td class="fix" id="tire_size_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $tire_sale->tire_size_number; ?></td>
             <td class="fix" data="<?php echo $tire_sale->tire_pattern; ?>" id="tire_pattern_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $tire_sale->tire_pattern_name; ?></td>
             <td class="fix" id="volume_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $tire_sale->volume; ?></td>
-            <td class="fix" id="sell_price_vat_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney($tire_sale->sell_price_vat); ?></td>
+            <td class="fix" id="sell_price_vat_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney($giavat); ?></td>
             <td class="fix" id="sell_price_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney($tire_sale->sell_price); ?></td>
-            <td class="fix" id="profit_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney($tire_sale->volume*$tire_sale->sell_price_vat); ?></td>
+            <td class="fix" id="profit_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $lib->formatMoney($tire_sale->volume*$giavat); ?></td>
             <td class="fix" id="sale_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $staff_data[$tire_sale->sale]['name']; ?></td>
             <td class="fix" id="revenue_<?php echo $tire_sale->tire_sale_id; ?>"><a class="revenue" style="text-decoration: underline;" href="<?php echo $this->url('allshipment/receivable/'.$tire_sale->code.'/'.$tire_sale->customer) ?>">Chi tiết</a></td>
             <td class="fix" style="display:none" id="check_vat_<?php echo $tire_sale->tire_sale_id; ?>"><?php echo $tire_sale->check_vat; ?></td>
@@ -207,6 +207,7 @@ elseif ($order_by == 'tire_sale_volume')
     <tr style="text-align:center; font-weight: bold; color: red;">
         <td class="fix" colspan="8" >Tổng cộng</td>
         <td class="fix"><?php echo $lib->formatMoney($tong); ?></td>
+        <td class="fix" ></td>
         <td class="fix" ></td>
         <td class="fix"><?php echo $lib->formatMoney($tongtt); ?></td>
         <td class="fix" ></td>

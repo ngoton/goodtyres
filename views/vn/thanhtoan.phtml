@@ -1,0 +1,551 @@
+<script type="text/javascript" src="<?php echo BASE_URL ?>/public/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="<?php echo BASE_URL ?>/public/js/localization/messages_vi.js"></script>
+<script type="text/javascript" src="<?php echo BASE_URL ?>/public/js/jquery.form.js"></script>
+<div class="main-content-box">
+
+
+
+    <h2>Đơn hàng</h2>
+
+
+
+    <div class="items-list-prod">
+
+        <div class="wrap_detail">
+            <div class="shopping">
+				<form class="formdathang form-horizontal" id="formdathang" method="post">
+					<div class="row">
+						<div class="bgformdathang col-sm-6">
+							<div class="title"><i class="fa fa-edit"></i> Thông tin người đặt hàng</div>
+							<div style="font-style:italic">
+								* Quý khách chỉ cần nhập vào Email nếu đã từng mua hàng online trên website của chúng tôi.
+							</div>
+							<div class="form-group">
+								<label for="hovaten_cart" class="col-sm-12">Họ và tên:</label>
+								<div class="col-sm-12">
+									<input type="text" class="form-control" name="cart_hovaten" id="hovaten_cart" required="required" placeholder="Họ và tên" value="">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="dienthoai_cart" class="col-sm-12">Điện thoại:</label>
+								<div class="col-sm-12">
+									<input type="text" class="form-control numbers" name="cart_dienthoai" id="dienthoai_cart" required="required" placeholder="Điện thoại" value="">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="address_cart" class="col-sm-12">Địa chỉ:</label>
+								<div class="col-sm-12">
+									<input type="text" class="form-control" name="cart_address" id="address_cart" required="required" placeholder="Địa chỉ" value="">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="email_cart" class="col-sm-12">Email:</label>
+								<div class="col-sm-12">
+									<input type="email" class="form-control" name="cart_email" id="email_cart" placeholder="Email" value="">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="address_cart" class="col-sm-12">Công ty:</label>
+								<div class="col-sm-12">
+									<input type="text" class="form-control" name="cart_company" id="company_cart" placeholder="Công ty" value="">
+								</div>
+							</div>
+							<!-- Modal -->
+						</div> <!-- col -->
+						<div class="bgformdathang col-sm-6">
+							<div class="title"><i class="fa fa-truck"></i> Hình thức vận chuyển</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<label class="radio-inline">
+										<input checked type="radio" name="phuongthucvanchuyen" id="truck_1" value="1"> Lấy hàng tại kho
+									</label>
+									<div class="show_when_click">
+										<p>» Quý khách đến kho công ty chúng tôi sẽ tiết kiệm được 100.000đ cho mỗi bộ sản phẩm</p>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<label class="radio-inline">
+										<input type="radio" name="phuongthucvanchuyen" id="truck_2" value="2"> Giao hàng tận nơi
+									</label>
+									<div class="show_when_click" style="display: none;">
+										<p>» Chúng tôi sẽ giao hàng tận nơi cho quý khách. Quý khách sẽ thanh toán ngay khi nhận hàng</p>
+									</div>
+								</div>
+								<!-- </div> -->
+							</div>
+							<div class="form-group">
+								<label for="thongtinthem_cart" class="col-sm-12">Thông tin khác:</label>
+								<div class="col-sm-12">
+									<textarea class="form-control" name="cart_thongtinthem" id="thongtinthem_cart" placeholder="Thêm ghi chú cho đơn hàng..."></textarea>
+								</div>
+							</div>
+						</div> <!-- col -->
+						<div class="bgformdathang col-sm-12">
+							<div class="title"><i class="fa fa-shopping-cart"></i> Hoá đơn mua hàng</div>
+							<div class="table_div order_list">
+								<?php 
+								$tongtien = 0; $soluong = 0;
+								foreach ($tire_product_carts as $tire_product) { 
+									$tien = $_SESSION['cart'][$tire_product->tire_product_id]*$tire_product->tire_retail;
+									$tongtien += $tien;
+									$soluong += $_SESSION['cart'][$tire_product->tire_product_id];
+								?>
+								<div class="each_order <?php echo $tire_product->tire_product_id ?>">
+									<a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product->tire_product_link ?>">
+										<?php
+					                    $filename = BASE_URL."/public/images/upload/".$tire_product->tire_product_thumb;
+					                    if (@getimagesize($filename)) {
+					                    ?>
+										<img src="<?php echo $filename ?>" alt="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>" />
+					                    <?php }
+					                    else{
+					                    ?>
+					                        <img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $tire_product->tire_product_pattern_type ?>.jpg" alt="Lốp xe <?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>" />
+					                    <?php } ?>
+									</a>
+									<div class="name_pro">
+										<a href="<?php echo BASE_URL ?>/vn/detail/<?php echo $tire_product->tire_product_link ?>"><?php echo $tire_product->tire_producer_name.' '.$tire_product->tire_product_size_number.' '.$tire_product->tire_product_name ?>
+										</a>
+									</div>
+									<i class="fa fa-times delete_pro_in_cart" data-number="<?php echo $_SESSION['cart'][$tire_product->tire_product_id] ?>" data-money="<?php echo $tien ?>" data="<?php echo $tire_product->tire_product_id ?>" title="Xoá khỏi giỏ hàng" ></i>
+									<div class="soluong_dongia">
+										<input min="1" class="soluong" type="number" style="width:50px" data-money="<?php echo $tire_product->tire_retail ?>" data="<?php echo $tire_product->tire_product_id ?>" id="soluong_<?php echo $tire_product->tire_product_id ?>" value="<?php echo $_SESSION['cart'][$tire_product->tire_product_id] ?>"/>
+										 x 
+										 <span><?php echo $lib->formatMoney($tire_product->tire_retail) ?> VNĐ</span> 
+										 = 
+										 <span id="tongcong_<?php echo $tire_product->tire_product_id ?>"><?php echo $lib->formatMoney($tien) ?> VNĐ</span>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<?php } ?>
+							</div>
+							<div class="total_vat">
+								<span style="font-size:14px;">Tổng cộng <span class="maincolor total" id="tongtien" data="<?php echo $tongtien ?>"><?php echo $lib->formatMoney($tongtien) ?> VNĐ</span></span>
+								<span class="show_dis" style="font-size:12px;">Giảm giá <span style="font-size:12px;" class="maincolor discount" id="giamgia" ><?php echo $lib->formatMoney(0-($soluong*100000)) ?> VNĐ</span></span>
+								<hr/>
+								<span style="font-weight:bold">THÀNH TIỀN <span class="maincolor thanhtien" id="thanhtien" data="<?php echo $tongtien-($soluong*100000) ?>"><?php echo $lib->formatMoney($tongtien-($soluong*100000)) ?> VNĐ</span></span>
+								<div class="sales complete" id="submit_cart" data-load="0"><i class="fa fa-shopping-cart"></i> Xác nhận đơn hàng</div>
+								<a href="<?php echo BASE_URL ?>" class="sales continue" id="continue_cart"><i class="fa fa-times"></i> Xem thêm sản phẩm</a>
+								<a class="sales continue restroy_cart" id="restroy_cart"><i class="fa fa-trash-o"></i> Huỷ đơn hàng</a>
+							</div>
+						</div> <!-- col -->
+						<div class="clear"></div>
+					</div> <!-- row -->
+				</form>
+			</div>
+        </div>
+        
+    </div>
+
+
+
+</div>
+
+<div class="modal fade" id="confirm" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Đặt hàng thành công</h4>
+            </div>
+            <div class="modal-body">
+                <p>Cảm ơn quý khách đã mua hàng!</p>
+                <p>Đơn hàng của quý khách đã được nhân viên tiếp nhận và liên hệ trong thời gian sớm nhất.</p>
+                <p>Thông tin chi tiết về đơn hàng sẽ được gửi về email của quý khách!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-fw fa-close"></i> Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+.items-list-prod{
+    background-color: white;
+}
+.formdathang {}
+.bgformdathang {}
+.bgformdathang .title {font-size: 18px; font-weight: 400; margin-bottom: 10px; border-bottom: 1px solid #eee;}
+.bgformdathang .title i {display: inline-block; vertical-align: middle; border: 1px solid #0088cd; color: #0088cd; border-radius: 50%; width: 30px; height: 30px; text-align: center; padding-top: 5px;}
+.total_vat {text-align: center; margin-bottom: 35px; text-transform: uppercase; font-weight: 400;}
+.total_vat > span {font-size: 16px; color: #4e4e4e; width: auto; text-align: right; display: block; text-align: left;}
+.total_vat > span > span {float: right; text-align: right;}
+.sales {text-align: left; background: #0088cd; height: 35px; width: 100%; color: #fff; font-weight: 400; line-height: 35px; margin-top: 10px; border-radius: 3px; display: block; transition: 0.3s ease all; padding-left: 10px;}
+.sales i {display: inline-block; width: 20px; text-align: center;}
+.sales.continue {background: #ec971f; color: #fff; border: 1px solid #d58512;}
+.sales.restroy_cart {background: #c9302c; color: #fff; border: 1px solid #ac2925;}
+.sales:hover {opacity: 0.8;}
+#submit_cart, #get_newsletter {cursor: pointer;}
+.show_when_click p{font-style: italic;}
+.order_list {margin-bottom: 10px;}
+.each_order {padding: 10px 0; border-bottom: 1px solid #eee; position: relative;}
+.each_order img {float: left; margin: 0 10px 0 0; width: 60px; height: 60px; border: 1px solid #eee;}
+.each_order .name_pro {}
+.each_order i.fa-times {display: block; width: 20px; height: 20px; text-align: center; padding-top: 3px; color: #fff; background: #0088cd; position: absolute; top: 15px; left: 5px; cursor: pointer;}
+.each_order .soluong_dongia {position: relative; bottom: 5px; right: 5px; font-size: 12px; margin-top: 10px; float: right;}
+.each_order .soluong_dongia .form-control.changeSoluongSelect {float: left; width: 80px; height: auto; margin-right: 10px;}
+.each_order .soluong_dongia span {display: inline-block; margin-left: 10px;}
+.clear {
+    clear: both;
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0!important;
+    height: 0!important;
+    min-height: 0!important;
+    min-width: 0!important;
+    float: none!important;
+    padding: 0!important;
+    margin: 0!important;
+}
+input:focus:invalid,
+textarea:focus:invalid,
+select:focus:invalid {
+  color: #b94a48;
+  border-color: #ee5f5b;
+}
+
+input:focus:invalid:focus,
+textarea:focus:invalid:focus,
+select:focus:invalid:focus {
+  border-color: #e9322d;
+  -webkit-box-shadow: 0 0 6px #f8b9b7;
+     -moz-box-shadow: 0 0 6px #f8b9b7;
+          box-shadow: 0 0 6px #f8b9b7;
+}
+</style>
+<script type="text/javascript">
+
+$(function(){
+	$('.numbers').keyup(function(event) {
+
+          // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+          .replace(/[^0-9]/g, "")
+          .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+        ;
+      });
+    });
+
+	$("input[type='radio']").click(function(){
+		var isthis = $(this);
+		$(".show_when_click").slideUp();
+		isthis.parent().next().slideDown();
+
+		var soluong = 0;
+		
+		if (isthis.val() == 1) {
+			$('.show_dis').slideDown();
+			$('.each_order .soluong').each(function(){
+				soluong += parseInt($(this).val());
+			});
+		}
+		else{
+			$('.show_dis').slideUp();
+		}
+		$("#giamgia").html(0-(soluong*100000));
+        $("#giamgia").html(function(index, value) {
+            return value
+              .replace(/[^0-9-.]/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+        $("#giamgia").html($("#giamgia").html()+" VNĐ");
+
+        var total = parseInt($(".total").attr("data"));
+        $("#thanhtien").html(total-(soluong*100000));
+	    $("#thanhtien").html(function(index, value) {
+	        return value
+	          .replace(/\D/g, "")
+	          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+	        ;
+	    });
+	    $("#thanhtien").html($("#thanhtien").html()+" VNĐ");
+	});
+
+	$('#email_cart').change(function(){
+		var val = $(this).val();
+
+		$.ajax({
+	      type: "GET",
+	      url: "<?php echo BASE_URL ?>/vn/getCustomer",
+	      data: "email="+val, // giá trị post
+	      success: function(answer){ 
+	        var data = jQuery.parseJSON(answer);
+	        if (data.hoten != null) {
+	        	$('#hovaten_cart').val(data.hoten);
+		        $('#dienthoai_cart').val(data.dienthoai);
+		        $('#address_cart').val(data.diachi);
+		        $('#company_cart').val(data.congty);
+	        }
+	        
+	      }
+	    });
+	});
+	
+});
+
+
+$(".delete_pro_in_cart").click(function(){
+    var id = $(this).attr("data");
+    var tien = $(this).attr("data-money");
+    $.ajax({
+      type: "GET",
+      url: "<?php echo BASE_URL ?>/vn/delete-cart",
+      data: "id="+id, // giá trị post
+      success: function(answer){ 
+        $("."+id).remove();
+        var num = parseInt($(".cartTopRightQuantity").html());
+        $(".cartTopRightQuantity").html(num-1);
+
+        var total = parseInt($(".total").attr("data"));
+        $(".total").html(total-tien);
+        $(".total").attr("data",total-tien)
+        $(".total").html(function(index, value) {
+            return value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+        });
+        $(".total").html($(".total").html()+" VNĐ");
+
+        var soluong = 0;
+		
+		if ($("input[type='radio']:checked").val() == 1) {
+			$('.show_dis').slideDown();
+			$('.each_order .soluong').each(function(){
+				soluong += parseInt($(this).val());
+			});
+		}
+		else{
+			$('.show_dis').slideUp();
+		}
+		$("#giamgia").html(0-(soluong*100000));
+	    $("#giamgia").html(function(index, value) {
+	        return value
+	          .replace(/[^0-9-.]/g, "")
+	          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+	        ;
+	    });
+	    $("#giamgia").html($("#giamgia").html()+" VNĐ");
+
+	    $("#thanhtien").html(total-tien-(soluong*100000));
+	    $("#thanhtien").html(function(index, value) {
+	        return value
+	          .replace(/\D/g, "")
+	          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+	        ;
+	    });
+	    $("#thanhtien").html($("#thanhtien").html()+" VNĐ");
+      }
+    });
+});
+$(".restroy_cart").click(function(){
+    $.ajax({
+      type: "GET",
+      url: "<?php echo BASE_URL ?>/vn/remove-cart",
+      data: "id=1", // giá trị post
+      success: function(answer){ 
+        $(".maxheighttablecart").html("Bạn không có sản phẩm nào trong giỏ hàng!");
+        $(".cartTopRightQuantity").html(0);
+        $(".margintop10").remove();
+        $(".order_list").remove();
+        $(".total").html("0 VNĐ");
+        $("#giamgia").html("0 VNĐ");
+        $("#thanhtien").html("0 VNĐ");
+      }
+    });
+});
+$(document).on("focusin", ".soluong", function(){
+    $(this).data("val", $(this).val());
+}).on("change",".soluong", function(){
+    var prev = parseInt($(this).data("val"));
+    var current = parseInt($(this).val());
+
+    $(this).data("val", $(this).val());
+
+    var price = $(this).attr("data-money");
+    var total = parseInt($(".total").attr("data"));
+
+    var tien = prev*price;
+    total = total - tien;
+    total = total + (current*price);
+
+    $(".total").html(total);
+    $(".total").attr("data",total)
+    $(".total").html(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $(".total").html($(".total").html()+" VNĐ");
+
+    var id = $(this).attr("data");
+    $.ajax({
+      type: "GET",
+      url: "<?php echo BASE_URL ?>/vn/update-cart",
+      data: "id="+id+"&data="+current, // giá trị post
+      success: function(answer){ 
+      }
+    });
+
+    $("#tongcong_"+id).html(current*price);
+    $("#tongcong_"+id).html(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $("#tongcong_"+id).html($("#tongcong_"+id).html()+" VNĐ");
+
+    var soluong = 0;
+		
+	if ($("input[type='radio']:checked").val() == 1) {
+		$('.show_dis').slideDown();
+		$('.each_order .soluong').each(function(){
+			soluong += parseInt($(this).val());
+		});
+	}
+	else{
+		$('.show_dis').slideUp();
+	}
+	$("#giamgia").html(0-(soluong*100000));
+    $("#giamgia").html(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $("#giamgia").html($("#giamgia").html()+" VNĐ");
+
+    $("#thanhtien").html(total-(soluong*100000));
+    $("#thanhtien").html(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $("#thanhtien").html($("#thanhtien").html()+" VNĐ");
+
+});
+
+$(document).on("focusin", ".soluong", function(){
+    $(this).data("val", $(this).val());
+}).on("keyup",".soluong", function(){
+    var prev = parseInt($(this).data("val"));
+    var current = parseInt($(this).val());
+
+    $(this).data("val", $(this).val());
+
+    var price = $(this).attr("data-money");
+    var total = parseInt($(".total").attr("data"));
+
+    var tien = prev*price;
+    total = total - tien;
+    total = total + (current*price);
+
+    $(".total").html(total);
+    $(".total").attr("data",total)
+    $(".total").html(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $(".total").html($(".total").html()+" VNĐ");
+
+    var id = $(this).attr("data");
+    $.ajax({
+      type: "GET",
+      url: "<?php echo BASE_URL ?>/vn/update-cart",
+      data: "id="+id+"&data="+current, // giá trị post
+      success: function(answer){ 
+      }
+    });
+
+    $("#tongcong_"+id).html(current*price);
+    $("#tongcong_"+id).html(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $("#tongcong_"+id).html($("#tongcong_"+id).html()+" VNĐ");
+
+    var soluong = 0;
+		
+	if ($("input[type='radio']:checked").val() == 1) {
+		$('.show_dis').slideDown();
+		$('.each_order .soluong').each(function(){
+			soluong += parseInt($(this).val());
+		});
+	}
+	else{
+		$('.show_dis').slideUp();
+	}
+	$("#giamgia").html(0-(soluong*100000));
+    $("#giamgia").html(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $("#giamgia").html($("#giamgia").html()+" VNĐ");
+
+    $("#thanhtien").html(total-(soluong*100000));
+    $("#thanhtien").html(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+    $("#thanhtien").html($("#thanhtien").html()+" VNĐ");
+
+});
+
+<?php if(isset($_SESSION['cart']) && $_SESSION['cart'] != null){ ?>
+$('#submit_cart').click(function(){
+	var hoten = $("#hovaten_cart").val();
+	if (hoten.trim() == "") {
+		$("#hovaten_cart").focus();
+		$("html, body").animate({ scrollTop: $("#hovaten_cart").offset().top-80 }, 300);
+		return false;
+	}
+	var dienthoai = $("#dienthoai_cart").val();
+	if (dienthoai.trim() == "") {
+		$("#dienthoai_cart").focus();
+		$("html, body").animate({ scrollTop: $("#dienthoai_cart").offset().top-80 }, 300);
+		return false;
+	}
+	var diachi = $("#address_cart").val();
+	if (diachi.trim() == "") {
+		$("#address_cart").focus();
+		$("html, body").animate({ scrollTop: $("#address_cart").offset().top-80 }, 300);
+		return false;
+	}
+	var email = $("#email_cart").val();
+	var congty = $("#company_cart").val();
+
+	var vanchuyen = $("input[type='radio']:checked").val();
+	var ghichu = $("#thongtinthem_cart").val();
+
+	$.ajax({
+      type: "POST",
+      url: "<?php echo BASE_URL ?>/vn/submit-cart",
+      data: "hoten="+hoten+"&email="+email+"&dienthoai="+dienthoai+"&diachi="+diachi+"&congty="+congty+"&vanchuyen="+vanchuyen+"&ghichu="+ghichu, // giá trị post
+      success: function(answer){ 
+      	$('#confirm').modal('show');
+      	$('#confirm').on('hidden.bs.modal', function () {
+		    window.location.href = "<?php echo BASE_URL ?>";
+		});
+      }
+    });
+});
+<?php } ?>
+</script>

@@ -30,9 +30,11 @@ elseif ($order_by == 'customer_address')
 <div id="content" style="padding:5px;">
     <center style="clear:both;margin-bottom: -30px;"><h1> DANH SÁCH KHÁCH HÀNG </h1></center>
 <div class="add-box">
+    <?php if($_SESSION['role_logined']==1){ ?>
     <a class="add_button" onClick="add_click();">Thêm khách hàng mới</a>
     <a class="add_button" id="import_excel" href="<?= $this->url('customer/import')?>">Import Excel</a>
     <a class="add_button" id="btnExport" >Export Excel</a>
+    <?php } ?>
 </div>
 	<div class="search-box">
         
@@ -95,7 +97,9 @@ elseif ($order_by == 'customer_address')
         <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_province','<?php echo $url_order ?>')">Tỉnh <?php if ($order_by == 'customer_province'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>  
-           
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_tire_type','<?php echo $url_order ?>')">Loại <?php if ($order_by == 'customer_tire_type'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>     
         <th  class="fix">&nbsp;</th>
     </tr>
     
@@ -113,6 +117,7 @@ elseif ($order_by == 'customer_address')
             <td class="fix" id="customer_address_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_address; ?></td>
             <td class="fix" id="customer_phone_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_phone; ?></td>
             <td class="fix" id="customer_email_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_email; ?></td>
+
             <td class="fix" style="display:none" id="customer_fax_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_fax; ?></td>
             <td class="fix" style="display:none" id="co_name_<?php echo $customer->customer_id; ?>"><?php echo $customer->co_name; ?></td>
             <td class="fix" style="display:none" id="director_<?php echo $customer->customer_id; ?>"><?php echo $customer->director; ?></td>
@@ -129,7 +134,29 @@ elseif ($order_by == 'customer_address')
             <td class="fix" style="display:none" id="customer_contact_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_contact; ?></td>
             <td class="fix" style="display:none" id="company_phone_<?php echo $customer->customer_id; ?>"><?php echo $customer->company_phone; ?></td>
             <td class="fix" id="customer_province_<?php echo $customer->customer_id; ?>"><?php echo isset($district_datas[$customer->customer_province]['name'])?$district_datas[$customer->customer_province]['name']:null; ?></td>
-
+            <td class="fix" style="display:none" id="customer_agent_link_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_agent_link; ?></td>
+            <td class="fix" style="display:none" id="customer_tire_type_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_tire_type; ?></td>
+            <td class="fix" style="display:none" id="customer_create_user_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_create_user; ?></td>
+            <td class="fix" id="customer_tire_type2_<?php echo $customer->customer_id; ?>">
+                <?php switch ($customer->customer_tire_type) {
+                    case 1:
+                        echo "Đại lý";
+                        break;
+                    case 2:
+                        echo "Vận tải";
+                        break;
+                    case 3:
+                        echo "Vá vỏ";
+                        break;
+                    case 4:
+                        echo "Cộng tác";
+                        break;
+                    default:
+                        echo "Khác";
+                        break;
+                } ?>
+                    
+            </td>
             <td>
                 <a class="error" href="#">Sửa</a>
                 | 
@@ -163,7 +190,7 @@ $this->helper('slidePaginator');
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><div class="add-box"><a class="add_button" onClick="add_click();">Thêm khách hàng mới</a></div></td>
+                            <td><?php if($_SESSION['role_logined']==1){ ?><div class="add-box"><a class="add_button" onClick="add_click();">Thêm khách hàng mới</a></div><?php } ?></td>
                             
                         </tr>
                         <tr>
@@ -180,7 +207,7 @@ $this->helper('slidePaginator');
                             </td>
                             <td>Tên công ty</td>
                             <td>
-                                <input type="text" id="company_name"  name="company_name" tabindex="3" required="required" >
+                                <input type="text" id="company_name"  name="company_name" tabindex="3" >
                             </td>
                             <td>Mã số thuế </td>
                             <td><input type="text" id="mst"  name="mst" tabindex="4" ></td>
@@ -206,7 +233,14 @@ $this->helper('slidePaginator');
                         </tr>
                         <tr>
                             
-                            
+                            <td>Tỉnh</td>
+                            <td>
+                                <select  style="width:100px"  id="customer_province"  name="customer_province" tabindex="21">
+                                    <?php foreach($districts as $district){ ?>
+                                    <option value="<?php echo $district->district_id ?>"><?php echo $district->district_name ?></option>
+                                    <?php } ?>
+                                </select> 
+                            </td>
                             <td>Người liên hệ </td>
                             <td><input type="text" id="customer_contact"  name="customer_contact" tabindex="10" ></td>
                             <td>Di động </td>
@@ -216,6 +250,19 @@ $this->helper('slidePaginator');
                             <td>Email </td>
                             <td><input type="email"  id="customer_email" name="customer_email" tabindex="12" ></td>
                         </tr>
+                        
+                        <tr>
+                            
+                            <td>Đường </td>
+                            <td><input type="text" id="customer_street"  name="customer_street" tabindex="17" ></td>
+                            <td>Phường/Xã </td>
+                            <td><input type="text" id="customer_ward"  name="customer_ward" tabindex="18" ></td>
+                            <td>Quận/Huyện</td>
+                            <td><input type="text" id="customer_district"  name="customer_district" tabindex="19" ></td>
+                            <td>Thành phố</td>
+                            <td><input type="text" id="customer_city"  name="customer_city" tabindex="20" ></td>
+                            
+                        </tr>
                         <tr>
                             
                             
@@ -224,7 +271,7 @@ $this->helper('slidePaginator');
                                 <input type="text" style="width:90px" id="customer_bank_name"  name="customer_bank_name" tabindex="13" >
                                 <input type="text" style="width:150px" id="account_number"  name="account_number" tabindex="14" >
                             </td>
-                            <td>Tài khoản ngân hàng CMG </td>
+                            <td>Tài khoản giao dịch </td>
                             <td>
                                 
                                 <select  style="width:100px" class="source" id="cmg_bank"  name="cmg_bank">
@@ -240,30 +287,109 @@ $this->helper('slidePaginator');
                                 <input type="text" style="width:30px" class="number" id="customer_expect_date" name="customer_expect_date" tabindex="15" placeholder="Ngày" > hàng tháng <br>
                                 <input type="text" style="width:30px" class="number" id="customer_after_date" name="customer_after_date" tabindex="16" placeholder="Số" > ngày sau xuất HĐ
                             </td>
-                        </tr>
-                        <tr>
-                            
-                            <td>Đường </td>
-                            <td><textarea id="customer_street"  name="customer_street" tabindex="17" ></textarea></td>
-                            <td>Phường/Xã </td>
-                            <td><textarea id="customer_ward"  name="customer_ward" tabindex="18" ></textarea></td>
-                            <td>Quận/Huyện</td>
-                            <td><textarea id="customer_district"  name="customer_district" tabindex="19" ></textarea></td>
-                            <td>Thành phố</td>
-                            <td><textarea id="customer_city"  name="customer_city" tabindex="20" ></textarea></td>
                             
                         </tr>
                         <tr>
-                            <td>Tỉnh</td>
+                            <td>Loại </td>
                             <td>
-                                <select  style="width:100px"  id="customer_province"  name="customer_province" tabindex="21">
-                                    <?php foreach($districts as $district){ ?>
-                                    <option value="<?php echo $district->district_id ?>"><?php echo $district->district_name ?></option>
+                                
+                                <select  style="width:100px" id="customer_tire_type"  name="customer_tire_type">
+                                    <option value="1">Đại lý</option>
+                                    <option value="2">Vận tải</option>
+                                    <option value="3">Vá vỏ</option>
+                                    <option value="4">Cộng tác</option>
+                                    <option value="5">Khác</option>
+                                </select> 
+                            </td>
+                            <td>Link đại lý</td>
+                            <td><input type="text" id="customer_agent_link"  name="customer_agent_link" tabindex="20" ></td>
+                            <td>Sale </td>
+                            <td>
+                                
+                                <select id="customer_create_user"  name="customer_create_user" <?php echo $_SESSION['role_logined'] != 1?"disabled":null ?> >
+                                    <?php foreach ($staffs as $staff) { ?>
+                                        <option value="<?php echo $staff->account ?>"><?php echo $staff->staff_name ?></option>
                                     <?php } ?>
+                                    
                                 </select> 
                             </td>
                         </tr>
                         
+                        <tr>
+                            <td colspan="8">
+                                <div class="col-md-12">
+                                    <fieldset class="groupbox">
+                                      <legend>
+                                          <span><h3>Người liên hệ</h3></span>
+                                      </legend>
+
+                                      <table id="dataTable" border="1" style="width: 100%; border: 1px solid rgb(221, 217, 217); margin-bottom: 10px" >
+                                          <tbody>
+                                          <tr>
+                                              <td><input type="checkbox" name="chk"></td>
+                                              <td>
+                                                  <table style="width:100%">
+                                                      <tr>
+                                                          <td>Họ tên</td>
+                                                          <td>
+                                                              <input type="text" class="contact_person_name" name="contact_person_name[]"  tabindex="22">
+                                                          </td>
+                                                          <td>
+                                                              Di động
+                                                          </td>
+                                                          <td>
+                                                              <input type="text" class="contact_person_mobile numbers" name="contact_person_mobile[]" tabindex="23" >
+                                                          </td>
+                                                          <td>
+                                                              SĐT
+                                                          </td>
+                                                          <td>
+                                                              <input type="text" class="contact_person_phone numbers" name="contact_person_phone[]" tabindex="24" >
+                                                          </td>
+                                                        </tr>
+                                                        <tr>
+                                                          
+                                                          <td>
+                                                              Email
+                                                          </td>
+                                                          <td>
+                                                              <input type="text" class="contact_person_email" name="contact_person_email[]" tabindex="25" >
+                                                          </td>
+                                                          <td>
+                                                              Ngày sinh
+                                                          </td>
+                                                          <td>
+                                                              <input type="text" class="contact_person_birthday ngay" name="contact_person_birthday[]" tabindex="26" >
+                                                          </td>
+                                                          <td>Địa chỉ</td>
+                                                          <td>
+                                                              <input type="text" class="contact_person_address" name="contact_person_address[]" tabindex="27" >
+                                                          </td>
+                                                      </tr>
+                                                      <tr>
+                                                        
+                                                          <td>Chức vụ</td>
+                                                          <td>
+                                                              <input type="text" class="contact_person_position" name="contact_person_position[]" tabindex="28" >
+                                                          </td>
+                                                        
+                                                          <td>Bộ phận</td>
+                                                          <td>
+                                                              <input type="text" class="contact_person_department" name="contact_person_department[]" tabindex="29" >
+                                                          </td>
+                                                      </tr>
+                                                  </table>
+                                              </td>
+                                          </tr>
+                                      </tbody>
+                                      </table>
+                                  </fieldset>
+                                      <input type="button" value="Thêm" onclick="addRow('dataTable')">
+
+                                      <input type="button" value="Xóa" onclick="deleteRow('dataTable')">
+                                  </div>
+                            </td>
+                        </tr>
                         
                         <tr>
                             <td>&nbsp;</td>
@@ -276,8 +402,8 @@ $this->helper('slidePaginator');
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="22"></td>
-                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="23"></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="30"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="31"></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -325,6 +451,11 @@ $('html').click(function(e) {
         var customer_province = $(this).find("#customer_province_"+$(this).attr('id')).text();
         var customer_contact = $(this).find("#customer_contact_"+$(this).attr('id')).text();
         var company_phone = $(this).find("#company_phone_"+$(this).attr('id')).text();
+
+        var customer_tire_type = $(this).find("#customer_tire_type_"+$(this).attr('id')).text();
+        var customer_agent_link = $(this).find("#customer_agent_link_"+$(this).attr('id')).text();
+
+        var customer_create_user = $(this).find("#customer_create_user_"+$(this).attr('id')).text();
         
         //alert(customer_code);
         $('#yes').val($(this).attr('id'));
@@ -354,8 +485,60 @@ $('html').click(function(e) {
        $('#customer_ward').val(customer_ward);
        $('#customer_district').val(customer_district);
        $('#customer_city').val(customer_city);
-       $("#customer_province option:contains(" + customer_province + ")").attr('selected', 'selected');
+       if (customer_province!="") {
+        $("#customer_province option:contains(" + customer_province + ")").attr('selected', 'selected');
+       }
+
+       $("#customer_tire_type option[value=" + customer_tire_type + "]").attr('selected', 'selected');
+       $('#customer_agent_link').val(customer_agent_link);
+
+       $("#customer_create_user option[value=" + customer_create_user + "]").attr('selected', 'selected');
        
+       $('#dataTable tbody tr').remove();
+
+       var customer_id = $(this).attr('id');
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/customer/getcontact',
+            type: 'POST',
+            data: {customer:customer_id},
+            success:function(data){
+                $('#dataTable tbody').append(data);
+
+                $('.numbers').keyup(function(event) {
+
+                    // skip for arrow keys
+                if(event.which >= 37 && event.which <= 40) return;
+
+                // format number
+                $(this).val(function(index, value) {
+                  return value
+                    .replace(/[^0-9]/g, "")
+                    .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+                  ;
+                });
+              });
+
+                var pickerOpay2 = {
+                    closeText: "Đóng",
+                    currentText: "Hiện tại",
+                    nextText: "Tiếp",
+                    prevText: "Quay lại",
+                    monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+                    monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+                    dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+                    dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+                    dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+                    dateFormat: 'dd-mm-yy',
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: "-100:+0",
+                    firstDay: 1,
+                    isRTL: false,
+                    showButtonPanel: true
+                }; 
+                $(".ngay").datepicker(pickerOpay2);
+            }
+        });
 
         $('#customer_name').focus();
         $('#customer_name').attr('data',"true");
@@ -391,6 +574,10 @@ function add_click(){
        $('#customer_city').val("");
        $('#customer_contact').val("");
        $('#company_phone').val("");
+
+       $('#customer_agent_link').val("");
+
+       $("#customer_create_user").attr('disabled', false);
 
    $('#customer_name').focus();
    $('#customer_name').attr('data',"false");
@@ -430,6 +617,62 @@ $(document).ready(function(){
                     var customer_province = $('#customer_province').attr('value');
                     var customer_contact = $('#customer_contact').attr('value');
                     var company_phone = $('#company_phone').attr('value');
+
+                    var customer_tire_type = $('#customer_tire_type').attr('value');
+                    var customer_agent_link = $('#customer_agent_link').attr('value');
+
+                    var customer_create_user = $('#customer_create_user').attr('value');
+
+                    var sdt = customer_phone.replace(/ /g, "");
+                    if (sdt.toString().length<10) {
+                        alert("Vui lòng nhập vào số điện thoại!");
+                        $('#customer_phone').focus();
+                        return false;
+                    }
+
+                    var contact_person = [];
+
+                    var contact_person_name = [];
+                    var contact_person_phone = [];
+                    var contact_person_email = [];
+                    var contact_person_birthday = [];
+                    var contact_person_mobile = [];
+                    var contact_person_address = [];
+                    var contact_person_position = [];
+                    var contact_person_department = [];
+                    var id_contact_person = [];
+
+                    $('.contact_person_name').each(function() { 
+                        contact_person_name.push($(this).val());
+                        id_contact_person.push($(this).attr('data') || "");
+                    });
+                    $('.contact_person_phone').each(function() { 
+                        contact_person_phone.push($(this).val());
+                    });
+                    $('.contact_person_mobile').each(function() { 
+                        contact_person_mobile.push($(this).val());
+                    });
+                    $('.contact_person_email').each(function() { 
+                        contact_person_email.push($(this).val());
+                    });
+                    $('.contact_person_birthday').each(function() { 
+                        contact_person_birthday.push($(this).val());
+                    });
+                    $('.contact_person_address').each(function() { 
+                        contact_person_address.push($(this).val());
+                    });
+                    $('.contact_person_position').each(function() { 
+                        contact_person_position.push($(this).val());
+                    });
+                    $('.contact_person_department').each(function() { 
+                        contact_person_department.push($(this).val());
+                    });
+
+                    for (var i = 0; i < contact_person_name.length; i++) {
+                        contact_person.push({'contact_person_name':contact_person_name[i], 'id_contact_person':id_contact_person[i], 'contact_person_phone':contact_person_phone[i], 'contact_person_mobile':contact_person_mobile[i], 'contact_person_email':contact_person_email[i], 'contact_person_birthday':contact_person_birthday[i], 'contact_person_address':contact_person_address[i], 'contact_person_position':contact_person_position[i], 'contact_person_department':contact_person_department[i]});
+                        
+                        
+                    };
                     
 
                     var yes = $('#yes').attr('value');
@@ -463,6 +706,10 @@ $(document).ready(function(){
                             customer_province: customer_province,
                             customer_contact: customer_contact,
                             company_phone: company_phone,
+                            contact_person: contact_person,
+                            customer_tire_type: customer_tire_type,
+                            customer_agent_link: customer_agent_link,
+                            customer_create_user: customer_create_user,
                             yes: yes,
                             check: check,
                             }, // giá trị post
@@ -562,5 +809,127 @@ $("#import_excel").click(function(){
 
 var x = "<?php echo $limit ?>";
 $('#chonloc option[value='+x+']').attr('selected','selected');
+
+var pickerOpay2 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true
+    }; 
+    $(".ngay").datepicker(pickerOpay2);
+
+function addRow(tableID){
+    var table=document.getElementById(tableID);
+    var rowCount=table.rows.length;
+    var row=table.insertRow(rowCount);
+    var colCount=table.rows[0].cells.length;
+    for(var i=0;i<colCount;i++){
+        var newcell=row.insertCell(i);
+        newcell.innerHTML=table.rows[0].cells[i].innerHTML;
+        switch(newcell.childNodes[0].type){
+            case"text":newcell.childNodes[0].value="";
+            break;
+            case"checkbox":newcell.childNodes[0].checked=false;
+            break;
+            case"select-one":newcell.childNodes[0].selectedIndex=0;
+            break;
+        }
+    }
+
+    $('.contact_person_name:last').attr('disabled',false);
+    $('.contact_person_name:last').attr('data',"");
+    $('.contact_person_name:last').val("");
+    $('.contact_person_phone:last').val("");
+    $('.contact_person_mobile:last').val("");
+    $('.contact_person_email:last').val("");
+    $('.contact_person_birthday:last').val("");
+    $('.contact_person_address:last').val("");
+    $('.contact_person_position:last').val("");
+    $('.contact_person_department:last').val("");
+    $('.contact_person_birthday').removeClass("hasDatepicker");
+    $('.contact_person_birthday').attr("id","");
+
+    $('input[name="chk"]:last').attr('data',"");
+    $('input[name="chk"]:last').attr('title',"");
+
+    $(".ngay").datepicker(pickerOpay2);
+
+    $('.numbers').keyup(function(event) {
+
+            // skip for arrow keys
+        if(event.which >= 37 && event.which <= 40) return;
+
+        // format number
+        $(this).val(function(index, value) {
+          return value
+            .replace(/[^0-9]/g, "")
+            .replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")
+          ;
+        });
+      });
+      $('.number').keyup(function(event) {
+
+            // skip for arrow keys
+        if(event.which >= 37 && event.which <= 40) return;
+
+        // format number
+        $(this).val(function(index, value) {
+          return value
+            .replace(/[^0-9]/g, "")
+          ;
+        });
+      });
+
+}
+function deleteRow(tableID){
+    try{
+        var table=document.getElementById(tableID);
+        var rowCount=table.rows.length;
+
+        var r = confirm("Bạn có chắc chắn không?");
+        if (r == true){
+            for(var i=0;i<rowCount;i++){
+                var row=table.rows[i];
+                var chkbox=row.cells[0].childNodes[0];
+                if(null!=chkbox&&true==chkbox.checked){
+                  if(rowCount<=1){
+                        alert("Cannot delete all the rows.");
+                        break;
+                    }
+                    else if(chkbox.getAttribute("title") > 0){
+                        
+                            var data = chkbox.getAttribute("data");
+                            var customer = chkbox.getAttribute("title");
+
+                            $.post("<?php echo BASE_URL ?>/customer/deletecontact", {data: data, customer: customer},
+                               function(data){
+                                //alert(data);
+                               }); 
+                        
+                    }
+                    
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+            }
+        }
+    }
+    catch(e){
+        alert(e);
+    }
+}
 </script>
 </div>

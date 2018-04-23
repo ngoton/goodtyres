@@ -19,6 +19,7 @@ elseif ($order_by == 'account_name')
 <div class="add-box">
     <a class="add_button" onClick="add_click();">Nhập tài khoản mới</a>
     <a class="add_button" id="import_excel" href="<?= $this->url('account/import')?>">Import Excel</a>
+    <a class="add_button" id="btnExport">Export excel</a>
 </div>
 	<div class="search-box">
         
@@ -52,7 +53,7 @@ elseif ($order_by == 'account_name')
 
 </div>
 
-<table class="table_data">
+<table class="table_data" id="tblExport">
 <thead>
     <tr>
         <th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>

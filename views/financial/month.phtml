@@ -133,20 +133,20 @@
                     <td class="fix"><?php echo $account->account_number ?></td>
                     <td class="fix" colspan="2"><?php echo $account->account_name ?></td>
 
-                    <td class="fix"><?php echo $lib->formatMoney($no_dk_parent) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($co_dk_parent) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($no_dk_parent) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($co_dk_parent) ?></td>
 
                     <?php
                     for ($i=0; $i <= $number; $i++) { 
                     $t = ($thang+$i)>12?($thang+$i-12):$thang+$i;
                     $n = ($thang+$i)>12?($nam+1):$nam;
                     ?>
-                    <td class="fix"><?php echo $lib->formatMoney($no_ps_pr[$t][$n]) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($co_ps_pr[$t][$n]) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($no_ps_pr[$t][$n]) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($co_ps_pr[$t][$n]) ?></td>
                     <?php } ?>
 
-                    <td class="fix"><?php echo $lib->formatMoney($tong_parent>0?$tong_parent:null) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($tong_parent<0?str_replace('-', '', $tong_parent):null) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($tong_parent>0?$tong_parent:null) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($tong_parent<0?str_replace('-', '', $tong_parent):null) ?></td>
                 </tr>
                 <?php 
                // }
@@ -156,20 +156,20 @@
                         <td class="fix"><?php echo $account->account_number ?></td>
                         <td class="fix"><?php echo $account->account_name ?></td>
 
-                        <td class="fix"><?php echo $lib->formatMoney($no_dk_parent) ?></td>
-                        <td class="fix"><?php echo $lib->formatMoney($co_dk_parent) ?></td>
+                        <td class="fix text-right"><?php echo $lib->formatMoney($no_dk_parent) ?></td>
+                        <td class="fix text-right"><?php echo $lib->formatMoney($co_dk_parent) ?></td>
 
                         <?php
                         for ($i=0; $i <= $number; $i++) { 
                         $t = ($thang+$i)>12?($thang+$i-12):$thang+$i;
                         $n = ($thang+$i)>12?($nam+1):$nam;
                         ?>
-                        <td class="fix"><?php echo $lib->formatMoney($no_ps_pr[$t][$n]) ?></td>
-                        <td class="fix"><?php echo $lib->formatMoney($co_ps_pr[$t][$n]) ?></td>
+                        <td class="fix text-right"><?php echo $lib->formatMoney($no_ps_pr[$t][$n]) ?></td>
+                        <td class="fix text-right"><?php echo $lib->formatMoney($co_ps_pr[$t][$n]) ?></td>
                         <?php } ?>
                         
-                        <td class="fix"><?php echo $lib->formatMoney($tong_parent>0?$tong_parent:null) ?></td>
-                        <td class="fix"><?php echo $lib->formatMoney($tong_parent<0?str_replace('-', '', $tong_parent):null) ?></td>
+                        <td class="fix text-right"><?php echo $lib->formatMoney($tong_parent>0?$tong_parent:null) ?></td>
+                        <td class="fix text-right"><?php echo $lib->formatMoney($tong_parent<0?str_replace('-', '', $tong_parent):null) ?></td>
                     </tr>
                 <?php
                 }
@@ -203,51 +203,51 @@
                     <td class="fix"><?php echo $acc->account_number ?></td>
                     <td class="fix"><?php echo $acc->account_name ?></td>
 
-                    <td class="fix"><?php echo $lib->formatMoney($no_dk) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($co_dk) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($no_dk) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($co_dk) ?></td>
 
                     <?php
                     for ($i=0; $i <= $number; $i++) { 
                     $t = ($thang+$i)>12?($thang+$i-12):$thang+$i;
                     $n = ($thang+$i)>12?($nam+1):$nam;
                     ?>
-                    <td class="fix"><?php echo $lib->formatMoney($no_psi[$t][$n]) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($co_psi[$t][$n]) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($no_psi[$t][$n]) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($co_psi[$t][$n]) ?></td>
                     <?php } ?>
                     
-                    <td class="fix"><?php echo $lib->formatMoney($tong>0?$tong:null) ?></td>
-                    <td class="fix"><?php echo $lib->formatMoney($tong<0?str_replace('-', '', $tong):null) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($tong>0?$tong:null) ?></td>
+                    <td class="fix text-right"><?php echo $lib->formatMoney($tong<0?str_replace('-', '', $tong):null) ?></td>
                 </tr>   
          <?php } }
             } ?>
             <tr style="background-color:rgba(50, 121, 171, 0.32); font-weight:bold" >
                 <td class="fix"></td>
                 <td class="fix" colspan="2">Tổng cộng</td>
-                <td class="fix"><?php echo $lib->formatMoney($tong_no_dk) ?></td>
-                <td class="fix"><?php echo $lib->formatMoney($tong_co_dk) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tong_no_dk) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tong_co_dk) ?></td>
                 <?php
                 for ($i=0; $i <= $number; $i++) { 
                 $t = ($thang+$i)>12?($thang+$i-12):$thang+$i;
                 $n = ($thang+$i)>12?($nam+1):$nam;
                 ?>
-                <td class="fix"><?php echo $lib->formatMoney($tong_no_ps[$t][$n]) ?></td>
-                <td class="fix"><?php echo $lib->formatMoney($tong_co_ps[$t][$n]) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tong_no_ps[$t][$n]) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tong_co_ps[$t][$n]) ?></td>
                 <?php } ?>
-                <td class="fix"><?php echo $lib->formatMoney($tong_no_ck) ?></td>
-                <td class="fix"><?php echo $lib->formatMoney($tong_co_ck) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tong_no_ck) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($tong_co_ck) ?></td>
             </tr>
             <tr style="font-weight:bold; color:red" >
                 <td class="fix"></td>
                 <td class="fix" colspan="2">Total</td>
-                <td class="fix" colspan="2"><?php echo $lib->formatMoney($tong_co_dk-$tong_no_dk) ?></td>
+                <td class="fix text-right" colspan="2"><?php echo $lib->formatMoney($tong_co_dk-$tong_no_dk) ?></td>
                 <?php
                 for ($i=0; $i <= $number; $i++) { 
                 $t = ($thang+$i)>12?($thang+$i-12):$thang+$i;
                 $n = ($thang+$i)>12?($nam+1):$nam;
                 ?>
-                <td class="fix" colspan="2"><?php echo $lib->formatMoney($tong_co_ps[$t][$n]-$tong_no_ps[$t][$n]) ?></td>
+                <td class="fix text-right" colspan="2"><?php echo $lib->formatMoney($tong_co_ps[$t][$n]-$tong_no_ps[$t][$n]) ?></td>
                 <?php } ?>
-                <td class="fix" colspan="2"><?php echo $lib->formatMoney($tong_co_ck-$tong_no_ck) ?></td>
+                <td class="fix text-right" colspan="2"><?php echo $lib->formatMoney($tong_co_ck-$tong_no_ck) ?></td>
             </tr>
         </tbody>
    </table>

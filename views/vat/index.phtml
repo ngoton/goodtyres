@@ -1,3 +1,11 @@
+Từ <input type="text" name="batdau" id="batdau" value="01-<?php echo date('m-Y') ?>"> Đến <input type="text" name="ketthuc" id="ketthuc" value="<?php echo date('t-m-Y') ?>">
+<select style="width:200px" name="customer" id="customer" tabindex="13" class="selectpicker" data-show-subtext="true" data-live-search="true">
+    <option value="">Khách hàng</option>
+    <?php foreach ($customers as $customer) { ?>
+        <option value="<?php echo $customer->customer_id ?>"><?php echo $customer->customer_name ?></option>
+    <?php } ?>
+</select>
+
 <button type="button" class="btn" id="find_item"><i class="fa fa-caret-down"></i> Chọn đơn hàng</button>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -483,7 +491,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:16.55pt;mso-height-rule:exactly">
           <span style="font-size:13.0pt;
-  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="0"><o:p></o:p></span></p>
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="0"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
       </td>
       <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
   none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
@@ -572,7 +580,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:16.55pt;mso-height-rule:exactly">
           <span style="font-size:13.0pt;
-  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="1"><o:p></o:p></span></p>
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="1"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
       </td>
       <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
   none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
@@ -660,7 +668,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:16.55pt;mso-height-rule:exactly">
           <span style="font-size:13.0pt;
-  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="2"><o:p></o:p></span></p>
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="2"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
       </td>
       <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
   none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
@@ -748,7 +756,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:16.55pt;mso-height-rule:exactly">
           <span style="font-size:13.0pt;
-  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="3"><o:p></o:p></span></p>
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="3"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
       </td>
       <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
   none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
@@ -836,7 +844,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:16.55pt;mso-height-rule:exactly">
           <span style="font-size:13.0pt;
-  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="4"><o:p></o:p></span></p>
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="4"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
       </td>
       <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
   none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
@@ -924,7 +932,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:16.55pt;mso-height-rule:exactly">
           <span style="font-size:13.0pt;
-  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="5"><o:p></o:p></span></p>
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="5"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
       </td>
       <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
   none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
@@ -1012,7 +1020,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:16.55pt;mso-height-rule:exactly">
           <span style="font-size:13.0pt;
-  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="6"><o:p></o:p></span></p>
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="6"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
       </td>
       <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
   none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
@@ -1100,7 +1108,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:16.55pt;mso-height-rule:exactly">
           <span style="font-size:13.0pt;
-  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="7"><o:p></o:p></span></p>
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="7"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
       </td>
       <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
   none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
@@ -1188,7 +1196,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:16.55pt;mso-height-rule:exactly">
           <span style="font-size:13.0pt;
-  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="8"><o:p></o:p></span></p>
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="8"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
       </td>
       <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
   none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
@@ -1276,7 +1284,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:16.55pt;mso-height-rule:exactly">
           <span style="font-size:13.0pt;
-  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="9"><o:p></o:p></span></p>
+  font-family:&quot;Times New Roman&quot;,&quot;serif&quot;"><input type="text" name="stt" class="stt" style="width:15px"><input type="hidden" name="order" class="order"><input type="hidden" name="orderlist" class="orderlist"><input type="hidden" name="brand" class="brand"><input type="hidden" name="size" class="size"><input type="hidden" name="pattern" class="pattern"><input type="hidden" name="check" class="check" data="9"><input type="hidden" name="price_hide" class="price_hide"><input type="hidden" name="total_hide" class="total_hide"><o:p></o:p></span></p>
       </td>
       <td colspan="9" nowrap="nowrap" style="width:207.75pt;border-top:
   none;border-left:none;border-bottom:dotted red 1.0pt;border-right:solid red 1.0pt;
@@ -1352,6 +1360,102 @@
       <td height="4" style="height:3.2pt;border:none" width="0">
         &nbsp;</td>
       <!--[endif]-->
+    </tr>
+    <tr>
+      <input type="hidden" name="stt" class="stt" style="width:15px">
+      <input type="hidden" name="order" class="order">
+      <input type="hidden" name="orderlist" class="orderlist">
+      <input type="hidden" name="brand" class="brand">
+      <input type="hidden" name="size" class="size">
+      <input type="hidden" name="pattern" class="pattern">
+      <input type="hidden" name="check" class="check" data="10">
+      <input type="hidden" name="price_hide" class="price_hide">
+      <input type="hidden" name="total_hide" class="total_hide">
+      <input type="hidden" name="ten" class="ten" style="width: 90%">
+      <input type="hidden" name="dvt" class="dvt" style="width:30px">
+      <input type="hidden" name="sl" class="sl" style="width:30px">
+      <input type="hidden" name="dg" class="dg numbers text-right" style="width:90px">
+      <input type="hidden" name="tt" class="tt numbers text-right" >
+    </tr>
+    <tr>
+      <input type="hidden" name="stt" class="stt" style="width:15px">
+      <input type="hidden" name="order" class="order">
+      <input type="hidden" name="orderlist" class="orderlist">
+      <input type="hidden" name="brand" class="brand">
+      <input type="hidden" name="size" class="size">
+      <input type="hidden" name="pattern" class="pattern">
+      <input type="hidden" name="check" class="check" data="11">
+      <input type="hidden" name="price_hide" class="price_hide">
+      <input type="hidden" name="total_hide" class="total_hide">
+      <input type="hidden" name="ten" class="ten" style="width: 90%">
+      <input type="hidden" name="dvt" class="dvt" style="width:30px">
+      <input type="hidden" name="sl" class="sl" style="width:30px">
+      <input type="hidden" name="dg" class="dg numbers text-right" style="width:90px">
+      <input type="hidden" name="tt" class="tt numbers text-right" >
+    </tr>
+    <tr>
+      <input type="hidden" name="stt" class="stt" style="width:15px">
+      <input type="hidden" name="order" class="order">
+      <input type="hidden" name="orderlist" class="orderlist">
+      <input type="hidden" name="brand" class="brand">
+      <input type="hidden" name="size" class="size">
+      <input type="hidden" name="pattern" class="pattern">
+      <input type="hidden" name="check" class="check" data="12">
+      <input type="hidden" name="price_hide" class="price_hide">
+      <input type="hidden" name="total_hide" class="total_hide">
+      <input type="hidden" name="ten" class="ten" style="width: 90%">
+      <input type="hidden" name="dvt" class="dvt" style="width:30px">
+      <input type="hidden" name="sl" class="sl" style="width:30px">
+      <input type="hidden" name="dg" class="dg numbers text-right" style="width:90px">
+      <input type="hidden" name="tt" class="tt numbers text-right" >
+    </tr>
+    <tr>
+      <input type="hidden" name="stt" class="stt" style="width:15px">
+      <input type="hidden" name="order" class="order">
+      <input type="hidden" name="orderlist" class="orderlist">
+      <input type="hidden" name="brand" class="brand">
+      <input type="hidden" name="size" class="size">
+      <input type="hidden" name="pattern" class="pattern">
+      <input type="hidden" name="check" class="check" data="13">
+      <input type="hidden" name="price_hide" class="price_hide">
+      <input type="hidden" name="total_hide" class="total_hide">
+      <input type="hidden" name="ten" class="ten" style="width: 90%">
+      <input type="hidden" name="dvt" class="dvt" style="width:30px">
+      <input type="hidden" name="sl" class="sl" style="width:30px">
+      <input type="hidden" name="dg" class="dg numbers text-right" style="width:90px">
+      <input type="hidden" name="tt" class="tt numbers text-right" >
+    </tr>
+    <tr>
+      <input type="hidden" name="stt" class="stt" style="width:15px">
+      <input type="hidden" name="order" class="order">
+      <input type="hidden" name="orderlist" class="orderlist">
+      <input type="hidden" name="brand" class="brand">
+      <input type="hidden" name="size" class="size">
+      <input type="hidden" name="pattern" class="pattern">
+      <input type="hidden" name="check" class="check" data="14">
+      <input type="hidden" name="price_hide" class="price_hide">
+      <input type="hidden" name="total_hide" class="total_hide">
+      <input type="hidden" name="ten" class="ten" style="width: 90%">
+      <input type="hidden" name="dvt" class="dvt" style="width:30px">
+      <input type="hidden" name="sl" class="sl" style="width:30px">
+      <input type="hidden" name="dg" class="dg numbers text-right" style="width:90px">
+      <input type="hidden" name="tt" class="tt numbers text-right" >
+    </tr>
+    <tr>
+      <input type="hidden" name="stt" class="stt" style="width:15px">
+      <input type="hidden" name="order" class="order">
+      <input type="hidden" name="orderlist" class="orderlist">
+      <input type="hidden" name="brand" class="brand">
+      <input type="hidden" name="size" class="size">
+      <input type="hidden" name="pattern" class="pattern">
+      <input type="hidden" name="check" class="check" data="15">
+      <input type="hidden" name="price_hide" class="price_hide">
+      <input type="hidden" name="total_hide" class="total_hide">
+      <input type="hidden" name="ten" class="ten" style="width: 90%">
+      <input type="hidden" name="dvt" class="dvt" style="width:30px">
+      <input type="hidden" name="sl" class="sl" style="width:30px">
+      <input type="hidden" name="dg" class="dg numbers text-right" style="width:90px">
+      <input type="hidden" name="tt" class="tt numbers text-right" >
     </tr>
     <tr style="mso-yfti-irow:22;height:3.2pt">
       <td colspan="14" nowrap="nowrap" style="width:368.95pt;border-top:
@@ -1671,11 +1775,13 @@
   });
 
 $("#find_item").click(function(){
-  
+  var batdau = $('#batdau').val();
+  var ketthuc = $('#ketthuc').val();
+  var customer = $('#customer').val();
     $.ajax({
         url: '<?php echo BASE_URL ?>/vat/getItem',
         type: 'GET',
-        data: {},
+        data: {batdau:batdau, ketthuc: ketthuc, customer: customer},
         success:function(data){
           $('#show_item').html(data);
           $("#show_item" ).dialog( "open" );
@@ -1749,17 +1855,20 @@ $( "#show_item" ).dialog({
             $('.brand:eq('+i+')').val(brand);
             $('.size:eq('+i+')').val(size);
             $('.pattern:eq('+i+')').val(pattern);
-            $('.check:eq('+i+')').val(brand+'-'+pattern+'-'+pattern);
+            $('.check:eq('+i+')').val(brand+'~'+size+'~'+pattern);
 
             var sl = $(this).attr('data-sl');
             var tt = $(this).attr('data-tt');
+            var to = $(this).attr('data-cong');
 
             var check=0;
             var rowIndex = 0;
             $('.check').each(function(){
-              if ($(this).val()==(brand+'-'+pattern+'-'+pattern) && $(this).attr('data')!=i) {
-                $('.sl:eq('+rowIndex+')').val(parseFloat($('.sl:eq('+rowIndex+')').val())+parseFloat(sl));
-                $('.tt:eq('+rowIndex+')').val(parseFloat($('.tt:eq('+rowIndex+')').val())+parseFloat(tt));
+              if ($(this).val()==(brand+'~'+size+'~'+pattern) && $(this).attr('data')!=i) {
+                $('.sl:eq('+rowIndex+')').val((parseFloat($('.sl:eq('+rowIndex+')').val())+parseFloat(sl)) || "");
+                $('.tt:eq('+rowIndex+')').val((parseFloat($('.tt:eq('+rowIndex+')').val())+parseFloat(tt)) || "");
+                $('.tt:eq('+rowIndex+')').attr('data',(parseFloat($('.tt:eq('+rowIndex+')').attr('data'))+parseFloat(to)) || "");
+                $('.total_hide:eq('+rowIndex+')').val((parseFloat($('.tt:eq('+rowIndex+')').attr('data'))+parseFloat(to)) || "");
                 check=1;
               }
               rowIndex++;
@@ -1771,7 +1880,11 @@ $( "#show_item" ).dialog({
               $('.dvt:eq('+i+')').val($(this).attr('data-dvt'));
               $('.sl:eq('+i+')').val($(this).attr('data-sl'));
               $('.dg:eq('+i+')').val($(this).attr('data-dg'));
+              $('.dg:eq('+i+')').attr('data',$(this).attr('data-dg1'));
               $('.tt:eq('+i+')').val($(this).attr('data-tt'));
+              $('.tt:eq('+i+')').attr('data',$(this).attr('data-cong'));
+              $('.price_hide:eq('+i+')').val($(this).attr('data-dg1'));
+              $('.total_hide:eq('+i+')').val($(this).attr('data-cong'));
 
               j++;
             }
@@ -1782,40 +1895,86 @@ $( "#show_item" ).dialog({
             i++;
           });
 
-          var k=0;
+          var k=1;
           var temp_stt="";
           var temp_ten="";
           var temp_dvt="";
           var temp_sl="";
           var temp_dg="";
+          var temp_dg1="";
           var temp_tt="";
+          var temp_to="";
           var temp_order="";
           var temp_orderlist="";
           var temp_brand="";
           var temp_size="";
           var temp_pattern="";
           var temp_check="";
-          $('.stt').each(function(){
-            if (k!=0 && $(this).val()=="") {
-              $(this).val($('.stt:eq('+(k+1)+')').val());
+          while(k<16){
+            
+            if ($('.stt:eq('+k+')').val()=="") {
+              var l=k+1;
+              while(l<16){
+                if ($('.stt:eq('+l+')').val()!="") {
+                  temp_stt = $('.stt:eq('+l+')').val();
+                  temp_ten = $('.ten:eq('+l+')').val();
+                  temp_dvt = $('.dvt:eq('+l+')').val();
+                  temp_sl = $('.sl:eq('+l+')').val();
+                  temp_dg = $('.dg:eq('+l+')').val();
+                  temp_dg1 = $('.dg:eq('+l+')').attr('data');
+                  temp_tt = $('.tt:eq('+l+')').val();
+                  temp_to = $('.tt:eq('+l+')').attr('data');
+                  temp_order = $('.order:eq('+l+')').val();
+                  temp_orderlist=$('.orderlist:eq('+l+')').val();
+                  temp_brand=$('.brand:eq('+l+')').val();
+                  temp_size=$('.size:eq('+l+')').val();
+                  temp_pattern=$('.pattern:eq('+l+')').val();
+                  temp_check=$('.check:eq('+l+')').val();
 
-              temp_stt = $('.stt:eq('+k+')').val();
-              temp_ten = $('.ten:eq('+k+')').val();
-              temp_dvt = $('.dvt:eq('+k+')').val();
-              temp_sl = $('.sl:eq('+k+')').val();
-              temp_dg = $('.dg:eq('+k+')').val();
-              temp_tt = $('.tt:eq('+k+')').val();
-              temp_order = $('.order:eq('+k+')').val();
-              $('.orderlist:eq('+k+')').val();
-              $('.brand:eq('+k+')').val();
-              $('.size:eq('+k+')').val();
-              $('.pattern:eq('+k+')').val();
-              $('.check:eq('+k+')').val();
+                  $('.stt:eq('+l+')').val($('.stt:eq('+k+')').val());
+                  $('.ten:eq('+l+')').val($('.ten:eq('+k+')').val());
+                  $('.dvt:eq('+l+')').val($('.dvt:eq('+k+')').val());
+                  $('.sl:eq('+l+')').val($('.sl:eq('+k+')').val());
+                  $('.dg:eq('+l+')').val($('.dg:eq('+k+')').val());
+                  $('.dg:eq('+l+')').attr('data',$('.dg:eq('+k+')').attr('data'));
+                  $('.tt:eq('+l+')').val($('.tt:eq('+k+')').val());
+                  $('.tt:eq('+l+')').attr('data',$('.tt:eq('+k+')').attr('data'));
+                  $('.order:eq('+l+')').val($('.order:eq('+k+')').val());
+                  $('.orderlist:eq('+l+')').val($('.orderlist:eq('+k+')').val());
+                  $('.brand:eq('+l+')').val($('.brand:eq('+k+')').val());
+                  $('.size:eq('+l+')').val($('.size:eq('+k+')').val());
+                  $('.pattern:eq('+l+')').val($('.pattern:eq('+k+')').val());
+                  $('.check:eq('+l+')').val($('.check:eq('+k+')').val());
+
+                  $('.price_hide:eq('+l+')').val($('.dg:eq('+k+')').attr('data'));
+                  $('.total_hide:eq('+l+')').val($('.tt:eq('+k+')').attr('data'));
+
+                  $('.stt:eq('+k+')').val(temp_stt);
+                  $('.ten:eq('+k+')').val(temp_ten);
+                  $('.dvt:eq('+k+')').val(temp_dvt);
+                  $('.sl:eq('+k+')').val(temp_sl);
+                  $('.dg:eq('+k+')').val(temp_dg);
+                  $('.dg:eq('+k+')').attr('data',temp_dg1);
+                  $('.tt:eq('+k+')').val(temp_tt);
+                  $('.tt:eq('+k+')').attr('data',temp_to);
+                  $('.order:eq('+k+')').val(temp_order);
+                  $('.orderlist:eq('+k+')').val(temp_orderlist);
+                  $('.brand:eq('+k+')').val(temp_brand);
+                  $('.size:eq('+k+')').val(temp_size);
+                  $('.pattern:eq('+k+')').val(temp_pattern);
+                  $('.check:eq('+k+')').val(temp_check);
+
+                  $('.price_hide:eq('+k+')').val(temp_dg1);
+                  $('.total_hide:eq('+k+')').val(temp_to);
+
+                  break;
+                }
+                l++;
+              }
             }
-
             k++;
-          });
-
+          }
+          
           
 
           var tienthue = parseFloat(Math.round(tong*0.1));
@@ -1842,6 +2001,107 @@ $( "#show_item" ).dialog({
             ;
           });
 
+
+          $('.sl').keyup(function(){
+              var rowIndex=$(this).closest('tr').index()-12;
+              
+              var sl = parseInt($(this).val()) || 0;
+              var dg = parseFloat($('.dg:eq('+rowIndex+')').attr('data').replace(/\,/g,'')) || 0;
+              var tt = sl*dg;
+
+              if (tt>0) {
+                $('.tt:eq('+rowIndex+')').val(Math.round(tt));
+                $('.tt:eq('+rowIndex+')').attr('data',tt);
+
+                $('.total_hide:eq('+rowIndex+')').val(tt);
+
+                var tong = 0;
+                $('.tt').each(function(){
+                  if ($(this).val() != "") {
+                    tong += parseFloat($(this).attr('data') || 0);
+                  }
+                  
+                });
+
+                var tienthue = parseFloat(Math.round(tong*0.1));
+                var tongcong = Math.round(tong+tienthue);
+                var congtien = Math.round(tong);
+
+                $('#tienthue').val(tienthue);
+                $('#tongcong').val(tongcong);
+                $('#congtien').val(congtien);
+
+                $.ajax({
+                  url: '<?php echo BASE_URL ?>/vat/getMoney',
+                  type: 'GET',
+                  data: {data:tongcong},
+                  success:function(data){
+                    $('#tongcongchu').val(data.trim());
+                  },
+                });
+
+                $('.numbers').val(function(index, value) {
+                  return value
+                    .replace(/[^0-9-.]/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  ;
+                });
+              }
+
+            });
+
+            $('.dg').keyup(function(){
+              var rowIndex=$(this).closest('tr').index()-12;
+              
+              var dg = parseFloat($(this).val().replace(/\,/g,'')) || 0;
+              var sl = parseInt($('.sl:eq('+rowIndex+')').val()) || 0;
+              var tt = sl*dg;
+
+              $(this).attr('data',dg);
+              $('.price_hide:eq('+rowIndex+')').val(dg);
+
+              if (tt>0) {
+                $('.tt:eq('+rowIndex+')').val(Math.round(tt));
+                $('.tt:eq('+rowIndex+')').attr('data',tt);
+
+                $('.total_hide:eq('+rowIndex+')').val(tt);
+
+                var tong = 0;
+                $('.tt').each(function(){
+                  if ($(this).val() != "") {
+                    tong += parseFloat($(this).attr('data') || 0);
+                  }
+                  
+                });
+
+                var tienthue = parseFloat(Math.round(tong*0.1));
+                var tongcong = Math.round(tong+tienthue);
+                var congtien = Math.round(tong);
+
+                $('#tienthue').val(tienthue);
+                $('#tongcong').val(tongcong);
+                $('#congtien').val(congtien);
+
+                $.ajax({
+                  url: '<?php echo BASE_URL ?>/vat/getMoney',
+                  type: 'GET',
+                  data: {data:tongcong},
+                  success:function(data){
+                    $('#tongcongchu').val(data.trim());
+                  },
+                });
+
+                $('.numbers').val(function(index, value) {
+                  return value
+                    .replace(/[^0-9-.]/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  ;
+                });
+              }
+
+            });
+
+
           $( "#show_item" ).dialog( "close" );
         }
       },
@@ -1857,7 +2117,11 @@ $( "#show_item" ).dialog({
 });
 
 $('#refresh').click(function(){
-  $('input').val("");
+  $('input[name!="batdau"][name!="ketthuc"][name!="ngay"][name!="thang"][name!="nam"][name!="sohd"][name!="thanhtoan"]').val("");
+  $('.tt').attr('data',"");
+  $('.dg').attr('data',"");
+  $('.ten:eq(0)').val("Lốp xe bố kẽm:");
+  $('.selectpicker').selectpicker('refresh');
 });
 
 $('#print').click(function(){
@@ -1875,10 +2139,82 @@ $('#print').click(function(){
     return;
   }
   else{
-    $('#printhd').submit();
+    var r = confirm("Bạn có chắc chắn không?");
+    if (r == true){
+      $('#printhd').submit();
+    }
   }
 
 });
+
+var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#ketthuc" ).datepicker( "option", "minDate", selectedDate );
+
+         },
+         
+    };  
+    $("#batdau").datepicker(pickerOpts);
+
+    var pickerOpts4 = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        //defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showWeek: true,
+        weekHeader: 'Tuần',
+        showButtonPanel: true,
+        onClose: function(selectedDate) {
+                
+                $( "#batdau" ).datepicker( "option", "maxDate", selectedDate );
+                
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts4);
+
+
+
 </script>
   
     </body>

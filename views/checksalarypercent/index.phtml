@@ -154,6 +154,9 @@ $tongthanhtien = 0;
     	<th class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
         <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','check_salary_percent_id','<?php echo $url_order ?>')">STT <?php if ($order_by == 'check_salary_percent_id'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','order_percent','<?php echo $url_order ?>')">Lương sản phẩm (%) <?php if ($order_by == 'order_percent'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>  
         <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','order_number','<?php echo $url_order ?>')">Lương sản lượng <?php if ($order_by == 'order_number'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
@@ -180,7 +183,7 @@ $tongthanhtien = 0;
                 
             </td>
             <td class="fix"><?php echo $i++; ?></td>
-            
+            <td class="fix" id="order_percent_<?php echo $salary->check_salary_percent_id; ?>"><?php echo $salary->order_percent; ?></td>
             <td class="fix" id="order_number_<?php echo $salary->check_salary_percent_id; ?>"><?php echo $lib->formatMoney($salary->order_number); ?></td>
             <td class="fix" id="order_new_<?php echo $salary->check_salary_percent_id; ?>"><?php echo $lib->formatMoney($salary->order_new); ?></td>
             <td class="fix" id="order_old_<?php echo $salary->check_salary_percent_id; ?>"><?php echo $lib->formatMoney($salary->order_old); ?></td>
@@ -218,20 +221,25 @@ $this->helper('slidePaginator');
                             
                         </tr>
                         <tr>
+                            <td>Lương sản phẩm (%) </td>
+                            <td><input type="text" id="order_percent" name="order_percent" tabindex="1"  required="required"></td>
                             <td>Lương sản lượng </td>
-                            <td><input type="text" id="order_number" class="number" name="order_number" tabindex="1"  required="required"></td> 
+                            <td><input type="text" id="order_number" class="number" name="order_number" tabindex="2"  required="required"></td>
+    
+                        </tr>
+                        <tr>
                             <td>Khách hàng mới </td>
-                            <td><input type="text" id="order_new" class="number" name="order_new" tabindex="2"  required="required"></td>
+                            <td><input type="text" id="order_new" class="number" name="order_new" tabindex="3"  ></td>
                             <td>Khách hàng cũ </td>
-                            <td><input type="text" id="order_old" class="number" name="order_old" tabindex="3"  required="required"></td>
+                            <td><input type="text" id="order_old" class="number" name="order_old" tabindex="4"  ></td>
     
                         </tr>
                         
                          <tr>
                             <td>&nbsp;</td>
                             <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
-                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="4"></td>
-                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="5"></td>
+                            <td><input type="submit" name="submit" value="Hoàn tất" tabindex="5"></td>
+                            <td ><input type="reset" name="reset" value="Nhập lại" tabindex="6"></td>
                             
                              
                         </tr>
@@ -255,12 +263,14 @@ $('html').click(function(e) {
                 $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
             }
             var order_number = $(this).find("#order_number_"+$(this).attr('id')).text();
+            var order_percent = $(this).find("#order_percent_"+$(this).attr('id')).text();
             var order_new = $(this).find("#order_new_"+$(this).attr('id')).text();
             var order_old = $(this).find("#order_old_"+$(this).attr('id')).text();
             var create_time = $(this).find("#create_time_"+$(this).attr('id')).text();
             //alert(staff_name);
             $('#yes').val($(this).attr('id'));
             $('#order_number').val(order_number);
+            $('#order_percent').val(order_percent);
             $('#order_new').val(order_new);
             $('#order_old').val(order_old);
             $('#create_time').val(create_time);
@@ -349,6 +359,7 @@ $(document).ready(function(){
                 submitHandler: function(form) {
                     
                     var order_number = $('#order_number').attr('value');
+                    var order_percent = $('#order_percent').attr('value');
                     var order_new = $('#order_new').attr('value');
                     var order_old = $('#order_old').attr('value');
                     var create_time = $('#create_time').attr('value');
@@ -361,6 +372,7 @@ $(document).ready(function(){
                         url: "<?php echo BASE_URL ?>/checksalarypercent/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
                         data: {
                             order_number: order_number,
+                            order_percent: order_percent,
                             order_new: order_new,
                             order_old: order_old,
                             create_time: create_time,
@@ -373,7 +385,7 @@ $(document).ready(function(){
                             $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
                             $('#error').fadeOut(10000);
 
-                            if (staff == "") {
+                            if (yes == "") {
                                 setTimeout(function() {
                                         sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
                                       }, 200);

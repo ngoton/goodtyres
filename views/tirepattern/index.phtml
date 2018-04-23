@@ -17,7 +17,9 @@ elseif ($order_by == 'tire_pattern_type')
 <div id="content" style="padding:5px;">
     <center style="clear:both;margin-bottom: -30px;"><h1> MÃ GAI</h1></center>
 <div class="add-box">
+    <?php if($_SESSION['role_logined']==1){ ?>
     <a class="add_button" onClick="add_click();">Nhập mới</a>
+    <?php } ?>
     <a class="add_button" id="btnExport" >Export Excel</a>
 </div>
 	<div class="search-box">
@@ -84,8 +86,9 @@ elseif ($order_by == 'tire_pattern_type')
             <td class="fix" id="tire_pattern_name_<?php echo $tire_pattern->tire_pattern_id; ?>"><?php echo $tire_pattern->tire_pattern_name; ?></td>
             <td class="fix" id="tire_pattern_type_<?php echo $tire_pattern->tire_pattern_id; ?>"><?php echo $tire_pattern->tire_pattern_type; ?></td>
             <td>
+                <?php if($_SESSION['role_logined']==1){ ?>
                 <button class="error" onclick="del(<?php echo $tire_pattern->tire_pattern_id ?>)" >Xóa</button>
-                
+                <?php } ?>
                
             </td>
         </tr>
@@ -134,7 +137,7 @@ $this->helper('slidePaginator');
                          <tr>
                             <td>&nbsp;</td>
                             <td>
-                                <input type="submit" name="submit" value="Submit" tabindex="3">
+                                <input type="submit" name="submit" value="Submit" tabindex="3" <?php echo $_SESSION['role_logined']!=1?'disabled':null ?> >
                                 
                             </td>
                             <td>

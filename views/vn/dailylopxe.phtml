@@ -1,0 +1,502 @@
+<?php
+$arr_danang = array(
+    'da-nang',
+    'quang-nam',
+);
+$key_danang = array_rand($arr_danang);
+
+$arr_ntb = array(
+    'quang-ngai',
+    'binh-dinh',
+    'phu-yen',
+    'khanh-hoa',
+    'ninh-thuan',
+    'binh-thuan',
+);
+$key_ntb = array_rand($arr_ntb);
+
+$arr_taynguyen = array(
+    'gia-lai',
+    'kon-tum',
+    'dak-lak',
+    'lam-dong',
+    'dak-nong',
+);
+$key_taynguyen = array_rand($arr_taynguyen);
+
+$arr_dnb = array(
+    'dong-nai',
+    'binh-duong',
+    'ba-ria-vung-tau',
+    'tay-ninh',
+    'binh-phuoc',
+    'long-an',
+);
+$key_dnb = array_rand($arr_dnb);
+
+?>
+<script type="text/javascript" src="<?php echo BASE_URL ?>/public/js/15865-docs-index-html.js" charset="UTF-8"></script>
+
+<div class="main-content-box">
+
+
+
+    <h2>Đại lý lốp xe Việt Trade</h2>
+
+
+
+    <div class="items-list-prod">
+
+
+        <div id='nhf_main_frame'> 
+            <div class="content_holder">
+                    <div id="container_map">
+                    <div id="main_content">
+                        <div id="shadowing"></div>
+                        <div id="map">
+                            <div id="map_map" class="sprite_index_vn_map_whole">
+                            <img src="<?php echo BASE_URL ?>/public/img/transparent.gif" width="1" height="1" id="area_highlight" alt="" />
+                            <img src="<?php echo BASE_URL ?>/public/img/transparent.gif" id="area_map" usemap="#map_map_map" alt=""/>
+                            </div>
+                            <map name="map_map_map" id="map_map_map">
+                            
+                                <area shape="poly" id="hoverregion_12" data="12" class="showmap" coords="124,87,113,82,122,75,133,84,216,115,239,131,223,166,194,161,181,138"  alt="Hà Nội" title="Hà Nội" href="<?php echo $this->url('vn/dai-ly/ha-noi') ?>" />
+                            
+                                <area shape="poly" id="hoverregion_13" data="13" class="showmap" coords="156,422,37,374,29,319,87,323,87,357" alt="Tp Hồ Chí Minh" title="Tp Hồ Chí Minh" href="<?php echo $this->url('vn/dai-ly/ho-chi-minh') ?>" />
+                            
+                                <area shape="poly" id="hoverregion_10" data="10" class="showmap" coords="86,28,94,46,105,53,118,74,131,76,154,90,162,85,179,86,197,72,172,52,164,40,177,29,166,21,154,23,148,17,140,21,118,2,102,14,102,23" alt="Đông Bắc Bộ" title="Bắc Kạn,Bắc Giang,Cao Bằng,Hà Giang,Lạng Sơn,Thái Nguyên,Tuyên Quang,Quảng Ninh" href="<?php echo $this->url('vn/dai-ly/dong-bac-bo') ?>" />
+                            
+                                <area shape="poly" id="hoverregion_11" data="11" class="showmap" coords="26,68,41,67,22,85,43,109,69,110,82,98,100,108,110,105,102,85,113,64,99,51,89,40,79,23,69,33,54,24,52,32,43,26,36,41,15,29,3,40" alt="Tây Bắc Bộ" title="Điện Biên,Lai Châu,Lào Cai,Sơn La,Yên Bái" href="<?php echo $this->url('vn/dai-ly/tay-bac-bo') ?>" />
+                            
+                                <area shape="poly" id="hoverregion_1" data="1" class="showmap" coords="131,116,150,113,150,103,131,99,132,89,139,86,150,95,155,89,129,77,118,76,112,70,102,87,110,108"  alt="Các tỉnh lân cận Hà Nội" title="Bắc Ninh,Phú Thọ,Hà Nam,Hải Dương,Hòa Bình,Hưng Yên,Ninh Bình,Vĩnh Phúc" href="<?php echo $this->url('vn/dai-ly/ha-noi') ?>" />
+                            
+                                <area shape="poly" id="hoverregion_4" data="4" class="showmap" coords="132,118,152,114,154,92,184,84,197,75,215,70,213,100,186,109,172,102,169,126,148,132"    alt="Hải Phòng Nam Định Thái Bình" title="Hải Phòng,Nam Định,Thái Bình" href="<?php echo $this->url('vn/dai-ly/dong-bac-bo') ?>" />
+                            
+                                <area shape="poly" id="hoverregion_8" data="8" class="showmap" coords="98,112,82,112,93,122,110,126,107,136,95,139,68,144,75,158,66,159,116,186,116,200,132,212,145,206,148,214,161,210,132,171,148,129,109,109,105,107"  alt="Thanh Nghệ Tĩnh" title="Hà Tĩnh,Nghệ An,Thanh Hóa" href="<?php echo $this->url('vn/dai-ly/bac-trung-bo') ?>" />
+                            
+                                <area shape="poly" id="hoverregion_6" data="6" class="showmap" coords="132,212,139,229,161,240,171,269,178,267,193,288,207,282,213,285,224,275,171,230,163,212,151,214,143,206" alt="Bình Trị Thừa Thiên Huế" title="Quảng Bình,Quảng Trị,Thừa Thiên Huế" href="<?php echo $this->url('vn/dai-ly/mien-trung') ?>" />
+                            
+                                <area shape="poly" id="hoverregion_3" data="3" class="showmap" coords="292,294,294,271,334,268,339,301,320,321,292,298,259,332,243,335,205,307,189,297,190,289,200,281,224,275,241,296,258,315,259,331"  alt="Quảng Nam Đà Nẵng" title="Đà Nẵng,Quảng Nam" href="<?php echo $this->url('vn/dai-ly/'.$arr_danang[$key_danang]) ?>" />
+                            
+                                <area shape="poly" id="hoverregion_9" data="9" class="showmap" coords="205,307,200,323,190,354,206,383,201,400,201,422,190,430,197,446,194,448,204,461,224,466,229,451,239,451,243,416,253,409,239,394,247,391,240,351,240,334,231,323,222,323"  alt="Tây Nguyên" title="Đắk Lắk,Đắk Nông,Gia Lai,Kon Tum,Lâm Đồng" href="<?php echo $this->url('vn/dai-ly/'.$arr_taynguyen[$key_taynguyen]) ?>" />
+                            
+                                <area shape="poly" id="hoverregion_7" data="7" class="showmap" coords="337,440,339,480,250,526,246,493,300,460,338,443,263,337,243,337,248,391,244,396,253,411,245,416,241,451,205,463,204,493,261,461,274,405,261,334"  alt="Nam Trung Bộ" title="Bình Thuận,Bình Định,Khánh Hòa,Ninh Thuận,Phú Yên,Quảng Ngãi" href="<?php echo $this->url('vn/dai-ly/'.$arr_ntb[$key_ntb]) ?>" />
+                            
+                                <area shape="poly" id="hoverregion_2" data="2" class="showmap" coords="162,438,156,451,140,450,169,476,178,469,183,476,175,485,194,499,205,496,200,477,201,460,193,448,190,434,192,425,167,436"  alt="Đông Nam Bộ" title="Bình Dương,Bình Phước,Đồng Nai,Tây Ninh,Bà Rịa Vũng Tàu" href="<?php echo $this->url('vn/dai-ly/'.$arr_dnb[$key_dnb]) ?>" />
+                            
+                                <area shape="poly" id="hoverregion_5" data="5" class="showmap" coords="155,477,102,483,59,498,86,518,110,513,94,531,95,572,148,550,178,569,190,496" alt="Cần Thơ - Tây Nam Bộ" title="An Giang,Bạc Liêu,Bến Tre,Cần Thơ,Cà Mau,Đồng Tháp,Hậu Giang,Kiên Giang,Long An,Sóc Trăng,Tiền Giang,Trà Vinh,Vĩnh Long" href="<?php echo $this->url('vn/dai-ly/can-tho') ?>" />
+                            
+                            </map>
+                        </div><!--map-->
+                        <div id="main_right">
+                            <div id="right_head">
+                                <span id="region_head">Khách hàng của chúng tôi tại các vùng</span><br/>
+                                <span id="region_head">Chọn để xem...</span>
+                            </div>
+                            <div id="regions">
+                                
+                                <ul id="region_list">
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/ha-noi') ?>" id="region_12" class="" >Hà Nội</a>
+                                        </li>
+                                        
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/ho-chi-minh') ?>" id="region_13" class="" >Tp Hồ Chí Minh</a>
+                                        </li>
+                                        
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/dong-bac-bo') ?>" id="region_10" class="showmap" data="10">Đông Bắc Bộ</a>
+                                        </li>
+                                        
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/tay-bac-bo') ?>" id="region_11" class="showmap" data="11" >Tây Bắc Bộ</a>
+                                        </li>
+                                        
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/ha-noi') ?>" id="region_1" class="showmap" data="1">Các tỉnh lân cận Hà Nội</a>
+                                        </li>
+                                        
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/dong-bac-bo') ?>" id="region_4" class="showmap" data="4" >Hải Phòng Nam Định Thái Bình</a>
+                                        </li>
+                                        
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/bac-trung-bo') ?>" id="region_8" class="showmap" data="8" >Thanh Nghệ Tĩnh</a>
+                                        </li>
+                                        
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/mien-trung') ?>" id="region_6" class="showmap" data="6" >Bình Trị Thừa Thiên Huế</a>
+                                        </li>
+                                        
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/'.$arr_danang[$key_danang]) ?>" id="region_3" class="showmap" data="3" >Quảng Nam Đà Nẵng</a>
+                                        </li>
+                                        
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/'.$arr_taynguyen[$key_taynguyen]) ?>" id="region_9" class="showmap" data="9" >Tây Nguyên</a>
+                                        </li>
+                                        
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/'.$arr_ntb[$key_ntb]) ?>" id="region_7" class="showmap" data="7" >Nam Trung Bộ</a>
+                                        </li>
+                                        
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/'.$arr_dnb[$key_dnb]) ?>" id="region_2" class="showmap" data="2" >Đông Nam Bộ</a>
+                                        </li>
+                                        
+                                    <li>
+                                            <a href="<?php echo $this->url('vn/dai-ly/can-tho') ?>" id="region_5" class="showmap" data="5" >Cần Thơ - Tây Nam Bộ</a>
+                                        </li>
+                                </ul>
+                                <div class="clear_float"></div> 
+                            </div>
+                        </div><!--main right-->
+                        <div class="clear_float"></div>
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+        
+    
+    <script type="text/javascript">
+        
+        /*$('.showmap').click(function(){
+            var id= $(this).attr("data");
+            $.ajax({
+            url:"dskh.php",
+            type:"GET",
+            data:{id:id},
+            success:function(data){
+                $('#show').html(data);
+            }
+        
+        });
+        });*/
+        $('.showmap').on('mousedown',function(){
+            var id= $(this).attr("data");
+            var b = document.getElementById("area_highlight");
+            b.className = "sprite_index_vn_hover_hover_region_" + id;
+            
+        
+        });
+        
+        
+        
+    </script>
+
+
+    </div>
+
+
+
+</div>
+
+
+<style type="text/css">
+.nhf_body
+{
+    /*background-color:#fffff7;*/
+    color:#000;
+    font-family:Verdana,Arial,sans-serif;
+    font-size:14px;
+    margin:0;
+    padding:0
+}
+    #nhf_main_frame
+{
+    margin:0 auto;
+    width:100%;
+}
+.content_holder
+{
+    padding:0
+}
+    #header
+{
+    height:85px;
+    margin-top:5px
+}
+.nhf_header
+{
+    position:relative;
+    margin:0 auto;
+    width:960px
+}
+.nhf_header_container
+{
+    background:#fff7d0
+}
+    #nhf_logo img
+{
+    margin-right:25px
+}
+    #logo
+{
+    float:left;
+    display:inline
+}
+    #nhf_logo
+{
+    float:left;
+    display:inline;
+    margin-left:-23px;
+    width:331px;
+    text-align:right
+}
+    #header_right
+{
+    float:right;
+    margin-top:20px;
+    width:645px!important
+}
+    #header_right.logged_header
+{
+    margin-top:32px
+}
+    #header_right div
+{
+    text-align:center;
+    border-radius:4px
+}
+    #right_head
+{
+    font-size:13px
+}
+.clear_float
+{
+    clear:both
+}
+    #main_content
+{
+    margin-top:20px
+}
+    #main_left,#map
+{
+    float:left
+}
+    #main_left
+{
+    width:445px
+}
+    #map
+{
+    width:100px;
+    margin-left:20px
+}
+    #map img
+{
+    border:0
+}
+    #main_right
+{
+    float:right;
+    width:350px;
+    text-align:right
+}
+    #region_head
+{
+    color:#000;
+    font-style:italic
+}
+    #regions
+{
+    margin:0
+}
+    #regions ul
+{
+    list-style-type:none
+}
+    #region_list li
+{
+    clear:both;
+    float:left;
+    line-height:33px;
+    width:100%
+}
+    #regions a
+{
+    color:#369;
+    font-weight:bold;
+    text-decoration:none
+}
+    #regions a:hover
+{
+    cursor: pointer;
+}
+
+  
+.sprite_index_vn_hover_hover_region_7
+{
+    width:74px;
+    height:179px;
+    /*background:url("../img/index_vn_hover.png") no-repeat -2px -2px*/
+    background: url("../public/img/7.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_9
+{
+    width:67px;
+    height:156px;
+    /*background:url("../img/index_vn_hover.png") no-repeat -73px -2px*/
+    background: url("../public/img/9.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_13
+{
+    width:116px;
+    height:100px;
+    /*background:url("../img/index_vn_hover.png") no-repeat -136px -2px*/
+    background: url("../public/img/13.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_12
+{
+    width:121px;
+    height:92px;
+    /*background:url("../img/index_vn_hover.png") no-repeat -256px -2px*/
+    background: url("../public/img/12.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_8
+{
+    width:98px;
+    height:103px;
+    /*background:url("../img/index_vn_hover.png") no-repeat -381px -2px*/
+    background: url("../public/img/8.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_5
+{
+    width:112px;
+    height:92px;
+    /*background:url("../img/index_vn_hover.png?") no-repeat -473px -2px*/
+    background: url("../public/img/5.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_11
+{
+    width:109px;
+    height:85px;
+    /*background:url("../img/index_vn_hover.png") no-repeat -574px -2px*/
+    background: url("../public/img/11.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_10
+{
+    width:108px;
+    height:82px;
+    /*background: url("../img/index_vn_hover.png") no-repeat -475px -90px*/
+    background: url("../public/img/10.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_2
+{
+    width:68px;
+    height:77px;
+    /*background:url("../img/index_vn_hover.png") no-repeat -576px -82px*/
+    background: url("../public/img/2.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_6
+{
+    width:93px;
+    height:75px;
+    /*background:url("../img/index_vn_hover.png") no-repeat -258px -96px*/
+    background: url("../public/img/6.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_4
+{
+    width:86px;
+    height:62px;
+    /*background:url("../img/index_vn_hover.png") no-repeat -138px -104px*/
+    background: url("../public/img/4.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_3
+{
+    width: 97px;
+    height: 58px;
+    /*background:url("../img/index_vn_hover.png") no-repeat -383px -96px*/
+    background: url("../public/img/3.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_1
+{
+    width:54px;
+    height:49px;
+    /*background:url("../img/index_vn_hover.png") no-repeat -676px -2px*/
+    background: url("../public/img/1.png") no-repeat;
+}
+.sprite_index_vn_hover_hover_region_12
+{
+    margin-left:112px;
+    margin-top:70px
+}
+.sprite_index_vn_hover_hover_region_10
+{
+    margin-left:87px;
+    margin-top:2px
+}
+.sprite_index_vn_hover_hover_region_11
+{
+    margin-left:2px;
+    margin-top:22px
+}
+.sprite_index_vn_hover_hover_region_1
+{
+    margin-left:102px;
+    margin-top:66px
+}
+.sprite_index_vn_hover_hover_region_4
+{
+    margin-left:135px;
+    margin-top:66px
+}
+.sprite_index_vn_hover_hover_region_8
+{
+    margin-left:67px;
+    margin-top:104px
+}
+.sprite_index_vn_hover_hover_region_6
+{
+    margin-left:132px;
+    margin-top:203px
+}
+.sprite_index_vn_hover_hover_region_3
+{
+    margin-left:190px;
+    margin-top:274px
+}
+.sprite_index_vn_hover_hover_region_9
+{
+    margin-left:193px;
+    margin-top:301px
+}
+.sprite_index_vn_hover_hover_region_7
+{
+    margin-left:201px;
+    margin-top:331px
+}
+.sprite_index_vn_hover_hover_region_2
+{
+    margin-left:137px;
+    margin-top:418px
+}
+.sprite_index_vn_hover_hover_region_5
+{
+    margin-left:66px;
+    margin-top:469px
+}
+.sprite_index_vn_hover_hover_region_13
+{
+    margin-left:50px;
+    margin-top:320px
+}
+.sprite_index_vn_map_whole
+{
+    width:291px;
+    height:573px;
+    background:url("../public/img/mapvn.png") no-repeat -2px -2px
+}
+#map_map img
+{
+    position:absolute
+}
+    #map_map,#area_map
+{
+    float:left;
+    width:291px;
+    height:573px
+}
+</style>

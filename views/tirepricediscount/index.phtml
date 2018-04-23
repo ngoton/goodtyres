@@ -19,8 +19,10 @@ elseif ($order_by == 'tire_pattern_name')
 <div id="content" style="padding:5px;">
     <center style="clear:both;margin-bottom: -30px;"><h1> BẢNG GIÁ LỐP</h1></center>
 <div class="add-box">
+    <?php if($_SESSION['role_logined']==1){ ?>
     <a class="add_button" onClick="add_click();">Nhập mới</a>
     <a class="add_button" id="import_excel" href="<?= $this->url('tirepricediscount/import')?>">Import Excel</a>
+    <?php } ?>
     <a class="add_button" id="btnExport" >Export Excel</a>
 </div>
 	<div class="search-box">
@@ -74,7 +76,7 @@ elseif ($order_by == 'tire_pattern_name')
         <th rowspan="2" class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_price','<?php echo $url_order ?>')">Giá công khai <?php if ($order_by == 'tire_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
-        <th colspan="6" class="fix">
+        <th colspan="10" class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_retail','<?php echo $url_order ?>')">Chiết khấu theo sản lượng <?php if ($order_by == 'tire_retail'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th rowspan="2" class="fix">
@@ -88,19 +90,31 @@ elseif ($order_by == 'tire_pattern_name')
     </tr>
     <tr>
         <th class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_retail','<?php echo $url_order ?>')">Bán lẻ <?php if ($order_by == 'tire_retail'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_retail','<?php echo $url_order ?>')">10 <?php if ($order_by == 'tire_retail'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_20','<?php echo $url_order ?>')">20 <?php if ($order_by == 'tire_20'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_50','<?php echo $url_order ?>')">50 <?php if ($order_by == 'tire_50'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_40','<?php echo $url_order ?>')">40 <?php if ($order_by == 'tire_40'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_60','<?php echo $url_order ?>')">60 <?php if ($order_by == 'tire_60'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_80','<?php echo $url_order ?>')">80 <?php if ($order_by == 'tire_80'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_100','<?php echo $url_order ?>')">100 <?php if ($order_by == 'tire_100'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_120','<?php echo $url_order ?>')">120 <?php if ($order_by == 'tire_120'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_150','<?php echo $url_order ?>')">150 <?php if ($order_by == 'tire_150'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_180','<?php echo $url_order ?>')">180 <?php if ($order_by == 'tire_180'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_cont','<?php echo $url_order ?>')">Nguyên cont <?php if ($order_by == 'tire_cont'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
@@ -125,15 +139,20 @@ elseif ($order_by == 'tire_pattern_name')
             <td class="fix" id="tire_price_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->formatMoney($tire->tire_price); ?></td>
             <td class="fix" id="tire_retail_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->formatMoney($tire->tire_retail); ?></td>
             <td class="fix" id="tire_20_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->formatMoney($tire->tire_20); ?></td>
-            <td class="fix" id="tire_50_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->formatMoney($tire->tire_50); ?></td>
+            <td class="fix" id="tire_40_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->formatMoney($tire->tire_40); ?></td>
+            <td class="fix" id="tire_60_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->formatMoney($tire->tire_60); ?></td>
+            <td class="fix" id="tire_80_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->formatMoney($tire->tire_80); ?></td>
             <td class="fix" id="tire_100_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->formatMoney($tire->tire_100); ?></td>
+            <td class="fix" id="tire_120_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->formatMoney($tire->tire_120); ?></td>
             <td class="fix" id="tire_150_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->formatMoney($tire->tire_150); ?></td>
+            <td class="fix" id="tire_180_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->formatMoney($tire->tire_180); ?></td>
             <td class="fix" id="tire_cont_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->formatMoney($tire->tire_cont); ?></td>
             <td class="fix" id="start_date_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->hien_thi_ngay_thang($tire->start_date); ?></td>
             <td class="fix" id="end_date_<?php echo $tire->tire_price_discount_id; ?>"><?php echo $lib->hien_thi_ngay_thang($tire->end_date); ?></td>
             <td>
+                <?php if($_SESSION['role_logined']==1){ ?>
                 <button class="error" onclick="del(<?php echo $tire->tire_price_discount_id ?>)" >Xóa</button>
-                
+                <?php } ?>
                
             </td>
         </tr>
@@ -189,28 +208,45 @@ $this->helper('slidePaginator');
                             <td><input  type="text" class="numbers" id="tire_price"  name="tire_price" tabindex="6"  required="required" ></td>
                             <td>Giá bán lẻ</td>
                             <td><input  type="text" class="numbers" id="tire_retail"  name="tire_retail" tabindex="7"  required="required" ></td>
-                            <td>Từ ngày</td>
-                            <td>
-                                <input  type="text" class="ngay" id="start_date"  name="start_date" tabindex="4"  required="required" >
-                            </td>
-                        </tr>
-                        <tr>
                             <td>Sản lượng 20</td>
                             <td><input  type="text" class="numbers" id="tire_20"  name="tire_20" tabindex="8"  required="required" ></td>
-                            <td>Sản lượng 50</td>
-                            <td><input  type="text" class="numbers" id="tire_50"  name="tire_50" tabindex="9"  required="required" ></td>
-                            <td>Đến ngày</td>
-                            <td>
-                                <input  type="text" class="ngay" id="end_date"  name="end_date" tabindex="5"  required="required" >
-                            </td>
+                            
+                        </tr>
+                        <tr>
+                            
+                            <td>Sản lượng 40</td>
+                            <td><input  type="text" class="numbers" id="tire_40"  name="tire_40" tabindex="9"  required="required" ></td>
+                            <td>Sản lượng 60</td>
+                            <td><input  type="text" class="numbers" id="tire_60"  name="tire_60" tabindex="10"  required="required" ></td>
+                            <td>Sản lượng 80</td>
+                            <td><input  type="text" class="numbers" id="tire_80"  name="tire_80" tabindex="11"  required="required" ></td>
+                            
+                            
                         </tr>
                         <tr>
                             <td>Sản lượng 100</td>
-                            <td><input  type="text" class="numbers" id="tire_100"  name="tire_100" tabindex="10"  required="required" ></td>
+                            <td><input  type="text" class="numbers" id="tire_100"  name="tire_100" tabindex="12"  required="required" ></td>
+                            <td>Sản lượng 120</td>
+                            <td><input  type="text" class="numbers" id="tire_120"  name="tire_120" tabindex="13"  required="required" ></td>
                             <td>Sản lượng 150</td>
-                            <td><input  type="text" class="numbers" id="tire_150"  name="tire_150" tabindex="11"  required="required" ></td>
+                            <td><input  type="text" class="numbers" id="tire_150"  name="tire_150" tabindex="14"  required="required" ></td>
+                            
+                        </tr>
+                        <tr>
+                            <td>Sản lượng 180</td>
+                            <td><input  type="text" class="numbers" id="tire_180"  name="tire_180" tabindex="15"  required="required" ></td>
                             <td>Giá nguyên cont</td>
-                            <td><input  type="text" class="numbers" id="tire_cont"  name="tire_cont" tabindex="12"  required="required" ></td>
+                            <td><input  type="text" class="numbers" id="tire_cont"  name="tire_cont" tabindex="16"  required="required" ></td>
+                        </tr>
+                        <tr>
+                            <td>Từ ngày</td>
+                            <td>
+                                <input  type="text" class="ngay" id="start_date"  name="start_date" tabindex="17"  required="required" >
+                            </td>
+                            <td>Đến ngày</td>
+                            <td>
+                                <input  type="text" class="ngay" id="end_date"  name="end_date" tabindex="18"  required="required" >
+                            </td>
                         </tr>
                         
                         <tr>
@@ -224,11 +260,11 @@ $this->helper('slidePaginator');
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>
-                                <input type="submit" name="submit" value="Submit" tabindex="13">
+                                <input type="submit" name="submit" value="Submit" tabindex="19" <?php echo $_SESSION['role_logined']!=1?'disabled':null ?> >
                                 
                             </td>
                             <td>
-                                <input type="reset" name="reset" value="Reset" tabindex="14">
+                                <input type="reset" name="reset" value="Reset" tabindex="20">
                             </td>
                              
                         </tr>
@@ -267,9 +303,13 @@ $('html').click(function(e) {
             var tire_price = $(this).find("#tire_price_"+$(this).attr('id')).text();
             var tire_retail = $(this).find("#tire_retail_"+$(this).attr('id')).text();
             var tire_20 = $(this).find("#tire_20_"+$(this).attr('id')).text();
-            var tire_50 = $(this).find("#tire_50_"+$(this).attr('id')).text();
+            var tire_40 = $(this).find("#tire_40_"+$(this).attr('id')).text();
+            var tire_60 = $(this).find("#tire_60_"+$(this).attr('id')).text();
+            var tire_80 = $(this).find("#tire_80_"+$(this).attr('id')).text();
             var tire_100 = $(this).find("#tire_100_"+$(this).attr('id')).text();
+            var tire_120 = $(this).find("#tire_120_"+$(this).attr('id')).text();
             var tire_150 = $(this).find("#tire_150_"+$(this).attr('id')).text();
+            var tire_180 = $(this).find("#tire_180_"+$(this).attr('id')).text();
             var tire_cont = $(this).find("#tire_cont_"+$(this).attr('id')).text();
             var start = $(this).find("#start_date_"+$(this).attr('id')).text();
             var end = $(this).find("#end_date_"+$(this).attr('id')).text();
@@ -282,9 +322,13 @@ $('html').click(function(e) {
             $('#tire_price').val(tire_price);
             $('#tire_retail').val(tire_retail);
             $('#tire_20').val(tire_20);
-            $('#tire_50').val(tire_50);
+            $('#tire_40').val(tire_40);
+            $('#tire_60').val(tire_60);
+            $('#tire_80').val(tire_80);
             $('#tire_100').val(tire_100);
+            $('#tire_120').val(tire_120);
             $('#tire_150').val(tire_150);
+            $('#tire_180').val(tire_180);
             $('#tire_cont').val(tire_cont);
             $('#start_date').val(start.replace(/\//g,"-"));
             $('#end_date').val(end.replace(/\//g,"-"));
@@ -309,9 +353,13 @@ function add_click(){
         $('#tire_price').val(0);
         $('#tire_retail').val(0);
         $('#tire_20').val(0);
-        $('#tire_50').val(0);
+        $('#tire_40').val(0);
+        $('#tire_60').val(0);
+        $('#tire_80').val(0);
         $('#tire_100').val(0);
+        $('#tire_120').val(0);
         $('#tire_150').val(0);
+        $('#tire_180').val(0);
         $('#tire_cont').val(0);
         $('#start_date').val("");
         $('#end_date').val("");
@@ -348,9 +396,13 @@ $(document).ready(function(){
                     var tire_price = $('#tire_price').attr('value');
                     var tire_retail = $('#tire_retail').attr('value');
                     var tire_20 = $('#tire_20').attr('value');
-                    var tire_50 = $('#tire_50').attr('value');
+                    var tire_40 = $('#tire_40').attr('value');
+                    var tire_60 = $('#tire_60').attr('value');
+                    var tire_80 = $('#tire_80').attr('value');
                     var tire_100 = $('#tire_100').attr('value');
+                    var tire_120 = $('#tire_120').attr('value');
                     var tire_150 = $('#tire_150').attr('value');
+                    var tire_180 = $('#tire_180').attr('value');
                     var tire_cont = $('#tire_cont').attr('value');
                     var start_date = $('#start_date').attr('value');
                     var end_date = $('#end_date').attr('value');
@@ -370,9 +422,13 @@ $(document).ready(function(){
                             tire_price: tire_price,
                             tire_retail: tire_retail,
                             tire_20: tire_20,
-                            tire_50: tire_50,
+                            tire_40: tire_40,
+                            tire_60: tire_60,
+                            tire_80: tire_80,
                             tire_100: tire_100,
+                            tire_120: tire_120,
                             tire_150: tire_150,
+                            tire_180: tire_180,
                             tire_cont: tire_cont,
                             start_date: start_date,
                             end_date: end_date,

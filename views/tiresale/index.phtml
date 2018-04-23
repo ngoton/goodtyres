@@ -10,6 +10,8 @@ elseif ($order_by == 'tire_size_number')
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
 elseif ($order_by == 'tire_buy_volume')
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'tire_buy_price')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
 elseif ($order_by == 'date_manufacture')
     $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
 
@@ -23,7 +25,6 @@ elseif ($order_by == 'date_manufacture')
 <div id="content" style="padding:5px;">
     <center style="clear:both;margin-bottom: -30px;"><h1> LỐP XE</h1></center>
 <div class="add-box">
-    <a class="add_button" onClick="add_click();">Nhập lô mới</a>
     <a class="add_button" id="btnExport" >Export Excel</a>
 </div>
 	<div class="search-box">
@@ -52,9 +53,9 @@ elseif ($order_by == 'date_manufacture')
         </select>
         
         <select id="sl_status" name="sl_status" style="width:120px">
-            <option value="0">Khách hàng</option>
-            <?php foreach ($customers as $customer) { ?>
-                <option value="<?php echo $customer->customer_id ?>"><?php echo $customer->customer_name ?></option>
+            <option value="0">Mã gai</option>
+            <?php foreach ($tire_patterns as $tire_pattern) { ?>
+                <option value="<?php echo $tire_pattern->tire_pattern_id ?>"><?php echo $tire_pattern->tire_pattern_name ?></option>
             <?php } ?>
         </select>
         <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
@@ -113,41 +114,22 @@ elseif ($order_by == 'date_manufacture')
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_volume','<?php echo $url_order ?>')">Số lượng <?php if ($order_by == 'tire_buy_volume'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_price','<?php echo $url_order ?>')">Đơn giá <?php if ($order_by == 'tire_buy_price'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','date_manufacture','<?php echo $url_order ?>')">Ngày SX <?php if ($order_by == 'date_manufacture'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
-        <th  class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','sell','<?php echo $url_order ?>')">Đã bán <?php if ($order_by == 'sell'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-        </th>
-        <th  class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_volume','<?php echo $url_order ?>')">Tồn kho <?php if ($order_by == 'tire_buy_volume'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-        </th>
-        <th  class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_volume','<?php echo $url_order ?>')">Doanh thu<?php if ($order_by == 'tire_buy_volume'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-        </th>
-        <th  class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_volume','<?php echo $url_order ?>')">Chi phí <?php if ($order_by == 'tire_buy_volume'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-        </th>
-        <th  class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_volume','<?php echo $url_order ?>')">Chi phí 1 cái <?php if ($order_by == 'tire_buy_volume'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-        </th>
-        <th  class="fix">
-            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','tire_buy_volume','<?php echo $url_order ?>')">Lợi nhuận <?php if ($order_by == 'tire_buy_volume'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-        </th>
         
-        
-        <th class="fix" colspan="4"></th>
     </tr>
     
    </thead>
    <tbody>
-    <?php $doanhthu=0; $chiphi=0; $loinhuan=0; $soluong = 0; $daban=0; $tonkho=0; ?>
+    <?php $soluong = 0; $chiphi=0; ?>
     <?php foreach ($tire_buys as $tire_buy) : ?>
     
     <?php 
-        $doanhthu += (isset($tire_buy_data[$tire_buy->tire_buy_id]['revenue'])?$tire_buy_data[$tire_buy->tire_buy_id]['revenue']:0);
-        $chiphi += (isset($tire_buy_data[$tire_buy->tire_buy_id]['cost'])?$tire_buy_data[$tire_buy->tire_buy_id]['cost']:0);
+        $chiphi += $tire_buy->tire_buy_volume*$tire_buy->tire_buy_price;
         $soluong += $tire_buy->tire_buy_volume;
-        $daban += (isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']:0);
     ?>
         
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire_buy->tire_buy_id ?>" class="edit_tr">
@@ -157,40 +139,16 @@ elseif ($order_by == 'date_manufacture')
             </td>
             
             <td  class="fix"><?php echo $i++; ?></td>
-            <td  class="fix"><img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo $link_picture[$tire_buy->tire_buy_id]['image']; ?>" width="50" height="50" /></td>
+            <td  class="fix"><img src="<?php echo BASE_URL ?>/public/images/upload/<?php echo isset($link_picture[$tire_buy->tire_buy_id]['image'])?$link_picture[$tire_buy->tire_buy_id]['image']:null; ?>" width="50" height="50" /></td>
             <td class="fix" id="tire_buy_date_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->hien_thi_ngay_thang($tire_buy->tire_buy_date); ?></td>
             <td class="fix" id="code_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->code; ?></td>
-            <td class="fix" id="tire_buy_brand_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_brand_name; ?></td>
-            <td class="fix" id="tire_buy_size_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_size_number; ?></td>
+            <td class="fix" data="<?php echo $tire_buy->tire_buy_brand; ?>" id="tire_buy_brand_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_brand_name; ?></td>
+            <td class="fix" data="<?php echo $tire_buy->tire_buy_size; ?>" id="tire_buy_size_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_size_number; ?></td>
             <td class="fix" data="<?php echo $tire_buy->tire_buy_pattern; ?>" id="tire_buy_pattern_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_pattern_name; ?></td>
             <td class="fix" id="tire_buy_volume_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $tire_buy->tire_buy_volume; ?></td>
+            <td class="fix" id="tire_buy_price_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney($tire_buy->tire_buy_price); ?></td>
             <td class="fix" id="date_manufacture_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo date('m/Y',$tire_buy->date_manufacture); ?></td>
-            <td class="fix" id="sell_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney(isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']:0); ?></td>
-            <td class="fix" id="conlai_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney($tire_buy->tire_buy_volume - (isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']:0) ); ?></td>
-            <td class="fix" id="revenue_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney(isset($tire_buy_data[$tire_buy->tire_buy_id]['revenue'])?$tire_buy_data[$tire_buy->tire_buy_id]['revenue']:0); ?></td>
-            <td class="fix" id="cost_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney(isset($tire_buy_data[$tire_buy->tire_buy_id]['cost'])?$tire_buy_data[$tire_buy->tire_buy_id]['cost']:0); ?></td>
-            <td class="fix" id="cost1_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney(isset($tire_buy_data[$tire_buy->tire_buy_id]['cost'])?round($tire_buy_data[$tire_buy->tire_buy_id]['cost']/$tire_buy->tire_buy_volume):0); ?></td>
-            <td class="fix" id="revenue_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney((isset($tire_buy_data[$tire_buy->tire_buy_id]['revenue'])?$tire_buy_data[$tire_buy->tire_buy_id]['revenue']:0) - (isset($tire_buy_data[$tire_buy->tire_buy_id]['cost'])?$tire_buy_data[$tire_buy->tire_buy_id]['cost']:0)); ?></td>
-            <td style="display:none" class="fix" id="rate_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney($tire_buy->rate); ?></td>
-            <td style="display:none" class="fix" id="rate_shipper_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->formatMoney($tire_buy->rate_shipper); ?></td>
-            <td style="display:none" class="fix" id="date_solow_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->hien_thi_ngay_thang($tire_buy->date_solow); ?></td>
-            <td style="display:none" class="fix" id="date_shipper_<?php echo $tire_buy->tire_buy_id; ?>"><?php echo $lib->hien_thi_ngay_thang($tire_buy->date_shipper); ?></td>
             
-            <td>
-                <button class="view" onclick="javascript:window.location.href='<?php echo BASE_URL.'/tiresale/view/'.$tire_buy->code.'/'.$tire_buy->tire_buy_brand.'/'.$tire_buy->tire_buy_size.'/'.$tire_buy->tire_buy_pattern ?>'"  >Bán</button>
-                <button class="view" onclick="javascript:window.location.href='<?php echo BASE_URL.'/tiresale/cost/'.$tire_buy->code.'/'.$tire_buy->tire_buy_brand.'/'.$tire_buy->tire_buy_size.'/'.$tire_buy->tire_buy_pattern ?>'"  >CP phát sinh</button>
-            </td>
-            <td>
-                <button class="show" href="<?= $this->url('tiresale/showbuy/'.$tire_buy->tire_buy_id)?>" data="<?php echo $tire_buy->code ?>" >Chi tiết</button>
-            </td>
-            <td>
-                <button class="show" href="<?= $this->url('tiresale/show/'.$tire_buy->code.'/'.$tire_buy->tire_buy_brand.'/'.$tire_buy->tire_buy_size.'/'.$tire_buy->tire_buy_pattern)?>" data="<?php echo $tire_buy->code ?>" >LN lô hàng</button>
-            </td>
-            <td>
-                <button class="error" onclick="del(<?php echo $tire_buy->tire_buy_id ?>)" >Xóa</button>
-                
-               
-            </td>
         </tr>
 
 
@@ -198,15 +156,9 @@ elseif ($order_by == 'date_manufacture')
 
     <tr style="text-align:center; font-weight: bold; color: red;">
         <td class="fix" colspan="8" >Tổng cộng</td>
-        <td class="fix"><?php echo $soluong; ?></td>
-        <td class="fix"></td>
-        <td class="fix"><?php echo $daban; ?></td>
-        <td class="fix"><?php echo $soluong-$daban; ?></td>
-        <td class="fix"><?php echo $lib->formatMoney($doanhthu); ?></td>
+        <td class="fix"><?php echo $lib->formatMoney($soluong); ?></td>
         <td class="fix"><?php echo $lib->formatMoney($chiphi); ?></td>
         <td class="fix"></td>
-        <td class="fix"><?php echo $lib->formatMoney($doanhthu-$chiphi); ?></td>
-        <td class="fix" colspan="4" ></td>
     </tr>
      
    </tbody>
@@ -214,398 +166,10 @@ elseif ($order_by == 'date_manufacture')
 <?php
 $this->helper('slidePaginator');
 ?>
-<div style="display:none" id="lasted"></div>
 <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
 
-<div class="add-field">
-        <fieldset class="groupbox">
-            <legend>
-                <span><h3>Lô hàng </h3></span>
-            </legend>
-            <div class="login_body">
-                  <form id="add_tire" method="post" action="">
-                      <table style="margin-top:0px;width:100%">
-                        <tr>
-                            <td>Ngày </td>
-                            <td>
-                                <input style="width:80px" class="ngay" type="text" id="tire_buy_date"  name="tire_buy_date" tabindex="1"  required="required" >
-                                
-                            </td>
-                            <td>Thương hiệu</td>
-                            <td>
-                                <select name="tire_buy_brand" id="tire_buy_brand" tabindex="2"  required="required">
-                                    <?php foreach ($tire_brands as $tire_brand) { ?>
-                                        <option value="<?php echo $tire_brand->tire_brand_id ?>"><?php echo $tire_brand->tire_brand_name ?></option>
-                                    <?php } ?>
-                                    
-                                </select>
-                                
-                            </td>
-                            <td>Size</td>
-                            <td>
-                                <select name="tire_buy_size" id="tire_buy_size" tabindex="3"  required="required">
-                                    <?php foreach ($tire_sizes as $tire_size) { ?>
-                                        <option value="<?php echo $tire_size->tire_size_id ?>"><?php echo $tire_size->tire_size_number ?></option>
-                                    <?php } ?>
-                                    
-                                </select>
-                                
-                            </td>
-                            
-                            
-                        </tr>
-                        <tr>
-                            <td>Code</td>
-                            <td>
-                                <input style="width:80px" class="number" type="text" id="code"  name="code" tabindex="4"  required="required" >
-                                
-                            </td>
-                            <td>Số lượng</td>
-                            <td>
-                                <input style="width:50px" class="number" type="text" id="tire_buy_volume"  name="tire_buy_volume" tabindex="5"  required="required" >
-                                
-                            </td>
-                            <td>
-                                Mã gai
-                            </td>
-                            <td>
-                                <input style="width:80px" type="text" class="tire_buy_pattern" id="tire_buy_pattern" name="tire_buy_pattern" required="required" autocomplete="false" placeholder="Nhập mã hoặc * để chọn" tabindex="6"> 
-                                <ul class="tire_list_id"></ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Ngày TT Solow</td>
-                            <td>
-                                <input style="width:80px" class="ngay" type="text" id="date_solow"  name="date_solow" tabindex="7"  required="required" >
-                                
-                            </td>
-                            <td>Tỷ giá</td>
-                            <td>
-                                <input style="width:80px" class="numbers" type="text" id="rate"  name="rate" tabindex="8"  required="required" >
-                                
-                            </td>
-                            <td>Ngày sản xuất</td>
-                            <td>
-                                <input style="width:80px" type="text" id="date_manufacture"  name="date_manufacture" tabindex="8"  required="required" >
-                                
-                            </td>
-                        </tr>
-                        <tr>
-                            
-                            <td>Ngày TT Shipper</td>
-                            <td>
-                                <input style="width:80px" class="ngay" type="text" id="date_shipper"  name="date_shipper" tabindex="9"  required="required" >
-                                
-                            </td>
-                            <td>Tỷ giá</td>
-                            <td>
-                                <input style="width:80px" class="numbers" type="text" id="rate_shipper"  name="rate_shipper" tabindex="10"  required="required" >
-                                
-                            </td>
-                        </tr>
-                                               
-                        
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td><input type="hidden" readonly id="yes" name="yes" required="required" ></td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        
-                        
-                         <tr>
-                            <td></td>
-                            <td></td>
-
-                            <td>
-                                <input type="submit" name="submit" value="Submit" tabindex="11">
-                                
-                            </td>
-                            <td>
-                                <input type="reset" name="reset" value="Reset" tabindex="12">
-                            </td>
-                             
-                        </tr>
-                    </table> 
-                </form>
-            </div>
-        </fieldset>
-    </div>
-
 
 <script type="text/javascript">
-
-
-  
-$('.add-field').hide();  
-
-
-$('html').click(function(e) {
-    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
-        $('.add-field').slideUp(500);      
-    }
-    $('.tire_list_id').slideUp(200);  
-    
-});
-
-
-
-    $('.edit_tr').click(function(e){
-        if(e.target != '[object HTMLButtonElement]' && e.target != '[object HTMLSpanElement]' && !$('.checkbox').is(':focus')) { 
-            if(!$('.checkbox').is(':focus')){
-                $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);
-            }
-            var code = $(this).find("#code_"+$(this).attr('id')).text();
-            var tire_buy_brand = $(this).find("#tire_buy_brand_"+$(this).attr('id')).text();
-            var tire_buy_size = $(this).find("#tire_buy_size_"+$(this).attr('id')).text();
-            var tire_buy_volume = $(this).find("#tire_buy_volume_"+$(this).attr('id')).text();
-            var rate = $(this).find("#rate_"+$(this).attr('id')).text();
-            var rate_shipper = $(this).find("#rate_shipper_"+$(this).attr('id')).text();
-            var date_shipper = $(this).find("#date_shipper_"+$(this).attr('id')).text();
-            var date_solow = $(this).find("#date_solow_"+$(this).attr('id')).text();
-            var tire_buy_date = $(this).find("#tire_buy_date_"+$(this).attr('id')).text();
-            var tire_pattern_name = $(this).find("#tire_buy_pattern_"+$(this).attr('id')).text();
-            var tire_pattern = $(this).find("#tire_buy_pattern_"+$(this).attr('id')).attr('data');
-            var date_manufacture = $(this).find("#date_manufacture_"+$(this).attr('id')).text();
-
-            //alert(cost_code);
-            $('#yes').val($(this).attr('id'));
-            
-            $('#code').val(code);
-            $("#tire_buy_brand option:contains(" + tire_buy_brand + ")").attr('selected', 'selected');
-            $("#tire_buy_size option:contains(" + tire_buy_size + ")").attr('selected', 'selected');
-            $('#tire_buy_volume').val(tire_buy_volume);
-            $('#rate').val(rate);
-            $('#rate_shipper').val(rate_shipper);
-            $('#date_solow').val(date_solow.replace(/\//g,"-"));
-            $('#date_shipper').val(date_shipper.replace(/\//g,"-"));
-            $('#tire_buy_date').val(tire_buy_date.replace(/\//g,"-"));
-            $('#tire_buy_pattern').val(tire_pattern_name);
-            $('#tire_buy_pattern').attr('data',tire_pattern);
-            $('#date_manufacture').val(date_manufacture);
-
-            $( ".add-field" ).dialog( "open" );
-        }
-
-        
-        
-    });
-
-
-</script>
-<script type="text/javascript">
-
-function add_click(){
-    $('#yes').val("");
-    $('.add-field').slideDown(500);
-     $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
-     
-        $('#code').val("");
-        $('#tire_buy_volume').val("");
-        $('#rate').val("");
-        $('#rate_shipper').val("");
-        $('#date_shipper').val("");
-        $('#date_solow').val("");
-        $('#tire_buy_date').val("");
-        $('#tire_buy_pattern').val("");
-        $('#tire_buy_pattern').attr('data',"");
-        $('#date_manufacture').val("");
-                
-        $('.numbers').focus(function(){
-            if ( $(this).val() == '0') {
-               $(this).val(""); 
-            };
-            
-        });
-        $('.numbers').blur(function(){
-            if ( $(this).val() == "") {
-                $(this).val(0);
-            };
-            
-        });
-
-    $( ".add-field" ).dialog( "open" );
-}
-
-
-$(document).ready(function(){
-            // Validate form
-            $("#add_tire").validate({
-                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
-                rules: {
-                    
-                },
-                submitHandler: function(form) {
-                
-                    var code = $('#code').attr('value');
-                    var tire_buy_brand = $('#tire_buy_brand').attr('value');
-                    var tire_buy_size = $('#tire_buy_size').attr('value');
-                    var tire_buy_volume = $('#tire_buy_volume').attr('value');
-                    var rate = $('#rate').attr('value');
-                    var rate_shipper = $('#rate_shipper').attr('value');
-                    var date_shipper = $('#date_shipper').attr('value');
-                    var date_solow = $('#date_solow').attr('value');
-                    var tire_buy_date = $('#tire_buy_date').attr('value');
-                    var tire_buy_pattern = $('#tire_buy_pattern').attr('data');
-                    var tire_pattern_name = $('#tire_buy_pattern').attr('value');
-                    var date_manufacture = $('#date_manufacture').attr('value');
-                    
-                    var yes = $('#yes').attr('value');
-                    
-                    var action      = "them";
-                 
-                    $.ajax({
-                        type: "POST", // phương thức gởi đi
-                        url: "<?php echo BASE_URL ?>/tiresale/add", // nơi mà dữ liệu sẽ chuyển đến khi submit
-                        data: {
-                            code: code,
-                            tire_buy_brand: tire_buy_brand,
-                            tire_buy_size: tire_buy_size,
-                            tire_buy_volume: tire_buy_volume,
-                            rate: rate,
-                            rate_shipper: rate_shipper,
-                            date_solow: date_solow,
-                            date_shipper: date_shipper,
-                            tire_buy_date: tire_buy_date,
-                            tire_pattern_name: tire_pattern_name,
-                            tire_buy_pattern: tire_buy_pattern,
-                            date_manufacture: date_manufacture,
-
-                            yes: yes,
-
-                            }, // giá trị post
-                        success: function(answer){ // if everything goes well
-                            //alert(answer);
-                            $('#error').hide();
-                            $('#error').slideToggle(100); // hiển thị thẻ div success
-                            $('#error').html('<div class="successbox">'+answer+'</div>'); // đặt kết quả trả về từ test.php vào thẻ div success
-                            $('#error').fadeOut(10000);
-
-                            if (yes != "") {
-                                setTimeout(function() {
-                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
-                                      }, 200);
-
-                                    $('#expect_date_'+yes).text(expect_date);
-                                    $('#comment_'+yes).text(comment);
-                                    $('#money_'+yes).text(money);
-                                    $('#source_'+yes).text($("#source option:selected").text());
-                                    $('#source_in_'+yes).text($("#source_in option:selected").text());
-                            }
-                            else{
-                                setTimeout(function() {
-                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
-                                      }, 200);
-
-                                    var lastID = parseInt($('#lasted').html());
-                                    var rowCount = parseInt($('.table_data > tbody > tr').length);
-                                    $('.table_data > tbody:last')
-                                    .append(
-                                        '<tr onclick="HighLightTR(this,"#4d90fe","cc3333");" id="'+parseInt(lastID+1)+'" class="edit_tr"><td><input name="check[]" type="checkbox" class="checkbox" value="'+parseInt(lastID+1)+'"></td><td class="fix">'+parseInt(rowCount+1)+'</td><td class="fix" id="vendor_'+parseInt(lastID+1)+'">'+vendor+'</td><td class="fix" id="money_'+parseInt(lastID+1)+'">'+money+'</td><td class="fix" id="expect_date_'+parseInt(lastID+1)+'">'+expect_date+'</td><td class="fix" id="week_'+parseInt(lastID+1)+'"></td><td class="fix" id="code_'+parseInt(lastID+1)+'">'+code+'</td><td class="fix" id="source_'+parseInt(lastID+1)+'">'+$("#source option:selected").text()+'</td><td class="fix" id="comment_'+parseInt(lastID+1)+'">'+comment+'</td><td><a class="error" href="#">Sửa</a> | <a class="error" onclick="del('+parseInt(lastID+1)+')">Xóa</a></td></tr>'
-                                    );
-
-                                    $('#lasted').html(parseInt(lastID+2));
-                                
-                            }
-                        }
-                    });
-                    return false;
-                     
-                 }
-            });
-
-
-    $('.tire_buy_pattern').keyup(function(){
-        var keyword = $(this).val();
-        $.ajax({
-            url: '<?php echo BASE_URL ?>/tireprice/getpattern',
-            type: 'POST',
-            data: {keyword:keyword},
-            success:function(data){
-                $('.tire_list_id').slideDown(200);
-                $('.tire_list_id').html(data);
-            }
-        });
-        if ($('.tire_buy_pattern').val() == "" || $('.tire_buy_pattern').attr('data') == "") {
-            
-            $('.tire_buy_pattern').attr('data',"");
-        }
-
-        
-    });
-
-   $('.numbers').keyup(function(event) {
-
-          // skip for arrow keys
-      if(event.which >= 37 && event.which <= 40) return;
-
-      // format number
-      $(this).val(function(index, value) {
-        return value
-          .replace(/[^0-9-.]/g, "")
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        ;
-      });
-    });
-
-    $('.number').keyup(function(event) {
-
-          // skip for arrow keys
-      if(event.which >= 37 && event.which <= 40) return;
-
-      // format number
-      $(this).val(function(index, value) {
-        return value
-          .replace(/[^0-9-]/g, "")
-        ;
-      });
-    });
-    
-
-});
-
-function get_number(id){
-    return $(id).val().replace(/\,/g,'');
-}
-function set_item(item,name) {
-    // change input value
-    $('#work_code').val(item);
-    $("#work_code").attr("data",name);
-    
-    $('#code_list_id').hide();
-    $('#work_code').focus();
-}
-function set_item_tire(item,name) {
-    // change input value
-    $('.tire_buy_pattern').val(item);
-    $(".tire_buy_pattern").attr("data",name);
-    
-    $('.tire_list_id').hide();
-    $('.tire_buy_pattern').focus();
-}
-
-</script>
-<div style="display:none" id="lasted"></div>
-<script type="text/javascript">
-    var count = parseInt(<?php echo $lastID ?>);
-    $('#lasted').html(count);
-
-$("#import_excel").click(function(){
-        $("#winpopup").dialog({
-            draggable:true,
-            modal: true,
-            autoOpen: false,
-            height:300,
-            width:400,
-            resizable: false,
-            title:'Import Excel',
-            
-        });
-        $("#winpopup").load($(this).attr('href'));
-        $("#winpopup").dialog("open");
-         
-        return false;
-    });
-
 
  
 var x = "<?php echo $limit ?>";
@@ -617,23 +181,12 @@ $('#chonngaytao option[value='+th+']').attr('selected','selected');
 var s = "<?php echo $size ?>";
 $('#chonngaytaobatdau option[value='+s+']').attr('selected','selected');
 
-var kh = "<?php echo $kh ?>";
-$('#sl_status option[value='+kh+']').attr('selected','selected');
+var p = "<?php echo $pattern ?>";
+$('#sl_status option[value='+p+']').attr('selected','selected');
 
 </script>
-</div>
 
 <script type="text/javascript">
-
-
-$( ".add-field" ).dialog({
-    autoOpen: false,
-    modal: true,
-    width: "auto",
-    title: "Lô hàng",
-    hide: 'fold',
-    show: 'blind'
-});
 
 var pickerOpay2 = {
         closeText: "Đóng",

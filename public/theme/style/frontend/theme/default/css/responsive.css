@@ -1,0 +1,101 @@
+/* 
+
+  - @TinHocTaiNha
+
+  - Design by Ngo Ton
+
+  - Email: ngoton@tinhoctainha.com
+
+ */
+ .banner_mobile{ display: none;}
+@media(max-width: 1200px)
+{
+	.main-menu ul li span{display: none;}
+	.menu-link h2{margin-top: 6px;}
+	.main-menu ul li{margin-bottom: 0;}
+	.hotline i{ float: inherit; margin-bottom: 10px;}
+	.hotline{ text-align: center; padding: 10px 30px;}
+	.info{padding: 0 19px 10px;}
+	.work-time{ font-size: 14px;}
+	.maps-link a{ padding: 10px 20px;}
+	.cart-right-fixed{ width: 235px;}
+	.cart-top-left{width:210px; }
+	.slide-detail .img-responsive{ width: 100% !important;}
+	.right-detail {margin-right: -15px; float: right;}
+	.picZoomer-pic-wp{width: 100% !important; height: auto !important; }
+	.top-panel-fixed-wrp .menu-link{ margin-bottom: 22px;}
+	.content-detail img{ width: 100%;}
+
+	/* event_page */
+	.share_event{ float:left;}
+    .prod_thumb{ float:left;padding-top: 15px;
+    width: 100%;}
+    .event_page .right-detail{ margin-right: 0;}
+    .content_event_page_top{ background: url("../images/saleoff_bg_2.jpg") center top repeat-y;}
+    .banner_mobile{ display: block;}
+    .banner_pc{display: none;}
+}
+@media(max-width: 990px)
+{
+	.submenu-lv1{ display: none !important;}
+	.hadsub-menu:hover{ border: none !important;}
+	.cart-top-right{ padding: 7px 5px 8px 10px;}
+	.cart-top{ background-color: #eee;}
+	.header-main-menu{ margin-right: 0;}
+	.content, .search-top { padding: 0;}
+	.brand_list{margin-left: 0;}
+	.main-content-box{ margin-left: 0;}
+	.cart-top{margin-bottom: 15px;}
+	.logo { margin: 0 0 15px; text-align: center;}
+	.quality-cart{width: 70%;}
+	.remove-cart{float: left;}
+	.img-cart{ height: 28%; width: 28%; margin-right: 2%;}
+	.cart-right-fixed{ display: none !important;}
+	.top-detail{ margin-left: 0;}
+	.slide-detail .carousel {width: 100%;}
+	.sub-menu-list{ margin-left: 0;}
+	.hotline span{ float: inherit;}
+	.hotline i{ display: none;}
+	.top-panel-fixed-wrp{ display: none !important;}
+
+	/* event_page */
+	.share_event{ width: 100%;}
+}
+@media(max-width: 800px)
+{
+	.content_event_page_top .digit{ width: 0.9em;}
+	.content_event_page_top .countdownHolder{ font: 28px/1.5 "Open Sans Condensed",sans-serif; width: 320px;}
+
+
+}
+@media(max-width: 760px)
+{
+	.price-items-modal, .right-note-cart, .modal-footer-btn{ text-align: left; margin-top: 10px;}
+	.modal-footer-btn{ padding-right: 30px; padding-left: 30px;}
+	.modal-footer-btn .btn{ width: 100%;}
+	.sort_mode {
+    float: right;
+    font-size: 12px;
+    margin-left: 0;
+    margin-top: -30px;
+    position: absolute;
+	}
+	.main-content-box.catalog-page{ margin-top: 0px;}
+	.sub-menu-list { padding: 0; }
+	.sub-menu-list a { width: 100%; }
+	.news-detail-content img{width: 100%;}
+	.header-orders .img-orders,.header-orders .title-orders, .header-orders .price-orders, .header-orders .quantity-orders{ display: none;}
+	.title-search-result, .price-search-result{ padding: 15px 15px 0 15px;}
+	.search-result-items { margin-bottom: 15px; background: #f9f9f9;}
+	.top-panel .navbar-right .user-menu-res{ display: block;}
+	.top-panel .navbar-right .user-menu-no-res{display: none;}
+	.img-orders img{ border:none;}
+	.img-prod{ height: inherit;}
+	.main_menu_dropdown { min-height: auto; }
+}
+
+@media(max-width: 340px)
+{
+	#sign-in-up .form-group img{ width: 100%;}
+	.content_event_page_top .countdownHolder{ width: 266px; font: 24px/1.5 "Open Sans Condensed",sans-serif;}
+}

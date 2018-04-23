@@ -1,0 +1,355 @@
+
+<?php
+$url_order = 'ASC';
+if ($order_by == 'customer_id')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($order_by == 'customer_name')
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+
+
+    $i = 1;
+
+?>
+
+<div id="loading"></div>
+<div id="winpopup"></div>
+
+<div id="content" style="padding:5px;">
+    <center style="clear:both;margin-bottom: -30px;"><h1> CÔNG NỢ ĐƠN HÀNG </h1></center>
+<div class="add-box">
+    <a class="add_button" href="<?php echo $this->url('tiredebit/exportdebit/'.($nv>0?$nv:0).'/'.strtotime($ketthuc)) ?>" >Export Excel</a>
+    
+</div>
+	<div class="search-box">
+        
+        <input type="search" id="search-input" name="s" value="<?php echo isset($keyword)?$keyword:null; ?>" placeholder="Tìm kiếm">
+        <input type="button" name="" id="search-submit" class="button-search" value="Tìm kiếm" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+    </div>
+    <div class="tablenav top">  
+        <div class="add-box">
+            Đến  <input style="width:100px" type="search" name="ketthuc" id="ketthuc" placeholder="Chọn ngày" <?php if(isset($ketthuc)) echo "value='$ketthuc'"; ?> >  
+             <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');"> 
+                                    
+        </div>     
+        <div class="add-box">
+            <select id="sl_nv" name="sl_nv" style="width:150px">
+                <option value="">Nhân viên</option>
+                <?php foreach ($staffs as $staff) { ?>
+                    <option value="<?php echo $staff->staff_id ?>"><?php echo $staff->staff_name ?></option>
+                <?php } ?>
+            </select>
+            <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+        </div>
+        <div class="alignleft actions">
+            <input autocomplete="off" type="text" name="customer" id="customer" placeholder="Tên khách hàng" <?php echo isset($customer->customer_name)?'value="'.$customer->customer_name.'"':null ?> />
+            <ul id="customer_list_id"></ul>
+            <input type="hidden" name="sl_status" id="sl_status" <?php echo isset($trangthai)?'value="'.$trangthai.'"':null ?> >
+            <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
+        </div>
+
+        
+
+      </div>
+    
+
+</div>
+
+<table id="tblExport" class="table_data">
+<thead>
+    <tr>
+        <th  class="fix"><input type="checkbox" onclick="checkall('checkbox', this)" name="checkall"/></th>
+        <th  class="fix">
+            <a class="sort " >STT </a>
+        </th>
+        
+        <th  class="fix">
+            <a class="sort" >Số ĐH </a>
+        </th>
+        
+        <th  class="fix">
+            <a class="sort" >Khách hàng </a>
+        </th>
+        <th  class="fix">
+            <a class="sort" >Sản lượng </a>
+        </th>
+        <th  class="fix">
+            <a class="sort" >Thu </a>
+        </th>
+        <th  class="fix">
+            <a class="sort" >Thuế GTGT </a>
+        </th>
+        <th  class="fix">
+            <a class="sort" >Trừ giảm </a>
+        </th>
+        
+        <th class="fix">
+            <a class="sort" >KH phải trả </a>
+        </th>
+        <th class="fix">
+            <a class="sort" >Đã trả </a>
+        </th>
+        <th class="fix">
+            <a class="sort" >Còn lại </a>
+        </th>
+        
+        <th class="fix">
+            <a class="sort" >Sale </a>
+        </th> 
+        
+        <th class="fix">
+            <a class="sort" >Ngày giao </a>
+        </th> 
+
+        <th  class="fix">
+            <a class="sort" >Hạn TT </a>
+        </th>
+    </tr>
+    
+   </thead>
+   <tbody>
+    <?php $tongthu=0; $tongsl=0; $tongthue=0; $tongtru=0; $tongkhtra=0; $tongdatra=0; $tongcon=0; ?>
+    <?php foreach ($orders as $order_tire) : 
+    $pay_money = isset($receivable_data[$order_tire->receivable_id]['pay_money'])?$receivable_data[$order_tire->receivable_id]['pay_money']:0;
+    
+    if($order_tire->total-$pay_money != 0){
+        $tongthu += $order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce;
+        $tongsl += $order_tire->order_tire_number;
+        $tongthue += $order_tire->vat;
+        $tongtru += $order_tire->discount+$order_tire->reduce;
+        $tongkhtra += $order_tire->total;
+        
+        $tongdatra += $pay_money;
+        $tongcon += $order_tire->total-$pay_money;
+    ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->order_tire_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>">
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->order_tire_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            
+            <td class="fix"  id="order_number_<?php echo $order_tire->order_tire_id; ?>">
+                <?php 
+                    echo $order_tire->order_number;
+                ?>
+            </td>
+            
+            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->customer_name; ?></td>
+            <td class="fix"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id.'/'.$order_tire->customer.'/cus/'.strtotime($ketthuc)); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
+            <td class="fix" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
+            <td class="fix"  id="vat_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->vat); ?></td>
+            <td class="fix"  id="discount_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->discount+$order_tire->reduce); ?></td>
+            <td style="font-weight:bold" class="fix"  id="total_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total); ?></td>
+            <td class="fix"  id="pay_money_<?php echo $order_tire->order_tire_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/pay/'.$order_tire->order_tire_id.'/'.$order_tire->customer.'/cus/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($pay_money); ?></a></td>
+            <td class="fix error"  id="con_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$pay_money); ?></td>
+            
+            <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->username; ?></td> 
+             
+            <td class="fix"  id="delivery_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->delivery_date>0?$lib->hien_thi_ngay_thang($order_tire->delivery_date):"Chưa giao"; ?></td>
+            <td class="fix"  id="due_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->hien_thi_ngay_thang($order_tire->due_date); ?></td>
+        </tr>
+        <?php } ?>
+        <?php endforeach; ?>
+        <?php foreach ($receivables as $order_tire) : 
+        $pay_money = isset($receivable_data[$order_tire->receivable_id]['pay_money'])?$receivable_data[$order_tire->receivable_id]['pay_money']:0;
+        
+        if ($order_tire->money-$pay_money != 0) {
+            $tongthu += $order_tire->money;
+            $tongkhtra += $order_tire->money;
+            
+            $tongdatra += $pay_money;
+            $tongcon += $order_tire->money-$pay_money;
+            $tongsl += isset($receivable_data[$order_tire->receivable_id]['number'])?$receivable_data[$order_tire->receivable_id]['number']:0;
+        ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->receivable_id ?>" class="edit_tr" >
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->receivable_id ?>"></td>
+            <td class="fix"><?php echo $i++; ?></td>
+            
+            <td class="fix"  id="order_number_<?php echo $order_tire->receivable_id; ?>">
+                <?php 
+                    echo $order_tire->code;
+                ?>
+            </td>
+            
+            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->receivable_id; ?>"><?php echo $order_tire->customer_name; ?></td>
+            <td class="fix"  id="order_tire_number_<?php echo $order_tire->receivable_id; ?>"><?php echo isset($receivable_data[$order_tire->receivable_id]['number'])?$receivable_data[$order_tire->receivable_id]['number']:null ?></td>
+            <td class="fix" id="thu_<?php echo $order_tire->receivable_id; ?>"><?php echo $lib->formatMoney($order_tire->money); ?></td> 
+            <td class="fix"  id="vat_<?php echo $order_tire->receivable_id; ?>"></td>
+            <td class="fix"  id="discount_<?php echo $order_tire->receivable_id; ?>"></td>
+            <td style="font-weight:bold" class="fix"  id="total_<?php echo $order_tire->receivable_id; ?>"><?php echo $lib->formatMoney($order_tire->money); ?></td>
+            <td class="fix"  id="pay_money_<?php echo $order_tire->receivable_id; ?>"><a style="font-weight:bold;text-decoration:underline" class="pay_money" href="<?php echo $this->url('tiredebit/pay/'.$order_tire->receivable_id.'/'.$order_tire->customer.'/cus/'.strtotime($ketthuc)); ?>"><?php echo $lib->formatMoney($pay_money); ?></a></td>
+            <td class="fix error"  id="con_<?php echo $order_tire->receivable_id; ?>"><?php echo $lib->formatMoney($order_tire->money-$pay_money); ?></td>
+            
+            <td class="fix" id="sale_<?php echo $order_tire->receivable_id; ?>"><?php echo isset($receivable_data[$order_tire->receivable_id]['sale'])?$receivable_data[$order_tire->receivable_id]['sale']:null ?></td> 
+             
+            <td class="fix"  id="delivery_date_<?php echo $order_tire->receivable_id; ?>"><?php echo $lib->hien_thi_ngay_thang($order_tire->expect_date); ?></td>
+            <td class="fix"  id="due_date_<?php echo $order_tire->receivable_id; ?>"><?php echo $lib->hien_thi_ngay_thang($order_tire->expect_date); ?></td>
+        </tr>
+        <?php } ?>
+    <?php endforeach; ?>
+    <tr style=" color:rgb(211, 11, 57); text-align: center; font-weight:bold;">
+            <td class="fix" colspan="4">Tổng cộng</td>
+            <td class="fix"><?php echo $lib->formatMoney($tongsl) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongthu) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongthue) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongtru) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongkhtra) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongdatra) ?></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongcon) ?></td>
+            <td class="fix"></td>
+            <td class="fix"></td>
+            <td class="fix"></td>
+        </tr>
+
+        
+   </tbody>
+</table>
+
+<div class="goback" style="margin: 0 auto"><a href="<?php echo $this->url('tiredebit') ?>">&larr;</a></div>
+
+
+<script type="text/javascript">
+var c = "<?php echo $tha ?>";
+$('#sl_tha option[value='+c+']').attr('selected','selected');
+var n = "<?php echo $nv ?>";
+$('#sl_nv option[value='+n+']').attr('selected','selected');
+
+$(".customer").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:"90%",
+            resizable: false,
+            title:'Danh sách đơn hàng',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+$(".order_cost").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:600,
+            resizable: false,
+            title:'Chi phí',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+$(".order_list").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:600,
+            resizable: false,
+            title:'Thông tin',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+$(".pay_money").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:500,
+            width:600,
+            resizable: false,
+            title:'Đã thanh toán',
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
+
+
+function set_item(item,value,company,phone,address,email,ngay,mst,type) {
+    // change input value
+    $('#customer').val(item);
+    $("#customer").attr("data",value);
+    $('#sl_status').val(value);
+    $('#customer_list_id').hide();
+    $('#customer').focus();
+
+}
+
+$('#customer').keyup(function(){
+      
+        var keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/ordertire/getcustomer',
+            type: 'POST',
+            data: {keyword:keyword},
+            success:function(data){
+                $('#customer_list_id').slideDown(200);
+                $('#customer_list_id').html(data);
+            }
+        });
+        if ($('#customer').val() == "" || $('#customer').attr('data') == "") {
+            
+            $('#customer').attr('data',"");
+            $('#sl_status').val("");
+        }
+      
+      
+   });  
+$('#customer').on('keydown', function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ){
+            $('#customer').attr('data',"");
+            $('#sl_status').val("");
+        }
+            
+      });  
+$('html').click(function(e) {
+    if(e.target == '[object HTMLDivElement]' || e.target == '[object HTMLBodyElement]') {
+        //$('.add-field').slideUp(500);      
+    }
+    $('#customer_list_id').slideUp(200); 
+    
+});
+
+var pickerOpts = {
+        closeText: "Đóng",
+        currentText: "Hiện tại",
+        nextText: "Tiếp",
+        prevText: "Quay lại",
+        monthNames: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+        "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+        dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm",
+        "Thứ sáu", "Thứ bảy"],
+        dayNamesShort: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        dayNamesMin: ["CN", "T2", "T3", "T4", "T5",
+        "T6", "T7"],
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        isRTL: false,
+        showButtonPanel: true,
+        onClose: function() {
+                $("#ketthuc").change();
+         },
+         
+    };  
+    $("#ketthuc").datepicker(pickerOpts);
+
+</script>

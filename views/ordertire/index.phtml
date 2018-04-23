@@ -34,7 +34,7 @@
             <input class="iform email" title="Nhằm hỗ trợ tốt nhất cho Sale, hãy nhập đầy đủ thông tin (Tên cty, Mst, Địa chỉ, SĐT, Email)" type="text" name="email" id="email" placeholder="Email liên hệ" required="required" data-toggle="tooltip" data-placement="left" />
             <input class="iform contact" title="Nhằm hỗ trợ tốt nhất cho Sale, hãy nhập đầy đủ thông tin (Tên cty, Mst, Địa chỉ, SĐT, Email)" type="text" name="contact" id="contact" placeholder="Người liên hệ" required="required" data-toggle="tooltip" data-placement="left" />
             
-            <input type="button" name="next" class="next action-button" value="Tiếp tục" />
+            <input id="dautien" type="button" name="next" class="next action-button" value="Tiếp tục" />
         </fieldset>
         <fieldset class="field-sp">
             <h2 class="fs-title">Sản phẩm</h2>
@@ -81,8 +81,11 @@
                                         <input style="width:150px" placeholder="Số lượng" type="text" class="tire_number numbers" tabindex="7" name="tire_number[]" >
                                     </td>
                                     <td >
-                                        <input placeholder="Đơn giá" style="width:150px" type="text" tabindex="8" class="tire_price number" name="tire_price[]" >
-                                        <input type="hidden" class="tire_price_vat number" name="tire_price_vat[]" >
+                                        <input placeholder="Đơn giá" style="width:100px" type="text" tabindex="8" class="tire_price number" name="tire_price[]" >
+                                        <input type="hidden" class="tire_price_vat number" name="tire_price_vat[]" > 
+                                    </td>
+                                    <td>
+                                        <span class="error" >Kho VT </span> <input value="0" style="width:50px;" type="text" disabled name="vt_number[]" class="vt_number">
                                     </td>
                                     <td>
                                         <span class="error">Tồn kho </span> <input value="0" style="width:50px" type="text" disabled name="stock_number[]" class="stock_number"> 
@@ -142,8 +145,13 @@
                 </table>
             </div>
             
-            
-                <input type="button" name="next" class="next action-button" value="Tiếp tục" id="next_1" /> "Chỉ đặt hàng cho những sản phẩm còn đủ trong kho" <br>
+                <input type="button" name="next" class="next action-button" value="Tiếp tục" id="next_4" /> "Đặt hàng trực tiếp từ nhà cung cấp" 
+                <select style="width:200px;float:right;margin-top: 10px;" id="shipment_vendor" name="shipment_vendor">
+                    <?php foreach ($shipment_vendors as $shipment_vendor) { ?>
+                        <option value="<?php echo $shipment_vendor->shipment_vendor_id ?>"><?php echo $shipment_vendor->shipment_vendor_name ?></option>
+                    <?php } ?>
+                </select> <br>
+                <input type="button" name="next" class="next action-button" value="Đặt hàng" id="next_1" /> "Chỉ đặt hàng cho những sản phẩm còn đủ trong kho" <br>
                 <input type="button" name="next" class="action-button" value="Chờ đơn hàng" id="next_2" /> "Đặt toàn bộ đơn hàng vào order lô tiếp theo" <br>
                 <input type="button" name="next" class="next action-button" value="Chờ hàng thiếu" ID="next_3" /> "Tiếp tục với sản phẩm còn đủ và đặt hàng cho sản phẩm còn thiếu"
             
@@ -228,6 +236,7 @@
                 </tr>
             </table>
             <input type="hidden" id="check_order" value="0">
+            <input type="hidden" id="check_purchase" value="0">
 
             <input type="button" name="previous" class="previous action-button" value="Quay lại" />
             <input type="submit" name="submit" class="submit action-button" id="finish" value="Hoàn thành" />
@@ -255,11 +264,13 @@ $(".next").click(function(){
     var due_date = $('#due_date').val().trim();
     
 
+    var sdt = phone.replace(/ /g, "");
+
     if (customer == "") {
         alert("Vui lòng nhập vào tên khách hàng!");
         $('#customer').focus();
     }
-    else if (phone == "") {
+    else if (phone == "" || sdt.toString().length<10) {
         alert("Vui lòng nhập vào số điện thoại!");
         $('#phone').focus();
     }
@@ -275,7 +286,163 @@ $(".next").click(function(){
         alert('Vui lòng chọn ngày thanh toán!');
         $('#due_date').focus();
     }
+    else if ($(this).attr('id')=="next_4") {
+        var sl = 0;
+        var max_sl = 0;
+        $('.vt_number').each(function() {
+            max_sl += parseFloat($(this).val());
+        });
+
+        $('.tire_number').each(function() {
+            sl += parseFloat($(this).val());
+        });
+
+        if (sl>max_sl) {
+            alert('Không đủ số lượng trong kho. Vui lòng kiểm tra lại!');
+        }
+        else{
+            if(animating) return false;
+            animating = true;
+            
+            current_fs = $(this).parent();
+            next_fs = $(this).parent().next();
+            
+            //activate next step on progressbar using the index of next_fs
+            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+            
+            //show the next fieldset
+            next_fs.show(); 
+            //hide the current fieldset with style
+            current_fs.animate({opacity: 0}, {
+                step: function(now, mx) {
+                    //as the opacity of current_fs reduces to 0 - stored in "now"
+                    //1. scale current_fs down to 80%
+                    scale = 1 - (1 - now) * 0.2;
+                    //2. bring next_fs from the right(50%)
+                    left = (now * 50)+"%";
+                    //3. increase opacity of next_fs to 1 as it moves in
+                    opacity = 1 - now;
+                    current_fs.css({'transform': 'scale('+scale+')'});
+                    next_fs.css({'left': left, 'opacity': opacity});
+                }, 
+                duration: 800, 
+                complete: function(){
+                    current_fs.hide();
+                    animating = false;
+                }, 
+                //this comes from the custom easing plugin
+                easing: 'easeInOutBack'
+            });
+
+            ///
+        }
+    }
+    else if ($(this).attr('id')=="dautien") {
+        var $this = $(this);
+
+        var company = $('#company').val().trim();
+        var mst = $('#mst').val().trim();
+        var phone = $('#phone').val();
+        var email = $('#email').val();
+        if ($('#email').attr('data') != "" && $('#email').attr('data') != undefined) {
+            email = $('#email').attr('data')+email.substring(5, email.length);
+        }
+        if ($('#phone').attr('data') != "" && $('#phone').attr('data') != undefined) {
+            phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
+        }
+
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/ordertire/getcustomeragent',
+            type: 'POST',
+            data: {mst:mst,company:company,phone:phone,email:email},
+            success:function(data){
+                console.log(data);
+                var data = jQuery.parseJSON(data);
+                if (data.phone.trim() != "") {
+                    //console.log(data.sale);
+                    if ((data.sale == "Dương Quế Anh" || data.sale == "Lê Trung Thuận" || data.sale == "Trần Ngọc Phương Thảo" || data.sale == "Karl") || (data.last_sale == "Dương Quế Anh" || data.last_sale == "Lê Trung Thuận" || data.last_sale == "Trần Ngọc Phương Thảo" || data.last_sale == "Karl") || data.approve==1) {
+                        if(animating) return false;
+                        animating = true;
+                        
+                        current_fs = $this.parent();
+                        next_fs = $this.parent().next();
+                        
+                        //activate next step on progressbar using the index of next_fs
+                        $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+                        
+                        //show the next fieldset
+                        next_fs.show(); 
+                        //hide the current fieldset with style
+                        current_fs.animate({opacity: 0}, {
+                            step: function(now, mx) {
+                                //as the opacity of current_fs reduces to 0 - stored in "now"
+                                //1. scale current_fs down to 80%
+                                scale = 1 - (1 - now) * 0.2;
+                                //2. bring next_fs from the right(50%)
+                                left = (now * 50)+"%";
+                                //3. increase opacity of next_fs to 1 as it moves in
+                                opacity = 1 - now;
+                                current_fs.css({'transform': 'scale('+scale+')'});
+                                next_fs.css({'left': left, 'opacity': opacity});
+                            }, 
+                            duration: 800, 
+                            complete: function(){
+                                current_fs.hide();
+                                animating = false;
+                            }, 
+                            //this comes from the custom easing plugin
+                            easing: 'easeInOutBack'
+                        });
+
+                        ///
+                    }
+                    else{
+                        alert("Khách hàng này đã được bán bởi Việt Trade!");
+                    }
+                    
+                }
+                else{
+                    if(animating) return false;
+                    animating = true;
+                    
+                    current_fs = $this.parent();
+                    next_fs = $this.parent().next();
+                    
+                    //activate next step on progressbar using the index of next_fs
+                    $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+                    
+                    //show the next fieldset
+                    next_fs.show(); 
+                    //hide the current fieldset with style
+                    current_fs.animate({opacity: 0}, {
+                        step: function(now, mx) {
+                            //as the opacity of current_fs reduces to 0 - stored in "now"
+                            //1. scale current_fs down to 80%
+                            scale = 1 - (1 - now) * 0.2;
+                            //2. bring next_fs from the right(50%)
+                            left = (now * 50)+"%";
+                            //3. increase opacity of next_fs to 1 as it moves in
+                            opacity = 1 - now;
+                            current_fs.css({'transform': 'scale('+scale+')'});
+                            next_fs.css({'left': left, 'opacity': opacity});
+                        }, 
+                        duration: 800, 
+                        complete: function(){
+                            current_fs.hide();
+                            animating = false;
+                        }, 
+                        //this comes from the custom easing plugin
+                        easing: 'easeInOutBack'
+                    });
+
+                    ///
+                }
+            }
+        });
+    }
     else{
+        
+
         if(animating) return false;
         animating = true;
         
@@ -408,15 +575,9 @@ $('.phone').keyup(function(event) {
 
 $('#company').change(function(){
     var company = $(this).val().trim();
-    var mst = $('#mst').val().trim();
-    var phone = $('#phone').attr('value');
-    if ($('#phone').attr('data') != "" && $('#phone').attr('data') != "undefined") {
-        phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
-    }
-    var email = $('#email').attr('value');
-    if ($('#email').attr('data') != "" && $('#email').attr('data') != "undefined") {
-        email = $('#email').attr('data')+email.substring(5, email.length);
-    }
+    var mst = "";
+    var phone = "";
+    var email = "";
     var staff = $("#order_staff").val();
     var type = $("input[name=customer_type]:checked").val();
     var customer_name = $('#customer').val();
@@ -431,17 +592,25 @@ $('#company').change(function(){
             data: {mst:mst,company:company,phone:phone,email:email,staff:staff,type:type,customer_name:customer_name,customer:customer,address:address,contact:contact},
             success:function(data){
                 var data = jQuery.parseJSON(data);
-                $('#company').val(data.company);
-                $('#mst').val(data.mst);
-                $('#phone').attr('data',data.phone.slice(-3));
-                $('#phone').val(data.phone);
-                if (data.phone != "") {
-                    $('#phone').val(data.phone.substring(0, data.phone.length - 3)+"xxx");
+                if (data.company.trim() != "") {
+                    $('#company').val(data.company);
                 }
-                $('#email').attr('data',data.email.slice(0,5));
-                $('#email').val(data.email);
-                if (data.email != "") {
-                    $('#email').val("xxxxx"+data.email.substring(5, data.email.length));
+                if (data.mst.trim() != "") {
+                    $('#mst').val(data.mst);
+                }
+                if (data.phone.trim() != "") {
+                    $('#phone').attr('data',data.phone.slice(-3));
+                    $('#phone').val(data.phone);
+                    if (data.phone != "") {
+                        $('#phone').val(data.phone.substring(0, data.phone.length - 3)+"xxx");
+                    }
+                }
+                if (data.email.trim() != "") {
+                    $('#email').attr('data',data.email.slice(0,5));
+                    $('#email').val(data.email);
+                    if (data.email != "") {
+                        $('#email').val("xxxxx"+data.email.substring(5, data.email.length));
+                    }
                 }
                 $("#order_staff option[value=" + data.staff + "]").attr('selected', 'selected');
                 $("input[name=customer_type][value=" + data.type + "]").attr('checked', 'checked');
@@ -455,15 +624,9 @@ $('#company').change(function(){
 });
 $('#mst').change(function(){
     var mst = $(this).val().trim();
-    var company = $('#company').val().trim();
-    var phone = $('#phone').attr('value');
-    if ($('#phone').attr('data') != "" && $('#phone').attr('data') != "undefined") {
-        phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
-    }
-    var email = $('#email').attr('value');
-    if ($('#email').attr('data') != "" && $('#email').attr('data') != "undefined") {
-        email = $('#email').attr('data')+email.substring(5, email.length);
-    }
+    var company = "";
+    var phone = "";
+    var email = "";
     var staff = $("#order_staff").val();
     var type = $("input[name=customer_type]:checked").val();
     var customer_name = $('#customer').val();
@@ -478,17 +641,25 @@ $('#mst').change(function(){
             data: {mst:mst,company:company,phone:phone,email:email,staff:staff,type:type,customer_name:customer_name,customer:customer,address:address,contact:contact},
             success:function(data){
                 var data = jQuery.parseJSON(data);
-                $('#company').val(data.company);
-                $('#mst').val(data.mst);
-                $('#phone').attr('data',data.phone.slice(-3));
-                $('#phone').val(data.phone);
-                if (data.phone != "") {
-                    $('#phone').val(data.phone.substring(0, data.phone.length - 3)+"xxx");
+                if (data.company.trim() != "") {
+                    $('#company').val(data.company);
                 }
-                $('#email').attr('data',data.email.slice(0,5));
-                $('#email').val(data.email);
-                if (data.email != "") {
-                    $('#email').val("xxxxx"+data.email.substring(5, data.email.length));
+                if (data.mst.trim() != "") {
+                    $('#mst').val(data.mst);
+                }
+                if (data.phone.trim() != "") {
+                    $('#phone').attr('data',data.phone.slice(-3));
+                    $('#phone').val(data.phone);
+                    if (data.phone != "") {
+                        $('#phone').val(data.phone.substring(0, data.phone.length - 3)+"xxx");
+                    }
+                }
+                if (data.email.trim() != "") {
+                    $('#email').attr('data',data.email.slice(0,5));
+                    $('#email').val(data.email);
+                    if (data.email != "") {
+                        $('#email').val("xxxxx"+data.email.substring(5, data.email.length));
+                    }
                 }
                 $("#order_staff option[value=" + data.staff + "]").attr('selected', 'selected');
                 $("input[name=customer_type][value=" + data.type + "]").attr('checked', 'checked');
@@ -501,16 +672,10 @@ $('#mst').change(function(){
     }
 });
 $('#phone').change(function(){
-    var mst = $('#mst').val().trim();
-    var company = $('#company').val().trim();
+    var mst = "";
+    var company = "";
     var phone = $('#phone').attr('value');
-    if ($('#phone').attr('data') != "" && $('#phone').attr('data') != "undefined") {
-        phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
-    }
-    var email = $('#email').attr('value');
-    if ($('#email').attr('data') != "" && $('#email').attr('data') != "undefined") {
-        email = $('#email').attr('data')+email.substring(5, email.length);
-    }
+    var email = "";
     var staff = $("#order_staff").val();
     var type = $("input[name=customer_type]:checked").val();
     var customer_name = $('#customer').val();
@@ -525,17 +690,25 @@ $('#phone').change(function(){
             data: {mst:mst,company:company,phone:phone,email:email,staff:staff,type:type,customer_name:customer_name,customer:customer,address:address,contact:contact},
             success:function(data){
                 var data = jQuery.parseJSON(data);
-                $('#company').val(data.company);
-                $('#mst').val(data.mst);
-                $('#phone').attr('data',data.phone.slice(-3));
-                $('#phone').val(data.phone);
-                if (data.phone != "") {
-                    $('#phone').val(data.phone.substring(0, data.phone.length - 3)+"xxx");
+                if (data.company.trim() != "") {
+                    $('#company').val(data.company);
                 }
-                $('#email').attr('data',data.email.slice(0,5));
-                $('#email').val(data.email);
-                if (data.email != "") {
-                    $('#email').val("xxxxx"+data.email.substring(5, data.email.length));
+                if (data.mst.trim() != "") {
+                    $('#mst').val(data.mst);
+                }
+                if (data.phone.trim() != "") {
+                    $('#phone').attr('data',data.phone.slice(-3));
+                    $('#phone').val(data.phone);
+                    if (data.phone != "") {
+                        $('#phone').val(data.phone.substring(0, data.phone.length - 3)+"xxx");
+                    }
+                }
+                if (data.email.trim() != "") {
+                    $('#email').attr('data',data.email.slice(0,5));
+                    $('#email').val(data.email);
+                    if (data.email != "") {
+                        $('#email').val("xxxxx"+data.email.substring(5, data.email.length));
+                    }
                 }
                 $("#order_staff option[value=" + data.staff + "]").attr('selected', 'selected');
                 $("input[name=customer_type][value=" + data.type + "]").attr('checked', 'checked');
@@ -548,14 +721,11 @@ $('#phone').change(function(){
     }
 });
 $('#email').change(function(){
-    var mst = $('#mst').val().trim();
-    var company = $('#company').val().trim();
-    var phone = $('#phone').attr('value');
-    if ($('#phone').attr('data') != "" && $('#phone').attr('data') != "undefined") {
-        phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
-    }
+    var mst = "";
+    var company = "";
+    var phone = "";
     var email = $('#email').attr('value');
-    if ($('#email').attr('data') != "" && $('#email').attr('data') != "undefined") {
+    if ($('#email').attr('data') != "" && $('#email').attr('data') != undefined) {
         email = $('#email').attr('data')+email.substring(5, email.length);
     }
     var staff = $("#order_staff").val();
@@ -572,17 +742,25 @@ $('#email').change(function(){
             data: {mst:mst,company:company,phone:phone,email:email,staff:staff,type:type,customer_name:customer_name,customer:customer,address:address,contact:contact},
             success:function(data){
                 var data = jQuery.parseJSON(data);
-                $('#company').val(data.company);
-                $('#mst').val(data.mst);
-                $('#phone').attr('data',data.phone.slice(-3));
-                $('#phone').val(data.phone);
-                if (data.phone != "") {
-                    $('#phone').val(data.phone.substring(0, data.phone.length - 3)+"xxx");
+                if (data.company.trim() != "") {
+                    $('#company').val(data.company);
                 }
-                $('#email').attr('data',data.email.slice(0,5));
-                $('#email').val(data.email);
-                if (data.email != "") {
-                    $('#email').val("xxxxx"+data.email.substring(5, data.email.length));
+                if (data.mst.trim() != "") {
+                    $('#mst').val(data.mst);
+                }
+                if (data.phone.trim() != "") {
+                    $('#phone').attr('data',data.phone.slice(-3));
+                    $('#phone').val(data.phone);
+                    if (data.phone != "") {
+                        $('#phone').val(data.phone.substring(0, data.phone.length - 3)+"xxx");
+                    }
+                }
+                if (data.email.trim() != "") {
+                    $('#email').attr('data',data.email.slice(0,5));
+                    $('#email').val(data.email);
+                    if (data.email != "") {
+                        $('#email').val("xxxxx"+data.email.substring(5, data.email.length));
+                    }
                 }
                 $("#order_staff option[value=" + data.staff + "]").attr('selected', 'selected');
                 $("input[name=customer_type][value=" + data.type + "]").attr('checked', 'checked');
@@ -593,6 +771,10 @@ $('#email').change(function(){
             }
         });
     }
+});
+
+$('#company').focus(function(){
+    $('#customer_list_id').slideUp(200); 
 });
 
 $('#customer').keyup(function(){
@@ -724,6 +906,8 @@ $('.tire_brand').change(function(){
             data: {brand:brand, size:size, pattern:pattern, customer:customer},
             success:function(data){
                 var data = jQuery.parseJSON(data);
+                $('.vt_number:eq('+rowIndex+')').val(data.max_vt);
+
                 $('.stock_number:eq('+rowIndex+')').val(data.max);
                 $('.going_number:eq('+rowIndex+')').val(data.going);
                 $('.max_number:eq('+rowIndex+')').val(parseInt(data.max)+parseInt(data.going));
@@ -737,6 +921,27 @@ $('.tire_brand').change(function(){
                 });
                 $('.date_manufacture:eq('+rowIndex+')').html("<option>Ngày SX</option>"+data.date);
                 $('.date_manufacture:eq('+rowIndex+') option:last').prop('selected', true);
+
+                var thanhtien = 0;
+
+                $('.tire_price').each(function() { 
+                    var row4 = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex4 = row4[0].rowIndex;
+
+                    var soluong = parseInt($('.tire_number:eq('+rowIndex4+')').val()) || 0;
+                    var dongia = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
+
+                    thanhtien += soluong*dongia;
+                });
+
+                $('#thanhtien').val(thanhtien);
+
+                $('#thanhtien').val(function(index, value) {
+                    return value
+                      .replace(/\D/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ;
+                });
             }
         });
     }
@@ -802,6 +1007,8 @@ $('.tire_size').change(function(){
             data: {brand:brand, size:size, pattern:pattern, customer:customer},
             success:function(data){
                 var data = jQuery.parseJSON(data);
+                $('.vt_number:eq('+rowIndex+')').val(data.max_vt);
+
                 $('.stock_number:eq('+rowIndex+')').val(data.max);
                 $('.going_number:eq('+rowIndex+')').val(data.going);
                 $('.max_number:eq('+rowIndex+')').val(parseInt(data.max)+parseInt(data.going));
@@ -815,6 +1022,27 @@ $('.tire_size').change(function(){
                 });
                 $('.date_manufacture:eq('+rowIndex+')').html("<option>Ngày SX</option>"+data.date);
                 $('.date_manufacture:eq('+rowIndex+') option:last').prop('selected', true);
+
+                var thanhtien = 0;
+
+                $('.tire_price').each(function() { 
+                    var row4 = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex4 = row4[0].rowIndex;
+
+                    var soluong = parseInt($('.tire_number:eq('+rowIndex4+')').val()) || 0;
+                    var dongia = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
+
+                    thanhtien += soluong*dongia;
+                });
+
+                $('#thanhtien').val(thanhtien);
+
+                $('#thanhtien').val(function(index, value) {
+                    return value
+                      .replace(/\D/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ;
+                });
             }
         });
     }    
@@ -870,6 +1098,8 @@ $('.tire_pattern').change(function(){
             success:function(data){
                 //console.log(data);
                 var data = jQuery.parseJSON(data);
+                $('.vt_number:eq('+rowIndex+')').val(data.max_vt);
+
                 $('.stock_number:eq('+rowIndex+')').val(data.max);
                 $('.going_number:eq('+rowIndex+')').val(data.going);
                 $('.max_number:eq('+rowIndex+')').val(parseInt(data.max)+parseInt(data.going));
@@ -883,6 +1113,27 @@ $('.tire_pattern').change(function(){
                 });
                 $('.date_manufacture:eq('+rowIndex+')').html("<option>Ngày SX</option>"+data.date);
                 $('.date_manufacture:eq('+rowIndex+') option:last').prop('selected', true);
+
+                var thanhtien = 0;
+
+                $('.tire_price').each(function() { 
+                    var row4 = $(this).parent().parent().parent().parent().parent().parent();
+                    var rowIndex4 = row4[0].rowIndex;
+
+                    var soluong = parseInt($('.tire_number:eq('+rowIndex4+')').val()) || 0;
+                    var dongia = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
+
+                    thanhtien += soluong*dongia;
+                });
+
+                $('#thanhtien').val(thanhtien);
+
+                $('#thanhtien').val(function(index, value) {
+                    return value
+                      .replace(/\D/g, "")
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ;
+                });
             }
         });
     }    
@@ -1221,12 +1472,7 @@ $('#discount').keyup(function(){
 });
 
 $('#last_next').click(function(){
-    var due_date = $('#due_date').val().trim();
-    if (due_date == "") {
-        alert('Vui lòng chọn ngày thanh toán!');
-        $('#due_date').focus();
-    }
-    else{
+    
 
         $('.tr_new').remove();
         var i = 1; var new_row = "";
@@ -1238,9 +1484,9 @@ $('#last_next').click(function(){
             var this_sl = parseInt($(this).val()) || 0;
             var this_dg = parseInt($(".tire_price:eq("+rowIndex+")").val().replace(/[^0-9\.-]+/g,""));
             var this_tk = parseInt($(".max_number:eq("+rowIndex+")").val());
-            if(this_tk < this_sl){
-                this_sl = this_tk;
-            }
+            // if(this_tk < this_sl){
+            //     this_sl = this_tk;
+            // }
             soluong += this_sl;
 
             var this_tt = this_sl*this_dg;
@@ -1305,7 +1551,7 @@ $('#last_next').click(function(){
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             ;
         });
-    }
+    
 
 });
 
@@ -1368,6 +1614,7 @@ $('#first_next').click(function(){
 $('#next_1').click(function(){
     
     $('#check_order').val(0);
+    $('#check_purchase').val(0);
 
     var soluong = 0;
 
@@ -1436,11 +1683,11 @@ $('#next_2').click(function(){
         var mst = $('#mst').attr('value');
         var address = $('#address').attr('value');
         var phone = $('#phone').attr('value');
-        if ($('#phone').attr('data') != "" && $('#phone').attr('data') != "undefined") {
+        if ($('#phone').attr('data') != "" && $('#phone').attr('data') != undefined) {
             phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
         }
         var email = $('#email').attr('value');
-        if ($('#email').attr('data') != "" && $('#email').attr('data') != "undefined") {
+        if ($('#email').attr('data') != "" && $('#email').attr('data') != undefined) {
             email = $('#email').attr('data')+email.substring(5, email.length);
         }
 
@@ -1532,6 +1779,7 @@ $('#next_2').click(function(){
 $('#next_3').click(function(){
 
     $('#check_order').val(1);
+    $('#check_purchase').val(0);
 
     var soluong = 0;
 
@@ -1553,6 +1801,66 @@ $('#next_3').click(function(){
         if(this_tk < this_sl){
             this_sl = this_tk;
         }
+
+        soluong += this_sl;
+        thanhtien += this_sl*this_dg;
+
+        //$('#sanluong2').val(soluong);
+
+            $('#thanhtien2').val(thanhtien);
+            $('#sanluong2').val(soluong);
+        
+        
+
+    });
+
+    var max_discount = 0;
+    max_discount = (thanhtien*0.02)+(soluong*100000);
+    if (soluong >= 20 && soluong < 50) {
+        max_discount += thanhtien*0.01;
+    }
+    else if (soluong >= 50 && soluong < 100) {
+        max_discount += thanhtien*0.02;
+    }
+    else if (soluong >= 100) {
+        max_discount += thanhtien*0.03;
+    }
+
+    $('#max_discount').val(Math.round(max_discount/1000)*1000);
+    
+    $('#thanhtien2').val(function(index, value) {
+        return value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+    });
+});
+
+$('#next_4').click(function(){
+
+    $('#check_order').val(0);
+    $('#check_purchase').val(1);
+
+    var soluong = 0;
+
+    var thanhtien = 0;
+
+    $('.tire_number').each(function() {
+        var row = $(this).parent().parent().parent().parent().parent().parent();
+        var rowIndex = row[0].rowIndex;
+
+        var this_brand = $(".tire_brand:eq("+rowIndex+") option:selected").text();
+        var this_size = $(".tire_size:eq("+rowIndex+") option:selected").text();
+        var this_pattern = $(".tire_pattern:eq("+rowIndex+") option:selected").text();
+
+        var this_sl = parseInt($(this).val()) || 0;
+        var this_tk = parseInt($(".max_number:eq("+rowIndex+")").val());
+        var this_dg = parseInt($('.tire_price:eq('+rowIndex+')').val().replace(/[^0-9\.-]+/g,"")) || 0;
+        var this_tt = parseInt($('#thanhtien2').val().replace(/[^0-9\.-]+/g,"")) || 0;
+
+        /*if(this_tk < this_sl){
+            this_sl = this_tk;
+        }*/
 
         soluong += this_sl;
         thanhtien += this_sl*this_dg;
@@ -1639,11 +1947,11 @@ $("#msform").validate({
                     var mst = $('#mst').attr('value');
                     var address = $('#address').attr('value');
                     var phone = $('#phone').attr('value');
-                    if ($('#phone').attr('data') != "" && $('#phone').attr('data') != "undefined") {
+                    if ($('#phone').attr('data') != "" && $('#phone').attr('data') != undefined) {
                         phone = phone.substring(0, phone.length - 3)+$('#phone').attr('data');
                     }
                     var email = $('#email').attr('value');
-                    if ($('#email').attr('data') != "" && $('#email').attr('data') != "undefined") {
+                    if ($('#email').attr('data') != "" && $('#email').attr('data') != undefined) {
                         email = $('#email').attr('data')+email.substring(5, email.length);
                     }
                     var contact = $('#contact').attr('value');
@@ -1689,6 +1997,9 @@ $("#msform").validate({
                     var order_tire_number = $('#sanluong2').attr('value');
 
                     var check_order = $('#check_order').attr('value');
+
+                    var check_purchase = $('#check_purchase').attr('value');
+                    var shipment_vendor = $('#shipment_vendor').attr('value');
 
                     var order_tire = [];
 
@@ -1775,6 +2086,8 @@ $("#msform").validate({
                             due_date: due_date,
                             total: total,
                             check_order: check_order,
+                            check_purchase: check_purchase,
+                            shipment_vendor: shipment_vendor,
                             order_tire_number: order_tire_number,
                             customer_type: customer_type,
                             check_price_vat: check_price_vat,
@@ -2032,6 +2345,27 @@ function addRow(tableID){
                     });
                     $('.date_manufacture:eq('+rowIndex+')').html("<option>Ngày SX</option>"+data.date);
                     $('.date_manufacture:eq('+rowIndex+') option:last').prop('selected', true);
+
+                    var thanhtien = 0;
+
+                    $('.tire_price').each(function() { 
+                        var row4 = $(this).parent().parent().parent().parent().parent().parent();
+                        var rowIndex4 = row4[0].rowIndex;
+
+                        var soluong = parseInt($('.tire_number:eq('+rowIndex4+')').val()) || 0;
+                        var dongia = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
+
+                        thanhtien += soluong*dongia;
+                    });
+
+                    $('#thanhtien').val(thanhtien);
+
+                    $('#thanhtien').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                    });
                 }
             });
         }
@@ -2109,6 +2443,27 @@ function addRow(tableID){
                     });
                     $('.date_manufacture:eq('+rowIndex+')').html("<option>Ngày SX</option>"+data.date);
                     $('.date_manufacture:eq('+rowIndex+') option:last').prop('selected', true);
+
+                    var thanhtien = 0;
+
+                    $('.tire_price').each(function() { 
+                        var row4 = $(this).parent().parent().parent().parent().parent().parent();
+                        var rowIndex4 = row4[0].rowIndex;
+
+                        var soluong = parseInt($('.tire_number:eq('+rowIndex4+')').val()) || 0;
+                        var dongia = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
+
+                        thanhtien += soluong*dongia;
+                    });
+
+                    $('#thanhtien').val(thanhtien);
+
+                    $('#thanhtien').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                    });
                 }
             });
         }    
@@ -2176,6 +2531,27 @@ function addRow(tableID){
                     });
                     $('.date_manufacture:eq('+rowIndex+')').html("<option>Ngày SX</option>"+data.date);
                     $('.date_manufacture:eq('+rowIndex+') option:last').prop('selected', true);
+
+                    var thanhtien = 0;
+
+                    $('.tire_price').each(function() { 
+                        var row4 = $(this).parent().parent().parent().parent().parent().parent();
+                        var rowIndex4 = row4[0].rowIndex;
+
+                        var soluong = parseInt($('.tire_number:eq('+rowIndex4+')').val()) || 0;
+                        var dongia = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
+
+                        thanhtien += soluong*dongia;
+                    });
+
+                    $('#thanhtien').val(thanhtien);
+
+                    $('#thanhtien').val(function(index, value) {
+                        return value
+                          .replace(/\D/g, "")
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                    });
                 }
             });
         }    
@@ -2307,8 +2683,8 @@ function addRow(tableID){
     
     var field_height = $('.field-sp').height();
     var min_height = $('.content-wrapper').height();
-    if (field_height > 897) {
-        min_height += 77;
+    if (field_height > 790) {
+        min_height += 150;
         $('.content-wrapper').height(min_height);
     }
 

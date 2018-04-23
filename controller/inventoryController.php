@@ -1,6 +1,16 @@
 <?php
 Class inventoryController Extends baseController {
-    
+    public function agent() {
+        $this->view->setLayout('admin');
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        
+        $this->view->data['lib'] = $this->lib;
+        $this->view->data['title'] = 'Tồn kho lốp xe';
+
+        $this->view->show('inventory/agent');
+    }
     public function index() {
         $this->view->setLayout('admin');
         if (!isset($_SESSION['userid_logined'])) {

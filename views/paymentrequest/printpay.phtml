@@ -19,6 +19,11 @@
                 display: list-item;
                 color: #ffffff00;
             }
+            .footer{
+           position:fixed;
+           top:90px;
+           left: 30px;
+           }
         }
         u {    
             text-decoration: underline dotted ;
@@ -80,7 +85,7 @@
                     <tr>
                         <td style="width:48.64%;padding:0in 5.4pt 0in 5.4pt" valign="top" width="48%">
                             <p class="MsoNormal" style="margin-top:6.0pt">
-                                <b><span lang="VI">Đơn vị: <u><?php echo mb_strtoupper($infos->info_company,"UTF-8") ?></u></span></b>
+                                <b><span lang="VI">Đơn vị: <u>VINA TRADE</u></span></b>
                             </p>
                             <p class="MsoNormal" style="margin-top:6.0pt">
                                 <b><span lang="VI" >Số: <u><?php echo $payment_requests->payment_request_number ?></u></span></b>
@@ -188,5 +193,6 @@
                 </tbody>
             </table>
         </div>
+        <div class="footer"><img height="50" src="<?php echo BASE_URL.'/'.$img ?>" /></div>
     </body>
 </html>

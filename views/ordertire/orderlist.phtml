@@ -172,20 +172,32 @@ elseif ($order_by == 'order_tire_number')
         $giacongkhai = $order_tire_discount[$order_tire->order_tire_id]['gia'];
         $giam = round((($giacongkhai-$giaban)/$giacongkhai)*100,1);
 
-        if ($order_tire->order_tire_number<20) {
+        if ($this_month[$order_tire->order_tire_id]<20) {
             $phantram = 10;
         }
-        else if ($order_tire->order_tire_number>=20 && $order_tire->order_tire_number<50) {
+        else if ($this_month[$order_tire->order_tire_id]>=20 && $this_month[$order_tire->order_tire_id]<40) {
             $phantram = 12;
         }
-        else if ($order_tire->order_tire_number>=50 && $order_tire->order_tire_number<100) {
+        else if ($this_month[$order_tire->order_tire_id]>=40 && $this_month[$order_tire->order_tire_id]<60) {
+            $phantram = 14;
+        }
+        else if ($this_month[$order_tire->order_tire_id]>=60 && $this_month[$order_tire->order_tire_id]<80) {
             $phantram = 16;
         }
-        else if ($order_tire->order_tire_number>=100 && $order_tire->order_tire_number<150) {
+        else if ($this_month[$order_tire->order_tire_id]>=80 && $this_month[$order_tire->order_tire_id]<100) {
+            $phantram = 18;
+        }
+        else if ($this_month[$order_tire->order_tire_id]>=100 && $this_month[$order_tire->order_tire_id]<120) {
             $phantram = 20;
         }
-        else if ($order_tire->order_tire_number>=150 && $order_tire->order_tire_number<200) {
+        else if ($this_month[$order_tire->order_tire_id]>=120 && $this_month[$order_tire->order_tire_id]<150) {
+            $phantram = 21;
+        }
+        else if ($this_month[$order_tire->order_tire_id]>=150 && $this_month[$order_tire->order_tire_id]<180) {
             $phantram = 22;
+        }
+        else if ($this_month[$order_tire->order_tire_id]>=180 && $this_month[$order_tire->order_tire_id]<220) {
+            $phantram = 23;
         }
         else{
             $phantram = 24;
@@ -199,11 +211,23 @@ elseif ($order_by == 'order_tire_number')
         else if ($lech>4) {
             $color = "#f94e4e85";
         }
+
+        $tru = $order_tire->order_cost;
+
+        if ($order_tire->order_tire_number>49) {
+            $tru = $tru-$order_tire->order_cost;
+        }
+
+        $luongsp = $salary[$order_tire->order_tire_id];
+        $luongsp = $luongsp-$tru;
+        if ($luongsp<$arr_salary['sanluong']*$order_tire->order_tire_number) {
+            $luongsp = $arr_salary['sanluong']*$order_tire->order_tire_number;
+        }
     ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->order_tire_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1)?1:0 ?>" <?php echo $color!=""?'style="background:'.$color.'"':null ?> >
         	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->order_tire_id ?>"></td>
             <td class="fix"><?php echo $k++; ?></td>
-            <td class="fix"  id="order_number_<?php echo $order_tire->order_tire_id; ?>">
+            <td class="fix masterTooltip"  id="order_number_<?php echo $order_tire->order_tire_id; ?>" <?php echo 'title="Lương SP: '.$lib->formatMoney($luongsp).'"'; ?> >
                 <?php 
                 if($order_tire->order_number != ""){ ?>
                     <a style="font-weight:bold;text-decoration:underline" class="order_number" data="<?php echo $order_tire->order_tire_id; ?>">
@@ -219,7 +243,7 @@ elseif ($order_by == 'order_tire_number')
                 <a title="Chuyển" style="font-weight:bold;text-decoration:underline" data="<?php echo $order_tire->order_tire_id ?>" value="<?php echo $order_tire->customer ?>" class="editCustomer"><i class="fa fa-mail-forward"></i></a>
                 <?php } ?>
             </td>
-            <td class="fix masterTooltip text-right"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>" <?php echo 'title="Giảm giá '.$giam.'%"'; ?> ><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
+            <td class="fix masterTooltip text-right"  id="order_tire_number_<?php echo $order_tire->order_tire_id; ?>" <?php echo 'title="Tháng trước: '.$last_month[$order_tire->order_tire_id].' Tháng này: '.$this_month[$order_tire->order_tire_id].' Giảm giá '.$giam.'%"'; ?> ><a style="font-weight:bold;text-decoration:underline" class="order_list" href="<?php echo $this->url('ordertire/listtire/'.$order_tire->order_tire_id); ?>"><?php echo $order_tire->order_tire_number; ?></a></td>
             <td class="fix text-right" id="thu_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->formatMoney($order_tire->total-$order_tire->vat+$order_tire->discount+$order_tire->reduce); ?></td> 
             <td class="fix text-right"  id="vat_<?php echo $order_tire->order_tire_id; ?>">
                 <b>
@@ -235,15 +259,15 @@ elseif ($order_by == 'order_tire_number')
                 <a style="text-decoration:underline" class="customer" href="<?php echo $this->url('tiredebit/customer/'.$order_tire->customer.'/'.strtotime(date('d-m-Y'))); ?>"><i class="fa fa-search-plus"></i>Công nợ</a></td>
             <td class="fix text-right"  id="order_cost_<?php echo $order_tire->order_tire_id; ?>">
                 <?php if($order_tire->order_cost != ""){ ?>
-                <a style="font-weight:bold;text-decoration:underline" class="order_cost" data="<?php echo $order_tire->order_tire_id; ?>" alt="<?php echo strtotime(date('t-m-Y',$order_tire->delivery_date))+691200; ?>" >
+                <a style="font-weight:bold;text-decoration:underline" class="order_cost" data="<?php echo $order_tire->order_tire_id; ?>" alt="<?php echo $order_tire->order_tire_status==1?(strtotime(date('t-m-Y',$order_tire->delivery_date))+691200):(strtotime(date('t-m-Y'))+691200); ?>" >
                     <?php echo $lib->formatMoney($order_tire->order_cost); ?>
                 </a>
                 <?php } else{ ?>
-                <button class="order_cost" data="<?php echo $order_tire->order_tire_id ?>" alt="<?php echo $order_tire->delivery_date>0?(strtotime(date('t-m-Y',$order_tire->delivery_date))+691200):(strtotime(date('t-m-Y'))+691200); ?>" >Thêm CP</button>
+                <button class="order_cost" data="<?php echo $order_tire->order_tire_id ?>" alt="<?php echo $order_tire->order_tire_status==1?(strtotime(date('t-m-Y',$order_tire->delivery_date))+691200):(strtotime(date('t-m-Y'))+691200); ?>" >Thêm CP</button>
                 <?php } ?>
             </td>
             <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>">
-                <?php if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined']==3){ ?>
+                <?php if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined']==3  || $_SESSION['role_logined']==2){ ?>
                 <a data="<?php echo $order_tire->order_tire_id ?>" value="<?php echo $order_tire->sale ?>"  class="change_sale"><?php echo $order_tire->username; ?></a>
                 <?php }
                 else{
@@ -251,7 +275,17 @@ elseif ($order_by == 'order_tire_number')
                 }
                  ?>
             </td> 
-            <td class="fix masterTooltip" id="approve_<?php echo $order_tire->order_tire_id; ?>" <?php echo 'title="Giảm giá '.$giam.'%"'; ?> ><?php echo isset($users['name'][$order_tire->approve])?$users['name'][$order_tire->approve]:(($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==3)?'<button data="'.$order_tire->order_tire_id.'" class="approve">Duyệt</button>':null); ?></td>  
+            <td class="fix masterTooltip" id="approve_<?php echo $order_tire->order_tire_id; ?>" data="<?php echo $order_tire->approve; ?>" <?php echo 'title="Giảm giá '.$giam.'%"'; ?> >
+                <?php if (isset($users['name'][$order_tire->approve])) {
+                    echo $users['name'][$order_tire->approve];
+                    if ($order_tire->order_tire_status!=1 && ($_SESSION['userid_logined']==$order_tire->approve || $_SESSION['role_logined']==1)) {
+                        echo '<br><button style="display:none" id="approve_btn_'.$order_tire->order_tire_id.'" data="'.$order_tire->order_tire_id.'" class="approveremove">Hủy</button>';
+                    }
+                }
+                else if(($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==3 || $_SESSION['role_logined']==2)){ 
+                    echo '<button data="'.$order_tire->order_tire_id.'" class="approve">Duyệt</button>';
+                } ?>
+            </td>  
             <td class="fix" id="order_tire_status_<?php echo $order_tire->order_tire_id; ?>" data="<?php echo $order_tire->order_tire_status ?>">
                 <?php
                 if ($order_tire->order_tire_status==1) {
@@ -266,7 +300,18 @@ elseif ($order_by == 'order_tire_number')
                 <button id="ex_stock_<?php echo $order_tire->order_tire_id; ?>" style="display:none" class="ex_stock" data="<?php echo $order_tire->order_tire_id; ?>">Xuất kho</button>
                 <?php }  } ?>
             </td> 
-            <td class="fix"  id="delivery_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->delivery_date>0?$lib->hien_thi_ngay_thang($order_tire->delivery_date):null; ?></td>
+            <td class="fix"  id="delivery_date_<?php echo $order_tire->order_tire_id; ?>">
+                <?php 
+                $de_date = $order_tire->delivery_date>0?$lib->hien_thi_ngay_thang($order_tire->delivery_date):null; 
+                if ($order_tire->order_tire_status!=1) { ?>
+                    <a data="<?php echo $order_tire->order_tire_id ?>" value="<?php echo $de_date ?>"  class="change_delivery"><?php echo $de_date; ?></a>
+                <?php }
+                else{
+                    echo $de_date;
+                }
+                ?>
+                    
+            </td>
             <td class="fix"  id="due_date_<?php echo $order_tire->order_tire_id; ?>">
                 <?php 
                 $due_date = $order_tire->due_date>0?$lib->hien_thi_ngay_thang($order_tire->due_date):null;
@@ -344,7 +389,7 @@ $this->helper('slidePaginator');
             <input type="text" id="i_vat_percent" name="i_vat_percent" value="" required="required" />
             <input type="hidden" id="i_order5" name="i_order5" value="" required="required" />
             <input type="hidden" id="i_thu" name="i_thu" value="" required="required" />
-            <input type="hidden" id="i_check_vat" name="i_check_vat" value="" required="required" />
+            <input type="checkbox" id="i_check_vat" name="i_check_vat" value="" > bao VAT
         </label>
         <label>
             <span class="add-on"><i class="icon-ok-circle" ></i></span>
@@ -627,6 +672,16 @@ $this->helper('slidePaginator');
         <input type="hidden" id="i_order10" name="i_order10" value="" required="required" />
     </form>
 </div>
+<div id="dialogContent12" title="Ngày giao">    
+    <form action="#" method="post" id="editForm8">
+        <label>
+            <span class="add-on"><i class="icon-calendar" ></i></span>
+            <span>Ngày giao hàng: </span>
+            <input type="text" id="i_de_date" name="i_de_date" class="ngay" value="" required="required" />
+            <input type="hidden" id="i_order12" name="i_order12" value="" required="required" />
+        </label> 
+    </form>
+</div>
 
 <script type="text/javascript">
 var x = "<?php echo $limit ?>";
@@ -644,6 +699,41 @@ $('#sl_tha option[value='+th+']').attr('selected','selected');
 var n = "<?php echo $nam ?>";
 $('#sl_na option[value='+n+']').attr('selected','selected');
 
+$('.change_delivery')
+    //.button({ icons: { primary: "ui-icon-document" }})
+    .click(function() {
+        
+        $('#i_order12').val($(this).attr('data'));
+        $('#i_de_date').val($(this).attr('value'));
+        $( "#dialogContent12" ).dialog( "open" )
+    });
+
+
+//set up the dialog box.
+$( "#dialogContent12" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var id = $('#i_order12').val();
+            var de_date = $('#i_de_date').val();
+                
+                $.post("<?php echo BASE_URL ?>/ordertire/changedelivery", {data: id, de_date: de_date},
+                   function(data){
+                    $("html, body").animate({ scrollTop: 0 }, 100);
+                    setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                   
+                   }); 
+              
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
 $('.change_due')
     //.button({ icons: { primary: "ui-icon-document" }})
     .click(function() {
@@ -798,15 +888,23 @@ $('.order_vat')
         $('#i_vat_percent').val($(this).attr('tabindex'));
 
         $('#i_thu').val($(this).attr('alt'));
-        $('#i_check_vat').val($(this).attr('title'));
+        if ($(this).attr('title')==1) {
+          $('#i_check_vat').prop('checked',true)  ;
+        }
+        else{
+            $('#i_check_vat').prop('checked',false)  ;
+        }
+        
 
         if ($(this).attr('value') == 1) {
             $('#i_vat').attr('disabled',true);
             $('#i_vat_percent').attr('disabled',true);
+            $('#i_check_vat').attr('disabled',true);
         }
         else{
             $('#i_vat').attr('disabled',false);
             $('#i_vat_percent').attr('disabled',false);
+            $('#i_check_vat').attr('disabled',false);
         }
 
         $( "#dialogContent5" ).dialog( "open" );
@@ -814,7 +912,14 @@ $('.order_vat')
         $('#i_vat_percent').keyup(function(){
             var val = $(this).val(); 
             var thanhtien = parseInt($('#i_thu').val().replace(/[^0-9\.-]+/g,"")) || 0;
-            var check_vat = $('#i_check_vat').val();
+
+            if ($('#i_check_vat').is(':checked')) {
+                var check_vat = 1;
+            }
+            else{
+                var check_vat = 0;
+            }
+            
             
             if (check_vat>0) {
                 $('#i_vat').val(Math.round(thanhtien*val/110));
@@ -835,7 +940,13 @@ $('.order_vat')
         $('#i_vat').keyup(function(){
             var val = parseInt($(this).val().replace(/[^0-9\.-]+/g,""));
             var thanhtien = parseInt($("#i_thu").val().replace(/[^0-9\.-]+/g,""));
-            var check_vat = $('#i_check_vat').val();
+            
+            if ($('#i_check_vat').is(':checked')) {
+                var check_vat = 1;
+            }
+            else{
+                var check_vat = 0;
+            }
 
             if (check_vat>0) {
                 $('#i_vat_percent').val(Math.round(val*110/thanhtien));
@@ -859,8 +970,14 @@ $( "#dialogContent5" ).dialog({
             var vat_percent = $('#i_vat_percent').val();
             var vat = $('#i_vat').val();
             var thu = $('#i_thu').val();
+            if ($('#i_check_vat').is(':checked')) {
+                var check_vat = 1;
+            }
+            else{
+                var check_vat = 0;
+            }
                 
-                $.post("<?php echo BASE_URL ?>/ordertire/editvat", {data: id, vat_percent: vat_percent, vat: vat, thu: thu},
+                $.post("<?php echo BASE_URL ?>/ordertire/editvat", {data: id, vat_percent: vat_percent, vat: vat, thu: thu, check_vat:check_vat},
                    function(data){
                     $("html, body").animate({ scrollTop: 0 }, 100);
                     setTimeout(function() {
@@ -1215,7 +1332,7 @@ $( "#dialogContent7" ).dialog({
                     resizable: false,
                     title:'Hóa đơn GTGT',
                     buttons: [
-                    {
+                    /*{
                         text: "In",
                         icons: { primary: "ui-icon-print" },
                         click: function() {
@@ -1241,7 +1358,7 @@ $( "#dialogContent7" ).dialog({
                           $( this ).dialog( "close" );
                           window.open("<?php echo $this->url('ordertire/printpage/') ?>"+printID+"/"+ngay+"/"+number[0]);
                         },
-                    },
+                    },*/
                     {
                         text: "Xem",
                         icons: { primary: "ui-icon-print" },
@@ -1271,6 +1388,7 @@ $( "#dialogContent7" ).dialog({
                 $("#winpopup").dialog("open");
             }
         },
+        <?php if($_SESSION['role_logined']==1){ ?>
         OK: function() {
             var id = $('#i_order7').val();
             
@@ -1302,7 +1420,8 @@ $( "#dialogContent7" ).dialog({
                    }); 
               
             $( this ).dialog( "close" );
-        },        
+        },     
+        <?php } ?>   
         Cancel: function() {
             $( this ).dialog( "close" );
         }
@@ -1345,14 +1464,23 @@ $(".order_discount").click(function(){
 
 $('.edit_tr').hover(function(){
     var order_tire_status = $(this).find("#order_tire_status_"+$(this).attr('id')).attr('data');
+    var approve = $(this).find("#approve_"+$(this).attr('id')).attr('data');
     if (order_tire_status != 1) {
         $('#ex_stock_'+$(this).attr('id')).show();
     }
     else{
         $('#ex_stock_'+$(this).attr('id')).hide();
     }
+
+    if (approve >0) {
+        $('#approve_btn_'+$(this).attr('id')).show();
+    }
+    else{
+        $('#approve_btn_'+$(this).attr('id')).hide();
+    }
 },function(){
     $('#ex_stock_'+$(this).attr('id')).hide();
+    $('#approve_btn_'+$(this).attr('id')).hide();
 });
 
 $('.approve').click(function(){
@@ -1375,12 +1503,32 @@ $('.approve').click(function(){
       }
 
 });
+$('.approveremove').click(function(){
+    var id = $(this).attr("data");
+    var r = confirm("Bạn có chắc chắn không?");
+      if (r == true){
+        $('#loading').html("<img src='<?php echo BASE_URL ?>/public/images/loading.gif'/>").fadeIn(500);
+        $.post("<?php echo BASE_URL ?>/ordertire/approveremove", {data: id},
+           function(data){
+            //alert(data);
+
+            $("html, body").animate({ scrollTop: 0 }, 100);
+            setTimeout(function() {
+                                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                                      }, 200);
+
+            $('#loading').fadeOut(500);
+           
+           }); 
+      }
+
+});
 
 
 $('.ex_stock')
     //.button({ icons: { primary: "ui-icon-document" }})
     .click(function() {
-        $('#i_lift').val("Nguyễn Văn Nghị");
+        $('#i_lift').val("");
         $('#i_delivery_date').val("<?php echo date('d-m-Y') ?>");
         $('#i_arrival_date').val("<?php echo date('d-m-Y') ?>");
         $('#i_order3').val($(this).attr('data'));
@@ -2131,6 +2279,7 @@ $( "#dialogContent4" ).dialog({
     if (r == true){
          $.post("<?php echo BASE_URL ?>/ordertire/delete", {data: data},
            function(data){
+            //console.log(data);
                 setTimeout(function() {
                     sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
                   }, 200);
@@ -2371,6 +2520,21 @@ $( "#hoanthanh" ).dialog({
           var lastID = $('#lastID').val();
 
           window.open("<?php echo $this->url('ordertire/printview/') ?>"+lastID);
+
+        },
+    },
+    {
+
+        text: "In đơn hàng (0 giá)",
+        icons: { primary: "ui-icon-print" },
+
+        click: function() {
+
+          $( this ).dialog( "close" );
+
+          var lastID = $('#lastID').val();
+
+          window.open("<?php echo $this->url('ordertire/printview2/') ?>"+lastID);
 
         },
     },
