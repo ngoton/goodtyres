@@ -59,10 +59,38 @@ $(document).ready(function(){
                           </select>
                         </td>
                     </tr>
+                    <tr>
+                        <td>Group </td>
+                        <td>
+                          <select name="user_group" id="user_group" tabindex="5" >
+                            <?php for ($i=1; $i <=10 ; $i++) {  ?>
+                              <option <?php echo $user_data->user_group==$i?'selected="selected"':null; ?> value="<?php echo $i ?>">Group <?php echo $i ?></option>
+                            <?php } ?>
+                            
+                          </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Phòng </td>
+                        <td>
+                          <select name="user_dept" id="user_dept" tabindex="6" >
+                              <option <?php echo $user_data->user_dept==1?'selected="selected"':null; ?> value="1">Ban GD</option>
+                              <option <?php echo $user_data->user_dept==2?'selected="selected"':null; ?> value="2">Phòng CSKH</option>
+                              <option <?php echo $user_data->user_dept==3?'selected="selected"':null; ?> value="3">Phòng Sale</option>
+                          </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Trạng thái</td>
+                        <td>
+                          <input type="radio" name="userlock" tabindex="7" value="1" <?php echo $user_data->user_lock==1?'checked':null; ?>> Khóa
+                          <input type="radio" name="userlock" tabindex="8" value="0" <?php echo $user_data->user_lock==0?'checked':null; ?>> Mở
+                        </td>
+                    </tr>
                     
                      <tr>
-                        <td ><input type="reset" name="reset" value="Nhập lại" tabindex="6"></td>
-                         <td><input type="submit" name="submit" value="Hoàn tất" tabindex="5"></td>
+                        <td ><input type="reset" name="reset" value="Nhập lại" tabindex="10"></td>
+                         <td><input type="submit" name="submit" value="Hoàn tất" tabindex="9"></td>
                          
                     </tr>
                 </table> 

@@ -97,7 +97,7 @@
 
         $ton = $tire_buy->soluong - (isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']:0);
 
-        if($ton > 0){
+        if($ton != 0){
             $giatri = $tire_prices[$tire_buy->tire_buy_brand][$tire_buy->tire_buy_size][$tire_buy->tire_buy_pattern];
             $thanhtien = $ton*$giatri;
             $tonggiatri += $thanhtien;

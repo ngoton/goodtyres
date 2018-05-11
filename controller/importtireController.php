@@ -1046,7 +1046,7 @@ Class importtireController Extends baseController {
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
         }
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 4) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 4 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
             return $this->view->redirect('user/login');
         }
         if (isset($_POST['yes'])) {
@@ -3304,7 +3304,7 @@ Class importtireController Extends baseController {
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
         }
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 4) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 4 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
             return $this->view->redirect('user/login');
         }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

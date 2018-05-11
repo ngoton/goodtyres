@@ -182,7 +182,7 @@ Class checksalarytotalController Extends baseController {
                 $ngay = [7,30];
             }
 
-            if ($ngay[0] > 11) {
+            if ($ngay[0] > 10) {
                 $ngay = [7,30];
             }
             
@@ -490,7 +490,7 @@ Class checksalarytotalController Extends baseController {
         
 
         $salary_keep_model = $this->model->get('salarykeepModel');
-        $qr = 'SELECT * FROM (SELECT * FROM salary_keep WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
+        $qr = 'SELECT * FROM (SELECT * FROM salary_keep WHERE create_time >= '.strtotime($batdau).' AND create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
         $salary_keeps = $salary_keep_model->querySalary($qr);
         $arr_salary_keep = array();
         foreach ($salary_keeps as $salary_keep) {
@@ -684,7 +684,7 @@ Class checksalarytotalController Extends baseController {
                 $ngay = [7,30];
             }
 
-            if ($ngay[0] > 11) {
+            if ($ngay[0] > 10) {
                 $ngay = [7,30];
             }
             
@@ -992,7 +992,7 @@ Class checksalarytotalController Extends baseController {
         
 
         $salary_keep_model = $this->model->get('salarykeepModel');
-        $qr = 'SELECT * FROM (SELECT * FROM salary_keep WHERE create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
+        $qr = 'SELECT * FROM (SELECT * FROM salary_keep WHERE create_time >= '.strtotime($batdau).' AND create_time <= '.strtotime($ketthuc).' ORDER BY create_time DESC) d GROUP BY d.staff';
         $salary_keeps = $salary_keep_model->querySalary($qr);
         $arr_salary_keep = array();
         foreach ($salary_keeps as $salary_keep) {

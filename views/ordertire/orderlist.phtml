@@ -849,6 +849,15 @@ $('.order_number')
         
         $('#i_order').val($(this).attr('data'));
 
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/ordertire/getordernumber',
+            type: 'GET',
+            data: {data:$(this).attr('data')},
+            success:function(data){
+                $('#i_order_number').val(data);
+            }
+        });
+
         $( "#dialogContent" ).dialog( "open" )
     });
 

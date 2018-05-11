@@ -1,43 +1,37 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-    
-            // Validate form
-            $("#loginForm").validate({
-                errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
-                     
-                 
-            });
-    
+	
+			// Validate form
+			$("#fogot").validate({
+				errorElement: "span", // Định dạng cho thẻ HTML hiện thông báo lỗi
+				
+				}
+					 
+				 
+			});
+	
 });
 </script>
-<div class="top-detail">
-    <div class="panel panel-info login_form">
-        <div class="panel-heading">
-            <div class="panel-title">QUÊN MẬT KHẨU</div>
-        </div> 
-        <div class="panel-body">
-            <form id="loginForm" method="post" action="">
-            <div class="row omb_row-sm-offset-3">
-                <div class="col-xs-12 col-sm-6">    
+<div class="login_form">
+        
+        <div class="login_body">
+          <h1>QUÊN MẬT KHẨU</h1>
+           <form action="" method="post" id="fogot">
+                  <table style="margin-top:20px;">
                     
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                            <input type="email" class="form-control" id="username" name="email" placeholder="Email" tabindex="1" autofocus required="required">
-                        </div>
-                        <span class="help-block"></span>
-
-                        <input class="btn btn-lg btn-primary btn-block" type="submit" name="submit" value="Lấy lại mật khẩu">
+                    <tr>
+                        <td>Email </td>
+                        <td><input type="email" id="username" name="email" tabindex="1" autofocus required="required"></td>
+                    </tr>
                     
-                </div>
-            </div>   
-            <div class="row omb_row-sm-offset-3">
-                <div class="col-xs-12 col-sm-6" style="color:#a94442">  
-                    <?php echo isset($error) ? $error : null; ?>
-                </div>
-            </div>
+                     <tr colspan="2">
+                         <td></td>
+                         <td ><input type="submit" name="submit" value="Lấy lại mật khẩu" tabindex="2"></td>
+                    </tr>
+                </table> 
             </form>
         </div>
-        
-    </div>
-</div>
+        <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
+        </div>
+

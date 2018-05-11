@@ -214,6 +214,7 @@ elseif ($order_by == 'import_tire_order_expect_date   ')
             <td class="fix" style="display: none;" id="import_tire_order_stevedore_small_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_stevedore_small); ?></td>
             <td class="fix" style="display: none;" id="import_tire_order_stevedore_large_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_stevedore_large); ?></td>
             <td class="fix" style="display: none;" id="import_tire_order_rate_diff_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $lib->formatMoney($import_tire_order->import_tire_order_rate_diff); ?></td>
+            <td class="fix" style="display: none;" id="import_tire_order_cont_total_<?php echo $import_tire_order->import_tire_order_id; ?>"><?php echo $import_tire_order->import_tire_order_cont_total; ?></td>
             <?php if(!isset($disable_control)){ ?>
             <td class="fix text-right">
               
@@ -358,6 +359,13 @@ $this->helper('slidePaginator');
                         
                         <input style="width:93%" type="text" id="import_tire_order_supplier"  name="import_tire_order_supplier" tabindex="8"  required="required" placeholder="Mã đơn vị" autocomplete="off" >
                         <ul id="vendor_list_id"></ul>
+                      </div>
+                    </div>
+                    <div class="box-body nopadding">
+                      <div class="form-group nopadding">
+                        <label for="import_tire_order_cont_total">Số lượng cont </label>
+                        
+                        <input style="width:100px" type="text" id="import_tire_order_cont_total"  name="import_tire_order_cont_total" tabindex="8"  required="required"  >
                       </div>
                     </div>
                     <div class="add-box nopadding right">
@@ -749,10 +757,26 @@ $('.edit_invoice').click(function(e){
     
     var import_tire_order_oceanfreight = $('#import_tire_order_oceanfreight_'+id).text();
     var tongsl = $('#import_tire_order_total_'+id).text() || 0;
-    var socont = Math.floor(parseInt(tongsl.substring(0,1))/2);
-    if (parseInt(tongsl.substring(0,1)) < 2) {
-      socont = 1;
+
+    if ($('#import_tire_order_cont_total').val()=="") {
+      if (parseInt(tongsl)>=1000) {
+        var socont = Math.floor(parseInt(tongsl.substring(0,2))/2);
+      }
+      else{
+        var socont = Math.floor(parseInt(tongsl.substring(0,1))/2);
+
+        if (parseInt(tongsl.substring(0,1)) < 2) {
+          socont = 1;
+        }
+      }
     }
+    else{
+      var socont = parseFloat(get_number('#import_tire_order_cont_total')) || 0;
+    }
+    
+
+    $('#import_tire_order_cont_total').val(socont);
+    
     
     $('#oceanfreight').val(import_tire_order_oceanfreight/socont);
     var import_tire_order_lift = $('#import_tire_order_lift_'+id).text();
@@ -771,6 +795,8 @@ $('.edit_invoice').click(function(e){
     $('#tthq_1cont').val($('#import_tire_order_tthq_1cont_'+id).text());
     $('#tthq_2cont').val($('#import_tire_order_tthq_2cont_'+id).text());
     $('#tthq_plus').val($('#import_tire_order_tthq_plus_'+id).text());
+
+    $('#import_tire_order_cont_total').val($('#import_tire_order_cont_total_'+id).text());
 
     var lopnho = $('#import_tire_order_stevedore_small_'+id).text();
     var loplon = $('#import_tire_order_stevedore_large_'+id).text();
@@ -1407,6 +1433,10 @@ function add_click(){
             
         });
 
+    $( document ).ajaxComplete(function() {
+      $('.add-field button').attr("disabled",false);
+    });
+
     $( ".add-field" ).dialog( "open" );
 }
 
@@ -1456,6 +1486,8 @@ $(document).ready(function(){
 
         var import_tire_order_stevedore_small = $('#stevedore_small').val();
         var import_tire_order_stevedore_large = $('#stevedore_large').val();
+
+        var import_tire_order_cont_total = $('#import_tire_order_cont_total').val();
 
 
         var import_tire_order_sum = $('#tongtienhang').text();
@@ -1607,6 +1639,7 @@ $(document).ready(function(){
             import_tire_order_tthq_plus: import_tire_order_tthq_plus,
             import_tire_order_stevedore_small: import_tire_order_stevedore_small,
             import_tire_order_stevedore_large: import_tire_order_stevedore_large,
+            import_tire_order_cont_total: import_tire_order_cont_total,
             import_list: import_list,
           },
           success:function(answer){
@@ -1994,13 +2027,43 @@ $('#import_tire_order_supplier:eq('+vitri+')').focus();
 
 } 
 
-function updateprice(){
-  
+
+$('#import_tire_order_cont_total').keyup(function(){
+    var val = $(this).val() || 0;
+    updateprice(val);
+});
+
+function updateprice(cont_change){
+  cont_change = cont_change || 0;
+
   var tongsl = $('#tongsl').text().replace(/\,/g,'') || 0;
-  var socont = Math.floor(parseInt(tongsl.substring(0,1))/2);
-  if (parseInt(tongsl.substring(0,1)) < 2) {
-    socont = 1;
+
+  if (cont_change>0) {
+    var socont = cont_change;
   }
+
+  if ($('#import_tire_order_cont_total').val()=="") {
+    if (parseInt(tongsl)>=1000) {
+      var socont = Math.floor(parseInt(tongsl.substring(0,2))/2);
+    }
+    else{
+      var socont = Math.floor(parseInt(tongsl.substring(0,1))/2);
+
+      if (parseInt(tongsl.substring(0,1)) < 2) {
+        socont = 1;
+      }
+    }
+  }
+  else{
+    var socont = parseFloat(get_number('#import_tire_order_cont_total')) || 0;
+  }
+
+  
+
+  $('#import_tire_order_cont_total').val(socont);
+  
+
+  
   var tongtienmua = 0;
   var tongtienthue = 0;
   var tongtienlogs = 0;

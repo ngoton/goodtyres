@@ -27,7 +27,11 @@ Class customerController Extends baseController {
 
         $staff_model = $this->model->get('staffModel');
         $staffs = $staff_model->getAllStaff(array('order_by'=>'staff_name ASC'));
-
+        $staff_data = array();
+        foreach ($staffs as $staff) {
+            $staff_data[$staff->account] = $staff->staff_name;
+        }
+        $this->view->data['staff_data'] = $staff_data;
         $this->view->data['staffs'] = $staffs;
 
         $district_model = $this->model->get('districtModel');
@@ -145,7 +149,7 @@ Class customerController Extends baseController {
                         'customer_tire_type' => trim($_POST['customer_tire_type']),
                         'customer_agent_link' => trim($_POST['customer_agent_link']),
                         'customer_create_user' => trim($_POST['customer_create_user']),
-                        
+                        'customer_status' => trim($_POST['customer_status']),
                         );
             if ($_POST['yes'] != "") {
                 $data['customer_update_user'] = $_SESSION['userid_logined'];

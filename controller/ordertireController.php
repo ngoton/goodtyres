@@ -1173,6 +1173,27 @@ Class ordertireController Extends baseController {
 
         $this->view->show('ordertire/report');
     }
+    public function getordernumber(){
+        if(isset($_GET['data'])){
+            $order_tire_model = $this->model->get('ordertireModel');
+            $order_tires = $order_tire_model->getTire($_GET['data']);
+
+            $str = $order_tires->order_number;
+
+            if ($str == "") {
+                $last = "";
+                $lasts = $order_tire_model->getAllTire(array('order_by'=>'order_number DESC','limit'=>1));
+                foreach ($lasts as $tire) {
+                    $last = str_replace('lx-', '', $tire->order_number);
+                }
+                $last++;
+                
+                $str = 'lx-'.$last;
+            }
+
+            echo $str;
+        }
+    }
 
     public function getcustomer(){
         if (!isset($_SESSION['userid_logined'])) {

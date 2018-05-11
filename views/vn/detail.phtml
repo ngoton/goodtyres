@@ -99,10 +99,12 @@
             $arr = explode(',', $tire_products->tire_product_vehicle);
 
             foreach ($arr as $key) {
+                if (isset($data_vehicle[$key]['type'])) {
+                    $lik = $data_vehicle[$key]['type']==1?"lop-xe-tai":($data_vehicle[$key]['type']==2?"lop-xe-du-lich":($data_vehicle[$key]['type']==3?"lop-xe-dac-chung":"lop-xe"));
 
-                $lik = $data_vehicle[$key]['type']==1?"lop-xe-tai":($data_vehicle[$key]['type']==2?"lop-xe-du-lich":($data_vehicle[$key]['type']==3?"lop-xe-dac-chung":"lop-xe"));
-
-                echo '<a href="'.BASE_URL.'/vn/'.$lik.'">'.$data_vehicle[$key]['name'].'</a>, ';
+                    echo '<a href="'.BASE_URL.'/vn/'.$lik.'">'.$data_vehicle[$key]['name'].'</a>, ';
+                }
+                
 
             }
 
@@ -262,7 +264,10 @@
 
         <?php 
 
+        if (isset($vehicle->tire_vehicle_type)) {
             $alls = $vehicle->tire_vehicle_type==1?"lop-xe-tai":($vehicle->tire_vehicle_type==2?"lop-xe-du-lich":($vehicle->tire_vehicle_type==3?"lop-xe-dac-chung":"lop-xe"));
+        }
+            
 
         ?>
 

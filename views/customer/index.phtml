@@ -96,10 +96,14 @@ elseif ($order_by == 'customer_address')
         </th>   
         <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_province','<?php echo $url_order ?>')">Tỉnh <?php if ($order_by == 'customer_province'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_create_user','<?php echo $url_order ?>')">Sale <?php if ($order_by == 'customer_create_user'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>  
         <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','customer_tire_type','<?php echo $url_order ?>')">Loại <?php if ($order_by == 'customer_tire_type'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>     
+        
         <th  class="fix">&nbsp;</th>
     </tr>
     
@@ -137,6 +141,8 @@ elseif ($order_by == 'customer_address')
             <td class="fix" style="display:none" id="customer_agent_link_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_agent_link; ?></td>
             <td class="fix" style="display:none" id="customer_tire_type_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_tire_type; ?></td>
             <td class="fix" style="display:none" id="customer_create_user_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_create_user; ?></td>
+            <td class="fix" style="display:none" id="customer_status_<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_status; ?></td>
+            <td class="fix"  id="customer_create_user2_<?php echo $customer->customer_id; ?>"><?php echo isset($staff_data[$customer->customer_create_user])?$staff_data[$customer->customer_create_user]:null; ?></td>
             <td class="fix" id="customer_tire_type2_<?php echo $customer->customer_id; ?>">
                 <?php switch ($customer->customer_tire_type) {
                     case 1:
@@ -287,7 +293,14 @@ $this->helper('slidePaginator');
                                 <input type="text" style="width:30px" class="number" id="customer_expect_date" name="customer_expect_date" tabindex="15" placeholder="Ngày" > hàng tháng <br>
                                 <input type="text" style="width:30px" class="number" id="customer_after_date" name="customer_after_date" tabindex="16" placeholder="Số" > ngày sau xuất HĐ
                             </td>
-                            
+                            <td>Trạng thái </td>
+                            <td>
+                                
+                                <select id="customer_status"  name="customer_status" >
+                                        <option value="">Chọn</option>
+                                        <option value="2">Tự do</option>
+                                </select> 
+                            </td>
                         </tr>
                         <tr>
                             <td>Loại </td>
@@ -313,6 +326,7 @@ $this->helper('slidePaginator');
                                     
                                 </select> 
                             </td>
+                            
                         </tr>
                         
                         <tr>
@@ -456,6 +470,7 @@ $('html').click(function(e) {
         var customer_agent_link = $(this).find("#customer_agent_link_"+$(this).attr('id')).text();
 
         var customer_create_user = $(this).find("#customer_create_user_"+$(this).attr('id')).text();
+        var customer_status = $(this).find("#customer_status_"+$(this).attr('id')).text();
         
         //alert(customer_code);
         $('#yes').val($(this).attr('id'));
@@ -493,6 +508,7 @@ $('html').click(function(e) {
        $('#customer_agent_link').val(customer_agent_link);
 
        $("#customer_create_user option[value=" + customer_create_user + "]").attr('selected', 'selected');
+       $("#customer_status option[value=" + customer_status + "]").attr('selected', 'selected');
        
        $('#dataTable tbody tr').remove();
 
@@ -578,6 +594,7 @@ function add_click(){
        $('#customer_agent_link').val("");
 
        $("#customer_create_user").attr('disabled', false);
+       $("#customer_status option[value='']").attr('selected', 'selected');
 
    $('#customer_name').focus();
    $('#customer_name').attr('data',"false");
@@ -622,6 +639,7 @@ $(document).ready(function(){
                     var customer_agent_link = $('#customer_agent_link').attr('value');
 
                     var customer_create_user = $('#customer_create_user').attr('value');
+                    var customer_status = $('#customer_status').attr('value');
 
                     var sdt = customer_phone.replace(/ /g, "");
                     if (sdt.toString().length<10) {
@@ -710,6 +728,7 @@ $(document).ready(function(){
                             customer_tire_type: customer_tire_type,
                             customer_agent_link: customer_agent_link,
                             customer_create_user: customer_create_user,
+                            customer_status: customer_status,
                             yes: yes,
                             check: check,
                             }, // giá trị post

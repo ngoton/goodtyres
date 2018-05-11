@@ -65,7 +65,6 @@ Class userController Extends baseController {
     }
 
     public function login() {
-        $this->view->setLayout('admin');
         $this->view->data['title'] = 'Đăng nhập';
         /*Kiểm tra CSDL*/
         if (isset($_POST['submit'])) {

@@ -1,46 +1,28 @@
-<div class="top-detail">
-    <div class="panel panel-info login_form">
-        <div class="panel-heading">
-            <div class="panel-title">ĐĂNG NHẬP</div>
-        </div> 
-        <div class="panel-body">
-            <form id="loginForm" method="post" action="">
-            <div class="row omb_row-sm-offset-3">
-                <div class="col-xs-12 col-sm-6">    
+<div class="login_form">
+        <h1>ĐĂNG NHẬP</h1>
+        <div class="login_body">
+            <form method="post" action="">
+                <table>
+                    <tr>
+                        <td >Username<br> <input type="text" id="username" name="username" tabindex="1" autofocus required="required"></td>
+                        
+                    </tr>
+                    <tr>
+                        <td >Password<br> <input type="password" id="password" name="password" tabindex="2" required="required"></td>
+                    </tr>
+                    <tr>
+                    <td>
+                        <center><input type="submit" name="submit" value="Đăng nhập" tabindex="3"></center>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="ghinho" value="1" tabindex="4" checked /> Ghi nhớ
+                        <span class="rm"><a href="<?php echo $this->url('user/fogot') ?>">Quên mật khẩu</a></span></td>
+                        
+                    </tr>
                     
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Username" tabindex="1" autofocus required="required">
-                        </div>
-                        <span class="help-block"></span>
-                                            
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                            <input type="password" class="form-control" placeholder="Password" id="password" name="password" tabindex="2" required="required">
-                        </div>
-                        <span class="help-block"></span>
-
-                        <input class="btn btn-lg btn-primary btn-block" type="submit" name="submit" value="Đăng nhập">
-                    
-                </div>
-            </div>  
-            <div class="row omb_row-sm-offset-3">
-                <div class="col-xs-12 col-sm-3">
-                    <input id="login-remember" type="checkbox" name="ghinho" value="1" tabindex="3" checked> Ghi nhớ
-                </div>
-                <div class="col-xs-12 col-sm-3">
-                    <p class="pull-right">
-                        <a href="<?php echo $this->url('user/fogot') ?>">Quên mật khẩu?</a>
-                    </p>
-                </div>
-            </div>  
-            <div class="row omb_row-sm-offset-3">
-                <div class="col-xs-12 col-sm-6" style="color:#a94442">  
-                    <?php echo isset($error) ? $error : null; ?>
-                </div>
-            </div>
+                </table>
             </form>
-        </div>
-        
-    </div>
+            </div>
+            <div id="error" class="error"><?php echo isset($error) ? $error : null; ?></div>
 </div>

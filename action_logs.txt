@@ -9721,3 +9721,79 @@ bxep: 6x14 = 84k-5-4--1484000
 
 16/04/2018 09:47:03|admin|edit|exstock|1|order_tire|
 
+10/05/2018 14:38:59|admin|delete|133|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|134|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|135|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|136|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|137|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|138|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|139|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|140|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|141|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|142|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|143|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|144|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|145|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|146|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|147|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|148|tire_price_discount|
+
+10/05/2018 14:38:59|admin|delete|149|tire_price_discount|
+
+10/05/2018 16:15:00|admin|add|40|order_tire|2-1525903200-60-57-31-1-1----------0-0-0---10-2036364--1525903200-22400000-4-0-1-1-313
+
+10/05/2018 16:17:58|admin|add|41|order_tire|2-1525903200-60-57-15-1-1----------0-0-0---10-9272728--1525903200-102000000-20-0-1-1-313
+
+10/05/2018 16:20:03|admin|add|42|order_tire|1-1525903200-58-57-29-1-1----------0-0-0---10-9972546--1525903200-109698000-26-0-1-1-313
+
+10/05/2018 16:21:28|admin|add|82|order_tire_cost_|
+
+10/05/2018 16:27:39|admin|edit|code|40|order_tire|
+
+10/05/2018 16:27:54|admin|edit|code|41|order_tire|
+
+10/05/2018 16:42:40|admin|edit|approve|40|order_tire|
+
+10/05/2018 16:42:43|admin|edit|approve|41|order_tire|
+
+10/05/2018 16:42:54|admin|edit|exstock|41|order_tire|
+
+10/05/2018 16:43:12|admin|edit|exstock|40|order_tire|
+
+10/05/2018 16:43:19|admin|edit|exstock|41|order_tire|
+
+10/05/2018 16:44:31|admin|add|83|order_tire_cost_|
+
+10/05/2018 16:46:42|admin|add|43|order_tire|2-1525903200-58-57-32-1-1----------0-0-0---10-25090908--1525903200-276000000-60-0-1-1-313
+
+10/05/2018 16:47:08|admin|add|84|order_tire_cost_|
+
+10/05/2018 16:47:20|admin|add|85|order_tire_cost_|
+
+10/05/2018 16:47:29|admin|edit|code|43|order_tire|
+
+10/05/2018 16:47:36|admin|edit|code|42|order_tire|
+
+10/05/2018 16:47:42|admin|edit|approve|42|order_tire|
+
+10/05/2018 16:47:48|admin|edit|approve|43|order_tire|
+
+10/05/2018 16:47:56|admin|edit|exstock|42|order_tire|
+
+10/05/2018 16:48:02|admin|edit|exstock|43|order_tire|
+
