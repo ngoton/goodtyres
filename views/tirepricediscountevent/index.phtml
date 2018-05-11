@@ -99,7 +99,7 @@ elseif ($order_by == 'tire_pattern_name')
     <?php foreach ($tires as $tire) : ?>
     
         
-        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire->tire_price_discount_event_id ?>" class="edit_tr">
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $tire->tire_price_discount_event_id ?>" class="edit_tr" <?php echo $tire->end_date>=strtotime(date('d-m-Y'))?'style="color: green"':'style="color:#999"' ?> >
             
             <td>
                 <input name="check[]" type="checkbox" class="checkbox" value="<?php echo $tire->tire_price_discount_event_id ?>">

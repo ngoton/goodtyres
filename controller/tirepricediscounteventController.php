@@ -33,9 +33,9 @@ Class tirepricediscounteventController Extends baseController {
 
         else{
 
-            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'start_date';
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'end_date';
 
-            $order = $this->registry->router->order ? $this->registry->router->order : 'ASC';
+            $order = $this->registry->router->order ? $this->registry->router->order : 'DESC';
 
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
 
