@@ -696,7 +696,7 @@ Class tiredebitController Extends baseController {
 
         if($kh > 0){
 
-            $data['where'] = 'customer = '.$kh;
+            $data['where'] = 'order_tire_status=1 AND customer = '.$kh;
 
         }
 
