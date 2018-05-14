@@ -3500,44 +3500,78 @@ Class ordertireController Extends baseController {
                         }
 
 
-                        $total_number = $order_tire->order_tire_number;
-                        $total = $order_tire->total;
-                        $total_after = $order_tire_list->tire_number*$order_tire_list->tire_price;
-                        $vat = $order_tire->vat;
-                        $discount = $order_tire->discount;
+                        // $total_number = $order_tire->order_tire_number;
+                        // $total = $order_tire->total;
+                        // $total_after = $order_tire_list->tire_number*$order_tire_list->tire_price;
+                        // $vat = $order_tire->vat;
+                        // $discount = $order_tire->discount;
 
-                        $total_number = $total_number - $order_tire_list->tire_number;
-                        $total = $total - $total_after;
+                        // $total_number = $total_number - $order_tire_list->tire_number;
+                        // $total = $total - $total_after;
 
-                        if ($order_tire->ck_ttn==1) {
-                            $discount = $discount - ($total_after*0.02);
-                            $total = $total + ($total_after*0.02);
-                        }
-                        if ($order_tire->ck_kho==1) {
-                            $discount = $discount - ($order_tire_list->tire_number*100000);
-                            $total = $total + ($order_tire_list->tire_number*100000);
-                        }
-                        if ($order_tire->ck_sl==1) {
-                            if ($order_tire->order_tire_number >= 20 && $order_tire->order_tire_number < 50) {
-                                $discount = $discount - ($total_after*0.01);
-                                $total = $total + ($total_after*0.01);
-                            }
-                            else if ($order_tire->order_tire_number >= 50 && $order_tire->order_tire_number < 100) {
-                                $discount = $discount - ($total_after*0.02);
-                                $total = $total + ($total_after*0.02);
-                            }
-                            else if ($order_tire->order_tire_number >= 100) {
-                                $discount = $discount - ($total_after*0.03);
-                                $total = $total + ($total_after*0.03);
-                            }
-                        }
+                        // if ($order_tire->ck_ttn==1) {
+                        //     $discount = $discount - ($total_after*0.02);
+                        //     $total = $total + ($total_after*0.02);
+                        // }
+                        // if ($order_tire->ck_kho==1) {
+                        //     $discount = $discount - ($order_tire_list->tire_number*100000);
+                        //     $total = $total + ($order_tire_list->tire_number*100000);
+                        // }
+                        // if ($order_tire->ck_sl==1) {
+                        //     if ($order_tire->order_tire_number >= 20 && $order_tire->order_tire_number < 50) {
+                        //         $discount = $discount - ($total_after*0.01);
+                        //         $total = $total + ($total_after*0.01);
+                        //     }
+                        //     else if ($order_tire->order_tire_number >= 50 && $order_tire->order_tire_number < 100) {
+                        //         $discount = $discount - ($total_after*0.02);
+                        //         $total = $total + ($total_after*0.02);
+                        //     }
+                        //     else if ($order_tire->order_tire_number >= 100) {
+                        //         $discount = $discount - ($total_after*0.03);
+                        //         $total = $total + ($total_after*0.03);
+                        //     }
+                        // }
 
-                        if ($order_tire->vat_percent > 0) {
-                            $vat = $vat - ($total_after*$order_tire->vat_percent/100);
-                            $total = $total - ($total_after*$order_tire->vat_percent/100);
-                        }
+                        // if ($order_tire->vat_percent > 0) {
+                        //     $vat = $vat - ($total_after*$order_tire->vat_percent/100);
+                        //     $total = $total - ($total_after*$order_tire->vat_percent/100);
+                        // }
 
                         
+
+                        // $data_order = array(
+                        //     'discount'=>$discount,
+                        //     'total'=>$total,
+                        //     'order_tire_number'=>$total_number,
+                        //     'vat'=> $vat,
+                        // );
+
+                        $order_tire_list_model->deleteTire($_POST['data']);
+
+                        $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire='.$order_tire_list->order_tire));
+                        $total_number = 0;
+                        $total = 0;
+                        $vat = 0;
+                        foreach ($order_lists as $od) {
+                            $total_number += $od->tire_number;
+                            
+                            if ($order_tire->check_price_vat == 1) {
+                                $p = $od->tire_price_vat;
+                                $v = round(($p*$order_tire->vat_percent*0.1)/1.1*0.1);
+                                $n = $p-$v;
+
+                                $vat += $v*$od->tire_number;
+                                $total += $od->tire_number*$od->tire_price_vat;
+                            }
+                            else{
+                                $vat += round($od->tire_number*$od->tire_price*$order_tire->vat_percent/100);
+                                $total += $od->tire_number*$od->tire_price+round($od->tire_number*$od->tire_price*$order_tire->vat_percent/100);
+                            }
+                        }
+
+                        $discount = $order_tire->discount+$order_tire->reduce;
+                        $total = $total - $discount;
+
 
                         $data_order = array(
                             'discount'=>$discount,
@@ -3602,7 +3636,6 @@ Class ordertireController Extends baseController {
                             $receivable_model->updateCosts($receivable_data,array('order_tire'=>$order_tire_list->order_tire,'customer'=>$order_tire_old->customer,'money'=>$order_tire->total));
                         }
 
-                        $order_tire_list_model->deleteTire($_POST['data']);
                         echo "Xóa thành công";
 
                         date_default_timezone_set("Asia/Ho_Chi_Minh"); 

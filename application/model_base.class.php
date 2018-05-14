@@ -145,8 +145,9 @@ class baseModel {
     /*
     * Lấy tất cả
     */
-    public function fetchAll($table,$data = array('where','order_by','order','limit'),$join = array('table','where','join')){
+    public function fetchAll($table,$data = array('where','order_by','order','limit','field'),$join = array('table','where','join')){
         //var_dump($data['order_by']);die();
+        $fields = "*";
         $where = null;
         $order_by = null;
         $order = null;
@@ -155,6 +156,10 @@ class baseModel {
         $table_join = null;
         $join_where = null;
 
+        if (isset($data['field'])) {
+            $fields = $data['field'];
+            //
+        }
         if (isset($data['where'])) {
             $where = 'WHERE '.$data['where'];
             //
@@ -186,10 +191,9 @@ class baseModel {
                 } 
             }
             
-            
             //
         }
-        $sql = "SELECT * FROM $table $table_join $where $join_where $order_by $order $limit";
+        $sql = "SELECT $fields FROM $table $table_join $where $join_where $order_by $order $limit";
         //var_dump($sql);
         $query = $this->dbh->prepare($sql);
         $query->execute();
