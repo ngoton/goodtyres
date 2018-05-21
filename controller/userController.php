@@ -65,65 +65,76 @@ Class userController Extends baseController {
     }
 
     public function login() {
+        $this->view->setLayout('admin');
         $this->view->data['title'] = 'Đăng nhập';
         /*Kiểm tra CSDL*/
         if (isset($_POST['submit'])) {
-            if ($_POST['username'] != '' && $_POST['password'] != '' ) {
-                $user = $this->model->get('userModel');
-                
-                $row = $user->getUserByUsername(addslashes($_POST['username']));
-                
-                if ($row) {
-                    if ($row->password == md5($_POST['password']) && $row->user_lock != 1) {
-                        $_SESSION['user_logined'] = $row->username;
-                        $_SESSION['userid_logined'] = $row->user_id;
-                        $_SESSION['role_logined'] = $row->role;
-                        echo "Đăng nhập thành công";
-
-                        if (isset($_POST['ghinho']) && $_POST['ghinho'] == 1) { 
-                            setcookie("remember", 1,time()+30*60*24*100,"/");
-                            setcookie("uu", 'yf'.base64_encode($row->username),time()+30*60*24*100,"/");
-                            setcookie("ui", 'kq'.base64_encode($row->user_id),time()+30*60*24*100,"/");
-                            setcookie("ro", 'xg'.base64_encode($row->role),time()+30*60*24*100,"/");
-                            setcookie("up", 'oi'.md5($_POST['password']),time()+30*60*24*100,"/");
-                         }
-
-                        $ipaddress = '';
-                        if (getenv('HTTP_CLIENT_IP'))
-                            $ipaddress = getenv('HTTP_CLIENT_IP');
-                        else if(getenv('HTTP_X_FORWARDED_FOR'))
-                            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
-                        else if(getenv('HTTP_X_FORWARDED'))
-                            $ipaddress = getenv('HTTP_X_FORWARDED');
-                        else if(getenv('HTTP_FORWARDED_FOR'))
-                            $ipaddress = getenv('HTTP_FORWARDED_FOR');
-                        else if(getenv('HTTP_FORWARDED'))
-                           $ipaddress = getenv('HTTP_FORWARDED');
-                        else if(getenv('REMOTE_ADDR'))
-                            $ipaddress = getenv('REMOTE_ADDR');
-                        else
-                            $ipaddress = 'UNKNOWN';
-
-                        date_default_timezone_set("Asia/Ho_Chi_Minh"); 
-                        $filename = "user_logs.txt";
-                        $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."login"."|".$ipaddress."\n"."\r\n";
+            if(isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])){
+                $captcha=$_POST['g-recaptcha-response'];
+                $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6Ld-91kUAAAAAPTdx9yrYqM_NzSo9q9Huf2jaofX&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']);
+                $obj = json_decode($response);
+                if ($obj->success == true) {
+                    if ($_POST['username'] != '' && $_POST['password'] != '' ) {
+                        $user = $this->model->get('userModel');
                         
-                        $fh = fopen($filename, "a") or die("Could not open log file.");
-                        fwrite($fh, $text) or die("Could not write file!");
-                        fclose($fh);
+                        $row = $user->getUserByUsername(addslashes($_POST['username']));
+                        
+                        if ($row) {
+                            if ($row->password == md5($_POST['password']) && $row->user_lock != 1) {
+                                $_SESSION['user_logined'] = $row->username;
+                                $_SESSION['userid_logined'] = $row->user_id;
+                                $_SESSION['role_logined'] = $row->role;
+                                echo "Đăng nhập thành công";
 
-                        $this->view->redirect('admin');
+                                if (isset($_POST['ghinho']) && $_POST['ghinho'] == 1) { 
+                                    setcookie("remember", 1,time()+30*60*24*100,"/");
+                                    setcookie("uu", 'yf'.base64_encode($row->username),time()+30*60*24*100,"/");
+                                    setcookie("ui", 'kq'.base64_encode($row->user_id),time()+30*60*24*100,"/");
+                                    setcookie("ro", 'xg'.base64_encode($row->role),time()+30*60*24*100,"/");
+                                    setcookie("up", 'oi'.md5($_POST['password']),time()+30*60*24*100,"/");
+                                 }
+
+                                $ipaddress = '';
+                                if (getenv('HTTP_CLIENT_IP'))
+                                    $ipaddress = getenv('HTTP_CLIENT_IP');
+                                else if(getenv('HTTP_X_FORWARDED_FOR'))
+                                    $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+                                else if(getenv('HTTP_X_FORWARDED'))
+                                    $ipaddress = getenv('HTTP_X_FORWARDED');
+                                else if(getenv('HTTP_FORWARDED_FOR'))
+                                    $ipaddress = getenv('HTTP_FORWARDED_FOR');
+                                else if(getenv('HTTP_FORWARDED'))
+                                   $ipaddress = getenv('HTTP_FORWARDED');
+                                else if(getenv('REMOTE_ADDR'))
+                                    $ipaddress = getenv('REMOTE_ADDR');
+                                else
+                                    $ipaddress = 'UNKNOWN';
+
+                                date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                                $filename = "user_logs.txt";
+                                $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."login"."|".$ipaddress."\n"."\r\n";
+                                
+                                $fh = fopen($filename, "a") or die("Could not open log file.");
+                                fwrite($fh, $text) or die("Could not write file!");
+                                fclose($fh);
+
+                                $this->view->redirect('admin');
+                            }
+                            else{
+                                $this->view->data['error'] = "Sai mật khẩu";
+                            }
+                        }
+                        else{
+                            $this->view->data['error'] =  "Không tồn tại username";
+                        }
                     }
                     else{
-                        $this->view->data['error'] = "Sai mật khẩu";
+                        $this->view->data['error'] =  "Vui lòng nhập vào username / password";
                     }
-                }
-                else{
-                    $this->view->data['error'] =  "Không tồn tại username";
                 }
             }
             else{
-                $this->view->data['error'] =  "Vui lòng nhập vào username / password";
+                $this->view->data['error'] =  "Vui lòng xác nhận captcha";
             }
         }
         return $this->view->show('user/login');

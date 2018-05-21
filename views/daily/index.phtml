@@ -634,6 +634,17 @@ $('#internal_transfer').click(function(){
   }
 });
 
+$('#deposit').click(function(){
+  if ($(this).is(':checked')) {
+    $('.additional_code').attr('disabled',true);
+    $('.additional_code').val("");
+    $('.additional_code').attr('data',"");
+  }
+  else{
+    $('.additional_code').attr('disabled',false);
+  }
+});
+
 $('#getPC').click(function(){
       $.ajax({
           url: '<?php echo BASE_URL ?>/daily/getPayvoucher',

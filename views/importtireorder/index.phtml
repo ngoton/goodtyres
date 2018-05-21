@@ -631,6 +631,7 @@ $this->helper('slidePaginator');
                     </div>
                     <i class="fa fa-plus" title="Thêm dòng mới"></i> F2: Thêm dòng
                     <i class="fa fa-minus" title="Xóa dòng cuối cùng"></i> F3: Xóa dòng
+                    <i class="fa fa-trash" title="Xóa tất cả" id="del_all"></i> Xóa tất cả
                     
                   </div>
                   
@@ -3066,6 +3067,19 @@ function delRow(id,rowIndex){
       alert(e);
   }
 }
+
+$('#del_all').click(function(){
+  var r = confirm("Bạn có chắc chắn muốn xóa không?");
+  if (r == true){
+    $.ajax({
+        url: '<?php echo BASE_URL ?>/importtireorder/delall',
+        type: 'GET',
+        data: {},
+        success:function(answer){
+        }
+    });
+  }
+});
 </script>
 <style type="text/css">
 .table-container {

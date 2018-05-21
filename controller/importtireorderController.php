@@ -3934,6 +3934,14 @@ Class importtireorderController Extends baseController {
         }
     }
 
+    public function delall(){
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        $import_tire_list_model = $this->model->get('importtirelistModel');
+        $import_tire_list_model->queryImport('DELETE FROM import_tire_list WHERE import_tire_order IS NULL OR import_tire_order=0');
+    }
+
     public function delete(){
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
