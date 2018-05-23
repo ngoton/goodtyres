@@ -2504,328 +2504,346 @@ Class ordertireController Extends baseController {
             );
 
             if ($_POST['yes'] != "") {
-                $order_tire_list = $order_tire_list_model->getTire($_POST['yes']);
-                $order_tire_list_o = $order_tire_list;
+                if (!$order_tire_list_model->getAllTireByWhere($_POST['yes'].' AND order_tire='.$_POST['order'].' AND tire_brand='.$brand.' AND tire_size='.$size.' AND tire_pattern='.$pattern)) {
+                    $order_tire_list = $order_tire_list_model->getTire($_POST['yes']);
+                    $order_tire_list_o = $order_tire_list;
 
-                $order_tire = $order_tire_model->getTire($order_tire_list->order_tire);
+                    $order_tire = $order_tire_model->getTire($order_tire_list->order_tire);
 
-                $order_tire_list_model->updateTire($data,array('order_tire_list_id'=>$_POST['yes']));
+                    $order_tire_list_model->updateTire($data,array('order_tire_list_id'=>$_POST['yes']));
 
-                $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire='.$order_tire_list->order_tire));
-                $total_number = 0;
-                $total = 0;
-                $vat = 0;
-                foreach ($order_lists as $od) {
-                    $total_number += $od->tire_number;
-                    
-                    if ($order_tire->check_price_vat == 1) {
-                        $p = $od->tire_price_vat;
-                        $v = round(($p*$order_tire->vat_percent*0.1)/1.1*0.1);
-                        $n = $p-$v;
+                    $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire='.$order_tire_list->order_tire));
+                    $total_number = 0;
+                    $total = 0;
+                    $vat = 0;
+                    foreach ($order_lists as $od) {
+                        $total_number += $od->tire_number;
+                        
+                        if ($order_tire->check_price_vat == 1) {
+                            $p = $od->tire_price_vat;
+                            $v = round(($p*$order_tire->vat_percent*0.1)/1.1*0.1);
+                            $n = $p-$v;
 
-                        $vat += $v*$od->tire_number;
-                        $total += $od->tire_number*$od->tire_price_vat;
+                            $vat += $v*$od->tire_number;
+                            $total += $od->tire_number*$od->tire_price_vat;
+                        }
+                        else{
+                            $vat += round($od->tire_number*$od->tire_price*$order_tire->vat_percent/100);
+                            $total += $od->tire_number*$od->tire_price+round($od->tire_number*$od->tire_price*$order_tire->vat_percent/100);
+                        }
                     }
-                    else{
-                        $vat += round($od->tire_number*$od->tire_price*$order_tire->vat_percent/100);
-                        $total += $od->tire_number*$od->tire_price+round($od->tire_number*$od->tire_price*$order_tire->vat_percent/100);
+
+                    $discount = $order_tire->discount+$order_tire->reduce;
+                    $total = $total - $discount;
+
+
+                    $data_order = array(
+                        'discount'=>$discount,
+                        'total'=>$total,
+                        'order_tire_number'=>$total_number,
+                        'vat'=> $vat,
+                    );
+
+
+                    $order_tire_model->updateTire($data_order,array('order_tire_id'=>$order_tire_list->order_tire));
+
+                    if($order_tire->order_tire_status==1){
+                        $order_tire_model->updateTire(array('sale_lock'=>1),array('order_tire_id'=>$order_tire_list->order_tire));
+
+                        $order_tire_list_old = $order_tire_list_model->getTire($_POST['yes']);
+
+                        $order_tire_old = $order_tire_model->getTire($order_tire_list->order_tire);
+
+                        $tire_sale = $tire_sale_model->getTireByWhere(array('tire_brand'=>$order_tire_list->tire_brand,'tire_size'=>$order_tire_list->tire_size,'tire_pattern'=>$order_tire_list->tire_pattern,'order_tire'=>$order_tire_list->order_tire));
+                        $data_sale = array(
+                            'tire_brand'=>$order_tire_list_old->tire_brand,
+                            'tire_size'=>$order_tire_list_old->tire_size,
+                            'tire_pattern'=>$order_tire_list_old->tire_pattern,
+                            'volume' => $order_tire_list_old->tire_number,
+                            'sell_price' => $order_tire_list_old->tire_price,
+                            'sell_price_vat' => $order_tire_list_old->tire_price_vat,
+                            'date_manufacture_sale' => $order_tire_list_old->tire_date,
+                        );
+                        $tire_sale_model->updateTire($data_sale,array('tire_sale_id'=>$tire_sale->tire_sale_id));
+
+                        $obtain_data = array(
+                            'obtain_date' => $order_tire_old->delivery_date,
+                            'customer' => $order_tire_old->customer,
+                            'money' => $order_tire_old->total,
+                            'week' => (int)date('W',$order_tire_old->delivery_date),
+                            'year' => (int)date('Y',$order_tire_old->delivery_date),
+                            'order_tire' => $order_tire_list->order_tire,
+                        );
+                        if($obtain_data['week'] == 53){
+                            $obtain_data['week'] = 1;
+                            $obtain_data['year'] = $obtain_data['year']+1;
+                        }
+                        if (((int)date('W',$order_tire_old->delivery_date) == 1) && ((int)date('m',$order_tire_old->delivery_date) == 12) ) {
+                            $obtain_data['year'] = (int)date('Y',$order_tire_old->delivery_date)+1;
+                        }
+                        $obtain_model->updateObtain($obtain_data,array('order_tire'=>$order_tire_list->order_tire,'customer'=>$order_tire_old->customer,'money'=>$order_tire->total));
+
+                        $receivable_data = array(
+                            'customer' => $order_tire_old->customer,
+                            'money' => $order_tire_old->total,
+                            'receivable_date' => $order_tire_old->delivery_date,
+                            'expect_date' => $order_tire_old->delivery_date,
+                            'week' => (int)date('W',$order_tire_old->delivery_date),
+                            'year' => (int)date('Y',$order_tire_old->delivery_date),
+                            'code' => $order_tire_old->order_number,
+                            'source' => 1,
+                            'comment' => $order_tire_old->order_tire_number.' lốp '.$order_tire_old->order_number,
+                            'create_user' => $_SESSION['userid_logined'],
+                            'type' => 4,
+                            'order_tire' => $order_tire_list->order_tire,
+                            'check_vat' => $order_tire_old->vat>0?1:0,
+                        );
+
+                        
+                        if($receivable_data['week'] == 53){
+                            $receivable_data['week'] = 1;
+                            $receivable_data['year'] = $receivable_data['year']+1;
+                        }
+                        if (((int)date('W',$order_tire_old->delivery_date) == 1) && ((int)date('m',$order_tire_old->delivery_date) == 12) ) {
+                            $receivable_data['year'] = (int)date('Y',$order_tire_old->delivery_date)+1;
+                        }
+
+                        $receivable_model->updateCosts($receivable_data,array('order_tire'=>$order_tire_list->order_tire,'customer'=>$order_tire_old->customer,'money'=>$order_tire->total));
                     }
+
+                    $check = 1;
+                    echo "Cập nhật thành công";
+
+                                date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                                $filename = "action_logs.txt";
+                                $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['yes']."|".implode("-",$data)."|order_tire_list|"."\n"."\r\n";
+                                
+                                $fh = fopen($filename, "a") or die("Could not open log file.");
+                                fwrite($fh, $text) or die("Could not write file!");
+                                fclose($fh);
                 }
-
-                $discount = $order_tire->discount+$order_tire->reduce;
-                $total = $total - $discount;
-
-
-                $data_order = array(
-                    'discount'=>$discount,
-                    'total'=>$total,
-                    'order_tire_number'=>$total_number,
-                    'vat'=> $vat,
-                );
-
-
-                $order_tire_model->updateTire($data_order,array('order_tire_id'=>$order_tire_list->order_tire));
-
-                if($order_tire->order_tire_status==1){
-                    $order_tire_model->updateTire(array('sale_lock'=>1),array('order_tire_id'=>$order_tire_list->order_tire));
-
-                    $order_tire_list_old = $order_tire_list_model->getTire($_POST['yes']);
-
-                    $order_tire_old = $order_tire_model->getTire($order_tire_list->order_tire);
-
-                    $tire_sale = $tire_sale_model->getTireByWhere(array('tire_brand'=>$order_tire_list->tire_brand,'tire_size'=>$order_tire_list->tire_size,'tire_pattern'=>$order_tire_list->tire_pattern,'order_tire'=>$order_tire_list->order_tire));
-                    $data_sale = array(
-                        'tire_brand'=>$order_tire_list_old->tire_brand,
-                        'tire_size'=>$order_tire_list_old->tire_size,
-                        'tire_pattern'=>$order_tire_list_old->tire_pattern,
-                        'volume' => $order_tire_list_old->tire_number,
-                        'sell_price' => $order_tire_list_old->tire_price,
-                        'sell_price_vat' => $order_tire_list_old->tire_price_vat,
-                        'date_manufacture_sale' => $order_tire_list_old->tire_date,
-                    );
-                    $tire_sale_model->updateTire($data_sale,array('tire_sale_id'=>$tire_sale->tire_sale_id));
-
-                    $obtain_data = array(
-                        'obtain_date' => $order_tire_old->delivery_date,
-                        'customer' => $order_tire_old->customer,
-                        'money' => $order_tire_old->total,
-                        'week' => (int)date('W',$order_tire_old->delivery_date),
-                        'year' => (int)date('Y',$order_tire_old->delivery_date),
-                        'order_tire' => $order_tire_list->order_tire,
-                    );
-                    if($obtain_data['week'] == 53){
-                        $obtain_data['week'] = 1;
-                        $obtain_data['year'] = $obtain_data['year']+1;
-                    }
-                    if (((int)date('W',$order_tire_old->delivery_date) == 1) && ((int)date('m',$order_tire_old->delivery_date) == 12) ) {
-                        $obtain_data['year'] = (int)date('Y',$order_tire_old->delivery_date)+1;
-                    }
-                    $obtain_model->updateObtain($obtain_data,array('order_tire'=>$order_tire_list->order_tire,'customer'=>$order_tire_old->customer,'money'=>$order_tire->total));
-
-                    $receivable_data = array(
-                        'customer' => $order_tire_old->customer,
-                        'money' => $order_tire_old->total,
-                        'receivable_date' => $order_tire_old->delivery_date,
-                        'expect_date' => $order_tire_old->delivery_date,
-                        'week' => (int)date('W',$order_tire_old->delivery_date),
-                        'year' => (int)date('Y',$order_tire_old->delivery_date),
-                        'code' => $order_tire_old->order_number,
-                        'source' => 1,
-                        'comment' => $order_tire_old->order_tire_number.' lốp '.$order_tire_old->order_number,
-                        'create_user' => $_SESSION['userid_logined'],
-                        'type' => 4,
-                        'order_tire' => $order_tire_list->order_tire,
-                        'check_vat' => $order_tire_old->vat>0?1:0,
-                    );
-
-                    
-                    if($receivable_data['week'] == 53){
-                        $receivable_data['week'] = 1;
-                        $receivable_data['year'] = $receivable_data['year']+1;
-                    }
-                    if (((int)date('W',$order_tire_old->delivery_date) == 1) && ((int)date('m',$order_tire_old->delivery_date) == 12) ) {
-                        $receivable_data['year'] = (int)date('Y',$order_tire_old->delivery_date)+1;
-                    }
-
-                    $receivable_model->updateCosts($receivable_data,array('order_tire'=>$order_tire_list->order_tire,'customer'=>$order_tire_old->customer,'money'=>$order_tire->total));
+                else{
+                    $check = 0;
+                    echo "Mã hàng đã tồn tại";
                 }
-
-                echo "Cập nhật thành công";
-
-                            date_default_timezone_set("Asia/Ho_Chi_Minh"); 
-                            $filename = "action_logs.txt";
-                            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."edit"."|".$_POST['yes']."|".implode("-",$data)."|order_tire_list|"."\n"."\r\n";
-                            
-                            $fh = fopen($filename, "a") or die("Could not open log file.");
-                            fwrite($fh, $text) or die("Could not write file!");
-                            fclose($fh);
             }
             else{
                 $data['order_tire'] = $_POST['order'];
 
-                $order_tire_list_model->createTire($data);
+                if (!$order_tire_list_model->getTireByWhere(array('order_tire'=>$data['order_tire'], 'tire_brand'=>$brand, 'tire_size'=>$size, 'tire_pattern'=>$pattern))) {
 
-                $order_tire_list = $order_tire_list_model->getTire($order_tire_list_model->getLastTire()->order_tire_list_id);
+                    $order_tire_list_model->createTire($data);
 
-                $order_tire = $order_tire_model->getTire($order_tire_list->order_tire);
+                    $order_tire_list = $order_tire_list_model->getTire($order_tire_list_model->getLastTire()->order_tire_list_id);
 
-                $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire='.$order_tire_list->order_tire));
-                $total_number = 0;
-                $total = 0;
-                $vat = 0;
-                foreach ($order_lists as $od) {
-                    $total_number += $od->tire_number;
-                    
-                    if ($order_tire->check_price_vat == 1) {
-                        $p = $od->tire_price_vat;
-                        $v = round(($p*$order_tire->vat_percent*0.1)/1.1*0.1);
-                        $n = $p-$v;
+                    $order_tire = $order_tire_model->getTire($order_tire_list->order_tire);
 
-                        $vat += $v*$od->tire_number;
-                        $total += $od->tire_number*$od->tire_price_vat;
+                    $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire='.$order_tire_list->order_tire));
+                    $total_number = 0;
+                    $total = 0;
+                    $vat = 0;
+                    foreach ($order_lists as $od) {
+                        $total_number += $od->tire_number;
+                        
+                        if ($order_tire->check_price_vat == 1) {
+                            $p = $od->tire_price_vat;
+                            $v = round(($p*$order_tire->vat_percent*0.1)/1.1*0.1);
+                            $n = $p-$v;
+
+                            $vat += $v*$od->tire_number;
+                            $total += $od->tire_number*$od->tire_price_vat;
+                        }
+                        else{
+                            $vat += round($od->tire_number*$od->tire_price*$order_tire->vat_percent/100);
+                            $total += $od->tire_number*$od->tire_price+round($od->tire_number*$od->tire_price*$order_tire->vat_percent/100);
+                        }
                     }
-                    else{
-                        $vat += round($od->tire_number*$od->tire_price*$order_tire->vat_percent/100);
-                        $total += $od->tire_number*$od->tire_price+round($od->tire_number*$od->tire_price*$order_tire->vat_percent/100);
+
+                    $discount = $order_tire->discount+$order_tire->reduce;
+                    $total = $total - $discount;
+
+                    $data_order = array(
+                        'discount'=>$discount,
+                        'total'=>$total,
+                        'order_tire_number'=>$total_number,
+                        'vat'=> $vat,
+                    );
+
+
+                    $order_tire_model->updateTire($data_order,array('order_tire_id'=>$order_tire_list->order_tire));
+
+                    if($order_tire->order_tire_status==1){
+
+                        $order_tire_model->updateTire(array('sale_lock'=>1),array('order_tire_id'=>$order_tire_list->order_tire));
+
+                        $order_tire_list_old = $order_tire_list_model->getTire($order_tire_list_model->getLastTire()->order_tire_list_id);
+
+                        $order_tire_old = $order_tire_model->getTire($order_tire_list->order_tire);
+
+                        $staff = $staff_model->getStaffByWhere(array('account'=>$order_tire_old->sale));
+
+                        $check_vat = $order_tire_old->vat>0?1:0;
+                        //$vat = $order->tire_price*$order_tire->vat_percent/100;
+                        $data_sale = array(
+                                
+                            'code' => $order_tire_old->order_number,
+                            'volume' => $order_tire_list_old->tire_number,
+                            'tire_brand' => $order_tire_list_old->tire_brand,
+                            'tire_size' => $order_tire_list_old->tire_size,
+                            'sell_price' => $order_tire_list_old->tire_price,
+                            'sell_price_vat' => $order_tire_list_old->tire_price_vat,
+                            'customer' => $order_tire_old->customer,
+                            'tire_sale_date' => $order_tire_old->delivery_date,
+                            //'tire_sale_date_expect' => strtotime($_POST['tire_sale_date_expect']),
+                            'tire_pattern' => $order_tire_list_old->tire_pattern,
+                            'check_vat' => $check_vat,
+                            'sale' => $staff->staff_id,
+                            'customer_type' => $order_tire_old->customer_type,
+                            'order_tire' => $order_tire_list->order_tire,
+                            'date_manufacture_sale' => $order_tire_list_old->tire_date,
+                        );
+                        $tire_sale_model->createTire($data_sale);
+
+                        $obtain_data = array(
+                            'obtain_date' => $order_tire_old->delivery_date,
+                            'customer' => $order_tire_old->customer,
+                            'money' => $order_tire_old->total,
+                            'week' => (int)date('W',$order_tire_old->delivery_date),
+                            'year' => (int)date('Y',$order_tire_old->delivery_date),
+                            'order_tire' => $order_tire_list->order_tire,
+                        );
+                        if($obtain_data['week'] == 53){
+                            $obtain_data['week'] = 1;
+                            $obtain_data['year'] = $obtain_data['year']+1;
+                        }
+                        if (((int)date('W',$order_tire_old->delivery_date) == 1) && ((int)date('m',$order_tire_old->delivery_date) == 12) ) {
+                            $obtain_data['year'] = (int)date('Y',$order_tire_old->delivery_date)+1;
+                        }
+                        $obtain_model->updateObtain($obtain_data,array('order_tire'=>$order_tire_list->order_tire,'customer'=>$order_tire_old->customer,'money'=>$order_tire->total));
+
+                        $receivable_data = array(
+                            'customer' => $order_tire_old->customer,
+                            'money' => $order_tire_old->total,
+                            'receivable_date' => $order_tire_old->delivery_date,
+                            'expect_date' => $order_tire_old->delivery_date,
+                            'week' => (int)date('W',$order_tire_old->delivery_date),
+                            'year' => (int)date('Y',$order_tire_old->delivery_date),
+                            'code' => $order_tire_old->order_number,
+                            'source' => 1,
+                            'comment' => $order_tire_old->order_tire_number.' lốp '.$order_tire_old->order_number,
+                            'create_user' => $_SESSION['userid_logined'],
+                            'type' => 4,
+                            'order_tire' => $order_tire_list->order_tire,
+                            'check_vat' => $order_tire_old->vat>0?1:0,
+                        );
+
+                        
+                        if($receivable_data['week'] == 53){
+                            $receivable_data['week'] = 1;
+                            $receivable_data['year'] = $receivable_data['year']+1;
+                        }
+                        if (((int)date('W',$order_tire_old->delivery_date) == 1) && ((int)date('m',$order_tire_old->delivery_date) == 12) ) {
+                            $receivable_data['year'] = (int)date('Y',$order_tire_old->delivery_date)+1;
+                        }
+
+                        $receivable_model->updateCosts($receivable_data,array('order_tire'=>$order_tire_list->order_tire,'customer'=>$order_tire_old->customer,'money'=>$order_tire->total));
                     }
+
+                    $check = 1;
+                    echo "Thêm thành công";
+
+                                date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                                $filename = "action_logs.txt";
+                                $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."add"."|".implode("-",$data)."|order_tire_list|"."\n"."\r\n";
+                                
+                                $fh = fopen($filename, "a") or die("Could not open log file.");
+                                fwrite($fh, $text) or die("Could not write file!");
+                                fclose($fh);
                 }
-
-                $discount = $order_tire->discount+$order_tire->reduce;
-                $total = $total - $discount;
-
-                $data_order = array(
-                    'discount'=>$discount,
-                    'total'=>$total,
-                    'order_tire_number'=>$total_number,
-                    'vat'=> $vat,
-                );
-
-
-                $order_tire_model->updateTire($data_order,array('order_tire_id'=>$order_tire_list->order_tire));
-
-                if($order_tire->order_tire_status==1){
-
-                    $order_tire_model->updateTire(array('sale_lock'=>1),array('order_tire_id'=>$order_tire_list->order_tire));
-
-                    $order_tire_list_old = $order_tire_list_model->getTire($order_tire_list_model->getLastTire()->order_tire_list_id);
-
-                    $order_tire_old = $order_tire_model->getTire($order_tire_list->order_tire);
-
-                    $staff = $staff_model->getStaffByWhere(array('account'=>$order_tire_old->sale));
-
-                    $check_vat = $order_tire_old->vat>0?1:0;
-                    //$vat = $order->tire_price*$order_tire->vat_percent/100;
-                    $data_sale = array(
-                            
-                        'code' => $order_tire_old->order_number,
-                        'volume' => $order_tire_list_old->tire_number,
-                        'tire_brand' => $order_tire_list_old->tire_brand,
-                        'tire_size' => $order_tire_list_old->tire_size,
-                        'sell_price' => $order_tire_list_old->tire_price,
-                        'sell_price_vat' => $order_tire_list_old->tire_price_vat,
-                        'customer' => $order_tire_old->customer,
-                        'tire_sale_date' => $order_tire_old->delivery_date,
-                        //'tire_sale_date_expect' => strtotime($_POST['tire_sale_date_expect']),
-                        'tire_pattern' => $order_tire_list_old->tire_pattern,
-                        'check_vat' => $check_vat,
-                        'sale' => $staff->staff_id,
-                        'customer_type' => $order_tire_old->customer_type,
-                        'order_tire' => $order_tire_list->order_tire,
-                        'date_manufacture_sale' => $order_tire_list_old->tire_date,
-                    );
-                    $tire_sale_model->createTire($data_sale);
-
-                    $obtain_data = array(
-                        'obtain_date' => $order_tire_old->delivery_date,
-                        'customer' => $order_tire_old->customer,
-                        'money' => $order_tire_old->total,
-                        'week' => (int)date('W',$order_tire_old->delivery_date),
-                        'year' => (int)date('Y',$order_tire_old->delivery_date),
-                        'order_tire' => $order_tire_list->order_tire,
-                    );
-                    if($obtain_data['week'] == 53){
-                        $obtain_data['week'] = 1;
-                        $obtain_data['year'] = $obtain_data['year']+1;
-                    }
-                    if (((int)date('W',$order_tire_old->delivery_date) == 1) && ((int)date('m',$order_tire_old->delivery_date) == 12) ) {
-                        $obtain_data['year'] = (int)date('Y',$order_tire_old->delivery_date)+1;
-                    }
-                    $obtain_model->updateObtain($obtain_data,array('order_tire'=>$order_tire_list->order_tire,'customer'=>$order_tire_old->customer,'money'=>$order_tire->total));
-
-                    $receivable_data = array(
-                        'customer' => $order_tire_old->customer,
-                        'money' => $order_tire_old->total,
-                        'receivable_date' => $order_tire_old->delivery_date,
-                        'expect_date' => $order_tire_old->delivery_date,
-                        'week' => (int)date('W',$order_tire_old->delivery_date),
-                        'year' => (int)date('Y',$order_tire_old->delivery_date),
-                        'code' => $order_tire_old->order_number,
-                        'source' => 1,
-                        'comment' => $order_tire_old->order_tire_number.' lốp '.$order_tire_old->order_number,
-                        'create_user' => $_SESSION['userid_logined'],
-                        'type' => 4,
-                        'order_tire' => $order_tire_list->order_tire,
-                        'check_vat' => $order_tire_old->vat>0?1:0,
-                    );
-
-                    
-                    if($receivable_data['week'] == 53){
-                        $receivable_data['week'] = 1;
-                        $receivable_data['year'] = $receivable_data['year']+1;
-                    }
-                    if (((int)date('W',$order_tire_old->delivery_date) == 1) && ((int)date('m',$order_tire_old->delivery_date) == 12) ) {
-                        $receivable_data['year'] = (int)date('Y',$order_tire_old->delivery_date)+1;
-                    }
-
-                    $receivable_model->updateCosts($receivable_data,array('order_tire'=>$order_tire_list->order_tire,'customer'=>$order_tire_old->customer,'money'=>$order_tire->total));
-                }
-
-                echo "Thêm thành công";
-
-                            date_default_timezone_set("Asia/Ho_Chi_Minh"); 
-                            $filename = "action_logs.txt";
-                            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."add"."|".implode("-",$data)."|order_tire_list|"."\n"."\r\n";
-                            
-                            $fh = fopen($filename, "a") or die("Could not open log file.");
-                            fwrite($fh, $text) or die("Could not write file!");
-                            fclose($fh);
-            }
-
-            $order_data = $order_tire_model->getTire($_POST['order']);
-            if ($order_data->check_purchase==1) {
-                $vendors = $shipment_vendor_model->getVendor($order_data->order_tire_vendor);
-                // where are we posting to?
-                $url = $vendors->shipment_vendor_code.'/ordertire/editagentorder';
-
-                // what post fields?
-                $fields = array(
-                    'tire_brand'=>$tire_brand_model->getTire($brand)->tire_brand_name,
-                    'tire_pattern'=>$tire_pattern_model->getTire($pattern)->tire_pattern_name,
-                    'tire_size'=>$tire_size_model->getTire($size)->tire_size_number,
-                    'tire_number'=>$number,
-                   'id_order_tire' => $order_data->order_tire_id,
-                   'link_agent' => BASE_URL,
-                   'update' => $_POST['yes']!=""?1:0,
-                   'tire_brand_old' => $_POST['yes']!=""?$tire_brand_model->getTire($order_tire_list_o->tire_brand)->tire_brand_name:null,
-                   'tire_pattern_old' => $_POST['yes']!=""?$tire_pattern_model->getTire($order_tire_list_o->tire_pattern)->tire_pattern_name:null,
-                   'tire_size_old' => $_POST['yes']!=""?$tire_size_model->getTire($order_tire_list_o->tire_size)->tire_size_number:null,
-                );
-                // build the urlencoded data
-                $postvars = http_build_query($fields);
-
-                // open connection
-                $ch = curl_init();
-
-                // set the url, number of POST vars, POST data
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_POST, count($fields));
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $postvars);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-                // execute post
-                $result = curl_exec($ch);
-
-                // close connection
-                curl_close($ch);
-
-                $resArr = array();
-                $resArr = json_decode($result);
-
-                $data_purchase = array(
-                    'purchase_tire_date'=>$order_data->order_tire_date,
-                    'shipment_vendor'=>$order_data->order_tire_vendor,
-                    'purchase_tire_number'=>$resArr->total_number,
-                    'purchase_tire_total'=>$resArr->total,
-                    'id_order_vendor'=>$resArr->id_order_tire,
-                    'order_tire'=>$order_data->order_tire_id,
-                );
-
-                $purchase_tire_model->updateTire($data_purchase,array('order_tire'=>$order_data->order_tire_id));
-                $id_purchase = $purchase_tire_model->getTireByWhere(array('order_tire'=>$order_data->order_tire_id))->purchase_tire_id;
-
-                //$purchase_tire_detail_model->queryTire('DELETE FROM purchase_tire_detail WHERE purchase_tire='.$id_purchase);
-
-                foreach($resArr->item as $order)
-                {
-                    $data_purchase_detail = array(
-                        'purchase_tire'=>$id_purchase,
-                        'tire_brand'=>$tire_brand_model->getTireByWhere(array('tire_brand_name'=>$order->tire_brand))->tire_brand_id,
-                        'tire_size'=>$tire_size_model->getTireByWhere(array('tire_size_number'=>$order->tire_size))->tire_size_id,
-                        'tire_pattern'=>$tire_pattern_model->getTireByWhere(array('tire_pattern_name'=>$order->tire_pattern))->tire_pattern_id,
-                        'tire_price'=>$order->tire_price,
-                        'tire_number'=>$order->tire_number,
-                    );
-
-                    $purs = $purchase_tire_detail_model->getTireByWhere(array('tire_brand'=>$data_purchase_detail['tire_brand'],'tire_size'=>$data_purchase_detail['tire_size'],'tire_pattern'=>$data_purchase_detail['tire_pattern'],'purchase_tire'=>$id_purchase));
-                    if (!$purs) {
-                        $purchase_tire_detail_model->createTire($data_purchase_detail);
-                    }
-                    else{
-                        $purchase_tire_detail_model->updateTire($data_purchase_detail,array('purchase_tire_detail_id'=>$purs->purchase_tire_detail_id));
-                    }
-                    
+                else{
+                    $check = 0;
+                    echo "Mã hàng đã tồn tại";
                 }
             }
+
+            if ($check == 1) {
+                $order_data = $order_tire_model->getTire($_POST['order']);
+                if ($order_data->check_purchase==1) {
+                    $vendors = $shipment_vendor_model->getVendor($order_data->order_tire_vendor);
+                    // where are we posting to?
+                    $url = $vendors->shipment_vendor_code.'/ordertire/editagentorder';
+
+                    // what post fields?
+                    $fields = array(
+                        'tire_brand'=>$tire_brand_model->getTire($brand)->tire_brand_name,
+                        'tire_pattern'=>$tire_pattern_model->getTire($pattern)->tire_pattern_name,
+                        'tire_size'=>$tire_size_model->getTire($size)->tire_size_number,
+                        'tire_number'=>$number,
+                       'id_order_tire' => $order_data->order_tire_id,
+                       'link_agent' => BASE_URL,
+                       'update' => $_POST['yes']!=""?1:0,
+                       'tire_brand_old' => $_POST['yes']!=""?$tire_brand_model->getTire($order_tire_list_o->tire_brand)->tire_brand_name:null,
+                       'tire_pattern_old' => $_POST['yes']!=""?$tire_pattern_model->getTire($order_tire_list_o->tire_pattern)->tire_pattern_name:null,
+                       'tire_size_old' => $_POST['yes']!=""?$tire_size_model->getTire($order_tire_list_o->tire_size)->tire_size_number:null,
+                    );
+                    // build the urlencoded data
+                    $postvars = http_build_query($fields);
+
+                    // open connection
+                    $ch = curl_init();
+
+                    // set the url, number of POST vars, POST data
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_POST, count($fields));
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $postvars);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                    // execute post
+                    $result = curl_exec($ch);
+
+                    // close connection
+                    curl_close($ch);
+
+                    $resArr = array();
+                    $resArr = json_decode($result);
+
+                    $data_purchase = array(
+                        'purchase_tire_date'=>$order_data->order_tire_date,
+                        'shipment_vendor'=>$order_data->order_tire_vendor,
+                        'purchase_tire_number'=>$resArr->total_number,
+                        'purchase_tire_total'=>$resArr->total,
+                        'id_order_vendor'=>$resArr->id_order_tire,
+                        'order_tire'=>$order_data->order_tire_id,
+                    );
+
+                    $purchase_tire_model->updateTire($data_purchase,array('order_tire'=>$order_data->order_tire_id));
+                    $id_purchase = $purchase_tire_model->getTireByWhere(array('order_tire'=>$order_data->order_tire_id))->purchase_tire_id;
+
+                    //$purchase_tire_detail_model->queryTire('DELETE FROM purchase_tire_detail WHERE purchase_tire='.$id_purchase);
+
+                    foreach($resArr->item as $order)
+                    {
+                        $data_purchase_detail = array(
+                            'purchase_tire'=>$id_purchase,
+                            'tire_brand'=>$tire_brand_model->getTireByWhere(array('tire_brand_name'=>$order->tire_brand))->tire_brand_id,
+                            'tire_size'=>$tire_size_model->getTireByWhere(array('tire_size_number'=>$order->tire_size))->tire_size_id,
+                            'tire_pattern'=>$tire_pattern_model->getTireByWhere(array('tire_pattern_name'=>$order->tire_pattern))->tire_pattern_id,
+                            'tire_price'=>$order->tire_price,
+                            'tire_number'=>$order->tire_number,
+                        );
+
+                        $purs = $purchase_tire_detail_model->getTireByWhere(array('tire_brand'=>$data_purchase_detail['tire_brand'],'tire_size'=>$data_purchase_detail['tire_size'],'tire_pattern'=>$data_purchase_detail['tire_pattern'],'purchase_tire'=>$id_purchase));
+                        if (!$purs) {
+                            $purchase_tire_detail_model->createTire($data_purchase_detail);
+                        }
+                        else{
+                            $purchase_tire_detail_model->updateTire($data_purchase_detail,array('purchase_tire_detail_id'=>$purs->purchase_tire_detail_id));
+                        }
+                        
+                    }
+                }
+            }
+            
 
         }
     }

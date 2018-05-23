@@ -1442,10 +1442,11 @@ $(".order_list").click(function(){
             draggable:true,
             modal: true,
             autoOpen: false,
-            height:500,
+            height:"auto",
             width:600,
             resizable: false,
             title:'Thông tin',
+            position: ['center',5],
             
         });
         $("#winpopup").load($(this).attr('href'));
