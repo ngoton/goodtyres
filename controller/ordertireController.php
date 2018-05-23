@@ -2538,7 +2538,6 @@ Class ordertireController Extends baseController {
 
 
                     $data_order = array(
-                        'discount'=>$discount,
                         'total'=>$total,
                         'order_tire_number'=>$total_number,
                         'vat'=> $vat,
@@ -2663,7 +2662,6 @@ Class ordertireController Extends baseController {
                     $total = $total - $discount;
 
                     $data_order = array(
-                        'discount'=>$discount,
                         'total'=>$total,
                         'order_tire_number'=>$total_number,
                         'vat'=> $vat,
