@@ -192,7 +192,7 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->username; ?></td> 
              
             
-            <td class="fix" id="approve_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($users['name'][$order_tire->approve])?$users['name'][$order_tire->approve]:(($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9)?'<button data="'.$order_tire->order_tire_id.'" class="approve">Duyệt</button>':null); ?></td> 
+            <td class="fix" id="approve_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($users['name'][$order_tire->approve])?$users['name'][$order_tire->approve]:(($_SESSION['role_logined']==1)?'<button data="'.$order_tire->order_tire_id.'" class="approve">Duyệt</button>':null); ?></td> 
         </tr>
     <?php endforeach; ?>
     <?php foreach ($sales as $tire_sale) : 

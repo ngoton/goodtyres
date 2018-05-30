@@ -166,23 +166,7 @@ elseif ($order_by == 'order_tire_number')
         $tongtra += $order_tire->total;
         $tongchiphi += $order_tire->order_cost;
 
-        $tru = $order_tire->order_cost;
-
-        if ($order_tire->order_tire_number>49) {
-            // if ($order_tire->order_tire_number*70000 > $order_tire->order_cost) {
-            //     $tru = $tru-$order_tire->order_cost;
-            // }
-            // else{
-            //     $tru = $tru-$order_tire->order_tire_number*70000;
-            // }
-            $tru = $tru-$order_tire->order_cost;
-        }
-
         $sp = round((isset($info['bonus'][$order_tire->order_tire_id])?$info['bonus'][$order_tire->order_tire_id]:null)/1000)*1000;
-        $sp = $sp-$tru;
-        if ($sp<$arr_salary['sanluong']*$order_tire->order_tire_number) {
-            $sp = $arr_salary['sanluong']*$order_tire->order_tire_number;
-        }
         $tongsp += $sp;
 
         $giaban = $order_tire_discount[$order_tire->order_tire_id]['thu'];
@@ -241,23 +225,7 @@ elseif ($order_by == 'order_tire_number')
         $tongtra += $order_tire->total;
         $tongchiphi += $order_tire->order_cost;
 
-        $tru = $order_tire->order_cost;
-
-        if ($order_tire->order_tire_number>49) {
-            // if ($order_tire->order_tire_number*70000 > $order_tire->order_cost) {
-            //     $tru = $tru-$order_tire->order_cost;
-            // }
-            // else{
-            //     $tru = $tru-$order_tire->order_tire_number*70000;
-            // }
-            $tru = $tru-$order_tire->order_cost;
-        }
-
         $sp = round((isset($info2['bonus'][$order_tire->order_tire_id])?$info2['bonus'][$order_tire->order_tire_id]:null)/1000)*1000;
-        $sp = $sp-$tru;
-        if ($sp<$arr_salary['sanluong']*$order_tire->order_tire_number) {
-            $sp = $arr_salary['sanluong']*$order_tire->order_tire_number;
-        }
         $tongsp += $sp;
 
         $giaban = $order_tire_discount2[$order_tire->order_tire_id]['thu'];

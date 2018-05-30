@@ -483,7 +483,7 @@ Class tirepricediscountController Extends baseController {
             }
             
 
-            $cell_ngay = $objWorksheet->getCellByColumnAndRow(14, 1);
+            $cell_ngay = $objWorksheet->getCellByColumnAndRow(23, 1);
             $ngay = $cell_ngay->getCalculatedValue();
             $ngaythang = PHPExcel_Shared_Date::ExcelToPHP($ngay);
 
@@ -540,15 +540,24 @@ Class tirepricediscountController Extends baseController {
                                     'start_date' => $ngaythang,
                                     'tire_price' => $val[3],
                                     'tire_retail' => $val[4],
-                                    'tire_20' => $val[5],
-                                    'tire_40' => $val[6],
-                                    'tire_60' => $val[7],
-                                    'tire_80' => $val[8],
-                                    'tire_100' => $val[9],
-                                    'tire_120' => $val[10],
+                                    'tire_10' => $val[5],
+                                    'tire_20' => $val[6],
+                                    'tire_40' => $val[7],
+                                    'tire_60' => $val[8],
+                                    'tire_80' => $val[9],
+                                    'tire_100' => $val[10],
                                     'tire_150' => $val[11],
                                     'tire_180' => $val[12],
                                     'tire_cont' => $val[13],
+                                    'tire_agent_10' => $val[14],
+                                    'tire_agent_20' => $val[15],
+                                    'tire_agent_40' => $val[16],
+                                    'tire_agent_60' => $val[17],
+                                    'tire_agent_80' => $val[18],
+                                    'tire_agent_100' => $val[19],
+                                    'tire_agent_150' => $val[20],
+                                    'tire_agent_180' => $val[21],
+                                    'tire_agent_cont' => $val[22],
                                 );
                                 $tirepricediscount->createTire($data);
                             }
@@ -560,15 +569,24 @@ Class tirepricediscountController Extends baseController {
                                     'tire_pattern'=>$tire_pattern->tire_pattern_id,
                                     'tire_price' => $val[3],
                                     'tire_retail' => $val[4],
-                                    'tire_20' => $val[5],
-                                    'tire_40' => $val[6],
-                                    'tire_60' => $val[7],
-                                    'tire_80' => $val[8],
-                                    'tire_100' => $val[9],
-                                    'tire_120' => $val[10],
+                                    'tire_10' => $val[5],
+                                    'tire_20' => $val[6],
+                                    'tire_40' => $val[7],
+                                    'tire_60' => $val[8],
+                                    'tire_80' => $val[9],
+                                    'tire_100' => $val[10],
                                     'tire_150' => $val[11],
                                     'tire_180' => $val[12],
                                     'tire_cont' => $val[13],
+                                    'tire_agent_10' => $val[14],
+                                    'tire_agent_20' => $val[15],
+                                    'tire_agent_40' => $val[16],
+                                    'tire_agent_60' => $val[17],
+                                    'tire_agent_80' => $val[18],
+                                    'tire_agent_100' => $val[19],
+                                    'tire_agent_150' => $val[20],
+                                    'tire_agent_180' => $val[21],
+                                    'tire_agent_cont' => $val[22],
                                 );
                                 $tirepricediscount->updateTire($data,array('tire_price_discount_id'=>$id_quotation));
                             }

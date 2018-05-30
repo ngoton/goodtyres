@@ -3626,8 +3626,8 @@ Class importtireorderController Extends baseController {
                 $id_list = $v['tire_list_id'];
                 $data_list = array(
                     'tire_number'=> $v['tire_number'],
-                    'tire_price'=> $v['tire_price'],
-                    'tire_price_down'=> $v['tire_price_down'],
+                    'tire_price'=> str_replace(',', '', $v['tire_price']),
+                    'tire_price_down'=> str_replace(',', '', $v['tire_price_down']),
                     'tire_stuff'=> $v['tire_stuff'],
                     'tire_ocean_freight'=> $v['tire_ocean_freight'],
                     'tire_price_sum'=> str_replace(',', '', $v['tire_price_sum']),
