@@ -474,7 +474,7 @@ var i_index=0;
                     // format number
                     $(this).val(function(index, value) {
                       return value
-                        .replace(/[^0-9-.]/g, "")
+                        .replace(/[^0-9.]/g, "")
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                       ;
                     });
@@ -921,7 +921,7 @@ function addRow(id){
     // format number
     $(this).val(function(index, value) {
       return value
-        .replace(/[^0-9-.]/g, "")
+        .replace(/[^0-9.]/g, "")
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       ;
     });
@@ -949,7 +949,7 @@ function delRow(id,rowIndex){
 
       $('.numbers').val(function(index, value) {
         return value
-          .replace(/[^0-9-.]/g, "")
+          .replace(/[^0-9.]/g, "")
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         ;
       });

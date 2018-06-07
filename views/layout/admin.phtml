@@ -393,7 +393,7 @@
             <li><a  data="shipmentvendor" href="<?php echo $this->url('shipmentvendor') ?>"><i class="fa fa-caret-right text-aqua"></i>Danh sách Vendor/NCC</a></li>
           </ul>
         </li>
-        <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 9){ ?>
+        <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3){ ?>
         <li><a href="#">
             <i class="fa fa-dollar"></i>
             <span>Tài chính - Kế toán</span>
@@ -440,6 +440,7 @@
             <li><a data="account" href="<?php echo $this->url('account') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Tài khoản kế toán</a></li>
           </ul>
         </li>
+        <?php if($_SESSION['user_logined'] != "nttthuy"){ ?>
         <li><a href="#">
             <i class="fa fa-group"></i>
             <span>Nhân sự</span>
@@ -460,6 +461,7 @@
             <li><a  data="staff" href="<?php echo $this->url('staff') ?>"><i class="fa fa-caret-right text-aqua"></i>Danh sách nhân viên</a></li>
           </ul>
         </li>
+        <?php } ?>
         <li><a href="#">
             <i class="fa fa-exclamation-triangle"></i>
             <span>Kiểm tra</span>

@@ -706,7 +706,7 @@ Class ordertireController Extends baseController {
             $total_order_before = 0; //Tổng sản lượng tháng trước
             $total_order = 0; //Tổng sản lượng tháng này
 
-            $myDate = strtotime(date("d-m-Y", $tire->delivery_date) . "-1 month" ) ;
+            $myDate = strtotime(date("d-m-Y", strtotime('01-'.date('m-Y',$tire->delivery_date))) . "-1 month" ) ;
 
             $sum_order = $tiresale_model->queryTire('SELECT SUM(volume) AS tong FROM tire_sale WHERE customer='.$tire->customer.' AND tire_sale_date >= '.strtotime('01-'.date('m-Y',$myDate)).' AND tire_sale_date <= '.strtotime(date('t-m-Y',$myDate)).' GROUP BY customer');
                 
@@ -3150,13 +3150,13 @@ Class ordertireController Extends baseController {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $order_tire_model = $this->model->get('ordertireModel');
             $tire_sale_model = $this->model->get('tiresaleModel');
-            $owe_model = $this->model->get('oweModel');
-            $payable_model = $this->model->get('payableModel');
+            //$owe_model = $this->model->get('oweModel');
+            //$payable_model = $this->model->get('payableModel');
             $obtain_model = $this->model->get('obtainModel');
             $receivable_model = $this->model->get('receivableModel');
             $assets = $this->model->get('assetsModel');
             $receive = $this->model->get('receiveModel');
-            $pay = $this->model->get('payModel');
+            //$pay = $this->model->get('payModel');
             $lift = $this->model->get('liftModel');
 
             $re = $receivable_model->getAllCosts(array('where'=>'order_tire='.$_POST['data']));
@@ -3164,16 +3164,16 @@ Class ordertireController Extends baseController {
                 $assets->queryAssets('DELETE FROM assets WHERE receivable='.$r->receivable_id);
                 $receive->queryCosts('DELETE FROM receive WHERE receivable='.$r->receivable_id);
             }
-            $pa = $payable_model->getAllCosts(array('where'=>'order_tire='.$_POST['data']));
-            foreach ($pa as $p) {
-                $assets->queryAssets('DELETE FROM assets WHERE payable='.$p->payable_id);
-                $pay->queryCosts('DELETE FROM pay WHERE payable='.$p->payable_id);
-            }
+            // $pa = $payable_model->getAllCosts(array('where'=>'order_tire='.$_POST['data']));
+            // foreach ($pa as $p) {
+            //     $assets->queryAssets('DELETE FROM assets WHERE payable='.$p->payable_id);
+            //     $pay->queryCosts('DELETE FROM pay WHERE payable='.$p->payable_id);
+            // }
 
             $receivable_model->queryCosts('DELETE FROM receivable WHERE order_tire = '.$_POST['data']);
-            $payable_model->queryCosts('DELETE FROM payable WHERE order_tire = '.$_POST['data']);
+            //$payable_model->queryCosts('DELETE FROM payable WHERE order_tire = '.$_POST['data']);
             $obtain_model->queryObtain('DELETE FROM obtain WHERE order_tire = '.$_POST['data']);
-            $owe_model->queryOwe('DELETE FROM owe WHERE order_tire = '.$_POST['data']);
+            //$owe_model->queryOwe('DELETE FROM owe WHERE order_tire = '.$_POST['data']);
             $tire_sale_model->queryTire('DELETE FROM tire_sale WHERE order_tire = '.$_POST['data']);
             $lift->queryLift('DELETE FROM lift WHERE order_tire = '.$_POST['data']);
 
