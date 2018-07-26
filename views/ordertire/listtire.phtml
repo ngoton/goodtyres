@@ -57,8 +57,8 @@
             <td class="fix" data="<?php echo $order_tire_list->tire_pattern; ?>" id="tire_pattern_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire_list->tire_pattern_name; ?></td>
             <td class="fix"  id="tire_number_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire_list->tire_number; ?></td>
             <td class="fix"  id="tire_price_<?php echo $order_tire_list->order_tire_list_id; ?>"><?php echo $order_tire->check_price_vat==1?$lib->formatMoney($order_tire_list->tire_price_vat):$lib->formatMoney($order_tire_list->tire_price); ?></td>
-            <td class="fix"  id="price_<?php echo $order_tire_list->order_tire_list_id; ?>">
-              <?php echo isset($price[$order_tire_list->order_tire_list_id])?round((($order_tire_list->tire_price_vat>0?$order_tire_list->tire_price_vat-(($order_tire_list->tire_number*($order_tire->discount+$order_tire->reduce))/$order_tire->order_tire_number)/$order_tire_list->tire_number:$order_tire_list->tire_price-(($order_tire_list->tire_number*($order_tire->discount+$order_tire->reduce))/$order_tire->order_tire_number)/$order_tire_list->tire_number)*100)/$price[$order_tire_list->order_tire_list_id],1)."%":null; ?>
+            <td class="fix" data="<?php echo isset($price[$order_tire_list->order_tire_list_id])?$price[$order_tire_list->order_tire_list_id]:null ?>"  id="price_<?php echo $order_tire_list->order_tire_list_id; ?>">
+              <?php echo isset($price[$order_tire_list->order_tire_list_id])?round((($order_tire_list->tire_price_vat>0?$order_tire_list->tire_price_vat:$order_tire_list->tire_price)*100)/$price[$order_tire_list->order_tire_list_id],1)."%":null; ?>
             </td>
             <td class="fix"  id="vat_<?php echo $order_tire_list->order_tire_list_id; ?>">
               <?php echo $order_tire->vat_percent>0?$order_tire->vat_percent.'%':null; ?>

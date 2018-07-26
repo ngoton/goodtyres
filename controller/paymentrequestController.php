@@ -129,17 +129,17 @@ Class paymentrequestController Extends baseController {
         $items = $payable_model->getAllCosts(array('where'=>'money>0 AND vendor>0 AND ( pay_money IS NULL OR pay_money=0 OR pay_money<money )','order_by'=>'payable_date DESC'));
         
         $str = '<table class="table_data" id="tblExport2">';
-        $str .= '<thead><tr><th class="fix"><input type="checkbox" onclick="checkall(\'checkbox2\', this)" name="checkall"/></th><th class="fix">Ngày</th><th class="fix">Code</th><th class="fix">Phải trả</th><th class="fix">Nội dung</th><th class="fix">Số tiền</th><th class="fix">Đã trả</th><th class="fix">Còn lại</th></tr></thead>';
+        $str .= '<thead><tr><th class="fix"><input type="checkbox" onclick="checkall(\'checkbox2\', this)" name="checkall"/></th><th class="fix">Ngày</th><th class="fix">Code</th><th class="fix">Phải trả</th><th class="fix">Nội dung</th><th class="fix">USD</th><th class="fix">Số tiền</th><th class="fix">Đã trả</th><th class="fix">Còn lại</th></tr></thead>';
         $str .= '<tbody>';
 
         foreach ($items as $item) {
             if ($item->order_tire>0) {
                 $cus = $customer_model->getCustomer($order_model->getTire($item->order_tire)->customer);
 
-                $str .= '<tr style="font-style:italic" class="tr"><td><input name="check_i[]" type="checkbox" class="checkbox2" value="'.$item->payable_id.'" data="'.$item->payable_id.'" data-code="'.$item->code.'" data-comment="'.str_replace($item->code.'-', '', $item->comment).' '.$cus->customer_name.'" data-money="'.$this->lib->formatMoney($item->money-$item->pay_money).'" ></td><td class="fix">'.$this->lib->hien_thi_ngay_thang($item->payable_date).'</td><td class="fix">'.$item->code.'</td><td class="fix">'.$vendor_data[$item->vendor].'</td><td class="fix">'.$item->comment.' '.$cus->customer_name.'</td><td class="fix">'.$this->lib->formatMoney($item->money).'</td><td class="fix">'.$this->lib->formatMoney($item->pay_money).'</td><td class="fix">'.$this->lib->formatMoney($item->money-$item->pay_money).'</td></tr>';
+                $str .= '<tr style="font-style:italic" class="tr"><td><input name="check_i[]" type="checkbox" class="checkbox2" value="'.$item->payable_id.'" data="'.$item->payable_id.'" data-code="'.$item->code.'" data-comment="'.str_replace($item->code.'-', '', $item->comment).' '.$cus->customer_name.'" data-money="'.$this->lib->formatMoney($item->money-$item->pay_money).'" data-money-usd="'.$item->money_usd.'" ></td><td class="fix">'.$this->lib->hien_thi_ngay_thang($item->payable_date).'</td><td class="fix">'.$item->code.'</td><td class="fix">'.$vendor_data[$item->vendor].'</td><td class="fix">'.$item->comment.' '.$cus->customer_name.'</td><td class="fix">'.$item->money_usd.'</td><td class="fix">'.$this->lib->formatMoney($item->money).'</td><td class="fix">'.$this->lib->formatMoney($item->pay_money).'</td><td class="fix">'.$this->lib->formatMoney($item->money-$item->pay_money).'</td></tr>';
             }
             else{
-                $str .= '<tr style="font-style:italic" class="tr"><td><input name="check_i[]" type="checkbox" class="checkbox2" value="'.$item->payable_id.'" data="'.$item->payable_id.'" data-code="'.$item->code.'" data-comment="'.str_replace($item->code.'-', '', $item->comment).'" data-money="'.$this->lib->formatMoney($item->money-$item->pay_money).'" ></td><td class="fix">'.$this->lib->hien_thi_ngay_thang($item->payable_date).'</td><td class="fix">'.$item->code.'</td><td class="fix">'.$vendor_data[$item->vendor].'</td><td class="fix">'.$item->comment.'</td><td class="fix">'.$this->lib->formatMoney($item->money).'</td><td class="fix">'.$this->lib->formatMoney($item->pay_money).'</td><td class="fix">'.$this->lib->formatMoney($item->money-$item->pay_money).'</td></tr>';
+                $str .= '<tr style="font-style:italic" class="tr"><td><input name="check_i[]" type="checkbox" class="checkbox2" value="'.$item->payable_id.'" data="'.$item->payable_id.'" data-code="'.$item->code.'" data-comment="'.str_replace($item->code.'-', '', $item->comment).'" data-money="'.$this->lib->formatMoney($item->money-$item->pay_money).'" data-money-usd="'.$item->money_usd.'" ></td><td class="fix">'.$this->lib->hien_thi_ngay_thang($item->payable_date).'</td><td class="fix">'.$item->code.'</td><td class="fix">'.$vendor_data[$item->vendor].'</td><td class="fix">'.$item->comment.'</td><td class="fix">'.$item->money_usd.'</td><td class="fix">'.$this->lib->formatMoney($item->money).'</td><td class="fix">'.$this->lib->formatMoney($item->pay_money).'</td><td class="fix">'.$this->lib->formatMoney($item->money-$item->pay_money).'</td></tr>';
             }
             
             
@@ -161,6 +161,7 @@ Class paymentrequestController Extends baseController {
                             <td class="width-10"><input type="text" name="code[]" class="code" autocomplete="off" data="'.$detail->payable.'" alt="'.$detail->payment_request_detail_id.'" value="'.$detail->payment_request_detail_code.'"></td>
                             <td><input type="text" name="comment[]" class="comment" autocomplete="off" value="'.$detail->payment_request_detail_comment.'"></td>
                             <td class="width-10"><input type="text" name="money[]" class="money numbers text-right" autocomplete="off" value="'.$this->lib->formatMoney($detail->payment_request_detail_money).'"></td>
+                            <td class="width-10"><input type="text" name="money_usd[]" class="money_usd text-right" autocomplete="off" value="'.$detail->payment_request_detail_money_usd.'"></td>
                           </tr>';
             }
         }
@@ -170,6 +171,7 @@ Class paymentrequestController Extends baseController {
                         <td class="width-10"><input type="text" name="code[]" class="code" autocomplete="off"></td>
                         <td><input type="text" name="comment[]" class="comment" autocomplete="off"></td>
                         <td class="width-10"><input type="text" name="money[]" class="money numbers text-right" autocomplete="off"></td>
+                        <td class="width-10"><input type="text" name="money_usd[]" class="money_usd text-right" autocomplete="off"></td>
                       </tr>';
         }
 
@@ -229,6 +231,7 @@ Class paymentrequestController Extends baseController {
                 'payment_request_receive' => trim($_POST['payment_request_receive']),
                 'payment_request_destination' => trim($_POST['payment_request_destination']),
                 'payment_request_money' => str_replace(',', '', $_POST['payment_request_money']),
+                'payment_request_money_usd' => str_replace(',', '', $_POST['payment_request_money_usd']),
                 'payment_request_origin' => trim($_POST['payment_request_origin']),
                 'payment_request_type' => trim($_POST['payment_request_type']),
             );
@@ -278,6 +281,7 @@ Class paymentrequestController Extends baseController {
                     'payment_request_detail_code'=>trim($v['code']),
                     'payment_request_detail_comment'=>trim($v['comment']),
                     'payment_request_detail_money'=>str_replace(',', '', $v['money']),
+                    'payment_request_detail_money_usd'=>str_replace(',', '', $v['money_usd']),
                     'payable'=>$v['payable_id'],
                     'payment_request'=>$id_payment,
                 );

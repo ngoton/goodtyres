@@ -1642,6 +1642,7 @@ Class importtireorderController Extends baseController {
                         $payable_mualop = array(
                             'vendor' => $data_mualop['vendor'],
                             'money' => $data_mualop['cost_vat'],
+                            'money_usd' => $data['import_tire_order_sum_usd']+$data['import_tire_order_oceanfreight']-$data['import_tire_order_claim'],
                             'payable_date' => $data_mualop['expect_date'],
                             'payable_create_date' => strtotime(date('d-m-Y H:i:s')),
                             'expect_date' => $data_mualop['expect_date'],
@@ -2985,6 +2986,7 @@ Class importtireorderController Extends baseController {
                         $payable_mualop = array(
                             'vendor' => $data_mualop['vendor'],
                             'money' => $data_mualop['cost_vat'],
+                            'money_usd' => $data['import_tire_order_sum_usd']+$data['import_tire_order_oceanfreight']-$data['import_tire_order_claim'],
                             'payable_date' => $data_mualop['expect_date'],
                             'payable_create_date' => strtotime(date('d-m-Y H:i:s')),
                             'expect_date' => $data_mualop['expect_date'],

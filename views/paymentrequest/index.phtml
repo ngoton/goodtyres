@@ -118,6 +118,9 @@ elseif ($order_by == 'payment_request_date   ')
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payment_request_money','<?php echo $url_order ?>')">Số tiền <?php if ($order_by == 'payment_request_money'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th  class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payment_request_money_usd','<?php echo $url_order ?>')">USD <?php if ($order_by == 'payment_request_money_usd'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th>
+        <th  class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','payment_request_user','<?php echo $url_order ?>')">Đề nghị <?php if ($order_by == 'payment_request_user'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th>
         <th  class="fix">
@@ -131,9 +134,10 @@ elseif ($order_by == 'payment_request_date   ')
     
    </thead>
    <tbody>
-    <?php $tongtien=0; 
+    <?php $tongtien=0; $tongtienusd=0;
     foreach ($payment_requests as $payment_request) : 
       $tongtien += $payment_request->payment_request_money;
+      $tongtienusd += $payment_request->payment_request_money_usd;
     ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $payment_request->payment_request_id ?>" class="edit_tr" >
             
@@ -150,6 +154,7 @@ elseif ($order_by == 'payment_request_date   ')
             <td class="fix" id="payment_request_date_<?php echo $payment_request->payment_request_id; ?>"><?php echo $lib->hien_thi_ngay_thang($payment_request->payment_request_date); ?></td>
             <td class="fix" id="payment_request_comment_<?php echo $payment_request->payment_request_id; ?>"><?php echo $payment_request->payment_request_comment; ?></td>
             <td class="fix text-right" id="payment_request_money_<?php echo $payment_request->payment_request_id; ?>"><?php echo $lib->formatMoney($payment_request->payment_request_money); ?></td>
+            <td class="fix text-right" id="payment_request_money_usd_<?php echo $payment_request->payment_request_id; ?>"><?php echo $lib->formatMoney($payment_request->payment_request_money_usd); ?></td>
             <td class="fix" id="payment_request_user_<?php echo $payment_request->payment_request_id; ?>"><?php echo $payment_request->username; ?></td>
             <td class="fix" id="payment_request_user_approve_<?php echo $payment_request->payment_request_id; ?>">
               <?php 
@@ -189,6 +194,7 @@ elseif ($order_by == 'payment_request_date   ')
         <tr style="font-weight:bold">
           <td colspan="5" class="fix">Tổng cộng</td>
           <td  class="fix text-right"><?php echo $lib->formatMoney($tongtien); ?></td>
+          <td  class="fix text-right"><?php echo $lib->formatMoney($tongtienusd,2); ?></td>
           <td  class="fix text-right"></td>
           <td  class="fix text-right"></td>
           <td  class="fix text-right"></td>
@@ -240,12 +246,20 @@ $this->helper('slidePaginator');
                       </div>
                     </div>
                     <div class="box-body nopadding">
-                      <div class="form-group nopadding">
-                        <label for="payment_request_type">Loại </label>
-                        <select style="width:20%" id="payment_request_type" name="payment_request_type" tabindex="5"  required="required" >
-                          <option value="1">Chi hành chính</option>
-                          <option value="2">Chi lô hàng</option>
-                        </select>
+                      <div class="col-md-8 col-xs-6 nopadding">
+                        <div class="form-group nopadding">
+                          <label for="payment_request_type">Loại </label>
+                          <select style="width:20%" id="payment_request_type" name="payment_request_type" tabindex="5"  required="required" >
+                            <option value="1">Chi hành chính</option>
+                            <option value="2">Chi lô hàng</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-4 col-xs-6 nopadding">
+                        <div class="form-group nopadding">
+                          <label for="payment_request_money_usd">USD</label>
+                          <input style="width:80%" type="text" id="payment_request_money_usd" class="numbers" name="payment_request_money_usd" tabindex="4"  autocomplete="off" disabled="disabled" >
+                        </div>
                       </div>
                     </div>
                 </div>
@@ -305,6 +319,7 @@ $this->helper('slidePaginator');
                             <th class="width-10">Code</th>
                             <th>Nội dung</th>
                             <th class="width-10">Số tiền</th>
+                            <th class="width-10">USD</th>
                             <th style="width:5px"></th>
                           </tr>
                         </thead>
@@ -314,6 +329,7 @@ $this->helper('slidePaginator');
                             <td class="width-10"><input type="text" name="code[]" class="code" autocomplete="off"></td>
                             <td><input type="text" name="comment[]" class="comment" autocomplete="off"></td>
                             <td class="width-10"><input type="text" name="money[]" class="money numbers text-right" autocomplete="off"></td>
+                            <td class="width-10"><input type="text" name="money_usd[]" class="money_usd text-right" autocomplete="off"></td>
                           </tr>
                         </tbody>
                       </table>
@@ -379,6 +395,7 @@ $('#payment_request_type').change(function(){
   $('.dataTable input').attr('data',"");
   $('.dataTable input').attr('alt',"");
   $('#payment_request_money').val("");
+  $('#payment_request_money_usd').val("");
 });
 
 $('.approve').click(function(e) {
@@ -479,6 +496,22 @@ $('.edit_invoice').click(function(e){
               });
           });
 
+          $('.money_usd').keyup(function(){
+            var total = 0;
+            $('.money_usd').each(function(){
+              total += parseFloat(get_number($(this))) || 0;
+            });
+
+            $('#payment_request_money_usd').val(total);
+
+            $('.numbers').val(function(index, value) {
+                return value
+                  .replace(/[^0-9-.]/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+              });
+          });
+
           $('.numbers').keyup(function(event) {
               // skip for arrow keys
             if(event.which >= 37 && event.which <= 40) return;
@@ -548,6 +581,7 @@ $(document).ready(function(){
         var payment_request_type = $('#payment_request_type').val();
         var payment_request_origin = $('#payment_request_origin').val();
         var payment_request_money = $('#payment_request_money').val();
+        var payment_request_money_usd = $('#payment_request_money_usd').val();
         
         if (payment_request_money=="" || payment_request_money==0) {
           alert('Vui lòng nhập vào số tiền!');
@@ -560,6 +594,7 @@ $(document).ready(function(){
         var code = [];
         var comment = [];
         var money = [];
+        var money_usd = [];
         
 
         $('.code').each(function(){
@@ -573,9 +608,12 @@ $(document).ready(function(){
         $('.money').each(function(){
           money.push($(this).attr('value'));
         });
+        $('.money_usd').each(function(){
+          money_usd.push($(this).attr('value'));
+        });
         
         for (var j = 0; j < money.length; j++) {
-          payable.push({'detail_id':detail_id[j],'payable_id':payable_id[j],'code':code[j],'comment':comment[j],'money':money[j]});
+          payable.push({'detail_id':detail_id[j],'payable_id':payable_id[j],'code':code[j],'comment':comment[j],'money':money[j],'money_usd':money_usd[j]});
         }
 
 
@@ -591,6 +629,7 @@ $(document).ready(function(){
             payment_request_type: payment_request_type,
             payment_request_date: payment_request_date,
             payment_request_money: payment_request_money,
+            payment_request_money_usd: payment_request_money_usd,
             payment_request_destination: payment_request_destination,
             payment_request_receive: payment_request_receive,
             payment_request_origin:payment_request_origin,
@@ -635,6 +674,21 @@ $('.money').keyup(function(){
     });
 
     $('#payment_request_money').val(total);
+
+    $('.numbers').val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+  });
+$('.money_usd').keyup(function(){
+    var total = 0;
+    $('.money_usd').each(function(){
+      total += parseFloat(get_number($(this))) || 0;
+    });
+
+    $('#payment_request_money_usd').val(total);
 
     $('.numbers').val(function(index, value) {
         return value
@@ -936,6 +990,7 @@ $( "#show_item" ).dialog({
             $('.code:eq('+rowIndex+')').attr('data',$(this).attr('value'));
             $('.comment:eq('+rowIndex+')').val($(this).attr('data-comment'));
             $('.money:eq('+rowIndex+')').val($(this).attr('data-money'));
+            $('.money_usd:eq('+rowIndex+')').val($(this).attr('data-money-usd'));
 
             i++;
             rowIndex++;
@@ -949,6 +1004,13 @@ $( "#show_item" ).dialog({
         });
 
         $('#payment_request_money').val(total);
+
+        var total_usd = 0;
+        $('.money_usd').each(function(){
+          total_usd += parseFloat(get_number($(this))) || 0;
+        });
+
+        $('#payment_request_money_usd').val(total_usd);
         
         $('.numbers').val(function(index, value) {
             return value
@@ -1086,7 +1148,21 @@ function addRow(id){
       });
   });
 
-  
+  $('.money_usd').keyup(function(){
+    var total = 0;
+    $('.money_usd').each(function(){
+      total += parseFloat(get_number($(this))) || 0;
+    });
+
+    $('#payment_request_money_usd').val(total);
+
+    $('.numbers').val(function(index, value) {
+        return value
+          .replace(/[^0-9-.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+  });
 
   $('.numbers').keyup(function(event) {
       // skip for arrow keys
@@ -1126,6 +1202,13 @@ function delRow(id,rowIndex){
       });
 
       $('#payment_request_money').val(total);
+
+      var total_usd = 0;
+      $('.money_usd').each(function(){
+        total_usd += parseFloat(get_number($(this))) || 0;
+      });
+
+      $('#payment_request_money_usd').val(total_usd);
 
       $('.numbers').val(function(index, value) {
         return value

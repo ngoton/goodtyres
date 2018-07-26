@@ -308,7 +308,7 @@ class Library{
 				$units  = $number % 10;
 				$string = $dictionary[$tens];
 				if ($units) {
-					$string .= strtolower( $hyphen . ($units==1?$one:($units==5?$pen:$dictionary[$units])) );
+					$string .= mb_strtolower(( $hyphen . ($units==1?$one:($units==5?$pen:$dictionary[$units])) ), 'UTF-8');
 				}
 			break;
 			case $number < 1000:
@@ -316,7 +316,7 @@ class Library{
 				$remainder = $number % 100;
 				$string = $dictionary[$hundreds] . ' ' . $dictionary[100];
 				if ($remainder) {
-					$string .= strtolower( $conjunction . ($remainder<10?$ten.$hyphen:null) . $this->convert_number_to_words($remainder) );
+					$string .= mb_strtolower(( $conjunction . ($remainder<10?$ten.$hyphen:null) . $this->convert_number_to_words($remainder) ), 'UTF-8');
 				}
 			break;
 			default:
@@ -333,8 +333,8 @@ class Library{
 					
 				}
 				if ($remainder) {
-					$string .= strtolower( $remainder < 100 ? $conjunction : $separator );
-					$string .= strtolower( $this->convert_number_to_words($remainder) );
+					$string .= mb_strtolower(( $remainder < 100 ? $conjunction : $separator ), 'UTF-8');
+					$string .= mb_strtolower($this->convert_number_to_words($remainder), 'UTF-8');
 				}
 			break;
 			

@@ -547,6 +547,10 @@ function set_item(item,value,company,phone,address,email,contact,sale,ngay,mst,t
     }
     $('#company').val(company);
     $('#contact').val(contact);
+    var old = '<?php echo $_SESSION['userid_logined'] ?>';
+    if (old != sale && sale>0) {
+        alert('Khách hàng đang được '+$("#order_staff option[value=" + sale + "]").text()+' chăm sóc!');
+    }
     $("#order_staff option[value=" + sale + "]").attr('selected', 'selected');
     $("input[name=customer_type][value=" + type + "]").attr('checked', 'checked');
     $('#customer_list_id').hide();
@@ -612,6 +616,10 @@ $('#company').change(function(){
                         $('#email').val("xxxxx"+data.email.substring(5, data.email.length));
                     }
                 }
+                var old = '<?php echo $_SESSION['userid_logined'] ?>';
+                if (old != data.staff && data.staff>0) {
+                    alert('Khách hàng đang được '+$("#order_staff option[value=" + data.staff + "]").text()+' chăm sóc!');
+                }
                 $("#order_staff option[value=" + data.staff + "]").attr('selected', 'selected');
                 $("input[name=customer_type][value=" + data.type + "]").attr('checked', 'checked');
                 $('#customer').val(data.customer_name);
@@ -661,6 +669,10 @@ $('#mst').change(function(){
                         $('#email').val("xxxxx"+data.email.substring(5, data.email.length));
                     }
                 }
+                var old = '<?php echo $_SESSION['userid_logined'] ?>';
+                if (old != data.staff && data.staff>0) {
+                    alert('Khách hàng đang được '+$("#order_staff option[value=" + data.staff + "]").text()+' chăm sóc!');
+                }
                 $("#order_staff option[value=" + data.staff + "]").attr('selected', 'selected');
                 $("input[name=customer_type][value=" + data.type + "]").attr('checked', 'checked');
                 $('#customer').val(data.customer_name);
@@ -709,6 +721,10 @@ $('#phone').change(function(){
                     if (data.email != "") {
                         $('#email').val("xxxxx"+data.email.substring(5, data.email.length));
                     }
+                }
+                var old = '<?php echo $_SESSION['userid_logined'] ?>';
+                if (old != data.staff && data.staff>0) {
+                    alert('Khách hàng đang được '+$("#order_staff option[value=" + data.staff + "]").text()+' chăm sóc!');
                 }
                 $("#order_staff option[value=" + data.staff + "]").attr('selected', 'selected');
                 $("input[name=customer_type][value=" + data.type + "]").attr('checked', 'checked');
@@ -761,6 +777,10 @@ $('#email').change(function(){
                     if (data.email != "") {
                         $('#email').val("xxxxx"+data.email.substring(5, data.email.length));
                     }
+                }
+                var old = '<?php echo $_SESSION['userid_logined'] ?>';
+                if (old != data.staff && data.staff>0) {
+                    alert('Khách hàng đang được '+$("#order_staff option[value=" + data.staff + "]").text()+' chăm sóc!');
                 }
                 $("#order_staff option[value=" + data.staff + "]").attr('selected', 'selected');
                 $("input[name=customer_type][value=" + data.type + "]").attr('checked', 'checked');

@@ -85,7 +85,7 @@
                     <tr>
                         <td style="width:48.64%;padding:0in 5.4pt 0in 5.4pt" valign="top" width="48%">
                             <p class="MsoNormal" style="margin-top:6.0pt">
-                                <b><span lang="VI">Đơn vị: <u>VINA TRADE</u></span></b>
+                                <b><span lang="VI">Đơn vị: <u><?php echo mb_strtoupper($infos->info_company,"UTF-8") ?></u></span></b>
                             </p>
                             <p class="MsoNormal" style="margin-top:6.0pt">
                                 <b><span lang="VI" >Số: <u><?php echo $payment_requests->payment_request_number ?></u></span></b>
@@ -141,12 +141,12 @@
             </p>
             <p class="MsoNormal" style="margin-top:6.0pt;tab-stops:dotted 5.75in">
                 <span lang="VI" style="float:left">Số tiền: </span>
-                <span style="float:left;"><u> &nbsp;&nbsp;&nbsp;&nbsp; <?php echo $lib->formatMoney(str_replace('.', '', $payment_requests->payment_request_money)) ?> &nbsp;&nbsp;&nbsp;&nbsp; </u></span>
+                <span style="float:left;"><u> &nbsp;&nbsp;&nbsp;&nbsp; <?php echo $payment_requests->payment_request_money_usd>0?$lib->formatMoney($payment_requests->payment_request_money_usd,2):$lib->formatMoney(str_replace('.', '', $payment_requests->payment_request_money)) ?> &nbsp;&nbsp;&nbsp;&nbsp; </u></span>
                 <span style="float:left">(Viết bằng chữ):</span>
                 <span class="underline"><font style="color:#000"></span>
             </p>
             <p class="MsoNormal" style="margin-top:6.0pt;tab-stops:dotted 5.75in">
-                <span class="underline"><font style="color:#000"><font style="color:#000"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $lib->convert_number_to_words(str_replace('.', '', $payment_requests->payment_request_money)) ?> đồng &nbsp;&nbsp;&nbsp;&nbsp; </font></span>
+                <span class="underline"><font style="color:#000"><font style="color:#000"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $payment_requests->payment_request_money_usd>0?$lib->convert_number_to_words($payment_requests->payment_request_money_usd).' USD':$lib->convert_number_to_words(str_replace('.', '', $payment_requests->payment_request_money)).' đồng' ?> &nbsp;&nbsp;&nbsp;&nbsp; </font></span>
             </p>
             <p class="MsoNormal" style="margin-top:6.0pt;tab-stops:dotted 5.75in">
                 <span lang="VI" style="float:left;">Kèm theo: </span>
@@ -175,7 +175,7 @@
                                 </span></b><i><span lang="VI" >(Ký, họ tên)</span></i>
                             </p>
                             <p align="center" class="MsoNormal" style="margin-top:50.0pt;text-align:center">
-                                <b><span lang="VI" ><?php echo $staff_data[$payment_requests->payment_request_user_approve] ?></span></b>
+                                <b><span lang="VI" ><?php echo isset($staff_data[$payment_requests->payment_request_user_approve])?$staff_data[$payment_requests->payment_request_user_approve]:null ?></span></b>
                             </p>
                         </td>
                         <td style="width:20%;padding:0in 5.4pt 0in 5.4pt" valign="top" width="33%">

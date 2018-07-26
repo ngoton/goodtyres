@@ -399,7 +399,7 @@ Class tiredebitController Extends baseController {
         $join = array('table'=>'bank','where'=>'source = bank_id');
         $data = array(
             'order_by'=>'receive_date',
-            'order'=>'ASC',
+            'order'=>'DESC',
             'where'=>'receivable IN (SELECT receivable_id FROM receivable WHERE order_tire = '.$id.') AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
 
@@ -407,7 +407,7 @@ Class tiredebitController Extends baseController {
         if (!$receives) {
             $data = array(
                 'order_by'=>'receive_date',
-                'order'=>'ASC',
+                'order'=>'DESC',
                 'where'=>'receivable  = '.$id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
                 );
 
@@ -562,7 +562,7 @@ Class tiredebitController Extends baseController {
         $join = array('table'=>'bank','where'=>'source = bank_id');
         $data = array(
             'order_by'=>'receive_date',
-            'order'=>'ASC',
+            'order'=>'DESC',
             'where'=>'receivable IN (SELECT receivable_id FROM receivable WHERE customer = '.$id.') AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
 
