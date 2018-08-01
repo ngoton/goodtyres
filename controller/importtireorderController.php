@@ -3710,20 +3710,10 @@ Class importtireorderController Extends baseController {
                         'import_tire_list' => $id_list,
                         );
 
-                        $going = $tire_going_order_model->getTireByWhere(array('import_tire_list' => $id_list));
-                        if (!$going) {
-                            $tire_going_order_model->createTire($tire_going_data);
-                            if ($import_orders->import_tire_order_status>1) {
-                                $tire_going_model->createTire($tire_going);
-                            }
-                            
-                        }
-                        else{
-                            $tire_going_order_model->updateTire($tire_going_data,array('import_tire_list' => $id_list));
-                            $tire_going_model->updateTire($tire_going,array('import_tire_list' => $id_list));
-                        }
                         
-                        
+                        $tire_going_order_model->updateTire($tire_going_data,array('import_tire_list' => $id_list));
+                        $tire_going_model->updateTire($tire_going,array('import_tire_list' => $id_list));
+ 
                     }
                     else{
                         $import_tire_list_model->createImport($data_list);
@@ -3764,7 +3754,7 @@ Class importtireorderController Extends baseController {
 
                     $item_olds = $import_tire_list_model->queryImport('SELECT * FROM import_tire_list WHERE import_tire_order='.$id_order.' AND import_tire_list_id NOT IN ('.$arr_item.')');
                     foreach ($item_olds as $item_old) {
-                        $import_tire_list_model->updateImport(array('import_tire_order'=>null),array('import_tire_list_id'=>$item_old->import_tire_list_id));
+                        $import_tire_list_model->queryImport('DELETE FROM import_tire_list WHERE import_tire_list_id='.$item_old->import_tire_list_id);
                         $tire_going_order_model->queryTire('DELETE FROM tire_going_order WHERE import_tire_list='.$item_old->import_tire_list_id);
                         $tire_going_model->queryTire('DELETE FROM tire_going WHERE import_tire_list='.$item_old->import_tire_list_id);
                     }

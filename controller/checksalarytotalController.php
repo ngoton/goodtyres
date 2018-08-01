@@ -182,7 +182,7 @@ Class checksalarytotalController Extends baseController {
                 $ngay = [7,30];
             }
 
-            if ($ngay[0] > 10) {
+            if ($ngay[0] > 8) {
                 $ngay = [7,30];
             }
             

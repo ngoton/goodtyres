@@ -753,6 +753,170 @@ Class adminController Extends baseController {
 
     }
 
+    public function checkorderexpired(){
+        $order_tire_model = $this->model->get('ordertireModel');
+        $order_tire_list_model = $this->model->get('ordertirelistModel');
+        $order_tire_cost_model = $this->model->get('ordertirecostModel');
+        $tire_sale_model = $this->model->get('tiresaleModel');
+        $owe_model = $this->model->get('oweModel');
+        $payable_model = $this->model->get('payableModel');
+        $obtain_model = $this->model->get('obtainModel');
+        $receivable_model = $this->model->get('receivableModel');
+        $assets = $this->model->get('assetsModel');
+        $receive = $this->model->get('receiveModel');
+        $pay = $this->model->get('payModel');
+        $lift = $this->model->get('liftModel');
+        $invoice_tire_model = $this->model->get('invoicetireModel');
+        $invoice_tire_detail_model = $this->model->get('invoicetiredetailModel');
+        $additional_model = $this->model->get('additionalModel');
+        $shipment_vendor_model = $this->model->get('shipmentvendorModel');
+        $purchase_tire_model = $this->model->get('purchasetireModel');
+        $purchase_tire_detail_model = $this->model->get('purchasetiredetailModel');
+        $tireimport = $this->model->get('tireimportModel');
+        $tireimportdetail = $this->model->get('tireimportdetailModel');
+        $tirebuy = $this->model->get('tirebuyModel');
+        // where are we posting to?
+        $url = 'https://viet-trade.org/admin/checkorderexpired';
+
+        // what post fields?
+        $fields = array(
+        );
+        // build the urlencoded data
+        $postvars = http_build_query($fields);
+
+        // open connection
+        $ch = curl_init();
+
+        // set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, count($fields));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postvars);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // execute post
+        $result = curl_exec($ch);
+
+        // close connection
+        curl_close($ch);
+
+        $resArr = array();
+        $resArr = json_decode($result);
+
+        $arr = implode($resArr, ',');
+
+        $today = date('d-m-Y');
+        $before = date('d-m-Y', strtotime($today. ' - 16 days'));
+
+        
+        $orders = $order_tire_model->getAllTire(array('where'=>'order_tire_id IN ('.$arr.')'),array('table'=>'customer,user','where'=>'customer=customer_id AND sale=user_id'));
+
+        $str = "";
+        $i=1;
+        foreach ($orders as $order) {
+            if ($order->order_tire_date < strtotime($before)) {
+                $order_data = $order;
+                $data = $order->order_tire_id;
+
+                $re = $receivable_model->getAllCosts(array('where'=>'order_tire='.$data));
+                foreach ($re as $r) {
+                    $assets->queryAssets('DELETE FROM assets WHERE receivable='.$r->receivable_id);
+                    $receive->queryCosts('DELETE FROM receive WHERE receivable='.$r->receivable_id);
+                }
+                $pa = $payable_model->getAllCosts(array('where'=>'order_tire='.$data));
+                foreach ($pa as $p) {
+                    $assets->queryAssets('DELETE FROM assets WHERE payable='.$p->payable_id);
+                    $pay->queryCosts('DELETE FROM pay WHERE payable='.$p->payable_id);
+                }
+
+                $receivable_model->queryCosts('DELETE FROM receivable WHERE order_tire = '.$data);
+                $payable_model->queryCosts('DELETE FROM payable WHERE order_tire = '.$data);
+                $obtain_model->queryObtain('DELETE FROM obtain WHERE order_tire = '.$data);
+                $owe_model->queryOwe('DELETE FROM owe WHERE order_tire = '.$data);
+                $order_tire_list_model->queryTire('DELETE FROM order_tire_list WHERE order_tire = '.$data);
+                $order_tire_cost_model->queryTire('DELETE FROM order_tire_cost WHERE order_tire = '.$data);
+                $tire_sale_model->queryTire('DELETE FROM tire_sale WHERE order_tire = '.$data);
+                $lift->queryLift('DELETE FROM lift WHERE order_tire = '.$data);
+                $invoice_tire_model->queryInvoice('DELETE FROM invoice_tire WHERE order_tire = '.$data);
+                $invoice_tire_detail_model->queryInvoice('DELETE FROM invoice_tire_detail WHERE order_tire = '.$data);
+                $additional_model->queryAdditional('DELETE FROM additional WHERE order_tire = '.$data);
+
+                $pu = $purchase_tire_model->getAllTire(array('where'=>'order_tire='.$data));
+                foreach ($pu as $p) {
+                    if ($order_data->check_purchase==1 && $p->purchase_tire_status!=2) {
+                        $vendors = $shipment_vendor_model->getVendor($order_data->order_tire_vendor);
+                        // where are we posting to?
+                        $url = $vendors->shipment_vendor_code.'/ordertire/agentorderdelete';
+
+                        // what post fields?
+                        $fields = array(
+                           'id_order_tire' => $data,
+                           'link_agent' => BASE_URL,
+                        );
+
+                        // build the urlencoded data
+                        $postvars = http_build_query($fields);
+
+                        // open connection
+                        $ch = curl_init();
+
+                        // set the url, number of POST vars, POST data
+                        curl_setopt($ch, CURLOPT_URL, $url);
+                        curl_setopt($ch, CURLOPT_POST, count($fields));
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $postvars);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                        // execute post
+                        $result = curl_exec($ch);
+
+                        // close connection
+                        curl_close($ch);
+
+                        $resArr = array();
+                        $resArr = json_decode($result);
+
+                        if ($resArr->accept==1) {
+                            $pude = $purchase_tire_detail_model->getAllTire(array('where'=>'purchase_tire='.$p->purchase_tire_id));
+                            foreach ($pude as $de) {
+                                $tirebuy->queryTire('DELETE FROM tire_buy WHERE purchase_tire_detail='.$de->purchase_tire_detail_id);
+                                $tireimport->queryTire('DELETE FROM tire_import WHERE purchase_tire_detail='.$de->purchase_tire_detail_id);
+                                $tireimportdetail->queryTire('DELETE FROM tire_import_detail WHERE purchase_tire_detail='.$de->purchase_tire_detail_id);
+                            }
+                            $purchase_tire_detail_model->queryTire('DELETE FROM purchase_tire_detail WHERE purchase_tire='.$p->purchase_tire_id);
+                            $purchase_tire_model->queryTire('DELETE FROM purchase_tire WHERE purchase_tire_id='.$p->purchase_tire_id);
+                            $owe_model->queryOwe('DELETE FROM owe WHERE purchase_tire='.$p->purchase_tire_id);
+                            $payable_model->queryCosts('DELETE FROM payable WHERE purchase_tire='.$p->purchase_tire_id);
+                        }
+                        
+                    }
+                    
+                }
+
+
+                $order_tire_model->deleteTire($data);
+                echo "Xóa thành công";
+                date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+                $filename = "action_logs.txt";
+                $text = date('d/m/Y H:i:s')."|expired|"."delete"."|".$data."|order_tire|"."\n"."\r\n";
+                
+                $fh = fopen($filename, "a") or die("Could not open log file.");
+                fwrite($fh, $text) or die("Could not write file!");
+                fclose($fh);
+            }
+            else{
+                $str.= '<tr>';
+                $str.= '<td class="fix">'.($i++).'</td>';
+                $str.= '<td class="fix">'.$order->order_number.'</td>';
+                $str.= '<td class="fix">'.$order->customer_name.'</td>';
+                $str.= '<td class="fix">'.$order->order_tire_number.'</td>';
+                $str.= '<td class="fix">'.$this->lib->formatMoney($order->total).'</td>';
+                $str.= '<td class="fix">'.$order->username.'</td>';
+                $str.= '</tr>';
+            }
+            
+        }
+        $check = $str!=""?1:0;
+        echo json_encode(array('check'=>$check,'result'=>$str,'count'=>($i-1)));
+    }
 
 
     public function notification(){

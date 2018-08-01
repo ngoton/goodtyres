@@ -133,26 +133,67 @@
           <!-- User Account: style can be found in dropdown.less -->
           <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
-          <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
-            </a>
-          </li>
+          
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
+              <span class="label label-danger count_expired"></span>
             </a>
+            <div class="dropdown-menu menu_expired">
+              
+                <div class="box box-danger">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">THÔNG BÁO HỦY ĐƠN HÀNG</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <!-- form start -->
+                  
+                    <div class="box-body">
+                      <div class="form-group error">
+                        Dưới đây là danh sách các đơn hàng quá hạn. Vui lòng xác nhận mua hàng hoặc tự động hủy trong 24h tới!
+                      </div>
+                      <table class="table_data show_expired" style="font-size: 10.5px">
+                        <thead>
+                          <tr>
+                            <th class="fix">STT</th>
+                            <th class="fix">Số ĐH</th>
+                            <th class="fix">Khách hàng</th>
+                            <th class="fix">Số lượng</th>
+                            <th class="fix">Thành tiền</th>
+                            <th class="fix">Sale</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+
+                <?php if(isset($_SESSION['user_logined'])){ ?>
+                <script type="text/javascript">
+                  $.ajax({
+                      url: '<?php echo BASE_URL ?>/admin/checkorderexpired',
+                      type: 'GET',
+                      data: {},
+                      success:function(data){
+                        var data = jQuery.parseJSON(data);
+                        if (data.check == 1) {
+                          $('.show_expired tbody').html(data.result);
+                          $('.count_expired').html(data.count);
+                          $('.notifications-menu').addClass('open');
+                          $('.menu_expired').show();
+                        }
+                      }
+                  });
+                </script>
+              <?php } ?>
+              </div>
           </li>
           <!-- Tasks: style can be found in dropdown.less -->
-          <li class="dropdown tasks-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-flag-o"></i>
-              <span class="label label-danger">9</span>
-            </a>
-          </li>
+          
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <!-- Kiem tra dang nhap -->
@@ -226,6 +267,7 @@
         </li>
         <li><a  data="ordertire/orderlist" href="<?php echo $this->url('ordertire/orderlist') ?>"><i class="fa fa-caret-right text-aqua"></i>Danh sách đơn hàng</a></li>
         <li><a  data="tiresalary" href="<?php echo $this->url('tiresalary') ?>"><i class="fa fa-caret-right text-aqua"></i>Doanh số bán hàng</a></li>
+        <li><a data="checksalary2" href="<?php echo $this->url('checksalary2') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Doanh số tính lương</a></li>
         <li><a data="stock" href="<?php echo $this->url('stock') ?>"><i class="fa fa-circle-o text-aqua"></i>Tồn kho - Dự kiến nhập</a></li>
         <li><a data="inventory" href="<?php echo $this->url('inventory') ?>"><i class="fa fa-circle-o text-aqua"></i>Tồn kho chi tiết</a></li>
         <li><a data="inventory/agent" href="<?php echo $this->url('inventory/agent') ?>"><i class="fa fa-circle-o text-aqua"></i>Tồn kho Việt Trade</a></li>
@@ -336,6 +378,7 @@
             <li><a  data="ordertire/report" href="<?php echo $this->url('ordertire/report') ?>"><i class="fa fa-caret-right text-aqua"></i>Tổng hợp đơn hàng</a></li>
             <li><a  data="tiresale/sale" href="<?php echo $this->url('tiresale/sale') ?>"><i class="fa fa-caret-right text-aqua"></i>Sản lượng bán</a></li>
             <li><a  data="tiresalary" href="<?php echo $this->url('tiresalary') ?>"><i class="fa fa-caret-right text-aqua"></i>Doanh số bán hàng</a></li>  
+            <li><a data="checksalary2" href="<?php echo $this->url('checksalary2') ?>"><i class="fa fa-fw fa-caret-right text-aqua"></i>Doanh số tính lương</a></li>
             <li><a data="#" href="#"><i class="fa fa-fw fa-caret-right text-aqua"></i>
                   <span>Công nợ</span>
                   <span class="pull-right-container">

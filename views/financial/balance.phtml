@@ -83,7 +83,7 @@
                 $tong_co_ck += $co_ck_parent;
 
                 ?>
-                <tr data="<?php echo $account->account_id ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>" style="background-color:rgba(50, 121, 171, 0.32)" >
+                <tr class="additional" data="<?php echo $account->account_id ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>" style="background-color:rgba(50, 121, 171, 0.32)" >
                     
                     <td class="fix"><?php echo $account->account_number ?></td>
                     <td class="fix" colspan="2"><?php echo $account->account_name ?></td>
@@ -253,7 +253,7 @@ $('#sl_tha').change(function(){
 
 $('.additional').click(function(){
         var val = $(this).attr('data');
-        window.open("<?php echo $this->url('additional/index') ?>/"+val);
+        window.open("<?php echo $this->url('additional/viewadditional') ?>/"+val);
     });
 
 $('.table_data').on('mousedown', function(e){
