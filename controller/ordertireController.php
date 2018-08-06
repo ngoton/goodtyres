@@ -2059,7 +2059,7 @@ Class ordertireController Extends baseController {
                                     $purchase_tire_model->queryTire('DELETE FROM purchase_tire WHERE purchase_tire_id='.$p->purchase_tire_id);
                                     $owe_model->queryOwe('DELETE FROM owe WHERE purchase_tire='.$p->purchase_tire_id);
                                     $payable_model->queryCosts('DELETE FROM payable WHERE purchase_tire='.$p->purchase_tire_id);
-                                    $add = $additional_model->getAdditionalByWhere(array('purchase_tire='.$p->purchase_tire_id));
+                                    $add = $additional_model->getAdditionalByWhere(array('purchase_tire'=>$p->purchase_tire_id));
                                     $account_balance_model->queryAccount('DELETE FROM account_balance WHERE additional='.$add->additional_id);
                                     $additional_model->queryAdditional('DELETE FROM additional WHERE additional_id='.$add->additional_id);
                                 }
@@ -2155,7 +2155,7 @@ Class ordertireController Extends baseController {
                                     $purchase_tire_model->queryTire('DELETE FROM purchase_tire WHERE purchase_tire_id='.$p->purchase_tire_id);
                                     $owe_model->queryOwe('DELETE FROM owe WHERE purchase_tire='.$p->purchase_tire_id);
                                     $payable_model->queryCosts('DELETE FROM payable WHERE purchase_tire='.$p->purchase_tire_id);
-                                    $add = $additional_model->getAdditionalByWhere(array('purchase_tire='.$p->purchase_tire_id));
+                                    $add = $additional_model->getAdditionalByWhere(array('purchase_tire'=>$p->purchase_tire_id));
                                     $account_balance_model->queryAccount('DELETE FROM account_balance WHERE additional='.$add->additional_id);
                                     $additional_model->queryAdditional('DELETE FROM additional WHERE additional_id='.$add->additional_id);
                                 }
@@ -3736,6 +3736,201 @@ Class ordertireController Extends baseController {
 
         }
     }
+    public function editagentorder(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $purchase_tire_model = $this->model->get('purchasetireModel');
+            $purchase_tire_detail_model = $this->model->get('purchasetiredetailModel');
+            $payable_model = $this->model->get('payableModel');
+            $owe_model = $this->model->get('oweModel');
+            $tireimport = $this->model->get('tireimportModel');
+            $tireimportdetail = $this->model->get('tireimportdetailModel');
+            $tirebuy = $this->model->get('tirebuyModel');
+            $tire_sale_model = $this->model->get('tiresaleModel');
+            $additional_model = $this->model->get('additionalModel');
+            $account_balance_model = $this->model->get('accountbalanceModel');
+            $tire_pattern_model = $this->model->get('tirepatternModel');
+            $tire_brand_model = $this->model->get('tirebrandModel');
+            $tire_size_model = $this->model->get('tiresizeModel');
+
+            $id = trim($_POST['id_order_tire']);
+
+            
+            $data_purchase = array(
+                'purchase_tire_total'=>trim($_POST['total']),
+            );
+
+            $purchase_tire_model->updateTire($data_purchase,array('order_tire'=>$id));
+
+            $purchases = $purchase_tire_model->getTireByWhere(array('order_tire'=>$id));
+            
+            $order_tire = $_POST['order_tire'];
+
+            foreach ($order_tire as $v) {
+                $brand = $tire_brand_model->getTireByWhere(array('tire_brand_name'=>$v['tire_brand']))->tire_brand_id;
+                $size = $tire_size_model->getTireByWhere(array('tire_size_number'=>$v['tire_size']))->tire_size_id;
+                $pattern = $tire_pattern_model->getTireByWhere(array('tire_pattern_name'=>$v['tire_pattern']))->tire_pattern_id;
+
+                $purchase_details = $purchase_tire_detail_model->getTireByWhere(array('purchase_tire'=>$purchases->purchase_tire_id,'tire_brand'=>$brand,'tire_size'=>$size,'tire_pattern'=>$pattern));
+
+                $data_purchase_detail = array(
+                    'tire_price'=>$v['tire_price'],
+                );
+                $purchase_tire_detail_model->updateTire($data_purchase_detail,array('purchase_tire_detail_id'=>$purchase_details->purchase_tire_detail_id));
+            }
+
+            if ($purchases->purchase_tire_status == 2) {
+
+                $purchase_id = $purchases;
+                $owe_data = array(
+                    'money' => $purchase_id->purchase_tire_total,
+                );
+                $owe_model->updateOwe($owe_data,array('purchase_tire' => $purchase_id->purchase_tire_id));
+
+                $payable_data = array(
+                    'money' => $purchase_id->purchase_tire_total,
+                );
+                $payable_model->updateCosts($payable_data,array('purchase_tire' => $purchase_id->purchase_tire_id));
+
+                $add = $additional_model->getAdditionalByWhere(array('purchase_tire' => $purchase_id->purchase_tire_id));
+                $data_additional = array(
+                    'money' => $purchase_id->purchase_tire_total,
+                );
+                $additional_model->updateAdditional($data_additional,array('purchase_tire' => $purchase_id->purchase_tire_id));
+                
+                
+                $data_debit = array(
+                    'money' => $data_additional['money'],
+                );
+                $data_credit = array(
+                    'money' => (0-$data_additional['money']),
+                );
+
+                $d = $account_balance_model->getAccountByWhere(array('additional'=>$add->additional_id,'account'=>$add->debit));
+                $c = $account_balance_model->getAccountByWhere(array('additional'=>$add->additional_id,'account'=>$add->credit));
+                $account_balance_model->updateAccount($data_debit,array('account_balance_id'=>$d->account_balance_id));
+                $account_balance_model->updateAccount($data_credit,array('account_balance_id'=>$c->account_balance_id));
+                
+
+                $code = $purchase_id->purchase_tire_code;
+
+                $dauthang = $purchase_id->purchase_tire_delivery_date;
+
+                $purchases = $purchase_tire_detail_model->getAllTire(array('where'=>'purchase_tire='.$purchase_id->purchase_tire_id));
+                
+                foreach ($purchases as $purchase) {
+                    $tirebuy->queryTire('DELETE FROM tire_buy WHERE purchase_tire_detail='.$purchase->purchase_tire_detail_id);
+                    $tireimport->queryTire('DELETE FROM tire_import WHERE purchase_tire_detail='.$purchase->purchase_tire_detail_id);
+                    $tireimportdetail->queryTire('DELETE FROM tire_import_detail WHERE purchase_tire_detail='.$purchase->purchase_tire_detail_id);
+
+                    $id_brand = $purchase->tire_brand;
+                    $id_size = $purchase->tire_size;
+                    $id_pattern = $purchase->tire_pattern;
+                    
+
+                    if($tireimportdetail->getTireByWhere(array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern))) {
+                        $ton = 0;
+
+                        $tire_buys = $tirebuy->getAllTire(array('where'=>'tire_buy_date <= '.$dauthang.' AND tire_buy_brand = '.$id_brand.' AND tire_buy_size = '.$id_size.' AND tire_buy_pattern = '.$id_pattern));
+                        foreach ($tire_buys as $tire) {
+                            $ton += $tire->tire_buy_volume;
+                        }
+
+                        $tire_sales = $tire_sale_model->getAllTire(array('where'=>'tire_sale_date < '.$dauthang.' AND tire_brand = '.$id_brand.' AND tire_size = '.$id_size.' AND tire_pattern = '.$id_pattern));
+                        foreach ($tire_sales as $tire) {
+                            $ton -= $tire->volume;
+                        }
+
+                        $data_old = array(
+                            'where' => 'tire_brand = '.$id_brand.' AND tire_size = '.$id_size.' AND tire_pattern = '.$id_pattern.' AND start_date <= '.$dauthang,
+                            'order_by' => 'start_date',
+                            'order' => 'DESC, tire_import_id DESC',
+                            'limit' => 1,
+                        );
+                        $tire_imports = $tireimport->getAllTire($data_old);
+                        $soluong = 0; $gia = 0;
+                        foreach ($tire_imports as $tire) {
+                            $soluong = $ton;
+                            $gia = $ton*$tire->tire_price;
+                        }
+                        $soluong += $purchase->tire_number;
+                        $gia += $purchase->tire_price*$purchase->tire_number;
+
+                        $tireimportdetail->updateTire(array('status'=>0),array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern,'status'=>1));
+
+                        $tire_import_detail_data = array(
+                        'tire_brand' => $id_brand,
+                        'tire_size' => $id_size,
+                        'tire_pattern' => $id_pattern,
+                        'tire_price' => $purchase->tire_price,
+                        'tire_price_vat' => $purchase->tire_price-($purchase->tire_price/1.1),
+                        'tire_number' => $purchase->tire_number,
+                        'code' => $code,
+                        'status' => 1,
+                        'purchase_tire_detail' => $purchase->purchase_tire_detail_id,
+                        );
+                        $tireimportdetail->createTire($tire_import_detail_data);
+
+                        $tire_import_data = array(
+                        'tire_brand' => $id_brand,
+                        'tire_size' => $id_size,
+                        'tire_pattern' => $id_pattern,
+                        'tire_price' => $gia/$soluong,
+                        'tire_price_vat' => $purchase->tire_price-($purchase->tire_price/1.1),
+                        'code' => $code,
+                        'start_date' => $dauthang,
+                        'purchase_tire_detail' => $purchase->purchase_tire_detail_id,
+                        );
+                        $tireimport->createTire($tire_import_data);
+                    }
+                    else{
+                        $tire_import_detail_data = array(
+                        'tire_brand' => $id_brand,
+                        'tire_size' => $id_size,
+                        'tire_pattern' => $id_pattern,
+                        'tire_price' => $purchase->tire_price,
+                        'tire_price_vat' => $purchase->tire_price-($purchase->tire_price/1.1),
+                        'tire_number' => $purchase->tire_number,
+                        'code' => $code,
+                        'status' => 1,
+                        'purchase_tire_detail' => $purchase->purchase_tire_detail_id,
+                        );
+                        $tireimportdetail->createTire($tire_import_detail_data);
+
+                        $tire_import_data = array(
+                        'tire_brand' => $id_brand,
+                        'tire_size' => $id_size,
+                        'tire_pattern' => $id_pattern,
+                        'tire_price' => $purchase->tire_price,
+                        'tire_price_vat' => $purchase->tire_price-($purchase->tire_price/1.1),
+                        'code' => $code,
+                        'start_date' => $dauthang,
+                        'purchase_tire_detail' => $purchase->purchase_tire_detail_id,
+                        );
+                        $tireimport->createTire($tire_import_data);
+                    }
+
+                    $data_buy = array(  
+                    'code' => $code,
+                    'tire_buy_volume' => $purchase->tire_number,
+                    'tire_buy_brand' => $purchase->tire_brand,
+                    'tire_buy_size' => $purchase->tire_size,
+                    'tire_buy_pattern' => $purchase->tire_pattern,
+                    'rate' => 0,
+                    'rate_shipper' => 0,
+                    'date_solow' => $dauthang,
+                    'date_shipper' => $dauthang,
+                    'tire_buy_date' => $dauthang,
+                    'date_manufacture' => $dauthang,
+                    'purchase_tire_detail' => $purchase->purchase_tire_detail_id,
+                    );
+
+                    $tirebuy->createTire($data_buy);
+
+
+                }
+            }
+        }
+    }
     public function receiveorder(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $purchase_tire_model = $this->model->get('purchasetireModel');
@@ -3779,7 +3974,7 @@ Class ordertireController Extends baseController {
                 'year' => (int)date('Y',$purchase_id->purchase_tire_delivery_date),
                 'code' => $purchase_id->purchase_tire_code,
                 'source' => 1,
-                'comment' => $purchase_id->purchase_tire_code.'-'.$purchase_id->purchase_tire_comment,
+                'comment' => $purchase_id->purchase_tire_code.'-'.$purchase_id->purchase_tire_comment.' '.$_POST['order_number'],
                 'create_user' => $purchase_id->purchase_tire_create_user,
                 'type' => 4,
                 'purchase_tire' => $purchase_id->purchase_tire_id,
@@ -3792,7 +3987,7 @@ Class ordertireController Extends baseController {
             $data_additional = array(
                 'document_date' => $purchase_id->purchase_tire_delivery_date,
                 'additional_date' => $purchase_id->purchase_tire_delivery_date,
-                'additional_comment' => $purchase_id->purchase_tire_code.'-'.$purchase_id->purchase_tire_comment,
+                'additional_comment' => $purchase_id->purchase_tire_code.'-'.$purchase_id->purchase_tire_comment.' '.$_POST['order_number'],
                 'debit' => 63,
                 'credit' => 471,
                 'money' => $purchase_id->purchase_tire_total,
@@ -3858,7 +4053,7 @@ Class ordertireController Extends baseController {
                 if($tireimportdetail->getTireByWhere(array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern))) {
                     $ton = 0;
 
-                    $tire_buys = $tirebuy->getAllTire(array('where'=>'code != "'.$code.'" AND tire_buy_date <= '.$dauthang.' AND tire_buy_brand = '.$id_brand.' AND tire_buy_size = '.$id_size.' AND tire_buy_pattern = '.$id_pattern));
+                    $tire_buys = $tirebuy->getAllTire(array('where'=>'tire_buy_date <= '.$dauthang.' AND tire_buy_brand = '.$id_brand.' AND tire_buy_size = '.$id_size.' AND tire_buy_pattern = '.$id_pattern));
                     foreach ($tire_buys as $tire) {
                         $ton += $tire->tire_buy_volume;
                     }
@@ -3938,7 +4133,7 @@ Class ordertireController Extends baseController {
                 }
 
                 $data_buy = array(  
-                'code' => $import_orders->import_tire_order_code,
+                'code' => $code,
                 'tire_buy_volume' => $purchase->tire_number,
                 'tire_buy_brand' => $purchase->tire_brand,
                 'tire_buy_size' => $purchase->tire_size,
@@ -3988,7 +4183,7 @@ Class ordertireController Extends baseController {
 
             $payable_model->createCosts('DELETE FROM payable WHERE purchase_tire='.$purchase_id->purchase_tire_id);
 
-            $add = $additional_model->getAdditionalByWhere(array('purchase_tire='.$purchase_id->purchase_tire_id));
+            $add = $additional_model->getAdditionalByWhere(array('purchase_tire'=>$purchase_id->purchase_tire_id));
             $account_balance_model->queryAccount('DELETE FROM account_balance WHERE additional='.$add->additional_id);
             $additional_model->queryAdditional('DELETE FROM additional WHERE additional_id='.$add->additional_id);
             

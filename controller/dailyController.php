@@ -4451,8 +4451,10 @@ Class dailyController Extends baseController {
                     $account_balance_model->createAccount($data_credit);
                 }
                 else{
-                    $account_balance_model->updateAccount($data_debit,array('additional'=>$additional_id,'account'=>$add->debit));
-                    $account_balance_model->updateAccount($data_credit,array('additional'=>$additional_id,'account'=>$add->credit));
+                    $d = $account_balance_model->getAccountByWhere(array('additional'=>$additional_id,'account'=>$add->debit,'money'=>$add->money));
+                    $c = $account_balance_model->getAccountByWhere(array('additional'=>$additional_id,'account'=>$add->credit,'money'=>(0-$add->money)));
+                    $account_balance_model->updateAccount($data_debit,array('account_balance_id'=>$d->account_balance_id));
+                    $account_balance_model->updateAccount($data_credit,array('account_balance_id'=>$c->account_balance_id));
                 }
             }
 

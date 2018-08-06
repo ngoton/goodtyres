@@ -338,8 +338,12 @@ Class checksalaryController Extends baseController {
                     $tire_price_origin = $dongia;
                     $giacongkhai = $dongia;
 
+                    $ngay = $sale->tire_sale_date;
+                    $ngaytruoc = strtotime(date('d-m-Y', strtotime(date('d-m-Y',$ngay). ' - 1 days')));
+                    $ngaysau = strtotime(date('d-m-Y', strtotime(date('d-m-Y',$ngay). ' + 1 days')));
+
                     $data_q = array(
-                        'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date <= '.$sale->tire_sale_date.' AND (end_date IS NULL OR end_date >= '.$sale->tire_sale_date.')',
+                        'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date < '.$ngaysau.' AND (end_date IS NULL OR end_date > '.$ngaytruoc.')',
                         'order_by' => 'start_date',
                         'order' => 'DESC',
                         'limit' => 1,
@@ -347,7 +351,7 @@ Class checksalaryController Extends baseController {
                     $tire_price_discounts = $tire_price_discount_model->getAllTire($data_q);
 
                     $data_e = array(
-                        'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date <= '.$sale->tire_sale_date.' AND (end_date IS NULL OR end_date >= '.$sale->tire_sale_date.')',
+                        'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date < '.$ngaysau.' AND (end_date IS NULL OR end_date > '.$ngaytruoc.')',
                         'order_by' => 'start_date',
                         'order' => 'DESC',
                         'limit' => 1,
@@ -698,8 +702,12 @@ Class checksalaryController Extends baseController {
                     $tire_price_origin = $dongia;
                     $giacongkhai = $dongia;
 
+                    $ngay = $sale->tire_sale_date;
+                    $ngaytruoc = strtotime(date('d-m-Y', strtotime(date('d-m-Y',$ngay). ' - 1 days')));
+                    $ngaysau = strtotime(date('d-m-Y', strtotime(date('d-m-Y',$ngay). ' + 1 days')));
+
                     $data_q = array(
-                        'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date <= '.$sale->tire_sale_date.' AND (end_date IS NULL OR end_date >= '.$sale->tire_sale_date.')',
+                        'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date < '.$ngaysau.' AND (end_date IS NULL OR end_date > '.$ngaytruoc.')',
                         'order_by' => 'start_date',
                         'order' => 'DESC',
                         'limit' => 1,
@@ -707,7 +715,7 @@ Class checksalaryController Extends baseController {
                     $tire_price_discounts = $tire_price_discount_model->getAllTire($data_q);
 
                     $data_e = array(
-                        'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date <= '.$sale->tire_sale_date.' AND (end_date IS NULL OR end_date >= '.$sale->tire_sale_date.')',
+                        'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date < '.$ngaysau.' AND (end_date IS NULL OR end_date > '.$ngaytruoc.')',
                         'order_by' => 'start_date',
                         'order' => 'DESC',
                         'limit' => 1,
