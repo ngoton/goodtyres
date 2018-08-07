@@ -47,9 +47,9 @@ Class stockController Extends baseController {
 
             foreach ($tire_sales as $tire_sale) {
                 
-                if ($tire_sale->customer != 119) {
+                //if ($tire_sale->customer != 119) {
                     $sell[$tire_buy->tire_buy_id]['number'] = isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']+$tire_sale->volume:$tire_sale->volume;
-                }
+                //}
                 
             }
         }
@@ -574,9 +574,9 @@ Class stockController Extends baseController {
 
             foreach ($tire_sales as $tire_sale) {
                 
-                if ($tire_sale->customer != 119) {
+                //if ($tire_sale->customer != 119) {
                     $sell[$tire_buy->tire_buy_id]['number'] = isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']+$tire_sale->volume:$tire_sale->volume;
-                }
+                //}
                 
             }
         }
@@ -793,9 +793,9 @@ Class stockController Extends baseController {
 
             foreach ($tire_sales as $tire_sale) {
                 
-                if ($tire_sale->customer != 119) {
+                //if ($tire_sale->customer != 119) {
                     $sell[$tire_buy->tire_buy_id]['number'] = isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']+$tire_sale->volume:$tire_sale->volume;
-                }
+                //}
                 
             }
 
@@ -856,7 +856,7 @@ Class stockController Extends baseController {
         $total = 0;
 
         $buys = $tire_buy_model->queryTire('SELECT sum(tire_buy_volume) AS total_buy FROM tire_buy WHERE tire_buy_date < '.$today);  
-        $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE customer != 119 AND tire_sale_date < '.$today); 
+        $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE tire_sale_date < '.$today); 
         $orders = $tire_order_model->queryTire('SELECT sum(tire_number) AS total_order FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date > 0 AND tire_receive_date < '.$today);
 
         foreach ($buys as $buy) {
@@ -874,7 +874,7 @@ Class stockController Extends baseController {
         $this->view->data['total'] = $total;
 
         $buys = $tire_buy_model->queryTire('SELECT * FROM tire_buy WHERE tire_buy_date >= '.$today);  
-        $sales = $tire_sale_model->queryTire('SELECT * FROM tire_sale WHERE customer != 119 AND tire_sale_date >= '.$today); 
+        $sales = $tire_sale_model->queryTire('SELECT * FROM tire_sale WHERE tire_sale_date >= '.$today); 
         $orders = $tire_order_model->queryTire('SELECT * FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date >= '.$today);
 
         $tire = array();

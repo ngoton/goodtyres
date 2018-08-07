@@ -1818,10 +1818,10 @@ Class reportController Extends baseController {
 
             foreach ($tire_sales as $tire_sale) {
                 
-                if ($tire_sale->customer != 119) {
+                //if ($tire_sale->customer != 119) {
                     $sell_truoc[$tire_buy->tire_buy_id]['number'] = isset($sell_truoc[$tire_buy->tire_buy_id]['number'])?$sell_truoc[$tire_buy->tire_buy_id]['number']+$tire_sale->volume:$tire_sale->volume;
 
-                }
+                //}
                 
             }
 
@@ -1885,9 +1885,9 @@ Class reportController Extends baseController {
 
             foreach ($tire_sales as $tire_sale) {
                 
-                if ($tire_sale->customer != 119) {
+                //if ($tire_sale->customer != 119) {
                     $sell[$tire_buy->tire_buy_id]['number'] = isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']+$tire_sale->volume:$tire_sale->volume;
-                }
+                //}
                 
             }
 
@@ -1941,14 +1941,14 @@ Class reportController Extends baseController {
             $tire_sales = $tire_sale_model->queryTire($query);
             foreach ($tire_sales as $tire_sale) {
                 
-                if ($tire_sale->customer != 119) {
+                //if ($tire_sale->customer != 119) {
                     $gia = isset($tire_prices[$tire_sale->tire_brand][$tire_sale->tire_size][$tire_sale->tire_pattern])?$tire_prices[$tire_sale->tire_brand][$tire_sale->tire_size][$tire_sale->tire_pattern]:0;
                     $sl = isset($count[$tire_sale->tire_brand][$tire_sale->tire_size][$tire_sale->tire_pattern])?$count[$tire_sale->tire_brand][$tire_sale->tire_size][$tire_sale->tire_pattern]:1;
                     $giatri = $gia/$sl;
                     $new_thanhtien -= $tire_sale->soluong*$giatri;
 
                     $lopxe_data['doanhthu'] = isset($lopxe_data['doanhthu'])?$lopxe_data['doanhthu']+($tire_sale->soluong*$giatri):$tire_sale->soluong*$giatri;
-                }
+                //}
                 
             }
 

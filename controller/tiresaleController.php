@@ -388,11 +388,11 @@ Class tiresaleController Extends baseController {
 
                 
 
-                if ($tire_sale->customer != 119) {
+                //if ($tire_sale->customer != 119) {
 
                     $sell[$tire_buy->tire_buy_id]['number'] = isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']+$tire_sale->volume:$tire_sale->volume;
 
-                }
+                //}
 
                 
 

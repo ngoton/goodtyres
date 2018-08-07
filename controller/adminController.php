@@ -517,7 +517,7 @@ Class adminController Extends baseController {
 
                 
 
-                if ($tire_sale->customer != 119) {
+                //if ($tire_sale->customer != 119) {
 
                     $sell[$tire_buy->tire_buy_id]['number'] = isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']+$tire_sale->volume:$tire_sale->volume;
 
@@ -525,7 +525,7 @@ Class adminController Extends baseController {
 
                     $stock[$tire_buy->tire_brand_region] = isset($stock[$tire_buy->tire_brand_region])?$stock[$tire_buy->tire_brand_region]-$tire_sale->volume:(0-$tire_sale->volume);
 
-                }
+                //}
 
                 
 

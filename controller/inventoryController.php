@@ -81,9 +81,9 @@ Class inventoryController Extends baseController {
 
             foreach ($tire_sales as $tire_sale) {
                 
-                if ($tire_sale->customer != 119) {
+                //if ($tire_sale->customer != 119) {
                     $sell[$tire_buy->tire_buy_id]['number'] = isset($sell[$tire_buy->tire_buy_id]['number'])?$sell[$tire_buy->tire_buy_id]['number']+$tire_sale->volume:$tire_sale->volume;
-                }
+                //}
                 
             }
 
@@ -189,7 +189,7 @@ Class inventoryController Extends baseController {
             $qr .= " AND tire_pattern = ".$magai;
             $qr2 .= " AND tire_buy_pattern = ".$magai;
         }
-        $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE customer != 119 AND tire_sale_date < '.$today.$qr); 
+        $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE tire_sale_date < '.$today.$qr); 
         $orders = $tire_order_model->queryTire('SELECT sum(tire_number) AS total_order FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date > 0 AND tire_receive_date < '.$today.$qr);
 
         foreach ($buys as $buy) {
@@ -207,7 +207,7 @@ Class inventoryController Extends baseController {
         $this->view->data['total'] = $total;
 
         $buys = $tire_buy_model->queryTire('SELECT * FROM tire_buy WHERE tire_buy_date >= '.$today.$qr2);  
-        $sales = $tire_sale_model->queryTire('SELECT * FROM tire_sale WHERE customer != 119 AND tire_sale_date >= '.$today.$qr); 
+        $sales = $tire_sale_model->queryTire('SELECT * FROM tire_sale WHERE tire_sale_date >= '.$today.$qr); 
         $orders = $tire_order_model->queryTire('SELECT * FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date >= '.$today.$qr);
 
         $tire = array();
@@ -257,7 +257,7 @@ Class inventoryController Extends baseController {
             $total = 0;
 
             $buys = $tire_buy_model->queryTire('SELECT sum(tire_buy_volume) AS total_buy FROM tire_buy WHERE tire_buy_brand = '.$b->tire_brand_id.' AND tire_buy_date <= '.$today);  
-            $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE tire_brand = '.$b->tire_brand_id.' AND customer != 119 AND tire_sale_date <= '.$today); 
+            $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE tire_brand = '.$b->tire_brand_id.' AND tire_sale_date <= '.$today); 
             $orders = $tire_order_model->queryTire('SELECT tire_order_id, sum(tire_number) AS total_order FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date > 0 AND tire_receive_date <= '.$today);
 
             foreach ($buys as $buy) {
@@ -326,7 +326,7 @@ Class inventoryController Extends baseController {
                 $total = 0;
 
                 $buys = $tire_buy_model->queryTire('SELECT sum(tire_buy_volume) AS total_buy FROM tire_buy WHERE tire_buy_size = '.$s->tire_size_id.' AND tire_buy_brand = '.$b->tire_brand_id.' AND tire_buy_date <= '.$today);  
-                $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE tire_size = '.$s->tire_size_id.' AND tire_brand = '.$b->tire_brand_id.' AND customer != 119 AND tire_sale_date <= '.$today); 
+                $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE tire_size = '.$s->tire_size_id.' AND tire_brand = '.$b->tire_brand_id.' AND tire_sale_date <= '.$today); 
                 $orders = $tire_order_model->queryTire('SELECT tire_order_id, sum(tire_number) AS total_order FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date > 0 AND tire_receive_date <= '.$today);
 
                 foreach ($buys as $buy) {
@@ -351,7 +351,7 @@ Class inventoryController Extends baseController {
             $total = 0;
 
             $buys = $tire_buy_model->queryTire('SELECT sum(tire_buy_volume) AS total_buy FROM tire_buy WHERE tire_buy_size = '.$s->tire_size_id.' AND tire_buy_date <= '.$today);  
-            $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE tire_size = '.$s->tire_size_id.' AND customer != 119 AND tire_sale_date <= '.$today); 
+            $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE tire_size = '.$s->tire_size_id.' AND tire_sale_date <= '.$today); 
             $orders = $tire_order_model->queryTire('SELECT tire_order_id, sum(tire_number) AS total_order FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date > 0 AND tire_receive_date <= '.$today);
 
             foreach ($buys as $buy) {
@@ -419,7 +419,7 @@ Class inventoryController Extends baseController {
                 $total = 0;
 
                 $buys = $tire_buy_model->queryTire('SELECT sum(tire_buy_volume) AS total_buy FROM tire_buy WHERE tire_buy_pattern = '.$s->tire_pattern_id.' AND tire_buy_size = '.$b->tire_size_id.' AND tire_buy_date <= '.$today);  
-                $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE tire_pattern = '.$s->tire_pattern_id.' AND tire_size = '.$b->tire_size_id.' AND customer != 119 AND tire_sale_date <= '.$today); 
+                $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE tire_pattern = '.$s->tire_pattern_id.' AND tire_size = '.$b->tire_size_id.' AND tire_sale_date <= '.$today); 
                 $orders = $tire_order_model->queryTire('SELECT tire_order_id, sum(tire_number) AS total_order FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date > 0 AND tire_receive_date <= '.$today);
 
                 foreach ($buys as $buy) {
@@ -444,7 +444,7 @@ Class inventoryController Extends baseController {
             $total = 0;
 
             $buys = $tire_buy_model->queryTire('SELECT sum(tire_buy_volume) AS total_buy FROM tire_buy WHERE tire_buy_pattern = '.$s->tire_pattern_id.' AND tire_buy_date <= '.$today);  
-            $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE tire_pattern = '.$s->tire_pattern_id.' AND customer != 119 AND tire_sale_date <= '.$today); 
+            $sales = $tire_sale_model->queryTire('SELECT sum(volume) AS total_sale FROM tire_sale WHERE tire_pattern = '.$s->tire_pattern_id.' AND tire_sale_date <= '.$today); 
             $orders = $tire_order_model->queryTire('SELECT tire_order_id, sum(tire_number) AS total_order FROM tire_order WHERE (status IS NULL OR status != 1) AND tire_receive_date > 0 AND tire_receive_date <= '.$today);
 
             foreach ($buys as $buy) {
