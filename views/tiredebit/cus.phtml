@@ -1,6 +1,6 @@
 <?php $k=1; ?>
 <div class="add-box">
-    <a class="add_button" id="btnExport2" >Export Excel</a>
+    <a class="add_button" id="btnExport2" >Xuất công nợ</a>
     
 </div>
 <table id="tblExport2" class="table_data">
@@ -48,7 +48,9 @@
         <th class="fix">
             <a class="sort" >Ngày giao </a>
         </th> 
-
+        <th  class="fix">
+            <a class="sort" >HĐ </a>
+        </th>
         <th  class="fix">
             <a class="sort" >Hạn TT </a>
         </th>
@@ -92,6 +94,7 @@
             <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->username; ?></td> 
              
             <td class="fix"  id="delivery_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo $order_tire->delivery_date>0?$lib->hien_thi_ngay_thang($order_tire->delivery_date):"Chưa giao"; ?></td>
+            <td class="fix" id="invoice_tire_number_<?php echo $order_tire->order_tire_id; ?>"><?php echo isset($invoice_data[$order_tire->order_tire_id]['number'])?$invoice_data[$order_tire->order_tire_id]['number']:null; ?></td> 
             <td class="fix"  id="due_date_<?php echo $order_tire->order_tire_id; ?>"><?php echo $lib->hien_thi_ngay_thang($order_tire->due_date); ?></td>
         </tr>
         <?php } ?>
@@ -129,6 +132,7 @@
             <td class="fix" id="sale_<?php echo $order_tire->receivable_id; ?>"><?php echo isset($receivable_data[$order_tire->receivable_id]['sale'])?$receivable_data[$order_tire->receivable_id]['sale']:null ?></td> 
              
             <td class="fix"  id="delivery_date_<?php echo $order_tire->receivable_id; ?>"><?php echo $lib->hien_thi_ngay_thang($order_tire->expect_date); ?></td>
+            <td class="fix"></td>
             <td class="fix"  id="due_date_<?php echo $order_tire->receivable_id; ?>"><?php echo $lib->hien_thi_ngay_thang($order_tire->expect_date); ?></td>
         </tr>
         <?php } ?>
@@ -142,6 +146,7 @@
             <td class="fix"><?php echo $lib->formatMoney($tongkhtra) ?></td>
             <td class="fix"><?php echo $lib->formatMoney($tongdatra) ?></td>
             <td class="fix"><?php echo $lib->formatMoney($tongcon) ?></td>
+            <td class="fix"></td>
             <td class="fix"></td>
             <td class="fix"></td>
             <td class="fix"></td>
@@ -239,6 +244,102 @@
             <td class="fix" colspan="2"></td>
             <td class="fix"><?php echo $lib->formatMoney($tongcantru) ?></td>
             <td class="fix"><?php echo $lib->formatMoney($tongcon) ?></td>
+            <td class="fix"></td>
+            <td class="fix"></td>
+        </tr>
+        <?php } ?>
+
+        <?php if(count($pays)>0){ ?>
+        <tr>
+
+        </tr>
+        <tr><th colspan="14">ĐÃ CHUYỂN TRẢ</th></tr>
+        <tr>
+            <th  class="fix"></th>
+            <th  class="fix">
+                <a class="sort " >STT </a>
+            </th>
+            <th  class="fix">
+                <a class="sort" >Ngày </a>
+            </th>
+            <th  class="fix">
+                <a class="sort" >Nội dung </a>
+            </th>
+            
+            <th  class="fix">
+                <a class="sort" >Khách hàng </a>
+            </th>
+            <th  class="fix">
+                <a class="sort" ></a>
+            </th>
+            <th class="fix">
+                <a class="sort" >Số tiền </a>
+            </th>
+            <th  class="fix">
+                <a class="sort" > </a>
+            </th>
+            <th  class="fix">
+                <a class="sort" ></a>
+            </th>
+            <th  class="fix">
+                <a class="sort" ></a>
+            </th>
+            
+            <th class="fix">
+                <a class="sort" ></a>
+            </th>
+            
+            <th class="fix">
+                <a class="sort" > </a>
+            </th>
+            
+            <th class="fix">
+                <a class="sort" ></a>
+            </th> 
+            
+            <th class="fix">
+                <a class="sort" ></a>
+            </th> 
+        </tr>
+        <?php 
+        $k=1; $tongchi=0;
+        foreach ($pays as $pay) : 
+        $tongchi += $pay->money;
+        ?>
+        <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $pay->pay_id ?>" class="edit_tr" >
+            <td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $pay->pay_id ?>"></td>
+            <td class="fix"><?php echo $k++; ?></td>
+            <td class="fix"  id="daily_date_<?php echo $pay->pay_id; ?>"><?php echo $lib->hien_thi_ngay_thang($pay->pay_date); ?></td>
+            <td class="fix"  id="order_number_<?php echo $pay->pay_id; ?>">
+                <?php 
+                    echo $pay->pay_comment;
+                ?>
+            </td>
+            
+            <td class="fix" data="<?php echo $pay->customer; ?>"  id="customer_<?php echo $pay->pay_id; ?>"><?php echo $pay->customer_name; ?></td>
+            <td class="fix"  id="pay_number_<?php echo $pay->pay_id; ?>"></td>
+            <td class="fix" id="chi_<?php echo $pay->pay_id; ?>"><?php echo $lib->formatMoney($pay->money); ?></td> 
+            <td class="fix" id="thu_<?php echo $pay->pay_id; ?>"></td> 
+            
+            <td class="fix"  id="discount_<?php echo $pay->pay_id; ?>"></td>
+            <td style="font-weight:bold" class="fix"  id="total_<?php echo $pay->pay_id; ?>"></td>
+            <td class="fix"  id="pay_money_<?php echo $pay->pay_id; ?>"></td>
+            <td class="fix error"  id="con_<?php echo $pay->pay_id; ?>"></td>
+            
+            <td class="fix" id="sale_<?php echo $pay->pay_id; ?>"></td> 
+             
+            <td class="fix"  id="delivery_date_<?php echo $pay->pay_id; ?>"></td>
+        </tr>
+    <?php endforeach; ?>
+    <tr style=" color:rgb(211, 11, 57); text-align: center; font-weight:bold;">
+            <td class="fix" colspan="5">Tổng cộng</td>
+            <td class="fix"></td>
+            <td class="fix"><?php echo $lib->formatMoney($tongchi) ?></td>
+            <td class="fix"></td>
+            <td class="fix"></td>
+            <td class="fix"></td>
+            <td class="fix"></td>
+            <td class="fix"></td>
             <td class="fix"></td>
             <td class="fix"></td>
         </tr>

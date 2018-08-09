@@ -236,6 +236,17 @@ Class tiredebitController Extends baseController {
             }
         }
 
+        $pay_model = $this->model->get('payableModel');
+        $join = array('table'=>'pay','where'=>'pay.payable = payable_id');
+        $data = array(
+            'where' => 'pay.pay_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+        );
+        $pays = $pay_model->getAllCosts($data,$join);
+
+        foreach ($pays as $pay) {
+            $data_customer['money'][$pay->customer] = isset($data_customer['money'][$pay->customer])?$data_customer['money'][$pay->customer]+$pay->money:$pay->money;
+        }
+
 
         $this->view->data['data_customer'] = $data_customer;
 
@@ -459,6 +470,12 @@ Class tiredebitController Extends baseController {
         $ketthuc = date('d-m-Y',$this->registry->router->page);
         $this->view->data['ketthuc'] = $ketthuc;
 
+        $batdau = $this->registry->router->order>0?date('d-m-Y',$this->registry->router->order):null;
+        $this->view->data['batdau'] = $batdau;
+
+        $trangthai = $this->registry->router->order_by;
+        $this->view->data['trangthai'] = $trangthai;
+
         $order_tire_model = $this->model->get('ordertireModel');
 
         $receive_model = $this->model->get('receiveModel');
@@ -469,6 +486,10 @@ Class tiredebitController Extends baseController {
             'order'=>'DESC',
             'where'=>'order_tire.customer = '.$id.' AND delivery_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
+
+        if ($batdau>0) {
+            $data['where'] .= ' AND delivery_date >= '.strtotime($batdau);
+        }
 
         $orders = $order_tire_model->getAllTire($data,$join);
         $this->view->data['orders'] = $orders;
@@ -481,6 +502,9 @@ Class tiredebitController Extends baseController {
             'order'=>'DESC',
             'where'=>'customer_id = '.$id.' AND receivable.expect_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
+        if ($batdau>0) {
+            $data['where'] .= ' AND receivable.expect_date >= '.strtotime($batdau);
+        }
 
         $receivables = $receivable_model->getAllCosts($data,$join);
         $this->view->data['receivables'] = $receivables;
@@ -504,6 +528,11 @@ Class tiredebitController Extends baseController {
             $data = array(
                 'where' => 'receivable = '.$re->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
+
+            if ($batdau>0) {
+                $data['where'] .= ' AND receive_date >= '.strtotime($batdau);
+            }
+
             $receives = $receive_model->getAllCosts($data);
             
             foreach ($receives as $receive) {
@@ -511,35 +540,73 @@ Class tiredebitController Extends baseController {
             }
         }
 
+        $invoice_tire_model = $this->model->get('invoicetireModel');
+        
+        $invoice_data = array();
         foreach ($orders as $order) {
             $data = array(
                 'where' => 'receivable = '.$order->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
             );
+
+            if ($batdau>0) {
+                $data['where'] .= ' AND receive_date >= '.strtotime($batdau);
+            }
+
             $receives = $receive_model->getAllCosts($data);
             
             foreach ($receives as $receive) {
                 $receivable_data[$order->receivable_id]['pay_money'] = isset($receivable_data[$order->receivable_id]['pay_money'])?$receivable_data[$order->receivable_id]['pay_money']+$receive->money:$receive->money;
             }
+
+            $invoice = $invoice_tire_model->getAllInvoice(array('where'=>'order_tire='.$order->order_tire_id));
+            foreach ($invoice as $invoices) {
+                $invoice_data[$order->order_tire_id]['number'] = isset($invoice_data[$order->order_tire_id]['number'])?$invoice_data[$order->order_tire_id]['number'].' | '.$invoices->invoice_tire_number:$invoices->invoice_tire_number;
+                $invoice_data[$order->order_tire_id]['date'] = isset($invoice_data[$order->order_tire_id]['date'])?$invoice_data[$order->order_tire_id]['date'].' | '.$this->lib->hien_thi_ngay_thang($invoices->invoice_tire_date):$this->lib->hien_thi_ngay_thang($invoices->invoice_tire_date);
+            }
         }
 
         $this->view->data['receivable_data'] = $receivable_data;
+        $this->view->data['invoice_data'] = $invoice_data;
 
         $deposit_model = $this->model->get('deposittireModel');
         $join = array('table'=>'daily, customer','where'=>'daily = daily_id AND deposit_tire.customer = customer_id');
         $data = array(
             'where' => 'deposit_tire.customer = '.$id.' AND daily_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
         );
+
+        if ($batdau>0) {
+            $data['where'] .= ' AND daily_date >= '.strtotime($batdau);
+        }
+
         $deposits = $deposit_model->getAllDeposit($data,$join);
         $this->view->data['deposits'] = $deposits;
 
         $deposit_data = array();
         foreach ($deposits as $de) {
             $receives = $receive_model->queryCosts('SELECT receive_id, receive.money, receive_comment, receivable.code FROM receive, receivable WHERE receivable=receivable_id AND receive.additional = '.$de->daily.' AND receivable_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))));
+
+            if ($batdau>0) {
+                $receives = $receive_model->queryCosts('SELECT receive_id, receive.money, receive_comment, receivable.code FROM receive, receivable WHERE receivable=receivable_id AND receive.additional = '.$de->daily.' AND receivable_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))).' AND receivable_date >= '.strtotime($batdau));
+            }
+
             foreach ($receives as $re) {
                 $deposit_data[$de->deposit_tire_id]['pay_money'] = isset($deposit_data[$de->deposit_tire_id]['pay_money'])?$deposit_data[$de->deposit_tire_id]['pay_money']+$re->money:$re->money;
             }
         }
         $this->view->data['deposit_data'] = $deposit_data;
+
+        $pay_model = $this->model->get('payableModel');
+        $join = array('table'=>'pay, customer','where'=>'pay.payable = payable_id AND payable.customer = customer_id');
+        $data = array(
+            'where' => 'payable.customer = '.$id.' AND pay.pay_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+        );
+
+        if ($batdau>0) {
+            $data['where'] .= ' AND pay.pay_date >= '.strtotime($batdau);
+        }
+
+        $pays = $pay_model->getAllCosts($data,$join);
+        $this->view->data['pays'] = $pays;
 
         /* Lấy tổng doanh thu*/
         
@@ -637,6 +704,9 @@ Class tiredebitController Extends baseController {
             }
         }
 
+        $invoice_tire_model = $this->model->get('invoicetireModel');
+        
+        $invoice_data = array();
         foreach ($orders as $order) {
             $data = array(
                 'where' => 'receivable = '.$order->receivable_id.' AND receive_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
@@ -646,9 +716,16 @@ Class tiredebitController Extends baseController {
             foreach ($receives as $receive) {
                 $receivable_data[$order->receivable_id]['pay_money'] = isset($receivable_data[$order->receivable_id]['pay_money'])?$receivable_data[$order->receivable_id]['pay_money']+$receive->money:$receive->money;
             }
+
+            $invoice = $invoice_tire_model->getAllInvoice(array('where'=>'order_tire='.$order->order_tire_id));
+            foreach ($invoice as $invoices) {
+                $invoice_data[$order->order_tire_id]['number'] = isset($invoice_data[$order->order_tire_id]['number'])?$invoice_data[$order->order_tire_id]['number'].' | '.$invoices->invoice_tire_number:$invoices->invoice_tire_number;
+                $invoice_data[$order->order_tire_id]['date'] = isset($invoice_data[$order->order_tire_id]['date'])?$invoice_data[$order->order_tire_id]['date'].' | '.$this->lib->hien_thi_ngay_thang($invoices->invoice_tire_date):$this->lib->hien_thi_ngay_thang($invoices->invoice_tire_date);
+            }
         }
 
         $this->view->data['receivable_data'] = $receivable_data;
+        $this->view->data['invoice_data'] = $invoice_data;
 
         $deposit_model = $this->model->get('deposittireModel');
         $join = array('table'=>'daily, customer','where'=>'daily = daily_id AND deposit_tire.customer = customer_id');
@@ -666,6 +743,14 @@ Class tiredebitController Extends baseController {
             }
         }
         $this->view->data['deposit_data'] = $deposit_data;
+
+        $pay_model = $this->model->get('payableModel');
+        $join = array('table'=>'pay, customer','where'=>'pay.payable = payable_id AND payable.customer = customer_id');
+        $data = array(
+            'where' => 'payable.customer = '.$id.' AND pay.pay_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+        );
+        $pays = $pay_model->getAllCosts($data,$join);
+        $this->view->data['pays'] = $pays;
 
         /* Lấy tổng doanh thu*/
         
@@ -686,6 +771,10 @@ Class tiredebitController Extends baseController {
 
 
         $kh = $this->registry->router->param_id;
+        $ketthuc = $this->registry->router->page>0?date('d-m-Y',$this->registry->router->page):null;
+        $batdau = $this->registry->router->order>0?date('d-m-Y',$this->registry->router->order):null;
+        $trangthai = $this->registry->router->order_by;
+        
 
         $order_tire_model = $this->model->get('ordertireModel');
         $order_tire_list_model = $this->model->get('ordertirelistModel');
@@ -693,14 +782,21 @@ Class tiredebitController Extends baseController {
 
         $join = array('table'=>'customer','where'=>'customer_id = customer');
 
+        $data['where'] = "1=1";
 
         if($kh > 0){
 
-            $data['where'] = 'order_tire_status=1 AND customer = '.$kh;
+            $data['where'] .= ' AND order_tire_status=1 AND customer = '.$kh;
 
         }
 
-        
+        if ($batdau != null) {
+            $data['where'] .= ' AND delivery_date >= '.strtotime($batdau);
+        }
+
+        if ($ketthuc != null) {
+            $data['where'] .= ' AND delivery_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days')));
+        }
 
         /*if ($_SESSION['role_logined'] == 3) {
 
@@ -718,6 +814,17 @@ Class tiredebitController Extends baseController {
 
 
         $orders = $order_tire_model->getAllTire($data,$join);
+
+        $invoice_tire_model = $this->model->get('invoicetireModel');
+        
+        $invoice_data = array();
+        foreach ($orders as $order) {
+            $invoice = $invoice_tire_model->getAllInvoice(array('where'=>'order_tire='.$order->order_tire_id));
+            foreach ($invoice as $invoices) {
+                $invoice_data[$order->order_tire_id]['number'] = isset($invoice_data[$order->order_tire_id]['number'])?$invoice_data[$order->order_tire_id]['number'].' | '.$invoices->invoice_tire_number:"'".$invoices->invoice_tire_number;
+                $invoice_data[$order->order_tire_id]['date'] = isset($invoice_data[$order->order_tire_id]['date'])?$invoice_data[$order->order_tire_id]['date'].' | '.$this->lib->hien_thi_ngay_thang($invoices->invoice_tire_date):$this->lib->hien_thi_ngay_thang($invoices->invoice_tire_date);
+            }
+        }
 
         
 
@@ -743,9 +850,9 @@ Class tiredebitController Extends baseController {
 
                 ->setCellValue('A2', 'PHÒNG KINH DOANH')
 
-                ->setCellValue('I1', 'CỘNG HÒA XÃ CHỦ NGHĨA VIỆT NAM')
+                ->setCellValue('H1', 'CỘNG HÒA XÃ CHỦ NGHĨA VIỆT NAM')
 
-                ->setCellValue('I2', 'Độc lập - Tự do - Hạnh phúc')
+                ->setCellValue('H2', 'Độc lập - Tự do - Hạnh phúc')
 
                 ->setCellValue('I4', 'Biên Hòa, ngày '.date('d').' tháng '.date('m').' năm '.date('Y'))
 
@@ -789,65 +896,187 @@ Class tiredebitController Extends baseController {
 
                 $k=0;
                 foreach ($orders as $row) {
-
-                    $receivable = $receivable_model->getCostsByWhere(array('order_tire'=>$row->order_tire_id));
-
                     $tencongty = $row->company_name;
 
                     $sohang = $hang;
 
-                    $join_order = array('table'=>'tire_brand, tire_size, tire_pattern','where'=>'tire_brand=tire_brand_id AND tire_size=tire_size_id AND tire_pattern=tire_pattern_id');
-                    $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$row->order_tire_id), $join_order);
-                    if ($order_lists) {
+                    $receivable = $receivable_model->getCostsByWhere(array('order_tire'=>$row->order_tire_id));
 
-                        
-                        //$objPHPExcel->setActiveSheetIndex(0)->getStyle('B'.$hang)->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
+                    if ($trangthai==1) {
+                        if ($row->total-$receivable->pay_money != 0) {
+                            $join_order = array('table'=>'tire_brand, tire_size, tire_pattern','where'=>'tire_brand=tire_brand_id AND tire_size=tire_size_id AND tire_pattern=tire_pattern_id');
+                            $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$row->order_tire_id), $join_order);
+                            if ($order_lists) {
 
-                         $objPHPExcel->setActiveSheetIndex(0)
+                                
+                                //$objPHPExcel->setActiveSheetIndex(0)->getStyle('B'.$hang)->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
 
-                            ->setCellValue('A' . $hang, $i++)
+                                 $objPHPExcel->setActiveSheetIndex(0)
 
-                            ->setCellValueExplicit('B' . $hang, $this->lib->hien_thi_ngay_thang($row->order_tire_date))
+                                    ->setCellValue('A' . $hang, $i++)
 
-                            ->setCellValue('C' . $hang, $row->order_number);
+                                    ->setCellValueExplicit('B' . $hang, $this->lib->hien_thi_ngay_thang($row->order_tire_date))
+
+                                    ->setCellValue('C' . $hang, $row->order_number)
+
+                                    ->setCellValue('L' . $hang, $invoice_data[$row->order_tire_id]['number']);
 
 
-                        foreach ($order_lists as $order_list) {
+                                foreach ($order_lists as $order_list) {
+
+                                    $objPHPExcel->setActiveSheetIndex(0)
+
+                                    ->setCellValue('D' . $hang, $order_list->tire_brand_name)
+
+                                    ->setCellValue('E' . $hang, $order_list->tire_size_number.' '.$order_list->tire_pattern_name)
+
+                                    ->setCellValue('F' . $hang, $order_list->tire_number)
+
+                                    ->setCellValue('G' . $hang, ($row->check_price_vat==1?$order_list->tire_price_vat:$order_list->tire_price+($row->vat/$row->order_tire_number)))
+
+                                    ->setCellValue('H' . $hang, '=F'.$hang.'*G'.$hang)
+
+                                    ->setCellValue('I' . $hang, $row->discount+$row->reduce)
+
+                                    ->setCellValue('J' . $hang, $receivable->pay_money);
+
+                                    $hang++;
+
+                                }
+
+                                $objPHPExcel->setActiveSheetIndex(0)
+
+                                    ->setCellValue('K' . $sohang, '=SUM(H'.$sohang.':H'.($hang-1).')-J'.$sohang.'-I'.$sohang);
+
+                                $objPHPExcel->getActiveSheet()->mergeCells('A'.$sohang.':A'.($hang-1));
+                                $objPHPExcel->getActiveSheet()->mergeCells('B'.$sohang.':B'.($hang-1));
+                                $objPHPExcel->getActiveSheet()->mergeCells('C'.$sohang.':C'.($hang-1));
+                                $objPHPExcel->getActiveSheet()->mergeCells('I'.$sohang.':I'.($hang-1));
+                                $objPHPExcel->getActiveSheet()->mergeCells('J'.$sohang.':J'.($hang-1));
+                                $objPHPExcel->getActiveSheet()->mergeCells('K'.$sohang.':K'.($hang-1));
+                                $objPHPExcel->getActiveSheet()->mergeCells('L'.$sohang.':L'.($hang-1));
+
+
+                            }
+                        }
+                    }
+                    else if($trangthai==2){
+                        if ($row->total-$receivable->pay_money == 0) {
+                            $join_order = array('table'=>'tire_brand, tire_size, tire_pattern','where'=>'tire_brand=tire_brand_id AND tire_size=tire_size_id AND tire_pattern=tire_pattern_id');
+                            $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$row->order_tire_id), $join_order);
+                            if ($order_lists) {
+
+                                
+                                //$objPHPExcel->setActiveSheetIndex(0)->getStyle('B'.$hang)->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
+
+                                 $objPHPExcel->setActiveSheetIndex(0)
+
+                                    ->setCellValue('A' . $hang, $i++)
+
+                                    ->setCellValueExplicit('B' . $hang, $this->lib->hien_thi_ngay_thang($row->order_tire_date))
+
+                                    ->setCellValue('C' . $hang, $row->order_number)
+
+                                    ->setCellValue('L' . $hang, $invoice_data[$row->order_tire_id]['number']);
+
+
+                                foreach ($order_lists as $order_list) {
+
+                                    $objPHPExcel->setActiveSheetIndex(0)
+
+                                    ->setCellValue('D' . $hang, $order_list->tire_brand_name)
+
+                                    ->setCellValue('E' . $hang, $order_list->tire_size_number.' '.$order_list->tire_pattern_name)
+
+                                    ->setCellValue('F' . $hang, $order_list->tire_number)
+
+                                    ->setCellValue('G' . $hang, ($row->check_price_vat==1?$order_list->tire_price_vat:$order_list->tire_price+($row->vat/$row->order_tire_number)))
+
+                                    ->setCellValue('H' . $hang, '=F'.$hang.'*G'.$hang)
+
+                                    ->setCellValue('I' . $hang, $row->discount+$row->reduce)
+
+                                    ->setCellValue('J' . $hang, $receivable->pay_money);
+
+                                    $hang++;
+
+                                }
+
+                                $objPHPExcel->setActiveSheetIndex(0)
+
+                                    ->setCellValue('K' . $sohang, '=SUM(H'.$sohang.':H'.($hang-1).')-J'.$sohang.'-I'.$sohang);
+
+                                $objPHPExcel->getActiveSheet()->mergeCells('A'.$sohang.':A'.($hang-1));
+                                $objPHPExcel->getActiveSheet()->mergeCells('B'.$sohang.':B'.($hang-1));
+                                $objPHPExcel->getActiveSheet()->mergeCells('C'.$sohang.':C'.($hang-1));
+                                $objPHPExcel->getActiveSheet()->mergeCells('I'.$sohang.':I'.($hang-1));
+                                $objPHPExcel->getActiveSheet()->mergeCells('J'.$sohang.':J'.($hang-1));
+                                $objPHPExcel->getActiveSheet()->mergeCells('K'.$sohang.':K'.($hang-1));
+                                $objPHPExcel->getActiveSheet()->mergeCells('L'.$sohang.':L'.($hang-1));
+
+
+                            }
+                        }
+                    }
+                    else{
+
+                    
+
+                        $join_order = array('table'=>'tire_brand, tire_size, tire_pattern','where'=>'tire_brand=tire_brand_id AND tire_size=tire_size_id AND tire_pattern=tire_pattern_id');
+                        $order_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$row->order_tire_id), $join_order);
+                        if ($order_lists) {
+
+                            
+                            //$objPHPExcel->setActiveSheetIndex(0)->getStyle('B'.$hang)->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
+
+                             $objPHPExcel->setActiveSheetIndex(0)
+
+                                ->setCellValue('A' . $hang, $i++)
+
+                                ->setCellValueExplicit('B' . $hang, $this->lib->hien_thi_ngay_thang($row->order_tire_date))
+
+                                ->setCellValue('C' . $hang, $row->order_number)
+
+                                ->setCellValue('L' . $hang, $invoice_data[$row->order_tire_id]['number']);
+
+
+                            foreach ($order_lists as $order_list) {
+
+                                $objPHPExcel->setActiveSheetIndex(0)
+
+                                ->setCellValue('D' . $hang, $order_list->tire_brand_name)
+
+                                ->setCellValue('E' . $hang, $order_list->tire_size_number.' '.$order_list->tire_pattern_name)
+
+                                ->setCellValue('F' . $hang, $order_list->tire_number)
+
+                                ->setCellValue('G' . $hang, ($row->check_price_vat==1?$order_list->tire_price_vat:$order_list->tire_price+($row->vat/$row->order_tire_number)))
+
+                                ->setCellValue('H' . $hang, '=F'.$hang.'*G'.$hang)
+
+                                ->setCellValue('I' . $hang, $row->discount+$row->reduce)
+
+                                ->setCellValue('J' . $hang, $receivable->pay_money);
+
+                                $hang++;
+
+                            }
 
                             $objPHPExcel->setActiveSheetIndex(0)
 
-                            ->setCellValue('D' . $hang, $order_list->tire_brand_name)
+                                ->setCellValue('K' . $sohang, '=SUM(H'.$sohang.':H'.($hang-1).')-J'.$sohang.'-I'.$sohang);
 
-                            ->setCellValue('E' . $hang, $order_list->tire_size_number.' '.$order_list->tire_pattern_name)
+                            $objPHPExcel->getActiveSheet()->mergeCells('A'.$sohang.':A'.($hang-1));
+                            $objPHPExcel->getActiveSheet()->mergeCells('B'.$sohang.':B'.($hang-1));
+                            $objPHPExcel->getActiveSheet()->mergeCells('C'.$sohang.':C'.($hang-1));
+                            $objPHPExcel->getActiveSheet()->mergeCells('I'.$sohang.':I'.($hang-1));
+                            $objPHPExcel->getActiveSheet()->mergeCells('J'.$sohang.':J'.($hang-1));
+                            $objPHPExcel->getActiveSheet()->mergeCells('K'.$sohang.':K'.($hang-1));
+                            $objPHPExcel->getActiveSheet()->mergeCells('L'.$sohang.':L'.($hang-1));
 
-                            ->setCellValue('F' . $hang, $order_list->tire_number)
-
-                            ->setCellValue('G' . $hang, ($row->check_price_vat==1?$order_list->tire_price_vat:$order_list->tire_price+($row->vat/$row->order_tire_number)))
-
-                            ->setCellValue('H' . $hang, '=F'.$hang.'*G'.$hang)
-
-                            ->setCellValue('I' . $hang, $row->discount+$row->reduce)
-
-                            ->setCellValue('J' . $hang, $receivable->pay_money);
-
-                            $hang++;
 
                         }
-
-                        $objPHPExcel->setActiveSheetIndex(0)
-
-                            ->setCellValue('K' . $sohang, '=SUM(H'.$sohang.':H'.($hang-1).')-J'.$sohang.'-I'.$sohang);
-
-                        $objPHPExcel->getActiveSheet()->mergeCells('A'.$sohang.':A'.($hang-1));
-                        $objPHPExcel->getActiveSheet()->mergeCells('B'.$sohang.':B'.($hang-1));
-                        $objPHPExcel->getActiveSheet()->mergeCells('C'.$sohang.':C'.($hang-1));
-                        $objPHPExcel->getActiveSheet()->mergeCells('I'.$sohang.':I'.($hang-1));
-                        $objPHPExcel->getActiveSheet()->mergeCells('J'.$sohang.':J'.($hang-1));
-                        $objPHPExcel->getActiveSheet()->mergeCells('K'.$sohang.':K'.($hang-1));
-                        $objPHPExcel->getActiveSheet()->mergeCells('L'.$sohang.':L'.($hang-1));
-
-
-                      }
+                    }
 
                 }
 
@@ -861,6 +1090,12 @@ Class tiredebitController Extends baseController {
                 ->setCellValue('A'.$hang, 'TỔNG CỘNG')
 
                 ->setCellValue('F'.$hang, '=SUM(F9:F'.($hang-1).')')
+
+                ->setCellValue('H'.$hang, '=SUM(H9:H'.($hang-1).')')
+
+                ->setCellValue('I'.$hang, '=SUM(I9:I'.($hang-1).')')
+
+                ->setCellValue('J'.$hang, '=SUM(J9:J'.($hang-1).')')
 
                ->setCellValue('K'.$hang, '=SUM(K9:K'.($hang-1).')');
 
@@ -896,13 +1131,15 @@ Class tiredebitController Extends baseController {
 
             $objPHPExcel->setActiveSheetIndex($index_worksheet)
 
-            ->setCellValue('B'.($hang+2), $this->lib->convert_number_to_words(round($cell)).' đồng');
+            ->setCellValue('C'.($hang+2), $this->lib->convert_number_to_words(round($cell)).' đồng');
 
 
 
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$hang.':E'.$hang);
 
-            $objPHPExcel->getActiveSheet()->mergeCells('B'.($hang+2).':L'.($hang+2));
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.($hang+2).':B'.($hang+2));
+
+            $objPHPExcel->getActiveSheet()->mergeCells('C'.($hang+2).':L'.($hang+2));
 
 
             $objPHPExcel->getActiveSheet()->getRowDimension($hang+1)->setRowHeight(8);
@@ -922,15 +1159,15 @@ Class tiredebitController Extends baseController {
 
                 ->setCellValue('E'.($hang+4), 'CÔNG TY TNHH VIỆT TRA DE')
 
-               ->setCellValue('I'.($hang+4), mb_strtoupper($tencongty, "UTF-8"));
+               ->setCellValue('H'.($hang+4), mb_strtoupper($tencongty, "UTF-8"));
 
 
 
             $objPHPExcel->getActiveSheet()->mergeCells('A'.($hang+4).':D'.($hang+4));
 
-            $objPHPExcel->getActiveSheet()->mergeCells('E'.($hang+4).':H'.($hang+4));
+            $objPHPExcel->getActiveSheet()->mergeCells('E'.($hang+4).':G'.($hang+4));
 
-            $objPHPExcel->getActiveSheet()->mergeCells('I'.($hang+4).':L'.($hang+4));
+            $objPHPExcel->getActiveSheet()->mergeCells('H'.($hang+4).':L'.($hang+4));
 
 
             $objPHPExcel->getActiveSheet()->getStyle('A8:E'.$hang)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -961,8 +1198,8 @@ Class tiredebitController Extends baseController {
 
             );
 
-            $objPHPExcel->getActiveSheet()->getStyle('B'.($hang+2))->getFont()->setBold(false);
-            $objPHPExcel->getActiveSheet()->getStyle('B'.($hang+2))->getFont()->setItalic(true);
+            $objPHPExcel->getActiveSheet()->getStyle('C'.($hang+2))->getFont()->setBold(false);
+            $objPHPExcel->getActiveSheet()->getStyle('C'.($hang+2))->getFont()->setItalic(true);
 
 
 
@@ -974,13 +1211,13 @@ Class tiredebitController Extends baseController {
 
 
 
-            $objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
+            $objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
 
-            $objPHPExcel->getActiveSheet()->mergeCells('I1:L1');
+            $objPHPExcel->getActiveSheet()->mergeCells('H1:L1');
 
-            $objPHPExcel->getActiveSheet()->mergeCells('A2:D2');
+            $objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
 
-            $objPHPExcel->getActiveSheet()->mergeCells('I2:L2');
+            $objPHPExcel->getActiveSheet()->mergeCells('H2:L2');
 
             $objPHPExcel->getActiveSheet()->mergeCells('I4:L4');
 
@@ -992,7 +1229,7 @@ Class tiredebitController Extends baseController {
 
             $objPHPExcel->getActiveSheet()->getStyle('A1:L6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
-            $objPHPExcel->getActiveSheet()->getStyle('I2')->getFont()->setItalic(true);
+            $objPHPExcel->getActiveSheet()->getStyle('H2')->getFont()->setItalic(true);
 
             $objPHPExcel->getActiveSheet()->getStyle('I4')->getFont()->setItalic(true);
 
@@ -1069,7 +1306,7 @@ Class tiredebitController Extends baseController {
 
             $objPHPExcel->getActiveSheet()->getDefaultColumnDimension()->setWidth(14);
 
-            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
 
             $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(18);
 
@@ -1080,7 +1317,7 @@ Class tiredebitController Extends baseController {
             $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getFont()->setName('Times New Roman');
             $objPHPExcel->getActiveSheet()->getStyle('A1:L'.$highestRow)->getFont()->setSize(12);
 
-            $objPHPExcel->getActiveSheet()->getStyle("A6")->getFont()->setSize(18);
+            $objPHPExcel->getActiveSheet()->getStyle("A6")->getFont()->setSize(22);
 
 
 
@@ -1256,6 +1493,17 @@ Class tiredebitController Extends baseController {
             }
         }
 
+        $pay_model = $this->model->get('payableModel');
+        $join = array('table'=>'pay','where'=>'pay.payable = payable_id');
+        $data = array(
+            'where' => 'pay.pay_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+        );
+        $pays = $pay_model->getAllCosts($data,$join);
+
+        foreach ($pays as $pay) {
+            $data_customer['money'][$pay->customer] = isset($data_customer['money'][$pay->customer])?$data_customer['money'][$pay->customer]+$pay->money:$pay->money;
+        }
+
         
 
             require("lib/Classes/PHPExcel/IOFactory.php");
@@ -1403,6 +1651,12 @@ Class tiredebitController Extends baseController {
                             }
                         }
 
+                        $join = array('table'=>'pay, customer','where'=>'pay.payable = payable_id AND payable.customer = customer_id');
+                        $data = array(
+                            'where' => 'payable.customer = '.$order_tire->customer_id.' AND pay.pay_date < '.strtotime(date('d-m-Y', strtotime($ketthuc. ' + 1 days'))),
+                        );
+                        $pays = $pay_model->getAllCosts($data,$join);
+
 
                         foreach ($orders as $order_list) {
                             $pay_money = isset($receivable_data[$order_list->receivable_id]['pay_money'])?$receivable_data[$order_list->receivable_id]['pay_money']:0;
@@ -1457,6 +1711,21 @@ Class tiredebitController Extends baseController {
 
                                 $hang++;
                             }
+
+                        }
+
+                        foreach ($pays as $order_list) {
+                            $objPHPExcel->setActiveSheetIndex(0)
+
+                            ->setCellValue('B' . $hang, $order_list->pay_comment)
+
+                            ->setCellValue('C' . $hang, $order_list->money)
+
+                            ->setCellValue('D' . $hang, 0)
+
+                            ->setCellValue('E' . $hang, '=C'.$hang.'-D'.$hang);
+
+                            $hang++;
 
                         }
 
