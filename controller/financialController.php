@@ -401,7 +401,7 @@ Class financialController Extends baseController {
 
         $join = array('table'=>'account','where'=>'account=account_id');
         $data = array(
-            'where'=>'account_balance_date < '.strtotime($batdau),
+            'where'=>'(account_balance_type IS NULL) AND account_balance_date < '.strtotime($batdau),
         );
         $account_balance_befores = $account_balance_model->getAllAccount($data,$join);
         $account_before = array();
@@ -418,7 +418,7 @@ Class financialController Extends baseController {
         }
 
         $data = array(
-            'where'=>'account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime($ketthuc),
+            'where'=>'(account_balance_type IS NULL) AND account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime($ketthuc),
         );
         $account_balances = $account_balance_model->getAllAccount($data,$join);
         $account_add = array();

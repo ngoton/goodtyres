@@ -167,6 +167,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -175,6 +176,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -200,6 +202,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -208,6 +211,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -237,6 +241,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -245,6 +250,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -270,6 +276,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -278,6 +285,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -307,6 +315,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -315,6 +324,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -340,6 +350,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -348,6 +359,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -377,6 +389,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -385,6 +398,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -409,6 +423,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -417,6 +432,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -445,6 +461,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -453,6 +470,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -477,6 +495,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -485,6 +504,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -513,6 +533,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -521,6 +542,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -545,6 +567,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -553,6 +576,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -581,6 +605,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -589,6 +614,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -613,6 +639,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -621,6 +648,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -649,6 +677,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -657,6 +686,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -681,6 +711,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -689,6 +720,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -717,6 +749,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -725,6 +758,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -749,6 +783,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -757,6 +792,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -786,6 +822,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -794,6 +831,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -818,6 +856,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -826,6 +865,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -854,6 +894,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -862,6 +903,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -886,6 +928,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -894,6 +937,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -922,6 +966,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -930,6 +975,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -954,6 +1000,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -962,6 +1009,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -990,6 +1038,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -998,6 +1047,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -1022,6 +1072,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -1030,6 +1081,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -1058,6 +1110,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -1066,6 +1119,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -1090,6 +1144,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -1098,6 +1153,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -1126,6 +1182,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -1134,6 +1191,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -1158,6 +1216,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -1166,6 +1225,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -1194,6 +1254,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -1202,6 +1263,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -1226,6 +1288,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -1234,6 +1297,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -1262,6 +1326,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -1270,6 +1335,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -1294,6 +1360,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -1302,6 +1369,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -1330,6 +1398,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -1338,6 +1407,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -1363,6 +1433,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -1371,6 +1442,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -1400,6 +1472,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -1408,6 +1481,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -1432,6 +1506,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -1440,6 +1515,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -1468,6 +1544,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -1476,6 +1553,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -1500,6 +1578,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -1508,6 +1587,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));
@@ -1536,6 +1616,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $data_credit = array(
                     'account_balance_date' => $data['additional_date'],
@@ -1544,6 +1625,7 @@ Class forwardController Extends baseController {
                     'week' => (int)date('W', $data['additional_date']),
                     'year' => (int)date('Y', $data['additional_date']),
                     'additional' => $id_additional,
+                    'account_balance_type'=>1,
                 );
                 $account_balance_model->createAccount($data_debit);
                 $account_balance_model->createAccount($data_credit);
@@ -1569,6 +1651,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $data_credit = array(
                         'account_balance_date' => $data['additional_date'],
@@ -1577,6 +1660,7 @@ Class forwardController Extends baseController {
                         'week' => (int)date('W', $data['additional_date']),
                         'year' => (int)date('Y', $data['additional_date']),
                         'additional' => $q->additional_id,
+                        'account_balance_type'=>1,
                     );
                     $account_balance_model->updateAccount($data_debit,array('account' => $q->debit,'additional' => $q->additional_id));
                     $account_balance_model->updateAccount($data_credit,array('account' => $q->credit,'additional' => $q->additional_id));

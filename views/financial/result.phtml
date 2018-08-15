@@ -120,7 +120,7 @@
             <tr class="bank" data="<?php echo $account_num[641] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">641</td>
                 <td class="fix">Vận chuyển + bốc xếp + bảo hành</td>
-                <td class="fix text-right"><?php echo $lib->formatMoney($cp_no_ps = isset($account_parent_add[641]['no'])?str_replace('-', '', $account_parent_add[641]['no']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($cp_no_ps = (isset($account_parent_add[641]['no'])?str_replace('-', '', $account_parent_add[641]['no']):null)-(isset($account_parent_add[641]['co'])?str_replace('-', '', $account_parent_add[641]['co']):null)) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[635] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">635</td>
@@ -140,17 +140,17 @@
             <tr class="bank" data="<?php echo $account_num[6421] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">6421</td>
                 <td class="fix">Tiền lương + Cơm + Bảo hiểm</td>
-                <td class="fix text-right"><?php echo $lib->formatMoney($luong_no_ps = isset($account_add[6421]['no'])?str_replace('-', '', $account_add[6421]['no']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($luong_no_ps = (isset($account_add[6421]['no'])?str_replace('-', '', $account_add[6421]['no']):null)-(isset($account_parent_add[6421]['co'])?str_replace('-', '', $account_parent_add[6421]['co']):null)) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[6426] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">6426</td>
                 <td class="fix">Thuê kho bãi</td>
-                <td class="fix text-right"><?php echo $lib->formatMoney($khobai_no_ps = isset($account_add[6426]['no'])?str_replace('-', '', $account_add[6426]['no']):null) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($khobai_no_ps = (isset($account_add[6426]['no'])?str_replace('-', '', $account_add[6426]['no']):null)-(isset($account_parent_add[6426]['co'])?str_replace('-', '', $account_parent_add[6426]['co']):null)) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[642] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">642</td>
                 <td class="fix">Chi phí Quản lý hành chính</td>
-                <td class="fix text-right"><?php echo $lib->formatMoney($hanhchinh_no_ps = (isset($account_parent_add[642]['no'])?str_replace('-', '', $account_parent_add[642]['no']):null) - $luong_no_ps - $khobai_no_ps ) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($hanhchinh_no_ps = ((isset($account_parent_add[642]['no'])?str_replace('-', '', $account_parent_add[642]['no']):null)-(isset($account_parent_add[642]['co'])?str_replace('-', '', $account_parent_add[642]['co']):null)) - $luong_no_ps - $khobai_no_ps ) ?></td>
             </tr>
             <tr style="background-color:rgba(0, 173, 255, 0.15)">
                 <td class="fix"></td>
