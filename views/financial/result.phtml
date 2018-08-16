@@ -140,12 +140,12 @@
             <tr class="bank" data="<?php echo $account_num[6421] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">6421</td>
                 <td class="fix">Tiền lương + Cơm + Bảo hiểm</td>
-                <td class="fix text-right"><?php echo $lib->formatMoney($luong_no_ps = (isset($account_add[6421]['no'])?str_replace('-', '', $account_add[6421]['no']):null)-(isset($account_parent_add[6421]['co'])?str_replace('-', '', $account_parent_add[6421]['co']):null)) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($luong_no_ps = (isset($account_add[6421]['no'])?str_replace('-', '', $account_add[6421]['no']):null)-(isset($account_add[6421]['co'])?str_replace('-', '', $account_add[6421]['co']):null)) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[6426] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">6426</td>
                 <td class="fix">Thuê kho bãi</td>
-                <td class="fix text-right"><?php echo $lib->formatMoney($khobai_no_ps = (isset($account_add[6426]['no'])?str_replace('-', '', $account_add[6426]['no']):null)-(isset($account_parent_add[6426]['co'])?str_replace('-', '', $account_parent_add[6426]['co']):null)) ?></td>
+                <td class="fix text-right"><?php echo $lib->formatMoney($khobai_no_ps = (isset($account_add[6426]['no'])?str_replace('-', '', $account_add[6426]['no']):null)-(isset($account_add[6426]['co'])?str_replace('-', '', $account_add[6426]['co']):null)) ?></td>
             </tr>
             <tr class="bank" data="<?php echo $account_num[642] ?>" alt="<?php echo $batdau ?>" name="<?php echo $ketthuc ?>">
                 <td class="fix">642</td>
