@@ -720,6 +720,9 @@ Class ordertireController Extends baseController {
             foreach ($sum_order as $sum) {
                 $total_order = $sum->tong;
             }
+            if ($total_order == 0) {
+                $total_order = $tire->order_tire_number;
+            }
 
             $last_month[$tire->order_tire_id] = $total_order_before;
             $this_month[$tire->order_tire_id] = $total_order;
@@ -810,8 +813,11 @@ Class ordertireController Extends baseController {
                 }
                 $tire_price_origin = $dongia;
 
+                $ngaytruoc = strtotime(date('d-m-Y', strtotime(date('d-m-Y',$ngay). ' - 1 days')));
+                $ngaysau = strtotime(date('d-m-Y', strtotime(date('d-m-Y',$ngay). ' + 1 days')));
+
                 $data_q = array(
-                    'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date <= '.$ngay.' AND (end_date IS NULL OR end_date >= '.$ngay.')',
+                    'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date < '.$ngaysau.' AND (end_date IS NULL OR end_date > '.$ngaytruoc.')',
                     'order_by' => 'start_date',
                     'order' => 'DESC',
                     'limit' => 1,
@@ -819,7 +825,7 @@ Class ordertireController Extends baseController {
                 $tire_price_discounts = $tire_price_discount_model->getAllTire($data_q);
 
                 $data_e = array(
-                    'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date <= '.$ngay.' AND (end_date IS NULL OR end_date >= '.$ngay.')',
+                    'where' => 'tire_brand ='.$sale->tire_brand.' AND tire_size ='.$sale->tire_size.' AND tire_pattern ='.$sale->tire_pattern.' AND start_date < '.$ngaysau.' AND (end_date IS NULL OR end_date > '.$ngaytruoc.')',
                     'order_by' => 'start_date',
                     'order' => 'DESC',
                     'limit' => 1,
@@ -2000,6 +2006,10 @@ Class ordertireController Extends baseController {
                         foreach ($pa as $p) {
                             $assets->queryAssets('DELETE FROM assets WHERE payable='.$p->payable_id);
                             $pay->queryCosts('DELETE FROM pay WHERE payable='.$p->payable_id);
+
+                            $additionals = $additional_model->getAdditionalByWhere(array('payable'=>$p->payable_id));
+                            $account_balance_model->queryAccount('DELETE FROM account_balance WHERE additional='.$additionals->additional_id);
+                            $additional_model->queryAdditional('DELETE FROM additional WHERE additional_id='.$additionals->additional_id);
                         }
 
                         $receivable_model->queryCosts('DELETE FROM receivable WHERE order_tire = '.$data);
@@ -2096,6 +2106,10 @@ Class ordertireController Extends baseController {
                         foreach ($pa as $p) {
                             $assets->queryAssets('DELETE FROM assets WHERE payable='.$p->payable_id);
                             $pay->queryCosts('DELETE FROM pay WHERE payable='.$p->payable_id);
+
+                            $additionals = $additional_model->getAdditionalByWhere(array('payable'=>$p->payable_id));
+                            $account_balance_model->queryAccount('DELETE FROM account_balance WHERE additional='.$additionals->additional_id);
+                            $additional_model->queryAdditional('DELETE FROM additional WHERE additional_id='.$additionals->additional_id);
                         }
 
                         $receivable_model->queryCosts('DELETE FROM receivable WHERE order_tire = '.$_POST['data']);
@@ -2365,7 +2379,11 @@ Class ordertireController Extends baseController {
         $price = array();
         foreach ($order_tire_lists as $order) {
             $ngay = $order_tire->delivery_date>0?$order_tire->delivery_date:strtotime(date('d-m-Y'));
-            $prices = $tire_price_discount_model->getAllTire(array('where'=>'tire_brand='.$order->tire_brand.' AND tire_size='.$order->tire_size.' AND tire_pattern='.$order->tire_pattern.' AND start_date <= '.$ngay.' AND (end_date IS NULL OR end_date >= '.$ngay.')  ORDER BY start_date DESC LIMIT 1'));
+
+            $ngaytruoc = strtotime(date('d-m-Y', strtotime(date('d-m-Y',$ngay). ' - 1 days')));
+            $ngaysau = strtotime(date('d-m-Y', strtotime(date('d-m-Y',$ngay). ' + 1 days')));
+
+            $prices = $tire_price_discount_model->getAllTire(array('where'=>'tire_brand='.$order->tire_brand.' AND tire_size='.$order->tire_size.' AND tire_pattern='.$order->tire_pattern.' AND start_date < '.$ngaysau.' AND (end_date IS NULL OR end_date > '.$ngaytruoc.')  ORDER BY start_date DESC LIMIT 1'));
             foreach ($prices as $p) {
                 $price[$order->order_tire_list_id] = $p->tire_price;
             }
@@ -4050,7 +4068,7 @@ Class ordertireController Extends baseController {
                 $id_pattern = $purchase->tire_pattern;
                 
 
-                if($tireimportdetail->getTireByWhere(array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern))) {
+                /*if($tireimportdetail->getTireByWhere(array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern))) {
                     $ton = 0;
 
                     $tire_buys = $tirebuy->getAllTire(array('where'=>'tire_buy_date <= '.$dauthang.' AND tire_buy_brand = '.$id_brand.' AND tire_buy_size = '.$id_size.' AND tire_buy_pattern = '.$id_pattern));
@@ -4098,6 +4116,62 @@ Class ordertireController Extends baseController {
                     'tire_size' => $id_size,
                     'tire_pattern' => $id_pattern,
                     'tire_price' => $gia/$soluong,
+                    'tire_price_vat' => $purchase->tire_price-($purchase->tire_price/1.1),
+                    'code' => $code,
+                    'start_date' => $dauthang,
+                    'purchase_tire_detail' => $purchase->purchase_tire_detail_id,
+                    );
+                    $tireimport->createTire($tire_import_data);
+                }
+                else{
+                    $tire_import_detail_data = array(
+                    'tire_brand' => $id_brand,
+                    'tire_size' => $id_size,
+                    'tire_pattern' => $id_pattern,
+                    'tire_price' => $purchase->tire_price,
+                    'tire_price_vat' => $purchase->tire_price-($purchase->tire_price/1.1),
+                    'tire_number' => $purchase->tire_number,
+                    'code' => $code,
+                    'status' => 1,
+                    'purchase_tire_detail' => $purchase->purchase_tire_detail_id,
+                    );
+                    $tireimportdetail->createTire($tire_import_detail_data);
+
+                    $tire_import_data = array(
+                    'tire_brand' => $id_brand,
+                    'tire_size' => $id_size,
+                    'tire_pattern' => $id_pattern,
+                    'tire_price' => $purchase->tire_price,
+                    'tire_price_vat' => $purchase->tire_price-($purchase->tire_price/1.1),
+                    'code' => $code,
+                    'start_date' => $dauthang,
+                    'purchase_tire_detail' => $purchase->purchase_tire_detail_id,
+                    );
+                    $tireimport->createTire($tire_import_data);
+                }*/
+
+                if($tireimportdetail->getTireByWhere(array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern))) {
+                    
+                    $tireimportdetail->updateTire(array('status'=>0),array('tire_brand'=>$id_brand,'tire_size'=>$id_size,'tire_pattern'=>$id_pattern,'status'=>1));
+
+                    $tire_import_detail_data = array(
+                    'tire_brand' => $id_brand,
+                    'tire_size' => $id_size,
+                    'tire_pattern' => $id_pattern,
+                    'tire_price' => $purchase->tire_price,
+                    'tire_price_vat' => $purchase->tire_price-($purchase->tire_price/1.1),
+                    'tire_number' => $purchase->tire_number,
+                    'code' => $code,
+                    'status' => 1,
+                    'purchase_tire_detail' => $purchase->purchase_tire_detail_id,
+                    );
+                    $tireimportdetail->createTire($tire_import_detail_data);
+
+                    $tire_import_data = array(
+                    'tire_brand' => $id_brand,
+                    'tire_size' => $id_size,
+                    'tire_pattern' => $id_pattern,
+                    'tire_price' => $purchase->tire_price,
                     'tire_price_vat' => $purchase->tire_price-($purchase->tire_price/1.1),
                     'code' => $code,
                     'start_date' => $dauthang,
@@ -4268,6 +4342,13 @@ Class ordertireController Extends baseController {
             $payable_model = $this->model->get('payableModel');
             $owe_model = $this->model->get('oweModel');
 
+            $additional_model = $this->model->get('additionalModel');
+            $account_balance_model = $this->model->get('accountbalanceModel');
+            $account_model = $this->model->get('accountModel');
+
+            $tk_6418 = $account_model->getAccountByWhere(array('account_number'=>'6418'))->account_id;
+            $tk_141 = $account_model->getAccountByWhere(array('account_number'=>'141_chiphi'))->account_id;
+
             $data_order = $order_tire_model->getTire($_POST['data']);
 
             $vendor_cost = $_POST['vendor_cost'];
@@ -4327,6 +4408,7 @@ Class ordertireController Extends baseController {
                         $payable_data['year'] = (int)date('Y',$data_order->delivery_date)+1;
                     }
 
+                
 
                 if ($order_cost_model->getTireByWhere(array('order_tire'=>$cost_data['order_tire'],'vendor'=>$cost_data['vendor'],'order_tire_cost_type'=>$cost_data['order_tire_cost_type']))) {
                     $data_order_cost = $order_cost_model->getTireByWhere(array('order_tire'=>$cost_data['order_tire'],'vendor'=>$cost_data['vendor'],'order_tire_cost_type'=>$cost_data['order_tire_cost_type']));
@@ -4334,15 +4416,64 @@ Class ordertireController Extends baseController {
 
                     $owe_model->updateOwe($owe_data,array('order_tire'=>$_POST['data'],'vendor'=>$cost_data['vendor'],'money'=>$data_order_cost->order_tire_cost));
          
-                    if($payable_model->getCostsByWhere(array('check_cost'=>4,'money'=>$data_order_cost->order_tire_cost,'vendor' => $cost_data['vendor'],'order_tire'=>trim($_POST['data']),'cost_type' => $cost_data['order_tire_cost_type']))){
-                        $check = $payable_model->getCostsByWhere(array('check_cost'=>4,'money'=>$data_order_cost->order_tire_cost,'vendor' => $cost_data['vendor'],'order_tire'=>trim($_POST['data']),'cost_type' => $cost_data['order_tire_cost_type']));
-
-                        if ($check->money >= $payable_data['money'] && $check->approve > 0) {
+                    $payables = $payable_model->getCostsByWhere(array('check_cost'=>4,'money'=>$data_order_cost->order_tire_cost,'vendor' => $cost_data['vendor'],'order_tire'=>trim($_POST['data']),'cost_type' => $cost_data['order_tire_cost_type']));
+                    if($payables){
+                        
+                        if ($payables->money >= $payable_data['money'] && $payables->approve > 0) {
                             $payable_data['approve'] = 10;
                         }
 
-                        $payable_model->updateCosts($payable_data,array('check_cost'=>4,'money'=>$data_order_cost->order_tire_cost,'vendor' => $cost_data['vendor'],'order_tire'=>trim($_POST['data']),'cost_type' => $cost_data['order_tire_cost_type']));
+                        $payable_model->updateCosts($payable_data,array('payable_id'=>$payables->payable_id));
                         
+                        
+                        $data_additional = array(
+                             
+                            'document_date' => $payable_data['payable_date'],
+                            'additional_date' => $payable_data['payable_date'],
+                            'additional_comment' => $payable_data['comment'],
+                            'debit' => $tk_6418,
+                            'credit' => $tk_141,
+                            'code' => $payable_data['code'],
+                            'money' => $payable_data['money'],
+                            'payable' => $payables->payable_id,
+                            );
+                        
+                        $data_debit = array(
+                            'account_balance_date' => $data_additional['additional_date'],
+                            'account' => $data_additional['debit'],
+                            'money' => $data_additional['money'],
+                            'week' => (int)date('W', $data_additional['additional_date']),
+                            'year' => (int)date('Y', $data_additional['additional_date']),
+                        );
+                        $data_credit = array(
+                            'account_balance_date' => $data_additional['additional_date'],
+                            'account' => $data_additional['credit'],
+                            'money' => (0-$data_additional['money']),
+                            'week' => (int)date('W', $data_additional['additional_date']),
+                            'year' => (int)date('Y', $data_additional['additional_date']),
+                        );
+
+                        if($data_debit['week'] == 53){
+                            $data_debit['week'] = 1;
+                            $data_debit['year'] = $data_debit['year']+1;
+
+                            $data_credit['week'] = 1;
+                            $data_credit['year'] = $data_credit['year']+1;
+                        }
+                        if (((int)date('W', $data_additional['additional_date']) == 1) && ((int)date('m', $data_additional['additional_date']) == 12) ) {
+                            $data_debit['year'] = (int)date('Y', $data_additional['additional_date'])+1;
+                            $data_credit['year'] = (int)date('Y', $data_additional['additional_date'])+1;
+                        }
+
+                        $additional_id = $additional_model->getAdditionalByWhere(array('payable'=>$payables->payable_id))->additional_id;
+                        $add = $additional_model->getAdditional($additional_id);
+
+                        $additional_model->updateAdditional($data_additional,array('additional_id'=>$additional_id));
+
+                        $d = $account_balance_model->getAccountByWhere(array('additional'=>$additional_id,'account'=>$add->debit,'money'=>$add->money));
+                        $c = $account_balance_model->getAccountByWhere(array('additional'=>$additional_id,'account'=>$add->credit,'money'=>(0-$add->money)));
+                        $account_balance_model->updateAccount($data_debit,array('account_balance_id'=>$d->account_balance_id));
+                        $account_balance_model->updateAccount($data_credit,array('account_balance_id'=>$c->account_balance_id));
                     }
 
                     
@@ -4363,6 +4494,57 @@ Class ordertireController Extends baseController {
                     $payable_model->createCosts($payable_data);
 
                     $last_cost = $order_cost_model->getLastTire()->order_tire_cost_id;
+
+                    $payables = $payable_model->getLastCosts();
+                    $data_additional = array(
+                             
+                        'document_date' => $payable_data['payable_date'],
+                        'additional_date' => $payable_data['payable_date'],
+                        'additional_comment' => $payable_data['comment'],
+                        'debit' => $tk_6418,
+                        'credit' => $tk_141,
+                        'code' => $payable_data['code'],
+                        'money' => $payable_data['money'],
+                        'payable' => $payables->payable_id,
+                        );
+
+                    $additional_model->createAdditional($data_additional);
+
+                    $additional_id = $additional_model->getLastAdditional()->additional_id;
+                    $add = $additional_model->getAdditional($additional_id);
+                    
+                    $data_debit = array(
+                        'account_balance_date' => $data_additional['additional_date'],
+                        'account' => $data_additional['debit'],
+                        'money' => $data_additional['money'],
+                        'week' => (int)date('W', $data_additional['additional_date']),
+                        'year' => (int)date('Y', $data_additional['additional_date']),
+                        'additional' => $additional_id,
+                    );
+                    $data_credit = array(
+                        'account_balance_date' => $data_additional['additional_date'],
+                        'account' => $data_additional['credit'],
+                        'money' => (0-$data_additional['money']),
+                        'week' => (int)date('W', $data_additional['additional_date']),
+                        'year' => (int)date('Y', $data_additional['additional_date']),
+                        'additional' => $additional_id,
+                    );
+
+                    if($data_debit['week'] == 53){
+                        $data_debit['week'] = 1;
+                        $data_debit['year'] = $data_debit['year']+1;
+
+                        $data_credit['week'] = 1;
+                        $data_credit['year'] = $data_credit['year']+1;
+                    }
+                    if (((int)date('W', $data_additional['additional_date']) == 1) && ((int)date('m', $data_additional['additional_date']) == 12) ) {
+                        $data_debit['year'] = (int)date('Y', $data_additional['additional_date'])+1;
+                        $data_credit['year'] = (int)date('Y', $data_additional['additional_date'])+1;
+                    }
+
+                    
+                    $account_balance_model->createAccount($data_debit);
+                    $account_balance_model->createAccount($data_credit);
 
                     date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                     $filename = "action_logs.txt";
@@ -4386,6 +4568,8 @@ Class ordertireController Extends baseController {
             $owe_model = $this->model->get('oweModel');
             $assets = $this->model->get('assetsModel');
             $pay = $this->model->get('payModel');
+            $additional_model = $this->model->get('additionalModel');
+            $account_balance_model = $this->model->get('accountbalanceModel');
 
             $order_tire_cost = $order_cost_model->getTireByWhere(array('order_tire'=>$_POST['data'],'vendor'=>$_POST['vendor'],'order_tire_cost_type'=>$_POST['type']));
             $order_tire = $order_tire_model->getTire($order_tire_cost->order_tire);
@@ -4400,6 +4584,10 @@ Class ordertireController Extends baseController {
             $payable_model->queryCosts('DELETE FROM payable WHERE payable_id='.$p->payable_id);
 
             $order_cost_model->queryTire('DELETE FROM order_tire_cost WHERE order_tire_cost_id = '.$order_tire_cost->order_tire_cost_id);
+
+            $additionals = $additional_model->getAdditionalByWhere(array('payable'=>$p->payable_id));
+            $account_balance_model->queryAccount('DELETE FROM account_balance WHERE additional='.$additionals->additional_id);
+            $additional_model->queryAdditional('DELETE FROM additional WHERE additional_id='.$additionals->additional_id);
 
             echo "Thêm thành công";
 

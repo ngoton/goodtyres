@@ -1067,5 +1067,187 @@ Class checksalarytotalController Extends baseController {
 
     }
 
+    public function approveall(){
+
+        
+
+        if (!isset($_SESSION['userid_logined'])) {
+
+            return $this->view->redirect('user/login');
+
+        }
+
+        if (isset($_POST['data'])) {
+
+            $ngay = strtotime($_POST['date']);
+            $batdau = '01-'.date('m-Y',$ngay);
+            $ketthuc = date('d-m-Y',strtotime(date('d-m-Y',$ngay)."+1 days"));
+
+            $salary_data = json_decode($_POST['data']);
+
+            $salary_staff = $this->model->get('salarystaffModel');
+            $staff_model = $this->model->get('staffModel');
+            $account_model = $this->model->get('accountModel');
+            $additional_model = $this->model->get('additionalModel');
+            $account_balance_model = $this->model->get('accountbalanceModel');
+
+            $tk_334_parent = $account_model->getAccountByWhere(array('account_number'=>'334'));
+            $tk_6421 = $account_model->getAccountByWhere(array('account_number'=>'6421'));
+
+            foreach ($salary_data as $salary) {
+                $data = array(
+                    'staff' => $salary->staff,
+                    'salary_staff_date' => $ngay,
+                    'salary' => trim(str_replace(',','',$salary->money)),
+                );
+
+                $salary_keep_data = $salary_staff->getAllSalary(array('where'=>'salary_staff_date >= '.strtotime($batdau).' AND salary_staff_date < '.strtotime($ketthuc).' AND staff = '.$salary->staff));
+
+                $staffs = $staff_model->getStaff($salary->staff);
+                $split = explode(" ", $staffs->staff_id);
+                $seller_name = $this->lib->stripUnicode(str_replace(' ', '', $split[count($split)-1]));
+                $tk_334 = $account_model->getAccountByWhere(array('account_number'=>'334_'.$seller_name));
+                if (!$tk_334) {
+                    $account_model->createAccount(array('account_number'=>'334_'.$seller_name,'account_parent'=>$tk_334_parent));
+                    $tk_334 = $account_model->getLastAccount();
+                }
+
+                if (!$salary_keep_data) {
+                    $salary_staff->createSalary($data);
+                    $salary_staffs = $salary_staff->getLastSalary();
+
+                    $data_additional = array(
+                             
+                        'document_date' => $data['salary_staff_date'],
+                        'additional_date' => $data['salary_staff_date'],
+                        'additional_comment' => 'Lương tháng '.date('m/Y',$data['salary_staff_date']).' '.$staffs->staff_name,
+                        'debit' => $tk_6421->account_id,
+                        'credit' => $tk_334->account_id,
+                        'money' => $data['salary'],
+                        'salary_staff' => $salary_staffs->salary_staff_id,
+                        );
+
+                    $additional_model->createAdditional($data_additional);
+
+                    $additional_id = $additional_model->getLastAdditional()->additional_id;
+                    $add = $additional_model->getAdditional($additional_id);
+                    
+                    $data_debit = array(
+                        'account_balance_date' => $data_additional['additional_date'],
+                        'account' => $data_additional['debit'],
+                        'money' => $data_additional['money'],
+                        'week' => (int)date('W', $data_additional['additional_date']),
+                        'year' => (int)date('Y', $data_additional['additional_date']),
+                        'additional' => $additional_id,
+                    );
+                    $data_credit = array(
+                        'account_balance_date' => $data_additional['additional_date'],
+                        'account' => $data_additional['credit'],
+                        'money' => (0-$data_additional['money']),
+                        'week' => (int)date('W', $data_additional['additional_date']),
+                        'year' => (int)date('Y', $data_additional['additional_date']),
+                        'additional' => $additional_id,
+                    );
+
+                    if($data_debit['week'] == 53){
+                        $data_debit['week'] = 1;
+                        $data_debit['year'] = $data_debit['year']+1;
+
+                        $data_credit['week'] = 1;
+                        $data_credit['year'] = $data_credit['year']+1;
+                    }
+                    if (((int)date('W', $data_additional['additional_date']) == 1) && ((int)date('m', $data_additional['additional_date']) == 12) ) {
+                        $data_debit['year'] = (int)date('Y', $data_additional['additional_date'])+1;
+                        $data_credit['year'] = (int)date('Y', $data_additional['additional_date'])+1;
+                    }
+
+                    
+                    $account_balance_model->createAccount($data_debit);
+                    $account_balance_model->createAccount($data_credit);
+                }
+                else{
+                    $salary_staff->querySalary('UPDATE salary_staff SET salary = '.trim(str_replace(',','',$salary->money)).' WHERE staff = '.$salary->staff.' AND create_time >= '.strtotime($batdau).' AND create_time < '.strtotime($ketthuc));
+                    
+                    foreach ($salary_keep_data as $salary_staffs) {
+                        $data_additional = array(
+                             
+                            'document_date' => $data['salary_staff_date'],
+                            'additional_date' => $data['salary_staff_date'],
+                            'additional_comment' => 'Lương tháng '.date('m/Y',$data['salary_staff_date']).' '.$staffs->staff_name,
+                            'debit' => $tk_6421->account_id,
+                            'credit' => $tk_334->account_id,
+                            'money' => $data['salary'],
+                            'salary_staff' => $salary_staffs->salary_staff_id,
+                            );
+                        
+                        $data_debit = array(
+                            'account_balance_date' => $data_additional['additional_date'],
+                            'account' => $data_additional['debit'],
+                            'money' => $data_additional['money'],
+                            'week' => (int)date('W', $data_additional['additional_date']),
+                            'year' => (int)date('Y', $data_additional['additional_date']),
+                        );
+                        $data_credit = array(
+                            'account_balance_date' => $data_additional['additional_date'],
+                            'account' => $data_additional['credit'],
+                            'money' => (0-$data_additional['money']),
+                            'week' => (int)date('W', $data_additional['additional_date']),
+                            'year' => (int)date('Y', $data_additional['additional_date']),
+                        );
+
+                        if($data_debit['week'] == 53){
+                            $data_debit['week'] = 1;
+                            $data_debit['year'] = $data_debit['year']+1;
+
+                            $data_credit['week'] = 1;
+                            $data_credit['year'] = $data_credit['year']+1;
+                        }
+                        if (((int)date('W', $data_additional['additional_date']) == 1) && ((int)date('m', $data_additional['additional_date']) == 12) ) {
+                            $data_debit['year'] = (int)date('Y', $data_additional['additional_date'])+1;
+                            $data_credit['year'] = (int)date('Y', $data_additional['additional_date'])+1;
+                        }
+
+                        $additional_id = $additional_model->getAdditionalByWhere(array('salary_staff'=>$salary_staffs->salary_staff_id))->additional_id;
+                        $add = $additional_model->getAdditional($additional_id);
+
+                        $additional_model->updateAdditional($data_additional,array('additional_id'=>$additional_id));
+
+                        $d = $account_balance_model->getAccountByWhere(array('additional'=>$additional_id,'account'=>$add->debit,'money'=>$add->money));
+                        $c = $account_balance_model->getAccountByWhere(array('additional'=>$additional_id,'account'=>$add->credit,'money'=>(0-$add->money)));
+                        $account_balance_model->updateAccount($data_debit,array('account_balance_id'=>$d->account_balance_id));
+                        $account_balance_model->updateAccount($data_credit,array('account_balance_id'=>$c->account_balance_id));
+                    }
+                    
+                }
+
+
+
+                date_default_timezone_set("Asia/Ho_Chi_Minh"); 
+
+                            $filename = "action_logs.txt";
+
+                            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."salary_staff"."|".$data."|salary_staff|"."\n"."\r\n";
+
+                            
+
+                            $fh = fopen($filename, "a") or die("Could not open log file.");
+
+                            fwrite($fh, $text) or die("Could not write file!");
+
+                            fclose($fh);
+            }
+
+            
+
+
+
+            return true;
+
+                    
+
+        }
+
+    }
+
 }
 ?>

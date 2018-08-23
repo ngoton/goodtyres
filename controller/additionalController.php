@@ -464,8 +464,10 @@ Class additionalController Extends baseController {
                     $additional_model->updateAdditional($data,array('additional_id' => trim($_POST['yes'])));
                     echo "Cập nhật thành công";
 
-                    $account_balance_model->updateAccount($data_debit,array('additional'=>trim($_POST['yes']),'account'=>$add->debit));
-                    $account_balance_model->updateAccount($data_credit,array('additional'=>trim($_POST['yes']),'account'=>$add->credit));
+                    $d = $account_balance_model->getAccountByWhere(array('additional'=>$add->additional_id,'account'=>$add->debit,'money'=>$add->money));
+                    $c = $account_balance_model->getAccountByWhere(array('additional'=>$add->additional_id,'account'=>$add->credit,'money'=>(0-$add->money)));
+                    $account_balance_model->updateAccount($data_debit,array('account_balance_id'=>$d->account_balance_id));
+                    $account_balance_model->updateAccount($data_credit,array('account_balance_id'=>$c->account_balance_id));
 
                     date_default_timezone_set("Asia/Ho_Chi_Minh"); 
                         $filename = "action_logs.txt";
