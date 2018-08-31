@@ -1,4 +1,4 @@
-<style type="text/css">
+﻿<style type="text/css">
     .ui-datepicker-calendar {
         display: none;
     }​
@@ -217,7 +217,7 @@ elseif ($order_by == 'staff_name')
             $chucvu = isset($arr_position_salary[$salary->staff_id])?$arr_position_salary[$salary->staff_id]:0;
             $tongchucvu += $chucvu;
 
-            if ($salary->position=="Kế toán") {
+            /*if ($salary->position=="Kế toán") {
                 $sanpham1 = isset($luong_sp[$salary->staff_id])?$luong_sp[$salary->staff_id]:0;
                 $sanpham1 += isset($luong_vuotgia[$salary->staff_id])?$luong_vuotgia[$salary->staff_id]:0;
                 $sanpham1 += isset($luong_kpi[$salary->staff_id])?$luong_kpi[$salary->staff_id]:0;
@@ -241,7 +241,7 @@ elseif ($order_by == 'staff_name')
                 
                 $sanpham += isset($luong_kpi[$salary->staff_id])?$luong_kpi[$salary->staff_id]:0;
                 $tongsp += $sanpham;
-            }
+            }*/
             
             /*if ($salary->user_group==10) {
                 $sanpham_tuvan += $sanpham;
@@ -249,6 +249,11 @@ elseif ($order_by == 'staff_name')
                 $congluong_tuvan += $sanpham;
             }*/
             
+            $sanpham = isset($luong_sp[$salary->staff_id])?$luong_sp[$salary->staff_id]:0;
+            $sanpham += isset($luong_vuotgia[$salary->staff_id])?$luong_vuotgia[$salary->staff_id]:0;
+            
+            $sanpham += isset($luong_kpi[$salary->staff_id])?$luong_kpi[$salary->staff_id]:0;
+            $tongsp += $sanpham;
 
             $giaonhan = isset($arr_lift[$salary->staff_id])?$arr_lift[$salary->staff_id]:0;
             $tonggiaonhan += $giaonhan;
@@ -268,10 +273,10 @@ elseif ($order_by == 'staff_name')
             $tongbh += $tienbh; 
             $tongbhnv += $tienbhnv;
 
-            $luong1 = $chucvu+$sanpham+$giaonhan;
-            $tongcongluong += $luong1;
+            $luong1 = $chucvu;
+            $tongcongluong += $luong1+$sanpham;
 
-            $heso_thoigian = isset($arr_attend[$salary->staff_id])?round($arr_attend[$salary->staff_id]/$tongngaylamviec,2):"";
+            $heso_thoigian = isset($arr_attend[$salary->staff_id])?round($arr_attend[$salary->staff_id]/$tongngaylamviec,6):"";
             $heso_danhgia = isset($position_evaluate[$salary->staff_id])?round((100+$position_evaluate[$salary->staff_id])/100,2):"";
 
             $luong2 = $luong1;
@@ -281,6 +286,8 @@ elseif ($order_by == 'staff_name')
             if ($heso_danhgia!="") {
                 $luong2 *= $heso_danhgia;
             }
+            $luong2 = round($luong2/1000)*1000;
+            $luong2 = $luong2+$sanpham;
             $tongluongtg += $luong2;
 
             $luong3 = $luong2+$phone+$ngoaikhoa+$com+$tienbh;
@@ -333,7 +340,7 @@ elseif ($order_by == 'staff_name')
                 <td class="fix text-right" id="luongsp_<?php echo $salary->staff_id; ?>"><a href="checksalary/index/<?php echo $salary->staff_id ?>/1/order_number/ASC/<?php echo strtotime('01-'.$ngaytao) ?>"><?php echo $lib->formatMoney($sanpham); ?></a></td>
                 <td class="fix text-right"><b><?php echo $lib->formatMoney($luong1) ?></b></td>
                 <td class="fix text-right"><a href="<?php echo $this->url('positionstaffevaluate/index/-1/'.$salary->staff_id.'/'.strtotime('01-'.$ngaytao)) ?>" ><?php echo $heso_danhgia ?></a></td>
-                <td class="fix text-right"><a href="attendance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $heso_thoigian ?></a></td>
+                <td class="fix text-right"><a href="attendance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo round($heso_thoigian,2) ?></a></td>
                 <td class="fix text-right"><b><?php echo $lib->formatMoney($luong2) ?></b></td>
                 <td class="fix text-right editable" data="<?php echo $salary->staff_id; ?>" id="ngoaikhoa_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($ngoaikhoa) ?></td>
                 <td class="fix text-right"><a href="phoneallowance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($phone) ?></a></td>

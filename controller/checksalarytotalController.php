@@ -1095,6 +1095,7 @@ Class checksalarytotalController Extends baseController {
             $tk_6421 = $account_model->getAccountByWhere(array('account_number'=>'6421'));
 
             foreach ($salary_data as $salary) {
+
                 $data = array(
                     'staff' => $salary->staff,
                     'salary_staff_date' => $ngay,
@@ -1104,11 +1105,11 @@ Class checksalarytotalController Extends baseController {
                 $salary_keep_data = $salary_staff->getAllSalary(array('where'=>'salary_staff_date >= '.strtotime($batdau).' AND salary_staff_date < '.strtotime($ketthuc).' AND staff = '.$salary->staff));
 
                 $staffs = $staff_model->getStaff($salary->staff);
-                $split = explode(" ", $staffs->staff_id);
+                $split = explode(" ", $staffs->staff_name);
                 $seller_name = $this->lib->stripUnicode(str_replace(' ', '', $split[count($split)-1]));
                 $tk_334 = $account_model->getAccountByWhere(array('account_number'=>'334_'.$seller_name));
                 if (!$tk_334) {
-                    $account_model->createAccount(array('account_number'=>'334_'.$seller_name,'account_parent'=>$tk_334_parent));
+                    $account_model->createAccount(array('account_number'=>'334_'.$seller_name,'account_parent'=>$tk_334_parent->account_id));
                     $tk_334 = $account_model->getLastAccount();
                 }
 
@@ -1226,7 +1227,7 @@ Class checksalarytotalController Extends baseController {
 
                             $filename = "action_logs.txt";
 
-                            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."salary_staff"."|".$data."|salary_staff|"."\n"."\r\n";
+                            $text = date('d/m/Y H:i:s')."|".$_SESSION['user_logined']."|"."salary_staff"."|".$salary_staffs->salary_staff_id."|salary_staff|"."\n"."\r\n";
 
                             
 

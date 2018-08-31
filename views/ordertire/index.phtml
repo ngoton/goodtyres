@@ -1264,8 +1264,8 @@ $('#check_price_vat').click(function(){
         var vat = 0;
         $('.tire_price').each(function() { 
             var p = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
-            var g = Math.round(p*val*0.1/1.1);
-            var v = g*0.1;
+            var g = p*val*0.1/1.1;
+            var v = Math.round(g*0.1);
             var n = p-v;
 
             var row = $(this).parent().parent().parent().parent().parent().parent();
@@ -1427,8 +1427,8 @@ $('#vat_percent').keyup(function(){
         var vat = 0;
         $('.tire_price_vat').each(function() { 
             var p = parseInt($(this).val().replace(/[^0-9\.-]+/g,"")) || 0;
-            var g = Math.round(p*val*0.1/1.1);
-            var v = g*0.1;
+            var g = p*val*0.1/1.1;
+            var v = Math.round(g*0.1);
             var n = p-v;
 
             var row = $(this).parent().parent().parent().parent().parent().parent();
