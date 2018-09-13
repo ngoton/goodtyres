@@ -95,11 +95,23 @@
                                         <span class="error">Đang về </span> <input value="0" style="width:50px" type="text" disabled name="going_number[]" class="going_number"> 
                                     </td>
                                 </tr>
+                                <tr class="lock" style="display: none">
+                                    <td colspan="5">
+                                        <span class="error show_lock"></span>
+                                    </td>
+                                </tr>
                             </table>
                         </td>
                     </tr>
                 </tbody>
                 </table>
+                <div style="text-align: left">
+                    <span class="error"><b>Lưu ý:</b> <br>
+                        - Những hàng còn < 50 bộ trong kho Việt Trade, chỉ được giữ tối đa 48h. <br>
+                        - Một đơn hàng Việt Trade chỉ được giữ tối đa 14 ngày. <br> 
+                        -> Đơn hàng (bên Việt trade) sẽ tự hủy mà không cần báo trước.
+                    </span>
+                </div>
                 <input class="iform" type="button" value="Thêm" onclick="addRow('dataTable')">
 
                 <input class="iform" type="button" value="Xóa" onclick="deleteRow('dataTable')">
@@ -287,17 +299,18 @@ $(".next").click(function(){
         $('#due_date').focus();
     }
     else if ($(this).attr('id')=="next_4") {
-        var sl = 0;
-        var max_sl = 0;
-        $('.vt_number').each(function() {
-            max_sl += parseFloat($(this).val());
-        });
-
+        var check = 0;
         $('.tire_number').each(function() {
-            sl += parseFloat($(this).val());
+            var row = $(this).parent().parent().parent().parent().parent().parent();
+            var rowIndex = row[0].rowIndex;
+            var sl = parseFloat($(this).val());
+            var max = parseFloat($('.vt_number:eq('+rowIndex+')').val());
+            if (sl>max) {
+                check = 1;
+            }
         });
 
-        if (sl>max_sl) {
+        if (check != 0) {
             alert('Không đủ số lượng trong kho. Vui lòng kiểm tra lại!');
         }
         else{
@@ -884,6 +897,7 @@ $('.tire_brand').change(function(){
     var brand = $(this).val();
     var size = $('.tire_size:eq('+rowIndex+')').val();
     var pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+    var sale = $('#order_staff').val();
 
     customer = customer>0?customer:"";
 
@@ -923,10 +937,15 @@ $('.tire_brand').change(function(){
         $.ajax({
             url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
             type: 'POST',
-            data: {brand:brand, size:size, pattern:pattern, customer:customer},
+            data: {brand:brand, size:size, pattern:pattern, customer:customer, sale:sale},
             success:function(data){
                 var data = jQuery.parseJSON(data);
                 $('.vt_number:eq('+rowIndex+')').val(data.max_vt);
+
+                if (data.lock==1) {
+                    $('.lock:eq('+rowIndex+')').show();
+                    $('.show_lock:eq('+rowIndex+')').html(data.msg);
+                }
 
                 $('.stock_number:eq('+rowIndex+')').val(data.max);
                 $('.going_number:eq('+rowIndex+')').val(data.going);
@@ -985,6 +1004,7 @@ $('.tire_size').change(function(){
     var size = $(this).val();
     var brand = $('.tire_brand:eq('+rowIndex+')').val();
     var pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+    var sale = $('#order_staff').val();
 
     customer = customer>0?customer:"";
 
@@ -1024,10 +1044,15 @@ $('.tire_size').change(function(){
         $.ajax({
             url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
             type: 'POST',
-            data: {brand:brand, size:size, pattern:pattern, customer:customer},
+            data: {brand:brand, size:size, pattern:pattern, customer:customer, sale: sale},
             success:function(data){
                 var data = jQuery.parseJSON(data);
                 $('.vt_number:eq('+rowIndex+')').val(data.max_vt);
+
+                if (data.lock==1) {
+                    $('.lock:eq('+rowIndex+')').show();
+                    $('.show_lock:eq('+rowIndex+')').html(data.msg);
+                }
 
                 $('.stock_number:eq('+rowIndex+')').val(data.max);
                 $('.going_number:eq('+rowIndex+')').val(data.going);
@@ -1075,6 +1100,7 @@ $('.tire_pattern').change(function(){
     var pattern = $(this).val();
     var size = $('.tire_size:eq('+rowIndex+')').val();
     var brand = $('.tire_brand:eq('+rowIndex+')').val();
+    var sale = $('#order_staff').val();
 
     customer = customer>0?customer:"";
 
@@ -1114,11 +1140,16 @@ $('.tire_pattern').change(function(){
         $.ajax({
             url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
             type: 'POST',
-            data: {brand:brand, size:size, pattern:pattern, customer:customer},
+            data: {brand:brand, size:size, pattern:pattern, customer:customer, sale: sale},
             success:function(data){
                 //console.log(data);
                 var data = jQuery.parseJSON(data);
                 $('.vt_number:eq('+rowIndex+')').val(data.max_vt);
+
+                if (data.lock==1) {
+                    $('.lock:eq('+rowIndex+')').show();
+                    $('.show_lock:eq('+rowIndex+')').html(data.msg);
+                }
 
                 $('.stock_number:eq('+rowIndex+')').val(data.max);
                 $('.going_number:eq('+rowIndex+')').val(data.going);
@@ -2297,6 +2328,8 @@ function addRow(tableID){
     $('.tire_size:last contains:("")').attr('selected','selected');
     $('.tire_pattern:last contains:("")').attr('selected','selected');
 
+    $('.lock:last').hide();
+
     $('input[name="chk"]:last').attr('data',"");
     $('input[name="chk"]:last').attr('tabindex',0);
     $('input[name="chk"]:last').attr('title',"");
@@ -2310,6 +2343,7 @@ function addRow(tableID){
         var brand = $(this).val();
         var size = $('.tire_size:eq('+rowIndex+')').val();
         var pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+        var sale = $('#order_staff').val();
 
         customer = customer>0?customer:"";
 
@@ -2349,9 +2383,16 @@ function addRow(tableID){
             $.ajax({
                 url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
                 type: 'POST',
-                data: {brand:brand, size:size, pattern:pattern, customer:customer},
+                data: {brand:brand, size:size, pattern:pattern, customer:customer, sale:sale},
                 success:function(data){
                     var data = jQuery.parseJSON(data);
+                    $('.vt_number:eq('+rowIndex+')').val(data.max_vt);
+
+                    if (data.lock==1) {
+                        $('.lock:eq('+rowIndex+')').show();
+                        $('.show_lock:eq('+rowIndex+')').html(data.msg);
+                    }
+
                     $('.stock_number:eq('+rowIndex+')').val(data.max);
                     $('.going_number:eq('+rowIndex+')').val(data.going);
                     $('.max_number:eq('+rowIndex+')').val(parseInt(data.max)+parseInt(data.going));
@@ -2408,6 +2449,7 @@ function addRow(tableID){
         var size = $(this).val();
         var brand = $('.tire_brand:eq('+rowIndex+')').val();
         var pattern = $('.tire_pattern:eq('+rowIndex+')').val();
+        var sale = $('#order_staff').val();
 
         customer = customer>0?customer:"";
 
@@ -2447,9 +2489,16 @@ function addRow(tableID){
             $.ajax({
                 url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
                 type: 'POST',
-                data: {brand:brand, size:size, pattern:pattern, customer:customer},
+                data: {brand:brand, size:size, pattern:pattern, customer:customer, sale:sale},
                 success:function(data){
                     var data = jQuery.parseJSON(data);
+                    $('.vt_number:eq('+rowIndex+')').val(data.max_vt);
+
+                    if (data.lock==1) {
+                        $('.lock:eq('+rowIndex+')').show();
+                        $('.show_lock:eq('+rowIndex+')').html(data.msg);
+                    }
+
                     $('.stock_number:eq('+rowIndex+')').val(data.max);
                     $('.going_number:eq('+rowIndex+')').val(data.going);
                     $('.max_number:eq('+rowIndex+')').val(parseInt(data.max)+parseInt(data.going));
@@ -2496,6 +2545,7 @@ function addRow(tableID){
         var pattern = $(this).val();
         var size = $('.tire_size:eq('+rowIndex+')').val();
         var brand = $('.tire_brand:eq('+rowIndex+')').val();
+        var sale = $('#order_staff').val();
 
         customer = customer>0?customer:"";
 
@@ -2535,9 +2585,16 @@ function addRow(tableID){
             $.ajax({
                 url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
                 type: 'POST',
-                data: {brand:brand, size:size, pattern:pattern, customer:customer},
+                data: {brand:brand, size:size, pattern:pattern, customer:customer, sale:sale},
                 success:function(data){
                     var data = jQuery.parseJSON(data);
+                    $('.vt_number:eq('+rowIndex+')').val(data.max_vt);
+
+                    if (data.lock==1) {
+                        $('.lock:eq('+rowIndex+')').show();
+                        $('.show_lock:eq('+rowIndex+')').html(data.msg);
+                    }
+
                     $('.stock_number:eq('+rowIndex+')').val(data.max);
                     $('.going_number:eq('+rowIndex+')').val(data.going);
                     $('.max_number:eq('+rowIndex+')').val(parseInt(data.max)+parseInt(data.going));

@@ -223,11 +223,12 @@ $('html').click(function(e) {
             $('#tire_price_vat').val($("#tire_price_vat_"+$(this).attr('id')).val());
 
           var customer = "";
+          var sale = "<?php echo $order_tire->sale ?>";
         
           $.ajax({
                 url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
                 type: 'POST',
-                data: {brand:tire_brand, size:tire_size, pattern:tire_pattern, customer:customer},
+                data: {brand:tire_brand, size:tire_size, pattern:tire_pattern, customer:customer, sale:sale},
                 success:function(data){
                     var data = jQuery.parseJSON(data);
                     var ton = parseInt(tire_number)+parseInt(data.max)+parseInt(data.going);
@@ -422,6 +423,7 @@ $('#tire_brand').change(function(){
     var brand = $(this).attr('data');
     var size = $('#tire_size').attr('data');
     var pattern = $('#tire_pattern').attr('data');
+    var sale = "<?php echo $order_tire->sale ?>";
 
     var customer = "";
 
@@ -429,7 +431,7 @@ $('#tire_brand').change(function(){
         $.ajax({
             url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
             type: 'POST',
-            data: {brand:brand, size:size, pattern:pattern, customer:customer},
+            data: {brand:brand, size:size, pattern:pattern, customer:customer, sale:sale},
             success:function(data){
                 var data = jQuery.parseJSON(data);
                 var ton = parseInt(data.max)+parseInt(data.going);
@@ -444,6 +446,7 @@ $('#tire_size').change(function(){
     var size = $(this).attr('data');
     var brand = $('#tire_brand').attr('data');
     var pattern = $('#tire_pattern').attr('data');
+    var sale = "<?php echo $order_tire->sale ?>";
 
     var customer = "";
 
@@ -451,7 +454,7 @@ $('#tire_size').change(function(){
         $.ajax({
             url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
             type: 'POST',
-            data: {brand:brand, size:size, pattern:pattern, customer:customer},
+            data: {brand:brand, size:size, pattern:pattern, customer:customer, sale:sale},
             success:function(data){
                 var data = jQuery.parseJSON(data);
                 var ton = parseInt(data.max)+parseInt(data.going);
@@ -466,6 +469,7 @@ $('#tire_pattern').change(function(){
     var pattern = $(this).attr('data');
     var size = $('#tire_size').attr('data');
     var brand = $('#tire_brand').attr('data');
+    var sale = "<?php echo $order_tire->sale ?>";
 
     var customer = "";
 
@@ -474,7 +478,7 @@ $('#tire_pattern').change(function(){
         $.ajax({
             url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
             type: 'POST',
-            data: {brand:brand, size:size, pattern:pattern, customer:customer},
+            data: {brand:brand, size:size, pattern:pattern, customer:customer, sale:sale},
             success:function(data){
 
                 var data = jQuery.parseJSON(data);
@@ -594,6 +598,7 @@ $('.tire_brand').keyup(function(){
             var pattern = $("#tire_pattern").attr('data');
             var size = $('#tire_size').attr('data');
             var brand = $('#tire_brand').attr('data');
+            var sale = "<?php echo $order_tire->sale ?>";
 
             var customer = "";
 
@@ -602,7 +607,7 @@ $('.tire_brand').keyup(function(){
                 $.ajax({
                     url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
                     type: 'POST',
-                    data: {brand:brand, size:size, pattern:pattern, customer:customer},
+                    data: {brand:brand, size:size, pattern:pattern, customer:customer, sale:sale},
                     success:function(data){
 
                         var data = jQuery.parseJSON(data);
@@ -626,6 +631,7 @@ $('.tire_brand').keyup(function(){
             var pattern = $("#tire_pattern").attr('data');
             var size = $('#tire_size').attr('data');
             var brand = $('#tire_brand').attr('data');
+            var sale = "<?php echo $order_tire->sale ?>";
 
             var customer = "";
 
@@ -634,7 +640,7 @@ $('.tire_brand').keyup(function(){
                 $.ajax({
                     url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
                     type: 'POST',
-                    data: {brand:brand, size:size, pattern:pattern, customer:customer},
+                    data: {brand:brand, size:size, pattern:pattern, customer:customer, sale:sale},
                     success:function(data){
 
                         var data = jQuery.parseJSON(data);
@@ -658,6 +664,7 @@ $('.tire_brand').keyup(function(){
             var pattern = $("#tire_pattern").attr('data');
             var size = $('#tire_size').attr('data');
             var brand = $('#tire_brand').attr('data');
+            var sale = "<?php echo $order_tire->sale ?>";
 
             var customer = "";
 
@@ -666,7 +673,7 @@ $('.tire_brand').keyup(function(){
                 $.ajax({
                     url: '<?php echo BASE_URL ?>/ordertire/getoldprice',
                     type: 'POST',
-                    data: {brand:brand, size:size, pattern:pattern, customer:customer},
+                    data: {brand:brand, size:size, pattern:pattern, customer:customer, sale:sale},
                     success:function(data){
 
                         var data = jQuery.parseJSON(data);

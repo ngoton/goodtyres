@@ -153,6 +153,9 @@ elseif ($order_by == 'order_tire_number')
         <th class="fix">
             <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','due_date','<?php echo $url_order ?>')">Hạn TT <?php if ($order_by == 'due_date'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
         </th> 
+        <th class="fix">
+            <a class="sort <?php echo $order ?>" onclick="sapxep('<?php echo $page ?>','order_tire_comment','<?php echo $url_order ?>')">Ghi chú <?php if ($order_by == 'order_tire_comment'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+        </th> 
         <th  class="fix">&nbsp;</th>
     </tr>
     
@@ -323,6 +326,9 @@ elseif ($order_by == 'order_tire_number')
                 }
                  ?>
             </td>
+            <td class="fix masterTooltip order_tire_comment" id="order_tire_comment_<?php echo $order_tire->order_tire_id; ?>" title="<?php echo $order_tire->order_tire_comment; ?>" alt="<?php echo $order_tire->order_tire_comment; ?>" data="<?php echo $order_tire->order_tire_id; ?>">  
+                <b>...</b>
+            </td>
             <td class="fix">  
             <div  > 
                 <?php if ($order_tire->approve>0) { ?>
@@ -350,7 +356,7 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix text-right"><?php echo $lib->formatMoney($tonggiam); ?></td>
             <td class="fix text-right"><?php echo $lib->formatMoney($tongtra); ?></td>
             <td class="fix text-right"><?php echo $lib->formatMoney($tongchiphi); ?></td>
-            <td class="fix" colspan="6" ></td>
+            <td class="fix" colspan="7" ></td>
         </tr>
 
    </tbody>
@@ -672,6 +678,19 @@ $this->helper('slidePaginator');
         <input type="hidden" id="i_order10" name="i_order10" value="" required="required" />
     </form>
 </div>
+<div id="dialogContent11" title="Ghi chú">
+    
+    
+    <form action="#" method="post" id="editForm7">
+        
+        
+        <label>
+            <textarea id="i_order_comment" rows="6" style="width: 100%"></textarea>
+            <input type="hidden" id="i_order11" name="i_order11" value="" required="required" />
+        </label>
+        
+    </form>
+</div>
 <div id="dialogContent12" title="Ngày giao">    
     <form action="#" method="post" id="editForm8">
         <label>
@@ -841,7 +860,40 @@ $( "#dialogContent10" ).dialog({
         }
     }
 });
+$('.order_tire_comment')
+    //.button({ icons: { primary: "ui-icon-document" }})
+    .click(function() {
+        $('#i_order11').val($(this).attr('data'));
+        $('#i_order_comment').val($(this).attr('alt'));
+        $( "#dialogContent11" ).dialog( "open" )
+    });
 
+
+//set up the dialog box.
+$( "#dialogContent11" ).dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        OK: function() {
+            var id = $('#i_order11').val();
+            var order_comment = $('#i_order_comment').val();
+                
+                $.post("<?php echo BASE_URL ?>/ordertire/addcomment", {data: id, order_comment: order_comment},
+                   function(data){
+                    $("html, body").animate({ scrollTop: 0 }, 100);
+                    setTimeout(function() {
+                        sapxep('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                      }, 200);
+                   
+                   }); 
+              
+            $( this ).dialog( "close" );
+        },        
+        Cancel: function() {
+            $( this ).dialog( "close" );
+        }
+    }
+});
 
 $('.order_number')
     //.button({ icons: { primary: "ui-icon-document" }})

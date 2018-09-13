@@ -107,7 +107,7 @@ Từ <input type="text" name="batdau" id="batdau" value="01-<?php echo date('m-Y
   2.0pt;margin-left:-6.65pt;line-height:normal;mso-element:frame;mso-element-frame-hspace:
   9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
   margin;mso-element-top:16.55pt;mso-height-rule:exactly">
-          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Mẫu số: 01GTKT3/001<o:p></o:p></span></p>
+          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Mẫu số: <input type="text" name="mauso" id="mauso" value="01GTKT0/001"><o:p></o:p></span></p>
       </td>
       <!--[if !supportMisalignedRows]-->
       <td height="16" style="height:12.05pt;border:none" width="0">
@@ -133,7 +133,7 @@ Từ <input type="text" name="batdau" id="batdau" value="01-<?php echo date('m-Y
   2.0pt;margin-left:-6.65pt;line-height:normal;mso-element:frame;mso-element-frame-hspace:
   9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:
   margin;mso-element-top:16.55pt;mso-height-rule:exactly">
-          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Ký hiệu: VT/17P<o:p></o:p></span></p>
+          <span style="font-size:13.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;color:red">Ký hiệu: <input type="text" name="kyhieu" id="kyhieu" value="VT/18E"><o:p></o:p></span></p>
       </td>
       <!--[if !supportMisalignedRows]-->
       <td height="16" style="height:11.95pt;border:none" width="0">
@@ -1744,7 +1744,8 @@ Từ <input type="text" name="batdau" id="batdau" value="01-<?php echo date('m-Y
     </tr>
   </tbody>
 </table>
-<h4><button type="button" class="btn" title="In" id="print"><i class="fa fa-print" ></i></button> <button id="refresh" type="button" class="btn"><i class="fa fa-refresh" title="Nhập lại"></i></button></h4>
+<input type="hidden" name="eHD" id="eHD">
+<h4><button disabled type="button" class="btn" title="Lấy thông tin công ty" id="getMST"><i class="fa fa-info-circle" ></i></button> <button disabled type="button" class="btn" title="Xuất hóa đơn điện tử" id="printEHD"><i class="fa fa-cloud-upload" ></i></button> <button type="button" class="btn" title="In" id="print"><i class="fa fa-print" ></i></button> <button id="refresh" type="button" class="btn"><i class="fa fa-refresh" title="Nhập lại"></i></button></h4>
 </form>
 <i class="error"><u><b>Lưu ý trước khi in:</b></u> Bằng việc bấm <b>"In"</b> là bạn đã xác nhận các thông tin là đúng.</i>
 <div id="show_item"></div>
@@ -2117,7 +2118,7 @@ $( "#show_item" ).dialog({
 });
 
 $('#refresh').click(function(){
-  $('input[name!="batdau"][name!="ketthuc"][name!="ngay"][name!="thang"][name!="nam"][name!="sohd"][name!="thanhtoan"]').val("");
+  $('input[name!="batdau"][name!="ketthuc"][name!="ngay"][name!="thang"][name!="nam"][name!="sohd"][name!="thanhtoan"][name!="mauso"][name!="kyhieu"]').val("");
   $('.tt').attr('data',"");
   $('.dg').attr('data',"");
   $('.ten:eq(0)').val("Lốp xe bố kẽm:");
@@ -2129,6 +2130,8 @@ $('#print').click(function(){
   var thang = $('#thang').val().trim();
   var nam = $('#nam').val().trim();
   var sohd = $('#sohd').val().trim();
+  var mauso = $('#mauso').val().trim();
+  var kyhieu = $('#kyhieu').val().trim();
 
   if (ngay=="" || thang=="" || nam=="") {
     alert('Vui lòng nhập vào ngày tháng!');
@@ -2138,9 +2141,51 @@ $('#print').click(function(){
     alert('Vui lòng nhập vào số hóa đơn!');
     return;
   }
+  else if (mauso=="") {
+    alert('Vui lòng nhập vào mẫu số hóa đơn!');
+    return;
+  }
+  else if (kyhieu=="") {
+    alert('Vui lòng nhập vào ký hiệu hóa đơn!');
+    return;
+  }
   else{
     var r = confirm("Bạn có chắc chắn không?");
     if (r == true){
+      $('#printhd').submit();
+    }
+  }
+
+});
+
+$('#printEHD').click(function(){
+  var ngay = $('#ngay').val().trim();
+  var thang = $('#thang').val().trim();
+  var nam = $('#nam').val().trim();
+  var sohd = $('#sohd').val().trim();
+  var mauso = $('#mauso').val().trim();
+  var kyhieu = $('#kyhieu').val().trim();
+
+  if (ngay=="" || thang=="" || nam=="") {
+    alert('Vui lòng nhập vào ngày tháng!');
+    return;
+  }
+  else if (sohd=="" || sohd=="0000000" || sohd==0) {
+    alert('Vui lòng nhập vào số hóa đơn!');
+    return;
+  }
+  else if (mauso=="") {
+    alert('Vui lòng nhập vào mẫu số hóa đơn!');
+    return;
+  }
+  else if (kyhieu=="") {
+    alert('Vui lòng nhập vào ký hiệu hóa đơn!');
+    return;
+  }
+  else{
+    var r = confirm("Bạn có chắc chắn không?");
+    if (r == true){
+      $('#eHD').attr('value',1);
       $('#printhd').submit();
     }
   }
@@ -2214,7 +2259,29 @@ var pickerOpts = {
     $("#ketthuc").datepicker(pickerOpts4);
 
 
-
+$('#getMST').click(function(){
+  var mst = $('#mst').val().trim();
+  $.ajax({
+        url: '<?php echo BASE_URL ?>/vat/getMasothue',
+        type: 'GET',
+        data: {mst:mst},
+        success:function(data){
+          //console.log(data);
+          var data = $.parseJSON(data);
+          if (data.mst == mst) {
+            if (data.ten.trim() != $('#tendv').val().trim() || data.diachi.trim() != $('#diachi').val().trim()) {
+              var r = confirm("Thông tin công ty đã thay đổi. Bạn có muốn cập nhật lại không? \n - Tên cũ: "+$('#tendv').val()+"\n - Tên mới: "+data.ten+"\n - Địa chỉ cũ: "+$('#diachi').val()+"\n - Địa chỉ mới: "+data.diachi);
+              if (r == true){
+                $('#tendv').val(data.ten);
+                $('#diachi').val(data.diachi);
+              }
+            }
+            
+          }
+          
+        }
+      });
+});
 </script>
   
     </body>

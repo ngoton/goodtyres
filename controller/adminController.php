@@ -874,7 +874,7 @@ Class adminController Extends baseController {
                         $resArr = array();
                         $resArr = json_decode($result);
 
-                        if ($resArr->accept==1) {
+                        if (isset($resArr->accept) && $resArr->accept==1) {
                             $pude = $purchase_tire_detail_model->getAllTire(array('where'=>'purchase_tire='.$p->purchase_tire_id));
                             foreach ($pude as $de) {
                                 $tirebuy->queryTire('DELETE FROM tire_buy WHERE purchase_tire_detail='.$de->purchase_tire_detail_id);
