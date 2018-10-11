@@ -215,17 +215,10 @@ elseif ($order_by == 'order_tire_number')
             $color = "#f94e4e85";
         }
 
-        $tru = $order_tire->order_cost;
-
-        if ($order_tire->order_tire_number>49) {
-            $tru = $tru-$order_tire->order_cost;
-        }
+        
 
         $luongsp = $salary[$order_tire->order_tire_id];
-        $luongsp = $luongsp-$tru;
-        if ($luongsp<$arr_salary['sanluong']*$order_tire->order_tire_number) {
-            $luongsp = $arr_salary['sanluong']*$order_tire->order_tire_number;
-        }
+        
     ?>
         <tr onClick="HighLightTR(this,'#4d90fe','cc3333');" id="<?php echo $order_tire->order_tire_id ?>" class="edit_tr" data="<?php echo ($order_tire->sale==$_SESSION['userid_logined'] || $_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9)?1:0 ?>" <?php echo $color!=""?'style="background:'.$color.'"':null ?> >
         	<td><input name="check[]" type="checkbox" class="checkbox" value="<?php echo $order_tire->order_tire_id ?>"></td>
@@ -335,9 +328,9 @@ elseif ($order_by == 'order_tire_number')
                 <button class="bienban" data="<?php echo $order_tire->order_tire_id ?>">BBBG</button>
                 <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/bill/'.$order_tire->order_tire_id ?>'">PGN</button>
                 <?php } ?>
-                <?php if($order_tire->sale_lock==1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==3)){ ?>
+                <?php if($order_tire->sale_lock==1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==3 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8)){ ?>
                 <button data="<?php echo $order_tire->order_tire_id ?>" value="0"  class="unlock">Mở</button>
-                <?php }elseif ($order_tire->sale_lock!=1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==3)) { ?>
+                <?php }elseif ($order_tire->sale_lock!=1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==3 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8)) { ?>
                     <button data="<?php echo $order_tire->order_tire_id ?>" value="1"  class="unlock">Khóa</button>
                 <?php } ?>
                 <?php if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9){ ?>

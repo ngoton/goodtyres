@@ -338,9 +338,9 @@ elseif ($order_by == 'staff_name')
                 <td class="fix" id="position_<?php echo $salary->staff_id; ?>"><?php echo $salary->position; ?></td>
                 <td class="fix text-right" id="chucvu_<?php echo $salary->staff_id; ?>"><a href="positionsalary/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($chucvu); ?></a></td>
                 <td class="fix text-right" id="luongsp_<?php echo $salary->staff_id; ?>"><a href="checksalary/index/<?php echo $salary->staff_id ?>/1/order_number/ASC/<?php echo strtotime('01-'.$ngaytao) ?>"><?php echo $lib->formatMoney($sanpham); ?></a></td>
-                <td class="fix text-right"><b><?php echo $lib->formatMoney($luong1) ?></b></td>
+                <td class="fix text-right"><b><?php echo $lib->formatMoney($chucvu+$sanpham) ?></b></td>
                 <td class="fix text-right"><a href="<?php echo $this->url('positionstaffevaluate/index/-1/'.$salary->staff_id.'/'.strtotime('01-'.$ngaytao)) ?>" ><?php echo $heso_danhgia ?></a></td>
-                <td class="fix text-right"><a href="attendance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo round($heso_thoigian,2) ?></a></td>
+                <td class="fix text-right"><a href="attendance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $heso_thoigian ?></a></td>
                 <td class="fix text-right"><b><?php echo $lib->formatMoney($luong2) ?></b></td>
                 <td class="fix text-right editable" data="<?php echo $salary->staff_id; ?>" id="ngoaikhoa_<?php echo $salary->staff_id; ?>"><?php echo $lib->formatMoney($ngoaikhoa) ?></td>
                 <td class="fix text-right"><a href="phoneallowance/index/<?php echo strtotime('01-'.$ngaytao).'/'.$salary->staff_id ?>"><?php echo $lib->formatMoney($phone) ?></a></td>

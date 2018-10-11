@@ -170,7 +170,7 @@ Class customerController Extends baseController {
                     return false;
                 }
                 else{
-                    if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 2) {
+                    if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 2) {
                         if ($customer->getCustomerByWhere(array('customer_id'=>$_POST['yes'],'customer_create_user'=>$_SESSION['userid_logined']))) {
                             $customer->updateCustomer($data,array('customer_id' => $_POST['yes']));
                             echo "Cập nhật thành công";
@@ -297,7 +297,7 @@ Class customerController Extends baseController {
             if (isset($_POST['xoa'])) {
                 $data = explode(',', $_POST['xoa']);
                 foreach ($data as $data) {
-                    if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
+                    if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
                         if ($customer->getCustomerByWhere(array('customer_id'=>$data,'customer_create_user'=>$_SESSION['userid_logined']))) {
                             $contact_person_model->queryCustomer('DELETE FROM contact_person WHERE customer='.$data);
                             $customer->deleteCustomer($data);
@@ -334,7 +334,7 @@ Class customerController Extends baseController {
                 return true;
             }
             else{
-                    if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
+                    if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) {
                         if ($customer->getCustomerByWhere(array('customer_id'=>$_POST['data'],'customer_create_user'=>$_SESSION['userid_logined']))) {
                             $contact_person_model->queryCustomer('DELETE FROM contact_person WHERE customer='.$_POST['data']);
                             $customer->deleteCustomer($_POST['data']);

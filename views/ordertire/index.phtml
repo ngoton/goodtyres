@@ -2821,11 +2821,18 @@ function deleteRow(tableID){
 
     var field_height = $('.field-sp').height();
     var min_height = $('.content-wrapper').height();
-    if (field_height > 897) {
-        min_height += 77;
+    if (field_height > 850) {
+        min_height += 100;
         $('.content-wrapper').height(min_height);
     }
 
+$('#msform').on('keyup keypress', function(e) {
+  var keyCode = e.keyCode || e.which;
+  if (keyCode === 13) { 
+    e.preventDefault();
+    return false;
+  }
+});
 </script>
 <style type="text/css">
     /*custom font*/

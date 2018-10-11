@@ -344,9 +344,14 @@ class Library{
 			$string .= $decimal;
 			$words = array();
 			foreach (str_split((string) $fraction) as $number) {
-				$words[] = $dictionary[$number];
+				$words[] = mb_strtolower($dictionary[$number], 'UTF-8');
 			}
-			$string .= implode(' ', $words);
+			if ($words[0]=="không") {
+				$string .= implode(' ', $words);
+			}
+			else{
+				$string .= mb_strtolower($this->convert_number_to_words($fraction), 'UTF-8');
+			}
 		}
 		 
 		return $string;

@@ -181,13 +181,8 @@ Class checksalaryController Extends baseController {
             $first_order = 0;
             
 
-            $check_sale = $check_sale_salary_model->getSalaryByWhere(array('order_tire'=>$order_tire->order_tire_id));
-            if ($check_sale) {
-                $info['bonus'][$order_tire->order_tire_id] = $check_sale->bonus;
-                $info['kpi'][$order_tire->order_tire_id] = $check_sale->bonus_kpi;
-                $info['thangluong'][$order_tire->order_tire_id] = $check_sale->salary_date;
-            }
-            else{
+            
+           
                 $data = array(
                     'where' => 'customer = '.$order_tire->customer.' AND tire_sale_date < '.$order_tire->delivery_date,
                     'limit' => 1,
@@ -480,6 +475,11 @@ Class checksalaryController Extends baseController {
                 }
 
                 
+            $check_sale = $check_sale_salary_model->getSalaryByWhere(array('order_tire'=>$order_tire->order_tire_id));
+            if ($check_sale) {
+                $info['bonus'][$order_tire->order_tire_id] = $check_sale->bonus;
+                $info['kpi'][$order_tire->order_tire_id] = $check_sale->bonus_kpi;
+                $info['thangluong'][$order_tire->order_tire_id] = $check_sale->salary_date;
             }
 
             
@@ -544,13 +544,8 @@ Class checksalaryController Extends baseController {
             $receivables = $receivable_model->getCostsByWhere(array('order_tire'=>$order_tire->order_tire_id));
             $info['congno'][$order_tire->order_tire_id] = $receivables->money-$receivables->pay_money;
 
-            $check_sale = $check_sale_salary_model->getSalaryByWhere(array('order_tire'=>$order_tire->order_tire_id));
-            if ($check_sale) {
-                $info['bonus'][$order_tire->order_tire_id] = $check_sale->bonus;
-                $info['kpi'][$order_tire->order_tire_id] = $check_sale->bonus_kpi;
-                $info['thangluong'][$order_tire->order_tire_id] = $check_sale->salary_date;
-            }
-            else{
+            
+            
 
                 $data = array(
                     'where' => 'customer = '.$order_tire->customer.' AND tire_sale_date < '.$order_tire->delivery_date,
@@ -843,6 +838,11 @@ Class checksalaryController Extends baseController {
                 }
 
                 
+            $check_sale = $check_sale_salary_model->getSalaryByWhere(array('order_tire'=>$order_tire->order_tire_id));
+            if ($check_sale) {
+                $info['bonus'][$order_tire->order_tire_id] = $check_sale->bonus;
+                $info['kpi'][$order_tire->order_tire_id] = $check_sale->bonus_kpi;
+                $info['thangluong'][$order_tire->order_tire_id] = $check_sale->salary_date;
             }
         }
 

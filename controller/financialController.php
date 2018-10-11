@@ -401,46 +401,50 @@ Class financialController Extends baseController {
 
         $join = array('table'=>'account','where'=>'account=account_id');
         $data = array(
-            'where'=>'(account_balance_type IS NULL) AND account_balance_date < '.strtotime($batdau),
+            'where'=>'account_balance_date < '.strtotime($batdau),
         );
         $account_balance_befores = $account_balance_model->getAllAccount($data,$join);
         $account_before = array();
         $account_parent_before = array();
 
         foreach ($account_balance_befores as $account) {
-            $account_before[$account->account_number] = isset($account_before[$account->account_number])?$account_before[$account->account_number]+$account->money:$account->money;
-            if ($account->account_parent > 0) {
-                $account_parent_before[$account_parents[$account->account_parent]] = isset($account_parent_before[$account_parents[$account->account_parent]])?$account_parent_before[$account_parents[$account->account_parent]]+$account->money:$account->money;
-            }
-            else{
-                $account_parent_before[$account->account_number] = isset($account_parent_before[$account->account_number])?$account_parent_before[$account->account_number]+$account->money:$account->money;
+            if ($account->account_balance_type == "" || $account->account_parent==112 || $account->account_id==112) {
+                $account_before[$account->account_number] = isset($account_before[$account->account_number])?$account_before[$account->account_number]+$account->money:$account->money;
+                if ($account->account_parent > 0) {
+                    $account_parent_before[$account_parents[$account->account_parent]] = isset($account_parent_before[$account_parents[$account->account_parent]])?$account_parent_before[$account_parents[$account->account_parent]]+$account->money:$account->money;
+                }
+                else{
+                    $account_parent_before[$account->account_number] = isset($account_parent_before[$account->account_number])?$account_parent_before[$account->account_number]+$account->money:$account->money;
+                }
             }
         }
 
         $data = array(
-            'where'=>'(account_balance_type IS NULL) AND account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime($ketthuc),
+            'where'=>'account_balance_date >= '.strtotime($batdau).' AND account_balance_date <= '.strtotime($ketthuc),
         );
         $account_balances = $account_balance_model->getAllAccount($data,$join);
         $account_add = array();
         $account_parent_add = array();
 
         foreach ($account_balances as $account) {
-            if ($account->money > 0) {
-                $account_add[$account->account_number]['no'] = isset($account_add[$account->account_number]['no'])?$account_add[$account->account_number]['no']+$account->money:$account->money;
-                if ($account->account_parent > 0) {
-                    $account_parent_add[$account_parents[$account->account_parent]]['no'] = isset($account_parent_add[$account_parents[$account->account_parent]]['no'])?$account_parent_add[$account_parents[$account->account_parent]]['no']+$account->money:$account->money;
+            if ($account->account_balance_type == "" || $account->account_parent==112 || $account->account_id==112) {
+                if ($account->money > 0) {
+                    $account_add[$account->account_number]['no'] = isset($account_add[$account->account_number]['no'])?$account_add[$account->account_number]['no']+$account->money:$account->money;
+                    if ($account->account_parent > 0) {
+                        $account_parent_add[$account_parents[$account->account_parent]]['no'] = isset($account_parent_add[$account_parents[$account->account_parent]]['no'])?$account_parent_add[$account_parents[$account->account_parent]]['no']+$account->money:$account->money;
+                    }
+                    else{
+                        $account_parent_add[$account->account_number]['no'] = isset($account_parent_add[$account->account_number]['no'])?$account_parent_add[$account->account_number]['no']+$account->money:$account->money;
+                    }
                 }
                 else{
-                    $account_parent_add[$account->account_number]['no'] = isset($account_parent_add[$account->account_number]['no'])?$account_parent_add[$account->account_number]['no']+$account->money:$account->money;
-                }
-            }
-            else{
-                $account_add[$account->account_number]['co'] = isset($account_add[$account->account_number]['co'])?$account_add[$account->account_number]['co']+$account->money:$account->money;
-                if ($account->account_parent > 0) {
-                    $account_parent_add[$account_parents[$account->account_parent]]['co'] = isset($account_parent_add[$account_parents[$account->account_parent]]['co'])?$account_parent_add[$account_parents[$account->account_parent]]['co']+$account->money:$account->money;
-                }
-                else{
-                    $account_parent_add[$account->account_number]['co'] = isset($account_parent_add[$account->account_number]['co'])?$account_parent_add[$account->account_number]['co']+$account->money:$account->money;
+                    $account_add[$account->account_number]['co'] = isset($account_add[$account->account_number]['co'])?$account_add[$account->account_number]['co']+$account->money:$account->money;
+                    if ($account->account_parent > 0) {
+                        $account_parent_add[$account_parents[$account->account_parent]]['co'] = isset($account_parent_add[$account_parents[$account->account_parent]]['co'])?$account_parent_add[$account_parents[$account->account_parent]]['co']+$account->money:$account->money;
+                    }
+                    else{
+                        $account_parent_add[$account->account_number]['co'] = isset($account_parent_add[$account->account_number]['co'])?$account_parent_add[$account->account_number]['co']+$account->money:$account->money;
+                    }
                 }
             }
             

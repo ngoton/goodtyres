@@ -130,9 +130,9 @@ Class checksalary2Controller Extends baseController {
         }
 
 
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 2) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 2) {
             $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
-        }*/
+        }
 
         if ($keyword != '') {
             $search = '( order_number LIKE "%'.$keyword.'%" 
@@ -492,9 +492,9 @@ Class checksalary2Controller Extends baseController {
         }
 
 
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2) {
             $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
-        }*/
+        }
 
         if ($keyword != '') {
             $search = '( order_number LIKE "%'.$keyword.'%" 

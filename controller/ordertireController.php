@@ -513,7 +513,7 @@ Class ordertireController Extends baseController {
             $order = $this->registry->router->order_by ? $this->registry->router->order : 'DESC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
-            $limit = 50;
+            $limit = 18446744073709;
             $trangthai = 0;
             $nv = "";
             $batdau = '01-'.date('m-Y');
@@ -1016,7 +1016,7 @@ Class ordertireController Extends baseController {
             $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
-            $limit = 50;
+            $limit = 18446744073709;
             $trangthai = 0;
             $nv = "";
             $batdau = '01-'.date('m-Y');
@@ -2447,11 +2447,11 @@ Class ordertireController Extends baseController {
             'where' => 'order_tire='.$id,
         );
 
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 2) {
             $data = array(
                 'where' => 'order_tire IN (SELECT order_tire_id FROM order_tire WHERE order_tire_id ='.$id.' AND sale = '.$_SESSION["userid_logined"].')',
             );
-        }*/
+        }
 
         $order_tire_lists = $order_tire_list_model->getAllTire($data,$join);
         $this->view->data['order_tire_lists'] = $order_tire_lists;

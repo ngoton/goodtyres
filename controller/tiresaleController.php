@@ -1312,6 +1312,12 @@ Class tiresaleController Extends baseController {
 
         }
 
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8) {
+
+            $data['where'] = $data['where'].' AND sale IN (SELECT staff_id FROM staff WHERE account = '.$_SESSION['userid_logined'].')';
+
+        }
+
         
 
         
@@ -1439,11 +1445,11 @@ Class tiresaleController Extends baseController {
 
 
 
-        /*if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8) {
 
             $data['where'] = $data['where'].' AND sale IN (SELECT staff_id FROM staff WHERE account = '.$_SESSION['userid_logined'].')';
 
-        }*/
+        }
 
       
 
