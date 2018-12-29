@@ -801,7 +801,7 @@ Class stockController Extends baseController {
 
 
             $data = array(
-                'where' => 'start_date < '.strtotime($ngayketthuc).' AND tire_brand = '.$tire_buy->tire_buy_brand.' AND tire_size = '.$tire_buy->tire_buy_size.' AND tire_pattern = '.$tire_buy->tire_buy_pattern,
+                'where' => '(order_num = "" OR order_num IS NULL) AND start_date < '.strtotime($ngayketthuc).' AND tire_brand = '.$tire_buy->tire_buy_brand.' AND tire_size = '.$tire_buy->tire_buy_size.' AND tire_pattern = '.$tire_buy->tire_buy_pattern,
                 'order_by' => 'start_date',
                 'order' => 'DESC, tire_import_id DESC',
                 'limit' => 1,

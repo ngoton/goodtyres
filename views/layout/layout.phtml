@@ -116,7 +116,7 @@
 
       <meta itemprop="url" content="<?php echo "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'] ?>" />
 
-      <meta itemprop="image" content="<?php echo isset($img_prop)?$img_prop:BASE_URL."/public/images/logo-viet-trade.png" ?>" />
+      <meta itemprop="image" content="<?php echo isset($img_prop)?$img_prop:BASE_URL."/public/images/logo-vina-trade.png" ?>" />
 
 
 
@@ -127,7 +127,7 @@
 
 
 
-      <meta property="og:image" content="<?php echo isset($img_prop)?$img_prop:BASE_URL."/public/images/logo-viet-trade.png" ?>" />
+      <meta property="og:image" content="<?php echo isset($img_prop)?$img_prop:BASE_URL."/public/images/logo-vina-trade.png" ?>" />
 
 
 
@@ -425,7 +425,7 @@
 
 
 
-            <img src="<?php echo BASE_URL ?>/public/images/logo-viet-trade.png" alt="Lốp xe" width="220" height="61" />
+            <img src="<?php echo BASE_URL ?>/public/images/logo-vina-trade.png" alt="Lốp xe" width="220" height="61" />
 
 
 
@@ -1188,7 +1188,7 @@
 
 
           <div class="info maps-link" style="background-color: white; border: 1px dashed #fff; font-size:30px; color: #DB2E66; font-weight:bold"><i class="fa fa-phone-square"></i> <span>0868 445679</span></div>
-         <div class="hotline"><i class="fa fa-phone"></i>  <span>0931.534.334</span> <br> <span>01234.889.779</span> <div class="clearFix"></div></div>
+         <div class="hotline"><i class="fa fa-phone"></i>  <span>0931.534.334</span> <br> <span>0834.889.779</span> <div class="clearFix"></div></div>
 
 
 
@@ -2476,7 +2476,186 @@ $("#breakingnews").breakingNews({
 
 
 
+<!-- <script type="text/javascript">
+// <![CDATA[
+var bits=200; // how many bits
+var speed=10; // how fast - smaller is faster
+var bangs=5; // how many can be launched simultaneously (note that using too many can slow the script down)
+var colours=new Array("#03f", "#f03", "#0e0", "#93f", "#0cf", "#f93", "#f0c"); 
+//                     blue    red     green   purple  cyan    orange  pink
 
+/****************************
+*      Fireworks Effect     *
+*(c)2004-14 mf2fm web-design*
+*  http://www.mf2fm.com/rv  *
+* DON'T EDIT BELOW THIS BOX *
+****************************/
+var bangheight=new Array();
+var intensity=new Array();
+var colour=new Array();
+var Xpos=new Array();
+var Ypos=new Array();
+var dX=new Array();
+var dY=new Array();
+var stars=new Array();
+var decay=new Array();
+var swide=1000;
+var shigh=600;
+var boddie;
+
+if (typeof('addRVLoadEvent')!='function') function addRVLoadEvent(funky) {
+  var oldonload=window.onload;
+  if (typeof(oldonload)!='function') window.onload=funky;
+  else window.onload=function() {
+    if (oldonload) oldonload();
+    funky();
+  }
+}
+
+addRVLoadEvent(light_blue_touchpaper);
+
+function light_blue_touchpaper() { if (document.getElementById) {
+  var i;
+  boddie=document.createElement("div");
+  boddie.style.position="fixed";
+  boddie.style.top="0px";
+  boddie.style.left="0px";
+  boddie.style.overflow="visible";
+  boddie.style.zIndex = '9999';
+  boddie.style.width="1px";
+  boddie.style.height="1px";
+  boddie.style.backgroundColor="transparent";
+  document.body.appendChild(boddie);
+  set_width();
+  for (i=0; i<bangs; i++) {
+    write_fire(i);
+    launch(i);
+    setInterval('stepthrough('+i+')', speed);
+  }
+}}
+
+function write_fire(N) {
+  var i, rlef, rdow;
+  stars[N+'r']=createDiv('|', 12);
+  boddie.appendChild(stars[N+'r']);
+  for (i=bits*N; i<bits+bits*N; i++) {
+    stars[i]=createDiv('*', 13);
+    boddie.appendChild(stars[i]);
+  }
+}
+
+function createDiv(char, size) {
+  var div=document.createElement("div");
+  div.style.font=size+"px monospace";
+  div.style.position="absolute";
+  div.style.zIndex = '9999';
+  div.style.backgroundColor="transparent";
+  div.appendChild(document.createTextNode(char));
+  return (div);
+}
+
+function launch(N) {
+  colour[N]=Math.floor(Math.random()*colours.length);
+  Xpos[N+"r"]=swide*0.5;
+  Ypos[N+"r"]=shigh-5;
+  bangheight[N]=Math.round((0.5+Math.random())*shigh*0.4);
+  dX[N+"r"]=(Math.random()-0.5)*swide/bangheight[N];
+  if (dX[N+"r"]>1.25) stars[N+"r"].firstChild.nodeValue="/";
+  else if (dX[N+"r"]<-1.25) stars[N+"r"].firstChild.nodeValue="\\";
+  else stars[N+"r"].firstChild.nodeValue="|";
+  stars[N+"r"].style.color=colours[colour[N]];
+}
+
+function bang(N) {
+  var i, Z, A=0;
+  for (i=bits*N; i<bits+bits*N; i++) { 
+    Z=stars[i].style;
+    Z.left=Xpos[i]+"px";
+    Z.top=Ypos[i]+"px";
+    if (decay[i]) decay[i]--;
+    else A++;
+    if (decay[i]==15) Z.fontSize="7px";
+    else if (decay[i]==7) Z.fontSize="12px";
+    else if (decay[i]==1) Z.visibility="hidden";
+    if (decay[i]>1 && Math.random()<.1) {
+       Z.visibility="hidden";
+       setTimeout('stars['+i+'].style.visibility="visible"', speed-1);
+    }
+    Xpos[i]+=dX[i];
+    Ypos[i]+=(dY[i]+=1.25/intensity[N]);
+
+  }
+  if (A!=bits) setTimeout("bang("+N+")", speed);
+}
+
+function stepthrough(N) { 
+  var i, M, Z;
+  var oldx=Xpos[N+"r"];
+  var oldy=Ypos[N+"r"];
+  Xpos[N+"r"]+=dX[N+"r"];
+  Ypos[N+"r"]-=4;
+  if (Ypos[N+"r"]<bangheight[N]) {
+    M=Math.floor(Math.random()*3*colours.length);
+    intensity[N]=5+Math.random()*4;
+    for (i=N*bits; i<bits+bits*N; i++) {
+      Xpos[i]=Xpos[N+"r"];
+      Ypos[i]=Ypos[N+"r"];
+      dY[i]=(Math.random()-0.5)*intensity[N];
+      dX[i]=(Math.random()-0.5)*(intensity[N]-Math.abs(dY[i]))*1.25;
+      decay[i]=16+Math.floor(Math.random()*16);
+      Z=stars[i];
+      if (M<colours.length) Z.style.color=colours[i%2?colour[N]:M];
+      else if (M<2*colours.length) Z.style.color=colours[colour[N]];
+      else Z.style.color=colours[i%colours.length];
+      Z.style.fontSize="13px";
+      Z.style.visibility="visible";
+    }
+    bang(N);
+    launch(N);
+  }
+  stars[N+"r"].style.left=oldx+"px";
+  stars[N+"r"].style.top=oldy+"px";
+} 
+
+window.onresize=set_width;
+function set_width() {
+  var sw_min=999999;
+  var sh_min=999999;
+  if (document.documentElement && document.documentElement.clientWidth) {
+    if (document.documentElement.clientWidth>0) sw_min=document.documentElement.clientWidth;
+    if (document.documentElement.clientHeight>0) sh_min=document.documentElement.clientHeight;
+  }
+  if (typeof(self.innerWidth)!="undefined" && self.innerWidth) {
+    if (self.innerWidth>0 && self.innerWidth<sw_min) sw_min=self.innerWidth;
+    if (self.innerHeight>0 && self.innerHeight<sh_min) sh_min=self.innerHeight;
+  }
+  if (document.body.clientWidth) {
+    if (document.body.clientWidth>0 && document.body.clientWidth<sw_min) sw_min=document.body.clientWidth;
+    if (document.body.clientHeight>0 && document.body.clientHeight<sh_min) sh_min=document.body.clientHeight;
+  }
+  if (sw_min==999999 || sh_min==999999) {
+    sw_min=800;
+    sh_min=600;
+  }
+  swide=sw_min;
+  shigh=sh_min;
+}
+// ]]> 15000);
+</script> -->
+<script type="text/javascript">
+/*if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+ document.write('<style type="text/css">body{padding-bottom:20px}</style><a href="#" ></a><a href="#" ></a><a href="#" ><img style="position:fixed;z-index:9999;bottom:5px;left:20px" src="<?php echo BASE_URL ?>/public/img/banner_header.png"/></a>');
+}
+else {
+     document.write('<style type="text/css">body{padding-bottom:20px}</style><a href="#" ><img style="position:fixed;z-index:9999;top:0;left:0;" src="<?php echo BASE_URL ?>/public/img/banner_left.png" _cke_saved_src="<?php echo BASE_URL ?>/public/img/banner_left.png"/></a><a href="#" ><img style="position:fixed;z-index:9999;top:0;right:0;" src="<?php echo BASE_URL ?>/public/img/banner_right.png"/></a><a href="#" ><img style="position:fixed;z-index:9999;bottom:5px;left:20px" src="<?php echo BASE_URL ?>/public/img/banner_header.png"/></a>');
+   }*/
+
+document.write('<style type="text/css">#bg_footer{position:fixed;z-index:9998;bottom:-50px;left:0;width:100%;height:104px;background:url(<?php echo BASE_URL ?>/public/img/ft.png) repeat-x bottom left}</style><a href="#" ></a><a href="#" ></a><a href="#" ><img style="position:fixed;z-index:9999;bottom:25px;left:20px" src="<?php echo BASE_URL ?>/public/img/bottomleft.png"/></a><div id="bg_footer"></div>');
+
+
+var no=100;var hidesnowtime=0;var snowdistance='pageheight';var ie4up=(document.all)?1:0;var ns6up=(document.getElementById&&!document.all)?1:0;function iecompattest(){return(document.compatMode&&document.compatMode!='BackCompat')?document.documentElement:document.body}var dx,xp,yp;var am,stx,sty;var i,doc_width=800,doc_height=600;if(ns6up){doc_width=self.innerWidth;doc_height=self.innerHeight}else if(ie4up){doc_width=iecompattest().clientWidth;doc_height=iecompattest().clientHeight}dx=new Array();xp=new Array();yp=new Array();am=new Array();stx=new Array();sty=new Array();for(i=0;i<no;++i){dx[i]=0;xp[i]=Math.random()*(doc_width-50);yp[i]=Math.random()*doc_height;am[i]=Math.random()*20;stx[i]=0.02+Math.random()/10; sty[i]=0.7+Math.random();if(ie4up||ns6up){document.write('<div id="dot'+i+'" style="POSITION:absolute;Z-INDEX:'+i+';VISIBILITY:visible;TOP:15px;LEFT:15px;"><span style="font-size:18px;color:#fff">*</span><\/div>')}}function snowIE_NS6(){doc_width=ns6up?window.innerWidth-10:iecompattest().clientWidth-10;doc_height=(window.innerHeight&&snowdistance=='windowheight')?window.innerHeight:(ie4up&&snowdistance=='windowheight')?iecompattest().clientHeight:(ie4up&&!window.opera&&snowdistance=='pageheight')?iecompattest().scrollHeight:iecompattest().offsetHeight;for(i=0;i<no;++i){yp[i]+=sty[i];if(yp[i]>doc_height-50){xp[i]=Math.random()*(doc_width-am[i]-30);yp[i]=0;stx[i]=0.02+Math.random()/10;sty[i]=0.7+Math.random()}dx[i]+=stx[i];document.getElementById('dot'+i).style.top=yp[i]+'px';document.getElementById('dot'+i).style.left=xp[i]+am[i]*Math.sin(dx[i])+'px'}snowtimer=setTimeout('snowIE_NS6()',10)}function hidesnow(){if(window.snowtimer){clearTimeout(snowtimer)}for(i=0;i<no;i++)document.getElementById('dot'+i).style.visibility='hidden'}if(ie4up||ns6up){snowIE_NS6();if(hidesnowtime>0)setTimeout('hidesnow()',hidesnowtime*1000)}
+
+</script>
 
 </body>
 

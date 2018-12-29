@@ -61,5 +61,8 @@ Class customerModel Extends baseModel {
     public function getLastCustomer(){
         return $this->getLast($this->table);
     }
+    public function queryCustomer($sql){
+        return $this->query($sql);
+    }
 }
 ?>

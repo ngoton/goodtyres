@@ -234,7 +234,7 @@ elseif ($order_by == 'order_tire_number')
                     echo '<button class="order_number" data="'.$order_tire->order_tire_id.'">Số ĐH</button>';
                 ?>
             </td>
-            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><a target="_blank" href="<?php echo $this->url('customer/index/'.$order_tire->customer); ?>"><?php echo $order_tire->customer_name; ?></a> <br><a  style="font-weight:bold;text-decoration:underline" data="<?php echo $order_tire->customer ?>" value="1"  class="editButton"><i class="fa fa-file-text-o"></i> Hợp đồng</a> 
+            <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><a target="_blank" href="<?php echo $this->url('customer/index/'.$order_tire->customer); ?>"><?php echo $order_tire->customer_name; ?></a> <br><a  style="font-weight:bold;text-decoration:underline" data="<?php echo $order_tire->customer ?>" data-order="<?php echo $order_tire->order_tire_id ?>" data-date="<?php echo $order_tire->contract_date>0?date('d-m-Y',$order_tire->contract_date):null ?>" data-number="<?php echo $order_tire->contract_number ?>" data-pay="<?php echo $order_tire->contract_pay_1 ?>" data-pay2="<?php echo $order_tire->contract_pay_2 ?>" data-valid="<?php echo $order_tire->contract_end_date>0?date('d-m-Y',$order_tire->contract_end_date):null ?>" value="1"  class="editButton"><i class="fa fa-file-text-o"></i> Hợp đồng</a> 
                 <?php if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9 || $_SESSION['role_logined']==3){ ?>
                 <a title="Chuyển" style="font-weight:bold;text-decoration:underline" data="<?php echo $order_tire->order_tire_id ?>" value="<?php echo $order_tire->customer ?>" class="editCustomer"><i class="fa fa-mail-forward"></i></a>
                 <?php } ?>
@@ -263,7 +263,7 @@ elseif ($order_by == 'order_tire_number')
                 <?php } ?>
             </td>
             <td class="fix" id="sale_<?php echo $order_tire->order_tire_id; ?>">
-                <?php if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9 || $_SESSION['role_logined']==3  || $_SESSION['role_logined']==2){ ?>
+                <?php if($_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9 || $_SESSION['role_logined']==8  || $_SESSION['role_logined']==2){ ?>
                 <a data="<?php echo $order_tire->order_tire_id ?>" value="<?php echo $order_tire->sale ?>"  class="change_sale"><?php echo $order_tire->username; ?></a>
                 <?php }
                 else{
@@ -278,7 +278,7 @@ elseif ($order_by == 'order_tire_number')
                         echo '<br><button style="display:none" id="approve_btn_'.$order_tire->order_tire_id.'" data="'.$order_tire->order_tire_id.'" class="approveremove">Hủy</button>';
                     }
                 }
-                else if(($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==2) && $_SESSION['user_logined'] != "nttthuy"){ 
+                else if(($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8) && $_SESSION['user_logined'] != "nttthuy"){ 
                     echo '<button data="'.$order_tire->order_tire_id.'" class="approve">Duyệt</button>';
                 } ?>
             </td>  
@@ -311,7 +311,7 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix"  id="due_date_<?php echo $order_tire->order_tire_id; ?>">
                 <?php 
                 $due_date = $order_tire->due_date>0?$lib->hien_thi_ngay_thang($order_tire->due_date):null;
-                if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9 || $_SESSION['role_logined']==3){ ?>
+                if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8){ ?>
                 <a data="<?php echo $order_tire->order_tire_id ?>" value="<?php echo $due_date ?>"  class="change_due"><?php echo $due_date; ?></a>
                 <?php }
                 else{
@@ -322,15 +322,16 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix masterTooltip order_tire_comment" id="order_tire_comment_<?php echo $order_tire->order_tire_id; ?>" title="<?php echo $order_tire->order_tire_comment; ?>" alt="<?php echo $order_tire->order_tire_comment; ?>" data="<?php echo $order_tire->order_tire_id; ?>">  
                 <b>...</b>
             </td>
-            <td class="fix">  
+            <td class="fix masterTooltip" <?php echo $order_tire->contract_number==""?'title="Thiếu số hợp đồng, vui lòng bổ sung thêm! Đơn hàng chỉ xuất khi có hợp đồng."':null ?> >  
             <div  > 
                 <?php if ($order_tire->approve>0) { ?>
                 <button class="bienban" data="<?php echo $order_tire->order_tire_id ?>">BBBG</button>
                 <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/bill/'.$order_tire->order_tire_id ?>'">PGN</button>
+                <button class="attachment" href="<?php echo $this->url('ordertire/attachment/'.$order_tire->order_tire_id); ?>" ><i class="fa fa-paperclip"></i></button>
                 <?php } ?>
-                <?php if($order_tire->sale_lock==1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==3 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8)){ ?>
+                <?php if($order_tire->sale_lock==1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8)){ ?>
                 <button data="<?php echo $order_tire->order_tire_id ?>" value="0"  class="unlock">Mở</button>
-                <?php }elseif ($order_tire->sale_lock!=1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==3 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8)) { ?>
+                <?php }elseif ($order_tire->sale_lock!=1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8)) { ?>
                     <button data="<?php echo $order_tire->order_tire_id ?>" value="1"  class="unlock">Khóa</button>
                 <?php } ?>
                 <?php if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9){ ?>
@@ -569,6 +570,7 @@ $this->helper('slidePaginator');
         <label>
             <input type="hidden" id="contract_link" name="contract_link" value="" />
             <input type="hidden" id="contract_customer" name="contract_customer" value="" />
+            <input type="hidden" id="contract_order" name="contract_order" value="" />
             <span class="add-on"><i class="icon-calendar" ></i></span>
             <span>Ngày: </span> <br>
             <input type="text" id="contract_date" name="contract_date" value="" class="ngay" required="required" />
@@ -576,7 +578,7 @@ $this->helper('slidePaginator');
         <label>
             <span class="add-on"><i class="icon-ok-circle" ></i></span>
             <span>Số hợp đồng: </span> <br>
-            <input type="text" id="contract_number" name="contract_number" value="" required="required" />
+            <input type="text" id="contract_number" name="contract_number" value="" required="required" autofocus="" />
         </label>
         
         <label>
@@ -1516,6 +1518,23 @@ $(".order_discount").click(function(){
          
         return false;
     });
+$(".attachment").click(function(){
+        $("#winpopup").dialog({
+            draggable:true,
+            modal: true,
+            autoOpen: false,
+            height:"auto",
+            width:600,
+            resizable: false,
+            title:'Tài liệu đính kèm',
+            position: ['center','center'],
+            
+        });
+        $("#winpopup").load($(this).attr('href'));
+        $("#winpopup").dialog("open");
+         
+        return false;
+    });
 
 $('.edit_tr').hover(function(){
     var order_tire_status = $(this).find("#order_tire_status_"+$(this).attr('id')).attr('data');
@@ -2180,6 +2199,12 @@ $('.editButton')
         }
 
         $('#contract_customer').val($(this).attr('data'));
+        $('#contract_order').val($(this).attr('data-order'));
+        $('#contract_date').val($(this).attr('data-date'));
+        $('#contract_number').val($(this).attr('data-number'));
+        $('#contract_pay').val($(this).attr('data-pay'));
+        $('#contract_pay2').val($(this).attr('data-pay2'));
+        $('#contract_valid').val($(this).attr('data-valid'));
 
         $( "#dialogContent4" ).dialog( "open" )
     });
@@ -2192,6 +2217,7 @@ $( "#dialogContent4" ).dialog({
     buttons: {
         OK: function() {
             var customer = $('#contract_customer').val();
+            var order = $('#contract_order').val();
             var date = $('#contract_date').val();
             var number = $('#contract_number').val();
             var pay = $('#contract_pay').val();
@@ -2200,7 +2226,7 @@ $( "#dialogContent4" ).dialog({
             var link = $('#contract_link').val();
             
             
-            number = number.replace(/ /g,"$");
+            number = number.replace(/\//g,"$");
 
             $("#winpopup").dialog({
                 draggable:true,
@@ -2212,14 +2238,14 @@ $( "#dialogContent4" ).dialog({
                 title:'Chi tiết',
                 buttons: {
                     OK: function() {
-                        window.location.href = "<?php echo BASE_URL ?>/ordertire/"+link+"/"+customer+"/0/0/0/"+date+"@"+number+"@"+pay+"@"+pay2+"@"+valid;
+                        window.location.href = "<?php echo BASE_URL ?>/ordertire/"+link+"/"+customer+"/"+order+"/0/0/"+date+"@"+number+"@"+pay+"@"+pay2+"@"+valid;
                     },
                     Cancel: function() {
                         $( this ).dialog( "close" );
                     }
                 }
             });
-            $("#winpopup").load("<?php echo BASE_URL ?>/ordertire/"+link+"/"+customer+"/0/0/0/"+date+"@"+number+"@"+pay+"@"+pay2+"@"+valid);
+            $("#winpopup").load("<?php echo BASE_URL ?>/ordertire/"+link+"/"+customer+"/"+order+"/0/0/"+date+"@"+number+"@"+pay+"@"+pay2+"@"+valid);
             $("#winpopup").dialog("open");
             
             //     $.post("<?php echo BASE_URL ?>/marketing/contract", {customer: customer, from: from, to: to,date: date, number: number, pay: pay, valid: valid},

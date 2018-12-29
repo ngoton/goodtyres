@@ -97,7 +97,7 @@ Class customerController Extends baseController {
                             OR mst LIKE "%'.$keyword.'%" 
                             OR customer_code LIKE "%'.$keyword.'%" 
                             OR customer_address LIKE "%'.$keyword.'%" 
-                            OR customer_phone LIKE "%'.$keyword.'%" 
+                            OR REPLACE(customer_phone, " ", "") LIKE "%'.str_replace(" ", "", $keyword).'%" 
                             OR customer_email LIKE "%'.$keyword.'%" 
                             )';
             $data['where'] .= $search;

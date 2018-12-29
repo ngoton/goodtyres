@@ -675,6 +675,13 @@ $( document ).ajaxComplete(function() {
 $(window).load(function() { 
   $("#ajax_loader").fadeOut(200);
 });
+
+<?php if(isset($_SESSION['user_logined']) && $_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 9){ ?>
+$('#action option[value="delete"]').hide();
+$('button:contains("Xóa")').hide();
+$('a:contains("Xóa")').hide();
+<?php } ?>
+
 </script>
 <!--
 <script type="text/javascript">

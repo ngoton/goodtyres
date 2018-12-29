@@ -100,7 +100,7 @@ Class adminController Extends baseController {
 
         $data = array(
 
-            'where' => 'staff_id IN (SELECT sale FROM tire_sale WHERE tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).') AND ( (start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) ) )',
+            'where' => '((staff_id=18 OR staff_id=19) OR staff_id IN (SELECT sale FROM tire_sale WHERE tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).') AND ( (start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) ) ))',
 
         );
        
@@ -219,6 +219,9 @@ Class adminController Extends baseController {
                     $info_staff['kh'][$tire->sale] = isset($info_staff['kh'][$tire->sale])?$info_staff['kh'][$tire->sale]+1:1;
 
                 }
+            }
+            else{
+                $info_staff['kh'][$tire->sale] = 1;
             }
             
 
@@ -393,9 +396,7 @@ Class adminController Extends baseController {
         // $end_year = date('Y',strtotime($ketthuc));
 
 
-        $join = array('table'=>'user','where'=>'account=user_id');
-        $staff_datas = $staff_model->getAllStaff(array('where'=>''),$join);
-
+        $staff_datas = $staff_sales;
         $this->view->data['staff_datas'] = $staff_datas;
 
 

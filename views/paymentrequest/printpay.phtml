@@ -141,7 +141,7 @@
             </p>
             <p class="MsoNormal" style="margin-top:6.0pt;tab-stops:dotted 5.75in">
                 <span lang="VI" style="float:left">Số tiền: </span>
-                <span style="float:left;"><u> &nbsp;&nbsp;&nbsp;&nbsp; <?php echo $payment_requests->payment_request_money_usd>0?$lib->formatMoney($payment_requests->payment_request_money_usd,2):$lib->formatMoney(str_replace('.', '', $payment_requests->payment_request_money)) ?> &nbsp;&nbsp;&nbsp;&nbsp; </u></span>
+                <span style="float:left;"><u> &nbsp;&nbsp;&nbsp;&nbsp; <?php echo $payment_requests->payment_request_money_usd>0?preg_replace('/(-?\d+)(\d\d\d)/', '$1,$2',$payment_requests->payment_request_money_usd):$lib->formatMoney(str_replace('.', '', $payment_requests->payment_request_money)) ?> &nbsp;&nbsp;&nbsp;&nbsp; </u></span>
                 <span style="float:left">(Viết bằng chữ):</span>
                 <span class="underline"><font style="color:#000"></span>
             </p>

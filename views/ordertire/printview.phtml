@@ -6,7 +6,7 @@
     <style type="text/css">
     @media print {
       @page { margin: 0; }
-      body { margin: 0.8cm 0.8cm 0cm 0.8cm; height: 100%; -webkit-print-color-adjust: exact;}
+      body { margin: 0.6cm 0.6cm 0cm 0.6cm; height: 100%; -webkit-print-color-adjust: exact;}
       .footer{
        position:fixed;
        bottom:15px;
@@ -14,6 +14,7 @@
         color: #8e8a8a;
        }
     }
+    @page { margin: 0.2cm 0.2cm 0cm 0.2cm; }
     #wrap{
             background: url('/public/img/watermarkA4.png') no-repeat;
         }
@@ -109,7 +110,11 @@
                 </tr>
                 <tr height="22" style="height:16.5pt">
                     <td class="xl77" colspan="7" height="22" style="height:16.5pt;width:527pt" width="700">
-                        <span style="font-size:14px;">Hôm nay, ngày <?php echo $ngay ?> tháng <?php echo $thang ?> năm <?php echo $nam ?> tại kho lốp công ty đã tiến hành bàn giao tài sản giữa:</span></td>
+                        <span style="font-size:14px;">Căn cứ hợp đồng mua bán số <?php echo $orders->contract_number!=""?$orders->contract_number:"............" ?> ngày <?php echo $orders->contract_date>0?$lib->hien_thi_ngay_thang($orders->contract_date):".../.../...." ?> giữa hai Công ty.</span></td>
+                </tr>
+                <tr height="22" style="height:16.5pt">
+                    <td class="xl77" colspan="7" height="22" style="height:16.5pt;width:527pt" width="700">
+                        <span style="font-size:14px;">Hôm nay, ngày <?php echo $ngay ?> tháng <?php echo $thang ?> năm <?php echo $nam ?> tại kho lốp công ty đã tiến hành bàn giao tài sản như sau:</span></td>
                 </tr>
                 <tr height="22" style="height:16.5pt">
                     <td class="xl75" colspan="2" height="22" style="height:16.5pt">
@@ -183,7 +188,7 @@
                         <span style="font-size:14px;"><br>
                         </span></td>
                     <td class="xl65">
-                        <span style="font-size:14px;">CMND:</span></td>
+                        <span style="font-size:14px;">Chức vụ:</span></td>
                     <td class="xl65">
                         <span style="font-size:14px;">SĐT: <?php echo $customers->customer_phone ?></span></td>
                     <td class="xl65">
@@ -196,7 +201,7 @@
                 </tr>
                 <tr height="22" style="height:16.5pt">
                     <td class="xl65" colspan="7" height="22" style="height:16.5pt">
-                        <span style="font-size:14px;">Bên A đã tiến hành bàn giao tài sản cho bên B theo bảng thống kê sau:</span></td>
+                        <span style="font-size:14px;">Bên A đã tiến hành bàn giao tài sản cho bên B theo bảng thống kê tài sản sau:</span></td>
                 </tr>
                 <tr height="22" style="height:16.5pt">
                     <td class="xl63" colspan="7" height="22" style="height: 16.5pt; text-align: center;">
@@ -305,8 +310,8 @@
                         </strong></span></td>
                 </tr>
                 <?php } ?>
-                <tr height="22" style="mso-height-source:userset;height:21.95pt">
-                    <td class="xl63" height="22" style="height:21.95pt">
+                <tr height="22" style="mso-height-source:userset;height:16.5pt">
+                    <td class="xl63" height="22" style="height:16.5pt">
                         <span style="font-size:14px;"><br>
                         </span></td>
                     <td class="xl63">
@@ -328,8 +333,8 @@
                         <span style="font-size:14px;"><br>
                         </span></td>
                 </tr>
-                <tr height="23" style="height:17.25pt">
-                    <td class="xl65" colspan="2" height="23" style="height:17.25pt;mso-ignore:colspan">
+                <tr height="23" style="height:16.5pt">
+                    <td class="xl65" colspan="2" height="23" style="height:16.5pt;mso-ignore:colspan">
                         <span style="font-size:14px;">Số tiền bằng chữ:</span></td>
                     <td class="xl72" colspan="5">
                         <span style="font-size:14px;"><em><strong><?php echo $lib->convert_number_to_words($tong).' đồng.' ?></strong></em></span></td>
@@ -355,34 +360,15 @@
                 </tr>
                 <tr height="22" style="height:16.5pt">
                     <td class="xl78" colspan="7" height="22" style="height:16.5pt;width:527pt" width="700">
+                        <span style="font-size:14px;">Hạn thanh toán: <?php echo $lib->hien_thi_ngay_thang($orders->due_date) ?></span></td>
+                </tr>
+                <tr height="22" style="height:16.5pt">
+                    <td class="xl78" colspan="7" height="22" style="height:16.5pt;width:527pt" width="700">
                         <span style="font-size:14px;"><strong>(Khách hàng thanh toán chuyển khoản vui lòng ghi rõ mã số đơn hàng khi thanh toán).</strong></span></td>
                 </tr>
                 <tr height="22" style="height:16.5pt">
                     <td class="xl65" colspan="6" height="22" style="height:16.5pt;mso-ignore:colspan">
-                        <span style="font-size:14px;">Biên bản này lập thành 3 bản có giá trị như nhau. Mỗi bên giữ một bản.</span></td>
-                    <td class="xl65">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                </tr>
-                <tr height="22" style="height:16.5pt">
-                    <td class="xl65" height="22" style="height:16.5pt">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl65">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl65">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl65">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl65">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl65">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
+                        <span style="font-size:14px;">Biên bản này lập thành 3 bản có giá trị pháp lý như nhau. Mỗi bên giữ một bản.</span></td>
                     <td class="xl65">
                         <span style="font-size:14px;"><br>
                         </span></td>
@@ -496,40 +482,14 @@
                         </span></td>
                 </tr>
                 <tr height="22" style="height:16.5pt">
-                    <td class="xl64" height="22" style="height:16.5pt">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl64">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl64">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl64">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl64">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl64">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl64">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                </tr>
-                <tr height="22" style="height:16.5pt">
                     <td class="xl63" colspan="2" height="22" style="height: 16.5pt; text-align: center;">
                         <span style="font-size:14px;"><strong><?php echo $staffs->staff_name ?></strong></span></td>
-                    <td class="xl63">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl63">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
-                    <td class="xl63">
-                        <span style="font-size:14px;"><br>
-                        </span></td>
+                    <td class="xl63" colspan="3" height="22" style="height: 16.5pt;">
+                        <span style="font-size:14px;">Người nhận:</span><br>
+                        <span style="font-size:14px;">SĐT:</span><br>
+                        <span style="font-size:14px;">CMND/GPLX:</span><br>
+                        <span style="font-size:14px;">Ngày cấp: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nơi cấp:</span><br>
+                    </td>
                     <td class="xl63">
                         <span style="font-size:14px;"><br>
                         </span></td>

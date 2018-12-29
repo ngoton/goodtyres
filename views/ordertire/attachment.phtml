@@ -1,0 +1,98 @@
+<link href="<?php echo BASE_URL ?>/public/js/jquery-file-upload/uploadfile.css" rel="stylesheet">
+<script src="<?php echo BASE_URL ?>/public/js/jquery-file-upload/jquery.uploadfile.min.js"></script>
+<?php $i=1; ?>
+<div>
+    <table class="table_data">
+        <tr>
+            <th class="fix">STT</th>
+            <th class="fix">File</th>
+            <th class="fix">Download</th>
+            <th class="fix"></th>
+        </tr>
+        <?php foreach ($attachments as $attach) { ?>
+        <tr id="<?php echo substr($attach->attachment_link, strpos($attach->attachment_link, '=') + 1) ?>">
+            <td class="fix"><?php echo $i++ ?></td>
+            <td class="fix"><?php echo $attach->attachment_name ?></td>
+            <td class="fix"><a target="_blank" href="<?php echo $attach->attachment_link ?>"><i class="fa fa-download"></i></a></td>
+            <td class="fix">
+                <?php if($_SESSION['role_logined']==1){ ?>
+                    <button class="xoaFile" data="<?php echo substr($attach->attachment_link, strpos($attach->attachment_link, '=') + 1) ?>">Xóa</button>
+                <?php } ?>
+            </td>
+        </tr>
+        <?php } ?>
+    </table>
+</div>
+<?php
+if ($authUrl == "") {
+    echo '<div id="multiple_file_uploader">Tải lên</div>';
+}
+else{
+    echo '<div class="error"><a target="_blank" href="'.$authUrl.'">Bấm vào đây để tiếp tục!</a></div>';
+}
+?>
+<input type="hidden" id="order_attach">
+<input type="hidden" id="order_id">
+
+<script type="text/javascript">
+  $(document).ready(function() {
+
+      var upload_settings = {
+        url : "<?php echo $this->url('ordertire/uploadDrive') ?>",
+        dragDrop:true,
+        multiple : true,
+        showProgress : true,
+        formData: { order: '<?php echo $order ?>' },
+        fileName: "myfile",
+        allowedTypes:"jpg,png,gif,pdf", 
+        returnType:"json",
+        onSuccess:function(files,data,xhr)
+        {
+           // alert((data));
+            var pic = $('#order_attach').val();
+           for(var i=0;i<data.length;i++)
+            {
+                if (pic=="") {
+                  $('#order_attach').val(pic + data[i]);
+                }
+                else{
+                  $('#order_attach').val(pic + "|" + data[i]);
+                }
+            }
+        },
+        showDelete:true,
+        deleteCallback: function(data,pd)
+          {
+            for(var i=0;i<data.length;i++)
+            {
+              var pic = $('#order_attach').val(); 
+              $('#order_attach').val(pic.replace(data[i],""));
+
+                $.post("<?php echo $this->url('ordertire/deleteDrive') ?>",{op:"delete",name:data[i]},
+                function(resp, textStatus, jqXHR)
+                {
+                    //Show Message  
+                    $("#status").append("<div>File Deleted</div>");  
+                });
+             }      
+            pd.statusbar.hide(); //You choice to hide/not.
+
+        }
+      };
+    var uploadObj = $("#multiple_file_uploader").uploadFile(upload_settings);
+
+    $('.xoaFile').click(function(){
+        var id = $(this).attr('data');
+        var r = confirm("Bạn có chắc chắn không?");
+        if (r == true){
+            $.post("<?php echo $this->url('ordertire/deleteDrive') ?>",{op:"delete",name:id},
+            function(resp, textStatus, jqXHR)
+            {
+                //Show Message  
+                $("#"+id).remove();  
+            });
+        }
+    });
+});
+   
+</script>

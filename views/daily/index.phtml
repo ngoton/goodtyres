@@ -202,6 +202,7 @@ elseif ($order_by == 'money')
             <td class="fix" style="display:none" id="daily_check_cost_<?php echo $daily->daily_id; ?>"><?php echo $daily->daily_check_cost; ?></td>
             <td class="fix" style="display:none" id="owner_request_<?php echo $daily->daily_id; ?>"><?php echo $daily->owner_request; ?></td>
             <td class="fix" style="display:none" id="owner_approve_<?php echo $daily->daily_id; ?>"><?php echo $daily->owner_approve; ?></td>
+            <td class="fix" style="display:none" id="daily_rate_<?php echo $daily->daily_id; ?>"><?php echo $daily->daily_rate; ?></td>
             <td class="fix" style="display:none" id="clearing_<?php echo $daily->daily_id; ?>">
                 <?php 
                     echo isset($clearing[$daily->daily_id])?$clearing[$daily->daily_id]:null;
@@ -255,6 +256,9 @@ elseif ($order_by == 'money')
 $this->helper('slidePaginator');
 ?>
 <div class="add-box thongtin" style="text-align:center;width:40%" >
+  <div style="text-align: left; margin-bottom: 10px">
+    <b>Nợ ngân hàng BIDV:  <span class="error"><?php echo $lib->formatMoney($no_bidv>0?$no_bidv:str_replace('-', '', $no_bidv)) ?></span> </b>
+  </div>
     <table class="table_data">
         <tr style="font-weight:bold;">
             <td class="fix">Mã</td>
@@ -446,6 +450,14 @@ $this->helper('slidePaginator');
                             <option value="7">Khác</option>
                         </select><br>
                           <input  type="checkbox" id="daily_check_lohang"  name="daily_check_lohang" tabindex="10" value="1" > Xem như lô hàng
+                      </div>
+                    </div>
+                    <div class="box-body nopadding">
+                      <div class="form-group col-xs-4 nopadding">
+                        <label for="daily_rate">Tỷ giá </label>
+                      </div>
+                      <div class="form-group col-xs-8 nopadding">
+                        <input type="text" class="numbers text-right" name="daily_rate" id="daily_rate" value="1">
                       </div>
                     </div>
                   </fieldset>
@@ -666,6 +678,31 @@ $('#getPT').click(function(){
       });
  });
 
+$('#daily_rate').keyup(function(){
+  var money_in = parseFloat(get_number('#money_in')) || 0;
+  var money_out = parseFloat(get_number('#money_out')) || 0;
+  var rate = parseFloat(get_number('#daily_rate')) || 0;
+  var total = 0;
+  $('.additional_money').each(function(){
+    var val = parseFloat($(this).attr('money-usd')) || 0;
+    $(this).val(Math.round(val*rate));
+    total += Math.round(val*rate);
+  });
+
+  if (money_in>0) {
+    $('#money_in').val(total);
+  }
+  else if (money_out>0) {
+    $('#money_out').val(total);
+  }
+
+  $('.numbers').val(function(index, value) {
+      return value
+        .replace(/[^0-9-.]/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      ;
+    });
+});
 $('#money_in').change(function(){
   if ($('.additional_money:first').val() == "") {
     $('.additional_money:first').val($(this).val());
@@ -799,6 +836,26 @@ $('.additional_code').keyup(function(){
     }
     
 });
+$('.additional_debit:first').chosen().change(function(){
+  var val = $(this).val();
+  $('.additional_debit').each(function(){
+    var rowIndex=$(this).closest('tr').index();
+    if ($('.additional_money:eq('+rowIndex+')').val() != "") {
+      $(this).val(val);
+      $(this).trigger("chosen:updated");
+    }
+  });
+});
+$('.additional_credit:first').chosen().change(function(){
+  var val = $(this).val();
+  $('.additional_credit').each(function(){
+    var rowIndex=$(this).closest('tr').index();
+    if ($('.additional_money:eq('+rowIndex+')').val() != "") {
+      $(this).val(val);
+      $(this).trigger("chosen:updated");
+    }
+  });
+});
 
 function set_item(item,name) {
     // change input value
@@ -819,10 +876,11 @@ function set_item(item,name) {
     $('#code_list_id').hide();
     $('#code').focus();
 }
-function set_item_code(item,value,vitri,money,max) {
+function set_item_code(item,value,vitri,money,max,usd) {
     // change input value
     $('.additional_money:eq('+vitri+')').val(money);
     $('.additional_money:eq('+vitri+')').attr('data-max',max);
+    $('.additional_money:eq('+vitri+')').attr('money-usd',usd);
     $('.additional_service:eq('+vitri+') option[value=2]').attr('selected',true);
     
     $('.additional_code:eq('+vitri+')').val(item);
@@ -849,6 +907,7 @@ function set_item_code(item,value,vitri,money,max) {
             $('.additional_code:last').val("");
             $('.additional_money:last').val("");
             $('.additional_money:last').attr('data-max','');
+            $('.additional_money:last').attr('money-usd','');
         }
         else{
           //$('#clearing').tagit('createTag', item+'~'+value);
@@ -978,6 +1037,27 @@ function set_item_payment(item,name,comment,money,receive,request,approve) {
                     $('.additional_code:eq('+rowIndex+')').attr('data',"");
                 }
                 
+            });
+
+            $('.additional_debit:first').chosen().change(function(){
+              var val = $(this).val();
+              $('.additional_debit').each(function(){
+                var rowIndex=$(this).closest('tr').index();
+                if ($('.additional_money:eq('+rowIndex+')').val() != "") {
+                  $(this).val(val);
+                  $(this).trigger("chosen:updated");
+                }
+              });
+            });
+            $('.additional_credit:first').chosen().change(function(){
+              var val = $(this).val();
+              $('.additional_credit').each(function(){
+                var rowIndex=$(this).closest('tr').index();
+                if ($('.additional_money:eq('+rowIndex+')').val() != "") {
+                  $(this).val(val);
+                  $(this).trigger("chosen:updated");
+                }
+              });
             });
 
             $('#service option[value='+$('.additional_service').val()+']').attr('selected',true);
@@ -1177,6 +1257,27 @@ $('.edit_daily').click(function(e){
               
           });
 
+          $('.additional_debit:first').chosen().change(function(){
+            var val = $(this).val();
+            $('.additional_debit').each(function(){
+              var rowIndex=$(this).closest('tr').index();
+              if ($('.additional_money:eq('+rowIndex+')').val() != "") {
+                $(this).val(val);
+                $(this).trigger("chosen:updated");
+              }
+            });
+          });
+          $('.additional_credit:first').chosen().change(function(){
+            var val = $(this).val();
+            $('.additional_credit').each(function(){
+              var rowIndex=$(this).closest('tr').index();
+              if ($('.additional_money:eq('+rowIndex+')').val() != "") {
+                $(this).val(val);
+                $(this).trigger("chosen:updated");
+              }
+            });
+          });
+
           $('.numbers').keyup(function(event) {
               // skip for arrow keys
             if(event.which >= 37 && event.which <= 40) return;
@@ -1222,6 +1323,7 @@ function add_click(){
         $('.internal_transfer').hide();
         $('#money_in').val(0);
         $('#money_out').val(0);
+        $('#daily_rate').val(1);
 
         if ($('#clearing').hasClass('tagit-hidden-field')) {
             $('#clearing').tagit('destroy');
@@ -1352,6 +1454,27 @@ function add_click(){
                   
               });
 
+              $('.additional_debit:first').chosen().change(function(){
+                var val = $(this).val();
+                $('.additional_debit').each(function(){
+                  var rowIndex=$(this).closest('tr').index();
+                  if ($('.additional_money:eq('+rowIndex+')').val() != "") {
+                    $(this).val(val);
+                    $(this).trigger("chosen:updated");
+                  }
+                });
+              });
+              $('.additional_credit:first').chosen().change(function(){
+                var val = $(this).val();
+                $('.additional_credit').each(function(){
+                  var rowIndex=$(this).closest('tr').index();
+                  if ($('.additional_money:eq('+rowIndex+')').val() != "") {
+                    $(this).val(val);
+                    $(this).trigger("chosen:updated");
+                  }
+                });
+              });
+
               $('.numbers').keyup(function(event) {
                   // skip for arrow keys
                 if(event.which >= 37 && event.which <= 40) return;
@@ -1453,6 +1576,8 @@ $(document).ready(function(){
         var payment_request_number = $('#payment_request').attr('value');
         var payment_request = $('#payment_request').attr('data');
 
+        var daily_rate = $('#daily_rate').attr('value');
+
         var yes = $('#yes').attr('value');
 
         var total = 0;
@@ -1511,6 +1636,7 @@ $(document).ready(function(){
         var additional_payable = [];
         var additional_data_max = [];
         var additional_service = [];
+        var additional_money_usd = [];
 
         $('select.additional_debit').each(function(){
           additional_debit.push($(this).val());
@@ -1522,6 +1648,7 @@ $(document).ready(function(){
           additional_money.push($(this).val());
           additional_id.push($(this).attr('data') || "");
           additional_data_max.push($(this).attr('data-max') || "");
+          additional_money_usd.push($(this).attr('data-max') || "");
         });
         $('.additional_comment').each(function(){
           additional_comment.push($(this).val());
@@ -1535,7 +1662,7 @@ $(document).ready(function(){
         });
 
         for (var i = 0; i < additional_money.length; i++) {
-          additional.push({'additional_id':additional_id[i], 'additional_debit':additional_debit[i],'additional_credit':additional_credit[i], 'additional_money':additional_money[i], 'additional_comment':additional_comment[i], 'additional_code':additional_code[i], 'additional_payable':additional_payable[i], 'additional_data_max':additional_data_max[i], 'additional_service':additional_service[i]});
+          additional.push({'additional_id':additional_id[i], 'additional_debit':additional_debit[i],'additional_credit':additional_credit[i], 'additional_money':additional_money[i], 'additional_comment':additional_comment[i], 'additional_code':additional_code[i], 'additional_payable':additional_payable[i], 'additional_data_max':additional_data_max[i], 'additional_service':additional_service[i], 'additional_money_usd':additional_money_usd[i]});
                 
         };
 
@@ -1570,6 +1697,7 @@ $(document).ready(function(){
                 account_out: account_out,
                 payment_request: payment_request,
                 payment_request_number: payment_request_number,
+                daily_rate: daily_rate,
                 yes: yes,
 
                 }, // giá trị post
@@ -1945,6 +2073,26 @@ function addRow(id){
         $('.additional_code:eq('+rowIndex+')').attr('data',"");
     }
     
+  });
+  $('.additional_debit:first').chosen().change(function(){
+    var val = $(this).val();
+    $('.additional_debit').each(function(){
+      var rowIndex=$(this).closest('tr').index();
+      if ($('.additional_money:eq('+rowIndex+')').val() != "") {
+        $(this).val(val);
+        $(this).trigger("chosen:updated");
+      }
+    });
+  });
+  $('.additional_credit:first').chosen().change(function(){
+    var val = $(this).val();
+    $('.additional_credit').each(function(){
+      var rowIndex=$(this).closest('tr').index();
+      if ($('.additional_money:eq('+rowIndex+')').val() != "") {
+        $(this).val(val);
+        $(this).trigger("chosen:updated");
+      }
+    });
   });
 
   $('.numbers').keyup(function(event) {

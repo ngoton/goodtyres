@@ -1,4 +1,6 @@
 <?php
+require "lib/google-api-php-client-2.2.2/vendor/autoload.php";
+
 Class ordertireController Extends baseController {
     
     public function index() {
@@ -509,7 +511,7 @@ Class ordertireController Extends baseController {
             $code = isset($_POST['tu']) ? $_POST['tu'] : null;
         }
         else{
-            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'order_tire_status ASC, order_number';
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'order_tire_status ASC, ABS(SUBSTRING(order_number,4,4)) DESC, ABS(SUBSTRING(order_number,4))';
             $order = $this->registry->router->order_by ? $this->registry->router->order : 'DESC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
@@ -706,7 +708,7 @@ Class ordertireController Extends baseController {
             $total_order_before = 0; //Tổng sản lượng tháng trước
             $total_order = 0; //Tổng sản lượng tháng này
 
-            $myDate = strtotime(date("d-m-Y", strtotime('01-'.date('m-Y',$tire->delivery_date))) . "-1 month" ) ;
+            $myDate = strtotime(date("d-m-Y", $ngay) . "-1 month" ) ;
 
             $sum_order = $tiresale_model->queryTire('SELECT SUM(volume) AS tong FROM tire_sale WHERE customer='.$tire->customer.' AND tire_sale_date >= '.strtotime('01-'.date('m-Y',$myDate)).' AND tire_sale_date <= '.strtotime(date('t-m-Y',$myDate)).' GROUP BY customer');
                 
@@ -1012,7 +1014,7 @@ Class ordertireController Extends baseController {
             $code = isset($_POST['tu']) ? $_POST['tu'] : null;
         }
         else{
-            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'order_tire_status ASC, order_number';
+            $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'order_tire_status ASC, ABS(SUBSTRING(order_number,4,4)) DESC, ABS(SUBSTRING(order_number,4))';
             $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
@@ -1253,7 +1255,7 @@ Class ordertireController Extends baseController {
 
             if ($str == "") {
                 $last = "";
-                $lasts = $order_tire_model->getAllTire(array('order_by'=>'order_number DESC','limit'=>1));
+                $lasts = $order_tire_model->getAllTire(array('order_by'=>'ABS(SUBSTRING(order_number,4,4)) DESC, ABS(SUBSTRING(order_number,4)) DESC','limit'=>1));
                 foreach ($lasts as $tire) {
                     $last = str_replace('lx-', '', $tire->order_number);
                 }
@@ -1603,7 +1605,7 @@ Class ordertireController Extends baseController {
                 $ton -= $tire->volume;
             }
 
-            $order_tires = $order_tire_model->getAllTire(array('where'=>'(order_tire_status IS NULL OR order_tire_status = 0)'));
+            $order_tires = $order_tire_model->getAllTire(array('where'=>'(order_tire_status IS NULL OR order_tire_status = 0) AND (order_tire_vendor IS NULL OR order_tire_vendor=0)'));
             foreach ($order_tires as $order) {
                 $order_tire_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$order->order_tire_id.' AND tire_brand = '.$brand.' AND tire_size = '.$size.' AND tire_pattern = '.$pattern));
                 foreach ($order_tire_lists as $list) {
@@ -1735,33 +1737,54 @@ Class ordertireController Extends baseController {
 
             if (trim($_POST['customer']) == "") {
                 if (trim($_POST['customer_name']) != "") {
-                    $data_cus = array(
-                        'customer_name' => addslashes(trim($_POST['customer_name'])),
-                        'company_name' => addslashes(trim($_POST['company'])),
-                        'mst' => trim($_POST['mst']),
-                        'customer_address' => addslashes(trim($_POST['address'])),
-                        'customer_phone' => trim($_POST['phone']),
-                        'customer_email' => trim($_POST['email']),
-                        'customer_contact' => trim($_POST['contact']),
-                        'customer_create_user' => trim($_POST['order_staff']),
-                        'customer_tire_type' => $_POST['customer_type'],
-                    );
+                    $cus = $customer_model->getCustomerByWhere(array('customer_name' => trim($_POST['customer_name'])));
+                    if (!$cus) {
+                        if (trim($_POST['mst']) != "") {
+                            $cus = $customer_model->getCustomerByWhere(array('mst' => trim($_POST['mst'])));
+                        }
+                        if (!$cus) {
+                            if (trim($_POST['phone']) != "") {
+                                $cus = $customer_model->getCustomerByWhere(array('customer_phone' => trim($_POST['phone'])));
+                                if (!$cus) {
+                                    $cus = $customer_model->getCustomerByWhere(array('customer_phone' => str_replace(' ', '', trim($_POST['phone']))));
+                                }
+                            }
+                        }
+                    }
+                    
 
-                    $customer_model->createCustomer($data_cus);
-                    $id_customer = $customer_model->getLastCustomer()->customer_id;
+                    if ($cus) {
+                        $id_customer = $cus->customer_id;
+                    }
+                    else{
+                        $data_cus = array(
+                            'customer_name' => addslashes(trim($_POST['customer_name'])),
+                            'company_name' => addslashes(trim($_POST['company'])),
+                            'mst' => trim($_POST['mst']),
+                            'customer_address' => addslashes(trim($_POST['address'])),
+                            'customer_phone' => trim($_POST['phone']),
+                            'customer_email' => trim($_POST['email']),
+                            'customer_contact' => trim($_POST['contact']),
+                            'customer_create_user' => trim($_POST['order_staff']),
+                            'customer_tire_type' => $_POST['customer_type'],
+                        );
 
-                    $data_contact_person = array(
-                        'contact_person_name' => trim($_POST['contact']),
-                        'contact_person_phone' => trim($_POST['phone']),
-                        'contact_person_mobile' => trim($_POST['phone']),
-                        'contact_person_email' => trim($_POST['email']),
-                        'contact_person_birthday' => null,
-                        'contact_person_address' => null,
-                        'contact_person_position' => null,
-                        'contact_person_department' => null,
-                        'customer' => $id_customer,
-                    );
-                    $contact_person_model->createCustomer($data_contact_person);
+                        $customer_model->createCustomer($data_cus);
+                        $id_customer = $customer_model->getLastCustomer()->customer_id;
+
+                        $data_contact_person = array(
+                            'contact_person_name' => trim($_POST['contact']),
+                            'contact_person_phone' => trim($_POST['phone']),
+                            'contact_person_mobile' => trim($_POST['phone']),
+                            'contact_person_email' => trim($_POST['email']),
+                            'contact_person_birthday' => null,
+                            'contact_person_address' => null,
+                            'contact_person_position' => null,
+                            'contact_person_department' => null,
+                            'customer' => $id_customer,
+                        );
+                        $contact_person_model->createCustomer($data_contact_person);
+                    }
                 }
             }
             else{
@@ -2106,7 +2129,12 @@ Class ordertireController Extends baseController {
                         $lift->queryLift('DELETE FROM lift WHERE order_tire = '.$data);
                         $invoice_tire_model->queryInvoice('DELETE FROM invoice_tire WHERE order_tire = '.$data);
                         $invoice_tire_detail_model->queryInvoice('DELETE FROM invoice_tire_detail WHERE order_tire = '.$data);
-                        $additional_model->queryAdditional('DELETE FROM additional WHERE order_tire = '.$data);
+                        
+                        $additionals = $additional_model->getAllAdditional(array('where'=>'order_tire = '.$data));
+                        foreach ($additionals as $add) {
+                           $additional_model->deleteAdditional($add->additional_id);
+                           $account_balance_model->queryAccount("DELETE FROM account_balance WHERE additional = ".$add->additional_id);
+                        }
 
                         $pu = $purchase_tire_model->getAllTire(array('where'=>'order_tire='.$data));
                         foreach ($pu as $p) {
@@ -2206,7 +2234,12 @@ Class ordertireController Extends baseController {
                         $lift->queryLift('DELETE FROM lift WHERE order_tire = '.$_POST['data']);
                         $invoice_tire_model->queryInvoice('DELETE FROM invoice_tire WHERE order_tire = '.$_POST['data']);
                         $invoice_tire_detail_model->queryInvoice('DELETE FROM invoice_tire_detail WHERE order_tire = '.$_POST['data']);
-                        $additional_model->queryAdditional('DELETE FROM additional WHERE order_tire = '.$_POST['data']);
+                        
+                        $additionals = $additional_model->getAllAdditional(array('where'=>'order_tire = '.$_POST['data']));
+                        foreach ($additionals as $add) {
+                           $additional_model->deleteAdditional($add->additional_id);
+                           $account_balance_model->queryAccount("DELETE FROM account_balance WHERE additional = ".$add->additional_id);
+                        }
 
                         $pu = $purchase_tire_model->getAllTire(array('where'=>'order_tire='.$_POST['data']));
                         foreach ($pu as $p) {
@@ -3599,6 +3632,7 @@ Class ordertireController Extends baseController {
                 'expired_date'=>strtotime(date('d-m-Y') . " +1 days"),
             );
             $order_tire_lock_model->createTire($data_lock);
+            $order_tire_lock_model->queryTire('DELETE FROM order_tire_lock WHERE sale = '.$order_tire->sale.' AND expired_date < '.strtotime(date('d-m-Y') . " -1 days"));
 
             $data_purchase = array(
                 'purchase_tire_date'=>$order_tire->order_tire_date,
@@ -5098,6 +5132,282 @@ Class ordertireController Extends baseController {
             fclose($fh);
         }
     }
+    public function attachment($id) {
+        $this->view->disableLayout();
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        $authUrl = "";
+
+        $redirect_uri = 'https://' . $_SERVER['HTTP_HOST'] . '/ordertire/uploadDrive';
+        $client = new Google_Client();
+        $client->setAuthConfig('client_credentials.json');
+        $client->setRedirectUri($redirect_uri);
+        $client->addScope("https://www.googleapis.com/auth/drive");
+        $client->setAccessType('offline');        // offline access
+        $client->setApprovalPrompt('force');
+        $client->setIncludeGrantedScopes(true);   // incremental auth
+        $service = new Google_Service_Drive($client);
+
+        $tokenPath = 'google_token.json';
+        if (file_exists($tokenPath)) {
+            $accessToken = json_decode(file_get_contents($tokenPath), true);
+            $client->setAccessToken($accessToken);
+            $_SESSION['upload_token'] = $accessToken;
+        }
+        
+        // set the access token as part of the client
+        if (!empty($_SESSION['upload_token'])) {
+          $client->setAccessToken($_SESSION['upload_token']);
+          // If there is no previous token or it's expired.
+            if ($client->isAccessTokenExpired()) {
+                // Refresh the token if possible, else fetch a new one.
+                if ($client->getRefreshToken()) {
+                    $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
+                } else {
+                    $authUrl = $client->createAuthUrl();
+                }
+            }
+
+        } else {
+          $authUrl = $client->createAuthUrl();
+        }
+        $attachment_model = $this->model->get('attachmentModel');
+
+        $attachments = $attachment_model->getAllAttachment(array('where'=>'order_tire='.$id));
+
+        $this->view->data['order'] = $id;
+        $this->view->data['attachments'] = $attachments;
+        $this->view->data['authUrl'] = $authUrl;
+        $this->view->show('ordertire/attachment');
+        
+    }
+    public function uploadDrive() {
+        $this->view->disableLayout();
+
+        $attachment_model = $this->model->get('attachmentModel');
+        
+        $tokenPath = 'google_token.json';
+        $redirect_uri = 'https://' . $_SERVER['HTTP_HOST'] . '/ordertire/uploadDrive';
+        $client = new Google_Client();
+        $client->setAuthConfig('client_credentials.json');
+        $client->setRedirectUri($redirect_uri);
+        $client->addScope("https://www.googleapis.com/auth/drive");
+        $client->setAccessType('offline');        // offline access
+        $client->setApprovalPrompt('force');
+        $client->setIncludeGrantedScopes(true);   // incremental auth
+        $service = new Google_Service_Drive($client);
+
+        /************************************************
+         * If we have a code back from the OAuth 2.0 flow,
+         * we need to exchange that with the
+         * Google_Client::fetchAccessTokenWithAuthCode()
+         * function. We store the resultant access token
+         * bundle in the session, and redirect to ourself.
+         ************************************************/
+        if (isset($_GET['code'])) {
+          $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+          $client->setAccessToken($token);
+          // store in the session also
+          $_SESSION['upload_token'] = $token;
+          // Save the token to a file.
+            if (!file_exists(dirname($tokenPath))) {
+                mkdir(dirname($tokenPath), 0700, true);
+            }
+            file_put_contents($tokenPath, json_encode($client->getAccessToken()));
+          // redirect back to the example
+          echo "<script>window.close();</script>";
+        }
+        if (file_exists($tokenPath)) {
+            $accessToken = json_decode(file_get_contents($tokenPath), true);
+            $client->setAccessToken($accessToken);
+            $_SESSION['upload_token'] = $accessToken;
+        }
+
+        $file = new Google_Service_Drive_DriveFile();
+
+
+        $output_dir = "public/files/";
+        if(isset($_FILES["myfile"]))
+        {
+            $ret = array();
+
+            $error =$_FILES["myfile"]["error"];
+            //You need to handle  both cases
+            //If Any browser does not support serializing of multiple files using FormData() 
+            if(!is_array($_FILES["myfile"]["name"])) //single file
+            {
+                $fileName = $_FILES["myfile"]["name"];
+                $fullpath = $output_dir.$fileName;
+                $file_info = pathinfo($fullpath);
+                $uploaded_filename = $file_info['filename'];
+
+                $count = 1;                 
+                while (file_exists($fullpath)) {
+                  $info = pathinfo($fullpath);
+                  $uploaded_filename .= '(' . $count++ . ')';
+                  $fullpath = $info['dirname'] . '/' . $uploaded_filename . '.' . $info['extension'];
+                }
+                move_uploaded_file($_FILES["myfile"]["tmp_name"],$fullpath);
+                
+                $file->setName($uploaded_filename);
+                $result = $service->files->create($file, array(
+                  'data' => file_get_contents($fullpath),
+                  'mimeType' => 'application/octet-stream',
+                  'uploadType' => 'media'
+                ));
+
+                $fileId = $result->id;
+                $service->getClient()->setUseBatch(true);
+                try {
+                    $batch = $service->createBatch();
+
+                    $domainPermission = new Google_Service_Drive_Permission(array(
+                        'type' => 'anyone',
+                        'role' => 'reader'
+                    ));
+                    $request = $service->permissions->create(
+                        $fileId, $domainPermission, array('fields' => 'id'));
+                    $batch->add($request, 'anyone');
+                    $batch->execute();
+
+                } finally {
+                    $service->getClient()->setUseBatch(false);
+                }
+
+                $ret[] = $result->id;
+
+                $data = array(
+                    'order_tire'=>$_POST['order'],
+                    'attachment_date'=>time(),
+                    'attachment_name'=>$result->name,
+                    'attachment_link'=>'https://drive.google.com/open?id='.$result->id,
+                    'attachment_user'=>$_SESSION['userid_logined']
+                );
+                $attachment_model->createAttachment($data);
+
+                unlink($fullpath);
+            }
+            else  //Multiple files, file[]
+            {
+              $fileCount = count($_FILES["myfile"]["name"]);
+              for($i=0; $i < $fileCount; $i++)
+              {
+                $fileName = $_FILES["myfile"]["name"][$i];
+                $fullpath = $output_dir.$fileName;
+                $file_info = pathinfo($fullpath);
+                $uploaded_filename = $file_info['filename'];
+
+                $count = 1;                 
+                while (file_exists($fullpath)) {
+                  $info = pathinfo($fullpath);
+                  $uploaded_filename .= '(' . $count++ . ')';
+                  $fullpath = $info['dirname'] . '/' . $uploaded_filename . '.' . $info['extension'];
+                }
+                move_uploaded_file($_FILES["myfile"]["tmp_name"][$i],$fullpath);
+
+                $file->setName($uploaded_filename);
+                $result = $service->files->create($file, array(
+                  'data' => file_get_contents($fullpath),
+                  'mimeType' => 'application/octet-stream',
+                  'uploadType' => 'media'
+                ));
+
+                $fileId = $result->id;
+                $service->getClient()->setUseBatch(true);
+                try {
+                    $batch = $service->createBatch();
+
+                    $domainPermission = new Google_Service_Drive_Permission(array(
+                        'type' => 'anyone',
+                        'role' => 'reader'
+                    ));
+                    $request = $service->permissions->create(
+                        $fileId, $domainPermission, array('fields' => 'id'));
+                    $batch->add($request, 'anyone');
+                    $batch->execute();
+
+                } finally {
+                    $service->getClient()->setUseBatch(false);
+                }
+
+                $ret[] = $result->id;
+
+                $data = array(
+                    'order_tire'=>$_POST['order'],
+                    'attachment_date'=>time(),
+                    'attachment_name'=>$result->name,
+                    'attachment_link'=>'https://drive.google.com/open?id='.$result->id,
+                    'attachment_user'=>$_SESSION['userid_logined']
+                );
+                $attachment_model->createAttachment($data);
+                
+                unlink($fullpath);
+              }
+            
+            }
+
+            echo json_encode($ret);
+            
+         }
+
+        // Now lets try and send the metadata as well using multipart!
+          
+    }
+    public function deleteDrive(){
+        $this->view->disableLayout();
+
+        $attachment_model = $this->model->get('attachmentModel');
+
+        $tokenPath = 'google_token.json';
+        $redirect_uri = 'https://' . $_SERVER['HTTP_HOST'] . '/ordertire/uploadDrive';
+        $client = new Google_Client();
+        $client->setAuthConfig('client_credentials.json');
+        $client->setRedirectUri($redirect_uri);
+        $client->addScope("https://www.googleapis.com/auth/drive");
+        $client->setAccessType('offline');        // offline access
+        $client->setApprovalPrompt('force');
+        $client->setIncludeGrantedScopes(true);   // incremental auth
+        $service = new Google_Service_Drive($client);
+
+        /************************************************
+         * If we have a code back from the OAuth 2.0 flow,
+         * we need to exchange that with the
+         * Google_Client::fetchAccessTokenWithAuthCode()
+         * function. We store the resultant access token
+         * bundle in the session, and redirect to ourself.
+         ************************************************/
+        if (isset($_GET['code'])) {
+          $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+          $client->setAccessToken($token);
+          // store in the session also
+          $_SESSION['upload_token'] = $token;
+          // Save the token to a file.
+            if (!file_exists(dirname($tokenPath))) {
+                mkdir(dirname($tokenPath), 0700, true);
+            }
+            file_put_contents($tokenPath, json_encode($client->getAccessToken()));
+          // redirect back to the example
+          echo "<script>window.close();</script>";
+        }
+        if (file_exists($tokenPath)) {
+            $accessToken = json_decode(file_get_contents($tokenPath), true);
+            $client->setAccessToken($accessToken);
+            $_SESSION['upload_token'] = $accessToken;
+        }
+
+        
+
+        $output_dir = "https://drive.google.com/open?id=";
+        if(isset($_POST["op"]) && $_POST["op"] == "delete" && isset($_POST['name']))
+        {
+            $fileName =$_POST['name'];
+            $filePath = $output_dir. $fileName;
+            $attachment_model->queryAttachment('DELETE FROM attachment WHERE attachment_link ="'.$output_dir. $fileName.'"');
+
+            $service->files->delete($fileName);
+        }
+    }
 
     public function contract() {
         $this->view->disableLayout();
@@ -5106,6 +5416,7 @@ Class ordertireController Extends baseController {
         }
 
         $customer_model = $this->model->get('customerModel');
+        $order_tire_model = $this->model->get('ordertireModel');
 
         $customers = $customer_model->getCustomer($this->registry->router->param_id);
 
@@ -5113,6 +5424,15 @@ Class ordertireController Extends baseController {
         $info = $this->registry->router->addition;
         
         $arr = explode('@', $info);
+
+        $data = array(
+            'contract_number'=>str_replace('$', '/', $arr[1]),
+            'contract_date'=>strtotime($arr[0]),
+            'contract_pay_1'=>$arr[2],
+            'contract_pay_2'=>$arr[3],
+            'contract_end_date'=>strtotime($arr[4]),
+        );
+        $order_tire_model->updateTire($data,array('order_tire_id'=>$this->registry->router->page));
 
         $this->view->data['company'] = strtoupper($customers->company_name);
         $this->view->data['mst'] = $customers->mst;
@@ -5124,7 +5444,7 @@ Class ordertireController Extends baseController {
         $this->view->data['name'] = $customers->director;
 
         $this->view->data['contract_date'] = explode('-', $arr[0]);
-        $this->view->data['contract_number'] = $arr[1];
+        $this->view->data['contract_number'] = str_replace('$', '/', $arr[1]);
         $this->view->data['contract_pay'] = $arr[2];
         $this->view->data['contract_pay2'] = $arr[3];
         $this->view->data['contract_valid'] = str_replace('-', '/', $arr[4]);
@@ -5756,7 +6076,9 @@ Class ordertireController Extends baseController {
         $join = array('table'=>'tire_pattern, tire_brand, tire_size','where'=> 'tire_brand_id=tire_brand AND tire_size_id=tire_size AND tire_pattern_id=tire_pattern');
         $order_types = $tire_order_list_model->getAllTire($data,$join);
 
-        
+        $contract_number = $orders->contract_number!=""?$orders->contract_number:".........";
+        $contract_date = $orders->contract_date>0?$this->lib->hien_thi_ngay_thang($orders->contract_date):".../.../....";
+
             require("lib/Classes/PHPExcel/IOFactory.php");
             require("lib/Classes/PHPExcel.php");
 
@@ -5772,6 +6094,7 @@ Class ordertireController Extends baseController {
                 ->setCellValue('E2', 'Độc lập - Tự do - Hạnh phúc')
                 ->setCellValue('A4', 'BIÊN BẢN')
                 ->setCellValue('A5', 'BÀN GIAO TÀI SẢN và XÁC NHẬN CÔNG NỢ')
+                ->setCellValue('A6', 'Căn cứ hợp đồng mua bán số '.$contract_number.' ngày '.$contract_date.' giữa hai Công ty.')
                 ->setCellValue('A7', 'Hôm nay, ngày '.$ngay.' tháng '.$thang.' năm '.$nam.' tại kho lốp công ty đã tiến hành bàn giao tài sản giữa:')
                 
                 ->setCellValue('A8', 'A/ Bên bán: ')
@@ -5787,7 +6110,7 @@ Class ordertireController Extends baseController {
                 ->setCellValue('A13', '- Mã số thuế: '.$customers->mst)
                 ->setCellValue('A14', '- Địa chỉ: '.$customers->customer_address)
                 ->setCellValue('A15', '- Ông/bà: '.$customers->customer_contact)
-                ->setCellValue('E15', 'CMND: ')
+                ->setCellValue('E15', 'Chức vụ: ')
                 ->setCellValue('F15', 'SĐT: '.$customers->customer_phone)
                 ->setCellValue('A16', 'NỘI DUNG BÀN GIAO: ')
                 ->setCellValue('A17', 'Bên A đã tiến hành bàn giao tài sản cho bên B theo bảng thống kê sau: ')
@@ -5912,9 +6235,9 @@ Class ordertireController Extends baseController {
 
                   $objPHPExcel->setActiveSheetIndex($index_worksheet)
                         ->setCellValue('A'.($hang+3), 'Bên B sẽ thanh toán toàn bộ số tiền trên cho bên A trước khi nhận hàng, bằng tiền mặt hoặc chuyển khoản.')
-                        
+                        ->setCellValue('A'.($hang+4), 'Hạn thanh toán: '.$this->lib->hien_thi_ngay_thang($orders->due_date))
                         ->setCellValue('A'.($hang+6), '(Khách hàng thanh toán chuyển khoản vui lòng ghi rõ mã số đơn hàng khi thanh toán).')
-                        ->setCellValue('A'.($hang+7), 'Biên bản này lập thành 3 bản có giá trị như nhau. Mỗi bên giữ một bản.')
+                        ->setCellValue('A'.($hang+7), 'Biên bản này lập thành 3 bản có giá trị pháp lý như nhau. Mỗi bên giữ một bản.')
                         ->setCellValue('A'.($hang+10), 'BÊN GIAO HÀNG')
                         ->setCellValue('C'.($hang+10), 'BÊN NHẬN HÀNG')
                         ->setCellValue('F'.($hang+10), 'BÊN VẬN CHUYỂN')
@@ -6050,7 +6373,7 @@ Class ordertireController Extends baseController {
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
             $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(5);
 
-            $objPHPExcel->getActiveSheet()->getRowDimension($hang+4)->setRowHeight(0);
+            //$objPHPExcel->getActiveSheet()->getRowDimension($hang+4)->setRowHeight(0);
             $objPHPExcel->getActiveSheet()->getRowDimension($hang+5)->setRowHeight(0);
 
             $objPHPExcel->getActiveSheet()->getStyle("A1:G".($highestRow+1))->getFont()->setName('Times New Roman');

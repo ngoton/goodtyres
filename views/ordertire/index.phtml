@@ -19,7 +19,7 @@
                 <input type="radio" name="customer_tire" value="1" checked> KH đã bán
                 <input type="radio" name="customer_tire" value="0"> KH mới <br>
 
-                <select style="width:200px;float:right" id="order_staff" name="order_staff">
+                <select disabled style="width:200px;float:right" id="order_staff" name="order_staff">
                     <?php foreach ($staffs as $staff) { ?>
                         <option <?php echo $staff->account==$_SESSION['userid_logined']?'selected="selected"':null ?> value="<?php echo $staff->account ?>"><?php echo $staff->staff_name ?></option>
                     <?php } ?>

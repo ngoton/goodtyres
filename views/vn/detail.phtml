@@ -263,7 +263,8 @@
     <div class="view-more">
 
         <?php 
-
+        $alls = "";
+        
         if (isset($vehicle->tire_vehicle_type)) {
             $alls = $vehicle->tire_vehicle_type==1?"lop-xe-tai":($vehicle->tire_vehicle_type==2?"lop-xe-du-lich":($vehicle->tire_vehicle_type==3?"lop-xe-dac-chung":"lop-xe"));
         }

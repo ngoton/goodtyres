@@ -76,6 +76,10 @@
     <td><?php echo $lib->hien_thi_ngay_thang($order_tire->order_tire_date); ?></td>
   </tr>
   <tr>
+    <td>Đơn hàng:</td>
+    <td><?php echo $order_tire->order_number ?></td>
+  </tr>
+  <tr>
     <td>KH:</td>
     <td><?php echo $customers->customer_name ?></td>
   </tr>
@@ -90,14 +94,6 @@
   <tr>
     <td>ĐC:</td>
     <td><?php echo $customers->customer_address ?></td>
-  </tr>
-  <tr>
-    <td>SĐT:</td>
-    <td><?php echo $customers->customer_phone ?></td>
-  </tr>
-  <tr>
-    <td>LH:</td>
-    <td><?php echo $customers->customer_contact ?></td>
   </tr>
   <tr>
     <td>Sale:</td>
