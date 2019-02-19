@@ -100,8 +100,9 @@ elseif ($order_by == 'money')
         <div class="alignleft actions">
             <select name="action" id="action">
                 <option value="-1" selected="selected">Chọn</option>
-                
-                <option value="delete">Xóa</option>
+                <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 2){ ?>
+                  <option value="delete">Xóa</option>
+                <?php } ?>
             </select>
             <input type="button" name="" id="doaction" class="button action" value="Áp dụng" onclick="action();">
         </div>
@@ -229,8 +230,10 @@ elseif ($order_by == 'money')
             ?>
             <td class="fix text-right">
                 <i class="fa fa-print print_daily" title="In" onClick="javascript:window.open('<?php echo $this->url('daily/'.$pr.'/'.$daily->daily_id) ?>','_blank')"></i>
-                <i class="fa fa-edit edit_daily" title="Sửa" data="<?php echo $daily->daily_id ?>"></i>
+                <i class="fa fa-edit edit_daily" title="Sửa" data="<?php echo $daily->daily_id ?>" alt="<?php echo ($daily->daily_date+604800) ?>"></i>
+                <?php if(($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 2) || (strtotime(date('d-m-Y')) > strtotime(date('d-m-Y',$daily->daily_date) . ' + 7 days'))){ ?>
                 <i class="fa fa-trash" title="Xóa" onclick="del(<?php echo $daily->daily_id ?>)"></i>
+                <?php } ?>
             </td>
             <?php } ?>
         </tr>
@@ -573,6 +576,7 @@ $this->helper('slidePaginator');
               <div class="row">
                 <div class="col-md-12">
                   <div class="box-footer">
+                    <input type="hidden" id="check_date">
                     <input type="hidden" readonly id="yes" name="yes" required="required" >
                     <button type="submit" class="btn btn-primary" tabindex="16"><i class="fa fa-save"></i> Hoàn thành</button>
                     <button type="reset" class="btn" tabindex="17"><i class="fa fa-undo"></i>  Nhập lại</button>
@@ -1084,6 +1088,7 @@ function set_item_payment(item,name,comment,money,receive,request,approve) {
 
 $('.edit_daily').click(function(e){
     var id = $(this).attr('data');
+    var check_date = $(this).attr('alt');
 
     $('.add-field input').each(function(){
       var name = $(this).attr('id');
@@ -1290,7 +1295,30 @@ $('.edit_daily').click(function(e){
             });
           });
 
-          
+          $('.add-field input').prop('disabled',false);
+          $('.add-field select').prop('disabled',false);
+          $('.add-field textarea').prop('disabled',false);
+          $('.additional_code').prop('disabled',false);
+          $('.additional_money').prop('disabled',false);
+          $('.additional_comment').prop('disabled',false);
+          $('.additional_debit').prop('disabled', false).trigger("chosen:updated");
+          $('.additional_credit').prop('disabled', false).trigger("chosen:updated");
+
+          var today = "<?php echo strtotime(date('d-m-Y')) ?>";
+          <?php if($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 8 && $_SESSION['role_logined'] != 2){ ?>
+            if(parseInt(today) > parseInt(check_date)){
+              $('.add-field input').prop('disabled',true);
+              $('.add-field select').prop('disabled',true);
+              $('.add-field textarea').prop('disabled',true);
+              $('.additional_code').prop('disabled',true);
+              $('.additional_money').prop('disabled',true);
+              $('.additional_comment').prop('disabled',true);
+              $('.additional_debit').prop('disabled', true).trigger("chosen:updated");
+              $('.additional_credit').prop('disabled', true).trigger("chosen:updated");
+            }
+            
+          <?php } ?>
+
         }
     });
 
@@ -1300,6 +1328,8 @@ $('.edit_daily').click(function(e){
         $(this).children('.dropdown-menu').hide();
       });
 
+    
+    
     $( ".add-field" ).dialog( "open" );
       
 });
@@ -1510,6 +1540,15 @@ function add_click(){
             };
             
         });
+
+    $('.add-field input').prop('disabled',false);
+    $('.add-field select').prop('disabled',false);
+    $('.add-field textarea').prop('disabled',false);
+    $('.additional_code').prop('disabled',false);
+    $('.additional_money').prop('disabled',false);
+    $('.additional_comment').prop('disabled',false);
+    $('.additional_debit').prop('disabled', false).trigger("chosen:updated");
+    $('.additional_credit').prop('disabled', false).trigger("chosen:updated");
 
     $( ".add-field" ).dialog( "open" );
 }

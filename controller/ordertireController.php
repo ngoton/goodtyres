@@ -8,6 +8,9 @@ Class ordertireController Extends baseController {
         if (!isset($_SESSION['userid_logined'])) {
             return $this->view->redirect('user/login');
         }
+        /*if ($_SESSION['user_logined'] != "admin" && $_SESSION['user_logined'] != "nvhieu" && $_SESSION['user_logined'] != "salephone1" && $_SESSION['user_logined'] != "salephone2") {
+            return $this->view->redirect('ordertire/orderlist');
+        }*/
         /*if ($_SESSION['role_logined'] == 4) {
             return $this->view->redirect('admin');
         }*/
@@ -122,6 +125,10 @@ Class ordertireController Extends baseController {
         $this->view->disableLayout();
         $this->view->data['lib'] = $this->lib;
 
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+
         $order = $this->registry->router->param_id;
         $ngay = $this->registry->router->order;
         $thang = $this->registry->router->order_by;
@@ -188,6 +195,10 @@ Class ordertireController Extends baseController {
         $this->view->disableLayout();
         $this->view->data['lib'] = $this->lib;
 
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+
         $order = $this->registry->router->param_id;
 
         $info_model = $this->model->get('infoModel');
@@ -245,6 +256,10 @@ Class ordertireController Extends baseController {
     public function printview2() {
         $this->view->disableLayout();
         $this->view->data['lib'] = $this->lib;
+
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
 
         $order = $this->registry->router->param_id;
 
@@ -1909,6 +1924,7 @@ Class ordertireController Extends baseController {
                         $fields = array(
                            'order_tire' => $order_agent,
                            'id_order_tire' => $id_order_tire,
+                           'vat' => $data['vat_percent'],
                            'link_agent' => BASE_URL,
                         );
 
@@ -2462,6 +2478,10 @@ Class ordertireController Extends baseController {
     public function listtire($id){
         $this->view->disableLayout();
         $this->view->data['lib'] = $this->lib;
+
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
 
         $ketthuc = date('d-m-Y',$this->registry->router->order);
         $cus = $this->registry->router->page;
@@ -4152,6 +4172,7 @@ Class ordertireController Extends baseController {
     }
     public function receiveorder(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $order_tire_model = $this->model->get('ordertireModel');
             $purchase_tire_model = $this->model->get('purchasetireModel');
             $purchase_tire_detail_model = $this->model->get('purchasetiredetailModel');
             $payable_model = $this->model->get('payableModel');
@@ -4164,6 +4185,8 @@ Class ordertireController Extends baseController {
             $account_balance_model = $this->model->get('accountbalanceModel');
 
             $id = trim($_POST['id_order_tire']);
+
+            $order = $order_tire_model->getTire($id)->order_number;
 
             $data = array(
                 'purchase_tire_status'=>2,
@@ -4376,6 +4399,7 @@ Class ordertireController Extends baseController {
                     'tire_price_vat' => $purchase->tire_price-($purchase->tire_price/1.1),
                     'code' => $code,
                     'start_date' => $dauthang,
+                    'order_num' => $order,
                     'purchase_tire_detail' => $purchase->purchase_tire_detail_id,
                     );
                     $tireimport->createTire($tire_import_data);
@@ -4402,6 +4426,7 @@ Class ordertireController Extends baseController {
                     'tire_price_vat' => $purchase->tire_price-($purchase->tire_price/1.1),
                     'code' => $code,
                     'start_date' => $dauthang,
+                    'order_num' => $order,
                     'purchase_tire_detail' => $purchase->purchase_tire_detail_id,
                     );
                     $tireimport->createTire($tire_import_data);

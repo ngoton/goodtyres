@@ -57,8 +57,9 @@ elseif ($order_by == 'money')
     	<div class="alignleft actions">
 			<select name="action" id="action">
             	<option value="-1" selected="selected">Select</option>
-                
+                <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 2){ ?>
                 <option value="delete">Delete</option>
+            	<?php } ?>
             </select>
             <input type="button" name="" id="doaction" class="button action" value="Apply" onclick="action();">
 		</div>
@@ -156,8 +157,9 @@ elseif ($order_by == 'money')
             <td class="fix" id="code_<?php echo $additional->additional_id; ?>"><a target="_blank" href="<?php echo $additional->order_tire>0?$this->url('ordertire/orderlist/'.$additional->order_tire):$this->url('ordertire/orderlist/0/0/0/0/'.$additional->code); ?>"><?php echo $additional->code; ?></a></td>
             <td class="fix" id="code_<?php echo $additional->additional_id; ?>"><?php echo isset($cus[$additional->additional_id])?$cus[$additional->additional_id]:null ?></td>
             <td>
+            	<?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 2){ ?>
                 <button class="error" onclick="del(<?php echo $additional->additional_id ?>)" >Xóa</button>
-                
+                <?php } ?>
                
             </td>
         </tr>
@@ -324,6 +326,12 @@ $('html').click(function(e) {
             $('#code').val(code);
             $('#money').val(money);
 
+            $('.add-field input[type=submit]').prop('disabled',true);
+
+            <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 2){ ?>
+            	$('.add-field input[type=submit]').prop('disabled',false);
+            <?php } ?>
+
             $( ".add-field" ).dialog( "open" );
         }
 
@@ -348,6 +356,8 @@ function add_click(){
         $('#money').val("");
         $("#debit option[value=0]").attr('selected', 'selected');
         $("#credit option[value=0]").attr('selected', 'selected');
+
+        $('.add-field input[type=submit]').prop('disabled',false);
                 
         $('.numbers').focus(function(){
             if ( $(this).val() == '0') {

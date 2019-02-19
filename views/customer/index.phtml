@@ -319,7 +319,7 @@ $this->helper('slidePaginator');
                             <td>Sale </td>
                             <td>
                                 
-                                <select id="customer_create_user"  name="customer_create_user" <?php echo $_SESSION['role_logined'] != 1?"disabled":null ?> >
+                                <select id="customer_create_user"  name="customer_create_user" <?php echo ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 9) ?"disabled":null ?> >
                                     <?php foreach ($staffs as $staff) { ?>
                                         <option value="<?php echo $staff->account ?>"><?php echo $staff->staff_name ?></option>
                                     <?php } ?>
