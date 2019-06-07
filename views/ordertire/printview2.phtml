@@ -7,11 +7,20 @@
     @media print {
       @page { margin: 0; }
       body { margin: 0.6cm 0.6cm 0cm 0.6cm; height: 100%; -webkit-print-color-adjust: exact;}
-      .footer{
+      .right{
        position:fixed;
        bottom:15px;
        right: 15px;
         color: #8e8a8a;
+        width: 10%;
+       }
+       .left{
+       position:fixed;
+       bottom:15px;
+       left: 15px;
+        color: #8e8a8a;
+        width: 90%;
+        border-top: 1px solid #000;
        }
     }
     @page { margin: 0.2cm 0.2cm 0cm 0.2cm; }
@@ -499,7 +508,10 @@
                 </tr>
             </tbody>
         </table>
-        <div class="footer"><i>Please visit our website to view the status of your order. <?php echo BASE_URL ?></i><img height="50" src="<?php echo BASE_URL.'/'.$img ?>" /></div>
+        <div class="footer">
+            <div class="left">Mọi thắc mắc về vấn đề đặt hàng & thái độ phục vụ vui lòng gọi hotline 086.84.45679 - 096.794.3579</div>
+            <div class="right"><img height="50" src="<?php echo BASE_URL.'/'.$img ?>" /></div>
+        </div>
     </div>
     </body>
 </html>

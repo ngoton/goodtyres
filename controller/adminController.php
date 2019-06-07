@@ -97,10 +97,12 @@ Class adminController Extends baseController {
         $this->view->data['staffs'] = $staffs;
 
 
-
+        $join = array('table'=>'user,tire_sale','where'=>'account=user_id AND staff_id=sale GROUP BY sale ');
         $data = array(
 
-            'where' => '((staff_id=18 OR staff_id=19) OR staff_id IN (SELECT sale FROM tire_sale WHERE tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).') AND ( (start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) ) ))',
+            'where' => '(tire_sale_date >= '.strtotime($batdau).' AND tire_sale_date <= '.strtotime($ketthuc).') AND ( (start_date <= '.strtotime($batdau).' AND end_date >= '.strtotime($ketthuc).') OR (start_date <= '.strtotime($batdau).' AND (end_date IS NULL OR end_date = 0) )) ',
+            'order_by'=>'sum(volume)',
+            'order'=>'DESC'
 
         );
        

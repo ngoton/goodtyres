@@ -82,7 +82,7 @@ elseif ($order_by == 'order_tire_number')
     	<div class="alignleft actions">
 			<select name="action" id="action">
             	<option value="-1" selected="selected">Chọn</option>
-                <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 9){ ?>
+                <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9){ ?>
                 <option value="delete">Xóa</option>
                 <?php } ?>
             </select>
@@ -235,7 +235,7 @@ elseif ($order_by == 'order_tire_number')
                 ?>
             </td>
             <td class="fix" data="<?php echo $order_tire->customer; ?>"  id="customer_<?php echo $order_tire->order_tire_id; ?>"><a target="_blank" href="<?php echo $this->url('customer/index/'.$order_tire->customer); ?>"><?php echo $order_tire->customer_name; ?></a> <br><a  style="font-weight:bold;text-decoration:underline" data="<?php echo $order_tire->customer ?>" data-order="<?php echo $order_tire->order_tire_id ?>" data-date="<?php echo $order_tire->contract_date>0?date('d-m-Y',$order_tire->contract_date):null ?>" data-number="<?php echo $order_tire->contract_number ?>" data-pay="<?php echo $order_tire->contract_pay_1 ?>" data-pay2="<?php echo $order_tire->contract_pay_2 ?>" data-valid="<?php echo $order_tire->contract_end_date>0?date('d-m-Y',$order_tire->contract_end_date):null ?>" value="1"  class="editButton"><i class="fa fa-file-text-o"></i> Hợp đồng</a> 
-                <?php if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9 || $_SESSION['role_logined']==3){ ?>
+                <?php if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8){ ?>
                 <a title="Chuyển" style="font-weight:bold;text-decoration:underline" data="<?php echo $order_tire->order_tire_id ?>" value="<?php echo $order_tire->customer ?>" class="editCustomer"><i class="fa fa-mail-forward"></i></a>
                 <?php } ?>
             </td>
@@ -274,11 +274,11 @@ elseif ($order_by == 'order_tire_number')
             <td class="fix masterTooltip" id="approve_<?php echo $order_tire->order_tire_id; ?>" data="<?php echo $order_tire->approve; ?>" <?php echo 'title="Giảm giá '.$giam.'%"'; ?> >
                 <?php if (isset($users['name'][$order_tire->approve])) {
                     echo $users['name'][$order_tire->approve];
-                    if ($order_tire->order_tire_status!=1 && ($_SESSION['userid_logined']==$order_tire->approve || $_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9)) {
+                    if ($order_tire->order_tire_status!=1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9 || $_SESSION['user_logined'] == "nvhieu")) {
                         echo '<br><button style="display:none" id="approve_btn_'.$order_tire->order_tire_id.'" data="'.$order_tire->order_tire_id.'" class="approveremove">Hủy</button>';
                     }
                 }
-                else if(($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8) && $_SESSION['user_logined'] != "nttthuy"){ 
+                else if(($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8 || $_SESSION['user_logined'] == "nvhieu") ){ 
                     echo '<button data="'.$order_tire->order_tire_id.'" class="approve">Duyệt</button>';
                 } ?>
             </td>  
@@ -329,14 +329,14 @@ elseif ($order_by == 'order_tire_number')
                 <button onClick="javascript:window.location.href='<?php echo BASE_URL.'/ordertire/bill/'.$order_tire->order_tire_id ?>'">PGN</button>
                 <button class="attachment" href="<?php echo $this->url('ordertire/attachment/'.$order_tire->order_tire_id); ?>" ><i class="fa fa-paperclip"></i></button>
                 <?php } ?>
-                <?php if($order_tire->sale_lock==1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8)){ ?>
+                <?php if($order_tire->sale_lock==1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9)){ ?>
                 <button data="<?php echo $order_tire->order_tire_id ?>" value="0"  class="unlock">Mở</button>
-                <?php }elseif ($order_tire->sale_lock!=1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9 || $_SESSION['role_logined']==2 || $_SESSION['role_logined']==8)) { ?>
+                <?php }elseif ($order_tire->sale_lock!=1 && ($_SESSION['role_logined']==1 || $_SESSION['role_logined']==9)) { ?>
                     <button data="<?php echo $order_tire->order_tire_id ?>" value="1"  class="unlock">Khóa</button>
                 <?php } ?>
                 <?php if(($order_tire->sale_lock!=1 && ($order_tire->sale==$_SESSION['userid_logined'] || $order_tire->sale_cskh==$_SESSION['userid_logined'])) || $_SESSION['role_logined']==1 || $_SESSION['role_logined'] ==9){ ?>
-                <a class="error revert" data="<?php echo $order_tire->order_tire_id ?>" >Hủy</a>
-                <a class="error del" data="<?php echo $order_tire->order_tire_id ?>" >Xóa</a>
+                <a class="error revert" data="<?php echo $order_tire->order_tire_id ?>" >Revert</a>
+                <span class="error del" data="<?php echo $order_tire->order_tire_id ?>" >Delete</span>
                 <?php } ?>
             </div>
             </td>
@@ -967,6 +967,33 @@ $('.order_vat')
 
         $('#i_vat_percent').keyup(function(){
             var val = $(this).val(); 
+            var thanhtien = parseInt($('#i_thu').val().replace(/[^0-9\.-]+/g,"")) || 0;
+
+            if ($('#i_check_vat').is(':checked')) {
+                var check_vat = 1;
+            }
+            else{
+                var check_vat = 0;
+            }
+            
+            
+            if (check_vat>0) {
+                $('#i_vat').val(Math.round(thanhtien*val/110));
+            }
+            else{
+                $('#i_vat').val(Math.round(thanhtien*val/100));
+            }
+            
+            
+            $('#i_vat').val(function(index, value) {
+                return value
+                  .replace(/\D/g, "")
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+            });
+        });
+        $('#i_check_vat').click(function(){
+            var val = $('#i_vat_percent').val(); 
             var thanhtien = parseInt($('#i_thu').val().replace(/[^0-9\.-]+/g,"")) || 0;
 
             if ($('#i_check_vat').is(':checked')) {

@@ -4476,6 +4476,101 @@ Class dailyController Extends baseController {
               
         }
     }
+    public function reaction(){
+        if (!isset($_SESSION['userid_logined'])) {
+            return $this->view->redirect('user/login');
+        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $additional_model = $this->model->get('additionalModel');
+            $account_balance_model = $this->model->get('accountbalanceModel');
+            $order_tire_model = $this->model->get('ordertireModel');
+            $order_tire_list_model = $this->model->get('ordertirelistModel');
+            $tire_import_model = $this->model->get('tireimportModel');
+
+            $batdau = trim($_POST['batdau']);
+            $ketthuc = trim($_POST['ketthuc']);
+            $ngayketthuc = date('d-m-Y', strtotime($ketthuc. ' + 1 days'));
+
+            $data = array(
+                'where' => ' ( delivery_date >= '.strtotime($batdau).' AND delivery_date < '.strtotime($ngayketthuc).' ) AND order_tire_id IN (SELECT order_tire FROM additional WHERE order_tire>0)',
+            );
+
+            
+            $order_tires = $order_tire_model->getAllTire($data);
+            $costs = array();
+            foreach ($order_tires as $tire) {
+                $ngay = $tire->order_tire_status==1?$tire->delivery_date:strtotime(date('d-m-Y'));
+                $ngayketthuc = strtotime(date('d-m-Y', strtotime(date('d-m-Y',$ngay). ' + 1 days')));
+                $order_tire_lists = $order_tire_list_model->getAllTire(array('where'=>'order_tire = '.$tire->order_tire_id));
+                foreach ($order_tire_lists as $l) {
+                    $gia = 0;
+                    $data = array(
+                        'where' => '(order_num = "" OR order_num IS NULL) AND start_date < '.$ngayketthuc.' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                        'order_by' => 'start_date',
+                        'order' => 'DESC, tire_import_id DESC',
+                        'limit' => 1,
+                    );
+                    $tire_imports = $tire_import_model->getAllTire($data);
+                    foreach ($tire_imports as $tire_import) {
+                        $gia = $tire_import->tire_price;
+                    }
+                    
+                    if ($tire->order_number != "") {
+                        $data = array(
+                            'where' => 'order_num = "'.$tire->order_number.'" AND start_date <= '.strtotime(date('t-m-Y',$ngay)).' AND tire_brand = '.$l->tire_brand.' AND tire_size = '.$l->tire_size.' AND tire_pattern = '.$l->tire_pattern,
+                            'order_by' => 'start_date',
+                            'order' => 'DESC, tire_import_id DESC',
+                            'limit' => 1,
+                        );
+                        $tire_imports = $tire_import_model->getAllTire($data);
+                        foreach ($tire_imports as $tire_import) {
+                            $gia = $tire_import->tire_price;
+                        }
+                    }
+
+                    $costs[$tire->order_tire_id] = isset($costs[$tire->order_tire_id])?$costs[$tire->order_tire_id]+$l->tire_number*$gia:$l->tire_number*$gia;
+                }
+
+                
+
+                $add = $additional_model->getAdditionalByWhere(array('debit'=>122,'order_tire'=>$tire->order_tire_id));
+                $additional_id = $add->additional_id;
+
+                $data_additional = array(
+                    'money' => round($costs[$tire->order_tire_id]),
+                    'order_tire' => $tire->order_tire_id,
+                );
+                $additional_model->updateAdditional($data_additional,array('additional_id'=>$additional_id));
+
+                $data_debit = array(
+                    'account_balance_date' => $add->additional_date,
+                    'account' => $add->debit,
+                    'money' => $data_additional['money'],
+                    'week' => (int)date('W', $add->additional_date),
+                    'year' => (int)date('Y', $add->additional_date),
+                    'additional' => $additional_id,
+                );
+                $data_credit = array(
+                    'account_balance_date' => $add->additional_date,
+                    'account' => $add->credit,
+                    'money' => (0-$data_additional['money']),
+                    'week' => (int)date('W', $add->additional_date),
+                    'year' => (int)date('Y', $add->additional_date),
+                    'additional' => $additional_id,
+                );
+                if (!$account_balance_model->getAccountByWhere(array('additional'=>$additional_id))) {
+                    $account_balance_model->createAccount($data_debit);
+                    $account_balance_model->createAccount($data_credit);
+                }
+                else{
+                    $d = $account_balance_model->getAccountByWhere(array('additional'=>$add->additional_id,'account'=>$add->debit,'money'=>$add->money));
+                    $c = $account_balance_model->getAccountByWhere(array('additional'=>$add->additional_id,'account'=>$add->credit,'money'=>(0-$add->money)));
+                    $account_balance_model->updateAccount($data_debit,array('account_balance_id'=>$d->account_balance_id));
+                    $account_balance_model->updateAccount($data_credit,array('account_balance_id'=>$c->account_balance_id));
+                }
+            }
+        }
+    }
     public function getitemaddorder(){
         if (isset($_POST['yes'])) {
             $account_model = $this->model->get('accountModel');

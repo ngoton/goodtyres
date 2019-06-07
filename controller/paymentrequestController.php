@@ -22,7 +22,7 @@ Class paymentrequestController Extends baseController {
         }
         else{
             $order_by = $this->registry->router->order_by ? $this->registry->router->order_by : 'payment_request_date';
-            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'ASC, payment_request_number ASC';
+            $order = $this->registry->router->order_by ? $this->registry->router->order_by : 'DESC, payment_request_number DESC';
             $page = $this->registry->router->page ? (int) $this->registry->router->page : 1;
             $keyword = "";
             $limit = 18446744073709;
@@ -226,7 +226,7 @@ Class paymentrequestController Extends baseController {
             $data = array(
                         
                 'payment_request_number' => trim($_POST['payment_request_number']),
-                'payment_request_comment' => trim($_POST['payment_request_comment']),
+                'payment_request_comment' => addslashes(trim($_POST['payment_request_comment'])),
                 'payment_request_date' => strtotime(str_replace('/', '-', $_POST['payment_request_date'])),
                 'payment_request_receive' => trim($_POST['payment_request_receive']),
                 'payment_request_destination' => trim($_POST['payment_request_destination']),
@@ -279,7 +279,7 @@ Class paymentrequestController Extends baseController {
             foreach ($payables as $v) {
                 $data_detail = array(
                     'payment_request_detail_code'=>trim($v['code']),
-                    'payment_request_detail_comment'=>trim($v['comment']),
+                    'payment_request_detail_comment'=>addslashes(trim($v['comment'])),
                     'payment_request_detail_money'=>str_replace(',', '', $v['money']),
                     'payment_request_detail_money_usd'=>str_replace(',', '', $v['money_usd']),
                     'payable'=>$v['payable_id'],

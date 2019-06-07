@@ -415,6 +415,7 @@
             </li>
           </ul>
         </li>
+        <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 3 || $_SESSION['role_logined'] == 8){ ?>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-archive"></i>
@@ -436,7 +437,8 @@
             <li><a  data="shipmentvendor" href="<?php echo $this->url('shipmentvendor') ?>"><i class="fa fa-caret-right text-aqua"></i>Danh sách Vendor/NCC</a></li>
           </ul>
         </li>
-        <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 9 || $_SESSION['role_logined'] == 3){ ?>
+        <?php } ?>
+        <?php if($_SESSION['role_logined'] == 1 || $_SESSION['role_logined'] == 2 || $_SESSION['role_logined'] == 8 || $_SESSION['role_logined'] == 9){ ?>
         <li><a href="#">
             <i class="fa fa-dollar"></i>
             <span>Tài chính - Kế toán</span>

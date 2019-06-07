@@ -67,7 +67,9 @@ elseif ($order_by == 'order_tire_number')
             </select>
             <input type="button" name="" id="search" class="button-search" value="Xem" onclick="searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');">
         </div>
-    	
+    	<div class="add-box">
+            <input type="button" name="reaction" id="reaction" class="button-search" value="Chạy lại">
+        </div>
 		<div class="alignleft actions">
 		<select name="m" id="chonloc">
 			<option  value="18446744073709">Hiển thị tất cả</option>
@@ -626,7 +628,23 @@ $('#sl_tha option[value='+th+']').attr('selected','selected');
 var n = "<?php echo $nam ?>";
 $('#sl_na option[value='+n+']').attr('selected','selected');
 
-
+$('#reaction').click(function(){
+    var r = confirm("Bạn có chắc chắn muốn chạy lại giá vốn không?");
+      if (r == true){
+        var batdau = $('#batdau').val();
+        var ketthuc = $('#ketthuc').val();
+        $.ajax({
+            url: '<?php echo BASE_URL ?>/daily/reaction',
+            type: 'POST',
+            data: {batdau:batdau, ketthuc:ketthuc},
+            success:function(answer){
+              setTimeout(function() {
+                            searchall('<?php echo $page ?>','<?php echo $order_by ?>','<?php echo $order ?>');
+                          }, 200);
+            }
+        });
+      }
+});
 
 $(".order_cost").click(function(){
         $("#winpopup").dialog({

@@ -115,7 +115,7 @@ Class tiredebitController Extends baseController {
             $data['where'] .= ' AND sale IN (SELECT account FROM staff WHERE staff_id = '.$nv.') ';
         }
 
-        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8) {
+        if ($_SESSION['role_logined'] != 1 && $_SESSION['role_logined'] != 3 && $_SESSION['role_logined'] != 9 && $_SESSION['role_logined'] != 2 && $_SESSION['role_logined'] != 8 && $_SESSION['user_logined']!="salephone1" && $_SESSION['user_logined']!="salephone2" && $_SESSION['user_logined']!="nmtvy") {
             $data['where'] = $data['where'].' AND sale = '.$_SESSION['userid_logined'];
         }
 
@@ -915,7 +915,7 @@ Class tiredebitController Extends baseController {
 
                                     ->setCellValue('A' . $hang, $i++)
 
-                                    ->setCellValueExplicit('B' . $hang, $this->lib->hien_thi_ngay_thang($row->order_tire_date))
+                                    ->setCellValueExplicit('B' . $hang, $this->lib->hien_thi_ngay_thang($row->delivery_date))
 
                                     ->setCellValue('C' . $hang, $row->order_number)
 
@@ -973,7 +973,7 @@ Class tiredebitController Extends baseController {
 
                                     ->setCellValue('A' . $hang, $i++)
 
-                                    ->setCellValueExplicit('B' . $hang, $this->lib->hien_thi_ngay_thang($row->order_tire_date))
+                                    ->setCellValueExplicit('B' . $hang, $this->lib->hien_thi_ngay_thang($row->delivery_date))
 
                                     ->setCellValue('C' . $hang, $row->order_number)
 
@@ -1033,7 +1033,7 @@ Class tiredebitController Extends baseController {
 
                                 ->setCellValue('A' . $hang, $i++)
 
-                                ->setCellValueExplicit('B' . $hang, $this->lib->hien_thi_ngay_thang($row->order_tire_date))
+                                ->setCellValueExplicit('B' . $hang, $this->lib->hien_thi_ngay_thang($row->delivery_date))
 
                                 ->setCellValue('C' . $hang, $row->order_number)
 
