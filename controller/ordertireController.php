@@ -1907,6 +1907,7 @@ Class ordertireController Extends baseController {
                 'check_price_vat' => $_POST['check_price_vat'],
                 'check_purchase' => $_POST['check_purchase'],
                 'order_tire_vendor' => $_POST['check_purchase']==1?$_POST['shipment_vendor']:null,
+                'order_cont' => $_POST['order_cont'],
             );
 
             $order_tire_model->createTire($data);
@@ -1935,6 +1936,7 @@ Class ordertireController Extends baseController {
                            'id_order_tire' => $id_order_tire,
                            'vat' => $data['vat_percent'],
                            'link_agent' => BASE_URL,
+                           'order_cont' => $data['order_cont'],
                         );
 
                         // build the urlencoded data

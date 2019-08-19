@@ -380,7 +380,7 @@ $this->helper('slidePaginator');
 <script type="text/javascript">
 var i_index=0;
     $(".date_mask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-    $('.add-field').hide(); 
+    //$('.add-field').hide(); 
 
     $('.add_additional').click(function(){
         var id = $(this).attr('data');
@@ -395,8 +395,8 @@ var i_index=0;
 
         
 
-        $('.add-field').slideDown(500);
-         $("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
+        //$('.add-field').slideDown(500);
+         //$("html, body").animate({ scrollTop: $('.add-field').offset().top }, 300);   
          
             $('.add-field input').val("");
             $('.add-field input').attr("data","");
