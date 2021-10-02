@@ -372,7 +372,7 @@ $(".next").click(function(){
             success:function(data){
                 console.log(data);
                 var data = jQuery.parseJSON(data);
-                if (data.phone.trim() != "") {
+                if (data.phone != null && data.phone.trim() != "") {
                     //console.log(data.sale);
                     if ((data.sale == "Dương Quế Anh" || data.sale == "Lê Trung Thuận" || data.sale == "Trần Ngọc Phương Thảo" || data.sale == "Karl") || (data.last_sale == "Dương Quế Anh" || data.last_sale == "Lê Trung Thuận" || data.last_sale == "Trần Ngọc Phương Thảo" || data.last_sale == "Karl") || data.approve==1) {
                         if(animating) return false;
@@ -855,7 +855,6 @@ $('#customer').keyup(function(){
    });  
 /*$('#customer').on('keydown', function() {
         var key = event.keyCode || event.charCode;
-
         if( key == 8 || key == 46 ){
             $('#customer').attr('data',"");
             $('#mst').val("");
@@ -2271,20 +2270,13 @@ $( "#hoanthanh" ).dialog({
     buttons: [
 
     /*{
-
         text: "In đơn hàng",
         icons: { primary: "ui-icon-print" },
-
         click: function() {
-
           $( this ).dialog( "close" );
-
           var lastID = $('#lastID').val();
-
           window.open("<?php echo $this->url('ordertire/printview/') ?>"+lastID);
-
           window.location.href = "<?php echo $this->url('ordertire/orderlist') ?>";
-
         },
     },*/
     {
